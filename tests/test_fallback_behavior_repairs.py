@@ -28,6 +28,7 @@ import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement
+from tests.helpers.final_emission_gate_fixtures import response_type_contract
 from game.gm_retry import build_retry_prompt_for_failure
 
 
@@ -87,13 +88,6 @@ def _consumer_fallback_contract(**overrides: object) -> dict:
     }
     contract.update(overrides)
     return contract
-
-
-def _response_type_contract(required: str = "answer") -> dict:
-    return {
-        "required_response_type": required,
-        "action_must_preserve_agency": required == "action_outcome",
-    }
 
 
 def _answer_contract(**overrides: object) -> dict:
@@ -203,7 +197,7 @@ def test_downstream_gate_observes_answer_contract_meta_when_output_exhibits_smoo
             ),
             "tags": [],
             "response_policy": {
-                "response_type_contract": _response_type_contract("answer"),
+                "response_type_contract": response_type_contract("answer"),
                 "answer_completeness": _answer_contract(),
                 "fallback_behavior": _consumer_fallback_contract(),
             },

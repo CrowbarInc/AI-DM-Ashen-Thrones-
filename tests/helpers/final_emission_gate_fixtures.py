@@ -3,6 +3,11 @@
 Support residue for gate-adjacent and replay/downstream suites. Block-O opening
 attach-then-helper adapters mirror gate entry prep without owning orchestration
 semantics. Semantic orchestration ownership remains ``tests/test_final_emission_gate.py``.
+
+Helper boundary (Cycle AD-4):
+- Downstream HTTP smoke asserts: ``tests/helpers/emission_smoke_assertions.py``
+- Opening fallback FEM evidence builders: ``tests/helpers/opening_fallback_evidence.py``
+- Golden replay / failure classifier observed-field locks stay local (intentional diagnostic).
 """
 from __future__ import annotations
 

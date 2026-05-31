@@ -1,8 +1,14 @@
-"""Downstream HTTP/pipeline emission smoke assertions (Cycle AE3).
+"""Downstream HTTP/pipeline emission smoke assertions (Cycle AE3 / AD-4).
 
 Narrow, explicit checks for player-facing output hygiene and repair evidence.
 These helpers are for downstream consumer/smoke tests — not final-emission gate
 orchestration owners.
+
+Helper boundary (Cycle AD-4):
+- Gate harness fixtures (``runner_strict_bundle``, opening GM scaffold, owner-bucket
+  asserts): ``tests/helpers/final_emission_gate_fixtures.py``
+- Opening fallback FEM evidence dicts: ``tests/helpers/opening_fallback_evidence.py``
+- FEM read from gate output dicts: ``final_emission_gate_fixtures.final_emission_meta_from_output``
 """
 from __future__ import annotations
 
@@ -23,6 +29,25 @@ _DEFAULT_REPAIR_DEBUG_MARKERS: tuple[str, ...] = (
     "retry_fallback",
     "final_emission_gate",
 )
+
+
+def gm_response_stub(
+    text: str,
+    *,
+    tags: Sequence[str] | None = None,
+    debug_notes: str = "",
+) -> dict[str, Any]:
+    """Minimal fake ``call_gpt`` return dict for HTTP/pipeline integration tests."""
+    return {
+        "player_facing_text": text,
+        "tags": list(tags or []),
+        "scene_update": None,
+        "activate_scene_id": None,
+        "new_scene_draft": None,
+        "world_updates": None,
+        "suggested_action": None,
+        "debug_notes": debug_notes,
+    }
 
 
 def _coerce_player_text(data_or_text: Any) -> str:

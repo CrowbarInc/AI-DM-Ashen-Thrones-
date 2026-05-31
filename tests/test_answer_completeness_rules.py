@@ -3,10 +3,15 @@
 Direct prompt-bundle ownership stays in ``tests/test_prompt_context.py``. This
 module exercises how shipped contracts drive answer-pressure derivation, social
 escalation eligibility, and final-emission gate behavior.
+
+Emission authority (Cycle AD-2):
+- ``tests/test_final_emission_gate.py`` owns gate orchestration (exact
+  ``final_route``, ``final_emitted_source``, repair-kind tables).
+- This suite owns answer-completeness checked/failed/repaired semantics and
+  boundary validate-only no-reorder traces; use ``assert_no_boundary_reorder_repair``
+  for the latter, not exact gate route/source locks.
 """
 from __future__ import annotations
-
-from game.final_emission_meta import read_final_emission_meta_dict
 
 import importlib
 
@@ -19,10 +24,8 @@ from game.final_emission_gate import (
 )
 from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.social import determine_social_escalation_outcome
-from tests.helpers.emission_smoke_assertions import (
-    assert_final_route_replaced_or_not_accept,
-    assert_no_boundary_reorder_repair,
-)
+from tests.helpers.emission_smoke_assertions import assert_no_boundary_reorder_repair
+from tests.helpers.final_emission_gate_fixtures import final_emission_meta_from_output
 from tests.test_social_escalation import _session_with_pressure
 
 _prompt_contracts = importlib.import_module("game.prompt_context")
@@ -401,7 +404,7 @@ def test_gate_skips_answer_completeness_when_contract_disabled(action_turn_contr
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert out["player_facing_text"] == raw
     assert meta.get("answer_completeness_checked") is False
     assert meta.get("answer_completeness_repaired") is False
@@ -435,7 +438,7 @@ def test_gate_neutral_narration_not_mutated_when_no_player_question_contract():
         world={},
     )
     assert out["player_facing_text"] == raw
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is not True
 
 
@@ -471,10 +474,10 @@ def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert_final_route_replaced_or_not_accept(meta)
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
     assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
@@ -509,10 +512,10 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert_final_route_replaced_or_not_accept(meta)
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
     assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
@@ -559,10 +562,10 @@ def test_authoritative_refusal_stays_substantive_after_repair():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert_final_route_replaced_or_not_accept(meta)
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
     assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
@@ -594,11 +597,11 @@ def test_transcript_style_dodge_opening_repaired_with_meta_flags():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_checked") is True
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert_final_route_replaced_or_not_accept(meta)
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
     assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 

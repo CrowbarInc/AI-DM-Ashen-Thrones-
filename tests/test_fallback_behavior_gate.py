@@ -28,6 +28,7 @@ from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.storage import get_scene_runtime
+from tests.helpers.final_emission_gate_fixtures import response_type_contract
 
 
 pytestmark = pytest.mark.unit
@@ -96,13 +97,6 @@ def _fallback_contract(**overrides: object) -> dict:
     }
     contract.update(overrides)
     return contract
-
-
-def _response_type_contract(required: str = "answer") -> dict:
-    return {
-        "required_response_type": required,
-        "action_must_preserve_agency": required == "action_outcome",
-    }
 
 
 def _answer_contract(**overrides: object) -> dict:
@@ -293,7 +287,7 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
             "tags": [],
             "response_policy": {
                 "fallback_behavior": _fallback_contract(),
-                "response_type_contract": _response_type_contract("dialogue"),
+                "response_type_contract": response_type_contract("dialogue"),
             },
         },
         resolution=resolution,
@@ -318,7 +312,7 @@ def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_cert
             "player_facing_text": raw,
             "tags": [],
             "response_policy": {
-                "response_type_contract": _response_type_contract("answer"),
+                "response_type_contract": response_type_contract("answer"),
                 "fallback_behavior": _fallback_contract(uncertainty_sources=[source]),
             },
         },

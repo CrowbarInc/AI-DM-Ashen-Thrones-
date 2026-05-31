@@ -3,6 +3,12 @@
 These builders centralize repeated FEM-shaped and replay-observed setup only.
 Consumer tests remain responsible for asserting their own projection,
 classification, reporting, or lineage contracts.
+
+Helper boundary (Cycle AD-4):
+- Gate harness + owner-bucket assert helpers: ``final_emission_gate_fixtures.py``
+- Downstream HTTP smoke: ``emission_smoke_assertions.py``
+- Classifier/dashboard inline observed rows may wrap these builders; duplication there
+  is intentional diagnostic projection, not runtime gate ownership.
 """
 from __future__ import annotations
 

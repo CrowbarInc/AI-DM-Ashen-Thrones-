@@ -3,10 +3,14 @@
 Tests skip logic, ``validate_response_delta``, and ``apply_final_emission_gate`` integration.
 Objective C2 Block C: response-delta **reordering/compression repair is disabled** at the boundary;
 this file asserts validate-only behavior and explicit ``*_at_boundary_no_reorder`` trace strings.
+
+Emission authority (Cycle AD-2):
+- ``tests/test_final_emission_gate.py`` owns gate orchestration (exact ``final_route`` /
+  ``final_emitted_source`` / fallback source tables).
+- This suite owns response-delta checked/failed/repaired/skip semantics and boundary
+  validate-only no-reorder behavior via ``assert_response_delta_boundary_validate_only``.
 """
 from __future__ import annotations
-
-from game.final_emission_meta import read_final_emission_meta_dict
 
 import importlib
 
@@ -22,10 +26,10 @@ from game.final_emission_gate import (
     validate_response_delta,
 )
 from tests.helpers.emission_smoke_assertions import (
-    assert_final_route_replaced_or_not_accept,
     assert_no_boundary_reorder_repair,
     assert_response_delta_boundary_validate_only,
 )
+from tests.helpers.final_emission_gate_fixtures import final_emission_meta_from_output
 
 _prompt_context = importlib.import_module("game.prompt_context")
 ANSWER_COMPLETENESS_PARTIAL_REASONS = _prompt_context.ANSWER_COMPLETENESS_PARTIAL_REASONS
@@ -638,7 +642,7 @@ def test_response_delta_runs_after_answer_completeness_non_social():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_failed") is True
     assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
 
@@ -672,7 +676,7 @@ def test_ac_repair_precedence_then_delta_on_repaired_text():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
@@ -690,10 +694,12 @@ def test_final_emitted_source_reflects_response_delta_repair_mode():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
+    assert meta.get("response_delta_checked") is True
     assert meta.get("response_delta_repaired") is False
     assert meta.get("response_delta_failed") is False
-    assert meta.get("final_emitted_source") == "generated_candidate"
+    assert meta.get("response_delta_kind_detected") == "refinement"
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
 
 
 def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
@@ -713,8 +719,10 @@ def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
-    assert_final_route_replaced_or_not_accept(meta)
+    meta = final_emission_meta_from_output(out)
+    assert meta.get("response_delta_failed") is True
+    assert meta.get("response_delta_repaired") is False
+    # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
     assert_no_boundary_reorder_repair(meta, "response_delta_unsatisfied_at_boundary_no_reorder")
 
 

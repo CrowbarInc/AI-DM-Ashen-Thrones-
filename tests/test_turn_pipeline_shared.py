@@ -11,12 +11,20 @@ model-request assembly.
 Table-style dialogue-lock routing (pure ``choose_interaction_route``) lives in
 ``test_dialogue_routing_lock.py``; this module keeps HTTP pipeline locks only.
 Explicit multi-turn / retry / emission-gate bug locks stay non-parametrized.
-Final-emission assertions here are API-level downstream smoke for emitted chat
-results, not the practical owner for gate orchestration order.
+
+Emission authority boundary (Cycle AD-1):
+- ``tests/test_final_emission_gate.py`` owns final-emission **orchestration** semantics
+  (layer order, exact ``final_route`` / ``final_emitted_source`` / repair-kind tables,
+  owner-bucket mapping, gate-private metadata).
+- This module owns **downstream HTTP/API smoke** only: non-empty player text, obvious
+  scaffold/procedural leakage bans, repair/replacement evidence, and response metadata
+  needed to prove prompt→payload packaging through ``/api/chat`` and ``/api/action``.
+- Prefer ``tests/helpers/emission_smoke_assertions.py`` for repeated smoke checks;
+  do not restate exact gate internals here unless guarding HTTP packaging explicitly.
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_debug_notes_from_turn_payload, read_final_emission_meta_dict
+from game.final_emission_meta import read_debug_notes_from_turn_payload
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 from tests.helpers.emission_smoke_assertions import (
     assert_emission_repair_evidence,
@@ -25,6 +33,8 @@ from tests.helpers.emission_smoke_assertions import (
     assert_no_internal_scaffold_labels,
     assert_no_unresolved_stock_phrases,
     assert_player_text_present,
+    assert_response_type_meta,
+    gm_response_stub as _gm_response,
 )
 
 import json
@@ -108,19 +118,6 @@ def _seed_shared_world(tmp_path, monkeypatch):
     storage._save_json(storage.CONDITIONS_PATH, default_conditions())
     if not storage.SESSION_LOG_PATH.exists():
         storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
-
-
-def _gm_response(text: str, *, tags=None, debug_notes: str = ""):
-    return {
-        "player_facing_text": text,
-        "tags": list(tags or []),
-        "scene_update": None,
-        "activate_scene_id": None,
-        "new_scene_draft": None,
-        "world_updates": None,
-        "suggested_action": None,
-        "debug_notes": debug_notes,
-    }
 
 
 def _seed_runner_dialogue_context(tmp_path, monkeypatch):
@@ -420,7 +417,6 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     gm_output = data.get("gm_output") or {}
     text = str(gm_output.get("player_facing_text") or "")
     low = text.lower()
-    meta = _extract_final_emission_meta(data) or {}
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
     trace_contract = (
         (latest_compact_debug_trace_entry(data.get("debug_traces") or []).get("turn_trace") or {}).get("response_type_contract")
@@ -435,7 +431,7 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert "stands nearby" not in low
     assert "tavern runner" in low
     assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
-    assert meta.get("final_emitted_source") != "global_scene_fallback"
+    # Downstream smoke: player-facing output beat generic filler; exact FEM source/route owned by gate.
     assert debug_contract.get("required_response_type") == "dialogue"
     assert trace_contract.get("required_response_type") == "dialogue"
     assert resolution_contract.get("required_response_type") == "dialogue"
@@ -496,7 +492,8 @@ def test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unkno
     assert prompt_contract.get("required_response_type") == "dialogue"
     assert prompt_policy_contract.get("required_response_type") == "dialogue"
     assert response_policy_meta.get("required_response_type") == "dialogue"
-    assert meta.get("response_type_required") == "dialogue"
+    # HTTP packaging smoke: dialogue contract threaded through prompt and emitted meta.
+    assert_response_type_meta(meta, required="dialogue")
 
     assert prompt_srs.get("enabled") is True
     assert prompt_srs.get("required_response_type") == "dialogue"
@@ -682,7 +679,12 @@ def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tm
     text = (gm_output.get("player_facing_text") or "").lower()
     assert text.startswith("you are in") or "investigator" in text or "filing shelves" in text
     assert "checkpoint feels tense" not in text
-    assert "question_retry_fallback" in (gm_output.get("tags") or [])
+    # Pipeline retry smoke: tag + debug evidence that retry fallback fired (not gate source tables).
+    assert_emission_repair_evidence(
+        data,
+        tag_markers=("question_retry_fallback",),
+        debug_notes_reader=read_debug_notes_from_turn_payload,
+    )
     assert "known_fact_guard" in (gm_output.get("tags") or [])
     dbg = read_debug_notes_from_turn_payload(data)
     assert "retry_strategy:selected=unresolved_question" in dbg
@@ -716,7 +718,11 @@ def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallbac
     low = text.lower()
     assert "fog hangs low" not in low
     assert "tavern runner" in low
-    assert "question_retry_fallback" in (gm_output.get("tags") or [])
+    assert_emission_repair_evidence(
+        data,
+        tag_markers=("question_retry_fallback",),
+        debug_notes_reader=read_debug_notes_from_turn_payload,
+    )
     assert "retry_fallback:unresolved_question" in read_debug_notes_from_turn_payload(data)
     assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
@@ -944,14 +950,17 @@ def test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped
         or "that's all" in low
         or "i do not know enough" in low
     )
-    assert meta.get("response_type_required") == "answer"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("response_type_repair_used") is True
-    assert meta.get("response_type_repair_kind") in {
-        "dialogue_minimal_repair",
-        "answer_upstream_prepared_repair",
-        "strict_social_dialogue_repair",
-    }
+    assert_response_type_meta(
+        meta,
+        required="answer",
+        candidate_ok=True,
+        repair_used=True,
+        repair_kinds=(
+            "dialogue_minimal_repair",
+            "answer_upstream_prepared_repair",
+            "strict_social_dialogue_repair",
+        ),
+    )
 
 
 # feature: routing, social
@@ -1410,7 +1419,7 @@ def test_chat_mixed_scene_object_investigation_question_recovers_action_outcome(
     assert metadata.get("mixed_turn_detail_question") == question_text
     assert metadata.get("adjudication_or_detail_question_text") == question_text
     assert metadata.get("recovered_action_clause")
-    assert final_meta.get("response_type_required") == "action_outcome"
+    assert_response_type_meta(final_meta, required="action_outcome")
     assert "scene pauses" not in low
     assert "nothing concrete" not in low
 
@@ -1452,10 +1461,9 @@ def test_chat_action_outcome_contract_survives_inside_active_social_scene(tmp_pa
     assert "tavern runner" not in low
     assert "desk" in low
     assert "concrete clue" in low or "map indicates patrol locations" in low
-    assert meta.get("response_type_required") == "action_outcome"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("response_type_repair_used") is True
-    assert meta.get("final_emitted_source") == "action_outcome_upstream_prepared_repair"
+    assert_global_visibility_stock_absent(text)
+    # HTTP smoke: action_outcome contract survived; exact repair source/kind is gate-owned.
+    assert_response_type_meta(meta, required="action_outcome", candidate_ok=True, repair_used=True)
 
 
 # feature: routing, social
@@ -1980,9 +1988,7 @@ def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(
         or "old crossroads" in low2
         or "old millstone" in low2
     )
-    assert meta.get("response_type_required") == "dialogue"
-    assert meta.get("response_type_candidate_ok") is True
-    assert meta.get("final_emitted_source") != "global_scene_fallback"
+    assert_response_type_meta(meta, required="dialogue", candidate_ok=True)
 
 
 # feature: emission
@@ -2053,12 +2059,8 @@ def test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical(tmp_
     assert "merchant" not in low
     assert "tavern runner" in low
     meta = _extract_final_emission_meta(data) or {}
-    assert meta.get("speaker_contract_enforcement_reason") in (
-        "continuity_locked_speaker_repair",
-        "canonical_speaker_rewrite",
-        "speaker_contract_match",
-        "speaker_binding_mismatch",
-    )
+    # HTTP smoke: speaker enforcement ran; exact reason codes owned by speaker/gate suites.
+    assert meta.get("speaker_contract_enforcement_reason")
 
 
 # feature: emission, speaker_contract
@@ -2083,12 +2085,7 @@ def test_pipeline_strict_social_ragged_stranger_fallback_repaired(tmp_path, monk
     assert "ragged stranger" not in low
     assert "tavern runner" in low
     meta = _extract_final_emission_meta(data) or {}
-    assert meta.get("speaker_contract_enforcement_reason") in (
-        "canonical_speaker_rewrite",
-        "continuity_locked_speaker_repair",
-        "speaker_contract_match",
-        "speaker_binding_mismatch",
-    )
+    assert meta.get("speaker_contract_enforcement_reason")
 
 
 # feature: emission, interruption

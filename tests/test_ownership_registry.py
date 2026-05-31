@@ -10,6 +10,17 @@ Design notes (read before extending):
   residue) are *supporting* surfaces. They must not be named as the direct owner for **live
   legality** responsibilities (gate-era rules, sanitizer post-processing, shipped policy
   materialization, etc.).
+- **Downstream consumer** suites (Cycle AD-3): integration-visible smoke only — player-facing
+  text hygiene, repair/replacement evidence, contract threading through HTTP/API, and
+  layer-specific checked/failed/repaired fields owned by that consumer (e.g. answer
+  completeness, response delta). They must **not** restate exact gate orchestration tables
+  (``final_route``, ``final_emitted_source``, owner-bucket mapping, repair-kind enumeration)
+  already owned by ``tests/test_final_emission_gate.py``; prefer ``tests/helpers/emission_smoke_assertions.py``.
+- **Smoke suites**: survival / wiring / one-phrase hygiene checks; not full legality matrices.
+- **Gauntlet / replay neighbors** (e.g. ``tests/test_golden_replay.py``): intentional
+  diagnostic observation and drift projection locks — not runtime gate orchestration owners.
+  Classifier/dashboard FEM bucket columns follow the same rule (diagnostic projection, not
+  gate ownership).
 - New validation rules should land with a clear direct owner first; only then add broad
   regression, transcript, or gauntlet coverage so failures stay attributable.
 
@@ -68,6 +79,15 @@ _LIVE_LEGALITY_GROUP_IDS: Final[AbstractSet[str]] = frozenset(
         "prompt_context_contract_assembly",
         "output_sanitizer_final_string_cleanup",
         "social_emission_legality_surface",
+    }
+)
+
+# Cycle AD-3: integration downstream smoke paths — registry neighbors only, never direct_owner.
+_DOWNSTREAM_INTEGRATION_SMOKE_ONLY: Final[frozenset[str]] = frozenset(
+    {
+        "tests/test_turn_pipeline_shared.py",
+        "tests/test_answer_completeness_rules.py",
+        "tests/test_response_delta_requirement.py",
     }
 )
 
@@ -151,7 +171,16 @@ def _path_is_disallowed_live_legality_owner(path: str) -> bool:
 
 @dataclass(frozen=True)
 class ResponsibilityRecord:
-    """One governed responsibility slice."""
+    """One governed responsibility slice.
+
+    Neighbor field semantics (Cycle AD-3):
+    - ``direct_owner``: normative / full assertion home for the responsibility.
+    - ``downstream_consumer_suites``: integration-visible smoke (HTTP/API packaging, consumer
+      layer meta fields); not alternate gate orchestration owners.
+    - ``smoke_suites``: thin wiring / survival checks only.
+    - ``gauntlet_suites`` / ``transcript_suites``: end-to-end observation; replay/classifier
+      FEM projection duplication is intentional diagnostic protection, not gate ownership.
+    """
 
     human_title: str
     declared_architecture_layer: str | None
@@ -186,6 +215,9 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         smoke_suites=("tests/test_c4_narrative_mode_live_pipeline.py",),
     ),
     "final_emission_gate_orchestration": ResponsibilityRecord(
+        # Direct owner: apply_final_emission_gate orchestration, layer order, exact final_route /
+        # final_emitted_source / repair-kind tables. Downstream neighbors: HTTP/API smoke and
+        # consumer-layer boundary validate-only traces only (see emission_smoke_assertions.py).
         human_title="Final emission gate orchestration",
         declared_architecture_layer="gate",
         direct_owner="tests/test_final_emission_gate.py",
@@ -199,6 +231,8 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         ),
     ),
     "final_emission_meta_projection": ResponsibilityRecord(
+        # Direct owner: FEM read/normalize/projection helpers. Golden replay / failure classifier
+        # bucket columns are intentional diagnostic projection neighbors — not gate orchestration.
         human_title="Final emission meta (FEM) projection, replay read path, and sidecar reads",
         declared_architecture_layer="gate",
         direct_owner="tests/test_final_emission_meta.py",
@@ -238,6 +272,8 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         downstream_consumer_suites=("tests/test_prompt_and_guard.py",),
     ),
     "output_sanitizer_final_string_cleanup": ResponsibilityRecord(
+        # Direct owner: full procedural phrase-ban matrix. Downstream neighbors: HTTP smoke via
+        # emission_smoke_assertions helpers — not duplicate sanitizer tables.
         human_title="Output sanitizer final string cleanup",
         declared_architecture_layer="gate",
         direct_owner="tests/test_output_sanitizer.py",
@@ -253,6 +289,8 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         smoke_suites=("tests/test_social_probe_determinism.py",),
     ),
     "social_emission_legality_surface": ResponsibilityRecord(
+        # Direct owner: strict-social legality tables (question_resolution, first-sentence).
+        # answer_completeness_rules / response_delta_requirement are downstream policy consumers.
         human_title="Social emission legality / surface",
         declared_architecture_layer="gate",
         direct_owner="tests/test_social_exchange_emission.py",
@@ -276,6 +314,8 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         smoke_suites=("tests/test_transcript_runner_smoke.py",),
     ),
     "gauntlet_playability_validation": ResponsibilityRecord(
+        # Direct owner: gauntlet orchestration. golden_replay gauntlet neighbor holds intentional
+        # replay observation / FEM drift locks — diagnostic projection, not gate orchestration.
         human_title="Gauntlet / playability validation",
         declared_architecture_layer="gate",
         direct_owner="tests/test_gauntlet_regressions.py",
@@ -554,6 +594,11 @@ def collect_ownership_governance_errors(
                     f"duplicate direct_owner claim: {dkey!r} used by {seen_owners[dkey]!r} and {gid!r}",
                 )
             seen_owners[dkey] = gid
+            if dkey in _DOWNSTREAM_INTEGRATION_SMOKE_ONLY:
+                errors.append(
+                    f"{gid}: direct_owner {rec.direct_owner!r} is AD-registered downstream "
+                    f"integration smoke only; assign a gate/unit owner instead.",
+                )
 
         if gid in live_legality_group_ids and _path_is_disallowed_live_legality_owner(rec.direct_owner):
             errors.append(
@@ -633,3 +678,58 @@ def test_final_emission_meta_projection_read_side_ownership_boundaries() -> None
     assert "read path" in title or "replay read path" in title
     assert "projection" in title
     assert "gate orchestration" not in title
+
+
+def test_ad3_gate_orchestration_direct_owner_is_final_emission_gate() -> None:
+    """Cycle AD-3: gate orchestration normative owner stays on the gate module."""
+    rec = RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"]
+    assert rec.direct_owner.replace("\\", "/") == "tests/test_final_emission_gate.py"
+
+
+def test_ad3_downstream_integration_smoke_suites_registered_as_neighbors() -> None:
+    """Cycle AD-3: AD-thinned suites are downstream neighbors, never direct owners."""
+    gate = RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"]
+    sanitizer = RESPONSIBILITY_REGISTRY["output_sanitizer_final_string_cleanup"]
+    visibility = RESPONSIBILITY_REGISTRY["final_emission_visibility_semantics"]
+    social = RESPONSIBILITY_REGISTRY["social_emission_legality_surface"]
+
+    gate_downstream = frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
+    assert _DOWNSTREAM_INTEGRATION_SMOKE_ONLY.issubset(gate_downstream)
+
+    turn_pipeline = "tests/test_turn_pipeline_shared.py"
+    assert turn_pipeline in gate_downstream
+    assert turn_pipeline in frozenset(
+        p.replace("\\", "/") for p in sanitizer.downstream_consumer_suites
+    )
+    assert turn_pipeline in frozenset(
+        p.replace("\\", "/") for p in visibility.downstream_consumer_suites
+    )
+
+    ac_rd = frozenset(
+        {
+            "tests/test_answer_completeness_rules.py",
+            "tests/test_response_delta_requirement.py",
+        }
+    )
+    assert ac_rd.issubset(gate_downstream)
+    assert ac_rd.issubset(
+        frozenset(p.replace("\\", "/") for p in social.downstream_consumer_suites)
+    )
+
+    for gid, rec in RESPONSIBILITY_REGISTRY.items():
+        owner = rec.direct_owner.replace("\\", "/")
+        assert owner not in _DOWNSTREAM_INTEGRATION_SMOKE_ONLY, (
+            f"{gid} must not list {owner!r} as direct_owner "
+            f"(downstream integration smoke only)."
+        )
+
+
+def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
+    """Cycle AD-3: replay observation locks live under gauntlet neighbor, not gate orchestration."""
+    gate = RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"]
+    gauntlet = RESPONSIBILITY_REGISTRY["gauntlet_playability_validation"]
+    golden = "tests/test_golden_replay.py"
+
+    assert golden in frozenset(p.replace("\\", "/") for p in gauntlet.gauntlet_suites)
+    assert gauntlet.direct_owner.replace("\\", "/") != gate.direct_owner.replace("\\", "/")
+    assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
