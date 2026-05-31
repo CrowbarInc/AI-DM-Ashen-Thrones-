@@ -23,14 +23,13 @@ from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.golden_replay_projection import (
     MISSING as _MISSING,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-    SEMANTIC_DRIFT_FIELDS as _SEMANTIC_DRIFT_FIELDS,
-    STRUCTURAL_DRIFT_FIELDS as _STRUCTURAL_DRIFT_FIELDS,
     _echo_overlap_band,
     final_text_has_scaffold_leakage,
     golden_text_hash,
     lookup_observation_path as _lookup_path,
     normalize_golden_text,
     project_turn_observation,
+    protected_observation_drift_bucket,
 )
 from tests.helpers.failure_dashboard_report import (
     failure_dashboard_requested,
@@ -322,11 +321,7 @@ def assert_protected_golden_turn_observation(
 
 
 def _drift_bucket_for_field(field_path: str) -> str:
-    if field_path in _STRUCTURAL_DRIFT_FIELDS or field_path.startswith("trace."):
-        return "structural_drift"
-    if field_path in _SEMANTIC_DRIFT_FIELDS or field_path.startswith("semantic."):
-        return "semantic_drift"
-    return "structural_drift"
+    return protected_observation_drift_bucket(field_path)
 
 
 def _add_drift(out: dict[str, Any], bucket: str, field_path: str, expected: Any, actual: Any, reason: str) -> None:

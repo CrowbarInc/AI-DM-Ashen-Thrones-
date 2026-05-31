@@ -18,6 +18,7 @@ from tests.failure_classification_contract import (
     ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
     LEGACY_RESPONSE_TYPE_REPAIR_KINDS,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
+    OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
     REQUIRED_CLASSIFICATION_FIELDS,
 )
 from tests.helpers.failure_classifier import (
@@ -25,6 +26,12 @@ from tests.helpers.failure_classifier import (
     INVESTIGATION_TARGETS,
     PRIMARY_OWNER_RULES,
     SECONDARY_OWNER_RULES,
+    validate_failure_classification_row,
+)
+from tests.helpers.golden_replay_projection import (
+    protected_observation_drift_bucket,
+    protected_observation_field_paths,
+    protected_observation_field_registry,
 )
 
 
@@ -67,6 +74,50 @@ def classification_contract_summary() -> dict[str, Any]:
         "visibility_owner_bucket_count": len(buckets["visibility"]),
         "runtime_response_type_repair_kind_count": len(ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS),
         "legacy_response_type_repair_kind_count": len(LEGACY_RESPONSE_TYPE_REPAIR_KINDS),
+    }
+
+
+def expected_failure_classification_row_fields() -> dict[str, tuple[str, ...]]:
+    """Return contract-locked required and optional evidence field names for dashboard rows."""
+    allowed = REQUIRED_CLASSIFICATION_FIELDS | OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
+    return {
+        "required": tuple(sorted(REQUIRED_CLASSIFICATION_FIELDS)),
+        "optional_evidence": tuple(sorted(OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)),
+        "allowed": tuple(sorted(allowed)),
+    }
+
+
+def failure_dashboard_row_shape_errors(row: Mapping[str, Any]) -> list[str]:
+    """Return row-shape validation errors; empty when the row matches the contract."""
+    return validate_failure_classification_row(row)
+
+
+def assert_failure_dashboard_row_shape(row: Mapping[str, Any]) -> None:
+    """Assert one classifier/dashboard row satisfies the shared row-shape contract."""
+    errors = failure_dashboard_row_shape_errors(row)
+    if errors:
+        joined = "; ".join(errors)
+        raise AssertionError(f"invalid failure dashboard row shape: {joined}")
+
+
+def protected_observation_registry_summary() -> dict[str, Any]:
+    """Compact summary of the protected golden replay observation field registry."""
+    registry = protected_observation_field_registry()
+    paths = protected_observation_field_paths()
+    structural_paths = tuple(
+        field.path for field in registry if field.drift_bucket == "structural_drift"
+    )
+    semantic_paths = tuple(
+        field.path for field in registry if field.drift_bucket == "semantic_drift"
+    )
+    return {
+        "protected_field_count": len(registry),
+        "structural_field_count": len(structural_paths),
+        "semantic_field_count": len(semantic_paths),
+        "paths_unique": len(set(paths)) == len(paths),
+        "paths_sorted": list(paths) == sorted(paths),
+        "fallback_family_bucket": protected_observation_drift_bucket("fallback_family"),
+        "scaffold_leakage_bucket": protected_observation_drift_bucket("scaffold_leakage"),
     }
 
 

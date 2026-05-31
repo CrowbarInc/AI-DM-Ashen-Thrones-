@@ -199,7 +199,7 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         ),
     ),
     "final_emission_meta_projection": ResponsibilityRecord(
-        human_title="Final emission meta (FEM) projection and read path",
+        human_title="Final emission meta (FEM) projection, replay read path, and sidecar reads",
         declared_architecture_layer="gate",
         direct_owner="tests/test_final_emission_meta.py",
         downstream_consumer_suites=(
@@ -610,3 +610,26 @@ def test_allowlist_entries_have_non_empty_reasons() -> None:
     for name, reason in _CROSS_FILE_DUPLICATE_ALLOWLIST.items():
         assert name.startswith("test_"), name
         assert reason.strip(), f"empty allowlist reason for {name!r}"
+
+
+def test_final_emission_meta_projection_read_side_ownership_boundaries() -> None:
+    """Cycle AE4: read-side lineage/projection edits stay in meta projection ownership."""
+    meta_proj = RESPONSIBILITY_REGISTRY["final_emission_meta_projection"]
+    gate_orch = RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"]
+
+    assert meta_proj.direct_owner == "tests/test_final_emission_meta.py"
+    assert gate_orch.direct_owner == "tests/test_final_emission_gate.py"
+    assert meta_proj.direct_owner != gate_orch.direct_owner
+
+    gate_path = "tests/test_final_emission_gate.py"
+    assert gate_path not in meta_proj.downstream_consumer_suites
+    assert gate_path not in meta_proj.smoke_suites
+    assert gate_path not in meta_proj.transcript_suites
+    assert gate_path not in meta_proj.gauntlet_suites
+    assert gate_path not in meta_proj.evaluator_suites
+    assert gate_path not in meta_proj.compatibility_residue_suites
+
+    title = meta_proj.human_title.lower()
+    assert "read path" in title or "replay read path" in title
+    assert "projection" in title
+    assert "gate orchestration" not in title

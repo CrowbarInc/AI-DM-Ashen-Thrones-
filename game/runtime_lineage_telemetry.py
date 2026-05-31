@@ -69,6 +69,30 @@ RUNTIME_LINEAGE_STAGES: frozenset[str] = frozenset(
     }
 )
 
+RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS: tuple[str, ...] = (
+    "fallback_authorship_source",
+    "fallback_owner_bucket",
+    "fallback_selection_owner",
+    "fallback_content_owner",
+)
+
+
+def runtime_lineage_vocabulary_summary() -> dict[str, object]:
+    """Compact summary of normalized read-side runtime lineage vocabulary.
+
+    Diagnostic only: does not inspect live runtime objects or influence scoring.
+    """
+    return {
+        "event_kinds": sorted(RUNTIME_LINEAGE_EVENT_KINDS),
+        "stages": sorted(RUNTIME_LINEAGE_STAGES),
+        "fallback_attribution_fields": list(RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS),
+        "recurrence_identity_note": (
+            "Recurrence identity remains event_kind/stage/owner/detail; "
+            "fallback_content_owner does not participate in recurrence_key."
+        ),
+    }
+
+
 _TOKEN_BREAKS_RE = re.compile(r"[\s-]+")
 _TOKEN_UNSAFE_RE = re.compile(r"[^a-z0-9_.]+")
 

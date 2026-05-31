@@ -61,6 +61,23 @@ SEALED_REPLACEMENT_SUBKINDS: frozenset[str] = frozenset(
 _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT: str = "sealed_or_global_replacement"
 
 
+def read_side_lineage_projection_surface() -> dict[str, object]:
+    """Summarize stable read-side projection-owned surfaces (diagnostic only).
+
+    Does not inspect live runtime state, select fallbacks, or mutate output.
+    """
+    return {
+        "sealed_replacement_subkind_count": len(SEALED_REPLACEMENT_SUBKINDS),
+        "sealed_replacement_subkind_tokens": sorted(SEALED_REPLACEMENT_SUBKINDS),
+        "opening_fallback_selection_owner": OPENING_FALLBACK_SELECTION_OWNER,
+        "opening_fallback_content_owner": OPENING_FALLBACK_CONTENT_OWNER,
+        "strict_social_fallback_selection_owner": STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
+        "strict_social_fallback_content_owner": STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+        "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
+        "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
+    }
+
+
 def _norm_projection_token(value: Any) -> str:
     return str(value or "").strip().lower()
 

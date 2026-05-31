@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from dataclasses import dataclass
 from typing import Any, Mapping
 
 from game.final_emission_meta import (
@@ -51,8 +52,29 @@ NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY = "neutral_reply_speaker_grounding
 
 MISSING = object()
 
-STRUCTURAL_DRIFT_FIELDS = frozenset(
-    {
+
+@dataclass(frozen=True)
+class ProtectedObservationField:
+    path: str
+    drift_bucket: str
+    required: bool = False
+    description: str = ""
+
+
+def _protected_structural_fields(*paths: str) -> tuple[ProtectedObservationField, ...]:
+    return tuple(
+        ProtectedObservationField(path=path, drift_bucket="structural_drift") for path in paths
+    )
+
+
+def _protected_semantic_fields(*paths: str) -> tuple[ProtectedObservationField, ...]:
+    return tuple(
+        ProtectedObservationField(path=path, drift_bucket="semantic_drift") for path in paths
+    )
+
+
+PROTECTED_OBSERVATION_FIELDS: tuple[ProtectedObservationField, ...] = (
+    *_protected_structural_fields(
         "resolution_kind",
         "route_kind",
         "selected_speaker_id",
@@ -92,10 +114,19 @@ STRUCTURAL_DRIFT_FIELDS = frozenset(
         "trace.canonical_entry.target_source",
         "trace.canonical_entry.reason",
         "trace.social_contract_trace.route_selected",
-    }
+    ),
+    *_protected_semantic_fields("final_text", "scaffold_leakage"),
 )
 
-SEMANTIC_DRIFT_FIELDS = frozenset({"final_text", "scaffold_leakage"})
+STRUCTURAL_DRIFT_FIELDS = frozenset(
+    field.path for field in PROTECTED_OBSERVATION_FIELDS if field.drift_bucket == "structural_drift"
+)
+
+SEMANTIC_DRIFT_FIELDS = frozenset(
+    field.path for field in PROTECTED_OBSERVATION_FIELDS if field.drift_bucket == "semantic_drift"
+)
+
+_DRIFT_BUCKET_BY_PATH = {field.path: field.drift_bucket for field in PROTECTED_OBSERVATION_FIELDS}
 
 _SCAFFOLD_LEAK_RE = re.compile(
     r"\b(?:planner|router|validator|adjudication|scaffold|authoritative state|"
@@ -104,9 +135,31 @@ _SCAFFOLD_LEAK_RE = re.compile(
 )
 
 
+def protected_observation_field_registry() -> tuple[ProtectedObservationField, ...]:
+    """Return the canonical protected observation field registry."""
+    return PROTECTED_OBSERVATION_FIELDS
+
+
+def protected_observation_field_paths() -> tuple[str, ...]:
+    """Return sorted unique dotted paths from the protected observation registry."""
+    return tuple(sorted({field.path for field in PROTECTED_OBSERVATION_FIELDS}))
+
+
+def protected_observation_drift_bucket(path: str) -> str:
+    """Map a protected observation field path to its drift bucket."""
+    bucket = _DRIFT_BUCKET_BY_PATH.get(path)
+    if bucket is not None:
+        return bucket
+    if str(path).startswith("trace."):
+        return "structural_drift"
+    if str(path).startswith("semantic."):
+        return "semantic_drift"
+    return "structural_drift"
+
+
 def protected_field_paths() -> tuple[str, ...]:
     """Return dotted field paths under protected golden replay observation locks."""
-    return tuple(sorted(STRUCTURAL_DRIFT_FIELDS | SEMANTIC_DRIFT_FIELDS))
+    return protected_observation_field_paths()
 
 
 def final_text_has_scaffold_leakage(text: str) -> bool:

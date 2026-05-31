@@ -19,6 +19,10 @@ from game.final_emission_gate import (
 )
 from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.social import determine_social_escalation_outcome
+from tests.helpers.emission_smoke_assertions import (
+    assert_final_route_replaced_or_not_accept,
+    assert_no_boundary_reorder_repair,
+)
 from tests.test_social_escalation import _session_with_pressure
 
 _prompt_contracts = importlib.import_module("game.prompt_context")
@@ -470,9 +474,8 @@ def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
-    sample = meta.get("rejection_reasons_sample") or []
-    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in sample
+    assert_final_route_replaced_or_not_accept(meta)
+    assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
 def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
@@ -509,8 +512,8 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
-    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
+    assert_final_route_replaced_or_not_accept(meta)
+    assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
 def test_authoritative_refusal_stays_substantive_after_repair():
@@ -558,8 +561,9 @@ def test_authoritative_refusal_stays_substantive_after_repair():
     )
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is False
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
-    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
+    assert meta.get("answer_completeness_failed") is True
+    assert_final_route_replaced_or_not_accept(meta)
+    assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
 def test_transcript_style_dodge_opening_repaired_with_meta_flags():
@@ -594,8 +598,8 @@ def test_transcript_style_dodge_opening_repaired_with_meta_flags():
     assert meta.get("answer_completeness_checked") is True
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
-    assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in (meta.get("rejection_reasons_sample") or [])
+    assert_final_route_replaced_or_not_accept(meta)
+    assert_no_boundary_reorder_repair(meta, "answer_completeness_unsatisfied_at_boundary_no_reorder")
 
 
 def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair():

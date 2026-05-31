@@ -12,10 +12,12 @@ from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
-    validate_failure_classification_row,
 )
-from tests.helpers.failure_classification_sync import known_failure_categories
-from tests.helpers.golden_replay_projection import protected_field_paths
+from tests.helpers.failure_classification_sync import (
+    failure_dashboard_row_shape_errors,
+    known_failure_categories,
+)
+from tests.helpers.golden_replay_projection import protected_observation_field_paths
 from tests.helpers.runtime_lineage_reporting import (
     build_runtime_lineage_summary,
     runtime_lineage_markdown_lines as _runtime_lineage_markdown_lines,
@@ -23,8 +25,37 @@ from tests.helpers.runtime_lineage_reporting import (
 
 # Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
 # re-enumerating protected replay field paths or failure categories inline.
-REPLAY_PROTECTED_FIELD_PATHS = protected_field_paths()
+REPLAY_PROTECTED_FIELD_PATHS = protected_observation_field_paths()
 KNOWN_FAILURE_CATEGORIES = known_failure_categories()
+
+FAILURE_DASHBOARD_TABLE_COLUMNS: tuple[str, ...] = (
+    "Scenario",
+    "Turn",
+    "Category",
+    "Severity",
+    "Primary Owner",
+    "Secondary Owner",
+    "Investigate First",
+    "Evidence",
+    "Replay Tags",
+    "Field",
+    "Expected",
+    "Actual",
+    "Unavailable",
+    "Final Source",
+    "Fallback",
+    "Post-Gate Mutation",
+    "Mutation Flags",
+)
+
+
+def expected_failure_dashboard_columns() -> tuple[str, ...]:
+    """Return markdown table column headers for the main failure dashboard table."""
+    return FAILURE_DASHBOARD_TABLE_COLUMNS
+
+
+def _failure_dashboard_table_header() -> str:
+    return "| " + " | ".join(FAILURE_DASHBOARD_TABLE_COLUMNS) + " |"
 
 FAILURE_DASHBOARD_ENV_VAR = "ASHEN_WRITE_FAILURE_DASHBOARD"
 RERUN_DRIFT_SCORECARD_ENV_VAR = "ASHEN_WRITE_RERUN_DRIFT_SCORECARD"
@@ -333,7 +364,7 @@ def render_failure_dashboard_markdown(
         return "\n".join(lines)
     lines.extend(
         [
-            "| Scenario | Turn | Category | Severity | Primary Owner | Secondary Owner | Investigate First | Evidence | Replay Tags | Field | Expected | Actual | Unavailable | Final Source | Fallback | Post-Gate Mutation | Mutation Flags |",
+            _failure_dashboard_table_header(),
             "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
         ]
     )
@@ -346,7 +377,7 @@ def render_failure_dashboard_markdown(
             str(item.get("category") or ""),
         ),
     ):
-        validation_errors = validate_failure_classification_row(row)
+        validation_errors = failure_dashboard_row_shape_errors(row)
         if validation_errors:
             raise ValueError(f"invalid failure dashboard row: {validation_errors}")
         mutation_flags = [
@@ -709,7 +740,7 @@ def render_protected_replay_failure_report(
             for key, value in row.items()
             if key not in {"test_node_id", "failed_invariant", "source_path", "branch_id", "turn_id"}
         }
-        validation_errors = validate_failure_classification_row(classification_row)
+        validation_errors = failure_dashboard_row_shape_errors(classification_row)
         if validation_errors:
             raise ValueError(f"invalid protected replay failure row: {validation_errors}")
         lines.append(

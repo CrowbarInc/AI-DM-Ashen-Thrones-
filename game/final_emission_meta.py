@@ -709,6 +709,24 @@ VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
     }
 )
 
+
+def final_emission_meta_read_side_surface() -> dict[str, object]:
+    """Summarize FEM read-side packaging keys and fallback owner bucket registries.
+
+    Diagnostic only: does not read live turn payloads or drive gate orchestration.
+    """
+    return {
+        "final_emission_meta_key": FINAL_EMISSION_META_KEY,
+        "emission_debug_lane_key": EMISSION_DEBUG_LANE_KEY,
+        "internal_state_key": INTERNAL_STATE_KEY,
+        "final_emission_mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
+        "opening_fallback_owner_buckets": sorted(OPENING_FALLBACK_OWNER_BUCKETS),
+        "sealed_fallback_owner_buckets": sorted(SEALED_FALLBACK_OWNER_BUCKETS),
+        "visibility_fallback_owner_buckets": sorted(VISIBILITY_FALLBACK_OWNER_BUCKETS),
+        "sidecar_read_helpers_preferred": True,
+    }
+
+
 _OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED: frozenset[str] = frozenset(
     {
         "upstream_prepared",

@@ -9,6 +9,8 @@ from game.final_emission_sealed_fallback import (
     stamp_non_strict_sealed_replacement_realization_family,
 )
 from game.final_emission_replay_projection import (
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
     SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
     SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
     SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
@@ -16,7 +18,11 @@ from game.final_emission_replay_projection import (
     SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
     SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
     SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    SEALED_REPLACEMENT_SUBKINDS,
+    STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
     project_sealed_replacement_subkind_from_fem,
+    read_side_lineage_projection_surface,
 )
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
@@ -38,12 +44,16 @@ from game.final_emission_meta import (
     EVALUATOR_FEM_KEY_PREFIX_FAMILIES,
     EMISSION_DEBUG_LANE_KEY,
     FINAL_EMISSION_META_KEY,
+    FINAL_EMISSION_MUTATION_LINEAGE_KEY,
     INTERNAL_STATE_KEY,
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
+    OPENING_FALLBACK_OWNER_BUCKETS,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
+    VISIBILITY_FALLBACK_OWNER_BUCKETS,
     apply_opening_fallback_projection_fields,
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
@@ -54,6 +64,7 @@ from game.final_emission_meta import (
     default_narrative_mode_output_layer_meta,
     default_response_type_debug,
     ensure_final_emission_meta_dict,
+    final_emission_meta_read_side_surface,
     infer_accept_path_final_emitted_source,
     merge_narrative_authenticity_into_final_emission_meta,
     merge_narrative_mode_output_into_final_emission_meta,
@@ -72,6 +83,15 @@ from game.final_emission_meta import (
     slim_na_evidence,
     slim_na_metrics,
     stage_diff_narrative_authenticity_projection,
+)
+from game.runtime_lineage_telemetry import (
+    RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
+    RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
+    RUNTIME_LINEAGE_EVENT_MUTATION,
+    RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR,
+    RUNTIME_LINEAGE_STAGE_GATE,
+    RUNTIME_LINEAGE_STAGE_SANITIZER,
+    runtime_lineage_vocabulary_summary,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
@@ -1036,3 +1056,53 @@ def test_normalize_fem_preserves_dual_fallback_family_fields_without_collapse() 
     assert normalized["fallback_family_used"] == "scene_opening"
     assert normalized[REALIZATION_FALLBACK_FAMILY_FIELD] == "legacy_diegetic_fallback"
     assert normalized["fallback_family_used"] != normalized[REALIZATION_FALLBACK_FAMILY_FIELD]
+
+
+def test_final_emission_meta_read_side_surface_exposes_sidecar_lane_constants() -> None:
+    surface = final_emission_meta_read_side_surface()
+    assert surface["final_emission_meta_key"] == FINAL_EMISSION_META_KEY
+    assert surface["emission_debug_lane_key"] == EMISSION_DEBUG_LANE_KEY
+    assert surface["internal_state_key"] == INTERNAL_STATE_KEY
+    assert surface["final_emission_mutation_lineage_key"] == FINAL_EMISSION_MUTATION_LINEAGE_KEY
+    assert surface["opening_fallback_owner_buckets"] == sorted(OPENING_FALLBACK_OWNER_BUCKETS)
+    assert surface["sealed_fallback_owner_buckets"] == sorted(SEALED_FALLBACK_OWNER_BUCKETS)
+    assert surface["visibility_fallback_owner_buckets"] == sorted(VISIBILITY_FALLBACK_OWNER_BUCKETS)
+    assert surface["sidecar_read_helpers_preferred"] is True
+
+
+def test_runtime_lineage_vocabulary_summary_includes_split_owner_fields() -> None:
+    summary = runtime_lineage_vocabulary_summary()
+    assert summary["event_kinds"] == sorted(
+        {
+            RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
+            RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR,
+            RUNTIME_LINEAGE_EVENT_MUTATION,
+            RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
+        }
+    )
+    assert RUNTIME_LINEAGE_STAGE_GATE in summary["stages"]
+    assert RUNTIME_LINEAGE_STAGE_SANITIZER in summary["stages"]
+    assert summary["fallback_attribution_fields"] == [
+        "fallback_authorship_source",
+        "fallback_owner_bucket",
+        "fallback_selection_owner",
+        "fallback_content_owner",
+    ]
+    note = str(summary["recurrence_identity_note"])
+    assert "event_kind" in note
+    assert "fallback_content_owner" in note
+    assert "recurrence_key" in note
+
+
+def test_read_side_lineage_projection_surface_includes_sealed_subkinds_and_split_owners() -> None:
+    surface = read_side_lineage_projection_surface()
+    assert surface["sealed_replacement_subkind_count"] == len(SEALED_REPLACEMENT_SUBKINDS)
+    assert surface["sealed_replacement_subkind_tokens"] == sorted(SEALED_REPLACEMENT_SUBKINDS)
+    assert surface["opening_fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
+    assert surface["opening_fallback_content_owner"] == OPENING_FALLBACK_CONTENT_OWNER
+    assert surface["strict_social_fallback_selection_owner"] == STRICT_SOCIAL_FALLBACK_SELECTION_OWNER
+    assert surface["strict_social_fallback_content_owner"] == STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
+    assert surface["mutation_lineage_key"] == FINAL_EMISSION_MUTATION_LINEAGE_KEY
+    assert surface["legacy_sealed_or_global_replacement_token"] == "sealed_or_global_replacement"
+    assert SEALED_REPLACEMENT_SUBKIND_OPENING in surface["sealed_replacement_subkind_tokens"]
+    assert SEALED_REPLACEMENT_SUBKIND_UNKNOWN in surface["sealed_replacement_subkind_tokens"]

@@ -56,6 +56,8 @@ from tests.helpers.golden_replay_projection import (
     project_replay_fallback_family_from_fem,
     project_turn_observation,
     protected_field_paths,
+    protected_observation_drift_bucket,
+    protected_observation_field_paths,
 )
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
@@ -120,6 +122,11 @@ def test_golden_replay_projection_adapter_wires_observed_turn():
     )
     assert via_adapter == via_wrapper
     paths = protected_field_paths()
+    registry_paths = protected_observation_field_paths()
+    assert protected_field_paths() == registry_paths
+    assert len(paths) == len(set(paths))
+    assert protected_observation_drift_bucket("fallback_family") == "structural_drift"
+    assert protected_observation_drift_bucket("scaffold_leakage") == "semantic_drift"
     assert "final_emitted_source" in paths
     assert "scaffold_leakage" in paths
     assert "route_kind" in paths

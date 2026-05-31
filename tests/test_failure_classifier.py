@@ -14,13 +14,18 @@ from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
 from tests.helpers.failure_classification_sync import (
     assert_contract_classifier_alignment,
+    assert_failure_dashboard_row_shape,
     classification_contract_summary,
+    expected_failure_classification_row_fields,
+    failure_dashboard_row_shape_errors,
     known_failure_categories,
     known_owner_buckets,
+    protected_observation_registry_summary,
 )
 from tests.helpers.failure_dashboard_report import (
     build_failure_dashboard_rows,
     build_runtime_lineage_summary,
+    expected_failure_dashboard_columns,
     render_failure_dashboard_markdown,
     write_failure_dashboard_artifact_if_requested,
 )
@@ -46,6 +51,7 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
     summary = classification_contract_summary()
     categories = known_failure_categories()
     buckets = known_owner_buckets()
+    registry_summary = protected_observation_registry_summary()
 
     assert summary["failure_category_count"] == len(categories)
     assert summary["opening_owner_bucket_count"] == len(buckets["opening"])
@@ -56,6 +62,17 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
     assert SEALED_FALLBACK_OWNER_SEALED_GATE in buckets["sealed"]
     assert "speaker" in categories
     assert "fallback" in categories
+    assert registry_summary["protected_field_count"] == (
+        registry_summary["structural_field_count"] + registry_summary["semantic_field_count"]
+    )
+    assert registry_summary["paths_unique"] is True
+    assert registry_summary["paths_sorted"] is True
+    assert registry_summary["fallback_family_bucket"] == "structural_drift"
+    assert registry_summary["scaffold_leakage_bucket"] == "semantic_drift"
+    row_fields = expected_failure_classification_row_fields()
+    assert len(row_fields["required"]) == summary["required_field_count"]
+    assert "category" in row_fields["required"]
+    assert "fallback_family" in row_fields["optional_evidence"]
 
 
 def _observed(**overrides: Any) -> dict[str, Any]:
@@ -258,13 +275,84 @@ def test_failure_dashboard_report_includes_required_replay_columns():
         scenario_id="report_probe",
         turn_index=2,
     )
+    assert_failure_dashboard_row_shape(rows[0])
     report = render_failure_dashboard_markdown(rows, title="Synthetic Failure Dashboard")
+    header = "| " + " | ".join(expected_failure_dashboard_columns()) + " |"
 
-    assert "| Scenario | Turn | Category | Severity | Primary Owner |" in report
+    assert header in report
     assert "| report_probe | 2 | fallback | high | fallback |" in report
     assert "game/final_emission_gate.py" in report
     assert "global_scene_fallback" in report
     assert "gate_terminal_repair" in report
+
+
+def test_failure_dashboard_row_shape_accepts_classified_row():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(),
+        drift_rows=[
+            {
+                "field_path": "selected_speaker_id",
+                "expected": "runner",
+                "actual": "guard",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="row_shape_probe",
+        turn_index=0,
+    )
+
+    assert failure_dashboard_row_shape_errors(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
+
+
+def test_failure_dashboard_row_shape_rejects_missing_required_fields():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(),
+        drift_rows=[
+            {
+                "field_path": "selected_speaker_id",
+                "expected": "runner",
+                "actual": "guard",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="row_shape_missing_probe",
+        turn_index=0,
+    )
+    incomplete = {key: value for key, value in rows[0].items() if key != "investigate_first"}
+
+    errors = failure_dashboard_row_shape_errors(incomplete)
+    assert any("missing required field: investigate_first" in error for error in errors)
+    with pytest.raises(AssertionError, match="investigate_first"):
+        assert_failure_dashboard_row_shape(incomplete)
+
+
+def test_failure_dashboard_markdown_raises_on_invalid_row_shape():
+    rows = build_failure_dashboard_rows(
+        observed_turn=_observed(),
+        drift_rows=[
+            {
+                "field_path": "selected_speaker_id",
+                "expected": "runner",
+                "actual": "guard",
+                "reason": "exact value mismatch",
+                "drift_bucket": "structural_drift",
+            }
+        ],
+        scenario_id="invalid_row_shape_probe",
+        turn_index=0,
+    )
+    invalid = dict(rows[0])
+    del invalid["category"]
+
+    with pytest.raises(ValueError, match="invalid failure dashboard row"):
+        render_failure_dashboard_markdown(
+            [invalid],
+            generated_at="2026-05-31T00:00:00Z",
+            command_used="pytest invalid-row-shape",
+        )
 
 
 def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_changing_rows():
@@ -1318,7 +1406,7 @@ def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
 
     assert rows[0]["fallback_selection_owner"] == "game.final_emission_gate"
     assert rows[0]["fallback_content_owner"] == "game.opening_deterministic_fallback"
-    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
     assert "fallback_selection_owner=game.final_emission_gate" in report
     assert "fallback_content_owner=game.opening_deterministic_fallback" in report
 
@@ -1354,7 +1442,7 @@ def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_
 
     assert rows[0]["fallback_selection_owner"] == "game.final_emission_gate"
     assert rows[0]["fallback_content_owner"] == "game.social_exchange_emission"
-    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
 
 
 def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_owner():

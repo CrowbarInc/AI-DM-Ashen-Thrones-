@@ -21,6 +21,11 @@ from game.final_emission_gate import (
     inspect_response_delta_failure,
     validate_response_delta,
 )
+from tests.helpers.emission_smoke_assertions import (
+    assert_final_route_replaced_or_not_accept,
+    assert_no_boundary_reorder_repair,
+    assert_response_delta_boundary_validate_only,
+)
 
 _prompt_context = importlib.import_module("game.prompt_context")
 ANSWER_COMPLETENESS_PARTIAL_REASONS = _prompt_context.ANSWER_COMPLETENESS_PARTIAL_REASONS
@@ -542,11 +547,7 @@ def test_response_delta_frontloads_existing_delta_sentence():
         "Specifically the bonded warehouse sits past the customs ditch."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_repair_mode"] is None
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra, repair_mode=None)
 
 
 def test_response_delta_trim_echo_opening():
@@ -559,10 +560,7 @@ def test_response_delta_trim_echo_opening():
         "Twelve guards hold the bonded warehouse past the customs ditch tonight."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 def test_response_delta_prioritize_refinement_before_caveat():
@@ -576,10 +574,7 @@ def test_response_delta_prioritize_refinement_before_caveat():
         "Specifically he works the bonded warehouse by the south crane."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 def test_response_delta_drop_duplicate_partial_prefix():
@@ -591,10 +586,7 @@ def test_response_delta_drop_duplicate_partial_prefix():
         "but the quartermaster calls him Brick."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 def test_response_delta_compress_echo_plus_delta():
@@ -605,10 +597,7 @@ def test_response_delta_compress_echo_plus_delta():
         "Specifically the bonded warehouse by the south crane handles the cargo."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 def test_response_delta_no_fabricated_repair_when_no_valid_later_delta():
@@ -622,10 +611,7 @@ def test_response_delta_no_fabricated_repair_when_no_valid_later_delta():
         "Fog drifts over the riverfront."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 # =============================================================================
@@ -728,9 +714,8 @@ def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
         world={},
     )
     meta = read_final_emission_meta_dict(out) or {}
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
-    sample = meta.get("rejection_reasons_sample") or []
-    assert "response_delta_unsatisfied_at_boundary_no_reorder" in sample
+    assert_final_route_replaced_or_not_accept(meta)
+    assert_no_boundary_reorder_repair(meta, "response_delta_unsatisfied_at_boundary_no_reorder")
 
 
 def test_response_delta_strict_social_owned_path_adds_no_extra_reason():
@@ -755,9 +740,7 @@ def test_response_delta_repair_preserves_npc_voice_trim():
         '"Twelve guards tonight," she mutters, "past the bonded warehouse."'
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta.get("response_delta_repaired") is False
-    assert out == raw
-    assert extra == ["response_delta_unsatisfied_at_boundary_no_reorder"]
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
 
 
 def test_response_delta_repair_preserves_pronoun_referent_order():
@@ -782,7 +765,6 @@ def test_response_delta_repair_does_not_invent_gated_facts():
         "Specifically the bonded warehouse sits past the customs ditch."
     )
     out, meta, extra = _apply_rd(raw, c)
-    assert meta.get("response_delta_repaired") is False
-    assert out == raw
+    assert_response_delta_boundary_validate_only(out, raw, meta, extra)
     for token in ("secret", "hidden", "underground"):
         assert token not in out.lower()

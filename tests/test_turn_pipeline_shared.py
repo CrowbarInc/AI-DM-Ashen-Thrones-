@@ -18,6 +18,14 @@ from __future__ import annotations
 
 from game.final_emission_meta import read_debug_notes_from_turn_payload, read_final_emission_meta_dict
 from game.narrative_authenticity_eval import _extract_final_emission_meta
+from tests.helpers.emission_smoke_assertions import (
+    assert_emission_repair_evidence,
+    assert_global_visibility_stock_absent,
+    assert_no_advisory_prose,
+    assert_no_internal_scaffold_labels,
+    assert_no_unresolved_stock_phrases,
+    assert_player_text_present,
+)
 
 import json
 import copy
@@ -134,11 +142,6 @@ def _seed_runner_dialogue_context(tmp_path, monkeypatch):
     session_ctx["interaction_mode"] = "social"
     session_ctx["engagement_level"] = "engaged"
     storage.save_session(session)
-
-
-def _assert_global_visibility_stock_absent(low: str) -> None:
-    """HTTP smoke: canonical global visibility stock must not reach player-facing chat."""
-    assert "for a breath, the scene holds" not in low
 
 
 def _assert_concrete_pressure(text: str) -> None:
@@ -428,7 +431,7 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert resolution.get("kind") == "question"
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
     if "scene holds" in bad_text.lower():
-        _assert_global_visibility_stock_absent(low)
+        assert_global_visibility_stock_absent(text)
     assert "stands nearby" not in low
     assert "tavern runner" in low
     assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
@@ -880,7 +883,7 @@ def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmospher
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     low = text.lower()
     assert "the tattered man" in low
-    _assert_global_visibility_stock_absent(low)
+    assert_global_visibility_stock_absent(text)
     _assert_concrete_pressure(text)
 
 
@@ -1611,11 +1614,8 @@ def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, m
 
     assert resp.status_code == 200
     data = resp.json()
-    text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
-    low = text.lower()
-    assert "planner:" not in low
-    assert "router" not in low
-    assert "validator:" not in low
+    text = assert_player_text_present(data)
+    assert_no_internal_scaffold_labels(text)
 
 
 # feature: emission
@@ -1831,17 +1831,11 @@ def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, mon
     gm_out = data.get("gm_output") or {}
     text = str(gm_out.get("player_facing_text") or "")
     low = text.lower()
-    assert "from here, no certain answer presents itself" not in low
-    assert "truth is still buried beneath rumor and rain" not in low
+    assert_no_unresolved_stock_phrases(text)
     assert "tavern runner" in low
-    tags = gm_out.get("tags") or []
-    dbg = read_debug_notes_from_turn_payload(data).lower()
-    assert (
-        "final_emission_gate_replaced" in tags
-        or "question_retry_fallback" in tags
-        or "social_exchange_retry_fallback" in tags
-        or "retry_fallback" in dbg
-        or "final_emission_gate" in dbg
+    assert_emission_repair_evidence(
+        data,
+        debug_notes_reader=read_debug_notes_from_turn_payload,
     )
 
 
@@ -1866,18 +1860,10 @@ def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkey
     data = resp.json()
     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
     low = text.lower()
-    assert "i'd suggest you" not in low
-    assert "you should" not in low
-    assert "you could" not in low
-    gm_out = data.get("gm_output") or {}
-    gtags = gm_out.get("tags") or []
-    dbg = read_debug_notes_from_turn_payload(data).lower()
-    assert (
-        "final_emission_gate_replaced" in gtags
-        or "question_retry_fallback" in gtags
-        or "social_exchange_retry_fallback" in gtags
-        or "retry_fallback" in dbg
-        or "final_emission_gate" in dbg
+    assert_no_advisory_prose(text)
+    assert_emission_repair_evidence(
+        data,
+        debug_notes_reader=read_debug_notes_from_turn_payload,
     )
 
 
@@ -1903,17 +1889,10 @@ def test_chat_social_exchange_strips_unresolved_stock_phrases(tmp_path, monkeypa
     data = resp.json()
     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
     low = text.lower()
-    assert "truth is still buried beneath rumor and rain" not in low
-    assert "answer has not formed yet" not in low
-    gm_out = data.get("gm_output") or {}
-    gtags = gm_out.get("tags") or []
-    dbg = read_debug_notes_from_turn_payload(data).lower()
-    assert (
-        "final_emission_gate_replaced" in gtags
-        or "question_retry_fallback" in gtags
-        or "social_exchange_retry_fallback" in gtags
-        or "retry_fallback" in dbg
-        or "final_emission_gate" in dbg
+    assert_no_unresolved_stock_phrases(text)
+    assert_emission_repair_evidence(
+        data,
+        debug_notes_reader=read_debug_notes_from_turn_payload,
     )
 
 
@@ -1939,7 +1918,7 @@ def test_chat_social_exchange_interruption_output_stays_coherent(tmp_path, monke
     data = resp.json()
     text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
     low = text.lower()
-    assert "i'd suggest you" not in low
+    assert_no_advisory_prose(text)
     assert "check the board" not in low
     assert any(
         phrase in low
@@ -2048,8 +2027,8 @@ def test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair(tmp_p
             "frowns",
         )
     )
-    assert "from here, no certain answer presents itself" not in low
-    assert "i'd suggest you" not in low
+    assert_no_unresolved_stock_phrases(text)
+    assert_no_advisory_prose(text)
 
 
 # feature: emission, speaker_contract
@@ -2134,6 +2113,28 @@ def test_pipeline_interruption_denial_still_emits_coherent_strict_social(tmp_pat
     gm_out = data.get("gm_output") or {}
     text = str(gm_out.get("player_facing_text") or "")
     low = text.lower()
-    assert "i'd suggest you" not in low
+    assert_no_advisory_prose(text)
     assert "check the board" not in low
     assert "tavern runner" in low or '"' in text
+
+
+def test_emission_smoke_helpers_reject_global_visibility_stock():
+    with pytest.raises(AssertionError):
+        assert_global_visibility_stock_absent(
+            "For a breath, the scene holds while voices shift around you."
+        )
+
+
+def test_emission_smoke_helpers_reject_advisory_prose():
+    with pytest.raises(AssertionError):
+        assert_no_advisory_prose("I'd suggest you ask the captain.")
+
+
+def test_emission_smoke_helpers_accept_repair_evidence_from_tags_or_debug():
+    assert_emission_repair_evidence(
+        {"gm_output": {"tags": ["final_emission_gate_replaced"]}},
+    )
+    assert_emission_repair_evidence(
+        {"debug_notes": "retry_fallback:unresolved_question"},
+        debug_notes_reader=lambda payload: str(payload.get("debug_notes") or ""),
+    )
