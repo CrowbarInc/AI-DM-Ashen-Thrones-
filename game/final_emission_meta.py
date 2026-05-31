@@ -29,7 +29,8 @@ path. This module packages **metadata shapes** and observational read paths, not
 from __future__ import annotations
 
 import importlib
-from typing import Any, Dict, Mapping, MutableMapping
+import re
+from typing import Any, Dict, List, Mapping, MutableMapping
 
 from game.final_emission_validators import (
     _default_response_type_debug as _validators_default_response_type_debug,
@@ -80,6 +81,375 @@ def ensure_final_emission_meta_dict(gm_output: MutableMapping[str, Any]) -> Dict
         meta = {}
         gm_output[FINAL_EMISSION_META_KEY] = meta
     return meta
+
+
+def _accept_path_layer_meta(meta: Mapping[str, Any] | None) -> Mapping[str, Any]:
+    return meta if isinstance(meta, Mapping) else {}
+
+
+def infer_accept_path_final_emitted_source(
+    initial_source: str,
+    *,
+    response_type_debug: Mapping[str, Any] | None = None,
+    retry_output: bool = False,
+    ac_layer_meta: Mapping[str, Any] | None = None,
+    rd_layer_meta: Mapping[str, Any] | None = None,
+    srs_layer_meta: Mapping[str, Any] | None = None,
+    nat_layer_meta: Mapping[str, Any] | None = None,
+    na_layer_meta: Mapping[str, Any] | None = None,
+    te_layer_meta: Mapping[str, Any] | None = None,
+    ar_layer_meta: Mapping[str, Any] | None = None,
+    cs_layer_meta: Mapping[str, Any] | None = None,
+    fb_layer_meta: Mapping[str, Any] | None = None,
+    purity_layer_meta: Mapping[str, Any] | None = None,
+    asp_layer_meta: Mapping[str, Any] | None = None,
+    ffnc_layer_meta: Mapping[str, Any] | None = None,
+) -> str:
+    """Project accept-path ``final_emitted_source`` from layer repair telemetry (metadata only).
+
+    Later overrides win in the same order as ``apply_final_emission_gate`` strict-social and
+    generic accept branches. *initial_source* is branch-specific (strict-social ``details`` or
+    generic ``generated_candidate``).
+    """
+    rtd = _accept_path_layer_meta(response_type_debug)
+    ac = _accept_path_layer_meta(ac_layer_meta)
+    rd = _accept_path_layer_meta(rd_layer_meta)
+    srs = _accept_path_layer_meta(srs_layer_meta)
+    nat = _accept_path_layer_meta(nat_layer_meta)
+    na = _accept_path_layer_meta(na_layer_meta)
+    te = _accept_path_layer_meta(te_layer_meta)
+    ar = _accept_path_layer_meta(ar_layer_meta)
+    cs = _accept_path_layer_meta(cs_layer_meta)
+    fb = _accept_path_layer_meta(fb_layer_meta)
+    purity = _accept_path_layer_meta(purity_layer_meta)
+    asp = _accept_path_layer_meta(asp_layer_meta)
+    ffnc = _accept_path_layer_meta(ffnc_layer_meta)
+
+    source = str(initial_source or "")
+    if rtd.get("response_type_repair_used"):
+        source = str(rtd.get("response_type_repair_kind") or "response_type_contract_repair")
+    if retry_output:
+        source = "retry_output"
+    if ac.get("answer_completeness_repaired"):
+        source = str(ac.get("answer_completeness_repair_mode") or "answer_completeness_repair")
+    if rd.get("response_delta_repaired"):
+        source = str(rd.get("response_delta_repair_mode") or "response_delta_repair")
+    if srs.get("social_response_structure_repair_applied") and srs.get("social_response_structure_passed"):
+        source = str(
+            srs.get("social_response_structure_repair_mode") or "social_response_structure_repair"
+        )
+    if nat.get("narrative_authenticity_repaired"):
+        source = str(nat.get("narrative_authenticity_repair_mode") or "narrative_authenticity_repair")
+    if na.get("narrative_authority_repaired"):
+        source = str(na.get("narrative_authority_repair_mode") or "narrative_authority_repair")
+    if te.get("tone_escalation_repaired"):
+        source = str(te.get("tone_escalation_repair_mode") or "tone_escalation_repair")
+    if ar.get("anti_railroading_repaired"):
+        source = str(ar.get("anti_railroading_repair_mode") or "anti_railroading_repair")
+    if cs.get("context_separation_repaired"):
+        source = str(cs.get("context_separation_repair_mode") or "context_separation_repair")
+    if fb.get("fallback_behavior_repaired"):
+        source = str(fb.get("fallback_behavior_repair_mode") or "fallback_behavior_repair")
+    if purity.get("player_facing_narration_purity_repaired"):
+        source = "player_facing_narration_purity_repair"
+    if asp.get("answer_shape_primacy_repaired"):
+        source = str(asp.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair")
+    if ffnc.get("fast_fallback_neutral_composition_repaired"):
+        source = str(
+            ffnc.get("fast_fallback_neutral_composition_repair_mode")
+            or "fast_fallback_neutral_composition_repair"
+        )
+    return source
+
+
+_NARRATION_CONSTRAINT_CODE_RE = re.compile(r"^[A-Za-z0-9_.:/-]+$")
+
+
+def default_narration_constraint_debug() -> Dict[str, Any]:
+    """Compact, sanitized narration-constraint diagnostics; not a full trace log."""
+    return {
+        "response_type": {
+            "required": None,
+            "contract_source": None,
+            "candidate_ok": None,
+            "repair_used": False,
+            "repair_kind": None,
+            "upstream_prepared_absent": None,
+        },
+        "visibility": {
+            "contract_present": False,
+            "decision_mode": None,
+            "visible_entity_count": None,
+            "withheld_fact_count": None,
+            "reason_codes": [],
+        },
+        "speaker_selection": {
+            "speaker_id": None,
+            "speaker_name": None,
+            "selection_source": None,
+            "reason_code": None,
+            "binding_confident": None,
+        },
+    }
+
+
+def narration_constraint_small_str(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    clean = value.strip()
+    if not clean or len(clean) > 64 or any(ch in clean for ch in "\r\n\t"):
+        return None
+    return clean
+
+
+def narration_constraint_small_code(value: Any) -> str | None:
+    clean = narration_constraint_small_str(value)
+    if clean is None or _NARRATION_CONSTRAINT_CODE_RE.fullmatch(clean) is None:
+        return None
+    return clean
+
+
+def narration_constraint_small_int(value: Any) -> int | None:
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def narration_constraint_reason_codes(*sources: Any, limit: int = 5) -> List[str]:
+    """Keep only small stable codes; never surface raw hidden text or prompt fragments."""
+    out: List[str] = []
+
+    def _push(raw: Any) -> None:
+        if len(out) >= limit:
+            return
+        if isinstance(raw, str):
+            clean = narration_constraint_small_code(raw)
+            if clean and clean not in out:
+                out.append(clean)
+            return
+        if isinstance(raw, dict):
+            _push(raw.get("reason_code"))
+            _push(raw.get("reason_codes"))
+            kind = raw.get("kind")
+            if isinstance(kind, str):
+                _push(kind)
+            return
+        if isinstance(raw, (list, tuple)):
+            for item in raw:
+                if len(out) >= limit:
+                    break
+                _push(item)
+
+    for source in sources:
+        _push(source)
+        if len(out) >= limit:
+            break
+    return out[:limit]
+
+
+def narration_constraint_visibility_mode(
+    visibility_meta: Mapping[str, Any] | None,
+    visibility_validation: Mapping[str, Any] | None,
+) -> str | None:
+    vm = visibility_meta if isinstance(visibility_meta, dict) else {}
+    vv = visibility_validation if isinstance(visibility_validation, dict) else {}
+    if vm.get("visibility_replacement_applied") is True:
+        return "replaced"
+    if vm.get("visibility_continuity_lead_exemption") is True:
+        return "continuity_lead_exemption"
+    if vm.get("visibility_validation_passed") is True:
+        return "validated"
+    if vm.get("visibility_validation_passed") is False:
+        return "validation_failed"
+    if isinstance(vv.get("ok"), bool):
+        return "validated" if vv.get("ok") is True else "validation_failed"
+    return None
+
+
+def narration_constraint_binding_confident(
+    speaker_selection_contract: Mapping[str, Any] | None,
+    speaker_contract_enforcement: Mapping[str, Any] | None,
+    speaker_binding_bridge: Mapping[str, Any] | None,
+) -> bool | None:
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+    if bridge.get("malformed_attribution_detected") is True:
+        return False
+
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    details = candidate.get("details") if isinstance(candidate, dict) else {}
+    signature = details.get("signature") if isinstance(details, dict) else {}
+    confidence = narration_constraint_small_code(signature.get("confidence")) if isinstance(signature, dict) else None
+    if confidence == "high":
+        return True
+    if confidence == "low":
+        return False
+    if ssc.get("continuity_locked") is True:
+        return True
+    if ssc.get("speaker_switch_allowed") is False and narration_constraint_small_str(ssc.get("primary_speaker_id")):
+        return True
+    return None
+
+
+def narration_constraint_speaker_reason_code(
+    speaker_selection_contract: Mapping[str, Any] | None,
+    speaker_contract_enforcement: Mapping[str, Any] | None,
+    speaker_binding_bridge: Mapping[str, Any] | None,
+) -> str | None:
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
+    grounded = (
+        narration_constraint_small_code(sce.get("final_reason_code"))
+        or narration_constraint_small_code(candidate.get("reason_code") if isinstance(candidate, dict) else None)
+        or narration_constraint_small_code(bridge.get("speaker_reason_code"))
+        or narration_constraint_small_code(ssc_debug.get("grounding_reason_code"))
+        or narration_constraint_small_code(ssc.get("continuity_lock_reason"))
+        or narration_constraint_small_code(ssc.get("speaker_switch_reason"))
+    )
+    if grounded:
+        return grounded
+
+    selection_source = narration_constraint_small_code(ssc.get("primary_speaker_source")) or narration_constraint_small_code(
+        ssc_debug.get("authoritative_source")
+    )
+    if selection_source in {"explicit_target", "declared_action", "spoken_vocative", "vocative"}:
+        return "speaker_from_explicit_target"
+    if selection_source == "continuity":
+        return "speaker_from_continuity"
+    if not narration_constraint_small_str(ssc.get("primary_speaker_id")):
+        return "speaker_unresolved"
+    return None
+
+
+def build_narration_constraint_debug(
+    *,
+    response_type_debug: Mapping[str, Any] | None = None,
+    response_type_contract: Mapping[str, Any] | None = None,
+    response_type_contract_source: str | None = None,
+    narration_visibility: Mapping[str, Any] | None = None,
+    visibility_meta: Mapping[str, Any] | None = None,
+    visibility_validation: Mapping[str, Any] | None = None,
+    speaker_selection_contract: Mapping[str, Any] | None = None,
+    speaker_contract_enforcement: Mapping[str, Any] | None = None,
+    speaker_binding_bridge: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Build a lightweight diagnostic surface; keep it compact, stable, and sanitized."""
+    payload = default_narration_constraint_debug()
+
+    rt_dbg = response_type_debug if isinstance(response_type_debug, dict) else {}
+    rt_contract = response_type_contract if isinstance(response_type_contract, dict) else {}
+    vis_contract = narration_visibility if isinstance(narration_visibility, dict) else {}
+    vis_meta = visibility_meta if isinstance(visibility_meta, dict) else {}
+    vis_validation_map = visibility_validation if isinstance(visibility_validation, dict) else {}
+    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
+    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
+    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
+
+    rt_out = payload["response_type"]
+    rt_out["required"] = narration_constraint_small_code(rt_dbg.get("response_type_required")) or narration_constraint_small_code(
+        rt_contract.get("required_response_type")
+    )
+    rt_out["contract_source"] = narration_constraint_small_code(rt_dbg.get("response_type_contract_source")) or narration_constraint_small_code(
+        response_type_contract_source
+    )
+    candidate_ok = rt_dbg.get("response_type_candidate_ok")
+    rt_out["candidate_ok"] = candidate_ok if isinstance(candidate_ok, bool) else None
+    rt_out["repair_used"] = bool(rt_dbg.get("response_type_repair_used"))
+    rt_out["repair_kind"] = narration_constraint_small_code(rt_dbg.get("response_type_repair_kind"))
+    absent = rt_dbg.get("response_type_upstream_prepared_absent")
+    rt_out["upstream_prepared_absent"] = bool(absent) if isinstance(absent, bool) else None
+
+    vis_out = payload["visibility"]
+    vis_out["contract_present"] = bool(vis_contract)
+    vis_out["decision_mode"] = narration_constraint_visibility_mode(vis_meta, vis_validation_map)
+    vis_out["visible_entity_count"] = (
+        len(vis_contract.get("visible_entity_ids"))
+        if isinstance(vis_contract.get("visible_entity_ids"), list)
+        else None
+    )
+    vis_out["withheld_fact_count"] = (
+        len(vis_contract.get("hidden_fact_strings"))
+        if isinstance(vis_contract.get("hidden_fact_strings"), list)
+        else None
+    )
+    vis_reasons: List[str] = []
+    if vis_meta.get("visibility_continuity_lead_exemption") is True:
+        vis_reasons.append("continuity_lead_exemption")
+    vis_reasons.extend(
+        narration_constraint_reason_codes(
+            vis_meta.get("visibility_violation_kinds"),
+            vis_validation_map.get("reason_codes"),
+            vis_validation_map.get("violations"),
+            limit=5,
+        )
+    )
+    vis_out["reason_codes"] = narration_constraint_reason_codes(vis_reasons, limit=5)
+
+    sp_out = payload["speaker_selection"]
+    candidate = sce.get("post_validation")
+    if not isinstance(candidate, dict):
+        candidate = sce.get("validation")
+    sp_out["speaker_id"] = narration_constraint_small_str(ssc.get("primary_speaker_id")) or narration_constraint_small_str(
+        candidate.get("canonical_speaker_id") if isinstance(candidate, dict) else None
+    )
+    sp_out["speaker_name"] = narration_constraint_small_str(ssc.get("primary_speaker_name")) or narration_constraint_small_str(
+        candidate.get("canonical_speaker_name") if isinstance(candidate, dict) else None
+    )
+    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
+    sp_out["selection_source"] = narration_constraint_small_code(ssc.get("primary_speaker_source")) or narration_constraint_small_code(
+        ssc_debug.get("authoritative_source")
+    )
+    sp_out["reason_code"] = narration_constraint_speaker_reason_code(ssc, sce, bridge)
+    sp_out["binding_confident"] = narration_constraint_binding_confident(ssc, sce, bridge)
+
+    return payload
+
+
+def merge_narration_constraint_debug_meta(
+    metadata: Dict[str, Any],
+    debug_payload: Mapping[str, Any] | None,
+) -> None:
+    """Merge the compact narration diagnostics without disturbing unrelated metadata."""
+    if not isinstance(metadata, dict):
+        return
+    if not isinstance(debug_payload, dict):
+        debug_payload = {}
+
+    emission_debug = metadata.setdefault("emission_debug", {})
+    if not isinstance(emission_debug, dict):
+        return
+
+    # Keep this surface stable and sanitized; it is a summary view, not a full trace.
+    merged = default_narration_constraint_debug()
+    existing = emission_debug.get("narration_constraint_debug")
+    existing_map = existing if isinstance(existing, dict) else {}
+    for section_name, section_default in merged.items():
+        existing_section = existing_map.get(section_name)
+        payload_section = debug_payload.get(section_name)
+        section = dict(section_default)
+        if isinstance(existing_section, dict):
+            section.update(existing_section)
+        if isinstance(payload_section, dict):
+            section.update(payload_section)
+        merged[section_name] = section
+    for extra_key, extra_value in existing_map.items():
+        if extra_key not in merged:
+            merged[extra_key] = extra_value
+    for extra_key, extra_value in debug_payload.items():
+        if extra_key not in merged:
+            merged[extra_key] = extra_value
+    emission_debug["narration_constraint_debug"] = merged
 
 
 def _append_lineage_token(tokens: list[str], token: str) -> None:

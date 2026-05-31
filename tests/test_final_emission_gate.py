@@ -43,6 +43,7 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    infer_accept_path_final_emitted_source,
     opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane,
     read_final_emission_meta_dict,
@@ -4975,6 +4976,49 @@ def test_block_ai_neutral_nonprogress_prose_is_owned_by_diegetic_fallback_module
     assert expected not in inspect.getsource(feg)
 
 
+def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks() -> None:
+    providers = fesf.build_non_strict_sealed_fallback_providers(
+        {"player_facing_text": "x", "tags": []},
+        session={},
+        scene=None,
+        world={"scenes": {"yard": {"npcs": [{"id": "npc_a", "name": "Aldric"}]}}},
+        sid="yard",
+        resolution=None,
+        eff_resolution=None,
+        active_interlocutor="npc_a",
+        res_kind="question",
+        response_type_required="dialogue",
+        opening_scene_safe_fallback_tuple=lambda _gm: (
+            "opening",
+            "opening_pool",
+            "opening_kind",
+            "opening_source",
+            None,
+            None,
+            None,
+        ),
+        passive_scene_pressure_fallback_candidates=lambda **_: [],
+        should_use_neutral_nonprogress_fallback_instead_of_global_stock=lambda *_: False,
+        scene_emit_integrity_global_fallback_tuple=lambda *a, **k: (
+            "global",
+            "global_pool",
+            "global_kind",
+            "global_source",
+            None,
+            None,
+            None,
+        ),
+        minimal_social_emergency_fallback_line=lambda _res: "injected social line",
+        npc_display_name_for_emission=lambda _w, _sid, _npc: "Aldric",
+        npc_pursuit_neutral_nonprogress_fallback_line=lambda: "neutral",
+        local_exchange_continuation_fallback_line=lambda **_: "continuation",
+    )
+    selection = providers.social_interlocutor_provider()
+    assert selection.text == "injected social line"
+    assert selection.fallback_pool == "social_active_interlocutor_minimal"
+    assert selection.final_emitted_source == "social_interlocutor_minimal_fallback"
+
+
 def test_block_ai_non_strict_provider_builder_is_callable_and_does_not_write_output() -> None:
     gm = {"player_facing_text": "Candidate stays untouched.", "tags": []}
     providers = feg._build_non_strict_sealed_fallback_providers(
@@ -5248,54 +5292,33 @@ def _assert_source_markers_in_order(source: str, markers: list[str]) -> None:
 def test_block_m4_final_emitted_source_accept_precedence_ladders_are_locked() -> None:
     """Characterization: accept-path final source attribution is a last-repair-wins ladder."""
 
-    source = inspect.getsource(feg.apply_final_emission_gate)
+    projector_source = inspect.getsource(infer_accept_path_final_emitted_source)
+    gate_source = inspect.getsource(feg.apply_final_emission_gate)
 
-    strict_accept = source[
-        source.index('final_emitted_source = str(details.get("final_emitted_source")')
-        : source.index('if not details.get("used_internal_fallback"):')
+    precedence_markers = [
+        'rtd.get("response_type_repair_used")',
+        'source = "retry_output"',
+        'ac.get("answer_completeness_repaired")',
+        'rd.get("response_delta_repaired")',
+        'srs.get("social_response_structure_repair_applied")',
+        'nat.get("narrative_authenticity_repaired")',
+        'na.get("narrative_authority_repaired")',
+        'te.get("tone_escalation_repaired")',
+        'ar.get("anti_railroading_repaired")',
+        'cs.get("context_separation_repaired")',
+        'fb.get("fallback_behavior_repaired")',
+        'purity.get("player_facing_narration_purity_repaired")',
+        'asp.get("answer_shape_primacy_repaired")',
+        'ffnc.get("fast_fallback_neutral_composition_repaired")',
     ]
-    non_strict_accept = source[
-        source.index('final_emitted_source = "generated_candidate"')
-        : source.index('log_final_emission_decision', source.index('final_emitted_source = "generated_candidate"'))
-    ]
+    _assert_source_markers_in_order(projector_source, precedence_markers)
 
-    strict_markers = [
-        'final_emitted_source = str(details.get("final_emitted_source")',
-        'response_type_debug.get("response_type_repair_used")',
-        'final_emitted_source = "retry_output"',
-        'ac_layer_meta.get("answer_completeness_repaired")',
-        'rd_layer_meta.get("response_delta_repaired")',
-        'srs_layer_meta.get("social_response_structure_repair_applied")',
-        'nat_layer_meta.get("narrative_authenticity_repaired")',
-        'na_layer_meta.get("narrative_authority_repaired")',
-        'te_layer_meta.get("tone_escalation_repaired")',
-        'ar_layer_meta.get("anti_railroading_repaired")',
-        'cs_layer_meta.get("context_separation_repaired")',
-        'fb_layer_meta.get("fallback_behavior_repaired")',
-        'purity_layer_meta.get("player_facing_narration_purity_repaired")',
-        'asp_layer_meta.get("answer_shape_primacy_repaired")',
-        'ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired")',
-    ]
-    non_strict_markers = [
-        'final_emitted_source = "generated_candidate"',
-        'response_type_debug.get("response_type_repair_used")',
-        'final_emitted_source = "retry_output"',
-        'ac_layer_meta.get("answer_completeness_repaired")',
-        'rd_layer_meta.get("response_delta_repaired")',
-        'srs_layer_meta.get("social_response_structure_repair_applied")',
-        'nat_layer_meta.get("narrative_authenticity_repaired")',
-        'na_layer_meta.get("narrative_authority_repaired")',
-        'te_layer_meta.get("tone_escalation_repaired")',
-        'ar_layer_meta.get("anti_railroading_repaired")',
-        'cs_layer_meta.get("context_separation_repaired")',
-        'fb_layer_meta.get("fallback_behavior_repaired")',
-        'purity_layer_meta.get("player_facing_narration_purity_repaired")',
-        'asp_layer_meta.get("answer_shape_primacy_repaired")',
-        'ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired")',
-    ]
-
-    _assert_source_markers_in_order(strict_accept, strict_markers)
-    _assert_source_markers_in_order(non_strict_accept, non_strict_markers)
+    assert gate_source.count("infer_accept_path_final_emitted_source(") == 2
+    assert (
+        'str(details.get("final_emitted_source") or "unknown_post_gate_writer")'
+        in gate_source
+    )
+    assert 'infer_accept_path_final_emitted_source(\n            "generated_candidate"' in gate_source
 
 
 def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
@@ -5308,7 +5331,8 @@ def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
         [
             'details = {**details, "final_emitted_source": "minimal_social_emergency_fallback"}',
             '"final_emitted_source": "minimal_social_emergency_fallback"',
-            'final_emitted_source = str(details.get("final_emitted_source")',
+            'infer_accept_path_final_emitted_source(',
+            'str(details.get("final_emitted_source") or "unknown_post_gate_writer")',
             'gate_tag="interaction_continuity"',
             'gate_tag="narrative_mode_output"',
         ],

@@ -15,12 +15,21 @@ import json
 import logging
 from typing import Any, Dict, Optional
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+from game.final_emission_text import _normalize_text, _sanitize_output_text
 from game.final_emission_meta import patch_final_emission_meta
 
 _LOG = logging.getLogger(__name__)
 
 METADATA_KEY = "fallback_provenance"
+
+FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
+    {
+        "mutation_before_or_during_gate_entry",
+        "mutation_inside_gate_or_finalize",
+        "mutation_unknown",
+    }
+)
 
 
 def fingerprint_for_normalized_text(norm: str) -> str:
@@ -183,3 +192,99 @@ def record_final_emission_gate_exit(out: Dict[str, Any], *, final_normalized_tex
     }
     out["metadata"] = {**md, METADATA_KEY: prov}
     patch_final_emission_meta(out, {"fallback_provenance_trace": dict(prov)})
+
+
+def upstream_fallback_canonical_provenance(out: Dict[str, Any]) -> Dict[str, Any] | None:
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov = md.get(METADATA_KEY)
+    if isinstance(prov, dict) and str(prov.get("source") or "") == "fallback":
+        return prov
+    return None
+
+
+def apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
+    """When canonical provenance shows gate-entry drift vs selector, restore selector text (Block I)."""
+    prov = upstream_fallback_canonical_provenance(out)
+    if not prov:
+        return False
+    original_fp = str(prov.get("content_fingerprint") or "")
+    if not original_fp or prov.get("gate_entry_vs_selector_match") is not False:
+        return False
+    snap = str(prov.get("selector_player_facing_text") or "")
+    if not snap or fingerprint_player_facing(snap) != original_fp:
+        return False
+    assert_final_emission_mutation_allowed(
+        "preserve_candidate_text",
+        source="gate._apply_upstream_fallback_pregate_containment",
+    )
+    out["player_facing_text"] = snap
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov2 = dict(md.get(METADATA_KEY) or prov)
+    prov2["overwrite_containment_applied"] = "pre_gate"
+    out["metadata"] = {**md, METADATA_KEY: prov2}
+    print("FALLBACK OVERWRITE CONTAINED: pre-gate")
+    record_final_emission_gate_entry(out)
+    return True
+
+
+def finalize_upstream_fallback_overwrite_containment(
+    out: Dict[str, Any],
+    *,
+    pre_gate_normalized: str,
+) -> bool:
+    """When exit trace proves post-selector divergence, revert to selector snapshot with sanitizer-only cleanup."""
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov = md.get(METADATA_KEY)
+    if not isinstance(prov, dict) or str(prov.get("source") or "") != "fallback":
+        return False
+    if not prov.get("mismatch_detected"):
+        return False
+    hint = str(prov.get("mutation_hint") or "")
+    if hint not in FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN:
+        return False
+    snap = str(prov.get("selector_player_facing_text") or "")
+    original_fp = str(prov.get("content_fingerprint") or "")
+    if not snap or not original_fp or fingerprint_player_facing(snap) != original_fp:
+        return False
+    assert_final_emission_mutation_allowed(
+        "sanitize_html_to_text",
+        source="gate._finalize_upstream_fallback_overwrite_containment",
+    )
+    snap_san = _sanitize_output_text(snap)
+    if fingerprint_player_facing(snap_san) == original_fp:
+        chosen = snap_san
+    elif fingerprint_player_facing(snap) == original_fp:
+        chosen = snap
+    else:
+        chosen = snap_san
+    assert_final_emission_mutation_allowed(
+        "preserve_candidate_text",
+        source="gate._finalize_upstream_fallback_overwrite_containment",
+    )
+    out["player_facing_text"] = chosen
+    gate_norm = _normalize_text(chosen)
+    contained_kind = (
+        "in_gate_finalize"
+        if hint in ("mutation_inside_gate_or_finalize", "mutation_unknown")
+        else "pre_gate"
+    )
+    patch_final_emission_meta(
+        out,
+        {
+            "fallback_overwrite_contained": contained_kind,
+            "fallback_overwrite_finalize_containment": True,
+            "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
+            "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
+        },
+    )
+    print(
+        "FALLBACK OVERWRITE CONTAINED: in-gate/finalize"
+        if contained_kind == "in_gate_finalize"
+        else "FALLBACK OVERWRITE CONTAINED: pre-gate"
+    )
+    record_final_emission_gate_exit(out, final_normalized_text=gate_norm)
+    md2 = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    prov3 = dict(md2.get(METADATA_KEY) or {})
+    prov3["overwrite_containment_applied"] = contained_kind
+    out["metadata"] = {**md2, METADATA_KEY: prov3}
+    return True

@@ -91,7 +91,10 @@ from game.social_exchange_emission import (
     log_final_emission_trace,
     merged_player_prompt_for_gate,
     minimal_social_emergency_fallback_line,
+    project_strict_social_replace_realization_family,
     replacement_is_route_legal_social,
+    stamp_strict_social_deterministic_fallback_family,
+    strict_social_deterministic_fallback_family_token,
     strict_social_emission_will_apply,
     strict_social_ownership_terminal_fallback,
     strict_social_suppress_non_native_coercion_for_narration_beat,
@@ -128,11 +131,12 @@ from game.scene_state_anchoring import validate_scene_state_anchoring
 from game.tone_escalation import tone_escalation_repair_hints, validate_tone_escalation
 
 from game.fallback_provenance_debug import (
+    apply_upstream_fallback_pregate_containment as _prov_apply_upstream_fallback_pregate_containment,
+    finalize_upstream_fallback_overwrite_containment as _prov_finalize_upstream_fallback_overwrite_containment,
     realign_fallback_provenance_selector_to_current_text,
-    METADATA_KEY,
-    fingerprint_player_facing,
     record_final_emission_gate_entry,
     record_final_emission_gate_exit,
+    upstream_fallback_canonical_provenance as _prov_upstream_fallback_canonical_provenance,
 )
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
@@ -140,7 +144,11 @@ from game.final_emission_meta import (
     apply_opening_fallback_projection_fields,
     default_narrative_authenticity_layer_meta,
     default_response_type_debug as _default_response_type_debug,
+    build_narration_constraint_debug,
+    default_narration_constraint_debug,
     ensure_final_emission_meta_dict,
+    infer_accept_path_final_emitted_source,
+    merge_narration_constraint_debug_meta,
     merge_narrative_authenticity_into_final_emission_meta,
     merge_narrative_mode_output_into_final_emission_meta,
     merge_response_type_meta as _merge_response_type_meta,
@@ -177,12 +185,15 @@ from game.final_emission_text import (
     _sanitize_output_text,
 )
 from game.final_emission_sealed_fallback import (
+    NonStrictSealedFallbackProviders as _NonStrictSealedFallbackProviders,
     SealedFallbackSelection,
     assemble_non_strict_sealed_fallback_selection,
+    build_non_strict_sealed_fallback_providers as _build_non_strict_sealed_fallback_providers_impl,
     finalize_n4_sealed_replace_fem_route_meta as _finalize_n4_sealed_replace_fem_route_meta,
     prepare_sealed_replacement_route_meta as _prepare_sealed_replacement_route_meta,
     select_acceptance_quality_n4_sealed_fallback_line,
     select_non_strict_replace_path_terminal_sealed_fallback_branch,
+    stamp_non_strict_sealed_replacement_realization_family as _stamp_non_strict_sealed_replacement_realization_family,
     stamp_sealed_fallback_realization_family as _stamp_sealed_fallback_realization_family,
 )
 from game.final_emission_visibility_fallback import (
@@ -224,12 +235,10 @@ from game.response_policy_contracts import (
     resolve_interaction_continuity_contract,
 )
 from game.realization_provenance import (
-    GATE_TERMINAL_REPAIR,
     LEGACY_DIEGETIC_FALLBACK,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
     UPSTREAM_PREPARED_EMISSION,
     attach_realization_fallback_family,
-    normalize_realization_fallback_family,
 )
 
 from game.dialogue_social_plan import (
@@ -293,16 +302,6 @@ from game.acceptance_quality import (
 # --- Policy layers & helpers (large clusters live here; validators/repairs are extracted) ---
 
 
-class _NonStrictSealedFallbackProviders(NamedTuple):
-    passive_candidates_provider: Callable[[], Sequence[SealedFallbackSelection]]
-    use_neutral_nonprogress_provider: Callable[[], bool]
-    opening_provider: Callable[[], SealedFallbackSelection]
-    social_interlocutor_provider: Callable[[], SealedFallbackSelection]
-    neutral_nonprogress_provider: Callable[[], SealedFallbackSelection]
-    anti_reset_provider: Callable[[], SealedFallbackSelection]
-    global_provider: Callable[[], SealedFallbackSelection]
-
-
 def _refresh_output_mutation_lineage(out: Mapping[str, Any] | None) -> None:
     if not isinstance(out, MutableMapping):
         return
@@ -363,110 +362,26 @@ def _build_non_strict_sealed_fallback_providers(
     res_kind: str,
     response_type_required: str,
 ) -> _NonStrictSealedFallbackProviders:
-    """Selector + tuple unpack for non–strict-social candidate-rejection terminal replace (ordering preserved)."""
-
-    def _opening_provider() -> SealedFallbackSelection:
-        (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            _fb_strat_ie,
-            _fb_cand_ie,
-            fallback_composition_meta,
-        ) = _opening_scene_safe_fallback_tuple(out)
-        return SealedFallbackSelection(
-            text=fallback_text,
-            fallback_pool=fallback_pool,
-            fallback_kind=fallback_kind,
-            final_emitted_source=final_emitted_source,
-            composition_meta=fallback_composition_meta,
-        )
-
-    def _social_interlocutor_provider() -> SealedFallbackSelection:
-        mini_res: Dict[str, Any] = {
-            "kind": "question",
-            "social": {
-                "npc_id": active_interlocutor,
-                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
-                "social_intent_class": "social_exchange",
-            },
-        }
-        fallback_pool = "social_active_interlocutor_minimal"
-        fallback_text = minimal_social_emergency_fallback_line(mini_res)
-        fallback_kind = "social_interlocutor_fallback"
-        final_emitted_source = "social_interlocutor_minimal_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    def _passive_candidates_provider() -> list[SealedFallbackSelection]:
-        passive_candidates = _passive_scene_pressure_fallback_candidates(
-            session=session if isinstance(session, dict) else None,
-            scene=scene,
-            scene_id=sid,
-        )
-        selections: list[SealedFallbackSelection] = []
-        for candidate in passive_candidates:
-            (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                _fallback_strategy,
-                _fallback_candidate_source,
-                _composition_meta,
-            ) = candidate
-            selections.append(SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None))
-        return selections
-
-    def _use_neutral_nonprogress_provider() -> bool:
-        return _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution)
-
-    def _neutral_nonprogress_provider() -> SealedFallbackSelection:
-        fallback_pool = "npc_pursuit_fail_closed_neutral"
-        fallback_text = npc_pursuit_neutral_nonprogress_fallback_line()
-        fallback_kind = "npc_pursuit_neutral_nonprogress"
-        final_emitted_source = "npc_pursuit_neutral_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    def _anti_reset_provider() -> SealedFallbackSelection:
-        fallback_pool = "anti_reset_local_continuation"
-        fallback_text = local_exchange_continuation_fallback_line(
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            scene_id=sid,
-            resolution=resolution if isinstance(resolution, dict) else None,
-        )
-        fallback_kind = "anti_reset_continuation_fallback"
-        final_emitted_source = "anti_reset_local_continuation_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-    def _global_provider() -> SealedFallbackSelection:
-        (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            _fb_strat_ie,
-            _fb_cand_ie,
-            _comp_ie,
-        ) = _scene_emit_integrity_global_fallback_tuple(
-            scene if isinstance(scene, dict) else None,
-            sid,
-            authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            res_kind=res_kind,
-            response_type_required=response_type_required,
-        )
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    return _NonStrictSealedFallbackProviders(
-        passive_candidates_provider=_passive_candidates_provider,
-        use_neutral_nonprogress_provider=_use_neutral_nonprogress_provider,
-        opening_provider=_opening_provider,
-        social_interlocutor_provider=_social_interlocutor_provider,
-        neutral_nonprogress_provider=_neutral_nonprogress_provider,
-        anti_reset_provider=_anti_reset_provider,
-        global_provider=_global_provider,
+    """Gate compatibility wrapper: provider assembly lives in final_emission_sealed_fallback."""
+    return _build_non_strict_sealed_fallback_providers_impl(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        sid=sid,
+        resolution=resolution,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
+        opening_scene_safe_fallback_tuple=_opening_scene_safe_fallback_tuple,
+        passive_scene_pressure_fallback_candidates=_passive_scene_pressure_fallback_candidates,
+        should_use_neutral_nonprogress_fallback_instead_of_global_stock=_should_use_neutral_nonprogress_fallback_instead_of_global_stock,
+        scene_emit_integrity_global_fallback_tuple=_scene_emit_integrity_global_fallback_tuple,
+        minimal_social_emergency_fallback_line=minimal_social_emergency_fallback_line,
+        npc_display_name_for_emission=_npc_display_name_for_emission,
+        npc_pursuit_neutral_nonprogress_fallback_line=npc_pursuit_neutral_nonprogress_fallback_line,
+        local_exchange_continuation_fallback_line=local_exchange_continuation_fallback_line,
     )
 
 
@@ -556,31 +471,39 @@ def _select_non_strict_replace_path_terminal_sealed_fallback(
 
 
 def _default_narration_constraint_debug() -> Dict[str, Any]:
-    """Compact, sanitized narration-constraint diagnostics; not a full trace log."""
-    return {
-        "response_type": {
-            "required": None,
-            "contract_source": None,
-            "candidate_ok": None,
-            "repair_used": False,
-            "repair_kind": None,
-            "upstream_prepared_absent": None,
-        },
-        "visibility": {
-            "contract_present": False,
-            "decision_mode": None,
-            "visible_entity_count": None,
-            "withheld_fact_count": None,
-            "reason_codes": [],
-        },
-        "speaker_selection": {
-            "speaker_id": None,
-            "speaker_name": None,
-            "selection_source": None,
-            "reason_code": None,
-            "binding_confident": None,
-        },
-    }
+    return default_narration_constraint_debug()
+
+
+def _build_narration_constraint_debug(
+    *,
+    response_type_debug: Mapping[str, Any] | None = None,
+    response_type_contract: Mapping[str, Any] | None = None,
+    response_type_contract_source: str | None = None,
+    narration_visibility: Mapping[str, Any] | None = None,
+    visibility_meta: Mapping[str, Any] | None = None,
+    visibility_validation: Mapping[str, Any] | None = None,
+    speaker_selection_contract: Mapping[str, Any] | None = None,
+    speaker_contract_enforcement: Mapping[str, Any] | None = None,
+    speaker_binding_bridge: Mapping[str, Any] | None = None,
+) -> Dict[str, Any]:
+    return build_narration_constraint_debug(
+        response_type_debug=response_type_debug,
+        response_type_contract=response_type_contract,
+        response_type_contract_source=response_type_contract_source,
+        narration_visibility=narration_visibility,
+        visibility_meta=visibility_meta,
+        visibility_validation=visibility_validation,
+        speaker_selection_contract=speaker_selection_contract,
+        speaker_contract_enforcement=speaker_contract_enforcement,
+        speaker_binding_bridge=speaker_binding_bridge,
+    )
+
+
+def _merge_narration_constraint_debug_meta(
+    metadata: Dict[str, Any],
+    debug_payload: Mapping[str, Any] | None,
+) -> None:
+    merge_narration_constraint_debug_meta(metadata, debug_payload)
 
 
 _DIALOGUE_QUOTE_RE = re.compile(r'["“”][^"”]{2,}["“”]')
@@ -818,268 +741,6 @@ def _enforce_dialogue_plan_invariant_on_strict_social(
         trace["dialogue_plan_subtractive_strip_deferred"] = True
         return text, trace
     return repaired, trace
-
-
-def _narration_constraint_small_str(value: Any) -> str | None:
-    if not isinstance(value, str):
-        return None
-    clean = value.strip()
-    if not clean or len(clean) > 64 or any(ch in clean for ch in "\r\n\t"):
-        return None
-    return clean
-
-
-_NARRATION_CONSTRAINT_CODE_RE = re.compile(r"^[A-Za-z0-9_.:/-]+$")
-
-
-def _narration_constraint_small_code(value: Any) -> str | None:
-    clean = _narration_constraint_small_str(value)
-    if clean is None or _NARRATION_CONSTRAINT_CODE_RE.fullmatch(clean) is None:
-        return None
-    return clean
-
-
-def _narration_constraint_small_int(value: Any) -> int | None:
-    if isinstance(value, bool) or value is None:
-        return None
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _narration_constraint_reason_codes(*sources: Any, limit: int = 5) -> List[str]:
-    """Keep only small stable codes; never surface raw hidden text or prompt fragments."""
-    out: List[str] = []
-
-    def _push(raw: Any) -> None:
-        if len(out) >= limit:
-            return
-        if isinstance(raw, str):
-            clean = _narration_constraint_small_code(raw)
-            if clean and clean not in out:
-                out.append(clean)
-            return
-        if isinstance(raw, dict):
-            _push(raw.get("reason_code"))
-            _push(raw.get("reason_codes"))
-            kind = raw.get("kind")
-            if isinstance(kind, str):
-                _push(kind)
-            return
-        if isinstance(raw, (list, tuple)):
-            for item in raw:
-                if len(out) >= limit:
-                    break
-                _push(item)
-
-    for source in sources:
-        _push(source)
-        if len(out) >= limit:
-            break
-    return out[:limit]
-
-
-def _narration_constraint_visibility_mode(
-    visibility_meta: Mapping[str, Any] | None,
-    visibility_validation: Mapping[str, Any] | None,
-) -> str | None:
-    vm = visibility_meta if isinstance(visibility_meta, dict) else {}
-    vv = visibility_validation if isinstance(visibility_validation, dict) else {}
-    if vm.get("visibility_replacement_applied") is True:
-        return "replaced"
-    if vm.get("visibility_continuity_lead_exemption") is True:
-        return "continuity_lead_exemption"
-    if vm.get("visibility_validation_passed") is True:
-        return "validated"
-    if vm.get("visibility_validation_passed") is False:
-        return "validation_failed"
-    if isinstance(vv.get("ok"), bool):
-        return "validated" if vv.get("ok") is True else "validation_failed"
-    return None
-
-
-def _narration_constraint_binding_confident(
-    speaker_selection_contract: Mapping[str, Any] | None,
-    speaker_contract_enforcement: Mapping[str, Any] | None,
-    speaker_binding_bridge: Mapping[str, Any] | None,
-) -> bool | None:
-    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
-    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
-    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
-    if bridge.get("malformed_attribution_detected") is True:
-        return False
-
-    candidate = sce.get("post_validation")
-    if not isinstance(candidate, dict):
-        candidate = sce.get("validation")
-    details = candidate.get("details") if isinstance(candidate, dict) else {}
-    signature = details.get("signature") if isinstance(details, dict) else {}
-    confidence = _narration_constraint_small_code(signature.get("confidence")) if isinstance(signature, dict) else None
-    if confidence == "high":
-        return True
-    if confidence == "low":
-        return False
-    if ssc.get("continuity_locked") is True:
-        return True
-    if ssc.get("speaker_switch_allowed") is False and _narration_constraint_small_str(ssc.get("primary_speaker_id")):
-        return True
-    return None
-
-
-def _narration_constraint_speaker_reason_code(
-    speaker_selection_contract: Mapping[str, Any] | None,
-    speaker_contract_enforcement: Mapping[str, Any] | None,
-    speaker_binding_bridge: Mapping[str, Any] | None,
-) -> str | None:
-    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
-    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
-    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
-    candidate = sce.get("post_validation")
-    if not isinstance(candidate, dict):
-        candidate = sce.get("validation")
-    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
-    grounded = (
-        _narration_constraint_small_code(sce.get("final_reason_code"))
-        or _narration_constraint_small_code(candidate.get("reason_code") if isinstance(candidate, dict) else None)
-        or _narration_constraint_small_code(bridge.get("speaker_reason_code"))
-        or _narration_constraint_small_code(ssc_debug.get("grounding_reason_code"))
-        or _narration_constraint_small_code(ssc.get("continuity_lock_reason"))
-        or _narration_constraint_small_code(ssc.get("speaker_switch_reason"))
-    )
-    if grounded:
-        return grounded
-
-    selection_source = _narration_constraint_small_code(ssc.get("primary_speaker_source")) or _narration_constraint_small_code(
-        ssc_debug.get("authoritative_source")
-    )
-    if selection_source in {"explicit_target", "declared_action", "spoken_vocative", "vocative"}:
-        return "speaker_from_explicit_target"
-    if selection_source == "continuity":
-        return "speaker_from_continuity"
-    if not _narration_constraint_small_str(ssc.get("primary_speaker_id")):
-        return "speaker_unresolved"
-    return None
-
-
-def _build_narration_constraint_debug(
-    *,
-    response_type_debug: Mapping[str, Any] | None = None,
-    response_type_contract: Mapping[str, Any] | None = None,
-    response_type_contract_source: str | None = None,
-    narration_visibility: Mapping[str, Any] | None = None,
-    visibility_meta: Mapping[str, Any] | None = None,
-    visibility_validation: Mapping[str, Any] | None = None,
-    speaker_selection_contract: Mapping[str, Any] | None = None,
-    speaker_contract_enforcement: Mapping[str, Any] | None = None,
-    speaker_binding_bridge: Mapping[str, Any] | None = None,
-) -> Dict[str, Any]:
-    """Build a lightweight diagnostic surface; keep it compact, stable, and sanitized."""
-    payload = _default_narration_constraint_debug()
-
-    rt_dbg = response_type_debug if isinstance(response_type_debug, dict) else {}
-    rt_contract = response_type_contract if isinstance(response_type_contract, dict) else {}
-    vis_contract = narration_visibility if isinstance(narration_visibility, dict) else {}
-    vis_meta = visibility_meta if isinstance(visibility_meta, dict) else {}
-    vis_validation_map = visibility_validation if isinstance(visibility_validation, dict) else {}
-    ssc = speaker_selection_contract if isinstance(speaker_selection_contract, dict) else {}
-    sce = speaker_contract_enforcement if isinstance(speaker_contract_enforcement, dict) else {}
-    bridge = speaker_binding_bridge if isinstance(speaker_binding_bridge, dict) else {}
-
-    rt_out = payload["response_type"]
-    rt_out["required"] = _narration_constraint_small_code(rt_dbg.get("response_type_required")) or _narration_constraint_small_code(
-        rt_contract.get("required_response_type")
-    )
-    rt_out["contract_source"] = _narration_constraint_small_code(rt_dbg.get("response_type_contract_source")) or _narration_constraint_small_code(
-        response_type_contract_source
-    )
-    candidate_ok = rt_dbg.get("response_type_candidate_ok")
-    rt_out["candidate_ok"] = candidate_ok if isinstance(candidate_ok, bool) else None
-    rt_out["repair_used"] = bool(rt_dbg.get("response_type_repair_used"))
-    rt_out["repair_kind"] = _narration_constraint_small_code(rt_dbg.get("response_type_repair_kind"))
-    absent = rt_dbg.get("response_type_upstream_prepared_absent")
-    rt_out["upstream_prepared_absent"] = bool(absent) if isinstance(absent, bool) else None
-
-    vis_out = payload["visibility"]
-    vis_out["contract_present"] = bool(vis_contract)
-    vis_out["decision_mode"] = _narration_constraint_visibility_mode(vis_meta, vis_validation_map)
-    vis_out["visible_entity_count"] = (
-        len(vis_contract.get("visible_entity_ids"))
-        if isinstance(vis_contract.get("visible_entity_ids"), list)
-        else None
-    )
-    vis_out["withheld_fact_count"] = (
-        len(vis_contract.get("hidden_fact_strings"))
-        if isinstance(vis_contract.get("hidden_fact_strings"), list)
-        else None
-    )
-    vis_reasons: List[str] = []
-    if vis_meta.get("visibility_continuity_lead_exemption") is True:
-        vis_reasons.append("continuity_lead_exemption")
-    vis_reasons.extend(
-        _narration_constraint_reason_codes(
-            vis_meta.get("visibility_violation_kinds"),
-            vis_validation_map.get("reason_codes"),
-            vis_validation_map.get("violations"),
-            limit=5,
-        )
-    )
-    vis_out["reason_codes"] = _narration_constraint_reason_codes(vis_reasons, limit=5)
-
-    sp_out = payload["speaker_selection"]
-    candidate = sce.get("post_validation")
-    if not isinstance(candidate, dict):
-        candidate = sce.get("validation")
-    sp_out["speaker_id"] = _narration_constraint_small_str(ssc.get("primary_speaker_id")) or _narration_constraint_small_str(
-        candidate.get("canonical_speaker_id") if isinstance(candidate, dict) else None
-    )
-    sp_out["speaker_name"] = _narration_constraint_small_str(ssc.get("primary_speaker_name")) or _narration_constraint_small_str(
-        candidate.get("canonical_speaker_name") if isinstance(candidate, dict) else None
-    )
-    ssc_debug = ssc.get("debug") if isinstance(ssc.get("debug"), dict) else {}
-    sp_out["selection_source"] = _narration_constraint_small_code(ssc.get("primary_speaker_source")) or _narration_constraint_small_code(
-        ssc_debug.get("authoritative_source")
-    )
-    sp_out["reason_code"] = _narration_constraint_speaker_reason_code(ssc, sce, bridge)
-    sp_out["binding_confident"] = _narration_constraint_binding_confident(ssc, sce, bridge)
-
-    return payload
-
-
-def _merge_narration_constraint_debug_meta(
-    metadata: Dict[str, Any],
-    debug_payload: Mapping[str, Any] | None,
-) -> None:
-    """Merge the compact narration diagnostics without disturbing unrelated metadata."""
-    if not isinstance(metadata, dict):
-        return
-    if not isinstance(debug_payload, dict):
-        debug_payload = {}
-
-    emission_debug = metadata.setdefault("emission_debug", {})
-    if not isinstance(emission_debug, dict):
-        return
-
-    # Keep this surface stable and sanitized; it is a summary view, not a full trace.
-    merged = _default_narration_constraint_debug()
-    existing = emission_debug.get("narration_constraint_debug")
-    existing_map = existing if isinstance(existing, dict) else {}
-    for section_name, section_default in merged.items():
-        existing_section = existing_map.get(section_name)
-        payload_section = debug_payload.get(section_name)
-        section = dict(section_default)
-        if isinstance(existing_section, dict):
-            section.update(existing_section)
-        if isinstance(payload_section, dict):
-            section.update(payload_section)
-        merged[section_name] = section
-    for extra_key, extra_value in existing_map.items():
-        if extra_key not in merged:
-            merged[extra_key] = extra_value
-    for extra_key, extra_value in debug_payload.items():
-        if extra_key not in merged:
-            merged[extra_key] = extra_value
-    emission_debug["narration_constraint_debug"] = merged
 
 
 def _resolve_narration_constraint_debug_visibility_contract(
@@ -4739,46 +4400,12 @@ def _final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:
     return True
 
 
-_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
-    {
-        "mutation_before_or_during_gate_entry",
-        "mutation_inside_gate_or_finalize",
-        "mutation_unknown",
-    }
-)
-
-
 def _upstream_fallback_canonical_provenance(out: Dict[str, Any]) -> Dict[str, Any] | None:
-    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
-    prov = md.get(METADATA_KEY)
-    if isinstance(prov, dict) and str(prov.get("source") or "") == "fallback":
-        return prov
-    return None
+    return _prov_upstream_fallback_canonical_provenance(out)
 
 
 def _apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
-    """When canonical provenance shows gate-entry drift vs selector, restore selector text (Block I)."""
-    prov = _upstream_fallback_canonical_provenance(out)
-    if not prov:
-        return False
-    original_fp = str(prov.get("content_fingerprint") or "")
-    if not original_fp or prov.get("gate_entry_vs_selector_match") is not False:
-        return False
-    snap = str(prov.get("selector_player_facing_text") or "")
-    if not snap or fingerprint_player_facing(snap) != original_fp:
-        return False
-    assert_final_emission_mutation_allowed(
-        "preserve_candidate_text",
-        source="gate._apply_upstream_fallback_pregate_containment",
-    )
-    out["player_facing_text"] = snap
-    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
-    prov2 = dict(md.get(METADATA_KEY) or prov)
-    prov2["overwrite_containment_applied"] = "pre_gate"
-    out["metadata"] = {**md, METADATA_KEY: prov2}
-    print("FALLBACK OVERWRITE CONTAINED: pre-gate")
-    record_final_emission_gate_entry(out)
-    return True
+    return _prov_apply_upstream_fallback_pregate_containment(out)
 
 
 def _finalize_upstream_fallback_overwrite_containment(
@@ -4786,62 +4413,10 @@ def _finalize_upstream_fallback_overwrite_containment(
     *,
     pre_gate_normalized: str,
 ) -> bool:
-    """When exit trace proves post-selector divergence, revert to selector snapshot with sanitizer-only cleanup."""
-    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
-    prov = md.get(METADATA_KEY)
-    if not isinstance(prov, dict) or str(prov.get("source") or "") != "fallback":
-        return False
-    if not prov.get("mismatch_detected"):
-        return False
-    hint = str(prov.get("mutation_hint") or "")
-    if hint not in _FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN:
-        return False
-    snap = str(prov.get("selector_player_facing_text") or "")
-    original_fp = str(prov.get("content_fingerprint") or "")
-    if not snap or not original_fp or fingerprint_player_facing(snap) != original_fp:
-        return False
-    assert_final_emission_mutation_allowed(
-        "sanitize_html_to_text",
-        source="gate._finalize_upstream_fallback_overwrite_containment",
-    )
-    snap_san = _sanitize_output_text(snap)
-    if fingerprint_player_facing(snap_san) == original_fp:
-        chosen = snap_san
-    elif fingerprint_player_facing(snap) == original_fp:
-        chosen = snap
-    else:
-        chosen = snap_san
-    assert_final_emission_mutation_allowed(
-        "preserve_candidate_text",
-        source="gate._finalize_upstream_fallback_overwrite_containment",
-    )
-    out["player_facing_text"] = chosen
-    gate_norm = _normalize_text(chosen)
-    contained_kind = (
-        "in_gate_finalize"
-        if hint in ("mutation_inside_gate_or_finalize", "mutation_unknown")
-        else "pre_gate"
-    )
-    patch_final_emission_meta(
+    return _prov_finalize_upstream_fallback_overwrite_containment(
         out,
-        {
-            "fallback_overwrite_contained": contained_kind,
-            "fallback_overwrite_finalize_containment": True,
-            "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
-            "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
-        },
+        pre_gate_normalized=pre_gate_normalized,
     )
-    print(
-        "FALLBACK OVERWRITE CONTAINED: in-gate/finalize"
-        if contained_kind == "in_gate_finalize"
-        else "FALLBACK OVERWRITE CONTAINED: pre-gate"
-    )
-    record_final_emission_gate_exit(out, final_normalized_text=gate_norm)
-    md2 = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
-    prov3 = dict(md2.get(METADATA_KEY) or {})
-    prov3["overwrite_containment_applied"] = contained_kind
-    out["metadata"] = {**md2, METADATA_KEY: prov3}
-    return True
 
 
 _GLOBAL_VISIBILITY_PLACEHOLDER_STOCK_RES: tuple[re.Pattern[str], ...] = (
@@ -8472,7 +8047,7 @@ def apply_strict_social_emergency_fallback_patch(
     if candidate_validation_passed is not None:
         fem["candidate_validation_passed"] = candidate_validation_passed
     fem["final_emitted_source"] = "minimal_social_emergency_fallback"
-    attach_realization_fallback_family(fem, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+    stamp_strict_social_deterministic_fallback_family(fem)
     _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
 
 
@@ -8966,7 +8541,7 @@ def apply_final_emission_gate(
                 "fallback_kind": "response_type_contract_social_emergency",
                 "fallback_pool": "response_type_contract",
                 "final_emitted_source": "minimal_social_emergency_fallback",
-                "realization_fallback_family": STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+                "realization_fallback_family": strict_social_deterministic_fallback_family_token(),
                 "rejection_reasons": list(details.get("rejection_reasons") or [])
                 + list(response_type_debug.get("response_type_rejection_reasons") or []),
             }
@@ -9196,63 +8771,23 @@ def apply_final_emission_gate(
         if isinstance(eff_resolution, dict):
             sp = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
             npc_id_for_meta = str(sp.get("npc_id") or "").strip()
-        final_emitted_source = str(details.get("final_emitted_source") or "unknown_post_gate_writer")
-        if response_type_debug.get("response_type_repair_used"):
-            final_emitted_source = str(
-                response_type_debug.get("response_type_repair_kind") or "response_type_contract_repair"
-            )
-        if retry_output:
-            final_emitted_source = "retry_output"
-        if ac_layer_meta.get("answer_completeness_repaired"):
-            final_emitted_source = str(
-                ac_layer_meta.get("answer_completeness_repair_mode") or "answer_completeness_repair"
-            )
-        if rd_layer_meta.get("response_delta_repaired"):
-            final_emitted_source = str(
-                rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
-            )
-        if srs_layer_meta.get("social_response_structure_repair_applied") and srs_layer_meta.get(
-            "social_response_structure_passed"
-        ):
-            final_emitted_source = str(
-                srs_layer_meta.get("social_response_structure_repair_mode")
-                or "social_response_structure_repair"
-            )
-        if nat_layer_meta.get("narrative_authenticity_repaired"):
-            final_emitted_source = str(
-                nat_layer_meta.get("narrative_authenticity_repair_mode") or "narrative_authenticity_repair"
-            )
-        if na_layer_meta.get("narrative_authority_repaired"):
-            final_emitted_source = str(
-                na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
-            )
-        if te_layer_meta.get("tone_escalation_repaired"):
-            final_emitted_source = str(
-                te_layer_meta.get("tone_escalation_repair_mode") or "tone_escalation_repair"
-            )
-        if ar_layer_meta.get("anti_railroading_repaired"):
-            final_emitted_source = str(
-                ar_layer_meta.get("anti_railroading_repair_mode") or "anti_railroading_repair"
-            )
-        if cs_layer_meta.get("context_separation_repaired"):
-            final_emitted_source = str(
-                cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
-            )
-        if fb_layer_meta.get("fallback_behavior_repaired"):
-            final_emitted_source = str(
-                fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
-            )
-        if purity_layer_meta.get("player_facing_narration_purity_repaired"):
-            final_emitted_source = "player_facing_narration_purity_repair"
-        if asp_layer_meta.get("answer_shape_primacy_repaired"):
-            final_emitted_source = str(
-                asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
-            )
-        if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
-            final_emitted_source = str(
-                ffnc_layer_meta.get("fast_fallback_neutral_composition_repair_mode")
-                or "fast_fallback_neutral_composition_repair"
-            )
+        final_emitted_source = infer_accept_path_final_emitted_source(
+            str(details.get("final_emitted_source") or "unknown_post_gate_writer"),
+            response_type_debug=response_type_debug,
+            retry_output=retry_output,
+            ac_layer_meta=ac_layer_meta,
+            rd_layer_meta=rd_layer_meta,
+            srs_layer_meta=srs_layer_meta,
+            nat_layer_meta=nat_layer_meta,
+            na_layer_meta=na_layer_meta,
+            te_layer_meta=te_layer_meta,
+            ar_layer_meta=ar_layer_meta,
+            cs_layer_meta=cs_layer_meta,
+            fb_layer_meta=fb_layer_meta,
+            purity_layer_meta=purity_layer_meta,
+            asp_layer_meta=asp_layer_meta,
+            ffnc_layer_meta=ffnc_layer_meta,
+        )
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
 
@@ -9534,8 +9069,10 @@ def apply_final_emission_gate(
             "deterministic_social_fallback_attempted": deterministic_attempted,
             "deterministic_social_fallback_passed": deterministic_passed,
             "final_emitted_source": final_emitted_source,
-            "realization_fallback_family": normalize_realization_fallback_family(
-                str(details.get("realization_fallback_family") or STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
+            "realization_fallback_family": project_strict_social_replace_realization_family(
+                details.get("realization_fallback_family")
+                if isinstance(details.get("realization_fallback_family"), str)
+                else None
             ),
             "post_gate_mutation_detected": post_gate_mutation_detected,
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
@@ -9974,63 +9511,23 @@ def apply_final_emission_gate(
 
     if not reasons:
         out["player_facing_text"] = text
-        final_emitted_source = "generated_candidate"
-        if response_type_debug.get("response_type_repair_used"):
-            final_emitted_source = str(
-                response_type_debug.get("response_type_repair_kind") or "response_type_contract_repair"
-            )
-        if retry_output:
-            final_emitted_source = "retry_output"
-        if ac_layer_meta.get("answer_completeness_repaired"):
-            final_emitted_source = str(
-                ac_layer_meta.get("answer_completeness_repair_mode") or "answer_completeness_repair"
-            )
-        if rd_layer_meta.get("response_delta_repaired"):
-            final_emitted_source = str(
-                rd_layer_meta.get("response_delta_repair_mode") or "response_delta_repair"
-            )
-        if srs_layer_meta.get("social_response_structure_repair_applied") and srs_layer_meta.get(
-            "social_response_structure_passed"
-        ):
-            final_emitted_source = str(
-                srs_layer_meta.get("social_response_structure_repair_mode")
-                or "social_response_structure_repair"
-            )
-        if nat_layer_meta.get("narrative_authenticity_repaired"):
-            final_emitted_source = str(
-                nat_layer_meta.get("narrative_authenticity_repair_mode") or "narrative_authenticity_repair"
-            )
-        if na_layer_meta.get("narrative_authority_repaired"):
-            final_emitted_source = str(
-                na_layer_meta.get("narrative_authority_repair_mode") or "narrative_authority_repair"
-            )
-        if te_layer_meta.get("tone_escalation_repaired"):
-            final_emitted_source = str(
-                te_layer_meta.get("tone_escalation_repair_mode") or "tone_escalation_repair"
-            )
-        if ar_layer_meta.get("anti_railroading_repaired"):
-            final_emitted_source = str(
-                ar_layer_meta.get("anti_railroading_repair_mode") or "anti_railroading_repair"
-            )
-        if cs_layer_meta.get("context_separation_repaired"):
-            final_emitted_source = str(
-                cs_layer_meta.get("context_separation_repair_mode") or "context_separation_repair"
-            )
-        if fb_layer_meta.get("fallback_behavior_repaired"):
-            final_emitted_source = str(
-                fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
-            )
-        if purity_layer_meta.get("player_facing_narration_purity_repaired"):
-            final_emitted_source = "player_facing_narration_purity_repair"
-        if asp_layer_meta.get("answer_shape_primacy_repaired"):
-            final_emitted_source = str(
-                asp_layer_meta.get("answer_shape_primacy_repair_mode") or "answer_shape_primacy_repair"
-            )
-        if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
-            final_emitted_source = str(
-                ffnc_layer_meta.get("fast_fallback_neutral_composition_repair_mode")
-                or "fast_fallback_neutral_composition_repair"
-            )
+        final_emitted_source = infer_accept_path_final_emitted_source(
+            "generated_candidate",
+            response_type_debug=response_type_debug,
+            retry_output=retry_output,
+            ac_layer_meta=ac_layer_meta,
+            rd_layer_meta=rd_layer_meta,
+            srs_layer_meta=srs_layer_meta,
+            nat_layer_meta=nat_layer_meta,
+            na_layer_meta=na_layer_meta,
+            te_layer_meta=te_layer_meta,
+            ar_layer_meta=ar_layer_meta,
+            cs_layer_meta=cs_layer_meta,
+            fb_layer_meta=fb_layer_meta,
+            purity_layer_meta=purity_layer_meta,
+            asp_layer_meta=asp_layer_meta,
+            ffnc_layer_meta=ffnc_layer_meta,
+        )
 
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
@@ -10258,7 +9755,6 @@ def apply_final_emission_gate(
         "deterministic_social_fallback_attempted": deterministic_attempted,
         "deterministic_social_fallback_passed": deterministic_passed,
         "final_emitted_source": final_emitted_source,
-        "realization_fallback_family": GATE_TERMINAL_REPAIR,
         "fallback_family_used": fallback_family_used,
         "fallback_temporal_frame": fallback_temporal_frame,
         "post_gate_mutation_detected": post_gate_mutation_detected,
@@ -10275,6 +9771,7 @@ def apply_final_emission_gate(
         coerce_for_fem=True,
         include_authorship_source=False,
     )
+    _stamp_non_strict_sealed_replacement_realization_family(fem_replacement_meta)
     out[FINAL_EMISSION_META_KEY] = fem_replacement_meta
     md_dbg = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
     out["metadata"] = md_dbg

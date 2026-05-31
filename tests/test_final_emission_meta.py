@@ -4,7 +4,27 @@ from __future__ import annotations
 
 import json
 
+from game.final_emission_sealed_fallback import (
+    non_strict_sealed_replacement_realization_family_token,
+    stamp_non_strict_sealed_replacement_realization_family,
+)
+from game.realization_provenance import (
+    GATE_TERMINAL_REPAIR,
+    REALIZATION_FALLBACK_FAMILY_FIELD,
+    STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+)
+from game.social_exchange_emission import (
+    project_strict_social_replace_realization_family,
+    stamp_strict_social_deterministic_fallback_family,
+    strict_social_deterministic_fallback_family_token,
+)
 from game.final_emission_meta import (
+    build_narration_constraint_debug,
+    default_narration_constraint_debug,
+    merge_narration_constraint_debug_meta,
+    narration_constraint_reason_codes,
+    narration_constraint_small_code,
+    narration_constraint_small_str,
     EVALUATOR_FEM_KEY_PREFIX_FAMILIES,
     EMISSION_DEBUG_LANE_KEY,
     FINAL_EMISSION_META_KEY,
@@ -24,6 +44,7 @@ from game.final_emission_meta import (
     default_narrative_mode_output_layer_meta,
     default_response_type_debug,
     ensure_final_emission_meta_dict,
+    infer_accept_path_final_emitted_source,
     merge_narrative_authenticity_into_final_emission_meta,
     merge_narrative_mode_output_into_final_emission_meta,
     merge_response_type_meta,
@@ -50,6 +71,168 @@ from game.narrative_mode_contract import (
     build_narrative_mode_emission_trace,
     validate_narrative_mode_output,
 )
+
+
+def test_narration_constraint_small_str_rejects_long_and_whitespace() -> None:
+    assert narration_constraint_small_str("ok") == "ok"
+    assert narration_constraint_small_str("x" * 65) is None
+    assert narration_constraint_small_str("bad\nline") is None
+
+
+def test_narration_constraint_reason_codes_respects_limit() -> None:
+    codes = narration_constraint_reason_codes(
+        ["a", "b", "c", "d", "e", "f"],
+        limit=5,
+    )
+    assert len(codes) == 5
+
+
+def test_build_narration_constraint_debug_visibility_reason_cap() -> None:
+    payload = build_narration_constraint_debug(
+        visibility_meta={
+            "visibility_validation_passed": False,
+            "visibility_replacement_applied": True,
+            "visibility_violation_kinds": [
+                "hidden_fact_reference",
+                "unseen_entity_reference",
+                "hidden_fact_reference",
+                "offscene_reference",
+                "continuity_bleed",
+                "should_not_fit",
+            ],
+        },
+        narration_visibility={"visible_entity_ids": ["a"], "hidden_fact_strings": []},
+    )
+    assert payload["visibility"]["decision_mode"] == "replaced"
+    assert len(payload["visibility"]["reason_codes"]) == 5
+
+
+def test_merge_narration_constraint_debug_meta_preserves_sections() -> None:
+    metadata = {
+        "emission_debug": {
+            "narration_constraint_debug": {
+                "speaker_selection": {"speaker_id": "runner"},
+            }
+        }
+    }
+    merge_narration_constraint_debug_meta(
+        metadata,
+        {"response_type": {"required": "dialogue"}},
+    )
+    merged = metadata["emission_debug"]["narration_constraint_debug"]
+    assert merged["response_type"]["required"] == "dialogue"
+    assert merged["speaker_selection"]["speaker_id"] == "runner"
+    assert merged["visibility"]["contract_present"] is False
+
+
+def test_default_narration_constraint_debug_shape() -> None:
+    assert default_narration_constraint_debug()["response_type"]["repair_used"] is False
+
+
+def test_stamp_strict_social_deterministic_fallback_family() -> None:
+    meta: dict[str, object] = {}
+    stamp_strict_social_deterministic_fallback_family(meta)
+    assert meta[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    assert strict_social_deterministic_fallback_family_token() == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+
+
+def test_project_strict_social_replace_realization_family_defaults_missing() -> None:
+    assert (
+        project_strict_social_replace_realization_family(None)
+        == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    )
+    assert project_strict_social_replace_realization_family("") == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+
+
+def test_stamp_non_strict_sealed_replacement_realization_family() -> None:
+    meta: dict[str, object] = {}
+    stamp_non_strict_sealed_replacement_realization_family(meta)
+    assert meta[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert non_strict_sealed_replacement_realization_family_token() == GATE_TERMINAL_REPAIR
+
+
+def test_infer_accept_path_final_emitted_source_strict_social_initial() -> None:
+    assert (
+        infer_accept_path_final_emitted_source(
+            "normalized_social_candidate",
+            response_type_debug={},
+        )
+        == "normalized_social_candidate"
+    )
+    assert (
+        infer_accept_path_final_emitted_source(
+            "",
+            response_type_debug={},
+        )
+        == ""
+    )
+
+
+def test_infer_accept_path_final_emitted_source_generic_initial() -> None:
+    assert (
+        infer_accept_path_final_emitted_source("generated_candidate", response_type_debug={})
+        == "generated_candidate"
+    )
+
+
+def test_infer_accept_path_final_emitted_source_later_layers_win_in_order() -> None:
+    layers = {
+        "response_type_debug": {
+            "response_type_repair_used": True,
+            "response_type_repair_kind": "response_type_contract_repair",
+        },
+        "retry_output": True,
+        "ac_layer_meta": {"answer_completeness_repaired": True, "answer_completeness_repair_mode": "ac_mode"},
+        "ffnc_layer_meta": {
+            "fast_fallback_neutral_composition_repaired": True,
+            "fast_fallback_neutral_composition_repair_mode": "ffnc_mode",
+        },
+    }
+    assert (
+        infer_accept_path_final_emitted_source(
+            "generated_candidate",
+            response_type_debug=layers["response_type_debug"],
+            retry_output=layers["retry_output"],
+            ac_layer_meta=layers["ac_layer_meta"],
+            ffnc_layer_meta=layers["ffnc_layer_meta"],
+        )
+        == "ffnc_mode"
+    )
+
+
+def test_infer_accept_path_final_emitted_source_srs_requires_passed() -> None:
+    assert (
+        infer_accept_path_final_emitted_source(
+            "generated_candidate",
+            srs_layer_meta={
+                "social_response_structure_repair_applied": True,
+                "social_response_structure_passed": False,
+                "social_response_structure_repair_mode": "srs_mode",
+            },
+        )
+        == "generated_candidate"
+    )
+    assert (
+        infer_accept_path_final_emitted_source(
+            "generated_candidate",
+            srs_layer_meta={
+                "social_response_structure_repair_applied": True,
+                "social_response_structure_passed": True,
+                "social_response_structure_repair_mode": "srs_mode",
+            },
+        )
+        == "srs_mode"
+    )
+
+
+def test_infer_accept_path_final_emitted_source_purity_uses_fixed_token() -> None:
+    assert (
+        infer_accept_path_final_emitted_source(
+            "generated_candidate",
+            purity_layer_meta={"player_facing_narration_purity_repaired": True},
+        )
+        == "player_facing_narration_purity_repair"
+    )
 
 
 def test_default_layer_meta_has_all_fem_keys() -> None:

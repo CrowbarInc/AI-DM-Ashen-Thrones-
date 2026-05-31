@@ -5,7 +5,7 @@ This module must not author or select fallback prose.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Literal, Mapping, MutableMapping, Sequence
+from typing import Any, Callable, Dict, Literal, Mapping, MutableMapping, NamedTuple, Sequence
 
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
@@ -51,6 +51,161 @@ class SealedFallbackSelection:
             self.final_emitted_source,
             self.composition_meta,
         )
+
+
+class NonStrictSealedFallbackProviders(NamedTuple):
+    passive_candidates_provider: Callable[[], Sequence[SealedFallbackSelection]]
+    use_neutral_nonprogress_provider: Callable[[], bool]
+    opening_provider: Callable[[], SealedFallbackSelection]
+    social_interlocutor_provider: Callable[[], SealedFallbackSelection]
+    neutral_nonprogress_provider: Callable[[], SealedFallbackSelection]
+    anti_reset_provider: Callable[[], SealedFallbackSelection]
+    global_provider: Callable[[], SealedFallbackSelection]
+
+
+def build_non_strict_sealed_fallback_providers(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    sid: str,
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    res_kind: str,
+    response_type_required: str,
+    opening_scene_safe_fallback_tuple: Callable[[Dict[str, Any]], tuple[Any, ...]],
+    passive_scene_pressure_fallback_candidates: Callable[..., list[tuple[Any, ...]]],
+    should_use_neutral_nonprogress_fallback_instead_of_global_stock: Callable[[Any, Any], bool],
+    scene_emit_integrity_global_fallback_tuple: Callable[..., tuple[Any, ...]],
+    minimal_social_emergency_fallback_line: Callable[[Dict[str, Any] | None], str],
+    npc_display_name_for_emission: Callable[[Any, str, str], str],
+    npc_pursuit_neutral_nonprogress_fallback_line: Callable[[], str],
+    local_exchange_continuation_fallback_line: Callable[..., str],
+) -> NonStrictSealedFallbackProviders:
+    """Assemble sealed fallback branch providers; prose comes from injected gate-owned builders."""
+
+    def _opening_provider() -> SealedFallbackSelection:
+        (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fb_strat_ie,
+            _fb_cand_ie,
+            fallback_composition_meta,
+        ) = opening_scene_safe_fallback_tuple(out)
+        return SealedFallbackSelection(
+            text=fallback_text,
+            fallback_pool=fallback_pool,
+            fallback_kind=fallback_kind,
+            final_emitted_source=final_emitted_source,
+            composition_meta=fallback_composition_meta,
+        )
+
+    def _social_interlocutor_provider() -> SealedFallbackSelection:
+        mini_res: Dict[str, Any] = {
+            "kind": "question",
+            "social": {
+                "npc_id": active_interlocutor,
+                "npc_name": npc_display_name_for_emission(world, sid, active_interlocutor),
+                "social_intent_class": "social_exchange",
+            },
+        }
+        fallback_pool = "social_active_interlocutor_minimal"
+        fallback_text = minimal_social_emergency_fallback_line(mini_res)
+        fallback_kind = "social_interlocutor_fallback"
+        final_emitted_source = "social_interlocutor_minimal_fallback"
+        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
+
+    def _passive_candidates_provider() -> list[SealedFallbackSelection]:
+        passive_candidates = passive_scene_pressure_fallback_candidates(
+            session=session if isinstance(session, dict) else None,
+            scene=scene,
+            scene_id=sid,
+        )
+        selections: list[SealedFallbackSelection] = []
+        for candidate in passive_candidates:
+            (
+                fallback_text,
+                fallback_pool,
+                fallback_kind,
+                final_emitted_source,
+                _fallback_strategy,
+                _fallback_candidate_source,
+                _composition_meta,
+            ) = candidate
+            selections.append(
+                SealedFallbackSelection(
+                    fallback_text, fallback_pool, fallback_kind, final_emitted_source, None
+                )
+            )
+        return selections
+
+    def _use_neutral_nonprogress_provider() -> bool:
+        return should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution)
+
+    def _neutral_nonprogress_provider() -> SealedFallbackSelection:
+        fallback_pool = "npc_pursuit_fail_closed_neutral"
+        fallback_text = npc_pursuit_neutral_nonprogress_fallback_line()
+        fallback_kind = "npc_pursuit_neutral_nonprogress"
+        final_emitted_source = "npc_pursuit_neutral_fallback"
+        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
+
+    def _anti_reset_provider() -> SealedFallbackSelection:
+        fallback_pool = "anti_reset_local_continuation"
+        fallback_text = local_exchange_continuation_fallback_line(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=sid,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
+        fallback_kind = "anti_reset_continuation_fallback"
+        final_emitted_source = "anti_reset_local_continuation_fallback"
+        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
+
+    def _global_provider() -> SealedFallbackSelection:
+        (
+            fallback_text,
+            fallback_pool,
+            fallback_kind,
+            final_emitted_source,
+            _fb_strat_ie,
+            _fb_cand_ie,
+            _comp_ie,
+        ) = scene_emit_integrity_global_fallback_tuple(
+            scene if isinstance(scene, dict) else None,
+            sid,
+            authoritative_resolution=resolution if isinstance(resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            res_kind=res_kind,
+            response_type_required=response_type_required,
+        )
+        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
+
+    return NonStrictSealedFallbackProviders(
+        passive_candidates_provider=_passive_candidates_provider,
+        use_neutral_nonprogress_provider=_use_neutral_nonprogress_provider,
+        opening_provider=_opening_provider,
+        social_interlocutor_provider=_social_interlocutor_provider,
+        neutral_nonprogress_provider=_neutral_nonprogress_provider,
+        anti_reset_provider=_anti_reset_provider,
+        global_provider=_global_provider,
+    )
+
+
+def non_strict_sealed_replacement_realization_family_token() -> str:
+    """Canonical ``realization_fallback_family`` for generic sealed terminal replace paths."""
+    return GATE_TERMINAL_REPAIR
+
+
+def stamp_non_strict_sealed_replacement_realization_family(
+    meta: MutableMapping[str, Any],
+) -> MutableMapping[str, Any]:
+    """Stamp gate-terminal repair family on non-strict sealed replacement FEM fragments."""
+    return attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
 
 
 def stamp_sealed_fallback_realization_family(
