@@ -168,7 +168,7 @@ def set_social_target(session: Dict[str, Any], target_id: Optional[str]) -> Dict
 
 - **Owner checks present:** `scene_update` branch asserts `SCENE_STATE` owner for `apply_gm_scene_update_layers`; `world_updates` asserts `WORLD_STATE` for `apply_gm_world_updates`.
 
-- **Policy layer upstream:** `validate_gm_state_update` (e.g. blocks exact promotion of `hidden_facts` strings into `visible_facts_add`) runs inside `apply_response_policy_enforcement` when `forbid_state_invention` is enabled—**before** the GM payload is heavily consumed in the resolved pipeline’s GPT build path (`game/gm.py`).
+- **Policy layer upstream:** `validate_gm_state_update` (e.g. blocks exact promotion of `hidden_facts` strings into `visible_facts_add`) runs inside `apply_response_policy_enforcement` (`game/response_policy_enforcement.py`; leaf helper in `game/gm.py`) when `forbid_state_invention` is enabled—**before** the GM payload is heavily consumed in the resolved pipeline’s GPT build path.
 
 ### Risky / needs tightening
 

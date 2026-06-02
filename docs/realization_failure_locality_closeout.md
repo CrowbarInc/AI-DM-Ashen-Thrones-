@@ -83,7 +83,7 @@ Canonical pointers: `tests/test_realization_provenance.py`,
 
 | Area | Risk | Notes |
 | --- | --- | --- |
-| `apply_response_policy_enforcement` | **HIGH** | Large post-GPT mutation hub; split still Cursor-led with tests. |
+| `apply_response_policy_enforcement` | **HIGH** (leaf mutators in `game/gm.py`) | Orchestration owner extracted (AI1); phased leaf moves remain Cursor-led with tests. |
 | Opening fallback | **HIGH** | Gate still composes some prose; upstream prepared selection is future work. |
 | `apply_final_emission_gate` | **EXTREME** | Broad rewrite unsafe; branch-local reduction only with snapshots. |
 | `_build_gpt_narration_from_authoritative_state` body | **HIGH if edited** | Orchestration changes can shift semantics quietly; AJ–AN mitigate extraction churn only. |

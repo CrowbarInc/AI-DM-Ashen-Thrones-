@@ -1,14 +1,72 @@
 # Response Policy Enforcement Split Plan
 
-This document describes the **completed** split of
-`game.gm.apply_response_policy_enforcement` into orchestration plus helpers (Blocks U–X),
-with **contract guards** (Block Y) to prevent re-coupling policy, validation, metadata, and text
-mutation.
+This document describes the **completed** split of response-policy enforcement
+orchestration plus helpers (Blocks U–Y), the **runtime owner extraction** (Blocks AI1–AI2),
+**phased leaf extraction** (Blocks AI3–AI11), and **closure audit** (Block AI12).
+
+## Block AI12 — Cycle AI closure (completed)
+
+**Status:** Response-policy enforcement ownership is localized to
+`game/response_policy_enforcement.py`. `game/gm.py` retains only compatibility re-exports
+and shared helper dependencies (uncertainty rendering, topic-pressure scoring/context,
+scene-momentum due-bit helpers, etc.).
+
+**Validation:** `RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES` in
+`game/response_policy_enforcement_manifest.py`; identity + module-owner tests in
+`tests/test_response_policy_enforcement_mutation.py`.
+
+## Blocks AI3–AI11 — Leaf extraction (completed)
+
+| Block | Subpath | Symbols moved to runtime owner |
+| --- | --- | --- |
+| AI3–AI5 | question resolution, validator voice, state validation | `enforce_question_resolution_rule`, `enforce_no_validator_voice`, `detect_validator_voice`, `validate_gm_state_update` |
+| AI6 | prefer_specificity | `enforce_npc_response_contract`, `npc_response_contract_check`, `enforce_forbidden_generic_phrases`, `detect_forbidden_generic_phrases` |
+| AI7 | forbid_secret_leak | `guard_gm_output`, `sanitize_player_facing_text` |
+| AI8 | topic pressure | `enforce_topic_pressure_escalation` (+ path-only beat helpers) |
+| AI9 | passive escalation | `escalate_passive_scene` (+ path-only beat helpers) |
+| AI10 | scene momentum | `enforce_scene_momentum` |
+| AI11 | topic progress commit | `_commit_topic_progress` |
+
+All moved symbols remain re-exported from `game.gm` until deliberate import migration.
+
+## Block AI2 — Manifest / runtime alignment (completed)
+
+**Runtime owner:** `game/response_policy_enforcement.py`
+
+**Compatibility surface:** `game.gm` re-exports (same objects) — see
+`RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES`.
+
+**Shared dependencies intentionally left in `game/gm.py`:** uncertainty stack
+(`classify_uncertainty`, `_apply_uncertainty_to_gm`, `render_uncertainty_response`, …),
+topic-pressure context/scoring (`_get_topic_pressure_context`, `_topic_progress_score`,
+`_topic_pressure_snapshot_for_reply`), scene-momentum due/tag helpers
+(`_scene_momentum_due`, `_extract_scene_momentum_kind`), pattern registries used across
+prompt/retry paths, and NPC/scene resolution helpers.
+
+**Governance:** `game/response_policy_enforcement_manifest.py` declares subpath classifications
+and contract helper names. Direct-owner behavioral suite:
+`tests/test_response_policy_enforcement_mutation.py`.
+
+## Block AI1 — Runtime owner shell (completed)
+
+Moved **orchestration only** out of `game/gm.py`:
+
+| Symbol | New home |
+| --- | --- |
+| `apply_response_policy_enforcement` | `game/response_policy_enforcement.py` |
+| `GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED` | same |
+| All 15 names in `RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES` | same |
+
+`game/gm.py` retains leaf enforcement implementations and re-exports the moved symbols for
+import compatibility (`game.api`, adoption gateway, downstream tests). Orchestration wrappers
+call runtime-owner leaf implementations directly; shared uncertainty/topic/scene helpers remain
+in `game.gm` with lazy imports from the runtime owner.
 
 ## Block Y — Finalization / contract guard (completed)
 
 The refactor is **frozen at the orchestration boundary**: `apply_response_policy_enforcement`
-must remain a thin loop over `RESPONSE_RULE_PRIORITY`, delegating work to named helpers.
+(in `game/response_policy_enforcement.py`) must remain a thin loop over `RESPONSE_RULE_PRIORITY`,
+delegating work to named helpers.
 
 **Contract surfaces**
 
@@ -47,9 +105,10 @@ must remain a thin loop over `RESPONSE_RULE_PRIORITY`, delegating work to named 
 
 ## Block U — Metadata / validation extraction (completed)
 
-Low-risk helpers now live next to `apply_response_policy_enforcement` in
-`game/gm.py`. They preserve mutation order and emitted prose; only boundaries
-were extracted.
+Low-risk helpers were first extracted next to `apply_response_policy_enforcement` inside
+`game/gm.py` (Blocks U–X). Block AI1 moved orchestration + these helpers to
+`game/response_policy_enforcement.py`. They preserve mutation order and emitted prose; only
+boundaries were extracted.
 
 **Helpers added**
 
@@ -74,8 +133,8 @@ were extracted.
 
 ## Block X — Residual helper extraction (completed)
 
-Snapshot-covered branches from Block W are thin wrappers next to
-`apply_response_policy_enforcement` in `game/gm.py`.
+Snapshot-covered branches from Block W are thin wrappers (Block X). Implementation now lives in
+`game/response_policy_enforcement.py`; leaf callees remain in `game/gm.py`.
 
 **Helpers added**
 
@@ -136,12 +195,18 @@ above.
 
 ## Current Shape
 
-`apply_response_policy_enforcement` runs policy keys in `RESPONSE_RULE_PRIORITY`,
-skips most mutating helpers when `strict_social_emission_will_apply(...)` is
-true, commits topic progress from the final reply text, then projects policy and
-fallback-behavior metadata. The function sits after GPT response generation and
-before final emission, so any player-facing rewrite here is provenance-relevant
-even when the rewrite is deterministic and bounded.
+**Runtime owner:** `game/response_policy_enforcement.apply_response_policy_enforcement`
+
+**Compatibility imports:** `from game.gm import apply_response_policy_enforcement` (re-export)
+
+The orchestrator runs policy keys in `RESPONSE_RULE_PRIORITY`, skips most mutating helpers when
+`strict_social_emission_will_apply(...)` is true, commits topic progress from the final reply text,
+then projects policy and fallback-behavior metadata. The function sits after GPT response generation
+and before final emission, so any player-facing rewrite here is provenance-relevant even when the
+rewrite is deterministic and bounded.
+
+Leaf text mutators and validation helpers live in `game/response_policy_enforcement.py`
+(Cycle AI3–AI11). `game/gm.py` re-exports them and hosts shared dependencies only.
 
 ## Classification Map
 
@@ -161,14 +226,13 @@ even when the rewrite is deterministic and bounded.
 
 ## Proposed Future Split Order
 
-The structural split is **complete**. Remaining work is optional maintenance:
+Orchestration and leaf extraction are **complete** (Blocks U–Y, AI1–AI12).
 
-1. ~~Extract metadata-only projection last-step helpers~~ (done — Block U).
-2. ~~Separate validation-only state/update normalization~~ (done — Block U).
-3. ~~Deterministic and residual text helpers~~ (done — Blocks V–X).
-4. ~~Contract tests + manifest registry~~ (done — Block Y).
-5. Optional later: deeper splits **inside** leaf implementations (`enforce_no_validator_voice`,
-   `guard_gm_output`, scene momentum renderers) only with dedicated provenance/snapshot coverage.
+**Optional follow-ups (outside Cycle AI):**
+
+1. Migrate import sites from `game.gm` to `game.response_policy_enforcement` deliberately.
+2. Collapse duplicate `_reply_already_has_concrete_interaction` copies in final-emission modules.
+3. Move uncertainty rendering stack upstream when planner-prepared emission owns answer text.
 
 ## Non-Goals For This Block
 

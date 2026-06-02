@@ -63,30 +63,23 @@ target.
 
 ## apply_response_policy_enforcement split
 
-Current status:
+Current status (**Cycle AI complete — Block AI12**):
 
-- Mutation snapshots exist.
-- A declarative manifest classifies subpaths.
-- The split plan is documented.
+- **Runtime owner:** `game/response_policy_enforcement.py` (Blocks AI1–AI11).
+- **Manifest/runtime alignment:** Block AI2 + AI12 compat registry
+  (`RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES`).
+- Orchestration, contract helpers, and all manifest leaf mutators live on the runtime owner;
+  `game.gm` re-exports the compat surface only.
+- Mutation snapshots + module-owner tests in `tests/test_response_policy_enforcement_mutation.py`.
 
-Why Cursor is required:
+Shared dependencies intentionally remain in `game/gm.py` (uncertainty rendering,
+topic-pressure context/scoring, scene-momentum due-bit helpers, pattern registries used by
+prompt/retry). These are not enforcement ownership residue.
 
-`apply_response_policy_enforcement` still sits after GPT output and can mutate
-`player_facing_text` before final emission. It mixes metadata projection,
-validation-only work, deterministic text enforcement, and
-fallback/provenance-relevant rewrites. The function needs careful interactive
-editing with constant test feedback.
+Optional follow-ups (outside Cycle AI):
 
-Recommended Cursor action:
-
-1. Extract metadata-only projection helpers for fallback behavior debug,
-   response policy snapshot, applied marker, and topic progress commit.
-2. Extract validation-only state/update normalization.
-3. Group deterministic text-mutating enforcement without changing order or
-   emitted text.
-4. Leave validator voice, secret leak guard, scene momentum, passive escalation,
-   and topic pressure in place until each path has explicit branch-level
-   provenance assertions.
+1. Deliberate import migration from `game.gm` to `game.response_policy_enforcement`.
+2. Upstream planner-prepared emission for provenance-sensitive rewrite paths.
 
 ## Opening fallback ownership move upstream
 

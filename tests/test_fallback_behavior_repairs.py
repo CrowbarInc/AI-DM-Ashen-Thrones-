@@ -12,7 +12,7 @@ tests/test_final_emission_repairs.py
 
 This file owns downstream consumer behavior for shipped ``fallback_behavior``
 metadata. Failures here should point first to
-``game.gm.apply_response_policy_enforcement``,
+``game.response_policy_enforcement.apply_response_policy_enforcement`` (``game.gm`` re-export),
 ``game.gm_retry.build_retry_prompt_for_failure``, or the ``game.gm_retry``
 fallback/debug metadata consumption path.
 

@@ -1,10 +1,12 @@
-"""Mutation snapshots for ``game.gm.apply_response_policy_enforcement``."""
+"""Mutation snapshots for ``game.response_policy_enforcement.apply_response_policy_enforcement``."""
 from __future__ import annotations
 
+import inspect
 from contextlib import ExitStack
 from unittest.mock import patch
 
 import game.gm as gm_mod
+import game.response_policy_enforcement as rpe_mod
 import pytest
 
 from game.gm import (
@@ -22,6 +24,7 @@ from game.response_policy_enforcement_manifest import (
     REQUIRED_RESPONSE_POLICY_ENFORCEMENT_SUBPATHS,
     RESPONSE_POLICY_ENFORCEMENT_CLASSIFICATIONS,
     RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES,
+    RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES,
     RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY,
     RESPONSE_POLICY_ENFORCEMENT_SUBPATHS,
     TEXT_MUTATING_ENFORCEMENT,
@@ -517,11 +520,38 @@ def test_response_policy_enforcement_manifest_classifies_required_subpaths() -> 
 
 
 def test_contract_split_helpers_remain_exported_from_gm() -> None:
-    """Rename guard: orchestration helpers must stay on ``game.gm`` (see manifest)."""
+    """Rename guard: orchestration helpers must stay re-exported on ``game.gm`` (see manifest)."""
     for name in RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES:
         obj = getattr(gm_mod, name, None)
         assert obj is not None, f"missing game.gm.{name}"
         assert callable(obj), f"game.gm.{name} must be callable"
+
+
+def test_response_policy_enforcement_runtime_owner_compatibility_exports() -> None:
+    """Cycle AI12: runtime owner owns symbols; ``game.gm`` re-exports identical objects."""
+    assert set(RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES) <= set(
+        RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES
+    )
+    for name in RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES:
+        owner_obj = getattr(rpe_mod, name, None)
+        gm_obj = getattr(gm_mod, name, None)
+        assert owner_obj is not None, f"missing game.response_policy_enforcement.{name}"
+        assert gm_obj is not None, f"missing game.gm.{name} compatibility export"
+        assert gm_obj is owner_obj, f"game.gm.{name} must be the same object as runtime owner"
+        if name != "GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED":
+            assert callable(owner_obj), f"game.response_policy_enforcement.{name} must be callable"
+
+
+def test_cycle_ai_gm_has_no_response_policy_enforcement_implementations() -> None:
+    """Cycle AI12: ``game.gm`` must not define enforcement bodies (compat re-exports only)."""
+    for name in RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES:
+        owner_obj = getattr(rpe_mod, name)
+        if name == "GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED":
+            assert rpe_mod.__dict__.get(name) == owner_obj
+            continue
+        assert inspect.getmodule(owner_obj) is rpe_mod, (
+            f"game.response_policy_enforcement.{name} must be defined on the runtime owner module"
+        )
 
 
 def test_contract_metadata_projection_helpers_do_not_mutate_player_facing_text() -> None:
@@ -551,13 +581,13 @@ def test_contract_orchestration_call_order_full_enabled_policy() -> None:
     log: list[str] = []
     with ExitStack() as stack:
         for name in RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY:
-            orig = getattr(gm_mod, name)
+            orig = getattr(rpe_mod, name)
             def wrapper_factory(nn: str, oo):
                 def _wrap(*a, **kw):
                     log.append(nn)
                     return oo(*a, **kw)
                 return _wrap
-            stack.enter_context(patch.object(gm_mod, name, new=wrapper_factory(name, orig)))
+            stack.enter_context(patch.object(rpe_mod, name, new=wrapper_factory(name, orig)))
         gm_mod.apply_response_policy_enforcement(
             _gm("Rain ticks against the gatehouse stones."),
             response_policy={
@@ -582,7 +612,7 @@ def test_contract_orchestration_call_order_full_enabled_policy() -> None:
 def test_contract_topic_progress_commit_receives_post_enforcement_reply_text() -> None:
     """Topic commit runs after the enforcement loop; capture uses final ``player_facing_text``."""
     captured: list[str] = []
-    orig_commit = gm_mod._commit_topic_progress
+    orig_commit = rpe_mod._commit_topic_progress
 
     def capture_commit(
         *,
@@ -593,7 +623,7 @@ def test_contract_topic_progress_commit_receives_post_enforcement_reply_text() -
         captured.append(reply_text)
         return orig_commit(session=session, scene_envelope=scene_envelope, reply_text=reply_text)
 
-    with patch.object(gm_mod, "_commit_topic_progress", side_effect=capture_commit):
+    with patch.object(rpe_mod, "_commit_topic_progress", side_effect=capture_commit):
         out = gm_mod.apply_response_policy_enforcement(
             _gm("Rain ticks against the gatehouse stones."),
             response_policy=_policy(must_answer=True),

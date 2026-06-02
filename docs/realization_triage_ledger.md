@@ -134,8 +134,8 @@ the seams already pinned. Further runtime refactors should be **evidence-driven*
 
 ## apply_response_policy_enforcement split
 
-- File/function: `game/gm.py::apply_response_policy_enforcement`
-- Current status: mutation snapshots and split-readiness manifest exist.
+- File/function: `game/response_policy_enforcement.py::apply_response_policy_enforcement` (compatibility re-export: `game.gm`)
+- Current status: orchestration + contract helpers moved to runtime owner (Block AI1); manifest/runtime alignment complete (Block AI2). Mutation snapshots and split-readiness manifest exist.
 - Remaining risk: the function still mutates `player_facing_text` after GPT and
   before final emission. Some paths are ordinary deterministic enforcement,
   while validator voice, secret leak guard, scene momentum, passive escalation,

@@ -1,7 +1,17 @@
 """Declarative split-readiness map for response policy enforcement.
 
 This module is intentionally metadata-only. It is not imported by runtime
-enforcement code and must not call into ``game.gm`` helpers.
+enforcement code and must not call into ``game.gm`` leaf helpers.
+
+**Runtime owner:** ``game.response_policy_enforcement`` implements
+``apply_response_policy_enforcement``, the applied-marker constant, all
+orchestration helpers in ``RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES``,
+and all leaf mutators listed in ``RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES``
+(Cycle AI3–AI11 complete).
+
+**Compatibility surface:** ``game.gm`` re-exports those symbols for legacy import
+paths (``game.api``, downstream tests, retry/adoption seams). Treat ``game.gm``
+exports as compatibility shims, not the semantic owner.
 """
 from __future__ import annotations
 
@@ -168,8 +178,12 @@ def response_policy_enforcement_subpath_keys() -> tuple[str, ...]:
     return tuple(item.key for item in RESPONSE_POLICY_ENFORCEMENT_SUBPATHS)
 
 
-# Contract guard (Blocks U–X): these ``game.gm`` symbols must remain importable;
-# tests assert presence + orchestration order. Do not rename without updating tests/docs.
+# Contract guard (Blocks U–Y, Block AI1): orchestration helpers are implemented on
+# ``game.response_policy_enforcement``. ``game.gm`` must preserve compatibility
+# re-exports for ``apply_response_policy_enforcement``,
+# ``GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED``, and every name below.
+# Tests assert presence on both modules, identity with the runtime owner, and
+# orchestration order. Do not rename without updating tests/docs.
 RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES: tuple[str, ...] = (
     "_normalize_response_policy_input",
     "_scene_id_from_scene_envelope",
@@ -189,7 +203,8 @@ RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES: tuple[str, ...] = (
 )
 
 # Expected invocation order when every orchestrated branch is enabled (strict-social off).
-# Mirrors ``apply_response_policy_enforcement`` + ``RESPONSE_RULE_PRIORITY`` handling.
+# Mirrors ``game.response_policy_enforcement.apply_response_policy_enforcement`` +
+# ``RESPONSE_RULE_PRIORITY`` handling.
 RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY: tuple[str, ...] = (
     "_init_response_policy_enforcement_state",
     "_apply_must_answer_question_resolution_enforcement",
@@ -203,4 +218,26 @@ RESPONSE_POLICY_ENFORCEMENT_ORCHESTRATION_SEQUENCE_FULL_POLICY: tuple[str, ...] 
     "_commit_topic_progress_after_enforcement",
     "_snapshot_response_policy_and_project_fallback_contract",
     "_mark_response_policy_enforcement_applied",
+)
+
+# Cycle AI12: full ``game.gm`` compatibility surface (must re-export same objects as runtime owner).
+# Includes orchestrator, applied marker, contract helpers, and all extracted leaf mutators.
+RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES: tuple[str, ...] = (
+    "apply_response_policy_enforcement",
+    "GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED",
+    "validate_gm_state_update",
+    "enforce_question_resolution_rule",
+    "enforce_no_validator_voice",
+    "detect_validator_voice",
+    "enforce_npc_response_contract",
+    "npc_response_contract_check",
+    "enforce_forbidden_generic_phrases",
+    "detect_forbidden_generic_phrases",
+    "guard_gm_output",
+    "sanitize_player_facing_text",
+    "enforce_topic_pressure_escalation",
+    "escalate_passive_scene",
+    "enforce_scene_momentum",
+    "_commit_topic_progress",
+    *RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES,
 )

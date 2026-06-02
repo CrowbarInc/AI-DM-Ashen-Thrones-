@@ -44,6 +44,21 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Does not belong in runtime owner:** validator verdicts, repair strategies, layer ordering, final-emission metadata packaging.
 - **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not repair-, validator-, or gate-centered parallel authority.
 
+## Response Policy Enforcement (post-GPT orchestration)
+
+- Canonical owner module: `game/response_policy_enforcement.py`
+- Non-owner supporting modules: `game/gm.py` (compatibility re-exports + shared helper dependencies), `game/response_policy_enforcement_manifest.py` (metadata-only classifications)
+- Current state: `governance-aligned; Cycle AI complete (AI12)`
+- **Concern name:** `response policy enforcement`
+- **Runtime owner:** `game/response_policy_enforcement.py` (`apply_response_policy_enforcement`, all leaf mutators, applied marker, orchestration helpers in `RESPONSE_POLICY_ENFORCEMENT_CONTRACT_HELPER_NAMES`)
+- **Practical primary direct-owner suite:** `tests/test_response_policy_enforcement_mutation.py`
+- **Secondary downstream suites:** `tests/test_post_gm_adoption_gateway.py`, `tests/test_api_narration_path_selection.py`, `tests/test_prompt_and_guard.py`, `tests/test_fallback_behavior_repairs.py`
+- **Compatibility / support residue:** `game/gm.py` re-exports full compat surface (`RESPONSE_POLICY_ENFORCEMENT_GM_COMPAT_EXPORT_NAMES`); shared uncertainty/topic-pressure/scene-momentum helpers remain in `game.gm` for prompt/retry reuse.
+- **Non-owner adjacent modules:** `game/response_policy_contracts.py` (shipped policy **reads**, not enforcement orchestration), `game/final_emission_gate.py` (downstream gate)
+- **Belongs in runtime owner:** post-GPT policy orchestration loop, strict-social bypass routing, metadata projection, all manifest-classified leaf mutators, post-enforcement topic commit.
+- **Does not belong in runtime owner:** shipped policy contract resolution (`response_policy_contracts`), final emission gate ordering, prompt assembly, broad uncertainty rendering stack.
+- **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`; `game.gm` imports are compatibility surface only (Cycle AI1–AI12).
+
 ## Prompt Contracts
 
 - Canonical owner module: `game/prompt_context.py`

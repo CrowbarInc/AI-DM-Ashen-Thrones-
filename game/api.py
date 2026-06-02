@@ -2173,7 +2173,8 @@ def _apply_narration_hub_policy_handoff(
 ) -> dict | None:
     """Post-GPT/retry response policy seam for manual-play narration hub.
 
-    Runs :func:`~game.gm.apply_response_policy_enforcement` when ``fast_fallback_mode`` is false,
+    Runs :func:`~game.response_policy_enforcement.apply_response_policy_enforcement`
+    (imported via ``game.gm`` for compatibility) when ``fast_fallback_mode`` is false,
     then the hub's terminal repair hook (same reasons as inline hub code before extraction).
 
     **Does not** call GPT, retry execution, select fallback prose, or final emission gate.
