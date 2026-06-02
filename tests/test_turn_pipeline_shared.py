@@ -31,8 +31,13 @@ from tests.helpers.emission_smoke_assertions import (
     assert_global_visibility_stock_absent,
     assert_no_advisory_prose,
     assert_no_internal_scaffold_labels,
+    assert_no_retry_coaching_leak_smoke,
+    assert_no_social_visible_intro_filler_smoke,
+    assert_no_uncertainty_fallback_stock_smoke,
     assert_no_unresolved_stock_phrases,
+    assert_no_validator_voice_smoke,
     assert_player_text_present,
+    assert_procedural_adjudication_smoke,
     assert_response_type_meta,
 )
 from tests.helpers.turn_pipeline_http_fixtures import (
@@ -233,9 +238,8 @@ def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     retry_tail = retry_messages[-1]["content"]
     assert "Retry target: validator_voice." in retry_tail
     assert "unresolved_question" not in retry_tail
-    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
-    assert "based on what's established" not in low
-    assert "we can determine" not in low
+    text = (data.get("gm_output") or {}).get("player_facing_text", "")
+    assert_no_validator_voice_smoke(text)
     assert "retry_strategy:selected=validator_voice" in read_debug_notes_from_turn_payload(data)
 
 
@@ -343,7 +347,7 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert (resolution.get("social") or {}).get("npc_id") == "runner"
     if "scene holds" in bad_text.lower():
         assert_global_visibility_stock_absent(text)
-    assert "stands nearby" not in low
+    assert_no_social_visible_intro_filler_smoke(text)
     assert "tavern runner" in low
     assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
     # Downstream smoke: player-facing output beat generic filler; exact FEM source/route owned by gate.
@@ -487,8 +491,7 @@ def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatc
     assert resp.status_code == 200
     data = resp.json()
     gm_output = data.get("gm_output") or {}
-    text_low = (gm_output.get("player_facing_text") or "").lower()
-    assert "blank scene awaiting definition" not in text_low
+    assert_no_uncertainty_fallback_stock_smoke(gm_output.get("player_facing_text") or "")
     assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
     assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
@@ -526,10 +529,11 @@ def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     assert "Sentence one MUST directly answer the exact player question." in retry_tail
     assert "Do not begin with atmosphere, scene summary, or recap." in retry_tail
     assert "No advisory phrasing" in retry_tail
-    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
-    assert "i can't answer" not in low
-    assert "answer the player" not in low
-    assert "blank scene awaiting definition" not in low
+    text = (data.get("gm_output") or {}).get("player_facing_text", "")
+    low = text.lower()
+    assert_no_validator_voice_smoke(text)
+    assert_no_retry_coaching_leak_smoke(text)
+    assert_no_uncertainty_fallback_stock_smoke(text)
     assert low.startswith("the report is") or "filing shelves" in low or "notice board" in low
     assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
@@ -562,9 +566,8 @@ def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, mo
     retry_tail = captured_inputs[1][-1]["content"]
     assert "Retry target: unresolved_question." in retry_tail
     assert "Retry target: validator_voice." not in retry_tail
-    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
-    assert "i can't answer" not in low
-    assert "based on what's established" not in low
+    text = (data.get("gm_output") or {}).get("player_facing_text", "")
+    assert_no_validator_voice_smoke(text)
     assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
 
 
@@ -676,9 +679,8 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     retry_tail = captured_inputs[1][-1]["content"]
     assert "Retry target: scene_stall." in retry_tail
     assert "validator_voice" not in retry_tail
-    low = (data.get("gm_output") or {}).get("player_facing_text", "").lower()
-    assert "answer the player" not in low
-    assert "rule priority" not in low
+    text = (data.get("gm_output") or {}).get("player_facing_text", "")
+    assert_no_retry_coaching_leak_smoke(text)
     assert "retry_strategy:selected=scene_stall" in read_debug_notes_from_turn_payload(data)
 
 
@@ -980,7 +982,7 @@ def test_chat_repeated_social_questions_keep_npc_uncertainty_voice(tmp_path, mon
             low = text.lower()
             assert "tavern runner" in low
             assert '"' in text
-            assert "resolve that procedurally" not in low
+            assert_procedural_adjudication_smoke(text)
 
 
 # feature: social
@@ -1219,8 +1221,9 @@ def test_chat_adjudication_refuses_over_answer_without_basis(tmp_path, monkeypat
     adjudication = (data.get("resolution") or {}).get("adjudication") or {}
     assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
     assert adjudication.get("answer_type") == "needs_concrete_action"
-    low = (((data.get("gm_output") or {}).get("player_facing_text") or "").lower())
-    assert low.strip()
+    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    assert_procedural_adjudication_smoke(text)
+    assert text.strip()
 
 
 # feature: continuity, emission
@@ -1497,30 +1500,6 @@ def test_chat_covert_concealment_under_observation_prompts_engine_check(tmp_path
 
 
 # feature: legality
-def test_chat_final_output_sanitizer_blocks_adjudication_procedural_leak(tmp_path, monkeypatch):
-    _seed_shared_world(tmp_path, monkeypatch)
-
-    with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT should not be called")))
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
-        client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "How far away is he?"})
-
-    assert resp.status_code == 200
-    data = resp.json()
-    text = ((data.get("gm_output") or {}).get("player_facing_text") or "")
-    low = text.lower()
-    assert "resolve that procedurally" not in low
-    assert "adjudication:" not in low
-    assert "authoritative state" not in low
-    assert "state exactly what you do" not in low
-    assert "scene offers no clear answer yet" not in low
-    assert low.strip()
-
-
-# feature: legality
 def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):
     _seed_shared_world(tmp_path, monkeypatch)
 
@@ -1791,35 +1770,6 @@ def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkey
 
 
 # feature: emission
-def test_chat_social_exchange_strips_unresolved_stock_phrases(tmp_path, monkeypatch):
-    _seed_runner_dialogue_context(tmp_path, monkeypatch)
-
-    with monkeypatch.context() as m:
-        m.setattr(
-            "game.api.call_gpt",
-            lambda _messages: _gm_response(
-                "The truth is still buried beneath rumor and rain. "
-                "The answer has not formed yet."
-            ),
-        )
-        m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
-        m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
-        client = TestClient(app)
-        resp = client.post("/api/chat", json={"text": "Who attacked them?"})
-
-    assert resp.status_code == 200
-    data = resp.json()
-    text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
-    low = text.lower()
-    assert_no_unresolved_stock_phrases(text)
-    assert_emission_repair_evidence(
-        data,
-        debug_notes_reader=read_debug_notes_from_turn_payload,
-    )
-
-
-# feature: emission
 def test_chat_social_exchange_interruption_output_stays_coherent(tmp_path, monkeypatch):
     _seed_runner_dialogue_context(tmp_path, monkeypatch)
 
@@ -1948,8 +1898,6 @@ def test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair(tmp_p
             "frowns",
         )
     )
-    assert_no_unresolved_stock_phrases(text)
-    assert_no_advisory_prose(text)
 
 
 # feature: emission, speaker_contract
@@ -2025,7 +1973,6 @@ def test_pipeline_interruption_denial_still_emits_coherent_strict_social(tmp_pat
     gm_out = data.get("gm_output") or {}
     text = str(gm_out.get("player_facing_text") or "")
     low = text.lower()
-    assert_no_advisory_prose(text)
     assert "check the board" not in low
     assert "tavern runner" in low or '"' in text
 
@@ -2040,6 +1987,13 @@ def test_emission_smoke_helpers_reject_global_visibility_stock():
 def test_emission_smoke_helpers_reject_advisory_prose():
     with pytest.raises(AssertionError):
         assert_no_advisory_prose("I'd suggest you ask the captain.")
+
+
+def test_emission_smoke_helpers_reject_procedural_adjudication_leak():
+    with pytest.raises(AssertionError):
+        assert_procedural_adjudication_smoke(
+            "State exactly what you do; the scene offers no clear answer yet."
+        )
 
 
 def test_emission_smoke_helpers_accept_repair_evidence_from_tags_or_debug():

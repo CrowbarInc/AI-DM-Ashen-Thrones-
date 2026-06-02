@@ -23,6 +23,16 @@ import pytest
 pytestmark = pytest.mark.unit
 
 
+def test_gm_binding_exposes_strict_social_resolution_seam():
+    """Regression: gm_retry._gm_binding() must resolve strict-social helpers on game.gm."""
+    import game.gm as gm
+
+    binding = gm_retry._gm_binding()
+    assert callable(getattr(binding, "effective_strict_social_resolution_for_emission", None))
+    assert binding.effective_strict_social_resolution_for_emission is gm.effective_strict_social_resolution_for_emission
+    assert callable(getattr(binding, "minimal_social_emergency_fallback_line", None))
+
+
 def _gate_session_scene():
     session = create_fresh_session_document()
     session["active_scene_id"] = "frontier_gate"

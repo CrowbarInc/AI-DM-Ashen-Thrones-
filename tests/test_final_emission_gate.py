@@ -89,7 +89,7 @@ from tests.helpers.objective7_referent_fixtures import (
     minimal_full_referent_artifact,
     referent_compact_mirror,
 )
-from tests.test_narrative_mode_output_validator import _minimal_ctir_continuation
+from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 
 pytestmark = pytest.mark.unit
 
@@ -99,7 +99,7 @@ def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = No
 
     Omit *acceptance_quality* to assert N4 defaults when the plan ships no ``acceptance_quality_contract``.
     """
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     plan: dict[str, Any] = {"narrative_mode_contract": nmc}
     if acceptance_quality is not None:
         plan["acceptance_quality_contract"] = acceptance_quality
@@ -3388,7 +3388,7 @@ def test_selector_snapshot_strict_social_emergency_vs_gate_terminal_family(monke
     assert gen_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
 
     session, world, sid, resolution = runner_strict_bundle()
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     stub_details = {
         "used_internal_fallback": False,
         "final_emitted_source": "test_stub",
@@ -4337,7 +4337,7 @@ def _narrative_mode_plan_payload(contract: dict) -> dict:
 
 
 def test_narrative_mode_output_layer_runs_when_plan_contract_shipped() -> None:
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     text = (
         "You still hold the sergeant's gaze; he nods once toward the east lane without breaking stride."
     )
@@ -4382,7 +4382,7 @@ def test_narrative_mode_output_opening_validation_runs_for_scene_opening_respons
 
 
 def test_narrative_mode_output_failure_reasons_in_fem_and_replace_route() -> None:
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     bad = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
     out = apply_final_emission_gate(
         {"player_facing_text": bad, "tags": [], **_narrative_mode_plan_payload(nmc)},
@@ -4450,7 +4450,7 @@ def test_narrative_mode_output_skip_invalid_contract_shape() -> None:
 
 def test_strict_social_narrative_mode_output_enforcement_terminal_fallback(monkeypatch):
     session, world, sid, resolution = runner_strict_bundle()
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     stub_details = {
         "used_internal_fallback": False,
         "final_emitted_source": "test_stub",

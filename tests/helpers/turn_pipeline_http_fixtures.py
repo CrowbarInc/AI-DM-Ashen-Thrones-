@@ -3,6 +3,9 @@
 These helpers are test setup only. They intentionally avoid assertions and keep
 seed contents stable for suites that exercise the shared ``/api/chat`` and
 ``/api/action`` pipeline.
+
+Import HTTP seeds and GPT stubs from this module — not from
+``tests/test_turn_pipeline_shared.py`` (Cycle AL1).
 """
 from __future__ import annotations
 

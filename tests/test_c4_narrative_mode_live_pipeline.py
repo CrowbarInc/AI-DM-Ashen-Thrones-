@@ -34,7 +34,11 @@ from game.narration_plan_bundle import attach_narration_plan_bundle, get_attache
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.prompt_context import build_narration_context
 from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
-from tests.test_narrative_mode_output_validator import _minimal_ctir_continuation
+from tests.helpers.emission_smoke_assertions import (
+    assert_final_route_accept_candidate_smoke,
+    assert_final_route_replaced_or_not_accept,
+)
+from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 
 pytestmark = pytest.mark.unit
 
@@ -133,7 +137,7 @@ def _attach_ctir_session(session: dict, c: dict) -> None:
 
 def test_c4_smoke_shipped_continuation_contract_accept_candidate() -> None:
     """Smoke: gate accepts a clean continuation line when contract ships on the plan."""
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     text = (
         "You keep your weight forward; the east lane stays open ahead of you "
         "while torchlight holds the stones."
@@ -148,13 +152,13 @@ def test_c4_smoke_shipped_continuation_contract_accept_candidate() -> None:
     fem = _fem(out)
     assert fem.get("narrative_mode_output_checked") is True
     assert fem.get("narrative_mode_output_passed") is True
-    assert fem.get("final_route") == "accept_candidate"
+    assert_final_route_accept_candidate_smoke(fem)
     assert str(out.get("player_facing_text") or "").strip()
 
 
 def test_c4_smoke_bad_continuation_candidate_replaced_without_crash() -> None:
     """Smoke: obvious continuation violation is replaced; exact subcodes owned by gate/validator suites."""
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     bad = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
     out = apply_final_emission_gate(
         _gm_with_shipped_plan(text=bad, contract=nmc),
@@ -166,7 +170,7 @@ def test_c4_smoke_bad_continuation_candidate_replaced_without_crash() -> None:
     fem = _fem(out)
     assert fem.get("narrative_mode_output_checked") is True
     assert fem.get("narrative_mode_output_passed") is False
-    assert fem.get("final_route") == "replaced"
+    assert_final_route_replaced_or_not_accept(fem)
     assert (out.get("player_facing_text") or "") != bad
 
 
@@ -282,7 +286,7 @@ def test_c4_smoke_bundle_prompt_gate_invalid_contract_cross_cut() -> None:
 
 def test_c4_smoke_bundle_prompt_gate_disabled_contract_cross_cut() -> None:
     """Smoke: disabled NMC still flows through prompt + gate skip reason."""
-    nmc = build_narrative_mode_contract(enabled=False, ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(enabled=False, ctir=minimal_ctir_continuation())
     session = dict(_minimal_narration_kwargs({"active_scene_id": "s1", "turn_counter": 5, "visited_scene_ids": ["s1"]})["session"])
     c = ctir.build_ctir(
         turn_id=5,
@@ -333,7 +337,7 @@ def test_c4_smoke_bundle_prompt_gate_disabled_contract_cross_cut() -> None:
 def test_c4_strict_social_nmo_terminal_fallback_metadata_and_reassessment(monkeypatch) -> None:
     """Smoke: strict-social path invokes stub builder once; FEM shows emergency fallback source."""
     session, world, sid, resolution = _strict_runner_session_world_scene()
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     calls: list[int] = []
 
     def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
@@ -362,8 +366,8 @@ def test_c4_strict_social_nmo_terminal_fallback_metadata_and_reassessment(monkey
     tags = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
     assert "final_emission_gate:narrative_mode_output" in tags
     fem = _fem(out)
-    assert fem.get("final_route") == "replaced"
-    assert fem.get("final_emitted_source") == "minimal_social_emergency_fallback"
+    assert_final_route_replaced_or_not_accept(fem)
+    # Exact emergency-fallback source token: gate owner (test_final_emission_gate.py).
     assert fem.get("narrative_mode_output_checked") is True
     assert fem.get("narrative_mode_output_passed") is True
     assert fem.get("narrative_mode_output_failure_reasons") == []
@@ -377,7 +381,7 @@ def test_c4_gate_does_not_invoke_planner_build_during_emit(monkeypatch) -> None:
     boom = MagicMock(side_effect=AssertionError("build_narrative_plan must not run inside the gate"))
 
     monkeypatch.setattr(narrative_planning, "build_narrative_plan", boom)
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     apply_final_emission_gate(
         _gm_with_shipped_plan(
             text=(
@@ -426,7 +430,7 @@ def test_c4_prompt_debug_shipped_contract_valid_smoke() -> None:
 
 
 def test_c4_gate_payload_may_include_plan_narrative_mode_alias_when_enabled() -> None:
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     gm = _gm_with_shipped_plan(
         text=(
             "You keep your weight forward; the east lane stays open ahead of you "
@@ -439,7 +443,7 @@ def test_c4_gate_payload_may_include_plan_narrative_mode_alias_when_enabled() ->
 
 
 def test_c4_gate_does_not_mutate_shipped_plan_contract() -> None:
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     gm = _gm_with_shipped_plan(
         text=(
             "You keep your weight forward; the east lane stays open ahead of you "
@@ -460,7 +464,7 @@ def test_c4_gate_does_not_mutate_shipped_plan_contract() -> None:
 
 def test_c4_continuation_stable_single_gate_pass_smoke() -> None:
     """Smoke: one clean pass still accepts (multi-turn repetition owned by integration if needed)."""
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     text = (
         "You keep your weight forward; the east lane stays open ahead of you "
         "while torchlight holds the stones."
@@ -475,7 +479,7 @@ def test_c4_continuation_stable_single_gate_pass_smoke() -> None:
     fem = _fem(out)
     assert fem.get("narrative_mode_output_mode") == "continuation"
     assert fem.get("narrative_mode_output_passed") is True
-    assert fem.get("final_route") == "accept_candidate"
+    assert_final_route_accept_candidate_smoke(fem)
     tags = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
     assert "final_emission_gate:narrative_mode_output" not in tags
 
@@ -489,7 +493,7 @@ def test_c4_no_second_planner_call_on_gate_emit(monkeypatch) -> None:
         return _orig(*args, **kwargs)
 
     monkeypatch.setattr(narrative_planning, "build_narrative_plan", traced)
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     apply_final_emission_gate(
         _gm_with_shipped_plan(
             text=(

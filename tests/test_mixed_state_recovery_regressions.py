@@ -28,6 +28,10 @@ from game.interaction_context import (
 )
 from game.models import ChatRequest
 from game.storage import get_npc_runtime, get_scene_runtime
+from tests.helpers.emission_smoke_assertions import (
+    assert_global_visibility_stock_absent,
+    assert_no_social_visible_intro_filler_smoke,
+)
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
 from tests.helpers.transcript_runner import (
     latest_target_id,
@@ -425,9 +429,8 @@ def test_emergent_vocative_repair_keeps_owner_under_dialogue_contract(
         assert trace.get("canonical_entry_path") == "social"
         text = str(gm.get("player_facing_text") or "")
         low = text.lower()
-        assert "for a breath" not in low
-        assert "scene holds" not in low
-        assert "stands nearby" not in low
+        assert_global_visibility_stock_absent(text)
+        assert_no_social_visible_intro_filler_smoke(text)
         assert "lord ashvale" in low
         assert not _is_placeholder_only_player_facing_text(text)
         assert meta.get("final_emitted_source") != "global_scene_fallback"

@@ -12,6 +12,11 @@ import re
 
 import pytest
 
+from tests.helpers.emission_smoke_assertions import (
+    SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS,
+    SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS,
+    SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS,
+)
 from tests.helpers.synthetic_profiles import (
     profile_bold_opportunist,
     profile_cautious_investigator,
@@ -110,33 +115,6 @@ _KNOWN_STOP_REASONS = {
     "external_stop",
 }
 
-_FOLLOWUP_INTERNAL_LEAK_PATTERNS = (
-    r"\brouter\b",
-    r"\bplanner\b",
-    r"\bvalidator\b",
-    r"\bdecision_rationale\b",
-    r"\bpolicy\b",
-    r"\bsystem prompt\b",
-    r"\bdebug_notes?\b",
-    r"\bchain[- ]of[- ]thought\b",
-)
-_FOLLOWUP_SCAFFOLD_LEAK_PATTERNS = (
-    r"\bstate exactly what you do\b",
-    r"\bstate the specific action\b",
-    r"\bresolve that procedurally\b",
-    r"\bcannot determine roll requirements\b",
-    r"\bbased on (?:what'?s|what is) established\b",
-    r"\bas an ai\b",
-    r"\bi can't answer\b",
-    r"\bi cannot answer\b",
-)
-_FOLLOWUP_VAGUE_FILLER_PATTERNS = (
-    r"\bfor a breath\b",
-    r"\bthe scene holds\b",
-    r"\bvoices shift around you\b",
-    r"\bthese are dangerous times\b",
-    r"\btrust is hard to come by\b",
-)
 _FOLLOWUP_GROUNDED_MARKERS = (
     r"\bscene\b",
     r"\bclue\b",
@@ -334,21 +312,23 @@ def _assert_followup_player_facing_quality(
             detail=f"follow-up response is not syntactically valid text: {gm_text!r}",
         )
 
-        for pattern in _FOLLOWUP_INTERNAL_LEAK_PATTERNS:
+        for pattern in SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS:
             assert not re.search(pattern, low), _followup_quality_failure_message(
                 scenario,
                 run_result,
                 offending_turn_index=turn_index,
                 detail=f"internal role leakage in player-facing text: pattern={pattern!r}",
             )
-        for pattern in _FOLLOWUP_SCAFFOLD_LEAK_PATTERNS:
+        for pattern in SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS:
             assert not re.search(pattern, low), _followup_quality_failure_message(
                 scenario,
                 run_result,
                 offending_turn_index=turn_index,
                 detail=f"scaffold/instruction leakage in player-facing text: pattern={pattern!r}",
             )
-        filler_hits = tuple(pattern for pattern in _FOLLOWUP_VAGUE_FILLER_PATTERNS if re.search(pattern, low))
+        filler_hits = tuple(
+            pattern for pattern in SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS if re.search(pattern, low)
+        )
         # Pure filler should fail immediately; incidental phrasing is tolerated unless it repeats.
         if filler_hits and len(gm_text.split()) <= 8:
             assert False, _followup_quality_failure_message(

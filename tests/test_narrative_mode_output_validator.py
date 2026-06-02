@@ -14,6 +14,11 @@ from game.narrative_mode_contract import (
     build_narrative_mode_contract,
     validate_narrative_mode_output,
 )
+from tests.helpers.narrative_mode_validator_fixtures import (
+    minimal_ctir_action_outcome,
+    minimal_ctir_continuation,
+    resolution_pending_check,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -63,14 +68,14 @@ def test_opening_fails_answer_buried_under_tableau_when_answer_pressure() -> Non
 
 
 def test_continuation_passes_thread_forward() -> None:
-    c = _contract(ctir=_minimal_ctir_continuation())
+    c = _contract(ctir=minimal_ctir_continuation())
     text = "You still hold the sergeant's gaze; he nods once toward the east lane without breaking stride."
     r = validate_narrative_mode_output(text, c)
     assert r["checked"] and r["passed"]
 
 
 def test_continuation_fails_fresh_opening_reset() -> None:
-    c = _contract(ctir=_minimal_ctir_continuation())
+    c = _contract(ctir=minimal_ctir_continuation())
     text = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
     r = validate_narrative_mode_output(text, c)
     assert r["checked"] and not r["passed"]
@@ -78,7 +83,7 @@ def test_continuation_fails_fresh_opening_reset() -> None:
 
 
 def test_continuation_fails_scenic_regrounding_without_transition() -> None:
-    c = _contract(ctir=_minimal_ctir_continuation())
+    c = _contract(ctir=minimal_ctir_continuation())
     text = "The square holds silence while mist gathers at the eastern gate and torchlight presses the cobbles."
     r = validate_narrative_mode_output(text, c)
     assert r["checked"] and not r["passed"]
@@ -87,36 +92,36 @@ def test_continuation_fails_scenic_regrounding_without_transition() -> None:
 
 def test_action_outcome_passes_early_result() -> None:
     c = _contract(
-        ctir=_minimal_ctir_action_outcome(),
+        ctir=minimal_ctir_action_outcome(),
     )
     text = "You find nothing new in the crate. The alley stays quiet except for distant footsteps."
-    r = validate_narrative_mode_output(text, c, resolution=_minimal_ctir_action_outcome())
+    r = validate_narrative_mode_output(text, c, resolution=minimal_ctir_action_outcome())
     assert r["checked"] and r["passed"]
 
 
 def test_action_outcome_fails_result_not_frontloaded() -> None:
-    c = _contract(ctir=_minimal_ctir_action_outcome())
+    c = _contract(ctir=minimal_ctir_action_outcome())
     text = (
         "The mist holds the alley in a grey hush. "
         "A rusted chain sags from the staple while drafts slide along the stones without settling."
     )
-    r = validate_narrative_mode_output(text, c, resolution=_minimal_ctir_action_outcome())
+    r = validate_narrative_mode_output(text, c, resolution=minimal_ctir_action_outcome())
     assert r["checked"] and not r["passed"]
     assert "nmo:action_outcome:result_not_frontloaded" in r["failure_reasons"]
 
 
 def test_action_outcome_fails_atmosphere_before_result() -> None:
-    c = _contract(ctir=_minimal_ctir_action_outcome())
+    c = _contract(ctir=minimal_ctir_action_outcome())
     text = "The mist beads along the stones. You find nothing new in the crate after a long breath."
-    r = validate_narrative_mode_output(text, c, resolution=_minimal_ctir_action_outcome())
+    r = validate_narrative_mode_output(text, c, resolution=minimal_ctir_action_outcome())
     assert r["checked"] and not r["passed"]
     assert "nmo:action_outcome:atmosphere_before_result" in r["failure_reasons"]
     assert r["repairable"] is True
 
 
 def test_action_outcome_fails_unresolved_mixed_with_landed_result_when_pending() -> None:
-    c = _contract(ctir=_minimal_ctir_action_outcome())
-    res = _resolution_pending_check()
+    c = _contract(ctir=minimal_ctir_action_outcome())
+    res = resolution_pending_check()
     text = "You succeed immediately, yet the outcome remains unresolved until the roll settles."
     r = validate_narrative_mode_output(text, c, resolution=res)
     assert r["checked"] and not r["passed"]
@@ -220,7 +225,7 @@ def test_exposition_answer_fails_fabricated_action_resolution() -> None:
 
 
 def test_generic_meta_fallback_fails_all_modes() -> None:
-    c = _contract(ctir=_minimal_ctir_continuation())
+    c = _contract(ctir=minimal_ctir_continuation())
     text = "I don't have enough information to describe the lane beyond insufficient context here."
     r = validate_narrative_mode_output(text, c)
     assert r["checked"] and not r["passed"]
@@ -240,22 +245,3 @@ def test_build_narrative_mode_emission_trace_and_fem_merge() -> None:
             assert k in fem
     d = default_narrative_mode_output_layer_meta()
     assert set(d.keys()) == NARRATIVE_MODE_OUTPUT_FEM_KEYS
-
-
-def _minimal_ctir_continuation() -> dict:
-    return {"resolution": {"kind": "narrate", "requires_check": False}}
-
-
-def _minimal_ctir_action_outcome() -> dict:
-    return {
-        "resolution": {
-            "kind": "skill_check",
-            "requires_check": False,
-            "skill_check": {"success": True, "roll": 14, "total": 18},
-            "outcome_type": "search",
-        }
-    }
-
-
-def _resolution_pending_check() -> dict:
-    return {"resolution": {"requires_check": True, "skill_check": {"dc": 12, "skill_id": "perception"}}}

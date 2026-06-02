@@ -28,6 +28,7 @@ from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.storage import get_scene_runtime
+from tests.helpers.fallback_behavior_fixtures import fallback_contract
 from tests.helpers.final_emission_gate_fixtures import response_type_contract
 
 
@@ -42,80 +43,6 @@ _FORBIDDEN_META_BITS = (
     "information",
     "system",
 )
-
-
-def _fallback_contract(**overrides: object) -> dict:
-    contract = {
-        "enabled": True,
-        "uncertainty_active": True,
-        "uncertainty_sources": ["unknown_identity"],
-        "uncertainty_mode": "scene_ambiguity",
-        "allowed_behaviors": {
-            "ask_clarifying_question": True,
-            "hedge_appropriately": True,
-            "provide_partial_information": True,
-        },
-        "disallowed_behaviors": {
-            "invented_certainty": True,
-            "fabricated_authority": True,
-            "meta_system_explanations": True,
-        },
-        "diegetic_only": True,
-        "max_clarifying_questions": 1,
-        "prefer_partial_over_question": True,
-        "require_partial_to_state_known_edge": True,
-        "require_partial_to_state_unknown_edge": True,
-        "require_partial_to_offer_next_lead": True,
-        "allowed_hedge_forms": [
-            "I can't swear to it, but",
-            "From what I saw,",
-            "As far as rumor goes,",
-            "Looks like",
-            "Hard to tell, but",
-        ],
-        "forbidden_hedge_forms": [
-            "I lack enough information to answer confidently.",
-            "The system cannot confirm that.",
-            "Canon proves it.",
-            "As an AI, I don't know.",
-            "There is insufficient context available.",
-        ],
-        "allowed_authority_bases": [
-            "direct_observation",
-            "established_report",
-            "rumor_marked_as_rumor",
-            "visible_evidence",
-        ],
-        "forbidden_authority_bases": [
-            "unsupported_named_culprit",
-            "unsupported_exact_location",
-            "unsupported_motive_as_fact",
-            "unsupported_procedural_certainty",
-            "system_or_canon_claims",
-        ],
-        "debug": {},
-    }
-    contract.update(overrides)
-    return contract
-
-
-def _answer_contract(**overrides: object) -> dict:
-    contract = {
-        "enabled": True,
-        "answer_required": True,
-        "answer_must_come_first": False,
-        "player_direct_question": True,
-        "expected_voice": "narrator",
-        "expected_answer_shape": "bounded_partial",
-        "allowed_partial_reasons": ["uncertainty", "lack_of_knowledge", "gated_information"],
-        "forbid_deflection": True,
-        "forbid_generic_nonanswer": True,
-        "require_concrete_payload": True,
-        "concrete_payload_any_of": ["place", "name", "next_lead"],
-        "trace": {},
-    }
-    contract.update(overrides)
-    return contract
 
 
 def _strict_social_bundle() -> tuple[dict, dict, str, dict]:
@@ -162,7 +89,7 @@ def test_gate_repairs_meta_fallback_voice_into_bounded_partial() -> None:
         {
             "player_facing_text": "I don't have enough information to answer confidently. Check the ward clerk at the east gate office.",
             "tags": [],
-            "response_policy": {"fallback_behavior": _fallback_contract()},
+            "response_policy": {"fallback_behavior": fallback_contract()},
         },
         resolution={"kind": "adjudication_query", "prompt": "Who did it?"},
         session=None,
@@ -191,7 +118,7 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
         {
             "player_facing_text": raw,
             "tags": [],
-            "response_policy": {"fallback_behavior": _fallback_contract(uncertainty_active=False)},
+            "response_policy": {"fallback_behavior": fallback_contract(uncertainty_active=False)},
         },
         resolution={"kind": "observe", "prompt": "I look at the gatehouse."},
         session=None,
@@ -232,7 +159,7 @@ def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(mon
         {
             "player_facing_text": "I don't have enough information to answer confidently. Check the ward clerk at the east gate office.",
             "tags": [],
-            "response_policy": {"fallback_behavior": _fallback_contract()},
+            "response_policy": {"fallback_behavior": fallback_contract()},
         },
         resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},
         session={},
@@ -286,7 +213,7 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
             "player_facing_text": "No names yet.",
             "tags": [],
             "response_policy": {
-                "fallback_behavior": _fallback_contract(),
+                "fallback_behavior": fallback_contract(),
                 "response_type_contract": response_type_contract("dialogue"),
             },
         },
@@ -313,7 +240,7 @@ def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_cert
             "tags": [],
             "response_policy": {
                 "response_type_contract": response_type_contract("answer"),
-                "fallback_behavior": _fallback_contract(uncertainty_sources=[source]),
+                "fallback_behavior": fallback_contract(uncertainty_sources=[source]),
             },
         },
         resolution={"kind": "adjudication_query", "prompt": prompt},
@@ -340,7 +267,7 @@ def test_gate_rewrites_runner_copper_meta_leak_into_diegetic_partial() -> None:
             "player_facing_text": "The reason is still unclear.",
             "tags": [],
             "response_policy": {
-                "fallback_behavior": _fallback_contract(
+                "fallback_behavior": fallback_contract(
                     uncertainty_sources=["unknown_motive"],
                     require_partial_to_state_known_edge=False,
                     require_partial_to_offer_next_lead=False,
@@ -375,7 +302,7 @@ def test_gate_rewrites_open_call_move_plays_out_meta_leak_into_diegetic_partial(
             "player_facing_text": "That is not settled until the move plays out.",
             "tags": [],
             "response_policy": {
-                "fallback_behavior": _fallback_contract(
+                "fallback_behavior": fallback_contract(
                     uncertainty_sources=["unknown_feasibility"],
                     require_partial_to_state_known_edge=False,
                     require_partial_to_offer_next_lead=False,

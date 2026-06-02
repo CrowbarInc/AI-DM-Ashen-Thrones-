@@ -32,6 +32,7 @@ from game.final_emission_repairs import (
     _flatten_list_like_dialogue,
 )
 from game.final_emission_validators import validate_fallback_behavior
+from tests.helpers.fallback_behavior_fixtures import fallback_contract
 
 pytestmark = pytest.mark.unit
 
@@ -47,63 +48,8 @@ _FORBIDDEN_META_BITS = (
 )
 
 
-def _fallback_contract(**overrides: object) -> dict:
-    contract = {
-        "enabled": True,
-        "uncertainty_active": True,
-        "uncertainty_sources": ["unknown_identity"],
-        "uncertainty_mode": "scene_ambiguity",
-        "allowed_behaviors": {
-            "ask_clarifying_question": True,
-            "hedge_appropriately": True,
-            "provide_partial_information": True,
-        },
-        "disallowed_behaviors": {
-            "invented_certainty": True,
-            "fabricated_authority": True,
-            "meta_system_explanations": True,
-        },
-        "diegetic_only": True,
-        "max_clarifying_questions": 1,
-        "prefer_partial_over_question": True,
-        "require_partial_to_state_known_edge": True,
-        "require_partial_to_state_unknown_edge": True,
-        "require_partial_to_offer_next_lead": True,
-        "allowed_hedge_forms": [
-            "I can't swear to it, but",
-            "From what I saw,",
-            "As far as rumor goes,",
-            "Looks like",
-            "Hard to tell, but",
-        ],
-        "forbidden_hedge_forms": [
-            "I lack enough information to answer confidently.",
-            "The system cannot confirm that.",
-            "Canon proves it.",
-            "As an AI, I don't know.",
-            "There is insufficient context available.",
-        ],
-        "allowed_authority_bases": [
-            "direct_observation",
-            "established_report",
-            "rumor_marked_as_rumor",
-            "visible_evidence",
-        ],
-        "forbidden_authority_bases": [
-            "unsupported_named_culprit",
-            "unsupported_exact_location",
-            "unsupported_motive_as_fact",
-            "unsupported_procedural_certainty",
-            "system_or_canon_claims",
-        ],
-        "debug": {},
-    }
-    contract.update(overrides)
-    return contract
-
-
 def _repair(text: str, contract: dict | None = None) -> tuple[str, dict, dict]:
-    ctr = contract or _fallback_contract()
+    ctr = contract or fallback_contract()
     validation = validate_fallback_behavior(text, ctr)
     repaired, meta, _ = fer.repair_fallback_behavior(text, ctr, validation)
     return repaired, meta, validation
@@ -216,7 +162,7 @@ def test_repair_downgrades_unsupported_certainty_into_bounded_partial(
     forbidden: str,
     expected: tuple[str, ...],
 ) -> None:
-    repaired, meta, _ = _repair(raw, _fallback_contract(uncertainty_sources=[source]))
+    repaired, meta, _ = _repair(raw, fallback_contract(uncertainty_sources=[source]))
 
     low = repaired.lower()
     assert forbidden not in low
@@ -230,7 +176,7 @@ def test_repair_downgrades_unsupported_certainty_into_bounded_partial(
 def test_repair_preserves_known_edge_when_one_exists() -> None:
     repaired, meta, _ = _repair(
         "They crossed through the east market before they vanished. They are under Dock Seven.",
-        _fallback_contract(
+        fallback_contract(
             uncertainty_sources=["unknown_location"],
             require_partial_to_offer_next_lead=False,
         ),
@@ -246,7 +192,7 @@ def test_repair_preserves_known_edge_when_one_exists() -> None:
 def test_repair_adds_unknown_edge_when_contract_requires_it() -> None:
     repaired, meta, _ = _repair(
         "Check the ward clerk at the east gate office.",
-        _fallback_contract(require_partial_to_offer_next_lead=False),
+        fallback_contract(require_partial_to_offer_next_lead=False),
     )
 
     low = repaired.lower()
@@ -257,7 +203,7 @@ def test_repair_adds_unknown_edge_when_contract_requires_it() -> None:
 
 @pytest.mark.skip(reason="C2 Block C: meta-voice diegetic rewrite removed from boundary fallback repair")
 def test_repair_rewrites_reason_is_still_unclear_into_diegetic_social_partial() -> None:
-    contract = _fallback_contract(
+    contract = fallback_contract(
         uncertainty_sources=["unknown_motive"],
         require_partial_to_state_known_edge=False,
         require_partial_to_offer_next_lead=False,
@@ -291,7 +237,7 @@ def test_repair_rewrites_reason_is_still_unclear_into_diegetic_social_partial() 
 
 @pytest.mark.skip(reason="C2 Block C: meta-voice diegetic rewrite removed from boundary fallback repair")
 def test_repair_rewrites_move_plays_out_line_into_diegetic_open_call_partial() -> None:
-    contract = _fallback_contract(
+    contract = fallback_contract(
         uncertainty_sources=["unknown_feasibility"],
         require_partial_to_state_known_edge=False,
         require_partial_to_offer_next_lead=False,
@@ -337,7 +283,7 @@ def test_repair_adds_next_lead_when_contract_requires_it_and_grounded_lead_exist
 def test_repair_uses_a_single_diegetic_clarifying_question_only_when_partial_cannot_be_preserved() -> None:
     repaired, meta, validation = _repair(
         "I don't have enough information to answer confidently.",
-        _fallback_contract(
+        fallback_contract(
             allowed_behaviors={
                 "ask_clarifying_question": True,
                 "hedge_appropriately": False,
@@ -359,7 +305,7 @@ def test_repair_uses_a_single_diegetic_clarifying_question_only_when_partial_can
 
 @pytest.mark.skip(reason="C2 Block C: boundary no longer collapses clarifying-question shapes")
 def test_repair_never_emits_more_than_one_brief_clarifying_question_when_capped() -> None:
-    contract = _fallback_contract(
+    contract = fallback_contract(
         allowed_behaviors={
             "ask_clarifying_question": True,
             "hedge_appropriately": False,
@@ -394,7 +340,7 @@ def test_fallback_behavior_layer_revalidates_once_after_repair(monkeypatch: pyte
 
     text, meta, extra = fer._apply_fallback_behavior_layer(
         "I don't have enough information to answer confidently. Check the ward clerk at the east gate office.",
-        gm_output={"response_policy": {"fallback_behavior": _fallback_contract()}},
+        gm_output={"response_policy": {"fallback_behavior": fallback_contract()}},
         resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},
         strict_social_path=False,
     )
@@ -412,7 +358,7 @@ def test_fallback_behavior_layer_retains_safest_repaired_text_when_revalidation_
         "They are under Dock Seven by the customs gate.",
         gm_output={
             "response_policy": {
-                "fallback_behavior": _fallback_contract(
+                "fallback_behavior": fallback_contract(
                     uncertainty_sources=["unknown_location"],
                     require_partial_to_state_known_edge=False,
                     require_partial_to_offer_next_lead=True,
@@ -446,7 +392,7 @@ def test_fallback_behavior_layer_leaves_grounded_answers_untouched_when_uncertai
 ) -> None:
     text, meta, extra = fer._apply_fallback_behavior_layer(
         raw,
-        gm_output={"response_policy": {"fallback_behavior": _fallback_contract(uncertainty_active=False)}},
+        gm_output={"response_policy": {"fallback_behavior": fallback_contract(uncertainty_active=False)}},
         resolution={"kind": "adjudication_query", "prompt": prompt},
         strict_social_path=False,
     )

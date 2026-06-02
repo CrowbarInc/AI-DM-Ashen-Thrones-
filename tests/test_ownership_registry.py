@@ -10,12 +10,17 @@ Design notes (read before extending):
   residue) are *supporting* surfaces. They must not be named as the direct owner for **live
   legality** responsibilities (gate-era rules, sanitizer post-processing, shipped policy
   materialization, etc.).
-- **Downstream consumer** suites (Cycle AD-3): integration-visible smoke only — player-facing
+- **Downstream consumer** suites (Cycle AD-3 / AL4): integration-visible smoke only — player-facing
   text hygiene, repair/replacement evidence, contract threading through HTTP/API, and
   layer-specific checked/failed/repaired fields owned by that consumer (e.g. answer
   completeness, response delta). They must **not** restate exact gate orchestration tables
   (``final_route``, ``final_emitted_source``, owner-bucket mapping, repair-kind enumeration)
-  already owned by ``tests/test_final_emission_gate.py``; prefer ``tests/helpers/emission_smoke_assertions.py``.
+  already owned by ``tests/test_final_emission_gate.py``; prefer
+  ``tests/helpers/emission_smoke_assertions.py`` for route/phrase smoke helpers.
+- **Smoke facade** (Cycle AL4): ``tests/helpers/emission_smoke_assertions.py`` is the intended
+  downstream assertion surface for HTTP/pipeline wiring — intentionally weaker than owner
+  legality suites. Replay/golden projection helpers stay separate
+  (``tests/helpers/golden_replay_projection.py``, ``tests/helpers/opening_fallback_evidence.py``).
 - **Smoke suites**: survival / wiring / one-phrase hygiene checks; not full legality matrices.
 - **Gauntlet / replay neighbors** (e.g. ``tests/test_golden_replay.py``): intentional
   diagnostic observation and drift projection locks — not runtime gate orchestration owners.
@@ -27,6 +32,18 @@ Design notes (read before extending):
 Governance consumes the live inventory from ``tests/test_inventory.json`` (regenerate via
 ``py -3 tools/test_audit.py``). Unclassified test files elsewhere in the repo do not affect
 these checks.
+
+Cycle AL4 legality-owner quick reference (downstream suites assert wiring/smoke only):
+- Final emission gate orchestration / route tables → ``tests/test_final_emission_gate.py``
+  (``final_emission_gate_orchestration``)
+- FEM projection / lineage → ``tests/test_final_emission_meta.py`` (``final_emission_meta_projection``)
+- Dialogue route classification table → ``tests/test_dialogue_routing_lock.py`` (pure
+  ``choose_interaction_route``; HTTP packaging smoke → ``tests/test_turn_pipeline_shared.py``)
+- Sanitizer phrase legality → ``tests/test_output_sanitizer.py`` (``output_sanitizer_final_string_cleanup``)
+- Strict-social phrase/source legality → ``tests/test_social_exchange_emission.py``
+  (``social_emission_legality_surface``)
+- Downstream HTTP smoke/wiring → ``tests/test_turn_pipeline_shared.py`` (registered neighbor)
+- Downstream smoke facade → ``tests/helpers/emission_smoke_assertions.py`` (helpers module)
 """
 
 from __future__ import annotations
@@ -90,6 +107,19 @@ _DOWNSTREAM_INTEGRATION_SMOKE_ONLY: Final[frozenset[str]] = frozenset(
         "tests/test_response_delta_requirement.py",
     }
 )
+
+# Cycle AL4: documented downstream smoke facade (helpers module — not a pytest suite path).
+_DOWNSTREAM_SMOKE_FACADE: Final[str] = "tests/helpers/emission_smoke_assertions.py"
+
+# Cycle AL4: legality owners locked by AL1–AL3 convergence (see module docstring).
+_AL4_LEGALITY_OWNER_PATHS: Final[Mapping[str, str]] = {
+    "final_emission_gate": "tests/test_final_emission_gate.py",
+    "final_emission_meta": "tests/test_final_emission_meta.py",
+    "dialogue_route_classification": "tests/test_dialogue_routing_lock.py",
+    "output_sanitizer": "tests/test_output_sanitizer.py",
+    "social_exchange_emission": "tests/test_social_exchange_emission.py",
+    "turn_pipeline_http_smoke": "tests/test_turn_pipeline_shared.py",
+}
 
 
 def _normalize_layer(name: str | None) -> str | None:
@@ -212,6 +242,7 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         human_title="GPT expression surface (smoke-oriented owner)",
         declared_architecture_layer="gpt",
         direct_owner="tests/test_narrative_mode_output_validator.py",
+        # C4 live-pipeline: planner→prompt→gate wiring; final_route smoke via emission_smoke_assertions (AL3).
         smoke_suites=("tests/test_c4_narrative_mode_live_pipeline.py",),
     ),
     "final_emission_gate_orchestration": ResponsibilityRecord(
@@ -289,8 +320,9 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         smoke_suites=("tests/test_social_probe_determinism.py",),
     ),
     "social_emission_legality_surface": ResponsibilityRecord(
-        # Direct owner: strict-social legality tables (question_resolution, first-sentence).
-        # answer_completeness_rules / response_delta_requirement are downstream policy consumers.
+        # Direct owner: strict-social legality tables (question_resolution, first-sentence,
+        # final_emitted_source semantics). Downstream policy consumers and HTTP smoke use
+        # emission_smoke_assertions route/phrase helpers — not duplicate legality matrices.
         human_title="Social emission legality / surface",
         declared_architecture_layer="gate",
         direct_owner="tests/test_social_exchange_emission.py",
@@ -755,3 +787,35 @@ def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
     assert golden in frozenset(p.replace("\\", "/") for p in gauntlet.gauntlet_suites)
     assert gauntlet.direct_owner.replace("\\", "/") != gate.direct_owner.replace("\\", "/")
     assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
+
+
+def test_al4_legality_owners_and_smoke_facade_locked() -> None:
+    """Cycle AL4: AL1–AL3 convergence boundaries stay aligned with registry direct owners."""
+    assert RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"].direct_owner.replace(
+        "\\", "/",
+    ) == _AL4_LEGALITY_OWNER_PATHS["final_emission_gate"]
+    assert RESPONSIBILITY_REGISTRY["final_emission_meta_projection"].direct_owner.replace(
+        "\\", "/",
+    ) == _AL4_LEGALITY_OWNER_PATHS["final_emission_meta"]
+    assert RESPONSIBILITY_REGISTRY["output_sanitizer_final_string_cleanup"].direct_owner.replace(
+        "\\", "/",
+    ) == _AL4_LEGALITY_OWNER_PATHS["output_sanitizer"]
+    assert RESPONSIBILITY_REGISTRY["social_emission_legality_surface"].direct_owner.replace(
+        "\\", "/",
+    ) == _AL4_LEGALITY_OWNER_PATHS["social_exchange_emission"]
+
+    turn_pipeline = _AL4_LEGALITY_OWNER_PATHS["turn_pipeline_http_smoke"]
+    gate_downstream = frozenset(
+        p.replace("\\", "/")
+        for p in RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"].downstream_consumer_suites
+    )
+    assert turn_pipeline in gate_downstream
+    assert turn_pipeline in _DOWNSTREAM_INTEGRATION_SMOKE_ONLY
+
+    facade_path = (_REPO_ROOT / _DOWNSTREAM_SMOKE_FACADE).resolve()
+    assert facade_path.is_file(), f"missing downstream smoke facade: {_DOWNSTREAM_SMOKE_FACADE}"
+
+    route_owner = (_REPO_ROOT / _AL4_LEGALITY_OWNER_PATHS["dialogue_route_classification"]).resolve()
+    assert route_owner.is_file(), (
+        "dialogue route legality owner must remain tests/test_dialogue_routing_lock.py"
+    )

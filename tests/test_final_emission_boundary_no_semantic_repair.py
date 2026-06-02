@@ -17,7 +17,7 @@ from game.final_emission_text import _normalize_text
 from game.narrative_authenticity import build_narrative_authenticity_contract
 from game.narrative_mode_contract import build_narrative_mode_contract
 from tests.helpers.objective7_referent_fixtures import minimal_full_referent_artifact, referent_compact_mirror
-from tests.test_narrative_mode_output_validator import _minimal_ctir_continuation
+from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 
 pytestmark = pytest.mark.unit
 
@@ -39,7 +39,7 @@ def _assert_fem_has_no_semantic_repair_success_flags(fem: dict[str, Any]) -> Non
 
 
 def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = None) -> dict[str, Any]:
-    nmc = build_narrative_mode_contract(ctir=_minimal_ctir_continuation())
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     plan: dict[str, Any] = {"narrative_mode_contract": nmc}
     if acceptance_quality is not None:
         plan["acceptance_quality_contract"] = acceptance_quality

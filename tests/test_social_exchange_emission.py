@@ -33,6 +33,7 @@ from game.final_emission_gate import (
     validate_answer_completeness,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
     _already_has_terminal_punctuation,
@@ -355,7 +356,7 @@ def test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_a
     meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
-    assert meta.get("final_route") == "replaced"
+    assert_final_route_replaced_or_not_accept(meta)
     sample = meta.get("rejection_reasons_sample") or []
     assert "answer_completeness_unsatisfied_at_boundary_no_reorder" in sample
 

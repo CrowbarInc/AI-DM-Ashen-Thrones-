@@ -23,7 +23,7 @@ from tests.helpers.failure_classification_sync import (
     known_owner_buckets,
 )
 from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, render_failure_dashboard_markdown
-from tests.test_failure_dashboard_controlled_failures import _classified_rows
+from tests.helpers.failure_dashboard_fixtures import classified_rows
 
 # Ownership note:
 # This file owns the failure-classification schema and taxonomy contract.
@@ -86,7 +86,7 @@ def _valid_sample_row() -> dict[str, Any]:
 
 
 def test_controlled_probe_rows_validate_against_contract():
-    rows = _classified_rows()
+    rows = classified_rows()
     assert rows
     for row in rows:
         assert validate_failure_classification_row(row) == []

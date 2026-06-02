@@ -43,9 +43,11 @@ from game.interaction_context import (
 from game.social_exchange_emission import (
     apply_strict_social_terminal_dialogue_fallback_if_needed,
     apply_social_exchange_retry_fallback_gm,
+    effective_strict_social_resolution_for_emission,
     is_route_illegal_global_or_sanitizer_fallback_text,
     is_scene_directed_watch_question,
     looks_like_npc_directed_question,
+    minimal_social_emergency_fallback_line,
     repair_strict_social_terminal_dialogue_fallback_if_needed,
     strict_social_emission_will_apply,
     strict_social_terminal_dialogue_fallback_valid,

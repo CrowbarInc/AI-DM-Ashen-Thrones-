@@ -16,7 +16,7 @@ from game.final_emission_gate import (
 )
 from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
 from game.social import determine_social_escalation_outcome
-from tests.test_social_escalation import _session_with_pressure
+from tests.helpers.social_escalation_fixtures import session_with_pressure
 
 pytestmark = pytest.mark.unit
 
@@ -121,7 +121,7 @@ def test_transcript_runner_correction_reask_followup_drives_downstream_escalatio
     correction = "What? I asked you why people here wouldn't be friendly to newcomers."
     ap = _correction_reask_answer_pressure_details()
 
-    session = _session_with_pressure("scene_tavern", "runner_local_gossip", "tavern_runner", 1)
+    session = session_with_pressure("scene_tavern", "runner_local_gossip", "tavern_runner", 1)
     soc = determine_social_escalation_outcome(
         session=session,
         scene_id="scene_tavern",

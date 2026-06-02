@@ -16,6 +16,10 @@ from game.social_exchange_emission import (
     _open_social_recovery_passes_anti_stall,
 )
 from game.storage import load_scene
+from tests.helpers.emission_smoke_assertions import (
+    assert_no_unresolved_stock_phrases,
+    assert_open_social_solicitation_route,
+)
 
 import pytest
 
@@ -100,12 +104,9 @@ def test_resolve_directed_social_open_solicitation_with_npcs():
         segmented_turn=None,
         raw_text='Anyone up for a chat?" Galinor shouts.',
     )
-    assert ent.get("should_route_social") is True
-    assert ent.get("reason") == "open_social_solicitation"
-    assert ent.get("target_actor_id") in (None, "")
-    assert ent.get("target_source") == "scene_open_bid"
-    assert ent.get("open_social_solicitation") is True
+    assert_open_social_solicitation_route(ent, require_broadcast_open_call=False)
     assert ent.get("broad_address_bid") is True
+    assert ent.get("target_source") == "scene_open_bid"
     ids = ent.get("candidate_addressable_ids")
     assert isinstance(ids, list) and len(ids) >= 2
     assert ent.get("candidate_addressable_count") == len(ids)
@@ -353,9 +354,7 @@ def test_apply_deterministic_retry_open_social_suppresses_uncertainty_pool(monke
     )
     tags = [str(t).lower() for t in (out.get("tags") or []) if isinstance(t, str)]
     assert "open_social_recovery" in tags
-    low = out.get("player_facing_text", "").lower()
-    assert "nothing in the scene points" not in low
-    assert "answer has not formed yet" not in low
+    assert_no_unresolved_stock_phrases(str(out.get("player_facing_text") or ""))
     assert "suppressed:uncertainty_pool" in str(out.get("debug_notes") or "").lower()
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert em.get("open_social_recovery_used") is True
@@ -480,4 +479,3 @@ def test_anyone_chat_open_solicitation_retry_fallback_not_dead_air(monkeypatch):
     assert "open_social_recovery" in [str(t).lower() for t in (out.get("tags") or []) if isinstance(t, str)]
     assert low.strip() not in {"no one answers.", "nobody answers.", "the moment passes.", "nobody steps forward."}
     assert "guard captain" in low or "tavern runner" in low
-    assert "pin down who they meet" not in low

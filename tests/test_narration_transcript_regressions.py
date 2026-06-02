@@ -63,7 +63,7 @@ import game.social_exchange_emission as _sse
 from game.social_exchange_emission import build_final_strict_social_response
 
 from tests.helpers.turn_pipeline_http_fixtures import _patch_storage
-from tests.test_fallback_behavior_gate import _fallback_contract, _answer_contract
+from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
 from tests.helpers.final_emission_gate_fixtures import response_type_contract
 
 pytestmark = [pytest.mark.regression, pytest.mark.transcript]
@@ -655,11 +655,11 @@ def _run_object20_bounded_gate_case(
         "response_policy": (
             {
                 "response_type_contract": response_type_contract("answer"),
-                "answer_completeness": _answer_contract(),
-                "fallback_behavior": _fallback_contract(),
+                "answer_completeness": answer_contract(),
+                "fallback_behavior": fallback_contract(),
             }
             if with_answer_contract
-            else {"fallback_behavior": _fallback_contract()}
+            else {"fallback_behavior": fallback_contract()}
         ),
     }
     apply_transcript_seeds(scenario)

@@ -19,7 +19,11 @@ import pytest
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
-from tests.helpers.emission_smoke_assertions import assert_continuity_validation_failed_without_repair
+from tests.helpers.emission_smoke_assertions import (
+    assert_continuity_validation_failed_without_repair,
+    assert_final_route_not_replaced_smoke,
+    assert_final_route_present_smoke,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -115,7 +119,7 @@ def test_emitted_output_preserves_continuity_constraints_under_strong_complex_na
     )
     em = out["metadata"]["emission_debug"]
     assert_continuity_validation_failed_without_repair(em)
-    assert (read_final_emission_meta_dict(out) or {}).get("final_route") != "replaced"
+    assert_final_route_not_replaced_smoke(read_final_emission_meta_dict(out) or {})
 
 
 def test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation():
@@ -167,5 +171,5 @@ def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
     )
     em = out["metadata"]["emission_debug"]
     assert_continuity_validation_failed_without_repair(em)
-    assert "final_route" in (read_final_emission_meta_dict(out) or {})
+    assert_final_route_present_smoke(read_final_emission_meta_dict(out) or {})
     assert "final_emission_gate_replaced" in out.get("tags", [])

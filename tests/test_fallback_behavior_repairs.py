@@ -28,6 +28,7 @@ import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement
+from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
 from tests.helpers.final_emission_gate_fixtures import response_type_contract
 from game.gm_retry import build_retry_prompt_for_failure
 
@@ -35,82 +36,8 @@ from game.gm_retry import build_retry_prompt_for_failure
 pytestmark = pytest.mark.unit
 
 
-def _consumer_fallback_contract(**overrides: object) -> dict:
-    contract = {
-        "enabled": True,
-        "uncertainty_active": True,
-        "uncertainty_sources": ["unknown_identity"],
-        "uncertainty_mode": "scene_ambiguity",
-        "allowed_behaviors": {
-            "ask_clarifying_question": True,
-            "hedge_appropriately": True,
-            "provide_partial_information": True,
-        },
-        "disallowed_behaviors": {
-            "invented_certainty": True,
-            "fabricated_authority": True,
-            "meta_system_explanations": True,
-        },
-        "diegetic_only": True,
-        "max_clarifying_questions": 1,
-        "prefer_partial_over_question": True,
-        "require_partial_to_state_known_edge": True,
-        "require_partial_to_state_unknown_edge": True,
-        "require_partial_to_offer_next_lead": True,
-        "allowed_hedge_forms": [
-            "I can't swear to it, but",
-            "From what I saw,",
-            "As far as rumor goes,",
-            "Looks like",
-            "Hard to tell, but",
-        ],
-        "forbidden_hedge_forms": [
-            "I lack enough information to answer confidently.",
-            "The system cannot confirm that.",
-            "Canon proves it.",
-            "As an AI, I don't know.",
-            "There is insufficient context available.",
-        ],
-        "allowed_authority_bases": [
-            "direct_observation",
-            "established_report",
-            "rumor_marked_as_rumor",
-            "visible_evidence",
-        ],
-        "forbidden_authority_bases": [
-            "unsupported_named_culprit",
-            "unsupported_exact_location",
-            "unsupported_motive_as_fact",
-            "unsupported_procedural_certainty",
-            "system_or_canon_claims",
-        ],
-        "debug": {},
-    }
-    contract.update(overrides)
-    return contract
-
-
-def _answer_contract(**overrides: object) -> dict:
-    contract = {
-        "enabled": True,
-        "answer_required": True,
-        "answer_must_come_first": False,
-        "player_direct_question": True,
-        "expected_voice": "narrator",
-        "expected_answer_shape": "bounded_partial",
-        "allowed_partial_reasons": ["uncertainty", "lack_of_knowledge", "gated_information"],
-        "forbid_deflection": True,
-        "forbid_generic_nonanswer": True,
-        "require_concrete_payload": True,
-        "concrete_payload_any_of": ["place", "name", "next_lead"],
-        "trace": {},
-    }
-    contract.update(overrides)
-    return contract
-
-
 def test_downstream_retry_observes_shipped_fallback_contract_and_final_emission_meta() -> None:
-    contract = _consumer_fallback_contract()
+    contract = fallback_contract()
     gm = apply_response_policy_enforcement(
         {"player_facing_text": "The line inches forward."},
         response_policy={"fallback_behavior": contract},
@@ -156,9 +83,9 @@ def test_retry_consumer_prefers_upstream_fallback_meta_over_nested_debug_noise()
     retry_debug: dict = {}
     build_retry_prompt_for_failure(
         {"failure_class": "scene_stall", "reasons": ["test"]},
-        response_policy={"fallback_behavior": _consumer_fallback_contract()},
+        response_policy={"fallback_behavior": fallback_contract()},
         gm_output={
-            "response_policy": {"fallback_behavior": _consumer_fallback_contract(uncertainty_active=False)},
+            "response_policy": {"fallback_behavior": fallback_contract(uncertainty_active=False)},
             "_final_emission_meta": {
                 "fallback_behavior_checked": False,
                 "fallback_behavior_failed": True,
@@ -188,7 +115,7 @@ def test_retry_consumer_prefers_upstream_fallback_meta_over_nested_debug_noise()
     assert retry_debug.get("retry_fallback_behavior_failure_reasons") == ["residual_shape_gap"]
 
 
-def test_downstream_gate_observes_answer_contract_meta_when_output_exhibits_smoothed_fallback_shape() -> None:
+def test_downstream_gate_observesanswer_contract_meta_when_output_exhibits_smoothed_fallback_shape() -> None:
     out = apply_final_emission_gate(
         {
             "player_facing_text": (
@@ -198,8 +125,8 @@ def test_downstream_gate_observes_answer_contract_meta_when_output_exhibits_smoo
             "tags": [],
             "response_policy": {
                 "response_type_contract": response_type_contract("answer"),
-                "answer_completeness": _answer_contract(),
-                "fallback_behavior": _consumer_fallback_contract(),
+                "answer_completeness": answer_contract(),
+                "fallback_behavior": fallback_contract(),
             },
         },
         resolution={"kind": "adjudication_query", "prompt": "No. Exactly who?"},

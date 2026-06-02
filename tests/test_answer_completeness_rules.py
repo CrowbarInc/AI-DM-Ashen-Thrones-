@@ -26,7 +26,7 @@ from game.upstream_response_repairs import apply_spoken_state_refinement_cash_ou
 from game.social import determine_social_escalation_outcome
 from tests.helpers.emission_smoke_assertions import assert_no_boundary_reorder_repair
 from tests.helpers.final_emission_gate_fixtures import final_emission_meta_from_output
-from tests.test_social_escalation import _session_with_pressure
+from tests.helpers.social_escalation_fixtures import session_with_pressure
 
 _prompt_contracts = importlib.import_module("game.prompt_context")
 # Consume shipped contracts through a local module handle so this suite reads as
@@ -845,7 +845,7 @@ def test_correction_reask_social_escalation_explicit_reassertion_not_first_attem
     compact = [{"player_input": "Why wouldn't people be friendly to strangers?", "gm_snippet": prior_gm}]
     line = "What? I asked you why people here wouldn't be friendly to newcomers."
     ap = _ap_details(line, compact)
-    session = _session_with_pressure("scene_tavern", "tavern_gossip", "tavern_runner", 1)
+    session = session_with_pressure("scene_tavern", "tavern_gossip", "tavern_runner", 1)
     out = determine_social_escalation_outcome(
         session=session,
         scene_id="scene_tavern",
