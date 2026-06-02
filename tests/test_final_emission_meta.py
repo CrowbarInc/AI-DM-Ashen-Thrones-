@@ -137,26 +137,368 @@ def test_build_narration_constraint_debug_visibility_reason_cap() -> None:
     assert len(payload["visibility"]["reason_codes"]) == 5
 
 
-def test_merge_narration_constraint_debug_meta_preserves_sections() -> None:
-    metadata = {
-        "emission_debug": {
-            "narration_constraint_debug": {
-                "speaker_selection": {"speaker_id": "runner"},
-            }
-        }
+def _iter_narration_constraint_strings(value):
+    if isinstance(value, str):
+        yield value
+        return
+    if isinstance(value, dict):
+        for child in value.values():
+            yield from _iter_narration_constraint_strings(child)
+        return
+    if isinstance(value, list):
+        for child in value:
+            yield from _iter_narration_constraint_strings(child)
+
+
+def _assert_narration_constraint_payload_is_compact(payload: dict) -> None:
+    assert set(payload) == {"response_type", "visibility", "speaker_selection"}
+    assert set(payload["response_type"]) == {
+        "required",
+        "contract_source",
+        "candidate_ok",
+        "repair_used",
+        "repair_kind",
+        "upstream_prepared_absent",
     }
-    merge_narration_constraint_debug_meta(
-        metadata,
-        {"response_type": {"required": "dialogue"}},
+    assert set(payload["visibility"]) == {
+        "contract_present",
+        "decision_mode",
+        "visible_entity_count",
+        "withheld_fact_count",
+        "reason_codes",
+    }
+    assert set(payload["speaker_selection"]) == {
+        "speaker_id",
+        "speaker_name",
+        "selection_source",
+        "reason_code",
+        "binding_confident",
+    }
+    assert isinstance(payload["visibility"]["reason_codes"], list)
+    assert len(payload["visibility"]["reason_codes"]) <= 5
+    assert payload["visibility"]["visible_entity_count"] is None or isinstance(
+        payload["visibility"]["visible_entity_count"], int
     )
-    merged = metadata["emission_debug"]["narration_constraint_debug"]
-    assert merged["response_type"]["required"] == "dialogue"
-    assert merged["speaker_selection"]["speaker_id"] == "runner"
-    assert merged["visibility"]["contract_present"] is False
+    assert payload["visibility"]["withheld_fact_count"] is None or isinstance(
+        payload["visibility"]["withheld_fact_count"], int
+    )
+    for text in _iter_narration_constraint_strings(payload):
+        assert len(text) <= 120
+
+
+def _assert_payload_omits_sentinels(payload: dict, *sentinels: str) -> None:
+    blob = json.dumps(payload, sort_keys=True)
+    for sentinel in sentinels:
+        assert sentinel not in blob
 
 
 def test_default_narration_constraint_debug_shape() -> None:
-    assert default_narration_constraint_debug()["response_type"]["repair_used"] is False
+    assert default_narration_constraint_debug() == {
+        "response_type": {
+            "required": None,
+            "contract_source": None,
+            "candidate_ok": None,
+            "repair_used": False,
+            "repair_kind": None,
+            "upstream_prepared_absent": None,
+        },
+        "visibility": {
+            "contract_present": False,
+            "decision_mode": None,
+            "visible_entity_count": None,
+            "withheld_fact_count": None,
+            "reason_codes": [],
+        },
+        "speaker_selection": {
+            "speaker_id": None,
+            "speaker_name": None,
+            "selection_source": None,
+            "reason_code": None,
+            "binding_confident": None,
+        },
+    }
+
+
+def test_narration_constraint_debug_builder_and_merge_are_null_safe() -> None:
+    payload = build_narration_constraint_debug(
+        response_type_debug={
+            "response_type_required": "dialogue",
+            "response_type_contract_source": "resolution.metadata",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "response_type_repair_kind": None,
+        },
+        narration_visibility={
+            "visible_entity_ids": ["runner", "guard"],
+            "hidden_fact_strings": ["hidden one", "hidden two"],
+        },
+        visibility_meta={
+            "visibility_validation_passed": False,
+            "visibility_replacement_applied": True,
+            "visibility_violation_kinds": [
+                "hidden_fact_reference",
+                "unseen_entity_reference",
+                "hidden_fact_reference",
+                "offscene_reference",
+                "continuity_bleed",
+                "should_not_fit",
+            ],
+        },
+        speaker_selection_contract={
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": "Tavern Runner",
+            "primary_speaker_source": "continuity",
+            "continuity_locked": True,
+            "speaker_switch_allowed": False,
+            "debug": {"grounding_reason_code": "grounded_in_scene_npc"},
+        },
+        speaker_contract_enforcement={
+            "final_reason_code": "speaker_contract_match",
+            "validation": {
+                "reason_code": "speaker_contract_match",
+                "details": {"signature": {"confidence": "high"}},
+            },
+        },
+    )
+
+    assert payload == {
+        "response_type": {
+            "required": "dialogue",
+            "contract_source": "resolution.metadata",
+            "candidate_ok": True,
+            "repair_used": False,
+            "repair_kind": None,
+            "upstream_prepared_absent": None,
+        },
+        "visibility": {
+            "contract_present": True,
+            "decision_mode": "replaced",
+            "visible_entity_count": 2,
+            "withheld_fact_count": 2,
+            "reason_codes": [
+                "hidden_fact_reference",
+                "unseen_entity_reference",
+                "offscene_reference",
+                "continuity_bleed",
+                "should_not_fit",
+            ],
+        },
+        "speaker_selection": {
+            "speaker_id": "runner",
+            "speaker_name": "Tavern Runner",
+            "selection_source": "continuity",
+            "reason_code": "speaker_contract_match",
+            "binding_confident": True,
+        },
+    }
+
+    metadata = {
+        "other_key": 7,
+        "emission_debug": {
+            "speaker_contract_enforcement": {"final_reason_code": "speaker_contract_match"},
+            "narration_constraint_debug": {
+                "speaker_selection": {
+                    "speaker_id": "runner",
+                    "selection_source": "existing_source",
+                }
+            },
+        },
+    }
+    merge_narration_constraint_debug_meta(
+        metadata,
+        {
+            "response_type": {"required": "dialogue"},
+            "speaker_selection": {"speaker_name": "Tavern Runner"},
+        },
+    )
+
+    merged = metadata["emission_debug"]["narration_constraint_debug"]
+    assert metadata["other_key"] == 7
+    assert metadata["emission_debug"]["speaker_contract_enforcement"]["final_reason_code"] == "speaker_contract_match"
+    assert merged["response_type"]["required"] == "dialogue"
+    assert merged["response_type"]["repair_used"] is False
+    assert merged["speaker_selection"]["speaker_id"] == "runner"
+    assert merged["speaker_selection"]["selection_source"] == "existing_source"
+    assert merged["speaker_selection"]["speaker_name"] == "Tavern Runner"
+    assert merged["visibility"]["reason_codes"] == []
+
+
+def test_narration_constraint_debug_excludes_sensitive_and_verbose_inputs() -> None:
+    hidden_fact = "The cult leader's name is Marrow Vale."
+    unpublished_clue = "The ledger under the chapel floor names Iven as the courier."
+    raw_prompt = "Player prompt fragment: tell me the secret name from the hidden ledger right now."
+    candidate_generation = (
+        'Candidate generation: Tavern Runner says, "The ledger under the chapel floor names Iven as the courier."'
+    )
+    contract_dump = (
+        'Contract dump: {"allowed_speaker_ids":["runner","guard"],"debug":{"authoritative_source":"prompt"}}'
+    )
+    roster_dump = "Scene roster: Tavern Runner, Gate Guard, Harbor Priest, Smuggler Lookout, Dock Clerk."
+    long_narration = " ".join(["Rain hammers the slate roof while the harbor bells answer the wind."] * 8)
+
+    payload = build_narration_constraint_debug(
+        response_type_debug={
+            "response_type_required": "dialogue",
+            "response_type_contract_source": raw_prompt,
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": True,
+            "response_type_repair_kind": candidate_generation,
+        },
+        narration_visibility={
+            "visible_entity_ids": ["runner", "guard", "priest"],
+            "hidden_fact_strings": [hidden_fact, unpublished_clue],
+        },
+        visibility_meta={
+            "visibility_validation_passed": False,
+            "visibility_violation_kinds": [
+                hidden_fact,
+                unpublished_clue,
+                raw_prompt,
+                candidate_generation,
+                contract_dump,
+                roster_dump,
+                long_narration,
+            ],
+        },
+        speaker_selection_contract={
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": roster_dump,
+            "primary_speaker_source": raw_prompt,
+            "debug": {
+                "grounding_reason_code": contract_dump,
+                "authoritative_source": roster_dump,
+            },
+        },
+        speaker_contract_enforcement={
+            "final_reason_code": candidate_generation,
+            "validation": {
+                "reason_code": unpublished_clue,
+                "canonical_speaker_name": long_narration,
+                "details": {"signature": {"confidence": "high"}},
+            },
+        },
+        speaker_binding_bridge={
+            "speaker_reason_code": contract_dump,
+            "malformed_attribution_detected": False,
+        },
+    )
+
+    assert payload["response_type"]["required"] == "dialogue"
+    assert payload["visibility"]["contract_present"] is True
+    assert payload["visibility"]["visible_entity_count"] == 3
+    assert payload["visibility"]["withheld_fact_count"] == 2
+    _assert_narration_constraint_payload_is_compact(payload)
+    _assert_payload_omits_sentinels(
+        payload,
+        hidden_fact,
+        unpublished_clue,
+        raw_prompt,
+        candidate_generation,
+        contract_dump,
+        roster_dump,
+        long_narration,
+    )
+
+
+def test_narration_constraint_debug_speaker_fallback_reason_codes_are_stable() -> None:
+    explicit = build_narration_constraint_debug(
+        speaker_selection_contract={
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": "Tavern Runner",
+            "primary_speaker_source": "explicit_target",
+        }
+    )
+    assert explicit["speaker_selection"]["reason_code"] == "speaker_from_explicit_target"
+
+    continuity = build_narration_constraint_debug(
+        speaker_selection_contract={
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": "Tavern Runner",
+            "primary_speaker_source": "continuity",
+        }
+    )
+    assert continuity["speaker_selection"]["reason_code"] == "speaker_from_continuity"
+
+    unresolved = build_narration_constraint_debug()
+    assert unresolved["speaker_selection"]["reason_code"] == "speaker_unresolved"
+
+
+def test_narration_constraint_debug_prefers_grounded_speaker_reason_code_over_fallbacks() -> None:
+    payload = build_narration_constraint_debug(
+        speaker_selection_contract={
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": "Tavern Runner",
+            "primary_speaker_source": "continuity",
+            "debug": {"grounding_reason_code": "speaker_from_continuity"},
+        },
+        speaker_contract_enforcement={
+            "final_reason_code": "local_rebind",
+            "validation": {"details": {"signature": {"confidence": "high"}}},
+        },
+        speaker_binding_bridge={"speaker_reason_code": "speaker_from_explicit_target"},
+    )
+    assert payload["speaker_selection"]["reason_code"] == "local_rebind"
+
+
+def test_narration_constraint_debug_missing_speaker_inputs_do_not_emit_noisy_values() -> None:
+    noisy = "Malformed prompt fragment that should never surface in narration_constraint_debug output."
+    payload = build_narration_constraint_debug(
+        speaker_selection_contract={
+            "primary_speaker_source": noisy,
+            "debug": {
+                "grounding_reason_code": noisy,
+                "authoritative_source": noisy,
+            },
+        },
+        speaker_contract_enforcement={
+            "validation": {"reason_code": noisy},
+        },
+        speaker_binding_bridge={"speaker_reason_code": noisy},
+    )
+
+    assert payload["speaker_selection"]["speaker_id"] is None
+    assert payload["speaker_selection"]["speaker_name"] is None
+    assert payload["speaker_selection"]["reason_code"] == "speaker_unresolved"
+    _assert_payload_omits_sentinels(payload, noisy)
+
+
+def test_merge_narration_constraint_debug_meta_triple_sink_is_null_safe_and_preserves_metadata() -> None:
+    out_metadata = {
+        "top_level_keep": {"ok": True},
+        "emission_debug": {
+            "existing_out_debug": {"count": 1},
+        },
+    }
+    resolution_metadata = {
+        "resolution_keep": {"source": "original"},
+        "emission_debug": {"existing_resolution_debug": {"count": 2}},
+    }
+    effective_metadata = {
+        "effective_keep": {"source": "effective"},
+        "emission_debug": {"existing_effective_debug": {"count": 3}},
+    }
+
+    payload = build_narration_constraint_debug(
+        response_type_debug={"response_type_required": "neutral_narration"},
+    )
+    merge_narration_constraint_debug_meta(out_metadata, payload)
+    merge_narration_constraint_debug_meta(resolution_metadata, payload)
+    merge_narration_constraint_debug_meta(effective_metadata, payload)
+
+    out_payload = ((out_metadata.get("emission_debug") or {}).get("narration_constraint_debug"))
+    res_payload = ((resolution_metadata.get("emission_debug") or {}).get("narration_constraint_debug"))
+    eff_payload = ((effective_metadata.get("emission_debug") or {}).get("narration_constraint_debug"))
+
+    assert out_metadata["top_level_keep"] == {"ok": True}
+    assert out_metadata["emission_debug"]["existing_out_debug"] == {"count": 1}
+    assert resolution_metadata["resolution_keep"] == {"source": "original"}
+    assert resolution_metadata["emission_debug"]["existing_resolution_debug"] == {"count": 2}
+    assert effective_metadata["effective_keep"] == {"source": "effective"}
+    assert effective_metadata["emission_debug"]["existing_effective_debug"] == {"count": 3}
+    assert out_payload == res_payload == eff_payload
+    assert out_payload["response_type"]["required"] == "neutral_narration"
+    assert out_payload["speaker_selection"]["reason_code"] == "speaker_unresolved"
+    _assert_narration_constraint_payload_is_compact(out_payload)
 
 
 def test_stamp_strict_social_deterministic_fallback_family() -> None:

@@ -6,20 +6,26 @@ own final-emission gate orchestration.
 """
 from __future__ import annotations
 
+import copy
 import inspect
 from typing import Any
 
 import pytest
 
+from game.final_emission_gate import apply_strict_social_emergency_fallback_patch
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
 )
 import game.final_emission_sealed_fallback as sealed_fallback
-from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
+from game.realization_provenance import (
+    REALIZATION_FALLBACK_FAMILY_FIELD,
+    STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
+)
 from tests.helpers.final_emission_gate_fixtures import (
     assert_final_emission_meta_contains,
     assert_sealed_fallback_owner_bucket,
+    opening_gm_output,
 )
 
 pytestmark = pytest.mark.unit
@@ -86,8 +92,9 @@ def test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple() -> No
 
 
 def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks() -> None:
+    gm = {"player_facing_text": "x", "tags": []}
     providers = sealed_fallback.build_non_strict_sealed_fallback_providers(
-        {"player_facing_text": "x", "tags": []},
+        gm,
         session={},
         scene=None,
         world={"scenes": {"yard": {"npcs": [{"id": "npc_a", "name": "Aldric"}]}}},
@@ -124,6 +131,122 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
     assert selection.text == "injected social line"
     assert selection.fallback_pool == "social_active_interlocutor_minimal"
     assert selection.final_emitted_source == "social_interlocutor_minimal_fallback"
+    assert callable(providers.passive_candidates_provider)
+    assert callable(providers.use_neutral_nonprogress_provider)
+    assert callable(providers.global_provider)
+    assert gm["player_facing_text"] == "x"
+    assert gm["tags"] == []
+
+
+def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None:
+    eff: dict[str, Any] = {
+        "kind": "question",
+        "social": {"npc_id": "n1", "grounded_speaker_id": "n1", "social_intent_class": "social_exchange"},
+    }
+    session: dict[str, Any] = {"active_scene_id": "yard"}
+    eff0 = copy.deepcopy(eff)
+    session0 = copy.deepcopy(session)
+    sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
+        strict_social_path=True,
+        eff_resolution=eff,
+        scene=None,
+        scene_id="yard",
+        resolution=None,
+        session=session,
+        world=None,
+        res_kind="question",
+        response_type_required="dialogue",
+        minimal_social_fallback_builder=lambda _resolution: "strict-social line",
+        global_fallback_tuple_builder=lambda *_args, **_kwargs: ("global line",),
+    )
+    assert eff == eff0
+    assert session == session0
+
+
+def test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output() -> None:
+    gm = copy.deepcopy(opening_gm_output())
+    snap = copy.deepcopy(gm)
+    sealed_fallback.assemble_non_strict_sealed_fallback_selection(
+        opening_mode_active=True,
+        has_active_social_interlocutor=False,
+        passive_candidates_provider=lambda: [],
+        use_neutral_nonprogress_provider=lambda: False,
+        suppress_intro_replace=False,
+        opening_provider=lambda: sealed_fallback.SealedFallbackSelection(
+            "opening text",
+            "opening_pool",
+            "opening_kind",
+            "opening_source",
+            None,
+        ),
+        social_interlocutor_provider=lambda: sealed_fallback.SealedFallbackSelection(
+            "social",
+            "social_pool",
+            "social_kind",
+            "social_source",
+            None,
+        ),
+        neutral_nonprogress_provider=lambda: sealed_fallback.SealedFallbackSelection(
+            "neutral",
+            "neutral_pool",
+            "neutral_kind",
+            "neutral_source",
+            None,
+        ),
+        anti_reset_provider=lambda: sealed_fallback.SealedFallbackSelection(
+            "anti_reset",
+            "anti_reset_pool",
+            "anti_reset_kind",
+            "anti_reset_source",
+            None,
+        ),
+        global_provider=lambda: sealed_fallback.SealedFallbackSelection(
+            "global",
+            "global_pool",
+            "global_kind",
+            "global_source",
+            None,
+        ),
+    )
+    assert gm == snap
+
+
+def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_without_selecting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def _forbidden_minimal(*_a: Any, **_k: Any) -> str:
+        raise AssertionError("patch helper must not invoke minimal_social_emergency_fallback_line")
+
+    import game.final_emission_gate as feg
+
+    monkeypatch.setattr(feg, "minimal_social_emergency_fallback_line", _forbidden_minimal)
+    out = {
+        "player_facing_text": "Bad candidate.",
+        "tags": ["existing"],
+        "_final_emission_meta": {"final_route": "accept_candidate", "candidate_validation_passed": True},
+    }
+
+    apply_strict_social_emergency_fallback_patch(
+        out,
+        fallback_text='"Runner says, "No."',
+        pre_gate_text="Bad candidate.",
+        gate_tag="narrative_mode_output",
+        final_route="replaced",
+        candidate_validation_passed=False,
+    )
+
+    fem = out["_final_emission_meta"]
+    assert out["player_facing_text"] == '"Runner says, "No."'
+    assert out["tags"] == [
+        "existing",
+        "final_emission_gate_replaced",
+        "final_emission_gate:narrative_mode_output",
+    ]
+    assert fem["final_route"] == "replaced"
+    assert fem["candidate_validation_passed"] is False
+    assert fem["final_emitted_source"] == "minimal_social_emergency_fallback"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+    assert fem["post_gate_mutation_detected"] is True
 
 
 def test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only() -> None:

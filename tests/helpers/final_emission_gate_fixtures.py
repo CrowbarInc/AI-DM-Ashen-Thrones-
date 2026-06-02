@@ -1,8 +1,9 @@
 """Shared final-emission gate harness fixtures (strict-social bundle + opening GM scaffold).
 
 Support residue for gate-adjacent and replay/downstream suites. Block-O opening
-attach-then-helper adapters mirror gate entry prep without owning orchestration
-semantics. Semantic orchestration ownership remains ``tests/test_final_emission_gate.py``.
+attach-then-helper adapters mirror gate entry prep; adapter/tuple semantics are
+owned by ``tests/test_final_emission_opening_fallback.py``. Semantic orchestration
+ownership remains ``tests/test_final_emission_gate.py``.
 
 Helper boundary (Cycle AD-4):
 - Downstream HTTP smoke asserts: ``tests/helpers/emission_smoke_assertions.py``
