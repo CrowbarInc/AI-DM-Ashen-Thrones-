@@ -1,8 +1,12 @@
 """Canonical test-only opening fallback evidence fixtures.
 
 These builders centralize repeated FEM-shaped and replay-observed setup only.
-Consumer tests remain responsible for asserting their own projection,
-classification, reporting, or lineage contracts.
+They intentionally emit **minimal** route/owner slices (``final_emitted_source``,
+authorship, repair kind, family) — not the full
+:data:`game.final_emission_meta.OPENING_FALLBACK_RESULT_META_FIELDS` shape produced at
+write time by ``build_opening_fallback_result_meta``. Tests that need every result-meta
+key should assert against payload/FEM fixtures or import
+``OPENING_FALLBACK_RESULT_META_FIELDS`` from ``game.final_emission_meta``.
 
 Helper boundary (Cycle AD-4):
 - Gate harness + owner-bucket assert helpers: ``final_emission_gate_fixtures.py``
@@ -17,7 +21,11 @@ from typing import Any
 from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    OPENING_FALLBACK_RESULT_META_FIELDS,
 )
+
+# Re-export for tests that lock composition_meta against opening_fallback_meta (AJ2/AJ4).
+OPENING_FALLBACK_RESULT_META_FIELD_NAMES = OPENING_FALLBACK_RESULT_META_FIELDS
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 # Legacy compatibility-local authorship token — test/read-side only; never emitted on canonical paths.

@@ -210,19 +210,12 @@ from game.final_emission_visibility_fallback import (
 )
 from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
-    _opening_curated_facts_have_attachable_non_empty_strings,
     _opening_curated_facts_schema_ok,
-    _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed,
-    _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts,
-    _opening_fail_closed_meta_upstream_stub_rebuild_failed,
     _opening_fallback_classification,
-    _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug,
     _opening_scene_safe_fallback_tuple as _opening_scene_safe_fallback_tuple_from_adapter,
-    _recover_upstream_opening_fallback_stub_payload,
-    _upstream_prepared_opening_fallback_payload_if_usable,
+    select_opening_fallback_for_response_type_contract,
 )
 from game.opening_deterministic_fallback import (
-    OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
@@ -3873,36 +3866,21 @@ def _enforce_response_type_contract(
                 debug["scene_opening_accepted_candidate_promoted"] = True
             return current, debug
 
-        # Otherwise, select opening fallback text: prepared upstream snapshot, stub recovery, else sealed marker.
-        upstream_opening, stub_patch = _recover_upstream_opening_fallback_stub_payload(
-            gm_output if isinstance(gm_output, dict) else None
+        # Otherwise, select opening fallback via adapter (upstream snapshot or sealed marker).
+        fallback, fallback_meta, stub_patch, upstream_opening_selected, _ = (
+            select_opening_fallback_for_response_type_contract(
+                gm_output if isinstance(gm_output, dict) else None
+            )
         )
         debug.update(stub_patch)
-        if upstream_opening:
-            fallback = str(upstream_opening["prepared_opening_fallback_text"]).strip()
-            fallback_meta = dict(upstream_opening["opening_fallback_meta"])
-        elif stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
-            "opening_fallback_upstream_payload_recovered"
-        ) is False:
-            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-            fallback_meta = _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output)
-        elif _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_output):
-            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-            fallback_meta = _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output)
-        elif not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
-            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-            fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
-        else:
-            fallback = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-            fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
         debug.update(fallback_meta)
         if (
             not opening_facts_schema_ok
-            and not upstream_opening
+            and not upstream_opening_selected
             and fallback_meta.get("blocked_repair_kind") != "opening_upstream_prepare_attach_failed"
         ):
             debug["blocked_repair_kind"] = "opening_missing_curated_facts"
-        if upstream_opening:
+        if upstream_opening_selected:
             debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
         else:
             debug["opening_fallback_authorship_source"] = None
@@ -3919,7 +3897,7 @@ def _enforce_response_type_contract(
             debug["fallback_temporal_frame"] = classification.get("temporal_frame")
             attach_realization_fallback_family(
                 debug,
-                UPSTREAM_PREPARED_EMISSION if upstream_opening else LEGACY_DIEGETIC_FALLBACK,
+                UPSTREAM_PREPARED_EMISSION if upstream_opening_selected else LEGACY_DIEGETIC_FALLBACK,
             )
             debug["response_type_rejection_reasons"] = list(dict.fromkeys(str(r) for r in reasons if r))
             return fallback, debug

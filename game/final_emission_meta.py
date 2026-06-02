@@ -581,6 +581,12 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
     }
 )
 
+# Read-side FEM/replay projection registry for opening fallback telemetry.
+# Write-time result metadata is composed by
+# ``game.final_emission_opening_fallback.build_opening_fallback_result_meta`` (AJ1);
+# upstream composition layers use ``build_upstream_prepared_opening_composition_meta`` (AJ2).
+# ``opening_fallback_projection_fields`` / ``apply_opening_fallback_projection_fields`` copy
+# these keys only — they do not select fallback text or remap owner buckets.
 OPENING_FALLBACK_PROJECTION_FIELDS: tuple[str, ...] = (
     "opening_fallback_context_source",
     "opening_fallback_basis_count",
@@ -595,6 +601,11 @@ OPENING_FALLBACK_PROJECTION_FIELDS: tuple[str, ...] = (
     "opening_final_fallback_basis",
     "opening_final_basis_matches_selector",
     "opening_fallback_authorship_source",
+)
+
+# Canonical write-time result meta keys (authorship stamped separately by upstream/gate).
+OPENING_FALLBACK_RESULT_META_FIELDS: tuple[str, ...] = tuple(
+    key for key in OPENING_FALLBACK_PROJECTION_FIELDS if key != "opening_fallback_authorship_source"
 )
 
 OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS: tuple[str, ...] = (

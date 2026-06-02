@@ -191,28 +191,20 @@ def deterministic_opening_fallback_text_and_meta(
     Called from :mod:`game.upstream_response_repairs` for the prepared payload and from
     :mod:`game.final_emission_gate` only on the compatibility path when that payload is absent.
     """
+    from game.final_emission_opening_fallback import build_opening_fallback_result_meta
+
     context = opening_context_from_gm_output(gm_output)
     facts = [str(x).strip().rstrip(".") for x in (context.get("visible_facts") or []) if str(x).strip()]
-    meta = {
-        "opening_fallback_context_source": context.get("opening_fallback_context_source"),
-        "opening_fallback_basis_count": len(facts),
-        "opening_fallback_context_missing": not bool(facts),
-        "opening_fallback_failed_closed": False,
-        "opening_curated_facts_present": bool(facts),
-        "opening_curated_facts_count": len(facts),
-        "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
-        "opening_selector_source_used": context.get("opening_selector_source_used") or "none",
-        "opening_selector_selected_facts": list(context.get("opening_selector_selected_facts") or []),
-        "opening_curated_facts": list(context.get("opening_curated_facts") or []),
-        "opening_final_fallback_basis": list(context.get("opening_final_fallback_basis") or []),
-        "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
-    }
+    meta = build_opening_fallback_result_meta(context=context, facts=facts)
     if not meta["opening_final_basis_matches_selector"]:
         raise AssertionError("curated opening facts diverged from selector output")
     if not facts:
-        meta["opening_fallback_failed_closed"] = True
-        meta["opening_fallback_context_source"] = "opening_curated_facts"
-        return OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER, meta
+        return OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER, build_opening_fallback_result_meta(
+            context=context,
+            facts=facts,
+            opening_fallback_failed_closed=True,
+            force_fail_closed_context_source=True,
+        )
 
     used: set[str] = set()
     environment = _pick_opening_fallback_fact(

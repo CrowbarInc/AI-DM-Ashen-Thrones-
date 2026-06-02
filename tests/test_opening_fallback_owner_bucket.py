@@ -6,9 +6,11 @@ Opening fallback ownership is intentionally split:
 - ``game.final_emission_gate`` owns selection, fail-closed behavior, orchestration, and final route/output wiring.
 - ``game.final_emission_meta`` owns owner-bucket mapping and projection metadata.
 
-This file owns only the read-side owner-bucket mapping. Repeated projection fields
-in replay/dashboard/classifier tests are intentional cross-layer contract locks,
-not duplicate prose or gate orchestration ownership.
+This file owns only the read-side owner-bucket mapping via
+``opening_fallback_owner_bucket_from_meta``. Full opening telemetry keys are
+registered in ``OPENING_FALLBACK_PROJECTION_FIELDS``; minimal FEM/replay slices
+use ``tests.helpers.opening_fallback_evidence`` — intentional cross-layer locks,
+not duplicate write-time metadata composition.
 """
 
 from __future__ import annotations

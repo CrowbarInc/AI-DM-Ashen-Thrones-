@@ -27,6 +27,7 @@ from tests.helpers.final_emission_gate_fixtures import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     opening_gm_output,
 )
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_RESULT_META_FIELD_NAMES
 
 pytestmark = pytest.mark.unit
 
@@ -219,6 +220,8 @@ def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -
     assert comp["fallback_temporal_frame"] == "first_impression"
     assert comp["opening_fallback_context_source"] == "opening_curated_facts"
     assert comp["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    for key in OPENING_FALLBACK_RESULT_META_FIELD_NAMES:
+        assert comp[key] == meta[key]
 
     fam = payload.get(REALIZATION_FALLBACK_FAMILY_FIELD)
     assert fam == UPSTREAM_PREPARED_EMISSION

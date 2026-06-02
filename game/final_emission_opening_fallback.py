@@ -22,6 +22,82 @@ from game.upstream_response_repairs import (
 )
 
 
+def build_opening_fallback_result_meta(
+    *,
+    context: Mapping[str, Any] | None = None,
+    facts: list[str] | None = None,
+    opening_fallback_failed_closed: bool = False,
+    force_fail_closed_context_source: bool = False,
+) -> Dict[str, Any]:
+    """Canonical opening fallback result metadata (selection/FEM projection core).
+
+    Aligns with :data:`game.final_emission_meta.OPENING_FALLBACK_RESULT_META_FIELDS`
+    (subset of ``OPENING_FALLBACK_PROJECTION_FIELDS``); authorship is stamped separately.
+    """
+    if context is None:
+        return {
+            "opening_fallback_context_source": "opening_curated_facts",
+            "opening_fallback_basis_count": 0,
+            "opening_fallback_context_missing": True,
+            "opening_fallback_failed_closed": True,
+            "opening_curated_facts_present": False,
+            "opening_curated_facts_count": 0,
+            "opening_curated_facts_source": "selector",
+            "opening_selector_source_used": "none",
+            "opening_selector_selected_facts": [],
+            "opening_curated_facts": [],
+            "opening_final_fallback_basis": [],
+            "opening_final_basis_matches_selector": True,
+        }
+    resolved_facts = (
+        facts
+        if facts is not None
+        else [
+            str(x).strip().rstrip(".")
+            for x in (context.get("visible_facts") or [])
+            if str(x).strip()
+        ]
+    )
+    meta: Dict[str, Any] = {
+        "opening_fallback_context_source": context.get("opening_fallback_context_source"),
+        "opening_fallback_basis_count": len(resolved_facts),
+        "opening_fallback_context_missing": not bool(resolved_facts),
+        "opening_fallback_failed_closed": opening_fallback_failed_closed,
+        "opening_curated_facts_present": bool(resolved_facts),
+        "opening_curated_facts_count": len(resolved_facts),
+        "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
+        "opening_selector_source_used": context.get("opening_selector_source_used") or "none",
+        "opening_selector_selected_facts": list(context.get("opening_selector_selected_facts") or []),
+        "opening_curated_facts": list(context.get("opening_curated_facts") or []),
+        "opening_final_fallback_basis": list(context.get("opening_final_fallback_basis") or []),
+        "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
+    }
+    if opening_fallback_failed_closed and (
+        force_fail_closed_context_source or not resolved_facts
+    ):
+        meta["opening_fallback_context_source"] = "opening_curated_facts"
+    return meta
+
+
+def build_upstream_prepared_opening_composition_meta(
+    result_meta: Mapping[str, Any],
+    *,
+    fallback_family_used: str | None,
+    fallback_temporal_frame: str | None,
+    opening_fallback_authorship_source: str,
+) -> Dict[str, Any]:
+    """Assemble ``opening_fallback_composition_meta`` from canonical result metadata + upstream layers."""
+    composition_meta: Dict[str, Any] = {
+        "first_mention_composition_used": False,
+        "first_mention_composition_layers": {"environment": None, "motion": None, "entities": []},
+        "fallback_family_used": fallback_family_used,
+        "fallback_temporal_frame": fallback_temporal_frame,
+        "opening_fallback_authorship_source": opening_fallback_authorship_source,
+    }
+    composition_meta.update(dict(result_meta))
+    return composition_meta
+
+
 def _opening_fallback_classification() -> Dict[str, str]:
     template_id = "opening_deterministic_fallback"
     if not diegetic_opening_scene_template_allowed(template_id):
@@ -70,40 +146,17 @@ def _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
     if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
-        meta = {
-            "opening_fallback_context_source": ctx.get("opening_fallback_context_source"),
-            "opening_fallback_basis_count": len(facts),
-            "opening_fallback_context_missing": not bool(facts),
-            "opening_fallback_failed_closed": False,
-            "opening_curated_facts_present": bool(facts),
-            "opening_curated_facts_count": len(facts),
-            "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
-            "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
-            "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
-            "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
-            "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
-            "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
-        }
-        meta["opening_fallback_failed_closed"] = True
-        meta["opening_fallback_context_source"] = "opening_curated_facts"
+        meta = build_opening_fallback_result_meta(
+            context=ctx,
+            facts=facts,
+            opening_fallback_failed_closed=True,
+            force_fail_closed_context_source=True,
+        )
         meta["opening_fallback_missing_curated_facts"] = False
         meta.update(block_h)
         return meta
-    meta = {
-        "opening_fallback_context_source": "opening_curated_facts",
-        "opening_fallback_basis_count": 0,
-        "opening_fallback_context_missing": True,
-        "opening_fallback_failed_closed": True,
-        "opening_fallback_missing_curated_facts": True,
-        "opening_curated_facts_present": False,
-        "opening_curated_facts_count": 0,
-        "opening_curated_facts_source": "selector",
-        "opening_selector_source_used": "none",
-        "opening_selector_selected_facts": [],
-        "opening_curated_facts": [],
-        "opening_final_fallback_basis": [],
-        "opening_final_basis_matches_selector": True,
-    }
+    meta = build_opening_fallback_result_meta(context=None)
+    meta["opening_fallback_missing_curated_facts"] = True
     meta.update(block_h)
     return meta
 
@@ -163,19 +216,12 @@ def _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
         out.update(
-            {
-                "opening_fallback_context_source": "opening_curated_facts",
-                "opening_fallback_basis_count": len(facts),
-                "opening_fallback_context_missing": not bool(facts),
-                "opening_curated_facts_present": bool(facts),
-                "opening_curated_facts_count": len(facts),
-                "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
-                "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
-                "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
-                "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
-                "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
-                "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
-            }
+            build_opening_fallback_result_meta(
+                context=ctx,
+                facts=facts,
+                opening_fallback_failed_closed=True,
+                force_fail_closed_context_source=True,
+            )
         )
     return out
 
@@ -195,21 +241,65 @@ def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
         out.update(
-            {
-                "opening_fallback_context_source": "opening_curated_facts",
-                "opening_fallback_basis_count": len(facts),
-                "opening_fallback_context_missing": not bool(facts),
-                "opening_curated_facts_present": bool(facts),
-                "opening_curated_facts_count": len(facts),
-                "opening_curated_facts_source": ctx.get("opening_curated_facts_source") or "selector",
-                "opening_selector_source_used": ctx.get("opening_selector_source_used") or "none",
-                "opening_selector_selected_facts": list(ctx.get("opening_selector_selected_facts") or []),
-                "opening_curated_facts": list(ctx.get("opening_curated_facts") or []),
-                "opening_final_fallback_basis": list(ctx.get("opening_final_fallback_basis") or []),
-                "opening_final_basis_matches_selector": bool(ctx.get("opening_final_basis_matches_selector")),
-            }
+            build_opening_fallback_result_meta(
+                context=ctx,
+                facts=facts,
+                opening_fallback_failed_closed=True,
+                force_fail_closed_context_source=True,
+            )
         )
     return out
+
+
+def select_opening_fallback_for_response_type_contract(
+    gm_output: Mapping[str, Any] | None,
+) -> tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]:
+    """Select opening fallback text and debug metadata for response-type enforcement.
+
+    Returns ``fallback_text``, ``result_meta`` (``opening_fallback_meta`` shape on upstream
+    success), ``stub_patch``, whether upstream-prepared was selected, and the upstream payload
+    snapshot when selected (else ``None``).
+    """
+    gm_dict = gm_output if isinstance(gm_output, dict) else None
+    upstream, stub_patch = (
+        _recover_upstream_opening_fallback_stub_payload(gm_dict)
+        if gm_dict is not None
+        else (None, {})
+    )
+    if upstream:
+        return (
+            str(upstream["prepared_opening_fallback_text"]).strip(),
+            dict(upstream["opening_fallback_meta"]),
+            stub_patch,
+            True,
+            upstream,
+        )
+    if stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
+        "opening_fallback_upstream_payload_recovered"
+    ) is False:
+        return (
+            OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+            _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output),
+            stub_patch,
+            False,
+            None,
+        )
+    if _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_dict):
+        return (
+            OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+            _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output),
+            stub_patch,
+            False,
+            None,
+        )
+    fail_closed_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
+    return (
+        OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+        fail_closed_meta,
+        stub_patch,
+        False,
+        None,
+    )
 
 
 def _opening_scene_safe_fallback_tuple(
@@ -218,17 +308,14 @@ def _opening_scene_safe_fallback_tuple(
     fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
 ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
     """Select the opening hard-replace tuple: upstream snapshot or sealed marker."""
-    gm_dict = gm_output if isinstance(gm_output, dict) else None
-    upstream, stub_patch = (
-        _recover_upstream_opening_fallback_stub_payload(gm_dict)
-        if gm_dict is not None
-        else (None, {})
+    fallback_text, fallback_meta, stub_patch, upstream_selected, upstream_payload = (
+        select_opening_fallback_for_response_type_contract(gm_output)
     )
-    if upstream:
-        composition_meta = dict(upstream["opening_fallback_composition_meta"])
+    if upstream_selected and upstream_payload is not None:
+        composition_meta = dict(upstream_payload["opening_fallback_composition_meta"])
         composition_meta.update(stub_patch)
         return (
-            str(upstream["prepared_opening_fallback_text"]).strip(),
+            fallback_text,
             "scene_opening_deterministic",
             "opening_deterministic_fallback",
             "opening_deterministic_fallback",
@@ -237,20 +324,6 @@ def _opening_scene_safe_fallback_tuple(
             composition_meta,
         )
     classification = _opening_fallback_classification()
-    if stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
-        "opening_fallback_upstream_payload_recovered"
-    ) is False:
-        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-        fallback_meta = _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output)
-    elif _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_dict):
-        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-        fallback_meta = _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output)
-    elif not _opening_curated_facts_have_attachable_non_empty_strings(gm_output):
-        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-        fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
-    else:
-        fallback_text = OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-        fallback_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
     meta = fail_closed_composition_meta_factory()
     meta["fallback_family_used"] = classification.get("fallback_family")
     meta["fallback_temporal_frame"] = classification.get("temporal_frame")

@@ -51,6 +51,8 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    OPENING_FALLBACK_PROJECTION_FIELDS,
+    OPENING_FALLBACK_RESULT_META_FIELDS,
     SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
@@ -640,6 +642,8 @@ def test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes()
     }
 
     raw = opening_fallback_projection_fields(source)
+    assert set(raw.keys()) == set(OPENING_FALLBACK_PROJECTION_FIELDS)
+    assert set(OPENING_FALLBACK_RESULT_META_FIELDS).issubset(set(OPENING_FALLBACK_PROJECTION_FIELDS))
     assert raw["opening_fallback_basis_count"] == "3"
     assert raw["opening_fallback_context_missing"] == ""
     assert raw["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED

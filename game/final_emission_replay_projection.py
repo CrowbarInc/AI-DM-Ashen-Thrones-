@@ -16,6 +16,9 @@ Owner semantics for projected runtime-lineage events:
   explicit ``fallback_selection_owner`` and ``fallback_content_owner`` fields.
   Fail-closed opening keeps gate/sealed ownership and is not treated as
   upstream-authored content.
+- ``fallback_owner_bucket`` for opening paths delegates to
+  :func:`game.final_emission_meta.opening_fallback_owner_bucket_from_meta`; this module
+  does not re-derive bucket rules from scratch.
 """
 from __future__ import annotations
 

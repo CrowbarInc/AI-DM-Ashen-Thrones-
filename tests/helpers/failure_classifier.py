@@ -699,6 +699,9 @@ def classify_failure_severity(
     return "low" if _drift_bucket(drift_row) == "exact_drift" else "medium"
 
 
+# Symptom routing for ``investigate_first`` only: substring markers on ``field_path``,
+# not a second copy of :data:`game.final_emission_meta.OPENING_FALLBACK_PROJECTION_FIELDS`.
+# Full FEM/replay field registry and owner-bucket mapping stay in ``game.final_emission_meta``.
 _OPENING_COMPOSITION_FIELD_MARKERS: tuple[str, ...] = (
     "opening_final_fallback_basis",
     "opening_final_basis_matches_selector",

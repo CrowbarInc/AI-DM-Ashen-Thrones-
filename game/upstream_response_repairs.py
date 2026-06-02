@@ -199,14 +199,14 @@ def build_upstream_prepared_opening_fallback_payload(
     if not diegetic_opening_scene_template_allowed(template_id):
         raise AssertionError("opening deterministic fallback template is not opening-scene classified")
     classification = diegetic_classified_fallback_meta(template_id)
-    composition_meta = {
-        "first_mention_composition_used": False,
-        "first_mention_composition_layers": {"environment": None, "motion": None, "entities": []},
-        "fallback_family_used": classification.get("fallback_family"),
-        "fallback_temporal_frame": classification.get("temporal_frame"),
-        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-    }
-    composition_meta.update(fallback_meta)
+    from game.final_emission_opening_fallback import build_upstream_prepared_opening_composition_meta
+
+    composition_meta = build_upstream_prepared_opening_composition_meta(
+        fallback_meta,
+        fallback_family_used=classification.get("fallback_family"),
+        fallback_temporal_frame=classification.get("temporal_frame"),
+        opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    )
     payload: Dict[str, Any] = {
         "prepared_opening_fallback_text": fallback_text,
         "opening_fallback_meta": dict(fallback_meta),

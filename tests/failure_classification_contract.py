@@ -105,6 +105,7 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
     }
 )
 
+# Single source: runtime/read-side bucket registry in ``game.final_emission_meta``.
 ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = OPENING_FALLBACK_OWNER_BUCKETS
 ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = SEALED_FALLBACK_OWNER_BUCKETS
 ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = VISIBILITY_FALLBACK_OWNER_BUCKETS
