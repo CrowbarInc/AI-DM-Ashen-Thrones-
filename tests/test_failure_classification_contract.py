@@ -15,14 +15,33 @@ from tests.failure_classification_contract import (
     MAJOR_OWNER_INVESTIGATION_TARGETS,
 )
 from tests.helpers.failure_classifier import CATEGORY_RULES, INVESTIGATION_TARGETS, validate_failure_classification_row
+from tests.failure_classification_contract import (
+    ALLOWED_CLASSIFICATION_ROW_FIELDS,
+    CLASSIFIER_EVIDENCE_EXTENSION_FIELDS,
+    CLASSIFIER_EVIDENCE_FIELDS,
+    OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
+    PROTECTED_CLASSIFIER_EVIDENCE_FIELDS,
+    REQUIRED_CLASSIFICATION_FIELDS,
+)
+from tests.helpers.failure_classifier import FailureClassification
 from tests.helpers.failure_classification_sync import (
+    assert_classifier_evidence_manifest_locked,
     assert_contract_classifier_alignment,
+    assert_failure_classification_row_contract_locked,
     classification_contract_summary,
+    classifier_evidence_manifest_misalignments,
     contract_classifier_misalignments,
+    failure_classification_row_contract_fields,
+    failure_classification_row_contract_misalignments,
+    failure_classification_typeddict_field_sets,
     known_failure_categories,
     known_owner_buckets,
 )
-from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, render_failure_dashboard_markdown
+from tests.helpers.failure_dashboard_report import (
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+    build_failure_dashboard_rows,
+    render_failure_dashboard_markdown,
+)
 from tests.helpers.failure_dashboard_fixtures import classified_rows
 
 # Ownership note:
@@ -33,6 +52,42 @@ from tests.helpers.failure_dashboard_fixtures import classified_rows
 
 def test_contract_classifier_alignment_is_locked():
     assert_contract_classifier_alignment()
+
+
+def test_classifier_evidence_manifest_matches_optional_contract_fields():
+    assert_classifier_evidence_manifest_locked()
+    assert CLASSIFIER_EVIDENCE_FIELDS == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
+    assert len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) == 32
+    assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 15
+    assert not (PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)
+    assert classifier_evidence_manifest_misalignments() == []
+
+
+def test_dashboard_evidence_keys_are_subset_of_classifier_evidence_fields():
+    assert set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) <= CLASSIFIER_EVIDENCE_FIELDS
+
+
+def test_failure_classification_row_contract_helper_matches_contract_constants():
+    fields = failure_classification_row_contract_fields()
+    assert fields["required"] == REQUIRED_CLASSIFICATION_FIELDS
+    assert fields["optional_evidence"] == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
+    assert fields["allowed"] == ALLOWED_CLASSIFICATION_ROW_FIELDS
+    assert fields["required"] | fields["optional_evidence"] == fields["allowed"]
+
+
+def test_failure_classification_typeddict_matches_row_contract():
+    assert_failure_classification_row_contract_locked()
+    assert failure_classification_row_contract_misalignments() == []
+    typed_required, typed_optional = failure_classification_typeddict_field_sets()
+    assert typed_required == REQUIRED_CLASSIFICATION_FIELDS
+    assert typed_optional == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
+    assert set(FailureClassification.__annotations__) == ALLOWED_CLASSIFICATION_ROW_FIELDS
+
+
+def test_unknown_classification_field_validation_message_unchanged():
+    row = _valid_sample_row()
+    row["unexpected_probe_field"] = "value"
+    assert validate_failure_classification_row(row) == ["unknown classification field: unexpected_probe_field"]
 
 
 def test_classification_contract_summary_matches_known_taxonomy():

@@ -10,6 +10,7 @@ from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
 from game.final_emission_meta import opening_fallback_owner_bucket_from_meta
 from tests.failure_classification_contract import (
+    ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_EMISSION_SUBLAYERS,
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_FAILURE_SEVERITIES,
@@ -23,9 +24,9 @@ from tests.failure_classification_contract import (
     ALLOWED_SECONDARY_OWNERS,
     ALLOWED_SOURCE_FAMILY_TAGS,
     ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
+    CLASSIFIER_EVIDENCE_FIELDS,
     EXPERIMENTAL_REPLAY_TAG_PREFIX,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
-    OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
     REQUIRED_CLASSIFICATION_FIELDS,
 )
 
@@ -223,6 +224,41 @@ POST_GATE_LINEAGE_SOURCE_PRIORITY: tuple[str, ...] = (
     "finalize_packaging",
 )
 
+_CLASSIFIER_COMPUTED_EVIDENCE_FIELDS: frozenset[str] = frozenset(
+    {
+        "canonical_target_actor_id",
+        "emission_sublayer",
+        "fallback_content_owner",
+        "fallback_selection_owner",
+        "final_text_hash",
+        "missing_source_kind",
+        "mutation_source",
+        "opening_fallback_owner_bucket",
+        "prepared_emission_owner",
+        "repair_kind",
+        "secondary_owner",
+    }
+)
+
+# Manifest fields copied from ``observed_turn`` via ``Mapping.get`` (not computed).
+_CLASSIFIER_MANIFEST_DIRECT_OBSERVED_FIELDS: frozenset[str] = (
+    CLASSIFIER_EVIDENCE_FIELDS - _CLASSIFIER_COMPUTED_EVIDENCE_FIELDS
+)
+
+if _CLASSIFIER_MANIFEST_DIRECT_OBSERVED_FIELDS | _CLASSIFIER_COMPUTED_EVIDENCE_FIELDS != CLASSIFIER_EVIDENCE_FIELDS:
+    raise AssertionError("classifier evidence manifest direct/computed partition must cover all evidence fields")
+
+
+def _copy_manifest_observed_evidence(
+    row: dict[str, Any],
+    observed_turn: Mapping[str, Any],
+    *,
+    fields: frozenset[str] = _CLASSIFIER_MANIFEST_DIRECT_OBSERVED_FIELDS,
+) -> None:
+    """Copy optional evidence keys from the observed turn using the AK2 manifest."""
+    for field in fields:
+        row[field] = observed_turn.get(field)
+
 
 def _lookup_path(obj: Mapping[str, Any], path: str) -> Any:
     cur: Any = obj
@@ -353,9 +389,8 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
     if strict_social_prose_owner not in (None, "") and strict_social_prose_owner != "strict_social_emission":
         errors.append(f"invalid sanitizer_strict_social_prose_owner: {strict_social_prose_owner!r}")
 
-    allowed_fields = REQUIRED_CLASSIFICATION_FIELDS | OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     for key in sorted(row.keys()):
-        if key not in allowed_fields:
+        if key not in ALLOWED_CLASSIFICATION_ROW_FIELDS:
             errors.append(f"unknown classification field: {key}")
 
     return errors
@@ -831,59 +866,12 @@ def classify_replay_failure(
             "category": category,
             "severity": severity,
             "primary_owner": determine_primary_owner(category=category, observed_turn=observed_turn, drift_row=drift_row),
-            "secondary_owner": determine_secondary_owner(category=category, observed_turn=observed_turn, drift_row=drift_row),
             "source_family": source_family,
             "replay_tags": replay_tags,
             "field_path": field_path,
             "expected": drift_row.get("expected"),
             "actual": drift_row.get("actual"),
             "reason": str(drift_row.get("reason") or ""),
-            "final_text_hash": str(drift_row.get("observed_text_hash") or observed_turn.get("final_text_hash") or ""),
-            "route_kind": observed_turn.get("route_kind"),
-            "selected_speaker_id": observed_turn.get("selected_speaker_id"),
-            "canonical_target_actor_id": _canonical_target_actor_id(observed_turn),
-            "final_emitted_source": observed_turn.get("final_emitted_source"),
-            "final_emission_mutation_lineage": observed_turn.get("final_emission_mutation_lineage"),
-            "fallback_family": observed_turn.get("fallback_family"),
-            "fallback_temporal_frame": observed_turn.get("fallback_temporal_frame"),
-            "opening_fallback_authorship_source": observed_turn.get("opening_fallback_authorship_source"),
-            "opening_fallback_owner_bucket": _opening_fallback_owner_bucket(observed_turn, drift_row),
-            "fallback_selection_owner": _fallback_split_owner(observed_turn, "fallback_selection_owner"),
-            "fallback_content_owner": _fallback_split_owner(observed_turn, "fallback_content_owner"),
-            "sealed_fallback_owner_bucket": observed_turn.get("sealed_fallback_owner_bucket"),
-            "visibility_fallback_owner_bucket": observed_turn.get("visibility_fallback_owner_bucket"),
-            "visibility_replacement_applied": observed_turn.get("visibility_replacement_applied"),
-            "visibility_fallback_pool": observed_turn.get("visibility_fallback_pool"),
-            "visibility_fallback_kind": observed_turn.get("visibility_fallback_kind"),
-            "upstream_prepared_emission_used": observed_turn.get("upstream_prepared_emission_used"),
-            "upstream_prepared_emission_valid": observed_turn.get("upstream_prepared_emission_valid"),
-            "upstream_prepared_emission_source": observed_turn.get("upstream_prepared_emission_source"),
-            "upstream_prepared_emission_reject_reason": observed_turn.get("upstream_prepared_emission_reject_reason"),
-            "prepared_emission_owner": _prepared_emission_owner(observed_turn),
-            "response_type_required": observed_turn.get("response_type_required"),
-            "response_type_repair_used": observed_turn.get("response_type_repair_used"),
-            "response_type_repair_kind": observed_turn.get("response_type_repair_kind"),
-            "post_gate_mutation_detected": observed_turn.get("post_gate_mutation_detected"),
-            "emission_sublayer": emission_sublayer,
-            "repair_kind": repair_kind,
-            "mutation_source": _mutation_source(observed_turn, emission_sublayer),
-            "missing_source_kind": missing_source_kind,
-            "sanitizer_mode": observed_turn.get("sanitizer_mode"),
-            "sanitizer_event_count": observed_turn.get("sanitizer_event_count"),
-            "sanitizer_changed_count": observed_turn.get("sanitizer_changed_count"),
-            "sanitizer_rewrite_used": observed_turn.get("sanitizer_rewrite_used"),
-            "sanitizer_empty_fallback_used": observed_turn.get("sanitizer_empty_fallback_used"),
-            "sanitizer_empty_fallback_source": observed_turn.get("sanitizer_empty_fallback_source"),
-            "sanitizer_empty_fallback_owner": observed_turn.get("sanitizer_empty_fallback_owner"),
-            "sanitizer_lineage_mode": observed_turn.get("sanitizer_lineage_mode"),
-            "sanitizer_lineage_changed_count": observed_turn.get("sanitizer_lineage_changed_count"),
-            "sanitizer_lineage_dropped_count": observed_turn.get("sanitizer_lineage_dropped_count"),
-            "sanitizer_lineage_empty_fallback_used": observed_turn.get("sanitizer_lineage_empty_fallback_used"),
-            "sanitizer_lineage_legacy_rewrite_active": observed_turn.get("sanitizer_lineage_legacy_rewrite_active"),
-            "sanitizer_strict_social_fallback_used": observed_turn.get("sanitizer_strict_social_fallback_used"),
-            "sanitizer_strict_social_selection_owner": observed_turn.get("sanitizer_strict_social_selection_owner"),
-            "sanitizer_strict_social_prose_owner": observed_turn.get("sanitizer_strict_social_prose_owner"),
-            "sanitizer_strict_social_source": observed_turn.get("sanitizer_strict_social_source"),
             "unavailable_fields": sorted(set(_as_list(observed_turn.get("unavailable"))) | set(_as_list(drift_row.get("unavailable_fields")))),
             "raw_signal_refs": _raw_signal_refs(field_path, observed_turn),
             "classification_confidence": "high" if category not in {"projection", "replay_drift"} else "medium",
@@ -894,5 +882,19 @@ def classify_replay_failure(
                 drift_row=drift_row,
             ),
         }
+        _copy_manifest_observed_evidence(row, observed_turn)
+        row["secondary_owner"] = determine_secondary_owner(
+            category=category, observed_turn=observed_turn, drift_row=drift_row
+        )
+        row["final_text_hash"] = str(drift_row.get("observed_text_hash") or observed_turn.get("final_text_hash") or "")
+        row["canonical_target_actor_id"] = _canonical_target_actor_id(observed_turn)
+        row["opening_fallback_owner_bucket"] = _opening_fallback_owner_bucket(observed_turn, drift_row)
+        row["fallback_selection_owner"] = _fallback_split_owner(observed_turn, "fallback_selection_owner")
+        row["fallback_content_owner"] = _fallback_split_owner(observed_turn, "fallback_content_owner")
+        row["prepared_emission_owner"] = _prepared_emission_owner(observed_turn)
+        row["emission_sublayer"] = emission_sublayer
+        row["repair_kind"] = repair_kind
+        row["mutation_source"] = _mutation_source(observed_turn, emission_sublayer)
+        row["missing_source_kind"] = missing_source_kind
         classifications.append(row)
     return classifications

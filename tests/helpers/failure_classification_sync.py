@@ -5,12 +5,13 @@ rule tables stay aligned without scattering duplicate checks across test files.
 """
 from __future__ import annotations
 
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping, NotRequired, Sequence, get_origin, get_type_hints
 
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
 )
 from tests.failure_classification_contract import (
+    ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
@@ -19,13 +20,17 @@ from tests.failure_classification_contract import (
     ALLOWED_SECONDARY_OWNERS,
     ALLOWED_SOURCE_FAMILY_TAGS,
     ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS,
+    CLASSIFIER_EVIDENCE_EXTENSION_FIELDS,
+    CLASSIFIER_EVIDENCE_FIELDS,
     LEGACY_RESPONSE_TYPE_REPAIR_KINDS,
     MAJOR_OWNER_INVESTIGATION_TARGETS,
     OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
+    PROTECTED_CLASSIFIER_EVIDENCE_FIELDS,
     REQUIRED_CLASSIFICATION_FIELDS,
 )
 from tests.helpers.failure_classifier import (
     CATEGORY_RULES,
+    FailureClassification,
     INVESTIGATION_TARGETS,
     PRIMARY_OWNER_RULES,
     SECONDARY_OWNER_RULES,
@@ -195,6 +200,64 @@ def expected_investigation_targets() -> dict[str, str]:
     } | {"replay_drift": MAJOR_OWNER_INVESTIGATION_TARGETS["replay"]}
 
 
+def failure_classification_row_contract_fields() -> dict[str, frozenset[str]]:
+    """Return contract-locked classifier row field sets for sync and validation."""
+    return {
+        "required": REQUIRED_CLASSIFICATION_FIELDS,
+        "optional_evidence": OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
+        "allowed": ALLOWED_CLASSIFICATION_ROW_FIELDS,
+    }
+
+
+def failure_classification_typeddict_field_sets() -> tuple[frozenset[str], frozenset[str]]:
+    """Return (required, optional) field names from ``FailureClassification`` annotations."""
+    required: set[str] = set()
+    optional: set[str] = set()
+    for name, hint in get_type_hints(FailureClassification, include_extras=True).items():
+        if get_origin(hint) is NotRequired:
+            optional.add(name)
+        else:
+            required.add(name)
+    return frozenset(required), frozenset(optional)
+
+
+def failure_classification_row_contract_misalignments() -> list[str]:
+    """Return row-contract drift messages; empty when TypedDict matches contract."""
+    misalignments: list[str] = []
+    contract = failure_classification_row_contract_fields()
+    typed_required, typed_optional = failure_classification_typeddict_field_sets()
+    allowed_typeddict = typed_required | typed_optional
+
+    if contract["required"] != typed_required:
+        misalignments.append(
+            "FailureClassification required TypedDict fields must match REQUIRED_CLASSIFICATION_FIELDS; "
+            f"missing_from_typeddict={sorted(contract['required'] - typed_required)!r} "
+            f"extra_in_typeddict={sorted(typed_required - contract['required'])!r}"
+        )
+    if contract["optional_evidence"] != typed_optional:
+        misalignments.append(
+            "FailureClassification NotRequired TypedDict fields must match OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS; "
+            f"missing_from_typeddict={sorted(contract['optional_evidence'] - typed_optional)!r} "
+            f"extra_in_typeddict={sorted(typed_optional - contract['optional_evidence'])!r}"
+        )
+    if allowed_typeddict != contract["allowed"]:
+        misalignments.append(
+            "FailureClassification.__annotations__ must cover required ∪ optional contract fields; "
+            f"missing_from_typeddict={sorted(contract['allowed'] - allowed_typeddict)!r} "
+            f"extra_in_typeddict={sorted(allowed_typeddict - contract['allowed'])!r}"
+        )
+
+    return misalignments
+
+
+def assert_failure_classification_row_contract_locked() -> None:
+    """Assert FailureClassification TypedDict mirrors the public row contract."""
+    misalignments = failure_classification_row_contract_misalignments()
+    if misalignments:
+        joined = "\n".join(f"- {item}" for item in misalignments)
+        raise AssertionError(f"failure classification row contract misalignment:\n{joined}")
+
+
 def classification_contract_summary() -> dict[str, Any]:
     """Compact summary of contract/classifier taxonomy surfaces."""
     buckets = known_owner_buckets()
@@ -216,11 +279,11 @@ def classification_contract_summary() -> dict[str, Any]:
 
 def expected_failure_classification_row_fields() -> dict[str, tuple[str, ...]]:
     """Return contract-locked required and optional evidence field names for dashboard rows."""
-    allowed = REQUIRED_CLASSIFICATION_FIELDS | OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
+    fields = failure_classification_row_contract_fields()
     return {
-        "required": tuple(sorted(REQUIRED_CLASSIFICATION_FIELDS)),
-        "optional_evidence": tuple(sorted(OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)),
-        "allowed": tuple(sorted(allowed)),
+        "required": tuple(sorted(fields["required"])),
+        "optional_evidence": tuple(sorted(fields["optional_evidence"])),
+        "allowed": tuple(sorted(fields["allowed"])),
     }
 
 
@@ -353,9 +416,118 @@ def contract_classifier_misalignments(
     return misalignments
 
 
+_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS: tuple[str, ...] = (
+    "sublayer",
+    "repair",
+    "lineage",
+    "opening_authorship",
+    "opening_owner",
+    "fallback_selection_owner",
+    "fallback_content_owner",
+    "sealed_owner",
+    "visibility_owner",
+    "visibility_replaced",
+    "visibility_pool",
+    "visibility_kind",
+    "mutation",
+    "missing",
+    "sanitizer_mode",
+    "sanitizer_events",
+    "sanitizer_changed",
+    "sanitizer_empty",
+    "sanitizer_empty_source",
+    "sanitizer_empty_owner",
+    "sanitizer_lineage_mode",
+    "sanitizer_lineage_changed",
+    "sanitizer_lineage_dropped",
+    "sanitizer_lineage_empty",
+    "sanitizer_lineage_legacy",
+    "strict_social_fallback",
+    "strict_social_selection_owner",
+    "strict_social_prose_owner",
+    "strict_social_source",
+)
+
+
+def dashboard_evidence_manifest_misalignments() -> list[str]:
+    """Return dashboard evidence manifest drift messages; empty when AK3-locked."""
+    from tests.helpers.failure_dashboard_report import (
+        FAILURE_DASHBOARD_EVIDENCE_LABELS,
+        FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
+        FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+    )
+
+    misalignments: list[str] = []
+
+    if FAILURE_DASHBOARD_EVIDENCE_LABELS != _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS:
+        misalignments.append(
+            "FAILURE_DASHBOARD_EVIDENCE_LABELS drifted from locked dashboard label order"
+        )
+
+    manifest_keys = tuple(row_key for _label, row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST)
+    if manifest_keys != FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS:
+        misalignments.append("FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS must match manifest row keys")
+
+    dashboard_only = sorted(set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) - CLASSIFIER_EVIDENCE_FIELDS)
+    if dashboard_only:
+        misalignments.append(f"dashboard evidence keys outside classifier evidence: {dashboard_only!r}")
+
+    return misalignments
+
+
+def classifier_evidence_manifest_misalignments() -> list[str]:
+    """Return manifest drift messages; empty when AK2 evidence sets are locked."""
+    misalignments: list[str] = []
+
+    if CLASSIFIER_EVIDENCE_FIELDS != OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS:
+        misalignments.append(
+            "CLASSIFIER_EVIDENCE_FIELDS must equal OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS"
+        )
+
+    if len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) != 32:
+        misalignments.append(
+            f"PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must contain 32 fields, got {len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)}"
+        )
+    if len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) != 15:
+        misalignments.append(
+            f"CLASSIFIER_EVIDENCE_EXTENSION_FIELDS must contain 15 fields, got {len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)}"
+        )
+
+    overlap = PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS
+    if overlap:
+        misalignments.append(f"protected overlap and extension sets must be disjoint; overlap={sorted(overlap)!r}")
+
+    if PROTECTED_CLASSIFIER_EVIDENCE_FIELDS | CLASSIFIER_EVIDENCE_EXTENSION_FIELDS != CLASSIFIER_EVIDENCE_FIELDS:
+        misalignments.append("CLASSIFIER_EVIDENCE_FIELDS must equal protected overlap | extension")
+
+    protected_flat_paths = {path for path in protected_observation_field_paths() if "." not in path}
+    expected_protected_overlap = protected_flat_paths & CLASSIFIER_EVIDENCE_FIELDS
+    if PROTECTED_CLASSIFIER_EVIDENCE_FIELDS != expected_protected_overlap:
+        misalignments.append(
+            "PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must equal flat protected paths ∩ classifier evidence; "
+            f"manifest_only={sorted(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS - expected_protected_overlap)!r} "
+            f"expected_only={sorted(expected_protected_overlap - PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)!r}"
+        )
+
+    misalignments.extend(dashboard_evidence_manifest_misalignments())
+    misalignments.extend(failure_classification_row_contract_misalignments())
+
+    return misalignments
+
+
+def assert_classifier_evidence_manifest_locked() -> None:
+    """Assert AK2 classifier evidence manifest matches contract and dashboard surfaces."""
+    misalignments = classifier_evidence_manifest_misalignments()
+    if misalignments:
+        joined = "\n".join(f"- {item}" for item in misalignments)
+        raise AssertionError(f"classifier evidence manifest misalignment:\n{joined}")
+    assert_failure_classification_row_contract_locked()
+
+
 def assert_contract_classifier_alignment() -> None:
     """Assert classifier rule tables remain aligned with contract constants."""
     misalignments = contract_classifier_misalignments()
     if misalignments:
         joined = "\n".join(f"- {item}" for item in misalignments)
         raise AssertionError(f"failure classification contract/classifier misalignment:\n{joined}")
+    assert_classifier_evidence_manifest_locked()

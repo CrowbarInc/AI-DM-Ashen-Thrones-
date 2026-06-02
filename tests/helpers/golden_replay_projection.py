@@ -61,6 +61,130 @@ class ProtectedObservationField:
     description: str = ""
 
 
+@dataclass(frozen=True)
+class _FlatObservedFieldExtractor:
+    """Read-side 1:1 flat observed-key projection from FEM or sanitizer trace."""
+
+    observed_key: str
+    source: str  # "fem" | "sanitizer_trace"
+    source_keys: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class _SanitizerLineageObservedExtractor:
+    """Sanitizer lineage observed key with trace lookup and context fallback."""
+
+    observed_key: str
+    trace_key: str
+    fallback_context_key: str
+
+
+def _flat_extractor_source_keys(extractor: _FlatObservedFieldExtractor) -> tuple[str, ...]:
+    return extractor.source_keys or (extractor.observed_key,)
+
+
+_FEM_FLAT_OBSERVED_EXTRACTORS: tuple[_FlatObservedFieldExtractor, ...] = (
+    _FlatObservedFieldExtractor(
+        "final_emitted_source",
+        "fem",
+        ("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
+    ),
+    _FlatObservedFieldExtractor("final_emission_mutation_lineage", "fem"),
+    _FlatObservedFieldExtractor("response_type_required", "fem"),
+    _FlatObservedFieldExtractor("response_type_candidate_ok", "fem"),
+    _FlatObservedFieldExtractor("response_type_repair_used", "fem"),
+    _FlatObservedFieldExtractor("response_type_repair_kind", "fem"),
+    _FlatObservedFieldExtractor("upstream_prepared_emission_used", "fem"),
+    _FlatObservedFieldExtractor("upstream_prepared_emission_valid", "fem"),
+    _FlatObservedFieldExtractor("upstream_prepared_emission_source", "fem"),
+    _FlatObservedFieldExtractor("upstream_prepared_emission_reject_reason", "fem"),
+    _FlatObservedFieldExtractor("sealed_fallback_owner_bucket", "fem"),
+    _FlatObservedFieldExtractor("visibility_fallback_owner_bucket", "fem"),
+    _FlatObservedFieldExtractor("visibility_replacement_applied", "fem"),
+    _FlatObservedFieldExtractor("visibility_fallback_pool", "fem"),
+    _FlatObservedFieldExtractor("visibility_fallback_kind", "fem"),
+    _FlatObservedFieldExtractor("fallback_temporal_frame", "fem"),
+)
+
+_SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS: tuple[_FlatObservedFieldExtractor, ...] = (
+    _FlatObservedFieldExtractor("sanitizer_empty_fallback_used", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_empty_fallback_source", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_empty_fallback_owner", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_strict_social_fallback_used", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_strict_social_selection_owner", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_strict_social_prose_owner", "sanitizer_trace"),
+    _FlatObservedFieldExtractor("sanitizer_strict_social_source", "sanitizer_trace"),
+)
+
+_SANITIZER_LINEAGE_OBSERVED_EXTRACTORS: tuple[_SanitizerLineageObservedExtractor, ...] = (
+    _SanitizerLineageObservedExtractor("sanitizer_lineage_mode", "sanitizer_lineage_mode", "sanitizer_mode"),
+    _SanitizerLineageObservedExtractor(
+        "sanitizer_lineage_changed_count",
+        "sanitizer_lineage_changed_count",
+        "sanitizer_changed_count",
+    ),
+    _SanitizerLineageObservedExtractor(
+        "sanitizer_lineage_dropped_count",
+        "sanitizer_lineage_dropped_count",
+        "sanitizer_dropped_count",
+    ),
+    _SanitizerLineageObservedExtractor(
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_empty_fallback_used",
+    ),
+)
+
+
+def _extract_fem_flat_observed_fields(fem: Mapping[str, Any]) -> dict[str, Any]:
+    """Project registry-listed flat FEM fields into observed-key values."""
+    return {
+        extractor.observed_key: _first_present(fem, _flat_extractor_source_keys(extractor))
+        for extractor in _FEM_FLAT_OBSERVED_EXTRACTORS
+    }
+
+
+def _extract_sanitizer_trace_flat_observed_fields(sanitizer_trace: Mapping[str, Any]) -> dict[str, Any]:
+    """Project registry-listed flat sanitizer-trace fields into observed-key values."""
+    return {
+        extractor.observed_key: _first_present(sanitizer_trace, _flat_extractor_source_keys(extractor))
+        for extractor in _SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS
+    }
+
+
+def _extract_sanitizer_lineage_observed_fields(
+    sanitizer_trace: Mapping[str, Any],
+    *,
+    lineage_context: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Project sanitizer lineage observed keys with trace lookup and context fallbacks."""
+    out = {
+        extractor.observed_key: _sanitizer_lineage_field(
+            sanitizer_trace,
+            extractor.trace_key,
+            lineage_context.get(extractor.fallback_context_key),
+        )
+        for extractor in _SANITIZER_LINEAGE_OBSERVED_EXTRACTORS
+    }
+    sanitizer_lineage_mode = out["sanitizer_lineage_mode"]
+    out["sanitizer_lineage_legacy_rewrite_active"] = _sanitizer_lineage_field(
+        sanitizer_trace,
+        "sanitizer_lineage_legacy_rewrite_active",
+        str(sanitizer_lineage_mode or "").strip().lower() == "legacy_sentence_rewrite"
+        if sanitizer_lineage_mode is not None
+        else None,
+    )
+    return out
+
+
+def _observed_fem_flat_values(fem_flat: Mapping[str, Any]) -> dict[str, Any]:
+    """Apply observed-turn value shaping for registry-projected FEM flat fields."""
+    out = dict(fem_flat)
+    lineage = out.get("final_emission_mutation_lineage")
+    out["final_emission_mutation_lineage"] = list(lineage) if isinstance(lineage, list) else lineage
+    return out
+
+
 def _protected_structural_fields(*paths: str) -> tuple[ProtectedObservationField, ...]:
     return tuple(
         ProtectedObservationField(path=path, drift_bucket="structural_drift") for path in paths
@@ -188,6 +312,49 @@ def lookup_observation_path(obj: Mapping[str, Any], path: str) -> Any:
             return MISSING
         cur = cur.get(part)
     return cur
+
+
+def _unavailable_paths(observed: Mapping[str, Any]) -> frozenset[str]:
+    raw = observed.get("unavailable")
+    if not isinstance(raw, (list, tuple, set, frozenset)):
+        return frozenset()
+    return frozenset(str(item) for item in raw)
+
+
+def protected_path_covered_by_unavailable(path: str, unavailable: frozenset[str]) -> bool:
+    """Return whether *path* or a dotted parent prefix is listed unavailable."""
+    if path in unavailable:
+        return True
+    parts = path.split(".")
+    return any(".".join(parts[:index]) in unavailable for index in range(1, len(parts)))
+
+
+def protected_path_is_represented_in_observed_turn(
+    observed: Mapping[str, Any],
+    path: str,
+) -> bool:
+    """Return whether a protected path is projected or explicitly marked unavailable.
+
+    Flat protected keys count as represented when present on the observed-turn dict,
+    even when the stored value is ``None`` or the ``MISSING`` lookup sentinel.
+    Dotted protected paths must be navigable via :func:`lookup_observation_path` unless
+    an unavailable parent prefix explains the absence.
+    """
+    unavailable = _unavailable_paths(observed)
+    if protected_path_covered_by_unavailable(path, unavailable):
+        return True
+    if "." not in path:
+        return path in observed
+    return lookup_observation_path(observed, path) is not MISSING
+
+
+def protected_path_representation_errors(observed: Mapping[str, Any]) -> list[str]:
+    """Return protected registry paths neither projected nor listed unavailable."""
+    return [
+        field.path
+        for field in protected_observation_field_registry()
+        if not protected_path_is_represented_in_observed_turn(observed, field.path)
+    ]
 
 
 def _sanitizer_debug_change_counts(sanitizer_debug: list[Any] | None) -> tuple[int | None, int | None]:
@@ -393,6 +560,7 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
     fem = read_final_emission_meta_from_turn_payload(payload)
     fem_normalized = normalize_final_emission_meta_for_observability(fem)
+    fem_flat = _extract_fem_flat_observed_fields(fem)
     runtime_lineage_events = _runtime_lineage_events_from_payload(payload, fem)
     emission_debug_lane = read_emission_debug_lane_from_turn_payload(payload)
     trace = _trace_from_payload_or_snapshot(payload, snap)
@@ -430,15 +598,6 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         selected_speaker_id = social.get("npc_id")
         selected_speaker_source = "resolution.social.npc_id" if selected_speaker_id else None
 
-    final_emitted_source = _first_present(
-        fem,
-        ("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
-    )
-    response_type_required = _first_present(fem, ("response_type_required",))
-    final_emission_mutation_lineage = _first_present(fem, ("final_emission_mutation_lineage",))
-    response_type_candidate_ok = _first_present(fem, ("response_type_candidate_ok",))
-    response_type_repair_used = _first_present(fem, ("response_type_repair_used",))
-    response_type_repair_kind = _first_present(fem, ("response_type_repair_kind",))
     response_delta_checked = _first_present(fem, ("response_delta_checked",))
     response_delta_failed = _first_present(fem, ("response_delta_failed",))
     response_delta_repaired = _first_present(fem, ("response_delta_repaired",))
@@ -447,23 +606,13 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     response_delta_echo_overlap_band = _echo_overlap_band(response_delta_echo_overlap_ratio)
     response_delta_skip_reason = _first_present(fem, ("response_delta_skip_reason",))
     response_delta_trigger_source = _first_present(fem, ("response_delta_trigger_source",))
-    upstream_prepared_emission_used = _first_present(fem, ("upstream_prepared_emission_used",))
-    upstream_prepared_emission_valid = _first_present(fem, ("upstream_prepared_emission_valid",))
-    upstream_prepared_emission_source = _first_present(fem, ("upstream_prepared_emission_source",))
-    upstream_prepared_emission_reject_reason = _first_present(fem, ("upstream_prepared_emission_reject_reason",))
     post_gate_mutation_detected = _first_present(fem, ("post_gate_mutation_detected",))
     opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
     opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
     opening_fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
-    sealed_fallback_owner_bucket = _first_present(fem, ("sealed_fallback_owner_bucket",))
-    visibility_fallback_owner_bucket = _first_present(fem, ("visibility_fallback_owner_bucket",))
-    visibility_replacement_applied = _first_present(fem, ("visibility_replacement_applied",))
-    visibility_fallback_pool = _first_present(fem, ("visibility_fallback_pool",))
-    visibility_fallback_kind = _first_present(fem, ("visibility_fallback_kind",))
     fallback_family = project_replay_fallback_family_from_fem(fem)
     if fallback_family is None:
         fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
-    fallback_temporal_frame = _first_present(fem, ("fallback_temporal_frame",))
     stage_diff = _find_nested_mapping(payload, "stage_diff_telemetry")
     sanitizer_debug = _find_nested_list(payload, "sanitizer_debug")
     sanitizer_trace = _find_nested_mapping(payload, "sanitizer_trace")
@@ -474,42 +623,17 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     sanitizer_event_count = len(sanitizer_debug) if sanitizer_debug else None
     sanitizer_changed_count, sanitizer_dropped_count = _sanitizer_debug_change_counts(sanitizer_debug)
     sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
-    sanitizer_empty_fallback_used = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_used",))
-    sanitizer_empty_fallback_source = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_source",))
-    sanitizer_empty_fallback_owner = _first_present(sanitizer_trace, ("sanitizer_empty_fallback_owner",))
-    sanitizer_lineage_mode = _sanitizer_lineage_field(sanitizer_trace, "sanitizer_lineage_mode", sanitizer_mode)
-    sanitizer_lineage_changed_count = _sanitizer_lineage_field(
+    sanitizer_trace_flat = _extract_sanitizer_trace_flat_observed_fields(sanitizer_trace)
+    sanitizer_empty_fallback_used = sanitizer_trace_flat["sanitizer_empty_fallback_used"]
+    sanitizer_lineage_flat = _extract_sanitizer_lineage_observed_fields(
         sanitizer_trace,
-        "sanitizer_lineage_changed_count",
-        sanitizer_changed_count,
+        lineage_context={
+            "sanitizer_mode": sanitizer_mode,
+            "sanitizer_changed_count": sanitizer_changed_count,
+            "sanitizer_dropped_count": sanitizer_dropped_count,
+            "sanitizer_empty_fallback_used": sanitizer_empty_fallback_used,
+        },
     )
-    sanitizer_lineage_dropped_count = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_dropped_count",
-        sanitizer_dropped_count,
-    )
-    sanitizer_lineage_empty_fallback_used = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_empty_fallback_used",
-        sanitizer_empty_fallback_used,
-    )
-    sanitizer_lineage_legacy_rewrite_active = _sanitizer_lineage_field(
-        sanitizer_trace,
-        "sanitizer_lineage_legacy_rewrite_active",
-        str(sanitizer_lineage_mode or "").strip().lower() == "legacy_sentence_rewrite"
-        if sanitizer_lineage_mode is not None
-        else None,
-    )
-    sanitizer_strict_social_fallback_used = _first_present(sanitizer_trace, ("sanitizer_strict_social_fallback_used",))
-    sanitizer_strict_social_selection_owner = _first_present(
-        sanitizer_trace,
-        ("sanitizer_strict_social_selection_owner",),
-    )
-    sanitizer_strict_social_prose_owner = _first_present(
-        sanitizer_trace,
-        ("sanitizer_strict_social_prose_owner",),
-    )
-    sanitizer_strict_social_source = _first_present(sanitizer_trace, ("sanitizer_strict_social_source",))
     interaction_continuity_validation = _find_nested_mapping(payload, "interaction_continuity_validation")
 
     final_text = str(snap.get("gm_text") or "")
@@ -579,14 +703,7 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         "route_kind": route_kind,
         "selected_speaker_id": selected_speaker_id,
         "selected_speaker_source": selected_speaker_source,
-        "final_emitted_source": final_emitted_source,
-        "final_emission_mutation_lineage": list(final_emission_mutation_lineage)
-        if isinstance(final_emission_mutation_lineage, list)
-        else final_emission_mutation_lineage,
-        "response_type_required": response_type_required,
-        "response_type_candidate_ok": response_type_candidate_ok,
-        "response_type_repair_used": response_type_repair_used,
-        "response_type_repair_kind": response_type_repair_kind,
+        **_observed_fem_flat_values(fem_flat),
         "response_delta_checked": response_delta_checked,
         "response_delta_failed": response_delta_failed,
         "response_delta_repaired": response_delta_repaired,
@@ -595,10 +712,6 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         "response_delta_echo_overlap_band": response_delta_echo_overlap_band,
         "response_delta_skip_reason": response_delta_skip_reason,
         "response_delta_trigger_source": response_delta_trigger_source,
-        "upstream_prepared_emission_used": upstream_prepared_emission_used,
-        "upstream_prepared_emission_valid": upstream_prepared_emission_valid,
-        "upstream_prepared_emission_source": upstream_prepared_emission_source,
-        "upstream_prepared_emission_reject_reason": upstream_prepared_emission_reject_reason,
         "post_gate_mutation_detected": post_gate_mutation_detected,
         "strict_social_active": _first_present(fem, ("strict_social_active",)),
         "speaker_contract_enforcement_reason": _first_present(fem, ("speaker_contract_enforcement_reason",)),
@@ -611,29 +724,13 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         "sanitizer_event_count": sanitizer_event_count,
         "sanitizer_changed_count": sanitizer_changed_count,
         "sanitizer_rewrite_used": sanitizer_rewrite_used,
-        "sanitizer_empty_fallback_used": sanitizer_empty_fallback_used,
-        "sanitizer_empty_fallback_source": sanitizer_empty_fallback_source,
-        "sanitizer_empty_fallback_owner": sanitizer_empty_fallback_owner,
-        "sanitizer_lineage_mode": sanitizer_lineage_mode,
-        "sanitizer_lineage_changed_count": sanitizer_lineage_changed_count,
-        "sanitizer_lineage_dropped_count": sanitizer_lineage_dropped_count,
-        "sanitizer_lineage_empty_fallback_used": sanitizer_lineage_empty_fallback_used,
-        "sanitizer_lineage_legacy_rewrite_active": sanitizer_lineage_legacy_rewrite_active,
-        "sanitizer_strict_social_fallback_used": sanitizer_strict_social_fallback_used,
-        "sanitizer_strict_social_selection_owner": sanitizer_strict_social_selection_owner,
-        "sanitizer_strict_social_prose_owner": sanitizer_strict_social_prose_owner,
-        "sanitizer_strict_social_source": sanitizer_strict_social_source,
+        **sanitizer_trace_flat,
+        **sanitizer_lineage_flat,
         "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
         "opening_recovered_via_fallback": opening_recovered_via_fallback,
         "opening_fallback_authorship_source": opening_fallback_authorship_source,
         "opening_fallback_owner_bucket": opening_fallback_owner_bucket,
-        "sealed_fallback_owner_bucket": sealed_fallback_owner_bucket,
-        "visibility_fallback_owner_bucket": visibility_fallback_owner_bucket,
-        "visibility_replacement_applied": visibility_replacement_applied,
-        "visibility_fallback_pool": visibility_fallback_pool,
-        "visibility_fallback_kind": visibility_fallback_kind,
         "fallback_family": fallback_family,
-        "fallback_temporal_frame": fallback_temporal_frame,
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
         "final_text_hash": golden_text_hash(final_text),
         "trace": {

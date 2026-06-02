@@ -153,6 +153,69 @@ REQUIRED_CLASSIFICATION_FIELDS: frozenset[str] = frozenset(
     }
 )
 
+# Cycle AK2 — classifier evidence manifest (protected overlap + extensions).
+# ``CLASSIFIER_EVIDENCE_FIELDS`` must stay equal to ``OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS``.
+PROTECTED_CLASSIFIER_EVIDENCE_FIELDS: frozenset[str] = frozenset(
+    {
+        "fallback_family",
+        "fallback_temporal_frame",
+        "final_emission_mutation_lineage",
+        "final_emitted_source",
+        "opening_fallback_authorship_source",
+        "opening_fallback_owner_bucket",
+        "response_type_repair_kind",
+        "response_type_repair_used",
+        "response_type_required",
+        "route_kind",
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_empty_fallback_source",
+        "sanitizer_empty_fallback_used",
+        "sanitizer_lineage_changed_count",
+        "sanitizer_lineage_dropped_count",
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_lineage_legacy_rewrite_active",
+        "sanitizer_lineage_mode",
+        "sanitizer_strict_social_fallback_used",
+        "sanitizer_strict_social_prose_owner",
+        "sanitizer_strict_social_selection_owner",
+        "sanitizer_strict_social_source",
+        "sealed_fallback_owner_bucket",
+        "selected_speaker_id",
+        "upstream_prepared_emission_reject_reason",
+        "upstream_prepared_emission_source",
+        "upstream_prepared_emission_used",
+        "upstream_prepared_emission_valid",
+        "visibility_fallback_kind",
+        "visibility_fallback_owner_bucket",
+        "visibility_fallback_pool",
+        "visibility_replacement_applied",
+    }
+)
+
+CLASSIFIER_EVIDENCE_EXTENSION_FIELDS: frozenset[str] = frozenset(
+    {
+        "canonical_target_actor_id",
+        "emission_sublayer",
+        "fallback_content_owner",
+        "fallback_selection_owner",
+        "final_text_hash",
+        "missing_source_kind",
+        "mutation_source",
+        "post_gate_mutation_detected",
+        "prepared_emission_owner",
+        "repair_kind",
+        "sanitizer_changed_count",
+        "sanitizer_event_count",
+        "sanitizer_mode",
+        "sanitizer_rewrite_used",
+        "secondary_owner",
+    }
+)
+
+CLASSIFIER_EVIDENCE_FIELDS: frozenset[str] = (
+    PROTECTED_CLASSIFIER_EVIDENCE_FIELDS | CLASSIFIER_EVIDENCE_EXTENSION_FIELDS
+)
+
 OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
     {
         "secondary_owner",
@@ -203,6 +266,19 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "sanitizer_strict_social_prose_owner",
         "sanitizer_strict_social_source",
     }
+)
+
+if CLASSIFIER_EVIDENCE_FIELDS != OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS:
+    _manifest_only = sorted(CLASSIFIER_EVIDENCE_FIELDS - OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)
+    _contract_only = sorted(OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS - CLASSIFIER_EVIDENCE_FIELDS)
+    raise AssertionError(
+        "CLASSIFIER_EVIDENCE_FIELDS must equal OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS; "
+        f"manifest_only={_manifest_only!r} contract_only={_contract_only!r}"
+    )
+
+# Cycle AK4 — full classifier/dashboard row field allowlist (required ∪ optional evidence).
+ALLOWED_CLASSIFICATION_ROW_FIELDS: frozenset[str] = (
+    REQUIRED_CLASSIFICATION_FIELDS | OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
 )
 
 ALLOWED_MISSING_SOURCE_KINDS: frozenset[str] = frozenset(

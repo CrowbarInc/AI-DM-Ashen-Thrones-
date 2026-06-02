@@ -53,12 +53,14 @@ from tests.helpers.golden_replay import (
     summarize_long_session_replay_observations,
 )
 from tests.helpers.golden_replay_projection import (
+    lookup_observation_path,
     project_replay_fallback_family_from_fem,
     project_turn_observation,
     protected_field_paths,
     protected_observation_drift_bucket,
     protected_observation_field_paths,
     protected_observation_field_registry,
+    protected_path_representation_errors,
 )
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
@@ -260,6 +262,199 @@ def test_protected_replay_manifest_matches_observation_registry():
     assert str(len(paths)) in current
     for field in protected_observation_field_registry():
         assert f"| `{field.path}` | `{field.drift_bucket}` |" in current
+
+
+# Cycle AK5 — replay projection schema safety locks (pre-AK1 refactor guards).
+
+
+def test_ak5_every_protected_path_is_projected_or_marked_unavailable():
+    """Each protected registry path must appear on the observed turn or in unavailable."""
+    sparse = project_turn_observation(
+        minimal_turn_payload(
+            scenario_id="ak5_sparse_projection",
+            gm_text="Rain on the gate road.",
+        )
+    )
+    assert protected_path_representation_errors(sparse) == []
+
+    rich_payload = minimal_gm_output_payload(
+        fem_meta=fem_payload(
+            final_emitted_source="upstream_prepared_emission",
+            response_type_required="dialogue_response",
+            response_type_repair_used=True,
+            response_type_repair_kind="dialogue_minimal_repair",
+            fallback_temporal_frame="present",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+            fallback_family_used="social",
+            realization_fallback_family="upstream_prepared_emission",
+            opening_recovered_via_fallback=False,
+            opening_fallback_authorship_source="upstream_prepared_opening_fallback",
+            sealed_fallback_owner_bucket="unknown-none",
+            visibility_fallback_owner_bucket="unknown-none",
+        ),
+        metadata={
+            "sanitizer_trace": {
+                "sanitizer_lineage_mode": "strip_only",
+                "sanitizer_empty_fallback_used": True,
+                "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+                "sanitizer_empty_fallback_owner": "output_sanitizer",
+                "sanitizer_lineage_changed_count": 1,
+                "sanitizer_lineage_dropped_count": 0,
+                "sanitizer_lineage_empty_fallback_used": True,
+                "sanitizer_lineage_legacy_rewrite_active": False,
+                "sanitizer_strict_social_fallback_used": False,
+            }
+        },
+    )
+    rich_payload["sanitizer_debug"] = [
+        {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Planner scaffold."},
+    ]
+    rich_payload["debug_traces"] = [
+        {
+            "canonical_entry": {
+                "target_actor_id": "runner",
+                "target_source": "social",
+                "reason": "direct_vocative",
+            },
+            "turn_trace": {
+                "social_contract_trace": {"route_selected": "dialogue"},
+            },
+        }
+    ]
+    rich = project_synthetic_turn(
+        scenario_id="ak5_rich_projection",
+        gm_text="The runner says the patrol moved east.",
+        player_text="Ask the runner.",
+        resolution={"kind": "question", "social": {"npc_id": "runner"}},
+        payload=rich_payload,
+    )
+    assert protected_path_representation_errors(rich) == []
+
+
+def test_ak5_protected_observation_field_paths_are_sorted_unique():
+    paths = protected_observation_field_paths()
+    assert paths == tuple(sorted(set(paths)))
+    assert len(paths) == len(protected_observation_field_registry())
+
+
+def test_ak5_manifest_generated_section_matches_registry():
+    import importlib.util
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "refresh_protected_replay_manifest",
+        root / "tools" / "refresh_protected_replay_manifest.py",
+    )
+    assert spec is not None and spec.loader is not None
+    refresh_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(refresh_mod)
+
+    registry_paths = {field.path: field.drift_bucket for field in protected_observation_field_registry()}
+    manifest_paths = refresh_mod._registry_fields_by_path()
+
+    assert set(registry_paths) == set(manifest_paths)
+    for path, bucket in registry_paths.items():
+        assert manifest_paths[path] == bucket
+    assert refresh_mod.manifest_section_is_current(refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8"))
+
+
+def test_ak5_synthetic_turn_exercises_fem_backed_protected_fields():
+    observed = project_synthetic_turn(
+        scenario_id="ak5_fem_backed_projection",
+        gm_text="The runner confirms the patrol route.",
+        resolution={"kind": "question"},
+        fem_meta=fem_payload(
+            final_emitted_source="upstream_prepared_emission",
+            response_type_required="dialogue_response",
+            response_type_repair_used=True,
+            response_type_repair_kind="dialogue_minimal_repair",
+            fallback_temporal_frame="present",
+            upstream_prepared_emission_used=True,
+            upstream_prepared_emission_valid=True,
+        ),
+    )
+
+    assert observed["final_emitted_source"] == "upstream_prepared_emission"
+    assert observed["response_type_required"] == "dialogue_response"
+    assert observed["response_type_repair_used"] is True
+    assert observed["response_type_repair_kind"] == "dialogue_minimal_repair"
+    assert observed["fallback_temporal_frame"] == "present"
+    assert observed["upstream_prepared_emission_used"] is True
+    assert observed["upstream_prepared_emission_valid"] is True
+
+
+def test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields():
+    observed = project_synthetic_turn(
+        scenario_id="ak5_sanitizer_backed_projection",
+        gm_text="For a breath, the scene stays still.",
+        resolution={"kind": "observe"},
+        payload={
+            **minimal_gm_output_payload(
+                fem_meta=fem_payload(final_emitted_source="generated_candidate"),
+                metadata={
+                    "sanitizer_trace": {
+                        "sanitizer_lineage_mode": "strip_only",
+                        "sanitizer_empty_fallback_used": True,
+                        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+                        "sanitizer_empty_fallback_owner": "output_sanitizer",
+                        "sanitizer_lineage_changed_count": 2,
+                        "sanitizer_lineage_dropped_count": 1,
+                    }
+                },
+            ),
+            "sanitizer_debug": [
+                {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Planner scaffold."},
+                {"event": "strip_only_dropped_non_diegetic", "sentence": "Validator scaffold."},
+            ],
+        },
+    )
+
+    assert observed["sanitizer_empty_fallback_used"] is True
+    assert observed["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
+    assert observed["sanitizer_empty_fallback_owner"] == "output_sanitizer"
+    assert observed["sanitizer_lineage_mode"] == "strip_only"
+    assert observed["sanitizer_lineage_changed_count"] == 2
+    assert observed["sanitizer_lineage_dropped_count"] == 1
+
+
+def test_ak5_complex_projection_contracts_remain_locked():
+    """Dual fallback-family, dotted trace lookup, and semantic drift bucket stay explicit."""
+    fem = {
+        "fallback_family_used": "scene_opening",
+        "realization_fallback_family": "upstream_prepared_emission",
+    }
+    assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
+
+    observed = project_synthetic_turn(
+        scenario_id="ak5_complex_projection",
+        gm_text="planner scaffold leaked into final text",
+        payload={
+            **minimal_gm_output_payload(fem_meta=fem_payload(**fem)),
+            "debug_traces": [
+                {
+                    "canonical_entry": {
+                        "target_actor_id": "runner",
+                        "target_source": "social",
+                        "reason": "direct",
+                    },
+                    "turn_trace": {
+                        "social_contract_trace": {"route_selected": "dialogue"},
+                    },
+                }
+            ],
+        },
+    )
+
+    assert observed["fallback_family"] == "scene_opening"
+    assert lookup_observation_path(observed, "trace.canonical_entry.target_actor_id") == "runner"
+    assert lookup_observation_path(observed, "trace.canonical_entry.target_source") == "social"
+    assert lookup_observation_path(observed, "trace.canonical_entry.reason") == "direct"
+    assert lookup_observation_path(observed, "trace.social_contract_trace.route_selected") == "dialogue"
+    assert observed["scaffold_leakage"] is True
+    assert protected_observation_drift_bucket("scaffold_leakage") == "semantic_drift"
+    assert protected_observation_drift_bucket("fallback_family") == "structural_drift"
 
 
 def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():

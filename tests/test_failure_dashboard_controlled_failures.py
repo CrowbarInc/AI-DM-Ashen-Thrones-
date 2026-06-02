@@ -2,15 +2,22 @@ from __future__ import annotations
 
 import pytest
 
+from tests.failure_classification_contract import CLASSIFIER_EVIDENCE_FIELDS
 from tests.helpers.failure_classification_sync import (
+    _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS,
     assert_contract_classifier_alignment,
     classification_contract_summary,
+    dashboard_evidence_manifest_misalignments,
     known_failure_categories,
     known_owner_buckets,
 )
 from tests.helpers.failure_dashboard_report import (
+    FAILURE_DASHBOARD_EVIDENCE_LABELS,
+    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
     KNOWN_FAILURE_CATEGORIES,
     REPLAY_PROTECTED_FIELD_PATHS,
+    _evidence_cell,
     build_failure_dashboard_rows,
     failure_dashboard_requested,
     record_failure_dashboard_rows,
@@ -48,6 +55,90 @@ def test_dashboard_report_module_exports_projection_and_taxonomy_surfaces():
     assert REPLAY_PROTECTED_FIELD_PATHS == protected_field_paths()
     assert KNOWN_FAILURE_CATEGORIES == known_failure_categories()
     assert_contract_classifier_alignment()
+
+
+def test_dashboard_evidence_row_keys_are_classifier_contract_backed():
+    assert set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) <= CLASSIFIER_EVIDENCE_FIELDS
+    assert dashboard_evidence_manifest_misalignments() == []
+
+
+def test_dashboard_evidence_manifest_labels_are_locked():
+    assert FAILURE_DASHBOARD_EVIDENCE_LABELS == _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS
+    assert tuple(label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST) == _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS
+
+
+_CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
+    "wrong_speaker": "none",
+    "forced_fallback_source": "sublayer=terminal_fallback; mutation=terminal_fallback",
+    "opening_fallback_owner_bucket": (
+        "sublayer=opening_fallback; repair=opening_deterministic_fallback; "
+        "opening_authorship=upstream_prepared_opening_fallback; opening_owner=upstream-prepared; "
+        "mutation=opening_fallback"
+    ),
+    "opening_fallback_authorship_source": (
+        "sublayer=opening_fallback; opening_authorship=compatibility_local_opening_deterministic; "
+        "opening_owner=unknown-ambiguous; mutation=opening_fallback"
+    ),
+    "opening_fallback_basis": "sublayer=opening_fallback; opening_owner=unknown-ambiguous; mutation=opening_fallback",
+    "opening_fallback_projection_missing": "opening_owner=unknown-ambiguous; missing=projection_missing_raw_present",
+    "sealed_fallback_owner_bucket": "sublayer=terminal_fallback; sealed_owner=sealed-gate; mutation=terminal_fallback",
+    "visibility_fallback_owner_bucket": (
+        "sublayer=terminal_fallback; visibility_owner=sealed-gate; visibility_replaced=True; "
+        "visibility_pool=global_scene_narrative; visibility_kind=narrative_safe_fallback; mutation=terminal_fallback"
+    ),
+    "sanitizer_leakage": (
+        "sublayer=sanitizer; mutation=sanitizer; sanitizer_mode=strip_only; sanitizer_events=1; "
+        "sanitizer_changed=0; sanitizer_lineage_mode=strip_only; sanitizer_lineage_changed=1; "
+        "sanitizer_lineage_dropped=1; sanitizer_lineage_empty=False; sanitizer_lineage_legacy=False"
+    ),
+    "sanitizer_empty_fallback": (
+        "sublayer=sanitizer; lineage=pre_gate_sanitizer>sanitizer_empty_fallback>finalize_packaging; "
+        "mutation=sanitizer; sanitizer_mode=strip_only; sanitizer_empty=True; "
+        "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text; "
+        "sanitizer_empty_owner=output_sanitizer; sanitizer_lineage_mode=strip_only; sanitizer_lineage_changed=1; "
+        "sanitizer_lineage_dropped=1; sanitizer_lineage_empty=True; sanitizer_lineage_legacy=False"
+    ),
+    "strict_social_sanitizer_fallback": (
+        "sublayer=strict_social_replacement; mutation=strict_social_replacement; strict_social_fallback=True; "
+        "strict_social_selection_owner=output_sanitizer; strict_social_prose_owner=strict_social_emission; "
+        "strict_social_source=social_fallback_line_for_sanitizer.empty_output"
+    ),
+    "legacy_sanitizer_rewrite_diagnostic": (
+        "sublayer=sanitizer; mutation=sanitizer; sanitizer_lineage_mode=legacy_sentence_rewrite; "
+        "sanitizer_lineage_changed=1; sanitizer_lineage_dropped=0; sanitizer_lineage_empty=False; "
+        "sanitizer_lineage_legacy=legacy_diagnostic"
+    ),
+    "response_type_repair_unexpected": (
+        "prepared_emission=used valid=True source=prepared_action_fallback_text; sublayer=upstream_prepared_emission; "
+        "repair=action_outcome_upstream_prepared_repair; lineage=response_type_repair>prepared_emission_selection>finalize_packaging; "
+        "mutation=upstream_prepared_emission"
+    ),
+    "prepared_emission_rejected": (
+        "prepared_emission=rejected reason=missing_answer_specificity; sublayer=upstream_prepared_emission; "
+        "repair=answer_upstream_prepared_repair; mutation=upstream_prepared_emission"
+    ),
+    "missing_route_metadata_raw_absent": "missing=runtime_missing_raw_absent",
+    "missing_route_metadata_raw_present": "missing=projection_missing_raw_present",
+    "semantic_mutation": "none",
+    "post_gate_unknown_mutation": "sublayer=emission.post_gate_mutation_unknown; mutation=emission.post_gate_mutation_unknown",
+    "post_gate_route_illegal_strip_reduced": (
+        "sublayer=final_emission.finalize_route_illegal_strip; lineage=finalize_route_illegal_strip>finalize_packaging; "
+        "mutation=final_emission.finalize_route_illegal_strip"
+    ),
+    "post_gate_sanitizer_empty_reduced": (
+        "sublayer=sanitizer.empty_fallback; lineage=pre_gate_sanitizer>sanitizer_empty_fallback>finalize_packaging; "
+        "mutation=sanitizer.empty_fallback"
+    ),
+    "post_gate_response_type_reduced": (
+        "sublayer=response_type; lineage=response_type_repair>finalize_packaging; mutation=response_type"
+    ),
+}
+
+
+@pytest.mark.parametrize("case_id", tuple(_CONTROLLED_PROBE_EVIDENCE_CELLS))
+def test_controlled_probe_evidence_cells_unchanged(case_id: str):
+    rows_by_id = {row["scenario_id"]: row for row in classified_rows()}
+    assert _evidence_cell(rows_by_id[case_id]) == _CONTROLLED_PROBE_EVIDENCE_CELLS[case_id]
 
 
 def test_controlled_failure_probe_categories_use_sync_taxonomy():
