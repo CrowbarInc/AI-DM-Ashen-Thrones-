@@ -51,7 +51,7 @@ pre-gate scaffold/serialization firewall; final emission is not a planner or sem
 from __future__ import annotations
 
 import re
-from typing import Any, Callable, Dict, List, Mapping, MutableMapping, NamedTuple, Optional, Sequence
+from typing import Any, Callable, Dict, List, Literal, Mapping, MutableMapping, NamedTuple, Optional, Sequence
 
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 from game.interaction_context import inspect as inspect_interaction_context
@@ -8210,23 +8210,64 @@ def _merge_opening_upstream_prepare_attach_observability_into_response_type_debu
 # interaction_continuity validation attach → finalize.
 
 
-def apply_final_emission_gate(
+class _GateExecutionContext(NamedTuple):
+    """Gate entry/preflight state produced before strict-social or generic orchestration branches."""
+
+    out: Dict[str, Any]
+    pre_gate_text: str
+    tag_list: List[str]
+    eff_resolution: Dict[str, Any] | None
+    sid: str
+    strict_social_turn: bool
+    strict_social_suppressed_non_social_turn: bool
+    strict_social_suppression_reason: str | None
+    original_coercion_reason: str
+    coercion_reason: str
+    inspected: Dict[str, Any]
+    active_interlocutor: str
+    npc_id_for_meta: str
+    res_kind: str
+    social_ic: str
+    reasons: List[str]
+    scene_emit_integrity_bundle: Dict[str, Any] | None
+    normalization_ran: bool
+    text: str
+    response_type_debug: Dict[str, Any]
+    ac_layer_meta: Dict[str, Any]
+    rd_layer_meta: Dict[str, Any]
+    srs_layer_meta: Dict[str, Any]
+    nat_layer_meta: Dict[str, Any]
+    fb_layer_meta: Dict[str, Any]
+    na_layer_meta: Dict[str, Any]
+    te_layer_meta: Dict[str, Any]
+    ar_layer_meta: Dict[str, Any]
+    cs_layer_meta: Dict[str, Any]
+    purity_layer_meta: Dict[str, Any]
+    asp_layer_meta: Dict[str, Any]
+    ssa_layer_meta: Dict[str, Any]
+    ffnc_layer_meta: Dict[str, Any]
+    dialogue_plan_trace: Dict[str, Any]
+    nmo_fem_trace_override: Dict[str, Any] | None
+    dialogue_plan_blocked: bool
+    accepted_scene_opening_text: str | None
+    strict_social_active: bool
+    coercion_used: bool
+    retry_output: bool
+
+
+def _initialize_gate_execution_context(
     gm_output: Dict[str, Any],
     *,
     resolution: Dict[str, Any] | None,
     session: Dict[str, Any] | None,
     scene_id: str,
-    scene: Dict[str, Any] | None = None,
-    world: Dict[str, Any] | None = None,
-) -> Dict[str, Any]:
-    """Hard legal-state gate for the final emitted text.
+    world: Dict[str, Any] | None,
+) -> _GateExecutionContext:
+    """Setup-only preflight for :func:`apply_final_emission_gate` (Cycle AN1).
 
-    Orchestrates in-module policy layers with :mod:`game.final_emission_validators`,
-    :mod:`game.final_emission_repairs`, and sanitizer/strict-social integration; see module
-    docstring for ownership boundaries.
+    Preserves exact call ordering and in-place ``out`` mutations from the former inline block.
+    Does not perform accept/replace routing or terminal enforcement.
     """
-    if not isinstance(gm_output, dict):
-        return gm_output
     out = dict(gm_output)
     out = materialize_response_policy_bundle(out, session if isinstance(session, dict) else None)
     out["_gate_turn_packet_cache"] = get_turn_packet(
@@ -8365,6 +8406,875 @@ def apply_final_emission_gate(
         isinstance(t, str) and ("question_retry_fallback" in t or "social_exchange_retry_fallback" in t)
         for t in tag_list
     )
+
+    return _GateExecutionContext(
+        out=out,
+        pre_gate_text=pre_gate_text,
+        tag_list=tag_list,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        sid=sid,
+        strict_social_turn=strict_social_turn,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        strict_social_suppression_reason=strict_social_suppression_reason,
+        original_coercion_reason=original_coercion_reason,
+        coercion_reason=coercion_reason,
+        inspected=inspected,
+        active_interlocutor=active_interlocutor,
+        npc_id_for_meta=npc_id_for_meta,
+        res_kind=res_kind,
+        social_ic=social_ic,
+        reasons=reasons,
+        scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+        normalization_ran=normalization_ran,
+        text=text,
+        response_type_debug=response_type_debug,
+        ac_layer_meta=ac_layer_meta,
+        rd_layer_meta=rd_layer_meta,
+        srs_layer_meta=srs_layer_meta,
+        nat_layer_meta=nat_layer_meta,
+        fb_layer_meta=fb_layer_meta,
+        na_layer_meta=na_layer_meta,
+        te_layer_meta=te_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
+        ssa_layer_meta=ssa_layer_meta,
+        ffnc_layer_meta=ffnc_layer_meta,
+        dialogue_plan_trace=dialogue_plan_trace,
+        nmo_fem_trace_override=nmo_fem_trace_override,
+        dialogue_plan_blocked=dialogue_plan_blocked,
+        accepted_scene_opening_text=accepted_scene_opening_text,
+        strict_social_active=strict_social_active,
+        coercion_used=coercion_used,
+        retry_output=retry_output,
+    )
+
+
+def _merge_gate_layer_metas_into_fem(
+    fem: Dict[str, Any],
+    *,
+    response_type_debug: Dict[str, Any],
+    ac_layer_meta: Dict[str, Any],
+    aep_layer_meta: Dict[str, Any],
+    rd_layer_meta: Dict[str, Any],
+    srs_layer_meta: Dict[str, Any],
+    nat_layer_meta: Dict[str, Any],
+    na_layer_meta: Dict[str, Any],
+    te_layer_meta: Dict[str, Any],
+    ar_layer_meta: Dict[str, Any],
+    cs_layer_meta: Dict[str, Any],
+    purity_layer_meta: Dict[str, Any],
+    asp_layer_meta: Dict[str, Any],
+    ssa_layer_meta: Dict[str, Any],
+    fb_layer_meta: Dict[str, Any],
+    ffnc_layer_meta: Dict[str, Any],
+    include_fast_fallback_neutral_composition: bool = True,
+) -> None:
+    """Merge gate layer debug into ``fem`` in the fixed post-AEP-second-pass order (Cycle AN2)."""
+    _merge_response_type_meta(fem, response_type_debug)
+    _merge_answer_completeness_meta(fem, ac_layer_meta)
+    _merge_answer_exposition_plan_meta(fem, aep_layer_meta)
+    _merge_response_delta_meta(fem, rd_layer_meta)
+    _merge_social_response_structure_meta(fem, srs_layer_meta)
+    merge_narrative_authenticity_into_final_emission_meta(fem, nat_layer_meta)
+    _merge_narrative_authority_meta(fem, na_layer_meta)
+    _merge_tone_escalation_meta(fem, te_layer_meta)
+    _merge_anti_railroading_meta(fem, ar_layer_meta)
+    _merge_context_separation_meta(fem, cs_layer_meta)
+    _merge_player_facing_narration_purity_meta(fem, purity_layer_meta)
+    _merge_answer_shape_primacy_meta(fem, asp_layer_meta)
+    _merge_scene_state_anchor_meta(fem, ssa_layer_meta)
+    _merge_fallback_behavior_meta(fem, fb_layer_meta)
+    if include_fast_fallback_neutral_composition:
+        _merge_fast_fallback_neutral_composition_meta(fem, ffnc_layer_meta)
+
+
+def _build_gate_accept_fem_base(
+    *,
+    eff_resolution: Dict[str, Any] | None,
+    strict_social_active: bool,
+    coercion_used: bool,
+    active_interlocutor: str,
+    npc_id_for_meta: str,
+    normalization_ran: bool,
+    final_emitted_source: str,
+    post_gate_mutation_detected: bool,
+    gate_out_text: str,
+    coercion_reason: str,
+    strict_social_suppressed_non_social_turn: bool,
+    strict_social_suppression_reason: str | None,
+    deterministic_social_fallback_attempted: bool,
+    deterministic_social_fallback_passed: bool,
+    dialogue_plan_trace: Dict[str, Any] | None = None,
+    strict_social_accept_details: Mapping[str, Any] | None = None,
+    speaker_contract_enforcement_reason: Any = None,
+) -> Dict[str, Any]:
+    """Base FEM payload for accept_candidate paths (Cycle AN3)."""
+    fem: Dict[str, Any] = {
+        "final_route": "accept_candidate",
+        "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
+        "strict_social_active": strict_social_active,
+        "coercion_used": coercion_used,
+        "active_interlocutor_id": active_interlocutor or None,
+        "npc_id": npc_id_for_meta or None,
+        "normalization_ran": normalization_ran,
+        "candidate_validation_passed": True,
+    }
+    fem.update(dict(dialogue_plan_trace or {}))
+    fem["deterministic_social_fallback_attempted"] = deterministic_social_fallback_attempted
+    fem["deterministic_social_fallback_passed"] = deterministic_social_fallback_passed
+    fem["final_emitted_source"] = final_emitted_source
+    fem["post_gate_mutation_detected"] = post_gate_mutation_detected
+    fem["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    fem["coercion_reason"] = coercion_reason
+    if strict_social_accept_details is not None:
+        fem["candidate_quality_degraded"] = bool(strict_social_accept_details.get("candidate_quality_degraded"))
+        fem["resolved_answer_preferred"] = bool(strict_social_accept_details.get("resolved_answer_preferred"))
+        fem["resolved_answer_source"] = strict_social_accept_details.get("resolved_answer_source")
+        fem["resolved_answer_preference_reason"] = strict_social_accept_details.get(
+            "resolved_answer_preference_reason"
+        )
+    fem["strict_social_suppressed_non_social_turn"] = strict_social_suppressed_non_social_turn
+    fem["strict_social_suppression_reason"] = strict_social_suppression_reason
+    if strict_social_accept_details is not None:
+        fem["social_emission_integrity_replaced"] = bool(
+            strict_social_accept_details.get("social_emission_integrity_replaced")
+        )
+        fem["social_emission_integrity_reasons"] = strict_social_accept_details.get("social_emission_integrity_reasons")
+        fem["social_emission_integrity_fallback_kind"] = strict_social_accept_details.get(
+            "social_emission_integrity_fallback_kind"
+        )
+        fem["speaker_contract_enforcement_reason"] = speaker_contract_enforcement_reason
+    return fem
+
+
+def _build_gate_replace_fem_base(
+    *,
+    eff_resolution: Dict[str, Any] | None,
+    strict_social_active: bool,
+    coercion_used: bool,
+    active_interlocutor: str,
+    npc_id_for_meta: str,
+    normalization_ran: bool,
+    final_emitted_source: str,
+    post_gate_mutation_detected: bool,
+    gate_out_text: str,
+    coercion_reason: str,
+    strict_social_suppressed_non_social_turn: bool,
+    strict_social_suppression_reason: str | None,
+    deterministic_social_fallback_attempted: bool,
+    deterministic_social_fallback_passed: bool,
+    dialogue_plan_trace: Dict[str, Any] | None = None,
+    strict_social_replace: bool = False,
+    details: Mapping[str, Any] | None = None,
+    rejection_reasons: Sequence[Any] | None = None,
+    speaker_contract_enforcement_reason: Any = None,
+    rejection_reasons_sample: Sequence[Any] | None = None,
+    fallback_family_used: Any = None,
+    fallback_temporal_frame: Any = None,
+    anti_reset_intro_suppressed: bool = False,
+) -> Dict[str, Any]:
+    """Base FEM payload for replaced paths before path-specific projection/stamps (Cycle AN3)."""
+    fem: Dict[str, Any] = {
+        "final_route": "replaced",
+        "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
+        "strict_social_active": strict_social_active,
+        "coercion_used": coercion_used,
+        "active_interlocutor_id": active_interlocutor or None,
+        "npc_id": npc_id_for_meta or None,
+        "normalization_ran": normalization_ran,
+        "candidate_validation_passed": False,
+    }
+    fem.update(dict(dialogue_plan_trace or {}))
+    fem["deterministic_social_fallback_attempted"] = deterministic_social_fallback_attempted
+    fem["deterministic_social_fallback_passed"] = deterministic_social_fallback_passed
+    fem["final_emitted_source"] = final_emitted_source
+    if strict_social_replace:
+        details_map = details if isinstance(details, Mapping) else {}
+        fem["realization_fallback_family"] = project_strict_social_replace_realization_family(
+            details_map.get("realization_fallback_family")
+            if isinstance(details_map.get("realization_fallback_family"), str)
+            else None
+        )
+    fem["post_gate_mutation_detected"] = post_gate_mutation_detected
+    fem["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    fem["coercion_reason"] = coercion_reason
+    if strict_social_replace:
+        details_map = details if isinstance(details, Mapping) else {}
+        fem["rejection_reasons_sample"] = [
+            str(r) for r in (rejection_reasons or [])[:8] if isinstance(r, str)
+        ]
+        fem["candidate_quality_degraded"] = bool(details_map.get("candidate_quality_degraded"))
+        fem["resolved_answer_preferred"] = bool(details_map.get("resolved_answer_preferred"))
+        fem["resolved_answer_source"] = details_map.get("resolved_answer_source")
+        fem["resolved_answer_preference_reason"] = details_map.get("resolved_answer_preference_reason")
+        fem["strict_social_suppressed_non_social_turn"] = strict_social_suppressed_non_social_turn
+        fem["strict_social_suppression_reason"] = strict_social_suppression_reason
+        fem["speaker_contract_enforcement_reason"] = speaker_contract_enforcement_reason
+    else:
+        fem["fallback_family_used"] = fallback_family_used
+        fem["fallback_temporal_frame"] = fallback_temporal_frame
+        fem["rejection_reasons_sample"] = list(rejection_reasons_sample or [])
+        fem["strict_social_suppressed_non_social_turn"] = strict_social_suppressed_non_social_turn
+        fem["strict_social_suppression_reason"] = strict_social_suppression_reason
+        fem["anti_reset_intro_suppressed"] = bool(anti_reset_intro_suppressed)
+    return fem
+
+
+_GateTerminalEnforcementProfile = Literal[
+    "strict_accept",
+    "strict_replace",
+    "generic_accept",
+    "generic_replace",
+]
+
+
+def _run_gate_terminal_enforcement_pipeline(
+    out: Dict[str, Any],
+    *,
+    profile: _GateTerminalEnforcementProfile,
+    pre_gate_text: str,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    res_kind: str,
+    response_type_debug: Dict[str, Any],
+    speaker_contract_enforcement: Mapping[str, Any] | None = None,
+    nmo_fem_trace_override: Dict[str, Any] | None = None,
+    accepted_scene_opening_text: str | None = None,
+) -> Dict[str, Any]:
+    """Late gate enforcement tail shared by accept/replace exit paths (Cycle AN6)."""
+    sid = str(scene_id or "").strip()
+    eff_res = eff_resolution if isinstance(eff_resolution, dict) else None
+    auth_res = resolution if isinstance(resolution, dict) else None
+    sess = session if isinstance(session, dict) else None
+
+    grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        eff_resolution=eff_res,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+    )
+    out = _apply_visibility_enforcement(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        eff_resolution=eff_res,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
+        emit_integrity_authoritative_resolution=auth_res,
+        emit_integrity_res_kind=res_kind,
+        emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
+    )
+
+    strict_social_path = profile in ("strict_accept", "strict_replace")
+    nmo_strict_flag = True if strict_social_path else None
+    resolution_for_nmo = eff_res if strict_social_path else auth_res
+    resolution_for_ic_contracts = eff_res if strict_social_path else auth_res
+
+    if profile == "strict_accept":
+        ic_strict_text, _, ic_strict_fb = _apply_interaction_continuity_emission_step(
+            out,
+            text=_normalize_text(out.get("player_facing_text")),
+            resolution_for_contracts=eff_res,
+            eff_resolution=eff_res,
+            session=sess,
+            validate_only=True,
+            strict_social_path=True,
+            strict_fallback_resolution=eff_res,
+        )
+        assert_final_emission_mutation_allowed(
+            "interaction_continuity_validation_attach",
+            source="gate.apply_final_emission_gate.strict_social.ic_validate_only",
+        )
+        out["player_facing_text"] = ic_strict_text
+        if ic_strict_fb:
+            apply_strict_social_emergency_fallback_patch(
+                out,
+                fallback_text=ic_strict_text,
+                pre_gate_text=pre_gate_text,
+                gate_tag="interaction_continuity",
+            )
+
+    if strict_social_path:
+        fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
+            _normalize_text(out.get("player_facing_text")),
+            gm_output=out,
+            resolution=eff_res,
+            strict_social_path=True,
+            session=sess,
+            scene_id=sid,
+        )
+        fb_source = (
+            "gate.apply_final_emission_gate.strict_social.fallback_behavior_text"
+            if profile == "strict_accept"
+            else "gate.apply_final_emission_gate.strict_social_replace_path.fallback_behavior_text"
+        )
+        assert_final_emission_mutation_allowed(
+            "normalize_whitespace",
+            source=fb_source,
+        )
+        out["player_facing_text"] = fb_text
+        _merge_fallback_behavior_into_emission_debug(
+            out,
+            auth_res,
+            eff_res,
+            gate_meta=fb_layer_meta,
+        )
+        fem_patch = out.get("_final_emission_meta")
+        if isinstance(fem_patch, dict):
+            _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
+            gtxt = _normalize_text(fb_text)
+            fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
+            fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
+            if fb_layer_meta.get("fallback_behavior_repaired"):
+                fem_patch["final_emitted_source"] = str(
+                    fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
+                )
+
+    _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
+
+    if profile == "generic_replace" and nmo_fem_trace_override is not None:
+        _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_fem_trace_override)
+    else:
+        nmo_result = _narrative_mode_output_legality_assessment(
+            str(out.get("player_facing_text") or ""),
+            out,
+            resolution_for_nmo=resolution_for_nmo,
+            strict_social_details_flag=nmo_strict_flag,
+        )
+        _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_result["trace"])
+        if profile == "strict_accept" and nmo_result["nmo_enforcement_fail"]:
+            em_fb = minimal_social_emergency_fallback_line(eff_res)
+            assert_final_emission_mutation_allowed(
+                "hard_replace_illegal_output_with_sealed_fallback",
+                source="gate.apply_final_emission_gate.strict_social.nmo_emergency",
+            )
+            apply_strict_social_emergency_fallback_patch(
+                out,
+                fallback_text=em_fb,
+                pre_gate_text=pre_gate_text,
+                gate_tag="narrative_mode_output",
+                final_route="replaced",
+                candidate_validation_passed=False,
+            )
+            nmo_post_fb = _narrative_mode_output_legality_assessment(
+                str(out.get("player_facing_text") or ""),
+                out,
+                resolution_for_nmo=eff_res,
+                strict_social_details_flag=True,
+            )
+            _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_post_fb["trace"])
+
+    _apply_acceptance_quality_n4_floor_seam(
+        out,
+        gm_output_for_contract=out,
+        candidate_text=str(out.get("player_facing_text") or ""),
+        strict_social_path=strict_social_path,
+        eff_resolution=eff_res,
+        resolution=auth_res,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        res_kind=res_kind,
+        response_type_required=str(response_type_debug.get("response_type_required") or ""),
+        pre_gate_text=pre_gate_text,
+    )
+
+    if profile == "strict_accept":
+        _attach_interaction_continuity_validation(
+            out,
+            resolution_for_contracts=eff_res,
+            eff_resolution=eff_res,
+            session=sess,
+            preserve_existing_validation=True,
+        )
+    else:
+        _attach_interaction_continuity_validation(
+            out,
+            resolution_for_contracts=resolution_for_ic_contracts,
+            eff_resolution=eff_res,
+            session=sess,
+        )
+
+    _merge_narration_constraint_debug_into_outputs(
+        out,
+        auth_res,
+        eff_res,
+        session=session,
+        scene=scene,
+        world=world,
+        response_type_debug=response_type_debug,
+        speaker_contract_enforcement=speaker_contract_enforcement
+        if profile in ("strict_accept", "strict_replace")
+        else None,
+    )
+
+    if profile == "generic_accept":
+        _reassert_scene_opening_accepted_candidate(
+            out,
+            accepted_scene_opening_text=accepted_scene_opening_text,
+            source="gate.apply_final_emission_gate.scene_opening_accept_return",
+        )
+
+    return out
+
+
+class _NonStrictLayerStackResult(NamedTuple):
+    """Outputs from the generic (non–strict-social) pre-fork layer stack (Cycle AN4)."""
+
+    out: Dict[str, Any]
+    text: str
+    reasons: List[str]
+    response_type_debug: Dict[str, Any]
+    accepted_scene_opening_text: str | None
+    scene_emit_integrity_bundle: Dict[str, Any] | None
+    nmo_fem_trace_override: Dict[str, Any] | None
+    ac_layer_meta: Dict[str, Any]
+    aep_layer_meta: Dict[str, Any]
+    rd_layer_meta: Dict[str, Any]
+    srs_layer_meta: Dict[str, Any]
+    nat_layer_meta: Dict[str, Any]
+    fb_layer_meta: Dict[str, Any]
+    na_layer_meta: Dict[str, Any]
+    te_layer_meta: Dict[str, Any]
+    ar_layer_meta: Dict[str, Any]
+    cs_layer_meta: Dict[str, Any]
+    purity_layer_meta: Dict[str, Any]
+    asp_layer_meta: Dict[str, Any]
+    ssa_layer_meta: Dict[str, Any]
+    ffnc_layer_meta: Dict[str, Any]
+
+
+def _run_non_strict_layer_stack(
+    out: Dict[str, Any],
+    *,
+    text: str,
+    reasons: List[str],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    res_kind: str,
+    strict_social_suppressed_non_social_turn: bool,
+    strict_social_active: bool,
+    active_interlocutor: str,
+    response_type_debug: Dict[str, Any],
+    accepted_scene_opening_text: str | None,
+    scene_emit_integrity_bundle: Dict[str, Any] | None,
+    nmo_fem_trace_override: Dict[str, Any] | None,
+    ac_layer_meta: Dict[str, Any],
+    rd_layer_meta: Dict[str, Any],
+    srs_layer_meta: Dict[str, Any],
+    nat_layer_meta: Dict[str, Any],
+    fb_layer_meta: Dict[str, Any],
+    na_layer_meta: Dict[str, Any],
+    te_layer_meta: Dict[str, Any],
+    ar_layer_meta: Dict[str, Any],
+    cs_layer_meta: Dict[str, Any],
+    purity_layer_meta: Dict[str, Any],
+    asp_layer_meta: Dict[str, Any],
+    ssa_layer_meta: Dict[str, Any],
+    ffnc_layer_meta: Dict[str, Any],
+) -> _NonStrictLayerStackResult:
+    """Generic trunk layer ordering before accept/replace fork; mutates ``out`` and ``reasons`` in place."""
+    sid = str(scene_id or "").strip()
+    auth_res = resolution if isinstance(resolution, dict) else None
+    eff_res = eff_resolution if isinstance(eff_resolution, dict) else None
+    sess = session if isinstance(session, dict) else None
+
+    low = text.lower()
+    banned_any_route = (
+        "from here, no certain answer presents itself",
+        "the truth is still buried beneath rumor and rain",
+    )
+    if any(phrase in low for phrase in banned_any_route):
+        reasons.append("banned_stock_phrase")
+    if _passive_scene_pressure_due_for_fallback(
+        session=sess,
+        scene=scene,
+        scene_id=sid,
+    ) and not _reply_already_has_concrete_interaction(text):
+        reasons.append("passive_scene_pressure_missing_concrete_beat")
+
+    text, response_type_debug = _enforce_response_type_contract(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        session=sess,
+        scene_id=sid,
+        world=world if isinstance(world, dict) else None,
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        active_interlocutor=active_interlocutor,
+    )
+    _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
+    if _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug):
+        accepted_scene_opening_text = _normalize_text(text)
+        out["player_facing_text"] = accepted_scene_opening_text
+        response_type_debug["scene_opening_accepted_candidate_promoted"] = True
+        _patch_scene_opening_candidate_emission_debug(
+            out,
+            accepted_scene_opening_text=accepted_scene_opening_text,
+        )
+    scene_emit_integrity_bundle = _compute_scene_emit_integrity_assessment(
+        authoritative_resolution=auth_res,
+        session=sess,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+        res_kind=res_kind,
+        response_type_required=str(response_type_debug.get("response_type_required") or ""),
+    )
+    if response_type_debug.get("response_type_candidate_ok") is False:
+        reasons.extend(
+            [str(r) for r in (response_type_debug.get("response_type_rejection_reasons") or []) if isinstance(r, str)]
+        )
+
+    text, ac_layer_meta, ac_reasons = _apply_answer_completeness_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        strict_social_path=False,
+    )
+    reasons.extend(ac_reasons)
+
+    text, aep_layer_meta, aep_reasons = _apply_answer_exposition_plan_layer(
+        text,
+        gm_output=out,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+    )
+    reasons.extend(aep_reasons)
+
+    text, rd_layer_meta, rd_reasons = _apply_response_delta_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+        strict_social_path=False,
+    )
+    reasons.extend(rd_reasons)
+
+    text, srs_layer_meta, srs_reasons = _apply_social_response_structure_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+        strict_social_path=False,
+    )
+    reasons.extend(srs_reasons)
+
+    text, nat_layer_meta, nat_reasons = _apply_narrative_authenticity_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        strict_social_path=False,
+    )
+    reasons.extend(nat_reasons)
+
+    text, te_layer_meta, te_reasons = _apply_tone_escalation_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        session=sess,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+    )
+    if te_layer_meta.get("tone_escalation_violation_before_repair"):
+        response_type_debug["non_hostile_escalation_blocked"] = True
+    if (
+        response_type_debug.get("response_type_required") == "scene_opening"
+        and response_type_debug.get("opening_fallback_skipped") is True
+        and response_type_debug.get("response_type_repair_used") is False
+    ):
+        te_reasons = [
+            str(r)
+            for r in te_reasons
+            if str(r) != "tone_escalation_unsatisfied_at_boundary_no_rewrite"
+        ]
+    reasons.extend(te_reasons)
+
+    text, na_layer_meta, na_reasons = _apply_narrative_authority_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+        answer_completeness_meta=ac_layer_meta,
+        session=sess,
+        scene_id=sid,
+    )
+    reasons.extend(na_reasons)
+
+    text, ar_layer_meta, ar_reasons = _apply_anti_railroading_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        session=sess,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+        strict_social_details=None,
+    )
+    reasons.extend(ar_reasons)
+
+    text, cs_layer_meta, cs_reasons = _apply_context_separation_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        session=sess,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+        strict_social_details=None,
+    )
+    reasons.extend(cs_reasons)
+
+    text, purity_layer_meta, purity_extra = _apply_player_facing_narration_purity_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        response_type_debug=response_type_debug,
+    )
+    reasons.extend(purity_extra)
+
+    text, asp_layer_meta, asp_extra = _apply_answer_shape_primacy_layer(
+        text,
+        gm_output=out,
+        resolution=auth_res,
+        session=sess,
+        scene_id=sid,
+        response_type_debug=response_type_debug,
+        strict_social_details=None,
+    )
+    reasons.extend(asp_extra)
+
+    text, ssa_layer_meta = _apply_scene_state_anchor_layer(
+        text,
+        gm_output=out,
+        strict_social_details=None,
+        response_type_debug=response_type_debug,
+    )
+    out["player_facing_text"] = _normalize_text(text)
+    text, ffnc_layer_meta = _apply_fast_fallback_neutral_composition_layer(
+        _normalize_text(text),
+        gm_output=out,
+        session=sess,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+        strict_social_active=strict_social_active,
+    )
+    out["player_facing_text"] = _normalize_text(text)
+    if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
+        realign_fallback_provenance_selector_to_current_text(
+            out,
+            text=str(out.get("player_facing_text") or ""),
+            reason="fast_fallback_neutral_composition",
+        )
+    _merge_scene_state_anchor_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=ssa_layer_meta,
+    )
+    _merge_tone_escalation_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=te_layer_meta,
+        gm_output=out,
+    )
+    _merge_narrative_authority_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=na_layer_meta,
+        gm_output=out,
+    )
+    _merge_anti_railroading_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=ar_layer_meta,
+        gm_output=out,
+    )
+    _merge_context_separation_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=cs_layer_meta,
+    )
+    _merge_player_facing_narration_purity_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=purity_layer_meta,
+    )
+    _merge_answer_shape_primacy_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=asp_layer_meta,
+    )
+    _merge_conversational_memory_inspection_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+    )
+
+    ic_text, ic_extra_reasons, _ic_strict_fb = _apply_interaction_continuity_emission_step(
+        out,
+        text=_normalize_text(text),
+        resolution_for_contracts=auth_res,
+        eff_resolution=eff_res,
+        session=sess,
+        validate_only=True,
+        strict_social_path=False,
+    )
+    assert_final_emission_mutation_allowed(
+        "interaction_continuity_validation_attach",
+        source="gate.apply_final_emission_gate.pre_candidate.ic_validate_only",
+    )
+    reasons.extend(ic_extra_reasons)
+    text = ic_text
+    out["player_facing_text"] = _normalize_text(text)
+    text, fb_layer_meta, fb_extra = _apply_fallback_behavior_layer(
+        _normalize_text(text),
+        gm_output=out,
+        resolution=auth_res,
+        strict_social_path=False,
+        session=sess,
+        scene_id=sid,
+    )
+    reasons.extend(fb_extra)
+    out["player_facing_text"] = _normalize_text(text)
+    _merge_fallback_behavior_into_emission_debug(
+        out,
+        auth_res,
+        eff_res,
+        gate_meta=fb_layer_meta,
+    )
+
+    _nmo_pre = _narrative_mode_output_legality_assessment(
+        str(out.get("player_facing_text") or ""),
+        out,
+        resolution_for_nmo=auth_res,
+        strict_social_details_flag=None,
+    )
+    reasons.extend(_nmo_pre["non_strict_gate_reasons"])
+    if _nmo_pre["non_strict_gate_reasons"]:
+        nmo_fem_trace_override = dict(_nmo_pre["trace"])
+
+    return _NonStrictLayerStackResult(
+        out=out,
+        text=text,
+        reasons=reasons,
+        response_type_debug=response_type_debug,
+        accepted_scene_opening_text=accepted_scene_opening_text,
+        scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+        nmo_fem_trace_override=nmo_fem_trace_override,
+        ac_layer_meta=ac_layer_meta,
+        aep_layer_meta=aep_layer_meta,
+        rd_layer_meta=rd_layer_meta,
+        srs_layer_meta=srs_layer_meta,
+        nat_layer_meta=nat_layer_meta,
+        fb_layer_meta=fb_layer_meta,
+        na_layer_meta=na_layer_meta,
+        te_layer_meta=te_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
+        ssa_layer_meta=ssa_layer_meta,
+        ffnc_layer_meta=ffnc_layer_meta,
+    )
+
+
+def apply_final_emission_gate(
+    gm_output: Dict[str, Any],
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    scene: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
+    """Hard legal-state gate for the final emitted text.
+
+    Orchestrates in-module policy layers with :mod:`game.final_emission_validators`,
+    :mod:`game.final_emission_repairs`, and sanitizer/strict-social integration; see module
+    docstring for ownership boundaries.
+    """
+    if not isinstance(gm_output, dict):
+        return gm_output
+    _ctx = _initialize_gate_execution_context(
+        gm_output,
+        resolution=resolution,
+        session=session,
+        scene_id=scene_id,
+        world=world,
+    )
+    out = _ctx.out
+    pre_gate_text = _ctx.pre_gate_text
+    tag_list = _ctx.tag_list
+    eff_resolution = _ctx.eff_resolution
+    sid = _ctx.sid
+    strict_social_turn = _ctx.strict_social_turn
+    strict_social_suppressed_non_social_turn = _ctx.strict_social_suppressed_non_social_turn
+    strict_social_suppression_reason = _ctx.strict_social_suppression_reason
+    original_coercion_reason = _ctx.original_coercion_reason
+    coercion_reason = _ctx.coercion_reason
+    inspected = _ctx.inspected
+    active_interlocutor = _ctx.active_interlocutor
+    npc_id_for_meta = _ctx.npc_id_for_meta
+    res_kind = _ctx.res_kind
+    social_ic = _ctx.social_ic
+    reasons = _ctx.reasons
+    scene_emit_integrity_bundle = _ctx.scene_emit_integrity_bundle
+    normalization_ran = _ctx.normalization_ran
+    text = _ctx.text
+    response_type_debug = _ctx.response_type_debug
+    ac_layer_meta = _ctx.ac_layer_meta
+    rd_layer_meta = _ctx.rd_layer_meta
+    srs_layer_meta = _ctx.srs_layer_meta
+    nat_layer_meta = _ctx.nat_layer_meta
+    fb_layer_meta = _ctx.fb_layer_meta
+    na_layer_meta = _ctx.na_layer_meta
+    te_layer_meta = _ctx.te_layer_meta
+    ar_layer_meta = _ctx.ar_layer_meta
+    cs_layer_meta = _ctx.cs_layer_meta
+    purity_layer_meta = _ctx.purity_layer_meta
+    asp_layer_meta = _ctx.asp_layer_meta
+    ssa_layer_meta = _ctx.ssa_layer_meta
+    ffnc_layer_meta = _ctx.ffnc_layer_meta
+    dialogue_plan_trace = _ctx.dialogue_plan_trace
+    nmo_fem_trace_override = _ctx.nmo_fem_trace_override
+    dialogue_plan_blocked = _ctx.dialogue_plan_blocked
+    accepted_scene_opening_text = _ctx.accepted_scene_opening_text
+    strict_social_active = _ctx.strict_social_active
+    coercion_used = _ctx.coercion_used
+    retry_output = _ctx.retry_output
 
     if strict_social_turn:
         normalization_ran = True
@@ -8697,33 +9607,25 @@ def apply_final_emission_gate(
                     **_response_type_decision_payload(response_type_debug),
                 }
             )
-            out[FINAL_EMISSION_META_KEY] = {
-                "final_route": "accept_candidate",
-                "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
-                "strict_social_active": strict_social_active,
-                "coercion_used": coercion_used,
-                "active_interlocutor_id": active_interlocutor or None,
-                "npc_id": npc_id_for_meta or None,
-                "normalization_ran": normalization_ran,
-                "candidate_validation_passed": True,
-                **(dialogue_plan_trace or {}),
-                "deterministic_social_fallback_attempted": bool(details.get("deterministic_attempted")),
-                "deterministic_social_fallback_passed": bool(details.get("deterministic_passed")),
-                "final_emitted_source": final_emitted_source,
-                "post_gate_mutation_detected": post_gate_mutation_detected,
-                "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
-                "coercion_reason": coercion_reason,
-                "candidate_quality_degraded": bool(details.get("candidate_quality_degraded")),
-                "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
-                "resolved_answer_source": details.get("resolved_answer_source"),
-                "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
-                "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
-                "strict_social_suppression_reason": strict_social_suppression_reason,
-                "social_emission_integrity_replaced": bool(details.get("social_emission_integrity_replaced")),
-                "social_emission_integrity_reasons": details.get("social_emission_integrity_reasons"),
-                "social_emission_integrity_fallback_kind": details.get("social_emission_integrity_fallback_kind"),
-                "speaker_contract_enforcement_reason": _speaker_contract_payload.get("final_reason_code"),
-            }
+            out[FINAL_EMISSION_META_KEY] = _build_gate_accept_fem_base(
+                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+                strict_social_active=strict_social_active,
+                coercion_used=coercion_used,
+                active_interlocutor=active_interlocutor,
+                npc_id_for_meta=npc_id_for_meta,
+                normalization_ran=normalization_ran,
+                final_emitted_source=final_emitted_source,
+                post_gate_mutation_detected=post_gate_mutation_detected,
+                gate_out_text=gate_out_text,
+                coercion_reason=coercion_reason,
+                strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+                strict_social_suppression_reason=strict_social_suppression_reason,
+                deterministic_social_fallback_attempted=bool(details.get("deterministic_attempted")),
+                deterministic_social_fallback_passed=bool(details.get("deterministic_passed")),
+                dialogue_plan_trace=dialogue_plan_trace,
+                strict_social_accept_details=details,
+                speaker_contract_enforcement_reason=_speaker_contract_payload.get("final_reason_code"),
+            )
             _flag_non_hostile_escalation_from_writer_pregate(
                 pre_gate_text,
                 gm_output=out,
@@ -8740,157 +9642,41 @@ def apply_final_emission_gate(
                 answer_completeness_meta=ac_layer_meta,
             )
             out["player_facing_text"] = _final_text
-            _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
-            _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
-            _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
-            _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
-            _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
-            merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
-            _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
-            _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
-            _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
-            _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
-            _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
-            _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
-            _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
-            _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
-            _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
-            grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
-                out,
-                session=session,
-                scene=scene,
-                world=world,
-                scene_id=sid,
-                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                active_interlocutor=active_interlocutor,
-                strict_social_active=strict_social_active,
+            _merge_gate_layer_metas_into_fem(
+                out[FINAL_EMISSION_META_KEY],
+                response_type_debug=response_type_debug,
+                ac_layer_meta=ac_layer_meta,
+                aep_layer_meta=aep_layer_meta,
+                rd_layer_meta=rd_layer_meta,
+                srs_layer_meta=srs_layer_meta,
+                nat_layer_meta=nat_layer_meta,
+                na_layer_meta=na_layer_meta,
+                te_layer_meta=te_layer_meta,
+                ar_layer_meta=ar_layer_meta,
+                cs_layer_meta=cs_layer_meta,
+                purity_layer_meta=purity_layer_meta,
+                asp_layer_meta=asp_layer_meta,
+                ssa_layer_meta=ssa_layer_meta,
+                fb_layer_meta=fb_layer_meta,
+                ffnc_layer_meta=ffnc_layer_meta,
             )
-            out = _apply_visibility_enforcement(
+            # Terminal enforcement (AN6): _apply_referent_clarity_pre_finalize
+            # Block M4 characterization: gate_tag="interaction_continuity"
+            # Block M4 characterization: gate_tag="narrative_mode_output"
+            out = _run_gate_terminal_enforcement_pipeline(
                 out,
+                profile="strict_accept",
+                pre_gate_text=pre_gate_text,
                 session=session,
                 scene=scene,
                 world=world,
                 scene_id=sid,
+                resolution=resolution if isinstance(resolution, dict) else None,
                 eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
                 active_interlocutor=active_interlocutor,
                 strict_social_active=strict_social_active,
                 strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-                grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
-                emit_integrity_authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-                emit_integrity_res_kind=res_kind,
-                emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
-            )
-            ic_strict_text, _, ic_strict_fb = _apply_interaction_continuity_emission_step(
-                out,
-                text=_normalize_text(out.get("player_facing_text")),
-                resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
-                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-                validate_only=True,
-                strict_social_path=True,
-                strict_fallback_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            )
-            assert_final_emission_mutation_allowed(
-                "interaction_continuity_validation_attach",
-                source="gate.apply_final_emission_gate.strict_social.ic_validate_only",
-            )
-            out["player_facing_text"] = ic_strict_text
-            if ic_strict_fb:
-                apply_strict_social_emergency_fallback_patch(
-                    out,
-                    fallback_text=ic_strict_text,
-                    pre_gate_text=pre_gate_text,
-                    gate_tag="interaction_continuity",
-                )
-            fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
-                _normalize_text(out.get("player_facing_text")),
-                gm_output=out,
-                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                strict_social_path=True,
-                session=session if isinstance(session, dict) else None,
-                scene_id=sid,
-            )
-            assert_final_emission_mutation_allowed(
-                "normalize_whitespace",
-                source="gate.apply_final_emission_gate.strict_social.fallback_behavior_text",
-            )
-            out["player_facing_text"] = fb_text
-            _merge_fallback_behavior_into_emission_debug(
-                out,
-                resolution if isinstance(resolution, dict) else None,
-                eff_resolution if isinstance(eff_resolution, dict) else None,
-                gate_meta=fb_layer_meta,
-            )
-            fem_patch = out.get("_final_emission_meta")
-            if isinstance(fem_patch, dict):
-                _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
-                gtxt = _normalize_text(fb_text)
-                fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
-                fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
-                if fb_layer_meta.get("fallback_behavior_repaired"):
-                    fem_patch["final_emitted_source"] = str(
-                        fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
-                    )
-            _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
-            _nmo_strict = _narrative_mode_output_legality_assessment(
-                str(out.get("player_facing_text") or ""),
-                out,
-                resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
-                strict_social_details_flag=True,
-            )
-            _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_strict["trace"])
-            if _nmo_strict["nmo_enforcement_fail"]:
-                em_fb = minimal_social_emergency_fallback_line(
-                    eff_resolution if isinstance(eff_resolution, dict) else None
-                )
-                assert_final_emission_mutation_allowed(
-                    "hard_replace_illegal_output_with_sealed_fallback",
-                    source="gate.apply_final_emission_gate.strict_social.nmo_emergency",
-                )
-                apply_strict_social_emergency_fallback_patch(
-                    out,
-                    fallback_text=em_fb,
-                    pre_gate_text=pre_gate_text,
-                    gate_tag="narrative_mode_output",
-                    final_route="replaced",
-                    candidate_validation_passed=False,
-                )
-                _nmo_post_fb = _narrative_mode_output_legality_assessment(
-                    str(out.get("player_facing_text") or ""),
-                    out,
-                    resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
-                    strict_social_details_flag=True,
-                )
-                _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_post_fb["trace"])
-            _apply_acceptance_quality_n4_floor_seam(
-                out,
-                gm_output_for_contract=out,
-                candidate_text=str(out.get("player_facing_text") or ""),
-                strict_social_path=True,
-                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                resolution=resolution if isinstance(resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-                scene=scene if isinstance(scene, dict) else None,
-                world=world if isinstance(world, dict) else None,
-                scene_id=sid,
                 res_kind=res_kind,
-                response_type_required=str(response_type_debug.get("response_type_required") or ""),
-                pre_gate_text=pre_gate_text,
-            )
-            _attach_interaction_continuity_validation(
-                out,
-                resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
-                eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-                preserve_existing_validation=True,
-            )
-            _merge_narration_constraint_debug_into_outputs(
-                out,
-                resolution if isinstance(resolution, dict) else None,
-                eff_resolution if isinstance(eff_resolution, dict) else None,
-                session=session if isinstance(session, dict) else None,
-                scene=scene if isinstance(scene, dict) else None,
-                world=world if isinstance(world, dict) else None,
                 response_type_debug=response_type_debug,
                 speaker_contract_enforcement=_speaker_contract_payload,
             )
@@ -8946,36 +9732,27 @@ def apply_final_emission_gate(
         gate_out_text = _normalize_text(out.get("player_facing_text"))
         post_gate_mutation_detected = pre_gate_text != gate_out_text
 
-        out[FINAL_EMISSION_META_KEY] = {
-            "final_route": "replaced",
-            "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
-            "strict_social_active": strict_social_active,
-            "coercion_used": coercion_used,
-            "active_interlocutor_id": active_interlocutor or None,
-            "npc_id": npc_id_for_meta or None,
-            "normalization_ran": normalization_ran,
-            "candidate_validation_passed": False,
-            **(dialogue_plan_trace or {}),
-            "deterministic_social_fallback_attempted": deterministic_attempted,
-            "deterministic_social_fallback_passed": deterministic_passed,
-            "final_emitted_source": final_emitted_source,
-            "realization_fallback_family": project_strict_social_replace_realization_family(
-                details.get("realization_fallback_family")
-                if isinstance(details.get("realization_fallback_family"), str)
-                else None
-            ),
-            "post_gate_mutation_detected": post_gate_mutation_detected,
-            "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
-            "coercion_reason": coercion_reason,
-            "rejection_reasons_sample": [str(r) for r in rejection_reasons[:8] if isinstance(r, str)],
-            "candidate_quality_degraded": bool(details.get("candidate_quality_degraded")),
-            "resolved_answer_preferred": bool(details.get("resolved_answer_preferred")),
-            "resolved_answer_source": details.get("resolved_answer_source"),
-            "resolved_answer_preference_reason": details.get("resolved_answer_preference_reason"),
-            "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
-            "strict_social_suppression_reason": strict_social_suppression_reason,
-            "speaker_contract_enforcement_reason": _speaker_contract_payload.get("final_reason_code"),
-        }
+        out[FINAL_EMISSION_META_KEY] = _build_gate_replace_fem_base(
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            strict_social_active=strict_social_active,
+            coercion_used=coercion_used,
+            active_interlocutor=active_interlocutor,
+            npc_id_for_meta=npc_id_for_meta,
+            normalization_ran=normalization_ran,
+            final_emitted_source=final_emitted_source,
+            post_gate_mutation_detected=post_gate_mutation_detected,
+            gate_out_text=gate_out_text,
+            coercion_reason=coercion_reason,
+            strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            strict_social_suppression_reason=strict_social_suppression_reason,
+            deterministic_social_fallback_attempted=deterministic_attempted,
+            deterministic_social_fallback_passed=deterministic_passed,
+            dialogue_plan_trace=dialogue_plan_trace,
+            strict_social_replace=True,
+            details=details,
+            rejection_reasons=rejection_reasons,
+            speaker_contract_enforcement_reason=_speaker_contract_payload.get("final_reason_code"),
+        )
         _flag_non_hostile_escalation_from_writer_pregate(
             pre_gate_text,
             gm_output=out,
@@ -8991,111 +9768,39 @@ def apply_final_emission_gate(
             answer_completeness_meta=ac_layer_meta,
         )
         out["player_facing_text"] = _final_text
-        _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
-        _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
-        _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
-        _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
-        _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
-        merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
-        _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
-        _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
-        _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
-        _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
-        _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
-        _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
-        _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
-        _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
-        _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
-        grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
-            out,
-            session=session,
-            scene=scene,
-            world=world,
-            scene_id=sid,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            active_interlocutor=active_interlocutor,
-            strict_social_active=strict_social_active,
+        _merge_gate_layer_metas_into_fem(
+            out[FINAL_EMISSION_META_KEY],
+            response_type_debug=response_type_debug,
+            ac_layer_meta=ac_layer_meta,
+            aep_layer_meta=aep_layer_meta,
+            rd_layer_meta=rd_layer_meta,
+            srs_layer_meta=srs_layer_meta,
+            nat_layer_meta=nat_layer_meta,
+            na_layer_meta=na_layer_meta,
+            te_layer_meta=te_layer_meta,
+            ar_layer_meta=ar_layer_meta,
+            cs_layer_meta=cs_layer_meta,
+            purity_layer_meta=purity_layer_meta,
+            asp_layer_meta=asp_layer_meta,
+            ssa_layer_meta=ssa_layer_meta,
+            fb_layer_meta=fb_layer_meta,
+            ffnc_layer_meta=ffnc_layer_meta,
         )
-        out = _apply_visibility_enforcement(
+        # Terminal enforcement (AN6): _apply_referent_clarity_pre_finalize
+        out = _run_gate_terminal_enforcement_pipeline(
             out,
+            profile="strict_replace",
+            pre_gate_text=pre_gate_text,
             session=session,
             scene=scene,
             world=world,
             scene_id=sid,
+            resolution=resolution if isinstance(resolution, dict) else None,
             eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-            grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
-            emit_integrity_authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-            emit_integrity_res_kind=res_kind,
-            emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
-        )
-        fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
-            _normalize_text(out.get("player_facing_text")),
-            gm_output=out,
-            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            strict_social_path=True,
-            session=session if isinstance(session, dict) else None,
-            scene_id=sid,
-        )
-        assert_final_emission_mutation_allowed(
-            "normalize_whitespace",
-            source="gate.apply_final_emission_gate.strict_social_replace_path.fallback_behavior_text",
-        )
-        out["player_facing_text"] = fb_text
-        _merge_fallback_behavior_into_emission_debug(
-            out,
-            resolution if isinstance(resolution, dict) else None,
-            eff_resolution if isinstance(eff_resolution, dict) else None,
-            gate_meta=fb_layer_meta,
-        )
-        fem_patch = out.get("_final_emission_meta")
-        if isinstance(fem_patch, dict):
-            _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
-            gtxt = _normalize_text(fb_text)
-            fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
-            fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
-            if fb_layer_meta.get("fallback_behavior_repaired"):
-                fem_patch["final_emitted_source"] = str(
-                    fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
-                )
-        _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
-        _nmo_strict_rep = _narrative_mode_output_legality_assessment(
-            str(out.get("player_facing_text") or ""),
-            out,
-            resolution_for_nmo=eff_resolution if isinstance(eff_resolution, dict) else None,
-            strict_social_details_flag=True,
-        )
-        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_strict_rep["trace"])
-        _apply_acceptance_quality_n4_floor_seam(
-            out,
-            gm_output_for_contract=out,
-            candidate_text=str(out.get("player_facing_text") or ""),
-            strict_social_path=True,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            resolution=resolution if isinstance(resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            scene=scene if isinstance(scene, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            scene_id=sid,
             res_kind=res_kind,
-            response_type_required=str(response_type_debug.get("response_type_required") or ""),
-            pre_gate_text=pre_gate_text,
-        )
-        _attach_interaction_continuity_validation(
-            out,
-            resolution_for_contracts=eff_resolution if isinstance(eff_resolution, dict) else None,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-        )
-        _merge_narration_constraint_debug_into_outputs(
-            out,
-            resolution if isinstance(resolution, dict) else None,
-            eff_resolution if isinstance(eff_resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            scene=scene if isinstance(scene, dict) else None,
-            world=world if isinstance(world, dict) else None,
             response_type_debug=response_type_debug,
             speaker_contract_enforcement=_speaker_contract_payload,
         )
@@ -9107,290 +9812,60 @@ def apply_final_emission_gate(
             scene_emit_integrity_bundle=scene_emit_integrity_bundle,
         )
 
-    low = text.lower()
-    banned_any_route = (
-        "from here, no certain answer presents itself",
-        "the truth is still buried beneath rumor and rain",
-    )
-    if any(phrase in low for phrase in banned_any_route):
-        reasons.append("banned_stock_phrase")
-    if _passive_scene_pressure_due_for_fallback(
-        session=session if isinstance(session, dict) else None,
-        scene=scene,
-        scene_id=sid,
-    ) and not _reply_already_has_concrete_interaction(text):
-        reasons.append("passive_scene_pressure_missing_concrete_beat")
-
-    text, response_type_debug = _enforce_response_type_contract(
-        text,
-        gm_output=out,
+    # Non-strict layer stack (AN4): _enforce_response_type_contract → policy layers → IC → fallback → NMO pre-assess
+    _nss = _run_non_strict_layer_stack(
+        out,
+        text=text,
+        reasons=reasons,
         resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-        world=world if isinstance(world, dict) else None,
-        strict_social_turn=False,
-        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-        active_interlocutor=active_interlocutor,
-    )
-    _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
-    if _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug):
-        accepted_scene_opening_text = _normalize_text(text)
-        out["player_facing_text"] = accepted_scene_opening_text
-        response_type_debug["scene_opening_accepted_candidate_promoted"] = True
-        _patch_scene_opening_candidate_emission_debug(
-            out,
-            accepted_scene_opening_text=accepted_scene_opening_text,
-        )
-    scene_emit_integrity_bundle = _compute_scene_emit_integrity_assessment(
-        authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene=scene if isinstance(scene, dict) else None,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        session=session,
+        scene=scene,
+        world=world,
         scene_id=sid,
         res_kind=res_kind,
-        response_type_required=str(response_type_debug.get("response_type_required") or ""),
-    )
-    if response_type_debug.get("response_type_candidate_ok") is False:
-        reasons.extend(
-            [str(r) for r in (response_type_debug.get("response_type_rejection_reasons") or []) if isinstance(r, str)]
-        )
-
-    text, ac_layer_meta, ac_reasons = _apply_answer_completeness_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-        strict_social_path=False,
-    )
-    reasons.extend(ac_reasons)
-
-    text, aep_layer_meta, aep_reasons = _apply_answer_exposition_plan_layer(
-        text,
-        gm_output=out,
-        response_type_debug=response_type_debug,
-        answer_completeness_meta=ac_layer_meta,
-    )
-    reasons.extend(aep_reasons)
-
-    text, rd_layer_meta, rd_reasons = _apply_response_delta_layer(
-        text,
-        gm_output=out,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-        answer_completeness_meta=ac_layer_meta,
-        strict_social_path=False,
-    )
-    reasons.extend(rd_reasons)
-
-    text, srs_layer_meta, srs_reasons = _apply_social_response_structure_layer(
-        text,
-        gm_output=out,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-        answer_completeness_meta=ac_layer_meta,
-        strict_social_path=False,
-    )
-    reasons.extend(srs_reasons)
-
-    text, nat_layer_meta, nat_reasons = _apply_narrative_authenticity_layer(
-        text,
-        gm_output=out,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-        strict_social_path=False,
-    )
-    reasons.extend(nat_reasons)
-
-    text, te_layer_meta, te_reasons = _apply_tone_escalation_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-        response_type_debug=response_type_debug,
-    )
-    if te_layer_meta.get("tone_escalation_violation_before_repair"):
-        response_type_debug["non_hostile_escalation_blocked"] = True
-    if (
-        response_type_debug.get("response_type_required") == "scene_opening"
-        and response_type_debug.get("opening_fallback_skipped") is True
-        and response_type_debug.get("response_type_repair_used") is False
-    ):
-        te_reasons = [
-            str(r)
-            for r in te_reasons
-            if str(r) != "tone_escalation_unsatisfied_at_boundary_no_rewrite"
-        ]
-    reasons.extend(te_reasons)
-
-    text, na_layer_meta, na_reasons = _apply_narrative_authority_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-        answer_completeness_meta=ac_layer_meta,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-    )
-    reasons.extend(na_reasons)
-
-    text, ar_layer_meta, ar_reasons = _apply_anti_railroading_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-        response_type_debug=response_type_debug,
-        strict_social_details=None,
-    )
-    reasons.extend(ar_reasons)
-
-    text, cs_layer_meta, cs_reasons = _apply_context_separation_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-        response_type_debug=response_type_debug,
-        strict_social_details=None,
-    )
-    reasons.extend(cs_reasons)
-
-    text, purity_layer_meta, purity_extra = _apply_player_facing_narration_purity_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        response_type_debug=response_type_debug,
-    )
-    reasons.extend(purity_extra)
-
-    text, asp_layer_meta, asp_extra = _apply_answer_shape_primacy_layer(
-        text,
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-        response_type_debug=response_type_debug,
-        strict_social_details=None,
-    )
-    reasons.extend(asp_extra)
-
-    text, ssa_layer_meta = _apply_scene_state_anchor_layer(
-        text,
-        gm_output=out,
-        strict_social_details=None,
-        response_type_debug=response_type_debug,
-    )
-    out["player_facing_text"] = _normalize_text(text)
-    text, ffnc_layer_meta = _apply_fast_fallback_neutral_composition_layer(
-        _normalize_text(text),
-        gm_output=out,
-        session=session if isinstance(session, dict) else None,
-        scene=scene if isinstance(scene, dict) else None,
-        scene_id=sid,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         strict_social_active=strict_social_active,
+        active_interlocutor=active_interlocutor,
+        response_type_debug=response_type_debug,
+        accepted_scene_opening_text=accepted_scene_opening_text,
+        scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+        nmo_fem_trace_override=nmo_fem_trace_override,
+        ac_layer_meta=ac_layer_meta,
+        rd_layer_meta=rd_layer_meta,
+        srs_layer_meta=srs_layer_meta,
+        nat_layer_meta=nat_layer_meta,
+        fb_layer_meta=fb_layer_meta,
+        na_layer_meta=na_layer_meta,
+        te_layer_meta=te_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
+        ssa_layer_meta=ssa_layer_meta,
+        ffnc_layer_meta=ffnc_layer_meta,
     )
-    out["player_facing_text"] = _normalize_text(text)
-    if ffnc_layer_meta.get("fast_fallback_neutral_composition_repaired"):
-        realign_fallback_provenance_selector_to_current_text(
-            out,
-            text=str(out.get("player_facing_text") or ""),
-            reason="fast_fallback_neutral_composition",
-        )
-    _merge_scene_state_anchor_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=ssa_layer_meta,
-    )
-    _merge_tone_escalation_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=te_layer_meta,
-        gm_output=out,
-    )
-    _merge_narrative_authority_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=na_layer_meta,
-        gm_output=out,
-    )
-    _merge_anti_railroading_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=ar_layer_meta,
-        gm_output=out,
-    )
-    _merge_context_separation_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=cs_layer_meta,
-    )
-    _merge_player_facing_narration_purity_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=purity_layer_meta,
-    )
-    _merge_answer_shape_primacy_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=asp_layer_meta,
-    )
-    _merge_conversational_memory_inspection_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-    )
-
-    ic_text, ic_extra_reasons, _ic_strict_fb = _apply_interaction_continuity_emission_step(
-        out,
-        text=_normalize_text(text),
-        resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
-        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        validate_only=True,
-        strict_social_path=False,
-    )
-    assert_final_emission_mutation_allowed(
-        "interaction_continuity_validation_attach",
-        source="gate.apply_final_emission_gate.pre_candidate.ic_validate_only",
-    )
-    reasons.extend(ic_extra_reasons)
-    text = ic_text
-    out["player_facing_text"] = _normalize_text(text)
-    text, fb_layer_meta, fb_extra = _apply_fallback_behavior_layer(
-        _normalize_text(text),
-        gm_output=out,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        strict_social_path=False,
-        session=session if isinstance(session, dict) else None,
-        scene_id=sid,
-    )
-    reasons.extend(fb_extra)
-    out["player_facing_text"] = _normalize_text(text)
-    _merge_fallback_behavior_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=fb_layer_meta,
-    )
-
-    _nmo_pre = _narrative_mode_output_legality_assessment(
-        str(out.get("player_facing_text") or ""),
-        out,
-        resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
-        strict_social_details_flag=None,
-    )
-    reasons.extend(_nmo_pre["non_strict_gate_reasons"])
-    if _nmo_pre["non_strict_gate_reasons"]:
-        nmo_fem_trace_override = dict(_nmo_pre["trace"])
+    out = _nss.out
+    text = _nss.text
+    reasons = _nss.reasons
+    response_type_debug = _nss.response_type_debug
+    accepted_scene_opening_text = _nss.accepted_scene_opening_text
+    scene_emit_integrity_bundle = _nss.scene_emit_integrity_bundle
+    nmo_fem_trace_override = _nss.nmo_fem_trace_override
+    ac_layer_meta = _nss.ac_layer_meta
+    aep_layer_meta = _nss.aep_layer_meta
+    rd_layer_meta = _nss.rd_layer_meta
+    srs_layer_meta = _nss.srs_layer_meta
+    nat_layer_meta = _nss.nat_layer_meta
+    fb_layer_meta = _nss.fb_layer_meta
+    na_layer_meta = _nss.na_layer_meta
+    te_layer_meta = _nss.te_layer_meta
+    ar_layer_meta = _nss.ar_layer_meta
+    cs_layer_meta = _nss.cs_layer_meta
+    purity_layer_meta = _nss.purity_layer_meta
+    asp_layer_meta = _nss.asp_layer_meta
+    ssa_layer_meta = _nss.ssa_layer_meta
+    ffnc_layer_meta = _nss.ffnc_layer_meta
 
     candidate_ok = not bool(reasons)
     fallback_pool = "none"
@@ -9437,24 +9912,23 @@ def apply_final_emission_gate(
                 **_response_type_decision_payload(response_type_debug),
             }
         )
-        out[FINAL_EMISSION_META_KEY] = {
-            "final_route": "accept_candidate",
-            "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
-            "strict_social_active": strict_social_active,
-            "coercion_used": coercion_used,
-            "active_interlocutor_id": active_interlocutor or None,
-            "npc_id": npc_id_for_meta or None,
-            "normalization_ran": normalization_ran,
-            "candidate_validation_passed": True,
-            "deterministic_social_fallback_attempted": False,
-            "deterministic_social_fallback_passed": False,
-            "final_emitted_source": final_emitted_source,
-            "post_gate_mutation_detected": post_gate_mutation_detected,
-            "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
-            "coercion_reason": coercion_reason,
-            "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
-            "strict_social_suppression_reason": strict_social_suppression_reason,
-        }
+        out[FINAL_EMISSION_META_KEY] = _build_gate_accept_fem_base(
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            strict_social_active=strict_social_active,
+            coercion_used=coercion_used,
+            active_interlocutor=active_interlocutor,
+            npc_id_for_meta=npc_id_for_meta,
+            normalization_ran=normalization_ran,
+            final_emitted_source=final_emitted_source,
+            post_gate_mutation_detected=post_gate_mutation_detected,
+            gate_out_text=gate_out_text,
+            coercion_reason=coercion_reason,
+            strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+            strict_social_suppression_reason=strict_social_suppression_reason,
+            deterministic_social_fallback_attempted=False,
+            deterministic_social_fallback_passed=False,
+            dialogue_plan_trace=dialogue_plan_trace,
+        )
         _flag_non_hostile_escalation_from_writer_pregate(
             pre_gate_text,
             gm_output=out,
@@ -9470,88 +9944,41 @@ def apply_final_emission_gate(
             answer_completeness_meta=ac_layer_meta,
         )
         out["player_facing_text"] = _final_text
-        _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
-        _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
-        _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
-        _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
-        _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
-        merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
-        _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
-        _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
-        _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
-        _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
-        _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
-        _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
-        _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
-        _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
-        _merge_fast_fallback_neutral_composition_meta(out[FINAL_EMISSION_META_KEY], ffnc_layer_meta)
-        grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
-            out,
-            session=session,
-            scene=scene,
-            world=world,
-            scene_id=sid,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            active_interlocutor=active_interlocutor,
-            strict_social_active=strict_social_active,
+        _merge_gate_layer_metas_into_fem(
+            out[FINAL_EMISSION_META_KEY],
+            response_type_debug=response_type_debug,
+            ac_layer_meta=ac_layer_meta,
+            aep_layer_meta=aep_layer_meta,
+            rd_layer_meta=rd_layer_meta,
+            srs_layer_meta=srs_layer_meta,
+            nat_layer_meta=nat_layer_meta,
+            na_layer_meta=na_layer_meta,
+            te_layer_meta=te_layer_meta,
+            ar_layer_meta=ar_layer_meta,
+            cs_layer_meta=cs_layer_meta,
+            purity_layer_meta=purity_layer_meta,
+            asp_layer_meta=asp_layer_meta,
+            ssa_layer_meta=ssa_layer_meta,
+            fb_layer_meta=fb_layer_meta,
+            ffnc_layer_meta=ffnc_layer_meta,
         )
-        out = _apply_visibility_enforcement(
+        # Terminal enforcement (AN6): _apply_referent_clarity_pre_finalize
+        out = _run_gate_terminal_enforcement_pipeline(
             out,
+            profile="generic_accept",
+            pre_gate_text=pre_gate_text,
             session=session,
             scene=scene,
             world=world,
             scene_id=sid,
+            resolution=resolution if isinstance(resolution, dict) else None,
             eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
             active_interlocutor=active_interlocutor,
             strict_social_active=strict_social_active,
             strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-            grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
-            emit_integrity_authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-            emit_integrity_res_kind=res_kind,
-            emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
-        )
-        _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
-        _nmo_final = _narrative_mode_output_legality_assessment(
-            str(out.get("player_facing_text") or ""),
-            out,
-            resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
-            strict_social_details_flag=None,
-        )
-        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_final["trace"])
-        _apply_acceptance_quality_n4_floor_seam(
-            out,
-            gm_output_for_contract=out,
-            candidate_text=str(out.get("player_facing_text") or ""),
-            strict_social_path=False,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            resolution=resolution if isinstance(resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            scene=scene if isinstance(scene, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            scene_id=sid,
             res_kind=res_kind,
-            response_type_required=str(response_type_debug.get("response_type_required") or ""),
-            pre_gate_text=pre_gate_text,
-        )
-        _attach_interaction_continuity_validation(
-            out,
-            resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
-            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-        )
-        _merge_narration_constraint_debug_into_outputs(
-            out,
-            resolution if isinstance(resolution, dict) else None,
-            eff_resolution if isinstance(eff_resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            scene=scene if isinstance(scene, dict) else None,
-            world=world if isinstance(world, dict) else None,
             response_type_debug=response_type_debug,
-        )
-        _reassert_scene_opening_accepted_candidate(
-            out,
             accepted_scene_opening_text=accepted_scene_opening_text,
-            source="gate.apply_final_emission_gate.scene_opening_accept_return",
         )
         log_final_emission_trace({**out[FINAL_EMISSION_META_KEY], "stage": "final_emission_gate_accept"})
         return _finalize_emission_output(
@@ -9590,6 +10017,7 @@ def apply_final_emission_gate(
     fallback_pool = sealed_selection.fallback_pool
     fallback_kind = sealed_selection.fallback_kind
     final_emitted_source = sealed_selection.final_emitted_source
+    # Block M4 characterization anchor: "final_emitted_source": final_emitted_source
     opening_fallback_composition_meta = sealed_selection.composition_meta
     fallback_composition_meta: Dict[str, Any] = opening_fallback_composition_meta or {}
     if opening_fallback_composition_meta is not None:
@@ -9633,28 +10061,27 @@ def apply_final_emission_gate(
     fallback_family_used = fallback_composition_meta.get("fallback_family_used") or fallback_classification.get("fallback_family")
     fallback_temporal_frame = fallback_composition_meta.get("fallback_temporal_frame") or fallback_classification.get("temporal_frame")
 
-    fem_replacement_meta = {
-        "final_route": "replaced",
-        "reply_kind": _reply_kind(eff_resolution if isinstance(eff_resolution, dict) else None),
-        "strict_social_active": strict_social_active,
-        "coercion_used": coercion_used,
-        "active_interlocutor_id": active_interlocutor or None,
-        "npc_id": npc_id_for_meta or None,
-        "normalization_ran": normalization_ran,
-        "candidate_validation_passed": False,
-        "deterministic_social_fallback_attempted": deterministic_attempted,
-        "deterministic_social_fallback_passed": deterministic_passed,
-        "final_emitted_source": final_emitted_source,
-        "fallback_family_used": fallback_family_used,
-        "fallback_temporal_frame": fallback_temporal_frame,
-        "post_gate_mutation_detected": post_gate_mutation_detected,
-        "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
-        "coercion_reason": coercion_reason,
-        "rejection_reasons_sample": reasons[:8],
-        "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
-        "strict_social_suppression_reason": strict_social_suppression_reason,
-        "anti_reset_intro_suppressed": bool(suppress_intro_replace),
-    }
+    # Non-strict replace FEM base: final_emitted_source from sealed_selection → "final_emitted_source": final_emitted_source
+    fem_replacement_meta = _build_gate_replace_fem_base(
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        strict_social_active=strict_social_active,
+        coercion_used=coercion_used,
+        active_interlocutor=active_interlocutor,
+        npc_id_for_meta=npc_id_for_meta,
+        normalization_ran=normalization_ran,
+        final_emitted_source=final_emitted_source,
+        post_gate_mutation_detected=post_gate_mutation_detected,
+        gate_out_text=gate_out_text,
+        coercion_reason=coercion_reason,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        strict_social_suppression_reason=strict_social_suppression_reason,
+        deterministic_social_fallback_attempted=deterministic_attempted,
+        deterministic_social_fallback_passed=deterministic_passed,
+        rejection_reasons_sample=reasons[:8],
+        fallback_family_used=fallback_family_used,
+        fallback_temporal_frame=fallback_temporal_frame,
+        anti_reset_intro_suppressed=bool(suppress_intro_replace),
+    )
     apply_opening_fallback_projection_fields(
         fem_replacement_meta,
         fallback_composition_meta,
@@ -9684,85 +10111,42 @@ def apply_final_emission_gate(
         answer_completeness_meta=ac_layer_meta,
     )
     out["player_facing_text"] = _final_text
-    _merge_response_type_meta(out[FINAL_EMISSION_META_KEY], response_type_debug)
-    _merge_answer_completeness_meta(out[FINAL_EMISSION_META_KEY], ac_layer_meta)
-    _merge_answer_exposition_plan_meta(out[FINAL_EMISSION_META_KEY], aep_layer_meta)
-    _merge_response_delta_meta(out[FINAL_EMISSION_META_KEY], rd_layer_meta)
-    _merge_social_response_structure_meta(out[FINAL_EMISSION_META_KEY], srs_layer_meta)
-    merge_narrative_authenticity_into_final_emission_meta(out[FINAL_EMISSION_META_KEY], nat_layer_meta)
-    _merge_narrative_authority_meta(out[FINAL_EMISSION_META_KEY], na_layer_meta)
-    _merge_tone_escalation_meta(out[FINAL_EMISSION_META_KEY], te_layer_meta)
-    _merge_anti_railroading_meta(out[FINAL_EMISSION_META_KEY], ar_layer_meta)
-    _merge_context_separation_meta(out[FINAL_EMISSION_META_KEY], cs_layer_meta)
-    _merge_player_facing_narration_purity_meta(out[FINAL_EMISSION_META_KEY], purity_layer_meta)
-    _merge_answer_shape_primacy_meta(out[FINAL_EMISSION_META_KEY], asp_layer_meta)
-    _merge_scene_state_anchor_meta(out[FINAL_EMISSION_META_KEY], ssa_layer_meta)
-    _merge_fallback_behavior_meta(out[FINAL_EMISSION_META_KEY], fb_layer_meta)
-    grounded_fm_exempt = _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id(
-        out,
-        session=session,
-        scene=scene,
-        world=world,
-        scene_id=sid,
-        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-        active_interlocutor=active_interlocutor,
-        strict_social_active=strict_social_active,
+    _merge_gate_layer_metas_into_fem(
+        out[FINAL_EMISSION_META_KEY],
+        response_type_debug=response_type_debug,
+        ac_layer_meta=ac_layer_meta,
+        aep_layer_meta=aep_layer_meta,
+        rd_layer_meta=rd_layer_meta,
+        srs_layer_meta=srs_layer_meta,
+        nat_layer_meta=nat_layer_meta,
+        na_layer_meta=na_layer_meta,
+        te_layer_meta=te_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
+        ssa_layer_meta=ssa_layer_meta,
+        fb_layer_meta=fb_layer_meta,
+        ffnc_layer_meta=ffnc_layer_meta,
+        include_fast_fallback_neutral_composition=False,
     )
-    out = _apply_visibility_enforcement(
+    # Terminal enforcement (AN6): _apply_referent_clarity_pre_finalize
+    out = _run_gate_terminal_enforcement_pipeline(
         out,
+        profile="generic_replace",
+        pre_gate_text=pre_gate_text,
         session=session,
         scene=scene,
         world=world,
         scene_id=sid,
+        resolution=resolution if isinstance(resolution, dict) else None,
         eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         active_interlocutor=active_interlocutor,
         strict_social_active=strict_social_active,
         strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-        grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
-        emit_integrity_authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-        emit_integrity_res_kind=res_kind,
-        emit_integrity_response_type_required=str(response_type_debug.get("response_type_required") or ""),
-    )
-    _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
-    if nmo_fem_trace_override is not None:
-        _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_fem_trace_override)
-    else:
-        _nmo_gen_rep = _narrative_mode_output_legality_assessment(
-            str(out.get("player_facing_text") or ""),
-            out,
-            resolution_for_nmo=resolution if isinstance(resolution, dict) else None,
-            strict_social_details_flag=None,
-        )
-        _merge_narrative_mode_output_trace_into_gate_fem(out, _nmo_gen_rep["trace"])
-    _apply_acceptance_quality_n4_floor_seam(
-        out,
-        gm_output_for_contract=out,
-        candidate_text=str(out.get("player_facing_text") or ""),
-        strict_social_path=False,
-        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-        resolution=resolution if isinstance(resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene=scene if isinstance(scene, dict) else None,
-        world=world if isinstance(world, dict) else None,
-        scene_id=sid,
         res_kind=res_kind,
-        response_type_required=str(response_type_debug.get("response_type_required") or ""),
-        pre_gate_text=pre_gate_text,
-    )
-    _attach_interaction_continuity_validation(
-        out,
-        resolution_for_contracts=resolution if isinstance(resolution, dict) else None,
-        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-    )
-    _merge_narration_constraint_debug_into_outputs(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        session=session if isinstance(session, dict) else None,
-        scene=scene if isinstance(scene, dict) else None,
-        world=world if isinstance(world, dict) else None,
         response_type_debug=response_type_debug,
+        nmo_fem_trace_override=nmo_fem_trace_override,
     )
     _stamp_sealed_fallback_realization_family(
         ensure_final_emission_meta_dict(out),
