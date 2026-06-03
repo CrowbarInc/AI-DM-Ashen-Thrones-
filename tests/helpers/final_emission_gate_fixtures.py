@@ -1,7 +1,7 @@
 """Shared final-emission gate harness fixtures (strict-social bundle + opening GM scaffold).
 
 Support residue for gate-adjacent and replay/downstream suites. Block-O opening
-attach-then-helper adapters mirror gate entry prep; adapter/tuple semantics are
+attach-then-helper adapters mirror gate entry prep; adapter/dataclass semantics are
 owned by ``tests/test_final_emission_opening_fallback.py``. Semantic orchestration
 ownership remains ``tests/test_final_emission_gate.py``.
 
@@ -17,6 +17,7 @@ from typing import Any, Mapping
 import pytest
 
 import game.final_emission_gate as feg
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.upstream_response_repairs import maybe_attach_upstream_prepared_opening_fallback_payload
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
@@ -62,18 +63,18 @@ def opening_validation_context() -> dict:
 _DEFAULT_OPENING_HARNESS_RESOLUTION: dict[str, Any] = {"kind": "scene_opening", "prompt": "Start the campaign."}
 
 
-def opening_gate_attach_then_opening_scene_safe_fallback_tuple(
+def opening_gate_attach_then_opening_scene_safe_fallback_selection(
     gm_output: dict[str, Any],
     *,
     resolution: Mapping[str, Any] | None = None,
-) -> tuple[str, str, str, str, str, str, dict[str, Any]]:
-    """Run ``maybe_attach_upstream_prepared_opening_fallback_payload`` then ``_opening_scene_safe_fallback_tuple`` (Block O).
+) -> VisibilitySelectedFallback:
+    """Run ``maybe_attach_upstream_prepared_opening_fallback_payload`` then ``_opening_scene_safe_fallback_selection`` (Block O).
 
     Mirrors the opening-prep sequence at ``apply_final_emission_gate`` entry before opening helper seams. Mutates *gm_output*.
     """
     resolved = dict(resolution) if isinstance(resolution, Mapping) else dict(_DEFAULT_OPENING_HARNESS_RESOLUTION)
     maybe_attach_upstream_prepared_opening_fallback_payload(gm_output, resolution=resolved)
-    return feg._opening_scene_safe_fallback_tuple(gm_output)
+    return feg._opening_scene_safe_fallback_selection(gm_output)
 
 
 def opening_gate_attach_then_enforce_response_type_contract(

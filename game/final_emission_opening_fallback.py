@@ -16,10 +16,17 @@ from game.opening_deterministic_fallback import (
     OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     is_structurally_usable_upstream_prepared_opening_fallback_payload,
 )
+
+_OPENING_SCENE_SAFE_FALLBACK_POOL = "scene_opening_deterministic"
+_OPENING_SCENE_SAFE_FALLBACK_KIND = "opening_deterministic_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_SOURCE = "opening_deterministic_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_STRATEGY = "opening_scene_safe_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE = "opening_deterministic_fallback"
 
 
 def build_opening_fallback_result_meta(
@@ -302,26 +309,26 @@ def select_opening_fallback_for_response_type_contract(
     )
 
 
-def _opening_scene_safe_fallback_tuple(
+def opening_scene_safe_fallback_selection(
     gm_output: Mapping[str, Any] | None,
     *,
     fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
-) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    """Select the opening hard-replace tuple: upstream snapshot or sealed marker."""
+) -> VisibilitySelectedFallback:
+    """Canonical opening hard-replace selection: upstream snapshot or sealed marker."""
     fallback_text, fallback_meta, stub_patch, upstream_selected, upstream_payload = (
         select_opening_fallback_for_response_type_contract(gm_output)
     )
     if upstream_selected and upstream_payload is not None:
         composition_meta = dict(upstream_payload["opening_fallback_composition_meta"])
         composition_meta.update(stub_patch)
-        return (
-            fallback_text,
-            "scene_opening_deterministic",
-            "opening_deterministic_fallback",
-            "opening_deterministic_fallback",
-            "opening_scene_safe_fallback",
-            "opening_deterministic_fallback",
-            composition_meta,
+        return VisibilitySelectedFallback(
+            text=fallback_text,
+            fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
+            fallback_kind=_OPENING_SCENE_SAFE_FALLBACK_KIND,
+            final_emitted_source=_OPENING_SCENE_SAFE_FALLBACK_SOURCE,
+            fallback_strategy=_OPENING_SCENE_SAFE_FALLBACK_STRATEGY,
+            fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
+            composition_meta=composition_meta,
         )
     classification = _opening_fallback_classification()
     meta = fail_closed_composition_meta_factory()
@@ -330,12 +337,12 @@ def _opening_scene_safe_fallback_tuple(
     meta.update(fallback_meta)
     meta.update(stub_patch)
     meta["opening_fallback_authorship_source"] = None
-    return (
-        fallback_text,
-        "scene_opening_deterministic",
-        "opening_deterministic_fallback",
-        "opening_deterministic_fallback",
-        "opening_scene_safe_fallback",
-        "opening_deterministic_fallback",
-        meta,
+    return VisibilitySelectedFallback(
+        text=fallback_text,
+        fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
+        fallback_kind=_OPENING_SCENE_SAFE_FALLBACK_KIND,
+        final_emitted_source=_OPENING_SCENE_SAFE_FALLBACK_SOURCE,
+        fallback_strategy=_OPENING_SCENE_SAFE_FALLBACK_STRATEGY,
+        fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
+        composition_meta=meta,
     )

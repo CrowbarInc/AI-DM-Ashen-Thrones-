@@ -650,12 +650,6 @@ def build_visibility_hard_replacement_plan(
     )
 
 
-def visibility_selected_fallback_from_tuple(
-    value: tuple[str, str, str, str, str, str, Mapping[str, Any]],
-) -> VisibilitySelectedFallback:
-    return VisibilitySelectedFallback.from_legacy_tuple(value)
-
-
 def build_visibility_first_mention_metadata_payload(
     *,
     composition_meta: Mapping[str, Any],

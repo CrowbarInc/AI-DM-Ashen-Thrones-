@@ -15,6 +15,7 @@ import pytest
 
 import game.final_emission_gate as final_emission_gate
 import game.final_emission_opening_fallback as opening_fallback
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 import game.opening_deterministic_fallback as opening_deterministic_fallback
 from game.defaults import default_scene
 from game.diegetic_fallback_narration import fallback_template_metadata
@@ -68,8 +69,8 @@ def _prepared_payload() -> Dict[str, Any]:
     }
 
 
-def _select(gm_output: Dict[str, Any]) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    return opening_fallback._opening_scene_safe_fallback_tuple(
+def _select(gm_output: Dict[str, Any]) -> VisibilitySelectedFallback:
+    return opening_fallback.opening_scene_safe_fallback_selection(
         gm_output,
         fail_closed_composition_meta_factory=_fail_closed_composition_meta,
     )
@@ -89,37 +90,68 @@ def _assert_owner_bucket(meta: Dict[str, Any], *, repair_kind: str, expected: st
     )
 
 
+def test_opening_scene_safe_fallback_selection_returns_canonical_dataclass_and_metadata() -> None:
+    """Dataclass selection preserves replay-facing composition meta without tuple wire."""
+    prepared_gm = {UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: _prepared_payload()}
+    fail_closed_gm = {"opening_curated_facts": ["Rain needles the stones at the gate."]}
+    for gm_output in (prepared_gm, fail_closed_gm):
+        selected = opening_fallback.opening_scene_safe_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=_fail_closed_composition_meta,
+        )
+        assert isinstance(selected, VisibilitySelectedFallback)
+        assert selected.fallback_pool == "scene_opening_deterministic"
+        assert selected.fallback_kind == "opening_deterministic_fallback"
+        assert selected.final_emitted_source == "opening_deterministic_fallback"
+        assert selected.fallback_strategy == "opening_scene_safe_fallback"
+        assert selected.fallback_candidate_source == "opening_deterministic_fallback"
+        meta = dict(selected.composition_meta)
+        if gm_output is prepared_gm:
+            assert selected.text == PREPARED_TEXT
+            assert meta.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+        else:
+            assert selected.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+            assert meta.get("opening_fallback_compatibility_local_disabled") is True
+            assert meta.get("opening_fallback_authorship_source") is None
+            assert meta.get("opening_fallback_failed_closed") is True
+
+
 def test_adapter_selects_usable_upstream_prepared_payload_unchanged() -> None:
     payload = _prepared_payload()
     gm_output = {UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: payload}
 
-    selected = opening_fallback._opening_scene_safe_fallback_tuple(
+    selected = opening_fallback.opening_scene_safe_fallback_selection(
         gm_output,
         fail_closed_composition_meta_factory=lambda: pytest.fail("prepared selection must not build fail-closed meta"),
     )
 
-    text, pool, kind, emitted_source, strategy, candidate_source, meta = selected
-    assert text == PREPARED_TEXT
-    assert (pool, kind, emitted_source, strategy, candidate_source) == (
+    assert selected.text == PREPARED_TEXT
+    assert (
+        selected.fallback_pool,
+        selected.fallback_kind,
+        selected.final_emitted_source,
+        selected.fallback_strategy,
+        selected.fallback_candidate_source,
+    ) == (
         "scene_opening_deterministic",
         "opening_deterministic_fallback",
         "opening_deterministic_fallback",
         "opening_scene_safe_fallback",
         "opening_deterministic_fallback",
     )
+    meta = dict(selected.composition_meta)
     assert meta == payload["opening_fallback_composition_meta"]
     assert meta is not payload["opening_fallback_composition_meta"]
     assert meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-    _assert_owner_bucket(meta, repair_kind=kind, expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED)
+    _assert_owner_bucket(meta, repair_kind=selected.fallback_kind, expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED)
 
 
 def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_shape() -> None:
-    _text, _pool, kind, _emitted_source, _strategy, _candidate_source, meta = _select(
-        {"opening_curated_facts": ["Rain needles the stones at the gate."]}
-    )
+    selected = _select({"opening_curated_facts": ["Rain needles the stones at the gate."]})
 
-    assert _text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-    assert kind == "opening_deterministic_fallback"
+    assert selected.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    assert selected.fallback_kind == "opening_deterministic_fallback"
+    meta = dict(selected.composition_meta)
     assert meta["opening_fallback_failed_closed"] is True
     assert meta["opening_fallback_missing_upstream_prepared_payload"] is True
     assert meta["opening_fallback_missing_curated_facts"] is False
@@ -135,11 +167,10 @@ def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_sh
 
 
 def test_adapter_insufficient_curated_facts_fails_closed_with_existing_metadata_shape() -> None:
-    text, _pool, _kind, _emitted_source, _strategy, _candidate_source, meta = _select(
-        {"opening_curated_facts": []}
-    )
+    selected = _select({"opening_curated_facts": []})
 
-    assert text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    assert selected.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    meta = dict(selected.composition_meta)
     assert meta["opening_fallback_failed_closed"] is True
     assert meta["opening_fallback_missing_upstream_prepared_payload"] is True
     assert meta["opening_fallback_compatibility_local_disabled"] is True
@@ -155,14 +186,15 @@ def test_adapter_insufficient_curated_facts_fails_closed_with_existing_metadata_
 
 
 def test_adapter_unusable_upstream_stub_preserves_fail_closed_metadata() -> None:
-    text, _pool, _kind, _emitted_source, _strategy, _candidate_source, meta = _select(
+    selected = _select(
         {
             "opening_curated_facts": ["Rain needles the stones at the gate."],
             UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: {"prepared_opening_fallback_text": PREPARED_TEXT},
         }
     )
 
-    assert text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    assert selected.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    meta = dict(selected.composition_meta)
     assert meta["opening_fallback_failed_closed"] is True
     assert meta["opening_fallback_upstream_payload_unusable"] is True
     assert meta["opening_fallback_upstream_payload_recovered"] is False
@@ -223,7 +255,7 @@ def test_fail_closed_empty_curated_facts_skips_local_deterministic_opening_compo
     assert dbg.get("opening_fallback_compatibility_local_disabled") is True
 
 
-def test_opening_scene_safe_fallback_tuple_skips_local_composer_when_empty_curated_facts(
+def test_opening_scene_safe_fallback_selection_skips_local_composer_when_empty_curated_facts(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     gm = {
@@ -235,12 +267,12 @@ def test_opening_scene_safe_fallback_tuple_skips_local_composer_when_empty_curat
         raise AssertionError("local deterministic opening must not run on fail-closed path")
 
     monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
-    text, _p, _k, _fe, _fs, _fc, composition_meta = opening_fallback._opening_scene_safe_fallback_tuple(
+    selected = opening_fallback.opening_scene_safe_fallback_selection(
         gm,
         fail_closed_composition_meta_factory=_fail_closed_composition_meta,
     )
-    assert text.startswith("[opening_fallback_failed_closed:")
-    assert composition_meta.get("opening_fallback_compatibility_local_disabled") is True
+    assert selected.text.startswith("[opening_fallback_failed_closed:")
+    assert selected.composition_meta.get("opening_fallback_compatibility_local_disabled") is True
 
 
 def test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot() -> None:
@@ -640,22 +672,30 @@ def test_frontier_gate_opening_fallback_uses_top_level_curated_facts() -> None:
     assert "immediately before you" not in text.lower()
 
 
-def test_gate_opening_tuple_wrapper_delegates_to_adapter(monkeypatch: pytest.MonkeyPatch) -> None:
-    sentinel = ("text", "pool", "kind", "emitted", "strategy", "candidate", {"meta": True})
+def test_gate_opening_selection_wrapper_delegates_to_adapter(monkeypatch: pytest.MonkeyPatch) -> None:
+    sentinel = VisibilitySelectedFallback(
+        text="text",
+        fallback_pool="pool",
+        fallback_kind="kind",
+        final_emitted_source="emitted",
+        fallback_strategy="strategy",
+        fallback_candidate_source="candidate",
+        composition_meta={"meta": True},
+    )
     captured: Dict[str, Any] = {}
 
     def fake_adapter(
         gm_output: Dict[str, Any],
         *,
         fail_closed_composition_meta_factory: Any,
-    ) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
+    ) -> VisibilitySelectedFallback:
         captured["gm_output"] = gm_output
         captured["meta_factory"] = fail_closed_composition_meta_factory
         return sentinel
 
-    monkeypatch.setattr(final_emission_gate, "_opening_scene_safe_fallback_tuple_from_adapter", fake_adapter)
+    monkeypatch.setattr(final_emission_gate, "_opening_scene_safe_fallback_selection_from_adapter", fake_adapter)
     gm_output = {"opening_curated_facts": []}
 
-    assert final_emission_gate._opening_scene_safe_fallback_tuple(gm_output) == sentinel
+    assert final_emission_gate._opening_scene_safe_fallback_selection(gm_output) is sentinel
     assert captured["gm_output"] is gm_output
     assert captured["meta_factory"] is final_emission_gate._first_mention_composition_meta

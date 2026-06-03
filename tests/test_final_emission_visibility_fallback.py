@@ -724,7 +724,7 @@ def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
         composition_meta,
     )
 
-    selected = visibility_fallback.visibility_selected_fallback_from_tuple(legacy)
+    selected = visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(legacy)
 
     assert selected == visibility_fallback.VisibilitySelectedFallback(
         text="Selected fallback text.",
@@ -737,6 +737,102 @@ def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
     )
     assert selected.as_legacy_tuple() == legacy
     assert visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(legacy) == selected
+
+
+def test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass() -> None:
+    """Gate global integrity selection returns the canonical visibility dataclass wire."""
+    import game.final_emission_gate as feg
+
+    scene = {"scene": {"id": "yard", "visible_facts": ["A guard watches the gate."]}}
+    selection_kwargs = {
+        "authoritative_resolution": None,
+        "session": None,
+        "world": None,
+        "res_kind": "observe",
+        "response_type_required": "narration",
+    }
+    selected = feg._scene_emit_integrity_global_fallback_selection(scene, "yard", **selection_kwargs)
+    assert isinstance(selected, visibility_fallback.VisibilitySelectedFallback)
+    assert selected.final_emitted_source == "global_scene_fallback"
+    assert selected.fallback_pool == "global_scene_narrative"
+    assert selected.fallback_kind == "narrative_safe_fallback"
+    assert selected.fallback_strategy == "standard_safe_fallback"
+    assert selected.fallback_candidate_source == "global_scene_fallback"
+    assert selected.text
+
+
+def test_passive_scene_pressure_candidates_return_canonical_dataclass() -> None:
+    """Gate passive-pressure selection returns canonical visibility dataclass candidates."""
+    import game.final_emission_gate as feg
+    from game.defaults import default_session, default_world
+    from game.storage import get_scene_runtime
+
+    session = default_session()
+    sid = "scene_investigate"
+    rt = get_scene_runtime(session, sid)
+    rt["last_player_action_passive"] = True
+    rt["passive_action_streak"] = 1
+    rt["recent_contextual_leads"] = [
+        {
+            "key": "tattered-man-by-the-shuttered-well",
+            "kind": "visible_suspicious_figure",
+            "subject": "the tattered man",
+            "position": "by the shuttered well",
+            "named": False,
+            "positioned": True,
+            "mentions": 2,
+            "last_turn": 1,
+        }
+    ]
+    scene = {"scene": {"id": sid, "location": "square", "visible_facts": []}}
+    kwargs = {"session": session, "scene": scene, "scene_id": sid}
+    selected = feg._passive_scene_pressure_fallback_candidates(**kwargs)
+    assert selected
+    assert all(isinstance(candidate, visibility_fallback.VisibilitySelectedFallback) for candidate in selected)
+    assert selected[0].final_emitted_source == "passive_scene_pressure_fallback"
+    assert selected[0].fallback_pool == "passive_scene_pressure"
+    assert selected[0].fallback_strategy == "passive_scene_pressure_fallback"
+    assert "passive_scene_pressure:lead_figure" == selected[0].fallback_candidate_source
+
+
+def test_grounded_scene_intro_fallback_candidates_return_canonical_dataclass() -> None:
+    import game.final_emission_gate as feg
+
+    from game.defaults import default_scene, default_session, default_world
+    from game.interaction_context import rebuild_active_scene_entities
+
+    session = default_session()
+    world = default_world()
+    scene = default_scene("frontier_gate")
+    scene["scene"]["visible_facts"] = ["A brazier throws orange sparks over the checkpoint."]
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"]["active_scene_id"] = sid
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+    kwargs = {
+        "session": session,
+        "scene": scene,
+        "world": world,
+        "active_interlocutor": "guard_captain",
+    }
+    selected = feg._grounded_scene_intro_fallback_candidates(**kwargs)
+    assert selected
+    assert all(isinstance(candidate, visibility_fallback.VisibilitySelectedFallback) for candidate in selected)
+    dedup_keys = {
+        (
+            candidate.text,
+            candidate.fallback_pool,
+            candidate.fallback_kind,
+            candidate.final_emitted_source,
+            candidate.fallback_strategy,
+            candidate.fallback_candidate_source,
+        )
+        for candidate in selected
+    }
+    assert len(dedup_keys) == len(selected)
+    assert any(candidate.fallback_pool == "visible_scene_composed_intro" for candidate in selected)
+    assert any(candidate.final_emitted_source == "visible_fact_scene_intro" for candidate in selected)
 
 
 def test_build_visibility_first_mention_metadata_payload_collects_composition_values() -> None:

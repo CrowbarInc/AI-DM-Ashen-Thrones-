@@ -12,6 +12,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     refresh_final_emission_mutation_lineage,
 )
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.final_emission_text import _normalize_text
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
@@ -50,6 +51,17 @@ class SealedFallbackSelection:
             self.fallback_kind,
             self.final_emitted_source,
             self.composition_meta,
+        )
+
+    @classmethod
+    def from_visibility_selection(cls, selected: VisibilitySelectedFallback) -> "SealedFallbackSelection":
+        """Project visibility selection into sealed selection (strategy/candidate fields are visibility-only)."""
+        return cls(
+            text=selected.text,
+            fallback_pool=selected.fallback_pool,
+            fallback_kind=selected.fallback_kind,
+            final_emitted_source=selected.final_emitted_source,
+            composition_meta=selected.composition_meta,
         )
 
     @classmethod
@@ -96,9 +108,9 @@ def build_non_strict_sealed_fallback_providers(
     res_kind: str,
     response_type_required: str,
     opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection],
-    passive_scene_pressure_fallback_candidates: Callable[..., list[tuple[Any, ...]]],
+    passive_scene_pressure_fallback_candidates: Callable[..., list[VisibilitySelectedFallback]],
     should_use_neutral_nonprogress_fallback_instead_of_global_stock: Callable[[Any, Any], bool],
-    scene_emit_integrity_global_fallback_tuple: Callable[..., tuple[Any, ...]],
+    scene_emit_integrity_global_fallback_selection: Callable[..., VisibilitySelectedFallback],
     minimal_social_emergency_fallback_line: Callable[[Dict[str, Any] | None], str],
     npc_display_name_for_emission: Callable[[Any, str, str], str],
     npc_pursuit_neutral_nonprogress_fallback_line: Callable[[], str],
@@ -130,10 +142,9 @@ def build_non_strict_sealed_fallback_providers(
             scene=scene,
             scene_id=sid,
         )
-        selections: list[SealedFallbackSelection] = []
-        for candidate in passive_candidates:
-            selections.append(SealedFallbackSelection.from_visibility_tuple(candidate))
-        return selections
+        return [
+            SealedFallbackSelection.from_visibility_selection(candidate) for candidate in passive_candidates
+        ]
 
     def _use_neutral_nonprogress_provider() -> bool:
         return should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution)
@@ -158,15 +169,7 @@ def build_non_strict_sealed_fallback_providers(
         return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
 
     def _global_provider() -> SealedFallbackSelection:
-        (
-            fallback_text,
-            fallback_pool,
-            fallback_kind,
-            final_emitted_source,
-            _fb_strat_ie,
-            _fb_cand_ie,
-            _comp_ie,
-        ) = scene_emit_integrity_global_fallback_tuple(
+        selected = scene_emit_integrity_global_fallback_selection(
             scene if isinstance(scene, dict) else None,
             sid,
             authoritative_resolution=resolution if isinstance(resolution, dict) else None,
@@ -175,17 +178,7 @@ def build_non_strict_sealed_fallback_providers(
             res_kind=res_kind,
             response_type_required=response_type_required,
         )
-        return SealedFallbackSelection.from_visibility_tuple(
-            (
-                fallback_text,
-                fallback_pool,
-                fallback_kind,
-                final_emitted_source,
-                _fb_strat_ie,
-                _fb_cand_ie,
-                _comp_ie,
-            )
-        )
+        return SealedFallbackSelection.from_visibility_selection(selected)
 
     return NonStrictSealedFallbackProviders(
         passive_candidates_provider=_passive_candidates_provider,
@@ -293,12 +286,12 @@ def select_acceptance_quality_n4_sealed_fallback_line(
     res_kind: str,
     response_type_required: str,
     minimal_social_fallback_builder: Callable[[dict[str, Any] | None], str],
-    global_fallback_tuple_builder: Callable[..., tuple[Any, ...]],
+    global_fallback_selection_builder: Callable[..., VisibilitySelectedFallback],
 ) -> str:
     """Select the N4 sealed fallback line via injected prose owners; this helper must not author prose."""
     if strict_social_path:
         return minimal_social_fallback_builder(eff_resolution if isinstance(eff_resolution, dict) else None)
-    return global_fallback_tuple_builder(
+    return global_fallback_selection_builder(
         scene if isinstance(scene, dict) else None,
         str(scene_id or "").strip(),
         authoritative_resolution=resolution if isinstance(resolution, dict) else None,
@@ -306,7 +299,7 @@ def select_acceptance_quality_n4_sealed_fallback_line(
         world=world if isinstance(world, dict) else None,
         res_kind=res_kind,
         response_type_required=response_type_required,
-    )[0]
+    ).text
 
 
 def select_non_strict_replace_path_terminal_sealed_fallback_branch(

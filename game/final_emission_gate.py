@@ -188,7 +188,7 @@ from game.final_emission_sealed_fallback import (
     NonStrictSealedFallbackProviders as _NonStrictSealedFallbackProviders,
     SealedFallbackSelection,
     assemble_non_strict_sealed_fallback_selection,
-    build_non_strict_sealed_fallback_providers as _build_non_strict_sealed_fallback_providers_impl,
+    build_non_strict_sealed_fallback_providers,
     finalize_n4_sealed_replace_fem_route_meta as _finalize_n4_sealed_replace_fem_route_meta,
     prepare_sealed_replacement_route_meta as _prepare_sealed_replacement_route_meta,
     select_acceptance_quality_n4_sealed_fallback_line,
@@ -212,7 +212,7 @@ from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
     _opening_curated_facts_schema_ok,
     _opening_fallback_classification,
-    _opening_scene_safe_fallback_tuple as _opening_scene_safe_fallback_tuple_from_adapter,
+    opening_scene_safe_fallback_selection as _opening_scene_safe_fallback_selection_from_adapter,
     select_opening_fallback_for_response_type_contract,
 )
 from game.opening_deterministic_fallback import (
@@ -303,34 +303,6 @@ def _refresh_output_mutation_lineage(out: Mapping[str, Any] | None) -> None:
     refresh_final_emission_mutation_lineage(meta, sanitizer_trace=sanitizer_trace)
 
 
-def _select_acceptance_quality_n4_sealed_fallback_line(
-    *,
-    strict_social_path: bool,
-    eff_resolution: Mapping[str, Any] | None,
-    scene: Dict[str, Any] | None,
-    scene_id: str,
-    resolution: Mapping[str, Any] | None,
-    session: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    res_kind: str,
-    response_type_required: str,
-) -> str:
-    """Sealed replacement line when N4 fails after subtractive repair (strict-social vs global tuple)."""
-    return select_acceptance_quality_n4_sealed_fallback_line(
-        strict_social_path=strict_social_path,
-        eff_resolution=eff_resolution,
-        scene=scene,
-        scene_id=scene_id,
-        resolution=resolution,
-        session=session,
-        world=world,
-        res_kind=res_kind,
-        response_type_required=response_type_required,
-        minimal_social_fallback_builder=minimal_social_emergency_fallback_line,
-        global_fallback_tuple_builder=_scene_emit_integrity_global_fallback_tuple,
-    )
-
-
 def _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug: Mapping[str, Any]) -> bool:
     """True when scene-opening response-type path accepts the writer candidate without RT repair (selector only)."""
     return (
@@ -338,42 +310,6 @@ def _scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debu
         and response_type_debug.get("response_type_candidate_ok") is True
         and response_type_debug.get("response_type_repair_used") is False
         and response_type_debug.get("scene_opening_candidate_contract_passed") is True
-    )
-
-
-def _build_non_strict_sealed_fallback_providers(
-    out: Dict[str, Any],
-    *,
-    session: Dict[str, Any] | None,
-    scene: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    sid: str,
-    resolution: Dict[str, Any] | None,
-    eff_resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    res_kind: str,
-    response_type_required: str,
-) -> _NonStrictSealedFallbackProviders:
-    """Gate compatibility wrapper: provider assembly lives in final_emission_sealed_fallback."""
-    return _build_non_strict_sealed_fallback_providers_impl(
-        out,
-        session=session,
-        scene=scene,
-        world=world,
-        sid=sid,
-        resolution=resolution,
-        eff_resolution=eff_resolution,
-        active_interlocutor=active_interlocutor,
-        res_kind=res_kind,
-        response_type_required=response_type_required,
-        opening_sealed_fallback_provider=_opening_sealed_fallback_provider,
-        passive_scene_pressure_fallback_candidates=_passive_scene_pressure_fallback_candidates,
-        should_use_neutral_nonprogress_fallback_instead_of_global_stock=_should_use_neutral_nonprogress_fallback_instead_of_global_stock,
-        scene_emit_integrity_global_fallback_tuple=_scene_emit_integrity_global_fallback_tuple,
-        minimal_social_emergency_fallback_line=minimal_social_emergency_fallback_line,
-        npc_display_name_for_emission=_npc_display_name_for_emission,
-        npc_pursuit_neutral_nonprogress_fallback_line=npc_pursuit_neutral_nonprogress_fallback_line,
-        local_exchange_continuation_fallback_line=local_exchange_continuation_fallback_line,
     )
 
 
@@ -402,7 +338,7 @@ def _select_non_strict_replace_path_terminal_sealed_fallback_selection(
         and isinstance(world, dict)
         and not strict_social_suppressed_non_social_turn
     )
-    providers = _build_non_strict_sealed_fallback_providers(
+    providers = build_non_strict_sealed_fallback_providers(
         out,
         session=session,
         scene=scene,
@@ -413,6 +349,14 @@ def _select_non_strict_replace_path_terminal_sealed_fallback_selection(
         active_interlocutor=active_interlocutor,
         res_kind=res_kind,
         response_type_required=response_type_required,
+        opening_sealed_fallback_provider=_opening_sealed_fallback_provider,
+        passive_scene_pressure_fallback_candidates=_passive_scene_pressure_fallback_candidates,
+        should_use_neutral_nonprogress_fallback_instead_of_global_stock=_should_use_neutral_nonprogress_fallback_instead_of_global_stock,
+        scene_emit_integrity_global_fallback_selection=_scene_emit_integrity_global_fallback_selection,
+        minimal_social_emergency_fallback_line=minimal_social_emergency_fallback_line,
+        npc_display_name_for_emission=_npc_display_name_for_emission,
+        npc_pursuit_neutral_nonprogress_fallback_line=npc_pursuit_neutral_nonprogress_fallback_line,
+        local_exchange_continuation_fallback_line=local_exchange_continuation_fallback_line,
     )
     return assemble_non_strict_sealed_fallback_selection(
         opening_mode_active=opening_mode_active,
@@ -426,40 +370,6 @@ def _select_non_strict_replace_path_terminal_sealed_fallback_selection(
         anti_reset_provider=providers.anti_reset_provider,
         global_provider=providers.global_provider,
     )
-
-
-def _select_non_strict_replace_path_terminal_sealed_fallback(
-    out: Dict[str, Any],
-    *,
-    session: Dict[str, Any] | None,
-    scene: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    sid: str,
-    resolution: Dict[str, Any] | None,
-    eff_resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    strict_social_suppressed_non_social_turn: bool,
-    res_kind: str,
-    response_type_required: str,
-    suppress_intro_replace: bool,
-    interaction_mode: str,
-) -> tuple[str, str, str, str, Mapping[str, Any] | None]:
-    """Backward-compatible tuple adapter for historical private tests/imports."""
-    return _select_non_strict_replace_path_terminal_sealed_fallback_selection(
-        out,
-        session=session,
-        scene=scene,
-        world=world,
-        sid=sid,
-        resolution=resolution,
-        eff_resolution=eff_resolution,
-        active_interlocutor=active_interlocutor,
-        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-        res_kind=res_kind,
-        response_type_required=response_type_required,
-        suppress_intro_replace=suppress_intro_replace,
-        interaction_mode=interaction_mode,
-    ).as_legacy_tuple()
 
 
 def _default_narration_constraint_debug() -> Dict[str, Any]:
@@ -3688,26 +3598,19 @@ def is_valid_opening(text: str, curated_facts: Sequence[Any]) -> bool:
     return matches >= 2
 
 
-def _opening_scene_safe_fallback_tuple(
+def _opening_scene_safe_fallback_selection(
     gm_output: Mapping[str, Any] | None,
-) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    """Gate-facing wrapper around the opening fallback selection adapter."""
-    return _opening_scene_safe_fallback_tuple_from_adapter(
+) -> VisibilitySelectedFallback:
+    """Canonical opening-mode safe fallback selection (dataclass-native gate wire)."""
+    return _opening_scene_safe_fallback_selection_from_adapter(
         gm_output,
         fail_closed_composition_meta_factory=_first_mention_composition_meta,
     )
 
 
-def _opening_scene_safe_fallback_selection(
-    gm_output: Mapping[str, Any] | None,
-) -> VisibilitySelectedFallback:
-    """Typed visibility selection for opening-mode safe fallback."""
-    return VisibilitySelectedFallback.from_legacy_tuple(_opening_scene_safe_fallback_tuple(gm_output))
-
-
 def _opening_sealed_fallback_provider(gm_output: Dict[str, Any]) -> SealedFallbackSelection:
     """Typed sealed selection for opening-mode terminal replace paths."""
-    return SealedFallbackSelection.from_visibility_tuple(_opening_scene_safe_fallback_tuple(gm_output))
+    return SealedFallbackSelection.from_visibility_selection(_opening_scene_safe_fallback_selection(gm_output))
 
 
 def _visibility_selected_fallback_candidate(
@@ -4967,12 +4870,30 @@ def _reply_already_has_concrete_interaction(text: str) -> bool:
     return any(pattern.search(clean) for pattern in _CONCRETE_INTERACTION_PATTERNS)
 
 
+def _passive_scene_pressure_visibility_candidate(
+    text: str,
+    *,
+    fallback_kind: str,
+    fallback_candidate_source: str,
+) -> VisibilitySelectedFallback:
+    """Build one passive-scene-pressure visibility fallback candidate (canonical dataclass wire)."""
+    return VisibilitySelectedFallback(
+        text=_output_sentence(text),
+        fallback_pool="passive_scene_pressure",
+        fallback_kind=fallback_kind,
+        final_emitted_source="passive_scene_pressure_fallback",
+        fallback_strategy="passive_scene_pressure_fallback",
+        fallback_candidate_source=fallback_candidate_source,
+        composition_meta=_first_mention_composition_meta(),
+    )
+
+
 def _passive_scene_pressure_fallback_candidates(
     *,
     session: Dict[str, Any] | None,
     scene: Dict[str, Any] | None,
     scene_id: str,
-) -> List[tuple[str, str, str, str, str, str, Dict[str, Any]]]:
+) -> List[VisibilitySelectedFallback]:
     if not _passive_scene_pressure_due_for_fallback(session=session, scene=scene, scene_id=scene_id):
         return []
 
@@ -4994,29 +4915,17 @@ def _passive_scene_pressure_fallback_candidates(
             move_from = f" leaves {position} and" if position else ""
             if passive_streak >= 2:
                 return [
-                    (
-                        _output_sentence(
-                            f'{subject}{move_from} comes straight to you before the pause can settle. "Enough watching," they say. "Ask me now, or lose the trail."'
-                        ),
-                        "passive_scene_pressure",
-                        "passive_scene_pressure_lead_figure",
-                        "passive_scene_pressure_fallback",
-                        "passive_scene_pressure_fallback",
-                        "passive_scene_pressure:lead_figure",
-                        _first_mention_composition_meta(),
+                    _passive_scene_pressure_visibility_candidate(
+                        f'{subject}{move_from} comes straight to you before the pause can settle. "Enough watching," they say. "Ask me now, or lose the trail."',
+                        fallback_kind="passive_scene_pressure_lead_figure",
+                        fallback_candidate_source="passive_scene_pressure:lead_figure",
                     )
                 ]
             return [
-                (
-                    _output_sentence(
-                        f'{subject}{move_from} cuts through the crowd and stops at your shoulder. "You\'re asking the wrong questions out loud," they murmur. "Walk with me if you want the next name."'
-                    ),
-                    "passive_scene_pressure",
-                    "passive_scene_pressure_lead_figure",
-                    "passive_scene_pressure_fallback",
-                    "passive_scene_pressure_fallback",
-                    "passive_scene_pressure:lead_figure",
-                    _first_mention_composition_meta(),
+                _passive_scene_pressure_visibility_candidate(
+                    f'{subject}{move_from} cuts through the crowd and stops at your shoulder. "You\'re asking the wrong questions out loud," they murmur. "Walk with me if you want the next name."',
+                    fallback_kind="passive_scene_pressure_lead_figure",
+                    fallback_candidate_source="passive_scene_pressure:lead_figure",
                 )
             ]
 
@@ -5035,14 +4944,10 @@ def _passive_scene_pressure_fallback_candidates(
                 'he says, stabbing two fingers at the posting. "Tell me what you know, or get on the east-road trail before it dies."'
             )
         return [
-            (
-                _output_sentence(text),
-                "passive_scene_pressure",
-                "passive_scene_pressure_guard_rumor",
-                "passive_scene_pressure_fallback",
-                "passive_scene_pressure_fallback",
-                "passive_scene_pressure:guard_rumor",
-                _first_mention_composition_meta(),
+            _passive_scene_pressure_visibility_candidate(
+                text,
+                fallback_kind="passive_scene_pressure_guard_rumor",
+                fallback_candidate_source="passive_scene_pressure:guard_rumor",
             )
         ]
     if "guard" in visible_low:
@@ -5051,28 +4956,18 @@ def _passive_scene_pressure_fallback_candidates(
             'he says. "Take the east-road report or get clear."'
         )
         return [
-            (
-                _output_sentence(text),
-                "passive_scene_pressure",
-                "passive_scene_pressure_visible_figure",
-                "passive_scene_pressure_fallback",
-                "passive_scene_pressure_fallback",
-                "passive_scene_pressure:visible_figure",
-                _first_mention_composition_meta(),
+            _passive_scene_pressure_visibility_candidate(
+                text,
+                fallback_kind="passive_scene_pressure_visible_figure",
+                fallback_candidate_source="passive_scene_pressure:visible_figure",
             )
         ]
     return [
-        (
-            _output_sentence(
-                'The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. '
-                '"Board, runner, or road," he says. "Pick one before the gate swallows the trail."'
-            ),
-            "passive_scene_pressure",
-            "passive_scene_pressure_generic",
-            "passive_scene_pressure_fallback",
-            "passive_scene_pressure_fallback",
-            "passive_scene_pressure:fallback",
-            _first_mention_composition_meta(),
+        _passive_scene_pressure_visibility_candidate(
+            'The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. '
+            '"Board, runner, or road," he says. "Pick one before the gate swallows the trail."',
+            fallback_kind="passive_scene_pressure_generic",
+            fallback_candidate_source="passive_scene_pressure:fallback",
         )
     ]
 
@@ -5824,7 +5719,7 @@ def _grounded_scene_intro_fallback_candidates(
     scene: Dict[str, Any] | None,
     world: Dict[str, Any] | None,
     active_interlocutor: str,
-) -> List[tuple[str, str, str, str, str, str, Dict[str, Any]]]:
+) -> List[VisibilitySelectedFallback]:
     visible_facts = _scene_visible_facts(scene)
     composition_facts = _visible_safe_scene_composition_facts(session=session, scene=scene, world=world)
     entity_rows = _visible_entity_catalog(session=session, scene=scene, world=world)
@@ -5848,7 +5743,7 @@ def _grounded_scene_intro_fallback_candidates(
         if row not in prioritized_entities:
             prioritized_entities.append(row)
 
-    fallback_candidates: List[tuple[str, str, str, str, str, str, Dict[str, Any]]] = []
+    fallback_candidates: List[VisibilitySelectedFallback] = []
     composed_scene_context: Dict[str, Any] = {
         "scene_location": scene_location,
         "entity_rows_by_display_name": {
@@ -5866,7 +5761,7 @@ def _grounded_scene_intro_fallback_candidates(
     composed_layers = composed_scene_context.get("composition_layers")
     if composed_scene_intro and isinstance(composed_layers, dict):
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 composed_scene_intro,
                 "visible_scene_composed_intro",
                 "first_mention_composed_scene_intro",
@@ -5904,7 +5799,7 @@ def _grounded_scene_intro_fallback_candidates(
                 break
         if explicit_fact_intro:
             fallback_candidates.append(
-                (
+                _visibility_selected_fallback_candidate(
                     explicit_fact_intro,
                     "visible_scene_explicit_intro",
                     "first_mention_explicit_scene_intro",
@@ -5925,7 +5820,7 @@ def _grounded_scene_intro_fallback_candidates(
         else:
             generic_intro = f"{display_name} stands nearby."
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 _output_sentence(generic_intro),
                 "visible_scene_explicit_intro",
                 "first_mention_explicit_scene_intro",
@@ -5938,7 +5833,7 @@ def _grounded_scene_intro_fallback_candidates(
 
     for index, fact in enumerate(visible_facts):
         fallback_candidates.append(
-            (
+            _visibility_selected_fallback_candidate(
                 fact,
                 "visible_scene_fact_intro",
                 "first_mention_visible_fact_intro",
@@ -5949,10 +5844,17 @@ def _grounded_scene_intro_fallback_candidates(
             )
         )
 
-    deduped_candidates: List[tuple[str, str, str, str, str, str, Dict[str, Any]]] = []
+    deduped_candidates: List[VisibilitySelectedFallback] = []
     seen_candidates = set()
     for candidate in fallback_candidates:
-        candidate_key = candidate[:6]
+        candidate_key = (
+            candidate.text,
+            candidate.fallback_pool,
+            candidate.fallback_kind,
+            candidate.final_emitted_source,
+            candidate.fallback_strategy,
+            candidate.fallback_candidate_source,
+        )
         if candidate_key in seen_candidates:
             continue
         seen_candidates.add(candidate_key)
@@ -6415,7 +6317,7 @@ def _compute_scene_emit_integrity_assessment(
     }
 
 
-def _scene_emit_integrity_global_fallback_tuple(
+def _scene_emit_integrity_global_fallback_selection(
     scene: Dict[str, Any] | None,
     scene_id: str,
     *,
@@ -6424,22 +6326,22 @@ def _scene_emit_integrity_global_fallback_tuple(
     world: Dict[str, Any] | None,
     res_kind: str,
     response_type_required: str,
-) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    """Return a full safe-fallback tuple matching ``_standard_visibility_safe_fallback`` shape."""
+) -> VisibilitySelectedFallback:
+    """Canonical global scene / scene-emit-integrity safe fallback selection."""
     travelish = _scene_emit_integrity_travelish_context(
         res_kind=res_kind,
         response_type_required=response_type_required,
         authoritative_resolution=authoritative_resolution,
     )
     if not travelish:
-        return (
-            _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
-            "global_scene_narrative",
-            "narrative_safe_fallback",
-            "global_scene_fallback",
-            "standard_safe_fallback",
-            "global_scene_fallback",
-            _first_mention_composition_meta(),
+        return VisibilitySelectedFallback(
+            text=_global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
+            fallback_pool="global_scene_narrative",
+            fallback_kind="narrative_safe_fallback",
+            final_emitted_source="global_scene_fallback",
+            fallback_strategy="standard_safe_fallback",
+            fallback_candidate_source="global_scene_fallback",
+            composition_meta=_first_mention_composition_meta(),
         )
     reasons, _named = _collect_scene_emit_integrity_failure_reasons(
         authoritative_resolution=authoritative_resolution,
@@ -6448,23 +6350,23 @@ def _scene_emit_integrity_global_fallback_tuple(
         scene_id=scene_id,
     )
     if reasons:
-        return (
-            _SCENE_EMIT_INTEGRITY_SAFE_FALLBACK_LINE,
-            "scene_emit_integrity_neutral",
-            "scene_emit_integrity_safe_fallback",
-            "scene_emit_integrity_safe_fallback",
-            "standard_safe_fallback",
-            "scene_emit_integrity_safe_fallback",
-            _first_mention_composition_meta(),
+        return VisibilitySelectedFallback(
+            text=_SCENE_EMIT_INTEGRITY_SAFE_FALLBACK_LINE,
+            fallback_pool="scene_emit_integrity_neutral",
+            fallback_kind="scene_emit_integrity_safe_fallback",
+            final_emitted_source="scene_emit_integrity_safe_fallback",
+            fallback_strategy="standard_safe_fallback",
+            fallback_candidate_source="scene_emit_integrity_safe_fallback",
+            composition_meta=_first_mention_composition_meta(),
         )
-    return (
-        _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
-        "global_scene_narrative",
-        "narrative_safe_fallback",
-        "global_scene_fallback",
-        "standard_safe_fallback",
-        "global_scene_fallback",
-        _first_mention_composition_meta(),
+    return VisibilitySelectedFallback(
+        text=_global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
+        fallback_pool="global_scene_narrative",
+        fallback_kind="narrative_safe_fallback",
+        final_emitted_source="global_scene_fallback",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="global_scene_fallback",
+        composition_meta=_first_mention_composition_meta(),
     )
 
 
@@ -6528,20 +6430,22 @@ def _standard_visibility_safe_fallback(
             )
         )
     else:
-        for candidate in _passive_scene_pressure_fallback_candidates(
-            session=session if isinstance(session, dict) else None,
-            scene=scene,
-            scene_id=scene_id,
-        ):
-            fallback_candidates.append(VisibilitySelectedFallback.from_legacy_tuple(candidate))
+        fallback_candidates.extend(
+            _passive_scene_pressure_fallback_candidates(
+                session=session if isinstance(session, dict) else None,
+                scene=scene,
+                scene_id=scene_id,
+            )
+        )
         if prefer_grounded_scene_intro and not suppress_intro:
-            for candidate in _grounded_scene_intro_fallback_candidates(
-                session=session,
-                scene=validation_scene if isinstance(validation_scene, dict) else scene,
-                world=world,
-                active_interlocutor=active_interlocutor,
-            ):
-                fallback_candidates.append(VisibilitySelectedFallback.from_legacy_tuple(candidate))
+            fallback_candidates.extend(
+                _grounded_scene_intro_fallback_candidates(
+                    session=session,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene,
+                    world=world,
+                    active_interlocutor=active_interlocutor,
+                )
+            )
 
     sid = str(scene_id or "").strip()
     if (
@@ -6607,16 +6511,14 @@ def _standard_visibility_safe_fallback(
             )
         else:
             fallback_candidates.append(
-                VisibilitySelectedFallback.from_legacy_tuple(
-                    _scene_emit_integrity_global_fallback_tuple(
-                        scene if isinstance(scene, dict) else None,
-                        sid,
-                        authoritative_resolution=auth_res,
-                        session=session if isinstance(session, dict) else None,
-                        world=world if isinstance(world, dict) else None,
-                        res_kind=rk_emit,
-                        response_type_required=rt_emit,
-                    )
+                _scene_emit_integrity_global_fallback_selection(
+                    scene if isinstance(scene, dict) else None,
+                    sid,
+                    authoritative_resolution=auth_res,
+                    session=session if isinstance(session, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                    res_kind=rk_emit,
+                    response_type_required=rt_emit,
                 )
             )
 
@@ -6676,7 +6578,7 @@ def _standard_visibility_safe_fallback(
         scene_id=scene_id,
     )
     if passive_candidates:
-        return VisibilitySelectedFallback.from_legacy_tuple(passive_candidates[0])
+        return passive_candidates[0]
 
     if suppress_intro:
         return _visibility_selected_fallback_candidate(
@@ -6693,55 +6595,15 @@ def _standard_visibility_safe_fallback(
             "anti_reset_local_continuation_fallback",
             _first_mention_composition_meta(),
         )
-    return VisibilitySelectedFallback.from_legacy_tuple(
-        _scene_emit_integrity_global_fallback_tuple(
-            scene if isinstance(scene, dict) else None,
-            sid,
-            authoritative_resolution=auth_res,
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            res_kind=rk_emit,
-            response_type_required=rt_emit,
-        )
+    return _scene_emit_integrity_global_fallback_selection(
+        scene if isinstance(scene, dict) else None,
+        sid,
+        authoritative_resolution=auth_res,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=rk_emit,
+        response_type_required=rt_emit,
     )
-
-
-def _standard_visibility_safe_fallback_tuple(
-    *,
-    gm_output: Dict[str, Any] | None = None,
-    session: Dict[str, Any] | None,
-    scene: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    scene_id: str,
-    eff_resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    strict_social_active: bool,
-    strict_social_suppressed_non_social_turn: bool,
-    enforce_first_mentions: bool = False,
-    enforce_referential_clarity: bool = False,
-    prefer_grounded_scene_intro: bool = False,
-    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
-    emit_integrity_res_kind: str = "",
-    emit_integrity_response_type_required: str = "",
-) -> tuple[str, str, str, str, str, str, Dict[str, Any]]:
-    """Backward-compatible tuple adapter for historical private tests/imports."""
-    return _standard_visibility_safe_fallback(
-        gm_output=gm_output,
-        session=session,
-        scene=scene,
-        world=world,
-        scene_id=scene_id,
-        eff_resolution=eff_resolution,
-        active_interlocutor=active_interlocutor,
-        strict_social_active=strict_social_active,
-        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
-        enforce_first_mentions=enforce_first_mentions,
-        enforce_referential_clarity=enforce_referential_clarity,
-        prefer_grounded_scene_intro=prefer_grounded_scene_intro,
-        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
-        emit_integrity_res_kind=emit_integrity_res_kind,
-        emit_integrity_response_type_required=emit_integrity_response_type_required,
-    ).as_legacy_tuple()
 
 
 def _apply_first_mention_enforcement(
@@ -8134,7 +7996,7 @@ def _apply_acceptance_quality_n4_floor_seam(
         _patch_gate_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
         return
 
-    fb_line = _select_acceptance_quality_n4_sealed_fallback_line(
+    fb_line = select_acceptance_quality_n4_sealed_fallback_line(
         strict_social_path=strict_social_path,
         eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         scene=scene if isinstance(scene, dict) else None,
@@ -8144,6 +8006,8 @@ def _apply_acceptance_quality_n4_floor_seam(
         world=world if isinstance(world, dict) else None,
         res_kind=res_kind,
         response_type_required=response_type_required,
+        minimal_social_fallback_builder=minimal_social_emergency_fallback_line,
+        global_fallback_selection_builder=_scene_emit_integrity_global_fallback_selection,
     )
     fem = ensure_final_emission_meta_dict(out)
     fem["acceptance_quality_gate_replaced_candidate"] = True

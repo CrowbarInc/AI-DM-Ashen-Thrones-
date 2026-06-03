@@ -18,6 +18,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
 )
 import game.final_emission_sealed_fallback as sealed_fallback
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
@@ -34,6 +35,7 @@ pytestmark = pytest.mark.unit
 def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None:
     for name in (
         "SealedFallbackSelection",
+        "build_non_strict_sealed_fallback_providers",
         "stamp_sealed_fallback_realization_family",
         "prepare_sealed_replacement_route_meta",
         "finalize_n4_sealed_replace_fem_route_meta",
@@ -44,9 +46,9 @@ def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None
         assert callable(getattr(sealed_fallback, name, None)), name
 
     for selector_name in (
-        "_select_non_strict_replace_path_terminal_sealed_fallback",
+        "_select_non_strict_replace_path_terminal_sealed_fallback_selection",
         "_standard_visibility_safe_fallback",
-        "_opening_scene_safe_fallback_tuple",
+        "_opening_scene_safe_fallback_selection",
         "minimal_social_emergency_fallback_line",
         "global_scene_fallback",
     ):
@@ -71,6 +73,24 @@ def test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple() -> None:
     assert selection.final_emitted_source == "opening_deterministic_fallback"
     assert selection.composition_meta == composition_meta
     assert selection.as_legacy_tuple() == legacy
+
+
+def test_sealed_fallback_from_visibility_selection_matches_manual_field_copy() -> None:
+    selected = VisibilitySelectedFallback(
+        text="Visibility fallback text.",
+        fallback_pool="visibility_pool",
+        fallback_kind="visibility_kind",
+        final_emitted_source="visibility_source",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="visibility_candidate_source",
+        composition_meta={"first_mention_composition_used": False},
+    )
+    sealed = sealed_fallback.SealedFallbackSelection.from_visibility_selection(selected)
+    assert sealed.text == selected.text
+    assert sealed.fallback_pool == selected.fallback_pool
+    assert sealed.fallback_kind == selected.fallback_kind
+    assert sealed.final_emitted_source == selected.final_emitted_source
+    assert sealed.composition_meta == selected.composition_meta
 
 
 def test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple() -> None:
@@ -113,14 +133,14 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
         ),
         passive_scene_pressure_fallback_candidates=lambda **_: [],
         should_use_neutral_nonprogress_fallback_instead_of_global_stock=lambda *_: False,
-        scene_emit_integrity_global_fallback_tuple=lambda *a, **k: (
-            "global",
-            "global_pool",
-            "global_kind",
-            "global_source",
-            None,
-            None,
-            None,
+        scene_emit_integrity_global_fallback_selection=lambda *a, **k: VisibilitySelectedFallback(
+            text="global",
+            fallback_pool="global_pool",
+            fallback_kind="global_kind",
+            final_emitted_source="global_source",
+            fallback_strategy="standard_safe_fallback",
+            fallback_candidate_source="global_scene_fallback",
+            composition_meta=None,
         ),
         minimal_social_emergency_fallback_line=lambda _res: "injected social line",
         npc_display_name_for_emission=lambda _w, _sid, _npc: "Aldric",
@@ -157,7 +177,15 @@ def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None
         res_kind="question",
         response_type_required="dialogue",
         minimal_social_fallback_builder=lambda _resolution: "strict-social line",
-        global_fallback_tuple_builder=lambda *_args, **_kwargs: ("global line",),
+        global_fallback_selection_builder=lambda *_args, **_kwargs: VisibilitySelectedFallback(
+            text="global line",
+            fallback_pool="global_scene_narrative",
+            fallback_kind="narrative_safe_fallback",
+            final_emitted_source="global_scene_fallback",
+            fallback_strategy="standard_safe_fallback",
+            fallback_candidate_source="global_scene_fallback",
+            composition_meta=None,
+        ),
     )
     assert eff == eff0
     assert session == session0
@@ -256,9 +284,17 @@ def test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only() -> Non
         calls.append("minimal")
         return "strict-social injected line"
 
-    def _global(*_args: Any, **_kwargs: Any) -> tuple[str]:
+    def _global(*_args: Any, **_kwargs: Any) -> VisibilitySelectedFallback:
         calls.append("global")
-        return ("global injected line",)
+        return VisibilitySelectedFallback(
+            text="global injected line",
+            fallback_pool="global_scene_narrative",
+            fallback_kind="narrative_safe_fallback",
+            final_emitted_source="global_scene_fallback",
+            fallback_strategy="standard_safe_fallback",
+            fallback_candidate_source="global_scene_fallback",
+            composition_meta=None,
+        )
 
     assert (
         sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
@@ -272,7 +308,7 @@ def test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only() -> Non
             res_kind="question",
             response_type_required="dialogue",
             minimal_social_fallback_builder=_minimal,
-            global_fallback_tuple_builder=_global,
+            global_fallback_selection_builder=_global,
         )
         == "strict-social injected line"
     )
@@ -291,7 +327,7 @@ def test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only() -> Non
             res_kind="observe",
             response_type_required="narration",
             minimal_social_fallback_builder=_minimal,
-            global_fallback_tuple_builder=_global,
+            global_fallback_selection_builder=_global,
         )
         == "global injected line"
     )
@@ -433,9 +469,9 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines()
         )
     )
     for forbidden in (
-        "_select_non_strict_replace_path_terminal_sealed_fallback",
+        "_select_non_strict_replace_path_terminal_sealed_fallback_selection",
         "_standard_visibility_safe_fallback",
-        "_opening_scene_safe_fallback_tuple",
+        "_opening_scene_safe_fallback_selection",
         "minimal_social_emergency_fallback_line(",
         "global_scene_fallback(",
         "Nothing confirms progress toward that lead",
