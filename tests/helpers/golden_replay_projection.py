@@ -17,11 +17,12 @@ Runtime FEM may carry two independent fallback-family vocabularies:
 
 Golden replay exposes a single observed ``fallback_family`` for protected
 structural drift checks. :func:`project_replay_fallback_family_from_fem`
-prefers ``fallback_family_used`` and falls back to ``realization_fallback_family``
-only when the diegetic field is absent. That preference is a **read-side
-compatibility projection**; runtime code must not rewrite either FEM field to
-force one taxonomy into the other, and the two fields must not be collapsed at
-write time until AB4+ replay proof completes.
+implements the read-side precedence rule documented by
+:func:`dual_fallback_family_replay_precedence_surface` — diegetic
+``fallback_family_used`` first, governed ``realization_fallback_family`` only
+when diegetic is absent. That preference is a **read-side compatibility
+projection**; runtime code must not rewrite either FEM field to force one
+taxonomy into the other, and the two fields must not be collapsed at write time.
 """
 from __future__ import annotations
 
@@ -39,6 +40,7 @@ from game.final_emission_meta import (
 )
 from game.final_emission_replay_projection import is_sealed_replacement_lineage_kind
 from game.output_sanitizer import resembles_serialized_response_payload
+from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
 
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
@@ -49,6 +51,13 @@ from tests.helpers.transcript_runner import (
 )
 
 NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY = "neutral_reply_speaker_grounding_bridge"
+
+# Read-side FEM key precedence for golden-replay observed ``fallback_family``.
+# Diegetic/template taxonomy wins when present; governed provenance is fallback only.
+REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS: tuple[str, ...] = (
+    "fallback_family_used",
+    REALIZATION_FALLBACK_FAMILY_FIELD,
+)
 
 MISSING = object()
 
@@ -529,14 +538,29 @@ def _project_replay_fallback_family(
     return None
 
 
+def dual_fallback_family_replay_precedence_surface() -> dict[str, object]:
+    """Document read-side golden-replay precedence for dual FEM fallback-family fields.
+
+    Diagnostic only: does not read live payloads or mutate FEM.
+    """
+    return {
+        "precedence_keys": list(REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS),
+        "prefer_field": "fallback_family_used",
+        "fallback_field": REALIZATION_FALLBACK_FAMILY_FIELD,
+        "projector": "project_replay_fallback_family_from_fem",
+        "read_side_only": True,
+    }
+
+
 def project_replay_fallback_family_from_fem(fem: Mapping[str, Any]) -> str | None:
     """Project golden replay ``fallback_family`` from FEM with diegetic-first preference.
 
-    Prefers ``fallback_family_used`` (diegetic/template taxonomy) over
-    ``realization_fallback_family`` (governed provenance). See module docstring
-    for the Cycle AB dual-field contract.
+    Read-side only: prefers ``fallback_family_used`` (diegetic/template taxonomy)
+    and uses ``realization_fallback_family`` (governed provenance) only when the
+    diegetic key is absent or null. Returns ``None`` when neither field is present.
+    See :func:`dual_fallback_family_replay_precedence_surface`.
     """
-    return _first_present(fem, ("fallback_family_used", "realization_fallback_family"))
+    return _first_present(fem, REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
 
 
 def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:

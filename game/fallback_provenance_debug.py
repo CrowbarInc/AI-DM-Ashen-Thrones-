@@ -1,8 +1,24 @@
-"""Temporary debug instrumentation: upstream fast-fallback fingerprint + overwrite tracing.
+"""Upstream fast-fallback provenance packaging and overwrite-containment traces.
 
-Not used for selection or narration — only logging and metadata markers.
+Despite the historical ``*_debug`` module name, this is the **canonical write-time
+packager** for upstream API fast-fallback provenance. It does not select fallback
+prose, assign owner buckets, or drive gate routing policy.
 
-Metadata under ``fallback_provenance`` is merged non-destructively alongside
+Ownership semantics:
+- **Selection/application**: ``game.api`` (``_fast_fallback_for_upstream_error``)
+  invokes terminal retry fallback selection before calling
+  :func:`attach_upstream_fast_fallback_provenance`.
+- **Provenance packaging** (this module): selector-boundary fingerprints,
+  ``metadata["fallback_provenance"]`` snapshots, gate-entry/exit drift traces,
+  and FEM ``fallback_provenance_trace`` projection via
+  :func:`record_final_emission_gate_exit`.
+- **Content authorship**: not individually stamped on FEM. ``content_fingerprint``
+  and ``selector_player_facing_text`` are the authoritative selector-boundary
+  evidence; read-side lineage may conservatively attribute content to
+  ``game.gm_retry`` (terminal fallback prose selection) when projecting split
+  owners.
+
+``metadata["fallback_provenance"]`` is merged non-destructively alongside
 ``metadata["turn_packet"]`` and ``metadata["stage_diff_telemetry"]``; stage-diff
 helpers may append ``stage_diff_last_transition`` without dropping other provenance
 fields.
@@ -22,6 +38,23 @@ from game.final_emission_meta import patch_final_emission_meta
 _LOG = logging.getLogger(__name__)
 
 METADATA_KEY = "fallback_provenance"
+FEM_TRACE_KEY = "fallback_provenance_trace"
+
+# Canonical ownership surface for upstream fast-fallback provenance (documentation only).
+UPSTREAM_FAST_FALLBACK_SELECTION_OWNER = "game.api"
+UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER = "game.fallback_provenance_debug"
+# Terminal retry fallback selects prose; specific line provider is not stamped on FEM.
+UPSTREAM_FAST_FALLBACK_CONTENT_OWNER = "game.gm_retry"
+
+# Stable selector-boundary keys written by :func:`attach_upstream_fast_fallback_provenance`.
+FALLBACK_PROVENANCE_SELECTOR_KEYS: frozenset[str] = frozenset(
+    {
+        "source",
+        "stage",
+        "content_fingerprint",
+        "selector_player_facing_text",
+    }
+)
 
 FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
     {
@@ -41,7 +74,11 @@ def fingerprint_player_facing(raw: str) -> str:
 
 
 def attach_upstream_fast_fallback_provenance(gm: Dict[str, Any]) -> None:
-    """Mark GM output from :func:`game.api` upstream API fast fallback (post-repair text)."""
+    """Stamp selector-boundary provenance for upstream API fast fallback (post-repair text).
+
+    Called by ``game.api._fast_fallback_for_upstream_error`` after terminal retry fallback
+    selection. Does not select fallback prose.
+    """
     if not isinstance(gm, dict):
         return
     pft = str(gm.get("player_facing_text") or "")
@@ -191,7 +228,7 @@ def record_final_emission_gate_exit(out: Dict[str, Any], *, final_normalized_tex
         "mismatch_detected": mismatch_detected,
     }
     out["metadata"] = {**md, METADATA_KEY: prov}
-    patch_final_emission_meta(out, {"fallback_provenance_trace": dict(prov)})
+    patch_final_emission_meta(out, {FEM_TRACE_KEY: dict(prov)})
 
 
 def upstream_fallback_canonical_provenance(out: Dict[str, Any]) -> Dict[str, Any] | None:

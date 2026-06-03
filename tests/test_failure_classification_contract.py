@@ -5,6 +5,11 @@ from typing import Any
 
 import pytest
 
+from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_BUCKETS,
+    SEALED_FALLBACK_OWNER_BUCKETS,
+    VISIBILITY_FALLBACK_OWNER_BUCKETS,
+)
 from tests.failure_classification_contract import (
     ALLOWED_FAILURE_CATEGORIES,
     ALLOWED_FAILURE_OWNERS,
@@ -180,6 +185,12 @@ def test_unknown_replay_tag_fails_unless_experimental():
 
 # Opening fallback owner buckets are cross-layer contract values; runtime
 # selection and prose behavior remain owned by the gate and opening fallback tests.
+def test_allowed_fallback_owner_buckets_match_canonical_meta_registry() -> None:
+    assert ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS is OPENING_FALLBACK_OWNER_BUCKETS
+    assert ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS is SEALED_FALLBACK_OWNER_BUCKETS
+    assert ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS is VISIBILITY_FALLBACK_OWNER_BUCKETS
+
+
 def test_opening_fallback_owner_bucket_values_are_contract_locked():
     row = _valid_sample_row()
     row["opening_fallback_owner_bucket"] = "upstream-prepared"

@@ -167,6 +167,33 @@ def test_visibility_fallback_owner_bucket_taxonomy_includes_ambiguous_bucket() -
     assert VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS in VISIBILITY_FALLBACK_OWNER_BUCKETS
 
 
+def test_visibility_fallback_owner_bucket_constants_match_canonical_registry() -> None:
+    assert visibility_fallback.VISIBILITY_FALLBACK_OWNER_SEALED_GATE is VISIBILITY_FALLBACK_OWNER_SEALED_GATE
+    assert (
+        visibility_fallback.VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY
+        is VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY
+    )
+    assert (
+        visibility_fallback.VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY
+        is VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY
+    )
+    assert visibility_fallback.VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE is VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE
+    assert (
+        visibility_fallback.VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+        is VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    )
+    assert visibility_fallback.VISIBILITY_FALLBACK_OWNER_BUCKETS == VISIBILITY_FALLBACK_OWNER_BUCKETS
+    assert VISIBILITY_FALLBACK_OWNER_BUCKETS == frozenset(
+        {
+            "sealed-gate",
+            "strict-social-visibility",
+            "opening-visibility",
+            "unknown-none",
+            "unknown-ambiguous",
+        }
+    )
+
+
 def test_build_visibility_validation_observation_shapes_pass_result() -> None:
     observation = visibility_fallback.build_visibility_validation_observation(
         {

@@ -228,6 +228,17 @@ def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -
     assert fam in FALLBACK_FAMILIES
 
 
+def test_upstream_prepared_opening_authorship_stamped_only_on_composition_meta() -> None:
+    """Success-path authorship is written once on composition meta, not opening_fallback_meta."""
+    gm = opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm)
+    assert "opening_fallback_authorship_source" not in payload["opening_fallback_meta"]
+    assert (
+        payload["opening_fallback_composition_meta"]["opening_fallback_authorship_source"]
+        == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    )
+
+
 def test_maybe_attach_upstream_opening_payload_scene_opening_with_curated_facts() -> None:
     gm = opening_gm_output()
     maybe_attach_upstream_prepared_opening_fallback_payload(gm, resolution={"kind": "scene_opening", "prompt": "Start."})

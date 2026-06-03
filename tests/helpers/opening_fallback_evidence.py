@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import Any
 
 from game.final_emission_meta import (
+    OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_RESULT_META_FIELDS,
@@ -28,8 +29,11 @@ from game.final_emission_meta import (
 OPENING_FALLBACK_RESULT_META_FIELD_NAMES = OPENING_FALLBACK_RESULT_META_FIELDS
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
-# Legacy compatibility-local authorship token — test/read-side only; never emitted on canonical paths.
+# Cycle AP1: retired gate-local composer authorship — test inject vocabulary only.
+# Production ``game/`` never writes these tokens; canonical paths use
+# ``OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED`` from upstream packaging.
 OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL = "compatibility_local_opening_deterministic"
+assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
 
 OPENING_FALLBACK_FAMILY = "scene_opening"
 OPENING_SUCCESS_SOURCE = "opening_deterministic_fallback"

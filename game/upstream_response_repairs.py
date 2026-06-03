@@ -191,7 +191,9 @@ def build_upstream_prepared_opening_fallback_payload(
 
     **Ownership:** prose is composed only via :func:`game.opening_deterministic_fallback.deterministic_opening_fallback_text_and_meta`;
     this function packages classification, composition layers, and provenance for :mod:`game.final_emission_gate`
-    to select (not re-author). Attached automatically before final emission via
+    to select (not re-author). ``opening_fallback_authorship_source`` is written here once on the
+    success path; gate and opening adapter mirror it from ``opening_fallback_composition_meta``.
+    Attached automatically before final emission via
     :func:`maybe_attach_upstream_prepared_opening_fallback_payload` when curated facts exist.
     """
     fallback_text, fallback_meta = deterministic_opening_fallback_text_and_meta(gm_output)

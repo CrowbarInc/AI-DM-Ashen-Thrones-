@@ -11,6 +11,11 @@ from game.final_emission_sealed_fallback import (
 from game.final_emission_replay_projection import (
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_SELECTION_OWNER,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_FALLBACK_SELECTION_OWNER,
+    SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
     SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
     SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
     SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
@@ -21,6 +26,8 @@ from game.final_emission_replay_projection import (
     SEALED_REPLACEMENT_SUBKINDS,
     STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
     STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
     project_sealed_replacement_subkind_from_fem,
     read_side_lineage_projection_surface,
 )
@@ -1172,20 +1179,45 @@ def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_f
     assert fallback["stage"] == "sanitizer"
     assert fallback["owner"] == "game.output_sanitizer"
     assert fallback["fallback_kind"] == "sanitizer_empty_output"
+    assert fallback["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
     assert _lineage_event(sanitizer, "gate_outcome")["gate_path"] == "sanitizer_fallback"
 
     sanitizer_social = build_fem_runtime_lineage_events(
         {
             "sanitizer_strict_social_fallback_used": True,
             "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
+            "sanitizer_strict_social_selection_owner": "output_sanitizer",
+            "sanitizer_strict_social_prose_owner": "strict_social_emission",
         }
     )
     sanitizer_social_selected = _lineage_event(sanitizer_social, "fallback_selected")
     assert sanitizer_social_selected["owner"] == "game.output_sanitizer"
     assert sanitizer_social_selected["fallback_kind"] == "sanitizer_strict_social"
-    assert sanitizer_social_selected["fallback_selection_owner"] is None
-    assert sanitizer_social_selected["fallback_content_owner"] is None
+    assert sanitizer_social_selected["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert sanitizer_social_selected["fallback_content_owner"] == SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
     assert _lineage_event(sanitizer_social, "gate_outcome")["gate_path"] == "sanitizer_fallback"
+
+
+def test_build_fem_runtime_lineage_events_projects_upstream_fast_fallback_split_owners() -> None:
+    events = build_fem_runtime_lineage_events(
+        {
+            "fallback_provenance_trace": {
+                "source": "fallback",
+                "stage": "fallback_selector",
+                "content_fingerprint": "abc123",
+                "gate_exit_vs_selector_match": True,
+            },
+        }
+    )
+    selected = _lineage_event(events, "fallback_selected")
+    assert selected["fallback_kind"] == "upstream_fast_fallback"
+    assert selected["owner"] == "game.api"
+    assert selected["source"] == "fallback_provenance_trace"
+    assert selected["stage"] == "retry"
+    assert selected["fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
+    assert selected["fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    assert not any(event.get("event_kind") == "gate_outcome" for event in events)
 
 
 def test_build_fem_runtime_lineage_events_is_conservative_serializable_and_recurrence_ready() -> None:
@@ -1271,14 +1303,14 @@ def test_build_fem_runtime_lineage_events_sealed_branches_remain_distinct_read_s
         "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
     }
     branches = (
-        ("social_interlocutor_minimal_fallback", SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR),
-        ("passive_scene_pressure_fallback", SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE),
-        ("npc_pursuit_neutral_fallback", SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL),
-        ("anti_reset_local_continuation_fallback", SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION),
-        ("global_scene_fallback", SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE),
+        ("social_interlocutor_minimal_fallback", SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR, STRICT_SOCIAL_FALLBACK_CONTENT_OWNER),
+        ("passive_scene_pressure_fallback", SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE, SEALED_FALLBACK_MODULE_CONTENT_OWNER),
+        ("npc_pursuit_neutral_fallback", SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL, SEALED_FALLBACK_MODULE_CONTENT_OWNER),
+        ("anti_reset_local_continuation_fallback", SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION, SEALED_FALLBACK_MODULE_CONTENT_OWNER),
+        ("global_scene_fallback", SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE, SEALED_FALLBACK_MODULE_CONTENT_OWNER),
     )
     projected_kinds: list[str] = []
-    for final_emitted_source, expected_subkind in branches:
+    for final_emitted_source, expected_subkind, expected_content_owner in branches:
         events = build_fem_runtime_lineage_events(
             {
                 **shared_realization,
@@ -1287,8 +1319,43 @@ def test_build_fem_runtime_lineage_events_sealed_branches_remain_distinct_read_s
         )
         fallback = _lineage_event(events, "fallback_selected")
         assert fallback["fallback_kind"] == expected_subkind
+        assert fallback["owner"] == "game.final_emission_gate"
+        assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
+        assert fallback["fallback_content_owner"] == expected_content_owner
         projected_kinds.append(str(fallback["fallback_kind"]))
     assert len(set(projected_kinds)) == len(branches)
+
+
+def test_build_fem_runtime_lineage_events_sealed_opening_subkind_maps_opening_content_owner() -> None:
+    """``sealed_opening_fallback`` content owner matches scene-opening prose owner."""
+    from game.final_emission_replay_projection import SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND
+
+    assert (
+        SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND[SEALED_REPLACEMENT_SUBKIND_OPENING]
+        == OPENING_FALLBACK_CONTENT_OWNER
+    )
+    opening_meta = successful_opening_fem_meta(final_route="replaced")
+    events = build_fem_runtime_lineage_events(opening_meta)
+    opening_selected = _lineage_event(events, "fallback_selected")
+    assert opening_selected["fallback_kind"] == "scene_opening"
+    assert opening_selected["owner"] == "game.final_emission_gate"
+    assert opening_selected["fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
+    assert opening_selected["fallback_content_owner"] == OPENING_FALLBACK_CONTENT_OWNER
+
+
+def test_build_fem_runtime_lineage_events_sealed_unknown_replacement_is_conservative() -> None:
+    events = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "final_emitted_source": "unclassified_terminal_fallback",
+            "realization_fallback_family": GATE_TERMINAL_REPAIR,
+        }
+    )
+    fallback = _lineage_event(events, "fallback_selected")
+    assert fallback["fallback_kind"] == SEALED_REPLACEMENT_SUBKIND_UNKNOWN
+    assert fallback["owner"] == "game.final_emission_gate"
+    assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER
 
 
 def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:
@@ -1404,6 +1471,23 @@ def test_normalize_fem_preserves_dual_fallback_family_fields_without_collapse() 
     assert normalized["fallback_family_used"] != normalized[REALIZATION_FALLBACK_FAMILY_FIELD]
 
 
+def test_golden_replay_dual_family_precedence_matches_fem_normalization() -> None:
+    """Replay projection reads both normalized FEM fields independently (no collapse)."""
+    from tests.helpers.golden_replay_projection import (
+        REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS,
+        project_replay_fallback_family_from_fem,
+    )
+
+    raw = {
+        "fallback_family_used": "scene_opening",
+        REALIZATION_FALLBACK_FAMILY_FIELD: "upstream_prepared_emission",
+    }
+    normalized = normalize_final_emission_meta_for_observability(raw)
+    assert project_replay_fallback_family_from_fem(normalized) == "scene_opening"
+    assert set(REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS) <= set(normalized.keys())
+    assert normalized[REALIZATION_FALLBACK_FAMILY_FIELD] == "upstream_prepared_emission"
+
+
 def test_final_emission_meta_read_side_surface_exposes_sidecar_lane_constants() -> None:
     surface = final_emission_meta_read_side_surface()
     assert surface["final_emission_meta_key"] == FINAL_EMISSION_META_KEY
@@ -1413,6 +1497,10 @@ def test_final_emission_meta_read_side_surface_exposes_sidecar_lane_constants() 
     assert surface["opening_fallback_owner_buckets"] == sorted(OPENING_FALLBACK_OWNER_BUCKETS)
     assert surface["sealed_fallback_owner_buckets"] == sorted(SEALED_FALLBACK_OWNER_BUCKETS)
     assert surface["visibility_fallback_owner_buckets"] == sorted(VISIBILITY_FALLBACK_OWNER_BUCKETS)
+    registries = surface["fallback_owner_bucket_registries"]
+    assert registries["opening"]["OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED"] == "upstream-prepared"
+    assert registries["sealed"]["SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED"] == "strict-social-sealed"
+    assert registries["visibility"]["VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY"] == "opening-visibility"
     assert surface["sidecar_read_helpers_preferred"] is True
 
 
@@ -1448,6 +1536,15 @@ def test_read_side_lineage_projection_surface_includes_sealed_subkinds_and_split
     assert surface["opening_fallback_content_owner"] == OPENING_FALLBACK_CONTENT_OWNER
     assert surface["strict_social_fallback_selection_owner"] == STRICT_SOCIAL_FALLBACK_SELECTION_OWNER
     assert surface["strict_social_fallback_content_owner"] == STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
+    assert surface["sanitizer_fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert surface["sanitizer_strict_social_content_owner"] == SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
+    assert surface["sealed_fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
+    assert surface["upstream_fast_fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
+    assert surface["upstream_fast_fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    assert surface["upstream_fast_fallback_provenance_packager"] == "game.fallback_provenance_debug"
+    assert surface["sealed_replacement_content_owner_by_subkind"][SEALED_REPLACEMENT_SUBKIND_OPENING] == (
+        OPENING_FALLBACK_CONTENT_OWNER
+    )
     assert surface["mutation_lineage_key"] == FINAL_EMISSION_MUTATION_LINEAGE_KEY
     assert surface["legacy_sealed_or_global_replacement_token"] == "sealed_or_global_replacement"
     assert SEALED_REPLACEMENT_SUBKIND_OPENING in surface["sealed_replacement_subkind_tokens"]

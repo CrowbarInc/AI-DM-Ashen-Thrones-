@@ -1,0 +1,801 @@
+{
+  "cycle": "AP",
+  "name": "Fallback Authorship Resolution",
+  "relevant_files": [
+    {
+      "path": "game/opening_deterministic_fallback.py",
+      "role": "Opening prose composer; builds result meta without authorship stamp",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "deterministic_opening_fallback_text_and_meta",
+        "OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER",
+        "opening_context_from_gm_output"
+      ],
+      "risk": "medium",
+      "notes": "Prose owner; delegates meta to build_opening_fallback_result_meta. Docstring still mentions stale gate compatibility re-call."
+    },
+    {
+      "path": "game/upstream_response_repairs.py",
+      "role": "Canonical upstream prepared opening payload packager; first authorship stamp",
+      "constructs_authorship": true,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "build_upstream_prepared_opening_fallback_payload",
+        "OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED",
+        "UPSTREAM_PREPARED_OPENING_FALLBACK_KEY",
+        "maybe_attach_upstream_prepared_opening_fallback_payload"
+      ],
+      "risk": "medium",
+      "notes": "Stamps opening_fallback_authorship_source and realization_fallback_family on success path."
+    },
+    {
+      "path": "game/final_emission_opening_fallback.py",
+      "role": "Opening selection and fail-closed policy; meta assembly without prose authorship",
+      "constructs_authorship": true,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "build_opening_fallback_result_meta",
+        "build_upstream_prepared_opening_composition_meta",
+        "_opening_fail_closed_meta_upstream_missing_insufficient_curated_facts",
+        "select_opening_fallback_for_response_type_contract",
+        "opening_fallback_compatibility_local_disabled"
+      ],
+      "risk": "medium",
+      "notes": "Sets compatibility_local_disabled=True on all active paths; fail-closed sets authorship_source=None."
+    },
+    {
+      "path": "game/final_emission_gate.py",
+      "role": "Gate orchestration; RT debug authorship merge on opening branch",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "_enforce_response_type_contract",
+        "_opening_scene_safe_fallback_selection",
+        "apply_opening_fallback_projection_fields"
+      ],
+      "risk": "high",
+      "notes": "Hot path. May mirror/clear opening_fallback_authorship_source on debug lane. Dead import of opening composer removed in AB but gate remains selection owner."
+    },
+    {
+      "path": "game/final_emission_meta.py",
+      "role": "FEM read-side packaging; owner-bucket mapper; projection field registry",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": true,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "opening_fallback_owner_bucket_from_meta",
+        "opening_fallback_owner_bucket_from_fields",
+        "OPENING_FALLBACK_PROJECTION_FIELDS",
+        "apply_opening_fallback_projection_fields",
+        "_OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL"
+      ],
+      "risk": "medium",
+      "notes": "Central read-side bucket assignment. Compatibility-local tokens map to unknown-ambiguous; never written in production."
+    },
+    {
+      "path": "game/final_emission_replay_projection.py",
+      "role": "Read-side fallback selection projection and runtime lineage builder",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": true,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "_fem_selected_fallback_projection",
+        "build_fem_runtime_lineage_events",
+        "OPENING_FALLBACK_SELECTION_OWNER",
+        "OPENING_FALLBACK_CONTENT_OWNER",
+        "OPENING_FAIL_CLOSED_CONTENT_OWNER"
+      ],
+      "risk": "medium",
+      "notes": "Projects split selection/content owners for opening and strict-social. Sanitizer events lack split fields today."
+    },
+    {
+      "path": "game/runtime_lineage_telemetry.py",
+      "role": "Lineage event envelope and fallback attribution field vocabulary",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "make_runtime_lineage_event",
+        "RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS",
+        "runtime_lineage_vocabulary_summary"
+      ],
+      "risk": "low",
+      "notes": "Documents owner=selector contract. Additive split-owner fields preferred over reinterpreting owner."
+    },
+    {
+      "path": "game/final_emission_sealed_fallback.py",
+      "role": "Sealed terminal selection; stamps sealed_fallback_owner_bucket",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": true,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "SealedFallbackSelection",
+        "stamp_sealed_fallback_realization_family",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "from_legacy_tuple"
+      ],
+      "risk": "medium",
+      "notes": "Route bucket explicit; underlying prose owner varies by branch. Tuple adapters are AM scope."
+    },
+    {
+      "path": "game/final_emission_visibility_fallback.py",
+      "role": "Visibility fallback routing and visibility_fallback_owner_bucket classification",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": true,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "VisibilitySelectedFallback",
+        "classify_visibility_fallback_owner_bucket",
+        "stamp_visibility_fallback_metadata",
+        "from_legacy_tuple"
+      ],
+      "risk": "medium",
+      "notes": "Routing owner distinguishable; content owner not on bucket."
+    },
+    {
+      "path": "game/fallback_provenance_debug.py",
+      "role": "Temporary upstream fast-fallback fingerprint and overwrite trace",
+      "constructs_authorship": true,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "attach_upstream_fast_fallback_provenance",
+        "record_final_emission_gate_entry",
+        "record_final_emission_gate_exit",
+        "fallback_provenance_trace"
+      ],
+      "risk": "medium",
+      "notes": "Self-described temporary. Weak permanent authorship anchor for fast fallback family."
+    },
+    {
+      "path": "game/output_sanitizer.py",
+      "role": "Sanitizer fallback selection with explicit split-owner trace",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_strict_social_selection_owner",
+        "sanitizer_strict_social_prose_owner"
+      ],
+      "risk": "low",
+      "notes": "Best existing split-owner model; lineage projection should mirror trace."
+    },
+    {
+      "path": "game/diegetic_fallback_narration.py",
+      "role": "Diegetic template classification to fallback_family_used",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "fallback_template_metadata",
+        "_FALLBACK_TEMPLATE_METADATA",
+        "opening_deterministic_fallback"
+      ],
+      "risk": "low",
+      "notes": "Taxonomy only; not prose authorship owner."
+    },
+    {
+      "path": "game/realization_authority.py",
+      "role": "Governed fallback family registry with owner profiles",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "FALLBACK_FAMILIES",
+        "FallbackFamily",
+        "legacy_diegetic_fallback"
+      ],
+      "risk": "low",
+      "notes": "Broad family level; opening success stamped legacy_diegetic_fallback historically."
+    },
+    {
+      "path": "game/realization_provenance.py",
+      "role": "Realization family stamp normalizer",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "attach_realization_fallback_family",
+        "UPSTREAM_PREPARED_EMISSION",
+        "STRICT_SOCIAL_DETERMINISTIC_FALLBACK"
+      ],
+      "risk": "low",
+      "notes": "Parallel vocabulary to diegetic fallback_family_used."
+    },
+    {
+      "path": "game/social_exchange_emission.py",
+      "role": "Strict-social fallback prose owner",
+      "constructs_authorship": true,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "deterministic_social_fallback_line",
+        "minimal_social_emergency_fallback_line",
+        "stamp_strict_social_deterministic_fallback_family"
+      ],
+      "risk": "low",
+      "notes": "Content owner for strict-social; gate selects."
+    },
+    {
+      "path": "game/gm_retry.py",
+      "role": "Retry terminal fallback selector",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "select_deterministic_retry_fallback_line",
+        "force_terminal_retry_fallback",
+        "select_terminal_retry_fallback_line"
+      ],
+      "risk": "medium",
+      "notes": "Multiple prose providers behind one retry family."
+    },
+    {
+      "path": "game/api.py",
+      "role": "Upstream API fast fallback trigger",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "_fast_fallback_for_upstream_error"
+      ],
+      "risk": "low",
+      "notes": "Triggers fallback_provenance_debug attachment."
+    },
+    {
+      "path": "game/final_emission_validators.py",
+      "role": "Validator debug defaults mirroring opening authorship keys",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "opening_fallback_authorship_source",
+        "opening_fallback_compatibility_local_disabled"
+      ],
+      "risk": "low",
+      "notes": "Mirror surface only."
+    },
+    {
+      "path": "game/final_emission_boundary_contract.py",
+      "role": "Mutation taxonomy including disallowed compatibility-local compose",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": true,
+      "test_file": false,
+      "key_symbols": [
+        "compose_opening_fallback_compatibility_local"
+      ],
+      "risk": "low",
+      "notes": "Registry entry only; no implementation."
+    },
+    {
+      "path": "tests/helpers/opening_fallback_evidence.py",
+      "role": "Canonical test fixtures for opening FEM and observed fields",
+      "constructs_authorship": true,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": true,
+      "test_file": true,
+      "key_symbols": [
+        "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL",
+        "successful_opening_fem_meta",
+        "fail_closed_opening_fem_meta"
+      ],
+      "risk": "low",
+      "notes": "Compatibility-local token is test-only; AP1 retirement target."
+    },
+    {
+      "path": "tests/helpers/golden_replay_projection.py",
+      "role": "Replay observation projection with 41 protected fields",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": true,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "PROTECTED_OBSERVATION_FIELDS",
+        "project_turn_observation",
+        "project_replay_fallback_family_from_fem"
+      ],
+      "risk": "high",
+      "notes": "Replay-protected values must remain byte-stable."
+    },
+    {
+      "path": "tests/helpers/golden_replay.py",
+      "role": "Golden replay harness and observed turn assembly",
+      "constructs_authorship": false,
+      "emits_provenance": true,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "run_golden_replay_scenario",
+        "observed_turn_from_pipeline"
+      ],
+      "risk": "high",
+      "notes": "Diagnostic replay; lineage does not affect drift classification."
+    },
+    {
+      "path": "tests/test_opening_fallback_owner_bucket.py",
+      "role": "Direct owner for read-side opening bucket mapping contract",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "test_canonical_upstream_prepared_authorship_source_maps_to_upstream_prepared",
+        "test_legacy_compatibility_local_authorship_source_maps_to_unknown_ambiguous"
+      ],
+      "risk": "low",
+      "notes": "Bucket value strings are replay-stable."
+    },
+    {
+      "path": "tests/test_final_emission_meta.py",
+      "role": "FEM projection and runtime lineage split-owner assertions",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks",
+        "test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes"
+      ],
+      "risk": "medium",
+      "notes": "Asserts split-owner lineage shape for opening/strict-social."
+    },
+    {
+      "path": "tests/test_golden_replay.py",
+      "role": "Protected replay scenarios and authorship negative invariants",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "test_golden_canonical_opening_fallback_never_reports_compatibility_local_ownership",
+        "test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner_bucket",
+        "test_golden_drift_classification_ignores_runtime_lineage_diagnostics"
+      ],
+      "risk": "high",
+      "notes": "Primary replay stability proof surface."
+    },
+    {
+      "path": "tests/test_final_emission_opening_fallback.py",
+      "role": "Opening adapter meta and fail-closed contract",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "test_opening_fallback_compatibility_local_disabled_on_all_paths"
+      ],
+      "risk": "medium",
+      "notes": "23 tests; meta composition and no local compose."
+    },
+    {
+      "path": "tests/test_upstream_response_repairs.py",
+      "role": "Prepared payload authorship and structure contract",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "build_upstream_prepared_opening_fallback_payload"
+      ],
+      "risk": "medium",
+      "notes": "Locks upstream authorship stamp."
+    },
+    {
+      "path": "tests/test_fallback_overwrite_containment.py",
+      "role": "Fast fallback provenance containment behavior",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "fallback_provenance_trace",
+        "overwrite_containment"
+      ],
+      "risk": "medium",
+      "notes": "Behavior tests for fallback_provenance_debug."
+    },
+    {
+      "path": "tests/test_runtime_lineage_telemetry.py",
+      "role": "Lineage event schema and attribution field normalization",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "test_make_runtime_lineage_event_is_json_serializable_and_normalized"
+      ],
+      "risk": "low",
+      "notes": "Vocabulary lock for split-owner fields."
+    },
+    {
+      "path": "tests/test_final_emission_sealed_fallback.py",
+      "role": "Sealed bucket stamping and dataclass/tuple adapters",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "sealed_fallback_owner_bucket"
+      ],
+      "risk": "medium",
+      "notes": "12 tests."
+    },
+    {
+      "path": "tests/test_final_emission_visibility_fallback.py",
+      "role": "Visibility bucket and routing contract",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "visibility_fallback_owner_bucket",
+        "classify_visibility_fallback_owner_bucket"
+      ],
+      "risk": "medium",
+      "notes": "53 tests."
+    },
+    {
+      "path": "tests/test_realization_provenance.py",
+      "role": "Realization family stamp normalization",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "attach_realization_fallback_family"
+      ],
+      "risk": "low",
+      "notes": "7 tests."
+    },
+    {
+      "path": "tests/failure_classification_contract.py",
+      "role": "Allowed opening_fallback_owner_bucket enum for classifier",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "opening_fallback_owner_bucket"
+      ],
+      "risk": "low",
+      "notes": "Bucket allowlist must stay stable."
+    },
+    {
+      "path": "tests/test_ownership_registry.py",
+      "role": "Test governance registry documenting direct owners",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": true,
+      "key_symbols": [
+        "final_emission_meta_projection",
+        "final_emission_gate_orchestration"
+      ],
+      "risk": "low",
+      "notes": "Governance only; 19 tests."
+    },
+    {
+      "path": "tools/realization_provenance_audit.py",
+      "role": "Static provenance audit tool",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "realization_provenance_audit"
+      ],
+      "risk": "low",
+      "notes": "Audit only."
+    },
+    {
+      "path": "tools/final_emission_ownership_audit.py",
+      "role": "Ownership hotspot audit tool",
+      "constructs_authorship": false,
+      "emits_provenance": false,
+      "assigns_owner_bucket": false,
+      "compatibility_layer": false,
+      "test_file": false,
+      "key_symbols": [
+        "final_emission_ownership_audit"
+      ],
+      "risk": "low",
+      "notes": "Audit only."
+    }
+  ],
+  "ambiguity_seams": [
+    {
+      "path": "game/final_emission_meta.py",
+      "symbol": "_OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL",
+      "problem": "Read-side mapper preserves retired compatibility-local authorship tokens that are never assigned in production game code",
+      "recommended_fix_type": "remove compatibility authorship inference",
+      "risk": "low"
+    },
+    {
+      "path": "tests/helpers/opening_fallback_evidence.py",
+      "symbol": "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL",
+      "problem": "Test-only token duplicated across helpers; negative tests depend on unknown-ambiguous mapping",
+      "recommended_fix_type": "consolidate to single test fixture vocabulary",
+      "risk": "low"
+    },
+    {
+      "path": "game/final_emission_replay_projection.py",
+      "symbol": "build_fem_runtime_lineage_events",
+      "problem": "Sanitizer fallback lineage events omit fallback_selection_owner and fallback_content_owner while sanitizer trace has explicit split",
+      "recommended_fix_type": "make ownership explicit",
+      "risk": "low"
+    },
+    {
+      "path": "game/final_emission_replay_projection.py",
+      "symbol": "_fem_selected_fallback_projection",
+      "problem": "Single owner field means gate selector; content authorship requires joining FEM fields for aggregation",
+      "recommended_fix_type": "no-op / leave alone",
+      "risk": "low"
+    },
+    {
+      "path": "game/upstream_response_repairs.py",
+      "symbol": "build_upstream_prepared_opening_fallback_payload",
+      "problem": "Dual stamp: realization_fallback_family upstream_prepared_emission plus diegetic fallback_family_used scene_opening in composition meta",
+      "recommended_fix_type": "normalize metadata shape",
+      "risk": "medium"
+    },
+    {
+      "path": "game/final_emission_gate.py",
+      "symbol": "_enforce_response_type_contract",
+      "problem": "Gate RT debug may set/clear opening_fallback_authorship_source separately from upstream payload stamp",
+      "recommended_fix_type": "move ownership earlier",
+      "risk": "medium"
+    },
+    {
+      "path": "game/final_emission_visibility_fallback.py",
+      "symbol": "classify_visibility_fallback_owner_bucket",
+      "problem": "Visibility bucket captures routing owner; underlying prose family (opening/social/global) not on bucket",
+      "recommended_fix_type": "consolidate owner_bucket assignment",
+      "risk": "medium"
+    },
+    {
+      "path": "game/final_emission_sealed_fallback.py",
+      "symbol": "assemble_non_strict_sealed_fallback_selection",
+      "problem": "Shared gate_terminal_repair family stamp masks distinct final_emitted_source prose owners across branches",
+      "recommended_fix_type": "make ownership explicit",
+      "risk": "medium"
+    },
+    {
+      "path": "game/fallback_provenance_debug.py",
+      "symbol": "attach_upstream_fast_fallback_provenance",
+      "problem": "Temporary module is de facto authorship anchor for upstream fast fallback; fingerprint-based not family-based",
+      "recommended_fix_type": "normalize metadata shape",
+      "risk": "medium"
+    },
+    {
+      "path": "game/gm_retry.py",
+      "symbol": "select_deterministic_retry_fallback_line",
+      "problem": "Multiple diegetic/social prose providers grouped under retry_terminal_fallback family without per-line content_owner",
+      "recommended_fix_type": "make ownership explicit",
+      "risk": "medium"
+    },
+    {
+      "path": "game/opening_deterministic_fallback.py",
+      "symbol": "module docstring",
+      "problem": "Documents gate compatibility re-call that production no longer performs",
+      "recommended_fix_type": "no-op / leave alone",
+      "risk": "low"
+    },
+    {
+      "path": "tests/helpers/golden_replay_projection.py",
+      "symbol": "project_replay_fallback_family_from_fem",
+      "problem": "Precedence between fallback_family_used and realization_fallback_family for observed fallback_family is implicit",
+      "recommended_fix_type": "normalize metadata shape",
+      "risk": "low"
+    }
+  ],
+  "recommended_blocks": [
+    {
+      "id": "AP1",
+      "title": "Retire compatibility-local authorship residue",
+      "goal": "Remove production read-side inference for authorship tokens never emitted; consolidate test-only constant",
+      "files": [
+        "game/final_emission_meta.py",
+        "tests/helpers/opening_fallback_evidence.py",
+        "game/final_emission_boundary_contract.py"
+      ],
+      "tests": [
+        "tests/test_opening_fallback_owner_bucket.py",
+        "tests/test_golden_replay.py"
+      ],
+      "parallel_safe_with": ["AP4", "AP6"],
+      "acceptance": [
+        "No game code assigns compatibility_local_opening_deterministic",
+        "Canonical golden scenarios unchanged on protected fields",
+        "Negative unknown-ambiguous behavior preserved for injected fixture tokens"
+      ]
+    },
+    {
+      "id": "AP2",
+      "title": "Single write-time authorship stamp boundary (opening)",
+      "goal": "Authorship stamped once on upstream success path; gate debug mirrors without re-authoring",
+      "files": [
+        "game/upstream_response_repairs.py",
+        "game/final_emission_opening_fallback.py",
+        "game/final_emission_gate.py"
+      ],
+      "tests": [
+        "tests/test_upstream_response_repairs.py",
+        "tests/test_final_emission_opening_fallback.py",
+        "tests/test_final_emission_gate.py"
+      ],
+      "parallel_safe_with": [],
+      "acceptance": [
+        "Canonical opening FEM byte-stable on golden fixtures",
+        "Fail-closed paths retain null/absent authorship_source",
+        "No new authorship stamp sites in gate"
+      ]
+    },
+    {
+      "id": "AP3",
+      "title": "Extend split-owner lineage projection",
+      "goal": "Project fallback_selection_owner and fallback_content_owner on sanitizer and sealed lineage events",
+      "files": [
+        "game/final_emission_replay_projection.py",
+        "game/runtime_lineage_telemetry.py"
+      ],
+      "tests": [
+        "tests/test_final_emission_meta.py",
+        "tests/test_runtime_lineage_telemetry.py"
+      ],
+      "parallel_safe_with": ["AP1", "AP4"],
+      "acceptance": [
+        "Additive lineage fields only; owner field unchanged",
+        "Golden drift classification still ignores lineage",
+        "Sanitizer split matches output_sanitizer trace owners"
+      ]
+    },
+    {
+      "id": "AP4",
+      "title": "Owner-bucket assignment consolidation (read-side)",
+      "goal": "Single documented entry point for bucket constants and classifiers without changing bucket strings",
+      "files": [
+        "game/final_emission_meta.py",
+        "game/final_emission_sealed_fallback.py",
+        "game/final_emission_visibility_fallback.py"
+      ],
+      "tests": [
+        "tests/test_opening_fallback_owner_bucket.py",
+        "tests/test_final_emission_sealed_fallback.py",
+        "tests/test_final_emission_visibility_fallback.py",
+        "tests/failure_classification_contract.py"
+      ],
+      "parallel_safe_with": ["AP1", "AP3", "AP6"],
+      "acceptance": [
+        "Bucket string values unchanged",
+        "Classifier allowlists unchanged",
+        "One documented bucket vocabulary surface"
+      ]
+    },
+    {
+      "id": "AP5",
+      "title": "Fast-fallback provenance ownership clarification",
+      "goal": "Clarify or promote fallback_provenance_debug as canonical fast-fallback authorship shape",
+      "files": [
+        "game/fallback_provenance_debug.py",
+        "game/final_emission_replay_projection.py",
+        "game/api.py"
+      ],
+      "tests": [
+        "tests/test_fallback_overwrite_containment.py",
+        "tests/test_upstream_fast_fallback_block_l.py"
+      ],
+      "parallel_safe_with": ["AP1"],
+      "acceptance": [
+        "Containment behavior unchanged",
+        "fallback_provenance_trace FEM shape stable or replay-proven"
+      ]
+    },
+    {
+      "id": "AP6",
+      "title": "Dual family stamp precedence helper",
+      "goal": "Document and centralize diegetic vs realization family precedence for replay projection",
+      "files": [
+        "tests/helpers/golden_replay_projection.py",
+        "game/final_emission_replay_projection.py"
+      ],
+      "tests": [
+        "tests/test_golden_replay.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_realization_provenance.py"
+      ],
+      "parallel_safe_with": ["AP1", "AP4"],
+      "acceptance": [
+        "Protected fallback_family observed values unchanged",
+        "Precedence documented in one module"
+      ]
+    }
+  ],
+  "files_to_attach": [
+    "game/final_emission_meta.py",
+    "game/final_emission_replay_projection.py",
+    "game/upstream_response_repairs.py",
+    "game/final_emission_opening_fallback.py",
+    "game/final_emission_gate.py",
+    "game/fallback_provenance_debug.py",
+    "game/runtime_lineage_telemetry.py",
+    "game/final_emission_sealed_fallback.py",
+    "game/final_emission_visibility_fallback.py",
+    "game/opening_deterministic_fallback.py",
+    "game/output_sanitizer.py",
+    "game/realization_provenance.py",
+    "tests/test_opening_fallback_owner_bucket.py",
+    "tests/test_final_emission_meta.py",
+    "tests/test_golden_replay.py",
+    "tests/helpers/golden_replay_projection.py",
+    "tests/helpers/opening_fallback_evidence.py",
+    "tests/test_final_emission_opening_fallback.py",
+    "tests/test_upstream_response_repairs.py",
+    "tests/test_fallback_overwrite_containment.py",
+    "docs/cycles/cycle_ap_fallback_authorship_resolution_recon.md",
+    "docs/cycles/cycle_ap_fallback_authorship_resolution_inventory.json",
+    "docs/cycles/cycle_ab_fallback_topology_collapse_recon_2026-05-31.md",
+    "docs/cycles/cycle_aj_opening_fallback_metadata_consolidation_recon_2026-06-02.md",
+    "docs/cycles/cycle_i_fallback_authorship_recon_2026-05-25.md"
+  ]
+}

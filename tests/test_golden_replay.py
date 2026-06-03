@@ -55,6 +55,8 @@ from tests.helpers.golden_replay import (
 from tests.helpers.golden_replay_projection import (
     lookup_observation_path,
     project_replay_fallback_family_from_fem,
+    dual_fallback_family_replay_precedence_surface,
+    REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS,
     project_turn_observation,
     protected_field_paths,
     protected_observation_drift_bucket,
@@ -185,6 +187,33 @@ def test_golden_replay_dual_family_projection_falls_back_to_realization_when_die
         )
     )
     assert turn["fallback_family"] == "upstream_prepared_emission"
+
+
+def test_golden_replay_dual_family_projection_returns_none_when_both_absent() -> None:
+    """Read-side projector returns None when neither FEM family field is present."""
+    assert project_replay_fallback_family_from_fem({}) is None
+    assert project_replay_fallback_family_from_fem({"final_emitted_source": "generated_candidate"}) is None
+
+    turn = project_turn_observation(
+        minimal_turn_payload(
+            scenario_id="dual_family_both_absent",
+            gm_text="The lane stays quiet.",
+            fem_meta={"final_emitted_source": "generated_candidate"},
+        )
+    )
+    assert turn["fallback_family"] is None
+    assert "fallback_family" in turn["unavailable"]
+
+
+def test_golden_replay_dual_family_precedence_surface_documents_read_side_rule() -> None:
+    surface = dual_fallback_family_replay_precedence_surface()
+    assert surface["prefer_field"] == "fallback_family_used"
+    assert surface["fallback_field"] == "realization_fallback_family"
+    assert surface["precedence_keys"] == list(REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
+    assert surface["read_side_only"] is True
+    assert project_replay_fallback_family_from_fem(
+        {"fallback_family_used": "social", "realization_fallback_family": "gate_terminal_repair"}
+    ) == "social"
 
 
 def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() -> None:

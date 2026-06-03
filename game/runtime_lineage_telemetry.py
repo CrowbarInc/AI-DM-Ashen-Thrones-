@@ -13,7 +13,9 @@ Owner vocabulary contract:
   and ``fallback_owner_bucket`` carry content/prose provenance when finalized
   FEM has that evidence. ``fallback_selection_owner`` and
   ``fallback_content_owner`` are explicit split-owner fields for families that
-  have moved beyond bucket/authorship-source hints.
+  have moved beyond bucket/authorship-source hints (opening, strict-social,
+  sanitizer, and sealed replacement projections in
+  ``game.final_emission_replay_projection``).
 - Future split-owner work should add explicit fields such as content_owner,
   selection_owner, and projection_owner instead of changing emitted text or
   silently reinterpreting ``owner``.

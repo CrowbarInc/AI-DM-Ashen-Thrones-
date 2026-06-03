@@ -3,6 +3,11 @@
 This module selects an existing upstream-prepared opening fallback snapshot or
 the existing sealed fail-closed marker. It does not author opening prose,
 package upstream payloads, write final output, or own gate orchestration.
+
+Success-path ``opening_fallback_authorship_source`` is written once upstream by
+:func:`game.upstream_response_repairs.build_upstream_prepared_opening_fallback_payload`
+and mirrored here from ``opening_fallback_composition_meta`` when a prepared
+payload is selected. Fail-closed paths leave authorship absent or ``None``.
 """
 from __future__ import annotations
 
@@ -39,7 +44,8 @@ def build_opening_fallback_result_meta(
     """Canonical opening fallback result metadata (selection/FEM projection core).
 
     Aligns with :data:`game.final_emission_meta.OPENING_FALLBACK_RESULT_META_FIELDS`
-    (subset of ``OPENING_FALLBACK_PROJECTION_FIELDS``); authorship is stamped separately.
+    (subset of ``OPENING_FALLBACK_PROJECTION_FIELDS``). Authorship is stamped only
+    upstream on the success path; selection mirrors it from composition meta.
     """
     if context is None:
         return {
@@ -103,6 +109,29 @@ def build_upstream_prepared_opening_composition_meta(
     }
     composition_meta.update(dict(result_meta))
     return composition_meta
+
+
+def opening_fallback_authorship_source_from_composition_meta(
+    composition_meta: Mapping[str, Any] | None,
+) -> str | None:
+    """Read authorship from upstream composition meta without inferring defaults."""
+    if not isinstance(composition_meta, Mapping):
+        return None
+    value = composition_meta.get("opening_fallback_authorship_source")
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _result_meta_from_upstream_prepared_payload(upstream: Mapping[str, Any]) -> Dict[str, Any]:
+    """Build adapter result meta from upstream prepared opening payload (mirror only)."""
+    result_meta = dict(upstream["opening_fallback_meta"])
+    authorship = opening_fallback_authorship_source_from_composition_meta(
+        upstream.get("opening_fallback_composition_meta")
+    )
+    if authorship is not None:
+        result_meta["opening_fallback_authorship_source"] = authorship
+    return result_meta
 
 
 def _opening_fallback_classification() -> Dict[str, str]:
@@ -276,7 +305,7 @@ def select_opening_fallback_for_response_type_contract(
     if upstream:
         return (
             str(upstream["prepared_opening_fallback_text"]).strip(),
-            dict(upstream["opening_fallback_meta"]),
+            _result_meta_from_upstream_prepared_payload(upstream),
             stub_patch,
             True,
             upstream,

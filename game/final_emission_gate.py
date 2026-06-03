@@ -262,7 +262,6 @@ from game.final_emission_repairs import (
     _strict_social_answer_pressure_rd_contract_active,
 )
 from game.upstream_response_repairs import (
-    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_EMISSION_KEY,
     build_social_fallback_resolution,
     maybe_attach_upstream_prepared_opening_fallback_payload,
@@ -3783,9 +3782,8 @@ def _enforce_response_type_contract(
             and fallback_meta.get("blocked_repair_kind") != "opening_upstream_prepare_attach_failed"
         ):
             debug["blocked_repair_kind"] = "opening_missing_curated_facts"
-        if upstream_opening_selected:
-            debug["opening_fallback_authorship_source"] = OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-        else:
+        # Mirror authorship from adapter/upstream composition meta only; do not infer on success path.
+        if not upstream_opening_selected:
             debug["opening_fallback_authorship_source"] = None
         fallback_failures = validate_opening_output(fallback, opening_context)
         if fallback and not fallback_failures and not fallback_meta.get("opening_fallback_failed_closed"):

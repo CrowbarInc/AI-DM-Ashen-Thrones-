@@ -2,7 +2,7 @@
 
 Ownership:
 - ``game.api`` and ``game.gm`` own upstream error classification and fast-fallback selection.
-- ``game.fallback_provenance_debug`` owns provenance/fingerprint metadata shaping and selector realignment.
+- ``game.fallback_provenance_debug`` owns canonical provenance packaging and selector realignment.
 - This file owns upstream classification, tagging, provenance preservation, and retry/budget incident paths.
 
 Gate/finalize overwrite containment is owned by
@@ -25,7 +25,14 @@ from game.api import (
     _synthetic_manual_play_gpt_budget_gm,
 )
 from game.defaults import default_campaign, default_character, default_session, default_world
-from game.fallback_provenance_debug import METADATA_KEY, realign_fallback_provenance_selector_to_current_text
+from game.fallback_provenance_debug import (
+    FALLBACK_PROVENANCE_SELECTOR_KEYS,
+    METADATA_KEY,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    attach_upstream_fast_fallback_provenance,
+    realign_fallback_provenance_selector_to_current_text,
+)
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm import _classify_upstream_gpt_error
 from game.storage import get_scene_runtime
@@ -348,6 +355,23 @@ def test_manual_play_gpt_budget_zero_skips_call_gpt(monkeypatch: pytest.MonkeyPa
     tags = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
     assert "upstream_api_fast_fallback" in tags
     assert (out.get("metadata") or {}).get("upstream_api_error", {}).get("failure_class") == "manual_play_gpt_budget_exceeded"
+
+
+def test_upstream_fast_fallback_provenance_ownership_surface_is_documented() -> None:
+    assert UPSTREAM_FAST_FALLBACK_SELECTION_OWNER == "game.api"
+    assert UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER == "game.fallback_provenance_debug"
+
+
+def test_upstream_fast_fallback_api_path_attaches_selector_provenance() -> None:
+    gm: dict[str, Any] = {
+        "player_facing_text": "Torch smoke hangs over the checkpoint.",
+        "tags": ["upstream_api_fast_fallback"],
+        "metadata": {},
+    }
+    attach_upstream_fast_fallback_provenance(gm)
+    prov = (gm.get("metadata") or {}).get(METADATA_KEY) or {}
+    assert set(prov.keys()) >= set(FALLBACK_PROVENANCE_SELECTOR_KEYS)
+    assert prov["source"] == "fallback"
 
 
 def test_realign_fallback_provenance_selector_refreshes_fingerprint() -> None:

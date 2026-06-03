@@ -88,6 +88,21 @@ def test_build_recurrence_key_is_deterministic_and_uses_kind_precedence() -> Non
     ).endswith(":accept_unchanged")
 
 
+def test_make_runtime_lineage_event_preserves_sanitizer_split_owners() -> None:
+    event = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="sanitizer",
+        owner="game.output_sanitizer",
+        fallback_kind="sanitizer_strict_social",
+        fallback_selection_owner="game.output_sanitizer",
+        fallback_content_owner="game.social_exchange_emission",
+    )
+    assert event["owner"] == "game.output_sanitizer"
+    assert event["fallback_selection_owner"] == "game.output_sanitizer"
+    assert event["fallback_content_owner"] == "game.social_exchange_emission"
+    assert event["recurrence_key"] == "fallback_selected:sanitizer:game.output_sanitizer:sanitizer_strict_social"
+
+
 def test_missing_optional_fields_are_safe_and_require_no_runtime_object() -> None:
     event = make_runtime_lineage_event(event_kind="gate_outcome")
 

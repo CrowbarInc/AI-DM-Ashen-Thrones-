@@ -66,6 +66,8 @@ SEMANTIC_DISALLOWED: frozenset[str] = frozenset(
         "speaker_contract_neutral_bridge",
         "strict_social_referential_substitution",
         "effective_social_resolution_sync",
+        # Retired gate-local opening composer (Cycle AP1): no game/ implementation;
+        # kept SEMANTIC_DISALLOWED for taxonomy / closeout-doc freeze.
         "compose_opening_fallback_compatibility_local",
         # Interaction continuity: Gate-local semantic repair / speaker-bridge residue (not packaging).
         "interaction_continuity_repair",

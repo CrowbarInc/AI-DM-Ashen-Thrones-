@@ -1,7 +1,8 @@
 """Block I regressions for upstream fast-fallback overwrite containment.
 
 Ownership:
-- ``game.fallback_provenance_debug`` owns provenance/fingerprint metadata shaping only.
+- ``game.fallback_provenance_debug`` owns canonical upstream fast-fallback provenance
+  packaging (fingerprints, selector snapshots, FEM ``fallback_provenance_trace``).
 - ``game.final_emission_gate`` owns containment at gate/finalize boundaries.
 - This file owns overwrite containment and gate-exit-vs-selector protection.
 
@@ -17,7 +18,10 @@ from game.final_emission_meta import read_final_emission_meta_dict
 
 import pytest
 
-from game.fallback_provenance_debug import attach_upstream_fast_fallback_provenance
+from game.fallback_provenance_debug import (
+    FALLBACK_PROVENANCE_SELECTOR_KEYS,
+    attach_upstream_fast_fallback_provenance,
+)
 from game.final_emission_gate import apply_final_emission_gate
 import game.final_emission_gate as feg
 
@@ -30,6 +34,16 @@ def _fallback_gm(selector_text: str) -> dict:
     }
     attach_upstream_fast_fallback_provenance(gm)
     return gm
+
+
+def test_attach_upstream_fast_fallback_provenance_selector_shape_is_stable() -> None:
+    gm = _fallback_gm("Fog rolls low between the river tents.")
+    prov = (gm.get("metadata") or {}).get("fallback_provenance") or {}
+    assert set(prov.keys()) >= set(FALLBACK_PROVENANCE_SELECTOR_KEYS)
+    assert prov["source"] == "fallback"
+    assert prov["stage"] == "fallback_selector"
+    assert prov["selector_player_facing_text"] == "Fog rolls low between the river tents."
+    assert isinstance(prov.get("content_fingerprint"), str) and len(prov["content_fingerprint"]) == 64
 
 
 def test_upstream_fast_fallback_no_overwrite_no_containment():

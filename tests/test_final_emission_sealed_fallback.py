@@ -14,8 +14,11 @@ import pytest
 
 from game.final_emission_gate import apply_strict_social_emergency_fallback_patch
 from game.final_emission_meta import (
+    SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
 )
 import game.final_emission_sealed_fallback as sealed_fallback
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
@@ -30,6 +33,22 @@ from tests.helpers.final_emission_gate_fixtures import (
 )
 
 pytestmark = pytest.mark.unit
+
+
+def test_sealed_fallback_owner_bucket_constants_match_canonical_registry() -> None:
+    assert sealed_fallback.SEALED_FALLBACK_OWNER_SEALED_GATE is SEALED_FALLBACK_OWNER_SEALED_GATE
+    assert sealed_fallback.SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED is SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+    assert sealed_fallback.SEALED_FALLBACK_OWNER_UNKNOWN_NONE is SEALED_FALLBACK_OWNER_UNKNOWN_NONE
+    assert sealed_fallback.SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS is SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+    assert sealed_fallback.SEALED_FALLBACK_OWNER_BUCKETS == SEALED_FALLBACK_OWNER_BUCKETS
+    assert SEALED_FALLBACK_OWNER_BUCKETS == frozenset(
+        {
+            "sealed-gate",
+            "strict-social-sealed",
+            "unknown-none",
+            "unknown-ambiguous",
+        }
+    )
 
 
 def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None:

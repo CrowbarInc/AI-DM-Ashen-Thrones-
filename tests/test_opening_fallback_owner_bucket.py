@@ -24,6 +24,7 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_OWNER_BUCKETS,
+    final_emission_meta_read_side_surface,
     opening_fallback_owner_bucket_from_fields,
 )
 from tests.helpers.final_emission_gate_fixtures import assert_fallback_owner_bucket
@@ -48,6 +49,14 @@ def test_owner_bucket_constants_are_the_allowed_values() -> None:
     )
 
 
+def test_opening_fallback_owner_bucket_registry_matches_read_side_surface() -> None:
+    registries = final_emission_meta_read_side_surface()["fallback_owner_bucket_registries"]
+    opening_registry = registries["opening"]
+    assert opening_registry["OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert opening_registry["OPENING_FALLBACK_OWNER_SEALED_GATE"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert set(opening_registry.values()) == set(OPENING_FALLBACK_OWNER_BUCKETS)
+
+
 def test_canonical_upstream_prepared_authorship_source_maps_to_upstream_prepared() -> None:
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
@@ -65,15 +74,15 @@ def test_fail_closed_repair_kind_maps_to_sealed_gate() -> None:
     )
 
 
-def test_legacy_compatibility_local_authorship_source_maps_to_unknown_ambiguous() -> None:
-    """Legacy compatibility-local opening authorship is observed, not canonicalized."""
+def test_injected_legacy_compatibility_local_authorship_maps_to_unknown_ambiguous() -> None:
+    """Injected legacy token maps to unknown-ambiguous; production never emits it."""
+    assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
         meta=successful_opening_observed_fields(
             opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
         ),
     )
-    assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
 def test_missing_metadata_maps_to_unknown_ambiguous() -> None:

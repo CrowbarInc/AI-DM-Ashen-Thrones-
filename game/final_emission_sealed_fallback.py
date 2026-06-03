@@ -8,8 +8,11 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, Literal, Mapping, MutableMapping, NamedTuple, Sequence
 
 from game.final_emission_meta import (
+    SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
     refresh_final_emission_mutation_lineage,
 )
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback

@@ -10,10 +10,19 @@ Owner semantics for projected runtime-lineage events:
   carrying ``fallback_owner_bucket="upstream-prepared"`` and
   ``fallback_authorship_source="upstream_prepared_opening_fallback"``.
 - Runtime FEM may carry both ``fallback_family_used`` (diegetic) and
-  ``realization_fallback_family`` (governed provenance); lineage ``fallback_kind``
+  ``realization_fallback_family`` (governed provenance). Lineage ``fallback_kind``
   for opening uses diegetic ``scene_opening`` and does not collapse the two FEM fields.
+  Golden replay observed ``fallback_family`` uses diegetic-first precedence via
+  ``tests.helpers.golden_replay_projection.project_replay_fallback_family_from_fem``
+  (read-side only; not applied here).
 - Successful opening fallback and gate-selected strict-social fallback carry
   explicit ``fallback_selection_owner`` and ``fallback_content_owner`` fields.
+  Sanitizer and sealed terminal replacement paths project the same split fields
+  when content ownership is knowable from finalized FEM / sanitizer trace evidence.
+  Upstream API fast fallback projects ``fallback_selection_owner="game.api"`` and
+  ``fallback_content_owner="game.gm_retry"`` when ``fallback_provenance_trace``
+  survives to FEM; ``owner`` remains ``game.api`` for event identity continuity.
+  Provenance packaging is owned by ``game.fallback_provenance_debug``.
   Fail-closed opening keeps gate/sealed ownership and is not treated as
   upstream-authored content.
 - ``fallback_owner_bucket`` for opening paths delegates to
@@ -31,7 +40,7 @@ from game.runtime_lineage_telemetry import (
     RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR,
     make_runtime_lineage_event,
 )
-from game.telemetry_vocab import normalize_reason_list
+from game.telemetry_vocab import normalize_owner, normalize_reason_list
 
 FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
 OPENING_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
@@ -39,6 +48,19 @@ OPENING_FALLBACK_CONTENT_OWNER: str = "game.opening_deterministic_fallback"
 OPENING_FAIL_CLOSED_CONTENT_OWNER: str = "game.final_emission_gate"
 STRICT_SOCIAL_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
 STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: str = "game.social_exchange_emission"
+SANITIZER_FALLBACK_SELECTION_OWNER: str = "game.output_sanitizer"
+SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: str = "game.social_exchange_emission"
+SEALED_FALLBACK_SELECTION_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
+SEALED_FALLBACK_MODULE_CONTENT_OWNER: str = "game.final_emission_sealed_fallback"
+SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
+UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: str = "game.api"
+UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: str = "game.gm_retry"
+
+# Short names stamped on sanitizer FEM/trace surfaces → canonical lineage module owners.
+_SANITIZER_TRACE_OWNER_TO_LINEAGE: dict[str, str] = {
+    "output_sanitizer": SANITIZER_FALLBACK_SELECTION_OWNER,
+    "strict_social_emission": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+}
 
 # Read-side sealed replacement sub-kinds (Cycle AB6). Runtime FEM keeps
 # ``final_emitted_source`` / ``final_route`` unchanged; lineage projection refines
@@ -61,6 +83,15 @@ SEALED_REPLACEMENT_SUBKINDS: frozenset[str] = frozenset(
         SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
     }
 )
+SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND: dict[str, str] = {
+    SEALED_REPLACEMENT_SUBKIND_OPENING: OPENING_FALLBACK_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN: SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+}
 _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT: str = "sealed_or_global_replacement"
 
 
@@ -76,6 +107,15 @@ def read_side_lineage_projection_surface() -> dict[str, object]:
         "opening_fallback_content_owner": OPENING_FALLBACK_CONTENT_OWNER,
         "strict_social_fallback_selection_owner": STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
         "strict_social_fallback_content_owner": STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+        "sanitizer_fallback_selection_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+        "sanitizer_strict_social_content_owner": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+        "sealed_fallback_selection_owner": SEALED_FALLBACK_SELECTION_OWNER,
+        "sealed_replacement_content_owner_by_subkind": dict(
+            sorted(SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND.items())
+        ),
+        "upstream_fast_fallback_selection_owner": UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        "upstream_fast_fallback_content_owner": UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+        "upstream_fast_fallback_provenance_packager": "game.fallback_provenance_debug",
         "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
         "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
     }
@@ -139,6 +179,60 @@ def project_sealed_replacement_subkind_from_fem(fem: Mapping[str, Any]) -> str |
     }:
         return SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE
     return SEALED_REPLACEMENT_SUBKIND_UNKNOWN
+
+
+def _lineage_module_owner_from_trace(value: str | None, *, default: str) -> str:
+    """Map sanitizer trace short owner names to canonical ``game.*`` lineage owners."""
+    if not value:
+        return default
+    mapped = _SANITIZER_TRACE_OWNER_TO_LINEAGE.get(value)
+    if mapped:
+        return mapped
+    normalized = normalize_owner(value)
+    if normalized and normalized.startswith("game."):
+        return normalized
+    if normalized:
+        return f"game.{normalized}"
+    return default
+
+
+def _fallback_split_owners_for_kind(
+    fem: Mapping[str, Any],
+    fallback_kind: str,
+) -> tuple[str | None, str | None]:
+    """Return ``(fallback_selection_owner, fallback_content_owner)`` for a projected kind."""
+    if fallback_kind == "scene_opening":
+        return OPENING_FALLBACK_SELECTION_OWNER, OPENING_FALLBACK_CONTENT_OWNER
+    if fallback_kind == "opening_failed_closed":
+        return OPENING_FALLBACK_SELECTION_OWNER, OPENING_FAIL_CLOSED_CONTENT_OWNER
+    if fallback_kind in {"strict_social_fallback", "minimal_social_emergency_fallback"}:
+        return STRICT_SOCIAL_FALLBACK_SELECTION_OWNER, STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
+    if fallback_kind == "sanitizer_strict_social":
+        return (
+            _lineage_module_owner_from_trace(
+                _fem_lineage_source(fem, "sanitizer_strict_social_selection_owner"),
+                default=SANITIZER_FALLBACK_SELECTION_OWNER,
+            ),
+            _lineage_module_owner_from_trace(
+                _fem_lineage_source(fem, "sanitizer_strict_social_prose_owner"),
+                default=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+            ),
+        )
+    if fallback_kind == "sanitizer_empty_output":
+        owner = _lineage_module_owner_from_trace(
+            _fem_lineage_source(fem, "sanitizer_empty_fallback_owner"),
+            default=SANITIZER_FALLBACK_SELECTION_OWNER,
+        )
+        return owner, owner
+    if fallback_kind == "upstream_fast_fallback":
+        return UPSTREAM_FAST_FALLBACK_SELECTION_OWNER, UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    if is_sealed_replacement_lineage_kind(fallback_kind):
+        content_owner = SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND.get(
+            fallback_kind,
+            SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        )
+        return SEALED_FALLBACK_SELECTION_OWNER, content_owner
+    return None, None
 
 
 def _opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
@@ -477,20 +571,15 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
         fallback_kind, gate_path, stage, owner, source = fallback
         fallback_authorship_source: str | None = None
         fallback_owner_bucket: str | None = None
-        fallback_selection_owner: str | None = None
-        fallback_content_owner: str | None = None
+        fallback_selection_owner, fallback_content_owner = _fallback_split_owners_for_kind(
+            fem,
+            fallback_kind,
+        )
         if fallback_kind == "scene_opening":
             fallback_authorship_source = _fem_lineage_source(fem, "opening_fallback_authorship_source")
             fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
-            fallback_selection_owner = OPENING_FALLBACK_SELECTION_OWNER
-            fallback_content_owner = OPENING_FALLBACK_CONTENT_OWNER
         elif fallback_kind == "opening_failed_closed":
             fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
-            fallback_selection_owner = OPENING_FALLBACK_SELECTION_OWNER
-            fallback_content_owner = OPENING_FAIL_CLOSED_CONTENT_OWNER
-        elif fallback_kind in {"strict_social_fallback", "minimal_social_emergency_fallback"}:
-            fallback_selection_owner = STRICT_SOCIAL_FALLBACK_SELECTION_OWNER
-            fallback_content_owner = STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
         _append_fem_lineage_event(
             events,
             make_runtime_lineage_event(

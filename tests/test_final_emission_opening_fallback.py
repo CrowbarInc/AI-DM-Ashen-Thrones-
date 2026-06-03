@@ -146,6 +146,28 @@ def test_adapter_selects_usable_upstream_prepared_payload_unchanged() -> None:
     _assert_owner_bucket(meta, repair_kind=selected.fallback_kind, expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED)
 
 
+def test_select_mirrors_authorship_from_upstream_composition_meta() -> None:
+    gm_output = {UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: _prepared_payload()}
+    _text, meta, _stub, selected, _upstream = (
+        opening_fallback.select_opening_fallback_for_response_type_contract(gm_output)
+    )
+    assert selected is True
+    assert meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_select_does_not_infer_authorship_when_composition_meta_lacks_field() -> None:
+    payload = _prepared_payload()
+    composition = dict(payload["opening_fallback_composition_meta"])
+    composition.pop("opening_fallback_authorship_source", None)
+    payload["opening_fallback_composition_meta"] = composition
+    gm_output = {UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: payload}
+    _text, meta, _stub, selected, _upstream = (
+        opening_fallback.select_opening_fallback_for_response_type_contract(gm_output)
+    )
+    assert selected is True
+    assert "opening_fallback_authorship_source" not in meta
+
+
 def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_shape() -> None:
     selected = _select({"opening_curated_facts": ["Rain needles the stones at the gate."]})
 

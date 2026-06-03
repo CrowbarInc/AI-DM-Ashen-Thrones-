@@ -581,6 +581,11 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
     }
 )
 
+# Upstream fast-fallback provenance trace on FEM (read-side observability only).
+# Packaged by ``game.fallback_provenance_debug.record_final_emission_gate_exit``;
+# not owner-bucket assignment, diegetic family, or prose authorship.
+FEM_FALLBACK_PROVENANCE_TRACE_KEY: str = "fallback_provenance_trace"
+
 # Read-side FEM/replay projection registry for opening fallback telemetry.
 # Write-time result metadata is composed by
 # ``game.final_emission_opening_fallback.build_opening_fallback_result_meta`` (AJ1);
@@ -674,6 +679,14 @@ def apply_opening_fallback_projection_fields(
     )
 
 
+# --- Canonical fallback owner-bucket registry (read-side vocabulary; not policy) ---
+# Single source of bucket string values for opening, sealed, and visibility fallback
+# observability. Assignment/classification lives in:
+# - opening: ``opening_fallback_owner_bucket_from_meta`` / ``_from_fields`` (this module)
+# - sealed: ``game.final_emission_sealed_fallback.stamp_sealed_fallback_realization_family``
+# - visibility: ``game.final_emission_visibility_fallback.classify_visibility_fallback_owner_bucket``
+# Sealed/visibility modules re-export these constants for stable import paths.
+
 OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED = "upstream-prepared"
 OPENING_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
 OPENING_FALLBACK_OWNER_RETRY = "retry"
@@ -721,11 +734,38 @@ VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
 )
 
 
+def fallback_owner_bucket_registry_surface() -> dict[str, dict[str, str]]:
+    """Named constant→value maps for each fallback owner-bucket family (diagnostic only)."""
+    return {
+        "opening": {
+            "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            "OPENING_FALLBACK_OWNER_SEALED_GATE": OPENING_FALLBACK_OWNER_SEALED_GATE,
+            "OPENING_FALLBACK_OWNER_RETRY": OPENING_FALLBACK_OWNER_RETRY,
+            "OPENING_FALLBACK_OWNER_STRICT_SOCIAL": OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
+            "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        },
+        "sealed": {
+            "SEALED_FALLBACK_OWNER_SEALED_GATE": SEALED_FALLBACK_OWNER_SEALED_GATE,
+            "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED": SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+            "SEALED_FALLBACK_OWNER_UNKNOWN_NONE": SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+            "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        },
+        "visibility": {
+            "VISIBILITY_FALLBACK_OWNER_SEALED_GATE": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+            "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY": VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+            "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY": VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE": VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        },
+    }
+
+
 def final_emission_meta_read_side_surface() -> dict[str, object]:
     """Summarize FEM read-side packaging keys and fallback owner bucket registries.
 
     Diagnostic only: does not read live turn payloads or drive gate orchestration.
     """
+    registries = fallback_owner_bucket_registry_surface()
     return {
         "final_emission_meta_key": FINAL_EMISSION_META_KEY,
         "emission_debug_lane_key": EMISSION_DEBUG_LANE_KEY,
@@ -734,6 +774,7 @@ def final_emission_meta_read_side_surface() -> dict[str, object]:
         "opening_fallback_owner_buckets": sorted(OPENING_FALLBACK_OWNER_BUCKETS),
         "sealed_fallback_owner_buckets": sorted(SEALED_FALLBACK_OWNER_BUCKETS),
         "visibility_fallback_owner_buckets": sorted(VISIBILITY_FALLBACK_OWNER_BUCKETS),
+        "fallback_owner_bucket_registries": registries,
         "sidecar_read_helpers_preferred": True,
     }
 
@@ -744,7 +785,10 @@ _OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED: frozenset[str] = frozenset(
         "upstream_prepared_opening_fallback",
     }
 )
-_OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL: frozenset[str] = frozenset(
+# Cycle AP1: retired gate-local opening composer authorship tokens. Production game code
+# never writes these values; the read-side owner-bucket mapper maps them to
+# unknown-ambiguous when they appear in injected test fixtures or stale FEM evidence.
+OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES: frozenset[str] = frozenset(
     {
         "compatibility_local",
         "compatibility_local_opening_deterministic",
@@ -793,7 +837,9 @@ def opening_fallback_owner_bucket_from_fields(
     """Map existing opening fallback telemetry to one conservative owner bucket.
 
     Read-side only: this does not select, repair, or authorize fallback text.
-    Compatibility-local opening composition intentionally remains ambiguous.
+    Legacy compatibility-local authorship tokens (see
+    ``OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES``) are never
+    emitted by production; when present in evidence they map to unknown-ambiguous.
     """
     del fallback_temporal_frame  # Family/timeframe are insufficient ownership signals by themselves.
 
@@ -809,7 +855,7 @@ def opening_fallback_owner_bucket_from_fields(
     if fail_closed:
         return OPENING_FALLBACK_OWNER_SEALED_GATE
 
-    if authorship in _OPENING_FALLBACK_AUTH_COMPATIBILITY_LOCAL:
+    if authorship in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES:
         return OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
 
     explicit_strict_social = (

@@ -3064,6 +3064,47 @@ def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(mon
     assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 
 
+def test_final_gate_mirrors_authorship_from_upstream_payload_not_route_inference() -> None:
+    gm_output = opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm_output)
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
+    _repaired, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+
+def test_final_gate_does_not_infer_authorship_when_upstream_composition_lacks_field() -> None:
+    gm_output = opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm_output)
+    composition = dict(payload["opening_fallback_composition_meta"])
+    composition.pop("opening_fallback_authorship_source", None)
+    payload["opening_fallback_composition_meta"] = composition
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
+    _repaired, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert dbg.get("opening_fallback_authorship_source") is None
+
+
 def test_final_gate_valid_opening_candidate_has_no_fallback_provenance() -> None:
     candidate = (
         "You stand in the churned mud before Cinderwatch's eastern gate as rain spatters soot-dark stone. "

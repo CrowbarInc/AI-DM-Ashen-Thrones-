@@ -2627,6 +2627,7 @@ def _build_gpt_narration_from_authoritative_state(
             + f"upstream_api_fast_fallback:{failure_class}:{reason}"
         )
         _preserve_model_route_metadata(out, gm_dict, mark_upstream_preserved=True)
+        # Canonical provenance packaging (game.fallback_provenance_debug); selection already applied above.
         attach_upstream_fast_fallback_provenance(out)
         _attach_resolution_contract_metadata_to_gm_output(out, resolution if isinstance(resolution, dict) else None)
         record_emergency_nonplan_output(
