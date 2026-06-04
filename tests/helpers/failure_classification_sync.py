@@ -37,6 +37,8 @@ from tests.helpers.failure_classifier import (
     validate_failure_classification_row,
 )
 from tests.helpers.golden_replay_projection import (
+    protected_classifier_evidence_excluded_paths,
+    protected_classifier_evidence_field_paths,
     protected_observation_drift_bucket,
     protected_observation_field_paths,
     protected_observation_field_registry,
@@ -46,46 +48,7 @@ from tests.helpers.opening_fallback_evidence import (
     fail_closed_opening_observed_fields,
     successful_opening_observed_fields,
 )
-
-
-def observed_failure_row(**overrides: Any) -> dict[str, Any]:
-    """Return a classifier-shaped synthetic observed replay row."""
-    row: dict[str, Any] = {
-        "scenario_id": "probe",
-        "turn_index": 0,
-        "final_text": "The runner answers.",
-        "final_text_hash": "hash123",
-        "route_kind": "dialogue",
-        "selected_speaker_id": "runner",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "fallback_temporal_frame": None,
-        "opening_fallback_owner_bucket": None,
-        "sealed_fallback_owner_bucket": None,
-        "visibility_fallback_owner_bucket": None,
-        "visibility_replacement_applied": None,
-        "visibility_fallback_pool": None,
-        "visibility_fallback_kind": None,
-        "response_type_required": "dialogue_response",
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "post_gate_mutation_detected": False,
-        "strict_social_active": False,
-        "speaker_contract_enforcement_reason": None,
-        "fallback_behavior_repaired": False,
-        "fallback_behavior_repair_kind": None,
-        "sanitizer_mode": None,
-        "sanitizer_event_count": None,
-        "sanitizer_changed_count": None,
-        "sanitizer_rewrite_used": None,
-        "unavailable": [],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
-    row.update(overrides)
-    return row
+from tests.helpers.replay_observed_row_fixtures import observed_failure_row
 
 
 def observed_opening_fallback_row(*, owner_bucket: bool = False, **overrides: Any) -> dict[str, Any]:
@@ -314,6 +277,8 @@ def protected_observation_registry_summary() -> dict[str, Any]:
         "protected_field_count": len(registry),
         "structural_field_count": len(structural_paths),
         "semantic_field_count": len(semantic_paths),
+        "protected_classifier_evidence_count": len(protected_classifier_evidence_field_paths()),
+        "protected_classifier_evidence_excluded_count": len(protected_classifier_evidence_excluded_paths()),
         "paths_unique": len(set(paths)) == len(paths),
         "paths_sorted": list(paths) == sorted(paths),
         "fallback_family_bucket": protected_observation_drift_bucket("fallback_family"),
@@ -416,59 +381,52 @@ def contract_classifier_misalignments(
     return misalignments
 
 
-_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS: tuple[str, ...] = (
-    "sublayer",
-    "repair",
-    "lineage",
-    "opening_authorship",
-    "opening_owner",
-    "fallback_selection_owner",
-    "fallback_content_owner",
-    "sealed_owner",
-    "visibility_owner",
-    "visibility_replaced",
-    "visibility_pool",
-    "visibility_kind",
-    "mutation",
-    "missing",
-    "sanitizer_mode",
-    "sanitizer_events",
-    "sanitizer_changed",
-    "sanitizer_empty",
-    "sanitizer_empty_source",
-    "sanitizer_empty_owner",
-    "sanitizer_lineage_mode",
-    "sanitizer_lineage_changed",
-    "sanitizer_lineage_dropped",
-    "sanitizer_lineage_empty",
-    "sanitizer_lineage_legacy",
-    "strict_social_fallback",
-    "strict_social_selection_owner",
-    "strict_social_prose_owner",
-    "strict_social_source",
-)
+_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 29
 
 
 def dashboard_evidence_manifest_misalignments() -> list[str]:
-    """Return dashboard evidence manifest drift messages; empty when AK3-locked."""
+    """Return dashboard evidence manifest drift messages; empty when AK3/AO3-locked."""
+    from tests.failure_classification_contract import (
+        FAILURE_DASHBOARD_EVIDENCE_LABELS as contract_labels,
+        FAILURE_DASHBOARD_EVIDENCE_MANIFEST as contract_manifest,
+        FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS as contract_row_keys,
+        failure_dashboard_evidence_manifest,
+    )
     from tests.helpers.failure_dashboard_report import (
-        FAILURE_DASHBOARD_EVIDENCE_LABELS,
-        FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
-        FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+        FAILURE_DASHBOARD_EVIDENCE_LABELS as dashboard_labels,
+        FAILURE_DASHBOARD_EVIDENCE_MANIFEST as dashboard_manifest,
+        FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS as dashboard_row_keys,
     )
 
     misalignments: list[str] = []
 
-    if FAILURE_DASHBOARD_EVIDENCE_LABELS != _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS:
+    if failure_dashboard_evidence_manifest() != contract_manifest:
+        misalignments.append("failure_dashboard_evidence_manifest() must return FAILURE_DASHBOARD_EVIDENCE_MANIFEST")
+
+    if dashboard_manifest != contract_manifest:
         misalignments.append(
-            "FAILURE_DASHBOARD_EVIDENCE_LABELS drifted from locked dashboard label order"
+            "failure_dashboard_report must re-export contract FAILURE_DASHBOARD_EVIDENCE_MANIFEST unchanged"
+        )
+    if dashboard_row_keys != contract_row_keys:
+        misalignments.append(
+            "failure_dashboard_report must re-export contract FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS unchanged"
+        )
+    if dashboard_labels != contract_labels:
+        misalignments.append(
+            "failure_dashboard_report must re-export contract FAILURE_DASHBOARD_EVIDENCE_LABELS unchanged"
         )
 
-    manifest_keys = tuple(row_key for _label, row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST)
-    if manifest_keys != FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS:
+    manifest_keys = tuple(row_key for _label, row_key in contract_manifest)
+    if manifest_keys != contract_row_keys:
         misalignments.append("FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS must match manifest row keys")
 
-    dashboard_only = sorted(set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) - CLASSIFIER_EVIDENCE_FIELDS)
+    if len(contract_row_keys) != _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT:
+        misalignments.append(
+            f"dashboard evidence manifest must contain {_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT} row keys, "
+            f"got {len(contract_row_keys)}"
+        )
+
+    dashboard_only = sorted(set(contract_row_keys) - CLASSIFIER_EVIDENCE_FIELDS)
     if dashboard_only:
         misalignments.append(f"dashboard evidence keys outside classifier evidence: {dashboard_only!r}")
 
@@ -476,12 +434,20 @@ def dashboard_evidence_manifest_misalignments() -> list[str]:
 
 
 def classifier_evidence_manifest_misalignments() -> list[str]:
-    """Return manifest drift messages; empty when AK2 evidence sets are locked."""
+    """Return manifest drift messages; empty when AK2/AO2 evidence sets are locked."""
     misalignments: list[str] = []
 
     if CLASSIFIER_EVIDENCE_FIELDS != OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS:
         misalignments.append(
             "CLASSIFIER_EVIDENCE_FIELDS must equal OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS"
+        )
+
+    derived_protected_overlap = protected_classifier_evidence_field_paths()
+    if PROTECTED_CLASSIFIER_EVIDENCE_FIELDS != derived_protected_overlap:
+        misalignments.append(
+            "PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must equal protected_classifier_evidence_field_paths(); "
+            f"contract_only={sorted(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS - derived_protected_overlap)!r} "
+            f"derived_only={sorted(derived_protected_overlap - PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)!r}"
         )
 
     if len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) != 32:
@@ -507,6 +473,20 @@ def classifier_evidence_manifest_misalignments() -> list[str]:
             "PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must equal flat protected paths ∩ classifier evidence; "
             f"manifest_only={sorted(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS - expected_protected_overlap)!r} "
             f"expected_only={sorted(expected_protected_overlap - PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)!r}"
+        )
+
+    excluded_only = protected_classifier_evidence_excluded_paths() - protected_flat_paths
+    if excluded_only:
+        misalignments.append(
+            "protected classifier evidence exclusions must be flat protected paths; "
+            f"invalid_exclusions={sorted(excluded_only)!r}"
+        )
+    ineligible_flat = protected_flat_paths - derived_protected_overlap
+    if ineligible_flat != protected_classifier_evidence_excluded_paths():
+        misalignments.append(
+            "protected classifier evidence exclusions must equal flat protected paths not in overlap; "
+            f"expected_excluded={sorted(protected_classifier_evidence_excluded_paths())!r} "
+            f"actual_ineligible={sorted(ineligible_flat)!r}"
         )
 
     misalignments.extend(dashboard_evidence_manifest_misalignments())

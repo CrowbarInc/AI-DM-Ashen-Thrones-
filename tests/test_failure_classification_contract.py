@@ -24,6 +24,9 @@ from tests.failure_classification_contract import (
     ALLOWED_CLASSIFICATION_ROW_FIELDS,
     CLASSIFIER_EVIDENCE_EXTENSION_FIELDS,
     CLASSIFIER_EVIDENCE_FIELDS,
+    FAILURE_DASHBOARD_EVIDENCE_LABELS,
+    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
     OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS,
     PROTECTED_CLASSIFIER_EVIDENCE_FIELDS,
     REQUIRED_CLASSIFICATION_FIELDS,
@@ -36,6 +39,7 @@ from tests.helpers.failure_classification_sync import (
     classification_contract_summary,
     classifier_evidence_manifest_misalignments,
     contract_classifier_misalignments,
+    dashboard_evidence_manifest_misalignments,
     failure_classification_row_contract_fields,
     failure_classification_row_contract_misalignments,
     failure_classification_typeddict_field_sets,
@@ -43,7 +47,6 @@ from tests.helpers.failure_classification_sync import (
     known_owner_buckets,
 )
 from tests.helpers.failure_dashboard_report import (
-    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
     build_failure_dashboard_rows,
     render_failure_dashboard_markdown,
 )
@@ -68,8 +71,59 @@ def test_classifier_evidence_manifest_matches_optional_contract_fields():
     assert classifier_evidence_manifest_misalignments() == []
 
 
+def test_ao2_protected_classifier_evidence_derived_from_observation_registry():
+    from tests.helpers.golden_replay_projection import (
+        protected_classifier_evidence_excluded_paths,
+        protected_classifier_evidence_field_paths,
+        protected_observation_field_paths,
+    )
+
+    derived = protected_classifier_evidence_field_paths()
+    assert derived == PROTECTED_CLASSIFIER_EVIDENCE_FIELDS
+    flat_protected = {path for path in protected_observation_field_paths() if "." not in path}
+    assert derived == flat_protected - protected_classifier_evidence_excluded_paths()
+    assert derived <= set(OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)
+
+
 def test_dashboard_evidence_keys_are_subset_of_classifier_evidence_fields():
     assert set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) <= CLASSIFIER_EVIDENCE_FIELDS
+    assert dashboard_evidence_manifest_misalignments() == []
+
+
+def test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract():
+    from tests.helpers.failure_dashboard_report import (
+        FAILURE_DASHBOARD_EVIDENCE_LABELS as dashboard_labels,
+        FAILURE_DASHBOARD_EVIDENCE_MANIFEST as dashboard_manifest,
+        FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS as dashboard_row_keys,
+    )
+    from tests.failure_classification_contract import failure_dashboard_evidence_manifest
+
+    contract_manifest = failure_dashboard_evidence_manifest()
+    assert len(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) == 29
+    assert dashboard_manifest == contract_manifest == FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+    assert dashboard_row_keys == FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
+    assert dashboard_labels == FAILURE_DASHBOARD_EVIDENCE_LABELS
+    assert tuple(label for label, _row_key in contract_manifest) == FAILURE_DASHBOARD_EVIDENCE_LABELS
+
+
+def test_ao4_synthetic_observed_row_factory_is_single_authority():
+    from tests.helpers.failure_classification_sync import observed_failure_row
+    from tests.helpers.replay_observed_row_fixtures import (
+        observed_dashboard_probe_row,
+        synthetic_observed_replay_row,
+    )
+
+    classifier_row = observed_failure_row()
+    dashboard_row = observed_dashboard_probe_row()
+    assert classifier_row == synthetic_observed_replay_row(profile="classifier_probe")
+    assert dashboard_row == synthetic_observed_replay_row(profile="dashboard_probe")
+    assert classifier_row["scenario_id"] == "probe"
+    assert classifier_row["final_text_hash"] == "hash123"
+    assert "raw_signal_presence" not in classifier_row
+    assert dashboard_row["scenario_id"] == "controlled_probe"
+    assert dashboard_row["final_text_hash"] == "probehash"
+    assert dashboard_row["raw_signal_presence"] == {}
+    assert dashboard_row["normalized_signal_presence"] == {}
 
 
 def test_failure_classification_row_contract_helper_matches_contract_constants():

@@ -1,0 +1,493 @@
+{
+  "cycle": "AO0",
+  "generated_at": "2026-06-03",
+  "purpose": "Schema/edit touchpoint map for replay ownership consolidation. Recon only.",
+  "authority_summary": {
+    "protected_observation_source_of_truth": "tests/helpers/golden_replay_projection.py::PROTECTED_OBSERVATION_FIELDS",
+    "classifier_row_source_of_truth": "tests/failure_classification_contract.py",
+    "dashboard_presentation_source_of_truth": "tests/helpers/failure_dashboard_report.py::FAILURE_DASHBOARD_*",
+    "manifest_governance_source_of_truth": "docs/testing/protected_replay_manifest.md (manual scenario tables + generated paths)",
+    "runtime_lineage_source_of_truth": "game/final_emission_replay_projection.py",
+    "runtime_fem_keys_source_of_truth": "game/final_emission_meta.py"
+  },
+  "overlap_counts": {
+    "protected_observation_fields": 41,
+    "classifier_required_fields": 15,
+    "classifier_optional_evidence_fields": 47,
+    "protected_intersect_classifier_optional": 32,
+    "protected_only": 9,
+    "classifier_extension_only": 15,
+    "dashboard_evidence_manifest_keys": 29,
+    "dashboard_table_columns": 17
+  },
+  "groups": {
+    "projection": {
+      "description": "Payload/FEM → observed turn; protected field registry and extraction",
+      "touchpoints": [
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "PROTECTED_OBSERVATION_FIELDS",
+          "fields_touched": ["all 41 protected paths"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Retain as sole acceptance registry; drive extraction from here (AO1)"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "protected_observation_field_registry",
+          "fields_touched": ["registry accessor for 41 paths + drift_bucket"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Export to manifest refresh, sync, dashboard path lists"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "project_turn_observation",
+          "fields_touched": [
+            "resolution_kind", "route_kind", "selected_speaker_id", "final_emitted_source",
+            "final_emission_mutation_lineage", "response_type_*", "upstream_prepared_emission_*",
+            "sanitizer_*", "opening_*", "sealed_fallback_owner_bucket", "visibility_*",
+            "fallback_family", "fallback_temporal_frame", "trace.canonical_entry.*",
+            "trace.social_contract_trace.route_selected", "final_text", "scaffold_leakage",
+            "unavailable", "raw_signal_presence", "normalized_signal_presence",
+            "runtime_lineage_events", "response_delta_*", "player_text"
+          ],
+          "role": "derivative",
+          "consolidation_candidate": "Registry-driven field extractors; dedupe raw_signal_presence keys (AO1)"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "project_replay_fallback_family_from_fem",
+          "fields_touched": ["fallback_family", "fallback_family_used", "realization_fallback_family"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Keep read-side precedence here; document in manifest only"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "lookup_observation_path / protected_path_representation_errors",
+          "fields_touched": ["dotted protected paths", "unavailable"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "AK5 coverage lock; no move needed"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "golden_text_hash / final_text_has_scaffold_leakage",
+          "fields_touched": ["final_text", "scaffold_leakage"],
+          "role": "derivative",
+          "consolidation_candidate": "Stay co-located with projection"
+        },
+        {
+          "path": "game/final_emission_replay_projection.py",
+          "symbol": "build_fem_runtime_lineage_events",
+          "fields_touched": [
+            "fem_runtime_lineage_events", "fallback_kind", "fallback_selection_owner",
+            "fallback_content_owner", "fallback_owner_bucket", "owner", "event_kind"
+          ],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Do not merge into test projection; clarify boundary doc (AO5)"
+        },
+        {
+          "path": "game/final_emission_replay_projection.py",
+          "symbol": "project_sealed_replacement_subkind_from_fem",
+          "fields_touched": ["SEALED_REPLACEMENT_SUBKINDS", "lineage fallback_kind sub-kinds"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Diagnostic only; not protected observation"
+        },
+        {
+          "path": "game/final_emission_meta.py",
+          "symbol": "OPENING_FALLBACK_PROJECTION_FIELDS / owner bucket frozensets",
+          "fields_touched": [
+            "opening_fallback_owner_bucket", "sealed_fallback_owner_bucket",
+            "visibility_fallback_owner_bucket", "opening_fallback_authorship_source"
+          ],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Runtime FEM authority; golden projection reads via helpers"
+        },
+        {
+          "path": "tests/helpers/golden_replay_fixtures.py",
+          "symbol": "observed_turn_from_gate_output / minimal_turn_payload",
+          "fields_touched": ["synthetic turn_payload for project_turn_observation"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep as direct-seam adapter only"
+        },
+        {
+          "path": "tests/helpers/golden_replay.py",
+          "symbol": "protected_*_expectation / classify_golden_drift",
+          "fields_touched": [
+            "route_kind", "selected_speaker_id", "scaffold_leakage", "final_text",
+            "structural_drift", "semantic_drift", "exact_drift"
+          ],
+          "role": "derivative",
+          "consolidation_candidate": "Move expectation DSL fragments toward projection-owned config (AO1 follow-on)"
+        }
+      ]
+    },
+    "manifest": {
+      "description": "Governance declaration and generated field-path mirror",
+      "touchpoints": [
+        {
+          "path": "docs/testing/protected_replay_manifest.md",
+          "symbol": "PROTECTED/SUPPORTING/ADVISORY scenario tables",
+          "fields_touched": ["scenario_id", "test function names", "acceptance classification"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Optional machine-readable scenario registry module (AO6)"
+        },
+        {
+          "path": "docs/testing/protected_replay_manifest.md",
+          "symbol": "Generated protected_field_paths section",
+          "fields_touched": ["41 paths + drift_bucket"],
+          "role": "derivative",
+          "consolidation_candidate": "Already automated; keep refresh tool as sole writer"
+        },
+        {
+          "path": "docs/testing/protected_replay_manifest.md",
+          "symbol": "Cycle AB dual fallback-family contract",
+          "fields_touched": ["fallback_family_used", "realization_fallback_family", "fallback_family"],
+          "role": "derivative",
+          "consolidation_candidate": "Doc-only; semantics owned by golden_replay_projection"
+        },
+        {
+          "path": "tools/refresh_protected_replay_manifest.py",
+          "symbol": "render_generated_section / --check / --write",
+          "fields_touched": ["41 paths", "structural/semantic counts"],
+          "role": "derivative",
+          "consolidation_candidate": "CI already gates; no change needed"
+        },
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_protected_replay_manifest_matches_observation_registry",
+          "fields_touched": ["manifest generated section vs registry"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep as parity lock"
+        },
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_ak5_manifest_generated_section_matches_registry",
+          "fields_touched": ["41 paths"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep as parity lock"
+        }
+      ]
+    },
+    "classifier": {
+      "description": "Failure row schema, taxonomy, and classification logic",
+      "touchpoints": [
+        {
+          "path": "tests/failure_classification_contract.py",
+          "symbol": "REQUIRED_CLASSIFICATION_FIELDS",
+          "fields_touched": [
+            "scenario_id", "turn_index", "category", "severity", "primary_owner",
+            "source_family", "replay_tags", "field_path", "expected", "actual",
+            "reason", "unavailable_fields", "raw_signal_refs", "classification_confidence",
+            "investigate_first"
+          ],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Retain; derive TypedDict from contract (AO2)"
+        },
+        {
+          "path": "tests/failure_classification_contract.py",
+          "symbol": "OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS / CLASSIFIER_EVIDENCE_FIELDS",
+          "fields_touched": ["47 optional evidence keys including 32 protected overlap"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Derive PROTECTED_CLASSIFIER_EVIDENCE_FIELDS from projection registry (AO2)"
+        },
+        {
+          "path": "tests/failure_classification_contract.py",
+          "symbol": "ALLOWED_* taxonomies",
+          "fields_touched": ["category", "primary_owner", "secondary_owner", "severity", "replay_tags", "source_family", "owner_buckets"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Keep; bucket frozensets already import from final_emission_meta"
+        },
+        {
+          "path": "tests/helpers/failure_classifier.py",
+          "symbol": "FailureClassification TypedDict",
+          "fields_touched": ["required + NotRequired optional evidence keys"],
+          "role": "derivative",
+          "consolidation_candidate": "Generate or assert-equal from contract constants (AO2)"
+        },
+        {
+          "path": "tests/helpers/failure_classifier.py",
+          "symbol": "classify_replay_failure",
+          "fields_touched": ["all row fields", "evidence copied from observed turn"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep logic; reduce hand-listed field copies via manifest"
+        },
+        {
+          "path": "tests/helpers/failure_classifier.py",
+          "symbol": "CATEGORY_RULES / PRIMARY_OWNER_RULES / SECONDARY_OWNER_RULES",
+          "fields_touched": ["routing by field_path, tags, observed evidence"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Classification logic authority stays here"
+        },
+        {
+          "path": "tests/helpers/failure_classification_sync.py",
+          "symbol": "assert_contract_classifier_alignment / registry overlap checks",
+          "fields_touched": ["protected paths vs classifier evidence", "dashboard manifest subset"],
+          "role": "derivative",
+          "consolidation_candidate": "Strengthen to derive overlap from registry programmatically (AO2)"
+        },
+        {
+          "path": "tests/helpers/failure_classification_sync.py",
+          "symbol": "observed_failure_row",
+          "fields_touched": ["synthetic observed-turn top-level keys + trace nested keys"],
+          "role": "derivative",
+          "consolidation_candidate": "Unify with dashboard fixtures (AO4)"
+        }
+      ]
+    },
+    "dashboard/reporting": {
+      "description": "Markdown reports, table columns, evidence rendering",
+      "touchpoints": [
+        {
+          "path": "tests/helpers/failure_dashboard_report.py",
+          "symbol": "FAILURE_DASHBOARD_TABLE_COLUMNS",
+          "fields_touched": [
+            "Scenario", "Turn", "Category", "Severity", "Primary Owner", "Secondary Owner",
+            "Investigate First", "Evidence", "Replay Tags", "Field", "Expected", "Actual",
+            "Unavailable", "Final Source", "Fallback", "Post-Gate Mutation", "Mutation Flags"
+          ],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Presentation schema; columns map to classifier required fields"
+        },
+        {
+          "path": "tests/helpers/failure_dashboard_report.py",
+          "symbol": "FAILURE_DASHBOARD_EVIDENCE_MANIFEST",
+          "fields_touched": [
+            "emission_sublayer", "repair_kind", "final_emission_mutation_lineage",
+            "opening_fallback_authorship_source", "opening_fallback_owner_bucket",
+            "fallback_selection_owner", "fallback_content_owner", "sealed_fallback_owner_bucket",
+            "visibility_*", "mutation_source", "missing_source_kind", "sanitizer_*"
+          ],
+          "role": "derivative",
+          "consolidation_candidate": "Derive row keys from CLASSIFIER_EVIDENCE_FIELDS with labels (AO3)"
+        },
+        {
+          "path": "tests/helpers/failure_dashboard_report.py",
+          "symbol": "build_failure_dashboard_rows / _evidence_cell",
+          "fields_touched": ["29 evidence keys rendered into Evidence column"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep rendering; reduce manual key list"
+        },
+        {
+          "path": "tests/helpers/failure_dashboard_report.py",
+          "symbol": "write_protected_replay_failure_report_if_present",
+          "fields_touched": ["classified rows", "protected field path list", "lineage summary"],
+          "role": "derivative",
+          "consolidation_candidate": "CI artifact writer; no schema ownership"
+        },
+        {
+          "path": "tests/helpers/failure_dashboard_report.py",
+          "symbol": "write_rerun_drift_scorecard_artifacts",
+          "fields_touched": ["rerun drift buckets", "protected path deltas"],
+          "role": "derivative",
+          "consolidation_candidate": "ADVISORY; separate from acceptance schema"
+        },
+        {
+          "path": "tests/helpers/runtime_lineage_reporting.py",
+          "symbol": "build_runtime_lineage_summary / runtime_lineage_markdown_lines",
+          "fields_touched": ["runtime_lineage_events diagnostic rendering"],
+          "role": "derivative",
+          "consolidation_candidate": "Shared report helper; not schema authority"
+        },
+        {
+          "path": "tests/conftest.py",
+          "symbol": "pytest_sessionfinish hooks",
+          "fields_touched": ["failure report path", "scorecard recording flags"],
+          "role": "derivative",
+          "consolidation_candidate": "Wiring only"
+        },
+        {
+          "path": "audits/failure_dashboard_latest.md",
+          "symbol": "generated markdown artifact",
+          "fields_touched": ["rendered dashboard rows"],
+          "role": "derivative",
+          "consolidation_candidate": "Output only"
+        },
+        {
+          "path": "artifacts/golden_replay/replay_failure_report.md",
+          "symbol": "CI-generated failure report",
+          "fields_touched": ["classified failure rows on protected assertion fail"],
+          "role": "derivative",
+          "consolidation_candidate": "Output only"
+        }
+      ]
+    },
+    "fixtures/tests": {
+      "description": "Tests and fixtures that define, assert, or encode replay schema",
+      "touchpoints": [
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_ak5_every_protected_path_is_projected_or_marked_unavailable",
+          "fields_touched": ["all 41 protected paths", "unavailable"],
+          "role": "derivative",
+          "consolidation_candidate": "Critical coverage lock; keep"
+        },
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_ak5_synthetic_turn_exercises_*",
+          "fields_touched": ["FEM-backed and sanitizer-backed protected subsets"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep; may consume registry-driven fixtures post-AO1"
+        },
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_golden_replay_*_structural_invariants (9 PROTECTED scenarios)",
+          "fields_touched": ["protected expectation DSL fields per scenario"],
+          "role": "derivative",
+          "consolidation_candidate": "Acceptance coverage; do not weaken"
+        },
+        {
+          "path": "tests/test_golden_replay.py",
+          "symbol": "test_golden_replay_dual_family_projection_*",
+          "fields_touched": ["fallback_family", "fallback_family_used", "realization_fallback_family"],
+          "role": "derivative",
+          "consolidation_candidate": "Encodes precedence contract; keep until AO1 documents surface"
+        },
+        {
+          "path": "tests/test_failure_classifier.py",
+          "symbol": "test_classifier_tables_stay_aligned_with_contract",
+          "fields_touched": ["CATEGORY_RULES vs ALLOWED_FAILURE_CATEGORIES", "evidence fields"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep as classifier parity lock"
+        },
+        {
+          "path": "tests/test_failure_classification_contract.py",
+          "symbol": "contract alignment tests",
+          "fields_touched": ["REQUIRED/OPTIONAL fields", "dashboard manifest subset"],
+          "role": "derivative",
+          "consolidation_candidate": "Keep"
+        },
+        {
+          "path": "tests/test_failure_dashboard_controlled_failures.py",
+          "symbol": "failure_dashboard_probe tests",
+          "fields_touched": ["known-bad classified rows", "project_turn_observation probe"],
+          "role": "derivative",
+          "consolidation_candidate": "Opt-in; unify fixture source (AO4)"
+        },
+        {
+          "path": "tests/helpers/failure_dashboard_fixtures.py",
+          "symbol": "_observed / CONTROLLED_FAILURE_CASES",
+          "fields_touched": ["synthetic observed rows mirroring classifier input"],
+          "role": "derivative",
+          "consolidation_candidate": "Merge with observed_failure_row (AO4)"
+        },
+        {
+          "path": "tests/helpers/opening_fallback_evidence.py",
+          "symbol": "successful_opening_observed_fields / fail_closed_opening_observed_fields",
+          "fields_touched": ["opening fallback FEM-shaped fields"],
+          "role": "derivative",
+          "consolidation_candidate": "Domain fixture; keep but reference projection paths"
+        },
+        {
+          "path": "data/validation/scenario_spines/frontier_gate_long_session.json",
+          "symbol": "25-turn scenario spine fixture",
+          "fields_touched": ["spine_id", "branch_id", "turn_id", "player inputs"],
+          "role": "source-of-truth",
+          "consolidation_candidate": "Fixture metadata authority for long session; not observation schema"
+        },
+        {
+          "path": "tests/test_runtime_drift_seed_audit.py",
+          "symbol": "AST nondeterminism audit",
+          "fields_touched": ["final_emission_replay_projection.py import surface"],
+          "role": "derivative",
+          "consolidation_candidate": "Guard rail; extend if projection modules move"
+        },
+        {
+          "path": "tests/test_final_emission_meta.py",
+          "symbol": "build_fem_runtime_lineage_events cross-checks",
+          "fields_touched": ["lineage events", "golden projection imports"],
+          "role": "derivative",
+          "consolidation_candidate": "Runtime FEM tests; adjacent to replay"
+        }
+      ]
+    },
+    "compatibility_adapters": {
+      "description": "Read-side wrappers, legacy paths, and compatibility surfaces",
+      "touchpoints": [
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "protected_field_paths",
+          "fields_touched": ["alias for protected_observation_field_paths"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Retain until callers migrated"
+        },
+        {
+          "path": "tests/helpers/golden_replay.py",
+          "symbol": "project_observed_turn (wrapper)",
+          "fields_touched": ["delegates to project_turn_observation"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Retain; documented backward-compat wrapper"
+        },
+        {
+          "path": "tests/helpers/golden_replay_projection.py",
+          "symbol": "_project_replay_fallback_family",
+          "fields_touched": ["fallback_family from lineage when FEM family absent"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Read-side bridge for neutral speaker grounding; keep"
+        },
+        {
+          "path": "tests/failure_classification_contract.py",
+          "symbol": "LEGACY_RESPONSE_TYPE_REPAIR_KINDS",
+          "fields_touched": ["response_type_repair_kind thin_answer"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Do not delete until replay proves retirement"
+        },
+        {
+          "path": "tests/helpers/opening_fallback_evidence.py",
+          "symbol": "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL",
+          "fields_touched": ["opening_fallback_authorship_source compatibility value"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Direct-seam negative test only"
+        },
+        {
+          "path": "game/final_emission_replay_projection.py",
+          "symbol": "_LEGACY_SEALED_OR_GLOBAL_REPLACEMENT",
+          "fields_touched": ["sealed_or_global_replacement lineage bucket"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Sub-kind projection supersedes; legacy bucket retained"
+        },
+        {
+          "path": "audits/proposed_failure_classification_schema.md",
+          "symbol": "historical proposal",
+          "fields_touched": ["n/a"],
+          "role": "compatibility-only",
+          "consolidation_candidate": "Archive only; not authority"
+        },
+        {
+          "path": "audits/cycle_ak_schema_duplication_map.json",
+          "symbol": "AK0 machine-readable overlap map",
+          "fields_touched": ["41 protected + classifier overlap sets"],
+          "role": "derivative",
+          "consolidation_candidate": "Regenerate from AO tooling post-consolidation"
+        }
+      ]
+    }
+  },
+  "protected_only_fields": [
+    "resolution_kind",
+    "response_type_candidate_ok",
+    "final_emission_mutation_lineage",
+    "trace.canonical_entry.target_actor_id",
+    "trace.canonical_entry.target_source",
+    "trace.canonical_entry.reason",
+    "trace.social_contract_trace.route_selected",
+    "final_text",
+    "scaffold_leakage"
+  ],
+  "ambiguous_ownership_flags": [
+    {
+      "area": "raw_signal_presence vs PROTECTED_OBSERVATION_FIELDS",
+      "note": "Presence map hand-maintained subset inside project_turn_observation; not registry-driven"
+    },
+    {
+      "area": "golden_replay.py protected expectation DSL vs registry drift buckets",
+      "note": "Route/speaker/scaffold rules live in runner helper, not projection registry"
+    },
+    {
+      "area": "Runtime lineage owner vs protected drift policy",
+      "note": "golden_replay explicitly ignores lineage owner mismatch in drift classification — intentional but splits authority"
+    },
+    {
+      "area": "Manifest scenario PROTECTED table vs pytest test function names",
+      "note": "Manual markdown table; no machine-readable scenario registry yet"
+    }
+  ]
+}

@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from tests.failure_classification_contract import CLASSIFIER_EVIDENCE_FIELDS
+from tests.failure_classification_contract import (
+    CLASSIFIER_EVIDENCE_FIELDS,
+    FAILURE_DASHBOARD_EVIDENCE_LABELS,
+    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+)
 from tests.helpers.failure_classification_sync import (
-    _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS,
     assert_contract_classifier_alignment,
     classification_contract_summary,
     dashboard_evidence_manifest_misalignments,
@@ -63,8 +67,8 @@ def test_dashboard_evidence_row_keys_are_classifier_contract_backed():
 
 
 def test_dashboard_evidence_manifest_labels_are_locked():
-    assert FAILURE_DASHBOARD_EVIDENCE_LABELS == _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS
-    assert tuple(label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST) == _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_LABELS
+    assert dashboard_evidence_manifest_misalignments() == []
+    assert tuple(label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST) == FAILURE_DASHBOARD_EVIDENCE_LABELS
 
 
 _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {

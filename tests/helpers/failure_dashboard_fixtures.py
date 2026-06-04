@@ -10,48 +10,7 @@ from typing import Any
 from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows
 from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
-
-
-def _observed(**overrides: Any) -> dict[str, Any]:
-    base: dict[str, Any] = {
-        "scenario_id": "controlled_probe",
-        "turn_index": 0,
-        "final_text": "The runner answers.",
-        "final_text_hash": "probehash",
-        "route_kind": "dialogue",
-        "selected_speaker_id": "runner",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "fallback_temporal_frame": None,
-        "opening_fallback_owner_bucket": None,
-        "sealed_fallback_owner_bucket": None,
-        "visibility_fallback_owner_bucket": None,
-        "visibility_replacement_applied": None,
-        "visibility_fallback_pool": None,
-        "visibility_fallback_kind": None,
-        "response_type_required": "dialogue_response",
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "post_gate_mutation_detected": False,
-        "strict_social_active": False,
-        "speaker_contract_enforcement_reason": None,
-        "fallback_behavior_repaired": False,
-        "sanitizer_mode": None,
-        "sanitizer_event_count": None,
-        "sanitizer_changed_count": None,
-        "sanitizer_rewrite_used": None,
-        "unavailable": [],
-        "raw_signal_presence": {},
-        "normalized_signal_presence": {},
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
-    base.update(overrides)
-    return base
-
-
+from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
 CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
     (
         "wrong_speaker",

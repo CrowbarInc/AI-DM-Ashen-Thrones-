@@ -9,7 +9,11 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
-from tests.failure_classification_contract import CLASSIFIER_EVIDENCE_FIELDS
+from tests.failure_classification_contract import (
+    FAILURE_DASHBOARD_EVIDENCE_LABELS,
+    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+)
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
@@ -49,64 +53,7 @@ FAILURE_DASHBOARD_TABLE_COLUMNS: tuple[str, ...] = (
     "Mutation Flags",
 )
 
-# Cycle AK3 — dashboard evidence manifest (label, classifier row key).
-# Row keys are a curated subset of ``CLASSIFIER_EVIDENCE_FIELDS`` (AK2 manifest).
-FAILURE_DASHBOARD_EVIDENCE_MANIFEST: tuple[tuple[str, str], ...] = (
-    ("sublayer", "emission_sublayer"),
-    ("repair", "repair_kind"),
-    ("lineage", "final_emission_mutation_lineage"),
-    ("opening_authorship", "opening_fallback_authorship_source"),
-    ("opening_owner", "opening_fallback_owner_bucket"),
-    ("fallback_selection_owner", "fallback_selection_owner"),
-    ("fallback_content_owner", "fallback_content_owner"),
-    ("sealed_owner", "sealed_fallback_owner_bucket"),
-    ("visibility_owner", "visibility_fallback_owner_bucket"),
-    ("visibility_replaced", "visibility_replacement_applied"),
-    ("visibility_pool", "visibility_fallback_pool"),
-    ("visibility_kind", "visibility_fallback_kind"),
-    ("mutation", "mutation_source"),
-    ("missing", "missing_source_kind"),
-    ("sanitizer_mode", "sanitizer_mode"),
-    ("sanitizer_events", "sanitizer_event_count"),
-    ("sanitizer_changed", "sanitizer_changed_count"),
-    ("sanitizer_empty", "sanitizer_empty_fallback_used"),
-    ("sanitizer_empty_source", "sanitizer_empty_fallback_source"),
-    ("sanitizer_empty_owner", "sanitizer_empty_fallback_owner"),
-    ("sanitizer_lineage_mode", "sanitizer_lineage_mode"),
-    ("sanitizer_lineage_changed", "sanitizer_lineage_changed_count"),
-    ("sanitizer_lineage_dropped", "sanitizer_lineage_dropped_count"),
-    ("sanitizer_lineage_empty", "sanitizer_lineage_empty_fallback_used"),
-    ("sanitizer_lineage_legacy", "sanitizer_lineage_legacy_rewrite_active"),
-    ("strict_social_fallback", "sanitizer_strict_social_fallback_used"),
-    ("strict_social_selection_owner", "sanitizer_strict_social_selection_owner"),
-    ("strict_social_prose_owner", "sanitizer_strict_social_prose_owner"),
-    ("strict_social_source", "sanitizer_strict_social_source"),
-)
-
-FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS: tuple[str, ...] = tuple(
-    row_key for _label, row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST
-)
-
-FAILURE_DASHBOARD_EVIDENCE_LABELS: tuple[str, ...] = tuple(
-    label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST
-)
-
-
-def _assert_failure_dashboard_evidence_manifest() -> None:
-    row_keys = FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
-    if len(row_keys) != len(set(row_keys)):
-        duplicates = sorted({key for key in row_keys if row_keys.count(key) > 1})
-        raise AssertionError(f"FAILURE_DASHBOARD_EVIDENCE_MANIFEST has duplicate row keys: {duplicates!r}")
-    dashboard_only = set(row_keys) - CLASSIFIER_EVIDENCE_FIELDS
-    if dashboard_only:
-        raise AssertionError(
-            "dashboard evidence row keys must be subset of CLASSIFIER_EVIDENCE_FIELDS; "
-            f"unexpected={sorted(dashboard_only)!r}"
-        )
-
-
-_assert_failure_dashboard_evidence_manifest()
-
+# Cycle AO3 — dashboard consumes contract-owned evidence manifest; formatting stays here.
 
 def _format_dashboard_evidence_value(row_key: str, value: Any) -> Any:
     if row_key == "final_emission_mutation_lineage" and isinstance(value, list):

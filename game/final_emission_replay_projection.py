@@ -2,6 +2,18 @@
 
 This module must not select fallbacks, mutate output, or stamp write-time FEM.
 
+**Cycle AO5 boundary — runtime lineage only (do not merge with acceptance projection):**
+
+This **runtime** module owns read-side ``fem_runtime_lineage_events`` derivation from
+finalized FEM. Output is diagnostic/read-side telemetry stamped on or derived from FEM;
+it is not the protected golden replay acceptance schema.
+
+Acceptance-side protected observation (41 paths, drift buckets,
+``project_turn_observation``) is owned by :mod:`tests.helpers.golden_replay_projection`
+(test-only, CI acceptance authority). That module may **consume**
+:func:`build_fem_runtime_lineage_events` but must not merge with or re-home this runtime
+module.
+
 Owner semantics for projected runtime-lineage events:
 - ``projection_owner`` is this module: it derives lineage from already-finalized FEM.
 - Projected event ``owner`` preserves the current event-owner meaning: selector or

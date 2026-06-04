@@ -3,6 +3,21 @@
 Centralizes payload/snapshot → observation dict projection and protected
 field-path enumeration. Test-only; no runtime behavior changes.
 
+**Cycle AO5 boundary — acceptance observation only (do not merge with runtime lineage):**
+
+This **test-only acceptance** module owns the 41 protected observation paths
+(``PROTECTED_OBSERVATION_FIELDS``), ``project_turn_observation``, drift buckets, and
+classifier/dashboard overlap derivation. It is CI acceptance authority.
+
+Runtime FEM lineage projection (``fem_runtime_lineage_events``, sealed sub-kinds,
+selection/content owner splits on lineage events) is owned by
+:mod:`game.final_emission_replay_projection`. Golden replay may consume lineage events
+for diagnostics and prefer payload-stamped events when present, but lineage event
+**owner** semantics are excluded from protected drift classification unless explicitly
+promoted later (see ``test_golden_drift_classification_ignores_runtime_lineage_diagnostics``).
+
+These modules must **not** be merged.
+
 **Dual fallback-family contract (Cycle AB):**
 
 Runtime FEM may carry two independent fallback-family vocabularies:
@@ -88,61 +103,56 @@ class _SanitizerLineageObservedExtractor:
     fallback_context_key: str
 
 
+@dataclass(frozen=True)
+class _ProtectedExtractionSpec:
+    """Registry-backed extraction metadata for one protected observation path."""
+
+    path: str
+    source: str
+    fem_source_keys: tuple[str, ...] = ()
+    sanitizer_lineage_trace_key: str = ""
+    sanitizer_lineage_context_key: str = ""
+    trace_container: str = ""
+    raw_presence: str = "none"
+    normalized_presence: bool = False
+    unavailable_key: str = ""
+
+
+@dataclass(frozen=True)
+class _SupportingRawPresenceSpec:
+    """Non-protected keys included in raw_signal_presence for classifier routing."""
+
+    key: str
+    fem_source_keys: tuple[str, ...]
+
+
 def _flat_extractor_source_keys(extractor: _FlatObservedFieldExtractor) -> tuple[str, ...]:
     return extractor.source_keys or (extractor.observed_key,)
 
 
-_FEM_FLAT_OBSERVED_EXTRACTORS: tuple[_FlatObservedFieldExtractor, ...] = (
-    _FlatObservedFieldExtractor(
-        "final_emitted_source",
-        "fem",
-        ("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
-    ),
-    _FlatObservedFieldExtractor("final_emission_mutation_lineage", "fem"),
-    _FlatObservedFieldExtractor("response_type_required", "fem"),
-    _FlatObservedFieldExtractor("response_type_candidate_ok", "fem"),
-    _FlatObservedFieldExtractor("response_type_repair_used", "fem"),
-    _FlatObservedFieldExtractor("response_type_repair_kind", "fem"),
-    _FlatObservedFieldExtractor("upstream_prepared_emission_used", "fem"),
-    _FlatObservedFieldExtractor("upstream_prepared_emission_valid", "fem"),
-    _FlatObservedFieldExtractor("upstream_prepared_emission_source", "fem"),
-    _FlatObservedFieldExtractor("upstream_prepared_emission_reject_reason", "fem"),
-    _FlatObservedFieldExtractor("sealed_fallback_owner_bucket", "fem"),
-    _FlatObservedFieldExtractor("visibility_fallback_owner_bucket", "fem"),
-    _FlatObservedFieldExtractor("visibility_replacement_applied", "fem"),
-    _FlatObservedFieldExtractor("visibility_fallback_pool", "fem"),
-    _FlatObservedFieldExtractor("visibility_fallback_kind", "fem"),
-    _FlatObservedFieldExtractor("fallback_temporal_frame", "fem"),
-)
-
-_SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS: tuple[_FlatObservedFieldExtractor, ...] = (
-    _FlatObservedFieldExtractor("sanitizer_empty_fallback_used", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_empty_fallback_source", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_empty_fallback_owner", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_strict_social_fallback_used", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_strict_social_selection_owner", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_strict_social_prose_owner", "sanitizer_trace"),
-    _FlatObservedFieldExtractor("sanitizer_strict_social_source", "sanitizer_trace"),
-)
-
-_SANITIZER_LINEAGE_OBSERVED_EXTRACTORS: tuple[_SanitizerLineageObservedExtractor, ...] = (
-    _SanitizerLineageObservedExtractor("sanitizer_lineage_mode", "sanitizer_lineage_mode", "sanitizer_mode"),
-    _SanitizerLineageObservedExtractor(
-        "sanitizer_lineage_changed_count",
-        "sanitizer_lineage_changed_count",
-        "sanitizer_changed_count",
-    ),
-    _SanitizerLineageObservedExtractor(
-        "sanitizer_lineage_dropped_count",
-        "sanitizer_lineage_dropped_count",
-        "sanitizer_dropped_count",
-    ),
-    _SanitizerLineageObservedExtractor(
-        "sanitizer_lineage_empty_fallback_used",
-        "sanitizer_lineage_empty_fallback_used",
-        "sanitizer_empty_fallback_used",
-    ),
-)
+def _protected_extraction_spec(
+    path: str,
+    *,
+    source: str,
+    fem_source_keys: tuple[str, ...] = (),
+    sanitizer_lineage_trace_key: str = "",
+    sanitizer_lineage_context_key: str = "",
+    trace_container: str = "",
+    raw_presence: str = "none",
+    normalized_presence: bool = False,
+    unavailable_key: str = "",
+) -> _ProtectedExtractionSpec:
+    return _ProtectedExtractionSpec(
+        path=path,
+        source=source,
+        fem_source_keys=fem_source_keys,
+        sanitizer_lineage_trace_key=sanitizer_lineage_trace_key,
+        sanitizer_lineage_context_key=sanitizer_lineage_context_key,
+        trace_container=trace_container,
+        raw_presence=raw_presence,
+        normalized_presence=normalized_presence,
+        unavailable_key=unavailable_key,
+    )
 
 
 def _extract_fem_flat_observed_fields(fem: Mapping[str, Any]) -> dict[str, Any]:
@@ -261,6 +271,308 @@ SEMANTIC_DRIFT_FIELDS = frozenset(
 
 _DRIFT_BUCKET_BY_PATH = {field.path: field.drift_bucket for field in PROTECTED_OBSERVATION_FIELDS}
 
+# Registry-backed extraction specs — one entry per protected path (AO1).
+_PROTECTED_EXTRACTION_SPECS: dict[str, _ProtectedExtractionSpec] = {
+    "resolution_kind": _protected_extraction_spec("resolution_kind", source="resolution"),
+    "route_kind": _protected_extraction_spec(
+        "route_kind",
+        source="route",
+        raw_presence="route",
+        unavailable_key="route_kind",
+    ),
+    "selected_speaker_id": _protected_extraction_spec(
+        "selected_speaker_id",
+        source="speaker",
+        raw_presence="speaker",
+        unavailable_key="selected_speaker_id",
+    ),
+    "final_emitted_source": _protected_extraction_spec(
+        "final_emitted_source",
+        source="fem_flat",
+        fem_source_keys=("final_emitted_source", "final_route", "upstream_prepared_emission_source"),
+        raw_presence="fem_key",
+        normalized_presence=True,
+        unavailable_key="final_emitted_source",
+    ),
+    "final_emission_mutation_lineage": _protected_extraction_spec(
+        "final_emission_mutation_lineage",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "response_type_required": _protected_extraction_spec(
+        "response_type_required",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+        unavailable_key="response_type_required",
+    ),
+    "response_type_candidate_ok": _protected_extraction_spec(
+        "response_type_candidate_ok",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+        unavailable_key="response_type_candidate_ok",
+    ),
+    "response_type_repair_used": _protected_extraction_spec(
+        "response_type_repair_used",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+        unavailable_key="response_type_repair_used",
+    ),
+    "response_type_repair_kind": _protected_extraction_spec("response_type_repair_kind", source="fem_flat"),
+    "upstream_prepared_emission_used": _protected_extraction_spec(
+        "upstream_prepared_emission_used",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "upstream_prepared_emission_valid": _protected_extraction_spec(
+        "upstream_prepared_emission_valid",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "upstream_prepared_emission_source": _protected_extraction_spec(
+        "upstream_prepared_emission_source",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "upstream_prepared_emission_reject_reason": _protected_extraction_spec(
+        "upstream_prepared_emission_reject_reason",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "sanitizer_empty_fallback_used": _protected_extraction_spec(
+        "sanitizer_empty_fallback_used",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_empty_fallback_source": _protected_extraction_spec(
+        "sanitizer_empty_fallback_source",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_empty_fallback_owner": _protected_extraction_spec(
+        "sanitizer_empty_fallback_owner",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_lineage_mode": _protected_extraction_spec(
+        "sanitizer_lineage_mode",
+        source="sanitizer_lineage",
+        sanitizer_lineage_trace_key="sanitizer_lineage_mode",
+        sanitizer_lineage_context_key="sanitizer_mode",
+    ),
+    "sanitizer_lineage_changed_count": _protected_extraction_spec(
+        "sanitizer_lineage_changed_count",
+        source="sanitizer_lineage",
+        sanitizer_lineage_trace_key="sanitizer_lineage_changed_count",
+        sanitizer_lineage_context_key="sanitizer_changed_count",
+    ),
+    "sanitizer_lineage_dropped_count": _protected_extraction_spec(
+        "sanitizer_lineage_dropped_count",
+        source="sanitizer_lineage",
+        sanitizer_lineage_trace_key="sanitizer_lineage_dropped_count",
+        sanitizer_lineage_context_key="sanitizer_dropped_count",
+    ),
+    "sanitizer_lineage_empty_fallback_used": _protected_extraction_spec(
+        "sanitizer_lineage_empty_fallback_used",
+        source="sanitizer_lineage",
+        sanitizer_lineage_trace_key="sanitizer_lineage_empty_fallback_used",
+        sanitizer_lineage_context_key="sanitizer_empty_fallback_used",
+    ),
+    "sanitizer_lineage_legacy_rewrite_active": _protected_extraction_spec(
+        "sanitizer_lineage_legacy_rewrite_active",
+        source="sanitizer_lineage_legacy",
+        sanitizer_lineage_trace_key="sanitizer_lineage_legacy_rewrite_active",
+    ),
+    "sanitizer_strict_social_fallback_used": _protected_extraction_spec(
+        "sanitizer_strict_social_fallback_used",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_strict_social_selection_owner": _protected_extraction_spec(
+        "sanitizer_strict_social_selection_owner",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_strict_social_prose_owner": _protected_extraction_spec(
+        "sanitizer_strict_social_prose_owner",
+        source="sanitizer_trace",
+    ),
+    "sanitizer_strict_social_source": _protected_extraction_spec(
+        "sanitizer_strict_social_source",
+        source="sanitizer_trace",
+    ),
+    "opening_recovered_via_fallback": _protected_extraction_spec(
+        "opening_recovered_via_fallback",
+        source="fem_flat",
+    ),
+    "opening_fallback_authorship_source": _protected_extraction_spec(
+        "opening_fallback_authorship_source",
+        source="fem_flat",
+    ),
+    "opening_fallback_owner_bucket": _protected_extraction_spec(
+        "opening_fallback_owner_bucket",
+        source="fem_opening_bucket",
+    ),
+    "sealed_fallback_owner_bucket": _protected_extraction_spec(
+        "sealed_fallback_owner_bucket",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "visibility_fallback_owner_bucket": _protected_extraction_spec(
+        "visibility_fallback_owner_bucket",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "visibility_replacement_applied": _protected_extraction_spec(
+        "visibility_replacement_applied",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "visibility_fallback_pool": _protected_extraction_spec(
+        "visibility_fallback_pool",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "visibility_fallback_kind": _protected_extraction_spec(
+        "visibility_fallback_kind",
+        source="fem_flat",
+        raw_presence="fem_key",
+        normalized_presence=True,
+    ),
+    "fallback_family": _protected_extraction_spec(
+        "fallback_family",
+        source="fallback_family",
+        raw_presence="fem_dual_family",
+        normalized_presence=True,
+        unavailable_key="fallback_family",
+    ),
+    "fallback_temporal_frame": _protected_extraction_spec(
+        "fallback_temporal_frame",
+        source="fem_flat",
+    ),
+    "trace.canonical_entry.target_actor_id": _protected_extraction_spec(
+        "trace.canonical_entry.target_actor_id",
+        source="trace_leaf",
+        trace_container="canonical_entry",
+    ),
+    "trace.canonical_entry.target_source": _protected_extraction_spec(
+        "trace.canonical_entry.target_source",
+        source="trace_leaf",
+        trace_container="canonical_entry",
+    ),
+    "trace.canonical_entry.reason": _protected_extraction_spec(
+        "trace.canonical_entry.reason",
+        source="trace_leaf",
+        trace_container="canonical_entry",
+    ),
+    "trace.social_contract_trace.route_selected": _protected_extraction_spec(
+        "trace.social_contract_trace.route_selected",
+        source="trace_leaf",
+        trace_container="social_contract_trace",
+    ),
+    "final_text": _protected_extraction_spec("final_text", source="final_text"),
+    "scaffold_leakage": _protected_extraction_spec("scaffold_leakage", source="scaffold"),
+}
+
+# Parent trace containers tracked for raw presence and unavailable handling.
+_TRACE_CONTAINER_RAW_PRESENCE: tuple[tuple[str, str], ...] = (
+    ("trace.canonical_entry", "canonical_entry"),
+    ("trace.turn_trace", "turn_trace"),
+    ("trace.social_contract_trace", "social_contract_trace"),
+)
+
+_TRACE_CONTAINER_UNAVAILABLE_KEYS: frozenset[str] = frozenset(
+    key for key, _container in _TRACE_CONTAINER_RAW_PRESENCE
+)
+
+# Supporting (non-protected) keys in raw_signal_presence for classifier missing-source routing.
+_SUPPORTING_RAW_PRESENCE_SPECS: tuple[_SupportingRawPresenceSpec, ...] = (
+    _SupportingRawPresenceSpec("response_delta_checked", ("response_delta_checked",)),
+    _SupportingRawPresenceSpec("response_delta_failed", ("response_delta_failed",)),
+    _SupportingRawPresenceSpec("response_delta_repaired", ("response_delta_repaired",)),
+    _SupportingRawPresenceSpec("response_delta_kind", ("response_delta_kind", "response_delta_kind_detected")),
+    _SupportingRawPresenceSpec("response_delta_echo_overlap_ratio", ("response_delta_echo_overlap_ratio",)),
+)
+
+
+def _validate_protected_extraction_registry() -> None:
+    registry_paths = {field.path for field in PROTECTED_OBSERVATION_FIELDS}
+    spec_paths = set(_PROTECTED_EXTRACTION_SPECS)
+    if registry_paths != spec_paths:
+        missing = sorted(registry_paths - spec_paths)
+        extra = sorted(spec_paths - registry_paths)
+        raise AssertionError(
+            "Protected extraction registry must cover every PROTECTED_OBSERVATION_FIELDS path; "
+            f"missing={missing!r} extra={extra!r}"
+        )
+
+
+def protected_observation_extraction_registry() -> dict[str, _ProtectedExtractionSpec]:
+    """Return the canonical protected-field extraction registry (AO1)."""
+    return dict(_PROTECTED_EXTRACTION_SPECS)
+
+
+# Flat protected paths excluded from classifier optional evidence copy (AO2).
+# Dotted trace paths are excluded automatically via the flat-path filter.
+_PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS: frozenset[str] = frozenset(
+    {
+        "resolution_kind",
+        "response_type_candidate_ok",
+        "opening_recovered_via_fallback",
+        "final_text",
+        "scaffold_leakage",
+    }
+)
+
+_EXPECTED_PROTECTED_CLASSIFIER_EVIDENCE_COUNT = 32
+
+def _fem_flat_extractors_from_registry() -> tuple[_FlatObservedFieldExtractor, ...]:
+    extractors: list[_FlatObservedFieldExtractor] = []
+    for spec in _PROTECTED_EXTRACTION_SPECS.values():
+        if spec.source != "fem_flat":
+            continue
+        extractors.append(
+            _FlatObservedFieldExtractor(
+                spec.path,
+                "fem",
+                spec.fem_source_keys or (spec.path,),
+            )
+        )
+    return tuple(extractors)
+
+
+def _sanitizer_trace_extractors_from_registry() -> tuple[_FlatObservedFieldExtractor, ...]:
+    return tuple(
+        _FlatObservedFieldExtractor(spec.path, "sanitizer_trace")
+        for spec in _PROTECTED_EXTRACTION_SPECS.values()
+        if spec.source == "sanitizer_trace"
+    )
+
+
+def _sanitizer_lineage_extractors_from_registry() -> tuple[_SanitizerLineageObservedExtractor, ...]:
+    return tuple(
+        _SanitizerLineageObservedExtractor(
+            spec.path,
+            spec.sanitizer_lineage_trace_key,
+            spec.sanitizer_lineage_context_key,
+        )
+        for spec in _PROTECTED_EXTRACTION_SPECS.values()
+        if spec.source == "sanitizer_lineage"
+    )
+
+
+_validate_protected_extraction_registry()
+
+_FEM_FLAT_OBSERVED_EXTRACTORS = _fem_flat_extractors_from_registry()
+_SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS = _sanitizer_trace_extractors_from_registry()
+_SANITIZER_LINEAGE_OBSERVED_EXTRACTORS = _sanitizer_lineage_extractors_from_registry()
+
 _SCAFFOLD_LEAK_RE = re.compile(
     r"\b(?:planner|router|validator|adjudication|scaffold|authoritative state|"
     r"resolve that procedurally|player_facing_text|scene_update|debug_notes)\b",
@@ -294,6 +606,62 @@ def protected_field_paths() -> tuple[str, ...]:
     """Return dotted field paths under protected golden replay observation locks."""
     return protected_observation_field_paths()
 
+
+def protected_classifier_evidence_excluded_paths() -> frozenset[str]:
+    """Return flat protected paths intentionally excluded from classifier evidence overlap (AO2)."""
+    return frozenset(_PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS)
+
+
+def protected_classifier_evidence_field_paths() -> frozenset[str]:
+    """Return flat protected observation paths copied as classifier optional evidence (AO2).
+
+    Derived from :func:`protected_observation_field_paths` and
+    :func:`protected_observation_extraction_registry` — flat protected paths minus
+    classifier-ineligible exclusions (semantic fields, trace-only locks, etc.).
+    """
+    return frozenset(
+        path
+        for path in protected_observation_field_paths()
+        if "." not in path and path not in _PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS
+    )
+
+
+def _validate_protected_classifier_evidence_derivation() -> None:
+    derived = protected_classifier_evidence_field_paths()
+    flat_protected = {path for path in protected_observation_field_paths() if "." not in path}
+    dotted_protected = {path for path in protected_observation_field_paths() if "." in path}
+    if derived & _PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS:
+        overlap = sorted(derived & _PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS)
+        raise AssertionError(
+            "protected classifier evidence paths must not include excluded paths; "
+            f"overlap={overlap!r}"
+        )
+    if derived & dotted_protected:
+        raise AssertionError(
+            "protected classifier evidence paths must be flat protected paths only; "
+            f"dotted_overlap={sorted(derived & dotted_protected)!r}"
+        )
+    expected = flat_protected - _PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS
+    if derived != expected:
+        raise AssertionError(
+            "protected classifier evidence derivation must equal flat protected paths minus exclusions; "
+            f"unexpected={sorted(derived - expected)!r} missing={sorted(expected - derived)!r}"
+        )
+    if len(derived) != _EXPECTED_PROTECTED_CLASSIFIER_EVIDENCE_COUNT:
+        raise AssertionError(
+            f"expected {_EXPECTED_PROTECTED_CLASSIFIER_EVIDENCE_COUNT} protected classifier evidence paths, "
+            f"got {len(derived)}; update _PROTECTED_CLASSIFIER_EVIDENCE_EXCLUDED_PATHS or classifier "
+            "OPTIONAL contract if the protected observation registry changed"
+        )
+    registry_paths = set(protected_observation_extraction_registry())
+    if not derived <= registry_paths:
+        raise AssertionError(
+            "protected classifier evidence paths must be subset of extraction registry; "
+            f"outside_registry={sorted(derived - registry_paths)!r}"
+        )
+
+
+_validate_protected_classifier_evidence_derivation()
 
 def final_text_has_scaffold_leakage(text: str) -> bool:
     """Best-effort final-text leak detector for golden structural assertions."""
@@ -563,6 +931,181 @@ def project_replay_fallback_family_from_fem(fem: Mapping[str, Any]) -> str | Non
     return _first_present(fem, REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
 
 
+def _fem_has_any_key(fem: Mapping[str, Any], keys: tuple[str, ...]) -> bool:
+    return any(key in fem for key in keys)
+
+
+def _fem_dual_fallback_family_present(fem: Mapping[str, Any]) -> bool:
+    return _fem_has_any_key(fem, REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
+
+
+def _resolve_route_kind(
+    *,
+    social_contract_trace: Mapping[str, Any],
+    resolution_compact: Mapping[str, Any] | None,
+    resolution: Mapping[str, Any],
+) -> Any:
+    route_kind = _first_present(social_contract_trace, ("route_selected",))
+    if route_kind is None and isinstance(resolution_compact, Mapping):
+        route_kind = resolution_compact.get("kind")
+    if route_kind is None:
+        route_kind = resolution.get("kind")
+    return route_kind
+
+
+def _resolve_selected_speaker_id(
+    *,
+    social_contract_trace: Mapping[str, Any],
+    snap: Mapping[str, Any],
+    social: Mapping[str, Any],
+) -> tuple[Any, str | None]:
+    selected_speaker_id = _first_present(
+        social_contract_trace,
+        ("final_reply_owner", "reply_owner_actor_id", "visible_grounded_speaker"),
+    )
+    selected_speaker_source = "turn_trace.social_contract_trace" if selected_speaker_id else None
+    if selected_speaker_id is None:
+        selected_speaker_id = latest_target_id(snap)
+        selected_speaker_source = latest_target_source(snap)
+    if selected_speaker_id is None:
+        selected_speaker_id = social.get("npc_id")
+        selected_speaker_source = "resolution.social.npc_id" if selected_speaker_id else None
+    return selected_speaker_id, selected_speaker_source
+
+
+def _resolve_fallback_family(
+    fem: Mapping[str, Any],
+    runtime_lineage_events: list[Mapping[str, Any]],
+) -> Any:
+    fallback_family = project_replay_fallback_family_from_fem(fem)
+    if fallback_family is None:
+        fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
+    return fallback_family
+
+
+def _raw_presence_key_for_spec(spec: _ProtectedExtractionSpec) -> str:
+    return spec.path
+
+
+def _raw_presence_for_protected_spec(
+    spec: _ProtectedExtractionSpec,
+    *,
+    fem: Mapping[str, Any],
+    route_kind: Any,
+    selected_speaker_id: Any,
+    payload: Mapping[str, Any],
+    trace: Mapping[str, Any],
+    canonical_entry: Mapping[str, Any],
+    turn_trace: Mapping[str, Any],
+    social_contract_trace: Mapping[str, Any],
+) -> bool | None:
+    """Return raw presence bool for a protected spec, or None when not tracked."""
+    if spec.raw_presence == "none":
+        return None
+    if spec.raw_presence == "route":
+        return route_kind is not None or _has_path(payload, "resolution.kind") or _has_path(
+            trace,
+            "turn_trace.social_contract_trace.route_selected",
+        )
+    if spec.raw_presence == "speaker":
+        return selected_speaker_id is not None
+    if spec.raw_presence == "fem_key":
+        keys = spec.fem_source_keys or (spec.path,)
+        return _fem_has_any_key(fem, keys)
+    if spec.raw_presence == "fem_dual_family":
+        return _fem_dual_fallback_family_present(fem)
+    return None
+
+
+def _build_raw_signal_presence(
+    *,
+    fem: Mapping[str, Any],
+    route_kind: Any,
+    selected_speaker_id: Any,
+    payload: Mapping[str, Any],
+    trace: Mapping[str, Any],
+    canonical_entry: Mapping[str, Any],
+    turn_trace: Mapping[str, Any],
+    social_contract_trace: Mapping[str, Any],
+) -> dict[str, bool]:
+    presence: dict[str, bool] = {}
+    for spec in _PROTECTED_EXTRACTION_SPECS.values():
+        value = _raw_presence_for_protected_spec(
+            spec,
+            fem=fem,
+            route_kind=route_kind,
+            selected_speaker_id=selected_speaker_id,
+            payload=payload,
+            trace=trace,
+            canonical_entry=canonical_entry,
+            turn_trace=turn_trace,
+            social_contract_trace=social_contract_trace,
+        )
+        if value is not None:
+            presence[_raw_presence_key_for_spec(spec)] = value
+    for presence_key, container_key in _TRACE_CONTAINER_RAW_PRESENCE:
+        container = {
+            "canonical_entry": canonical_entry,
+            "turn_trace": turn_trace,
+            "social_contract_trace": social_contract_trace,
+        }[container_key]
+        presence[presence_key] = bool(container)
+    for supporting in _SUPPORTING_RAW_PRESENCE_SPECS:
+        presence[supporting.key] = _fem_has_any_key(fem, supporting.fem_source_keys)
+    return presence
+
+
+def _build_normalized_signal_presence(
+    *,
+    fem_normalized: Mapping[str, Any],
+    raw_signal_presence: Mapping[str, bool],
+) -> dict[str, bool]:
+    normalized: dict[str, bool] = {}
+    for spec in _PROTECTED_EXTRACTION_SPECS.values():
+        if not spec.normalized_presence:
+            continue
+        if spec.raw_presence == "fem_dual_family":
+            normalized[spec.path] = _fem_dual_fallback_family_present(fem_normalized)
+        elif spec.raw_presence == "fem_key":
+            keys = spec.fem_source_keys or (spec.path,)
+            normalized[spec.path] = _fem_has_any_key(fem_normalized, keys)
+    for supporting in _SUPPORTING_RAW_PRESENCE_SPECS:
+        if supporting.key in raw_signal_presence:
+            normalized[supporting.key] = _fem_has_any_key(fem_normalized, supporting.fem_source_keys)
+    return normalized
+
+
+def _build_missing_source_by_field(
+    raw_signal_presence: Mapping[str, bool],
+    normalized_signal_presence: Mapping[str, bool],
+) -> dict[str, str]:
+    missing_source_by_field: dict[str, str] = {}
+    for field, raw_present in raw_signal_presence.items():
+        if raw_present is True and field in normalized_signal_presence and normalized_signal_presence[field] is False:
+            missing_source_by_field[field] = "normalized_view_missing_raw_present"
+        elif raw_present is True:
+            missing_source_by_field[field] = "projection_missing_raw_present"
+        elif raw_present is False:
+            missing_source_by_field[field] = "runtime_missing_raw_absent"
+    return missing_source_by_field
+
+
+def _compute_unavailable_paths(observed: Mapping[str, Any]) -> list[str]:
+    unavailable: list[str] = []
+    for spec in _PROTECTED_EXTRACTION_SPECS.values():
+        if not spec.unavailable_key:
+            continue
+        key = spec.unavailable_key
+        if observed.get(key) is None:
+            unavailable.append(key)
+    trace = observed.get("trace") if isinstance(observed.get("trace"), Mapping) else {}
+    for unavailable_key in _TRACE_CONTAINER_UNAVAILABLE_KEYS:
+        container_name = unavailable_key.removeprefix("trace.")
+        container = trace.get(container_name) if isinstance(trace, Mapping) else None
+        if not container:
+            unavailable.append(unavailable_key)
+    return sorted(set(unavailable))
+
 def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     """Project chat payload + snapshot into a golden replay observation dict.
 
@@ -601,26 +1144,17 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         else None
     )
 
-    route_kind = _first_present(
-        social_contract_trace,
-        ("route_selected",),
+    route_kind = _resolve_route_kind(
+        social_contract_trace=social_contract_trace,
+        resolution_compact=resolution_compact if isinstance(resolution_compact, Mapping) else None,
+        resolution=resolution,
     )
-    if route_kind is None and isinstance(resolution_compact, Mapping):
-        route_kind = resolution_compact.get("kind")
-    if route_kind is None:
-        route_kind = resolution.get("kind")
 
-    selected_speaker_id = _first_present(
-        social_contract_trace,
-        ("final_reply_owner", "reply_owner_actor_id", "visible_grounded_speaker"),
+    selected_speaker_id, selected_speaker_source = _resolve_selected_speaker_id(
+        social_contract_trace=social_contract_trace,
+        snap=snap,
+        social=social,
     )
-    selected_speaker_source = "turn_trace.social_contract_trace" if selected_speaker_id else None
-    if selected_speaker_id is None:
-        selected_speaker_id = latest_target_id(snap)
-        selected_speaker_source = latest_target_source(snap)
-    if selected_speaker_id is None:
-        selected_speaker_id = social.get("npc_id")
-        selected_speaker_source = "resolution.social.npc_id" if selected_speaker_id else None
 
     response_delta_checked = _first_present(fem, ("response_delta_checked",))
     response_delta_failed = _first_present(fem, ("response_delta_failed",))
@@ -631,12 +1165,7 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     response_delta_skip_reason = _first_present(fem, ("response_delta_skip_reason",))
     response_delta_trigger_source = _first_present(fem, ("response_delta_trigger_source",))
     post_gate_mutation_detected = _first_present(fem, ("post_gate_mutation_detected",))
-    opening_recovered_via_fallback = _first_present(fem, ("opening_recovered_via_fallback",))
-    opening_fallback_authorship_source = _first_present(fem, ("opening_fallback_authorship_source",))
-    opening_fallback_owner_bucket = opening_fallback_owner_bucket_from_meta(fem)
-    fallback_family = project_replay_fallback_family_from_fem(fem)
-    if fallback_family is None:
-        fallback_family = _project_replay_fallback_family(fem, runtime_lineage_events)
+    fallback_family = _resolve_fallback_family(fem, runtime_lineage_events)
     stage_diff = _find_nested_mapping(payload, "stage_diff_telemetry")
     sanitizer_debug = _find_nested_list(payload, "sanitizer_debug")
     sanitizer_trace = _find_nested_mapping(payload, "sanitizer_trace")
@@ -661,63 +1190,24 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     interaction_continuity_validation = _find_nested_mapping(payload, "interaction_continuity_validation")
 
     final_text = str(snap.get("gm_text") or "")
-    raw_signal_presence = {
-        "route_kind": route_kind is not None or _has_path(payload, "resolution.kind") or _has_path(trace, "turn_trace.social_contract_trace.route_selected"),
-        "selected_speaker_id": selected_speaker_id is not None,
-        "final_emitted_source": "final_emitted_source" in fem,
-        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem,
-        "response_type_required": "response_type_required" in fem,
-        "response_type_candidate_ok": "response_type_candidate_ok" in fem,
-        "response_type_repair_used": "response_type_repair_used" in fem,
-        "response_delta_checked": "response_delta_checked" in fem,
-        "response_delta_failed": "response_delta_failed" in fem,
-        "response_delta_repaired": "response_delta_repaired" in fem,
-        "response_delta_kind": "response_delta_kind" in fem or "response_delta_kind_detected" in fem,
-        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem,
-        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem,
-        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem,
-        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem,
-        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem,
-        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem,
-        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem,
-        "visibility_replacement_applied": "visibility_replacement_applied" in fem,
-        "visibility_fallback_pool": "visibility_fallback_pool" in fem,
-        "visibility_fallback_kind": "visibility_fallback_kind" in fem,
-        "fallback_family": "fallback_family_used" in fem or "realization_fallback_family" in fem,
-        "trace.canonical_entry": bool(canonical_entry),
-        "trace.turn_trace": bool(turn_trace),
-        "trace.social_contract_trace": bool(social_contract_trace),
-    }
-    normalized_signal_presence = {
-        "final_emitted_source": "final_emitted_source" in fem_normalized,
-        "final_emission_mutation_lineage": "final_emission_mutation_lineage" in fem_normalized,
-        "response_type_required": "response_type_required" in fem_normalized,
-        "response_type_candidate_ok": "response_type_candidate_ok" in fem_normalized,
-        "response_type_repair_used": "response_type_repair_used" in fem_normalized,
-        "response_delta_checked": "response_delta_checked" in fem_normalized,
-        "response_delta_failed": "response_delta_failed" in fem_normalized,
-        "response_delta_repaired": "response_delta_repaired" in fem_normalized,
-        "response_delta_kind": "response_delta_kind" in fem_normalized or "response_delta_kind_detected" in fem_normalized,
-        "response_delta_echo_overlap_ratio": "response_delta_echo_overlap_ratio" in fem_normalized,
-        "upstream_prepared_emission_used": "upstream_prepared_emission_used" in fem_normalized,
-        "upstream_prepared_emission_valid": "upstream_prepared_emission_valid" in fem_normalized,
-        "upstream_prepared_emission_source": "upstream_prepared_emission_source" in fem_normalized,
-        "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_reject_reason" in fem_normalized,
-        "sealed_fallback_owner_bucket": "sealed_fallback_owner_bucket" in fem_normalized,
-        "visibility_fallback_owner_bucket": "visibility_fallback_owner_bucket" in fem_normalized,
-        "visibility_replacement_applied": "visibility_replacement_applied" in fem_normalized,
-        "visibility_fallback_pool": "visibility_fallback_pool" in fem_normalized,
-        "visibility_fallback_kind": "visibility_fallback_kind" in fem_normalized,
-        "fallback_family": "fallback_family_used" in fem_normalized or "realization_fallback_family" in fem_normalized,
-    }
-    missing_source_by_field = {}
-    for field, raw_present in raw_signal_presence.items():
-        if raw_present is True and field in normalized_signal_presence and normalized_signal_presence[field] is False:
-            missing_source_by_field[field] = "normalized_view_missing_raw_present"
-        elif raw_present is True:
-            missing_source_by_field[field] = "projection_missing_raw_present"
-        elif raw_present is False:
-            missing_source_by_field[field] = "runtime_missing_raw_absent"
+    raw_signal_presence = _build_raw_signal_presence(
+        fem=fem,
+        route_kind=route_kind,
+        selected_speaker_id=selected_speaker_id,
+        payload=payload,
+        trace=trace,
+        canonical_entry=canonical_entry,
+        turn_trace=turn_trace,
+        social_contract_trace=social_contract_trace,
+    )
+    normalized_signal_presence = _build_normalized_signal_presence(
+        fem_normalized=fem_normalized,
+        raw_signal_presence=raw_signal_presence,
+    )
+    missing_source_by_field = _build_missing_source_by_field(
+        raw_signal_presence,
+        normalized_signal_presence,
+    )
     observed = {
         "scenario_id": scenario_id,
         "turn_index": snap.get("turn_index"),
@@ -751,9 +1241,9 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         **sanitizer_trace_flat,
         **sanitizer_lineage_flat,
         "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
-        "opening_recovered_via_fallback": opening_recovered_via_fallback,
-        "opening_fallback_authorship_source": opening_fallback_authorship_source,
-        "opening_fallback_owner_bucket": opening_fallback_owner_bucket,
+        "opening_recovered_via_fallback": fem_flat.get("opening_recovered_via_fallback"),
+        "opening_fallback_authorship_source": fem_flat.get("opening_fallback_authorship_source"),
+        "opening_fallback_owner_bucket": opening_fallback_owner_bucket_from_meta(fem),
         "fallback_family": fallback_family,
         "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
         "final_text_hash": golden_text_hash(final_text),
@@ -780,25 +1270,5 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
             value = replay_identity_map.get(key)
             if value is not None and str(value).strip():
                 observed[key] = str(value)
-    observed["unavailable"] = sorted(
-        key
-        for key in (
-            "route_kind",
-            "selected_speaker_id",
-            "final_emitted_source",
-            "response_type_required",
-            "response_type_candidate_ok",
-            "response_type_repair_used",
-            "fallback_family",
-            "trace.canonical_entry",
-            "trace.turn_trace",
-            "trace.social_contract_trace",
-        )
-        if (
-            (key == "trace.canonical_entry" and not observed["trace"]["canonical_entry"])
-            or (key == "trace.turn_trace" and not observed["trace"]["turn_trace"])
-            or (key == "trace.social_contract_trace" and not observed["trace"]["social_contract_trace"])
-            or (not key.startswith("trace.") and observed.get(key) is None)
-        )
-    )
+    observed["unavailable"] = _compute_unavailable_paths(observed)
     return observed

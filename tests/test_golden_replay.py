@@ -62,6 +62,7 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_drift_bucket,
     protected_observation_field_paths,
     protected_observation_field_registry,
+    protected_observation_extraction_registry,
     protected_path_representation_errors,
 )
 from tests.helpers.transcript_runner import (
@@ -365,6 +366,13 @@ def test_ak5_protected_observation_field_paths_are_sorted_unique():
     paths = protected_observation_field_paths()
     assert paths == tuple(sorted(set(paths)))
     assert len(paths) == len(protected_observation_field_registry())
+
+
+def test_ao1_protected_extraction_registry_matches_observation_registry():
+    registry_paths = {field.path for field in protected_observation_field_registry()}
+    extraction_paths = set(protected_observation_extraction_registry())
+    assert extraction_paths == registry_paths
+    assert len(extraction_paths) == 41
 
 
 def test_ak5_manifest_generated_section_matches_registry():

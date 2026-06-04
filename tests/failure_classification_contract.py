@@ -14,6 +14,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
 )
+from tests.helpers.golden_replay_projection import protected_classifier_evidence_field_paths
 
 ALLOWED_FAILURE_CATEGORIES: frozenset[str] = frozenset(
     {
@@ -153,44 +154,9 @@ REQUIRED_CLASSIFICATION_FIELDS: frozenset[str] = frozenset(
     }
 )
 
-# Cycle AK2 — classifier evidence manifest (protected overlap + extensions).
+# Cycle AK2 / AO2 — protected overlap derived from golden replay observation registry.
 # ``CLASSIFIER_EVIDENCE_FIELDS`` must stay equal to ``OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS``.
-PROTECTED_CLASSIFIER_EVIDENCE_FIELDS: frozenset[str] = frozenset(
-    {
-        "fallback_family",
-        "fallback_temporal_frame",
-        "final_emission_mutation_lineage",
-        "final_emitted_source",
-        "opening_fallback_authorship_source",
-        "opening_fallback_owner_bucket",
-        "response_type_repair_kind",
-        "response_type_repair_used",
-        "response_type_required",
-        "route_kind",
-        "sanitizer_empty_fallback_owner",
-        "sanitizer_empty_fallback_source",
-        "sanitizer_empty_fallback_used",
-        "sanitizer_lineage_changed_count",
-        "sanitizer_lineage_dropped_count",
-        "sanitizer_lineage_empty_fallback_used",
-        "sanitizer_lineage_legacy_rewrite_active",
-        "sanitizer_lineage_mode",
-        "sanitizer_strict_social_fallback_used",
-        "sanitizer_strict_social_prose_owner",
-        "sanitizer_strict_social_selection_owner",
-        "sanitizer_strict_social_source",
-        "sealed_fallback_owner_bucket",
-        "selected_speaker_id",
-        "upstream_prepared_emission_reject_reason",
-        "upstream_prepared_emission_source",
-        "upstream_prepared_emission_used",
-        "upstream_prepared_emission_valid",
-        "visibility_fallback_kind",
-        "visibility_fallback_owner_bucket",
-        "visibility_fallback_pool",
-        "visibility_replacement_applied",
-    }
-)
+PROTECTED_CLASSIFIER_EVIDENCE_FIELDS: frozenset[str] = protected_classifier_evidence_field_paths()
 
 CLASSIFIER_EVIDENCE_EXTENSION_FIELDS: frozenset[str] = frozenset(
     {
@@ -275,6 +241,92 @@ if CLASSIFIER_EVIDENCE_FIELDS != OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS:
         "CLASSIFIER_EVIDENCE_FIELDS must equal OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS; "
         f"manifest_only={_manifest_only!r} contract_only={_contract_only!r}"
     )
+
+if not PROTECTED_CLASSIFIER_EVIDENCE_FIELDS <= OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS:
+    _protected_only = sorted(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS - OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)
+    raise AssertionError(
+        "derived PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must be subset of OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS; "
+        f"protected_only={_protected_only!r}"
+    )
+
+if PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS:
+    _overlap = sorted(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)
+    raise AssertionError(
+        "derived protected overlap and classifier extension fields must be disjoint; "
+        f"overlap={_overlap!r}"
+    )
+
+# Cycle AK3 / AO3 — dashboard Evidence column manifest (label, classifier row key).
+# Row keys are a curated subset of ``CLASSIFIER_EVIDENCE_FIELDS`` surfaced in markdown.
+_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 29
+
+FAILURE_DASHBOARD_EVIDENCE_MANIFEST: tuple[tuple[str, str], ...] = (
+    ("sublayer", "emission_sublayer"),
+    ("repair", "repair_kind"),
+    ("lineage", "final_emission_mutation_lineage"),
+    ("opening_authorship", "opening_fallback_authorship_source"),
+    ("opening_owner", "opening_fallback_owner_bucket"),
+    ("fallback_selection_owner", "fallback_selection_owner"),
+    ("fallback_content_owner", "fallback_content_owner"),
+    ("sealed_owner", "sealed_fallback_owner_bucket"),
+    ("visibility_owner", "visibility_fallback_owner_bucket"),
+    ("visibility_replaced", "visibility_replacement_applied"),
+    ("visibility_pool", "visibility_fallback_pool"),
+    ("visibility_kind", "visibility_fallback_kind"),
+    ("mutation", "mutation_source"),
+    ("missing", "missing_source_kind"),
+    ("sanitizer_mode", "sanitizer_mode"),
+    ("sanitizer_events", "sanitizer_event_count"),
+    ("sanitizer_changed", "sanitizer_changed_count"),
+    ("sanitizer_empty", "sanitizer_empty_fallback_used"),
+    ("sanitizer_empty_source", "sanitizer_empty_fallback_source"),
+    ("sanitizer_empty_owner", "sanitizer_empty_fallback_owner"),
+    ("sanitizer_lineage_mode", "sanitizer_lineage_mode"),
+    ("sanitizer_lineage_changed", "sanitizer_lineage_changed_count"),
+    ("sanitizer_lineage_dropped", "sanitizer_lineage_dropped_count"),
+    ("sanitizer_lineage_empty", "sanitizer_lineage_empty_fallback_used"),
+    ("sanitizer_lineage_legacy", "sanitizer_lineage_legacy_rewrite_active"),
+    ("strict_social_fallback", "sanitizer_strict_social_fallback_used"),
+    ("strict_social_selection_owner", "sanitizer_strict_social_selection_owner"),
+    ("strict_social_prose_owner", "sanitizer_strict_social_prose_owner"),
+    ("strict_social_source", "sanitizer_strict_social_source"),
+)
+
+FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS: tuple[str, ...] = tuple(
+    row_key for _label, row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+)
+
+FAILURE_DASHBOARD_EVIDENCE_LABELS: tuple[str, ...] = tuple(
+    label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+)
+
+
+def failure_dashboard_evidence_manifest() -> tuple[tuple[str, str], ...]:
+    """Return the canonical dashboard Evidence-column manifest (AO3)."""
+    return FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+
+
+def _validate_failure_dashboard_evidence_manifest() -> None:
+    row_keys = FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
+    if len(row_keys) != len(set(row_keys)):
+        duplicates = sorted({key for key in row_keys if row_keys.count(key) > 1})
+        raise AssertionError(f"FAILURE_DASHBOARD_EVIDENCE_MANIFEST has duplicate row keys: {duplicates!r}")
+    if len(row_keys) != _EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT:
+        raise AssertionError(
+            f"FAILURE_DASHBOARD_EVIDENCE_MANIFEST must contain {_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT} "
+            f"row keys, got {len(row_keys)}"
+        )
+    dashboard_only = set(row_keys) - CLASSIFIER_EVIDENCE_FIELDS
+    if dashboard_only:
+        raise AssertionError(
+            "dashboard evidence row keys must be subset of CLASSIFIER_EVIDENCE_FIELDS; "
+            f"unexpected={sorted(dashboard_only)!r}"
+        )
+    if FAILURE_DASHBOARD_EVIDENCE_LABELS != tuple(label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST):
+        raise AssertionError("FAILURE_DASHBOARD_EVIDENCE_LABELS must match manifest label order")
+
+
+_validate_failure_dashboard_evidence_manifest()
 
 # Cycle AK4 — full classifier/dashboard row field allowlist (required ∪ optional evidence).
 ALLOWED_CLASSIFICATION_ROW_FIELDS: frozenset[str] = (

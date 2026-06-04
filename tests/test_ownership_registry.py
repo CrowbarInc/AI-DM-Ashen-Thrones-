@@ -789,6 +789,36 @@ def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
     assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
 
 
+def test_ao5_runtime_and_acceptance_projection_modules_remain_separate() -> None:
+    """Cycle AO5: runtime lineage projection and acceptance observation projection stay split."""
+    import game.final_emission_replay_projection as runtime_projection
+    import tests.helpers.golden_replay_projection as acceptance_projection
+
+    runtime_doc = (runtime_projection.__doc__ or "").lower()
+    acceptance_doc = (acceptance_projection.__doc__ or "").lower()
+
+    assert "do not merge" in runtime_doc
+    assert "do not merge" in acceptance_doc
+    assert "golden_replay_projection" in runtime_doc
+    assert "final_emission_replay_projection" in acceptance_doc
+    assert runtime_projection.__name__ == "game.final_emission_replay_projection"
+    assert acceptance_projection.__name__ == "tests.helpers.golden_replay_projection"
+
+    lineage_surface = runtime_projection.read_side_lineage_projection_surface()
+    assert lineage_surface["mutation_lineage_key"] == "final_emission_mutation_lineage"
+    assert len(acceptance_projection.protected_observation_field_registry()) == 41
+
+    meta_proj = RESPONSIBILITY_REGISTRY["final_emission_meta_projection"]
+    gauntlet = RESPONSIBILITY_REGISTRY["gauntlet_playability_validation"]
+    assert "tests/test_golden_replay.py" in frozenset(
+        p.replace("\\", "/") for p in gauntlet.gauntlet_suites
+    )
+    assert meta_proj.direct_owner.replace("\\", "/") == "tests/test_final_emission_meta.py"
+    assert "game.final_emission_replay_projection" not in frozenset(
+        p.replace("\\", "/") for p in meta_proj.downstream_consumer_suites
+    )
+
+
 def test_al4_legality_owners_and_smoke_facade_locked() -> None:
     """Cycle AL4: AL1–AL3 convergence boundaries stay aligned with registry direct owners."""
     assert RESPONSIBILITY_REGISTRY["final_emission_gate_orchestration"].direct_owner.replace(

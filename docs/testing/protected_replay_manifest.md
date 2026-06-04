@@ -31,6 +31,24 @@ Golden replay owns `scenario_id` as the replay acceptance identifier. Scenario-s
 
 Text fields are layer-specific projections: `player_facing_text` is the runtime response field, `gm_text` is a snapshot/transcript projection, and `final_text` is the golden replay observed assertion surface. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when a replay row can be traced back to a scenario-spine fixture.
 
+## Cycle AO5 Runtime vs Acceptance Projection Boundary
+
+Replay projection is intentionally split across two modules that must **not** be merged:
+
+| Layer | Module | Owns |
+|---|---|---|
+| **Runtime (diagnostic/read-side)** | `game/final_emission_replay_projection.py` | `fem_runtime_lineage_events` derivation from finalized FEM; sealed replacement sub-kinds; lineage selection/content owner fields on events |
+| **Acceptance (test-only)** | `tests/helpers/golden_replay_projection.py` | 41 protected observation paths; `project_turn_observation`; drift buckets; classifier evidence overlap derivation |
+
+Rules:
+
+- Runtime lineage is **diagnostic/read-side** — it does not define protected golden replay fields or CI acceptance locks.
+- Golden replay protected fields are **acceptance authority** — registry + projection adapter in the test helper module.
+- Golden replay may **consume** runtime lineage output (or payload-stamped `fem_runtime_lineage_events`) for reports and supporting tests.
+- **Lineage owner mismatch remains excluded from protected drift** unless explicitly promoted in a future cycle; drift classification ignores runtime-lineage diagnostic-only owner semantics today.
+
+Direct-seam and E2E golden replay both flow through the acceptance projection adapter; runtime lineage projection is supporting evidence only.
+
 ## Cycle AB Dual Fallback-Family Contract
 
 Runtime FEM may carry **two independent fallback-family fields**:
