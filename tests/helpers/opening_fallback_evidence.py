@@ -8,22 +8,28 @@ write time by ``build_opening_fallback_result_meta``. Tests that need every resu
 key should assert against payload/FEM fixtures or import
 ``OPENING_FALLBACK_RESULT_META_FIELDS`` from ``game.final_emission_meta``.
 
-Helper boundary (Cycle AD-4):
-- Gate harness + owner-bucket assert helpers: ``final_emission_gate_fixtures.py``
-- Downstream HTTP smoke: ``emission_smoke_assertions.py``
+Helper boundary (Cycle AS1):
+- Downstream HTTP smoke / response-type scaffolds: ``emission_smoke_assertions.py``
+- Strict-social harness: ``strict_social_harness.py``
+- Opening attach-then gate harness (private seams): ``opening_fallback_gate_harness.py``
 - Classifier/dashboard inline observed rows may wrap these builders; duplication there
   is intentional diagnostic projection, not runtime gate ownership.
+
+Import opening helpers from this module directly (AS1 retired ``final_emission_gate_fixtures`` shim).
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Mapping
 
 from game.final_emission_meta import (
     OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_RESULT_META_FIELDS,
+    opening_fallback_owner_bucket_from_fields,
+    opening_fallback_owner_bucket_from_meta,
 )
+from tests.helpers.emission_smoke_assertions import response_type_contract
 
 # Re-export for tests that lock composition_meta against opening_fallback_meta (AJ2/AJ4).
 OPENING_FALLBACK_RESULT_META_FIELD_NAMES = OPENING_FALLBACK_RESULT_META_FIELDS
@@ -40,6 +46,111 @@ OPENING_SUCCESS_SOURCE = "opening_deterministic_fallback"
 OPENING_FAILED_CLOSED_SOURCE = "opening_fallback_failed_closed"
 OPENING_SUCCESS_REPAIR_KIND = "opening_deterministic_fallback"
 OPENING_FAILED_CLOSED_REPAIR_KIND = "opening_deterministic_fallback_failed_closed"
+
+EXPECTED_FRONTIER_GATE_OPENING_FALLBACK = (
+    "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. "
+    "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. "
+    "A notice board lists new taxes, curfews, and a posted warning about a missing patrol. "
+    "You can start with Read the notice board or Approach the guards."
+)
+
+
+def opening_validation_context() -> dict:
+    facts = [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+    ]
+    return {
+        "location_anchors": ["Cinderwatch Gate District"],
+        "visible_facts": facts,
+        "actionable_labels": ["Read the notice board", "Approach the guards"],
+    }
+
+
+def opening_gm_output() -> dict:
+    facts = opening_validation_context()["visible_facts"]
+    return {
+        "response_policy": {"response_type_contract": response_type_contract("scene_opening")},
+        "opening_curated_facts": list(facts),
+        "metadata": {
+            "emission_debug": {
+                "opening_curated_facts_present": True,
+                "opening_curated_facts_count": len(facts),
+                "opening_curated_facts_source": "realization",
+            }
+        },
+        "prompt_context": {
+            "opening_inputs_are_curated": True,
+            "opening_curated_facts": list(facts),
+            "narration_obligations": {"is_opening_scene": True},
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Cinderwatch Gate District"]},
+                "scene_anchors": {"location_anchors": ["Cinderwatch Gate District"]},
+                "active_pressures": {},
+            },
+            "opening_scene_realization": {"contract": {"narration_basis_visible_facts": facts}},
+            "narration_visibility": {"visible_facts": facts},
+            "scene": {
+                "public": {
+                    "id": "frontier_gate",
+                    "location": "Cinderwatch Gate District",
+                    "visible_facts": facts,
+                    "actions": [{"label": "Read the notice board"}, {"label": "Approach the guards"}],
+                }
+            },
+        },
+    }
+
+
+def assert_final_emission_meta_contains(
+    meta: Mapping[str, Any] | None,
+    **expected: Any,
+) -> dict[str, Any]:
+    """Assert exact key matches on FEM/debug metadata already extracted from gate output."""
+    fem = dict(meta) if isinstance(meta, Mapping) else {}
+    for key, value in expected.items():
+        assert fem.get(key) == value, f"{key}: expected {value!r}, got {fem.get(key)!r}"
+    return fem
+
+
+def assert_fallback_owner_bucket(
+    expected: str,
+    *,
+    meta: Mapping[str, Any] | None = None,
+    from_fields: Mapping[str, Any] | None = None,
+) -> None:
+    """Assert opening fallback owner bucket via meta read or explicit field projection."""
+    if from_fields is not None:
+        got = opening_fallback_owner_bucket_from_fields(**dict(from_fields))
+    else:
+        got = opening_fallback_owner_bucket_from_meta(meta)
+    assert got == expected
+
+
+def assert_opening_fallback_source(
+    meta: Mapping[str, Any] | None,
+    *,
+    final_emitted_source: str,
+    authorship_source: str | None = None,
+    owner_bucket: str | None = None,
+    forbid_compat_local_authorship: bool = False,
+) -> None:
+    """Assert canonical opening fallback source/authorship/owner-bucket projection locks."""
+    fem = dict(meta) if isinstance(meta, Mapping) else {}
+    assert fem.get("final_emitted_source") == final_emitted_source
+    if authorship_source is not None:
+        assert fem.get("opening_fallback_authorship_source") == authorship_source
+    if forbid_compat_local_authorship:
+        assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    if owner_bucket is not None:
+        assert_fallback_owner_bucket(owner_bucket, meta=fem)
+
+
+def assert_sealed_fallback_owner_bucket(meta: Mapping[str, Any] | None, expected: str) -> None:
+    """Assert sealed fallback owner-bucket stamp on FEM/debug metadata."""
+    fem = dict(meta) if isinstance(meta, Mapping) else {}
+    assert fem.get("sealed_fallback_owner_bucket") == expected
 
 
 def successful_opening_fem_meta(**overrides: Any) -> dict[str, Any]:

@@ -28,7 +28,6 @@ from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 import game.final_emission_gate as feg_module
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_plan_bundle import attach_narration_plan_bundle, get_attached_narration_plan_bundle
 from game.narrative_mode_contract import build_narrative_mode_contract
@@ -37,6 +36,7 @@ from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for
 from tests.helpers.emission_smoke_assertions import (
     assert_final_route_accept_candidate_smoke,
     assert_final_route_replaced_or_not_accept,
+    final_emission_meta_from_output,
 )
 from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 
@@ -67,7 +67,7 @@ def _gm_with_shipped_plan(
 
 
 def _fem(out: dict) -> dict:
-    return read_final_emission_meta_dict(out) or {}
+    return final_emission_meta_from_output(out)
 
 
 def _strict_runner_session_world_scene():

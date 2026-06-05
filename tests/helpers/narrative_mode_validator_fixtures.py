@@ -1,9 +1,18 @@
-"""Shared narrative-mode validator CTIR/resolution stubs (Cycle AL1b).
+"""Shared narrative-mode validator CTIR/resolution stubs (Cycle AL1b / AS5).
 
-Support residue for gate and live-pipeline suites that need minimal CTIR shells.
+Support residue for gate, live-pipeline, and boundary suites that need minimal CTIR shells.
 Validator predicate ownership stays in ``tests/test_narrative_mode_output_validator.py``.
 """
 from __future__ import annotations
+
+from typing import Any
+
+
+def build_validator_narrative_mode_contract(**kwargs: Any) -> dict:
+    """Minimal ``build_narrative_mode_contract`` wrapper for non-owner wiring tests."""
+    from game.narrative_mode_contract import build_narrative_mode_contract
+
+    return build_narrative_mode_contract(**kwargs)
 
 
 def minimal_ctir_continuation() -> dict:

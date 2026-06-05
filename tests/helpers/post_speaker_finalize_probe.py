@@ -8,6 +8,11 @@ Also probes **inline** ``_strip_dialogue_from_text`` calls **after** speaker enf
 subtractive strip following fast-fallback neutral composition), which are not a named layer function.
 
 Does not change production behavior beyond monkeypatched wrappers delegating to originals.
+
+**Retained private ``feg._*`` seams (AS6):** layer wrappers in
+:func:`install_post_speaker_text_probes` and :func:`chain_enforce_phase_marker` must patch gate-module
+symbols because divergence inventory is defined over the strict-social accept trunk's private layer
+callables. Replacing with ``apply_final_emission_gate_consumer`` would collapse observability.
 """
 from __future__ import annotations
 

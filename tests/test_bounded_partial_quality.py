@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_repairs import repair_fallback_behavior
+from tests.helpers.repairs_consumer_facade import repair_fallback_behavior
 from game.final_emission_validators import validate_fallback_behavior
 
 

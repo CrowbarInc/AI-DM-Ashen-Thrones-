@@ -260,6 +260,6 @@ def test_gauntlet_malformed_splice_does_not_leak_fragment_concat(tmp_path, monke
 
 def test_gauntlet_slice_strict_social_narrative_authority_repair(monkeypatch):
     """Thin integration hook: strict-social NA + speaker stability (canonical case in emission tests)."""
-    from tests.helpers.final_emission_gate_fixtures import run_strict_social_motive_overclaim_gate_case
+    from tests.helpers.strict_social_harness import run_strict_social_motive_overclaim_gate_case
 
     run_strict_social_motive_overclaim_gate_case(monkeypatch)

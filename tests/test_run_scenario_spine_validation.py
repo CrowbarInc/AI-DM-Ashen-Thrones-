@@ -790,12 +790,13 @@ def test_scenario_spine_runtime_lineage_summary_uses_shared_reporting_surface() 
 
 def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_diagnostics() -> None:
     from game.final_emission_gate import apply_final_emission_gate
-    from game.final_emission_meta import build_fem_runtime_lineage_events, read_final_emission_meta_dict
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+    from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
     from game.upstream_response_repairs import (
         UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
         build_upstream_prepared_opening_fallback_payload,
     )
-    from tests.helpers.final_emission_gate_fixtures import (
+    from tests.helpers.opening_fallback_evidence import (
         EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
         opening_gm_output,
     )
@@ -815,7 +816,7 @@ def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_
     assert prepared["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert successful["player_facing_text"] == prepared["prepared_opening_fallback_text"]
 
-    successful_events = build_fem_runtime_lineage_events(read_final_emission_meta_dict(successful) or {})
+    successful_events = build_fem_runtime_lineage_events(read_fem_meta_from_gate_output(successful))
     successful_selected = next(event for event in successful_events if event["event_kind"] == "fallback_selected")
     assert successful_selected["fallback_kind"] == "scene_opening"
     assert successful_selected["owner"] == "game.final_emission_gate"
@@ -838,7 +839,7 @@ def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_
         scene_id="frontier_gate",
         world={},
     )
-    fail_closed_events = build_fem_runtime_lineage_events(read_final_emission_meta_dict(fail_closed) or {})
+    fail_closed_events = build_fem_runtime_lineage_events(read_fem_meta_from_gate_output(fail_closed))
     fail_closed_selected = next(event for event in fail_closed_events if event["event_kind"] == "fallback_selected")
     assert fail_closed_selected["fallback_kind"] == "opening_failed_closed"
     assert fail_closed_selected["owner"] == "game.final_emission_gate"

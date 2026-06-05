@@ -34,14 +34,14 @@ from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_upstream_prepared_opening_fallback_payload,
 )
-from tests.helpers.final_emission_gate_fixtures import (
+from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
-    opening_gate_attach_then_enforce_response_type_contract,
     opening_gm_output,
-    response_type_contract,
 )
+from tests.helpers.opening_fallback_gate_harness import opening_gate_attach_then_enforce_response_type_contract
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 

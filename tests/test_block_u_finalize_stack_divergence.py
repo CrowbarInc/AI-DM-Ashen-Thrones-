@@ -5,12 +5,16 @@ from types import SimpleNamespace
 
 import pytest
 
-import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
+)
+from tests.helpers.gate_equivalence_monkeypatch import (
+    patch_build_final_strict_social_response,
+    patch_get_speaker_selection_contract,
 )
 from tests.helpers.post_speaker_finalize_probe import (
     POST_SPEAKER_PROBE_ORDER,
@@ -24,11 +28,7 @@ from tests.helpers.speaker_relocation_shadow_harness import (
     build_finalize_stack_fixture,
     install_dual_run_enforce,
 )
-from tests.test_block_s_speaker_local_rebind_equivalence import (
-    _locked_runner_contract,
-    _stub_strict_social_details,
-)
-from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
+from tests.helpers.strict_social_harness import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -37,8 +37,8 @@ pytestmark = pytest.mark.unit
 def local_rebind_strict_bundle(monkeypatch):
     return build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
     )
 
 
@@ -59,8 +59,8 @@ def local_rebind_canonical_plan_with_declared_alias_bundle(monkeypatch):
 
     return build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
         configure_resolution=configure_resolution,
     )
 
@@ -84,8 +84,8 @@ def local_rebind_passing_dialogue_plan_bundle(monkeypatch):
 
     return build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
         configure_resolution=configure_resolution,
     )
 
@@ -192,17 +192,16 @@ def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monke
             dialogue_intent="question",
         ),
     )
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(_locked_runner_contract()))
+    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
 
     build_inputs: list[str] = []
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        build_inputs.append(str(candidate_text or ""))
-        return 'Ragged stranger says, "No names, only rumors."', _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-
     pre_gate_line = 'Ragged stranger says, "No names, only rumors."'
+    patch_build_final_strict_social_response(
+        monkeypatch,
+        line=pre_gate_line,
+        strict_social_details=stub_strict_social_details,
+        build_inputs=build_inputs,
+    )
     out = apply_final_emission_gate(
         {"player_facing_text": pre_gate_line, "tags": []},
         resolution=resolution,
@@ -211,7 +210,7 @@ def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monke
         world=world,
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("dialogue_plan_valid") is False
     reasons = meta.get("dialogue_plan_failure_reasons") or []
     assert any(str(r).startswith("attributed_speaker_mismatch:") for r in reasons)
@@ -231,17 +230,17 @@ def test_block_z_canonical_plan_with_declared_alias_passes_dialogue_plan_gate(mo
             speaker_alias_resolution_source="manual_bundle_override",
         ),
     )
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(_locked_runner_contract()))
+    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
 
     build_inputs: list[str] = []
-
-    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
-        build_inputs.append(str(candidate_text or ""))
-        return 'Ragged stranger says, "No names, only rumors."', _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-
     pre_gate_line = 'Ragged stranger says, "No names, only rumors."'
+    patch_build_final_strict_social_response(
+        monkeypatch,
+        line=pre_gate_line,
+        strict_social_details=stub_strict_social_details,
+        build_inputs=build_inputs,
+    )
+
     out = apply_final_emission_gate(
         {"player_facing_text": pre_gate_line, "tags": []},
         resolution=resolution,
@@ -250,7 +249,7 @@ def test_block_z_canonical_plan_with_declared_alias_passes_dialogue_plan_gate(mo
         world=world,
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("dialogue_plan_valid") is True
     assert build_inputs and build_inputs[0].strip() == pre_gate_line.strip()
 

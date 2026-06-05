@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 import pytest
 
-from game.final_emission_repairs import _apply_narrative_authenticity_layer
+from tests.helpers.repairs_consumer_facade import apply_narrative_authenticity_layer
 from game.narrative_authenticity import (
     build_narrative_authenticity_contract,
     build_narrative_authenticity_emission_trace,
@@ -104,7 +104,7 @@ def test_emission_validator_skip_fallback_uncertainty_not_terminal_status():
 def test_apply_na_layer_skip_distinct_from_relaxed_and_fail():
     c = build_narrative_authenticity_contract()
     gm = _gm_with_na(c)
-    out, meta, _extra = _apply_narrative_authenticity_layer(
+    out, meta, _extra = apply_narrative_authenticity_layer(
         "Any text here about the gate.",
         gm_output=gm,
         strict_social_details=None,
@@ -121,7 +121,7 @@ def test_apply_na_layer_skip_distinct_from_relaxed_and_fail():
 def test_apply_na_layer_fail_is_checked_and_terminal_not_skip():
     c = build_narrative_authenticity_contract()
     gm = _gm_with_na(c)
-    _out, meta, _extra = _apply_narrative_authenticity_layer(
+    _out, meta, _extra = apply_narrative_authenticity_layer(
         "The mist holds along the quay.",
         gm_output=gm,
         strict_social_details=None,
@@ -142,7 +142,7 @@ def test_fail_is_distinct_from_validator_skip_in_apply_layer():
             "fallback_behavior": {"uncertainty_active": True},
         }
     }
-    out_s, meta_s, _ = _apply_narrative_authenticity_layer(
+    out_s, meta_s, _ = apply_narrative_authenticity_layer(
         "hard to say",
         gm_output=gm_uncertain,
         strict_social_details=None,
@@ -155,7 +155,7 @@ def test_fail_is_distinct_from_validator_skip_in_apply_layer():
     assert meta_s.get("narrative_authenticity_failed") is False
 
     gm2 = _gm_with_na(c)
-    _out_f, meta_f, _ = _apply_narrative_authenticity_layer(
+    _out_f, meta_f, _ = apply_narrative_authenticity_layer(
         "The mist holds along the quay.",
         gm_output=gm2,
         strict_social_details=None,
@@ -203,7 +203,7 @@ def test_clean_rumor_pass_apply_layer_matches_emission_contract():
     )
     text = 'He shrugs. "Dock talk says the sealed gate holds until morning, could be wrong," he mutters.'
     gm = _gm_with_na(c)
-    _out, meta, _ = _apply_narrative_authenticity_layer(
+    _out, meta, _ = apply_narrative_authenticity_layer(
         text,
         gm_output=gm,
         strict_social_details=None,
@@ -360,7 +360,7 @@ def test_apply_layer_repaired_vs_fail_terminal_meta():
     )
     ok_text = 'He shrugs. "Dock talk says the sealed gate holds until morning, could be wrong," he mutters.'
     gm = _gm_with_na(c)
-    _o, meta_ok, _ = _apply_narrative_authenticity_layer(
+    _o, meta_ok, _ = apply_narrative_authenticity_layer(
         ok_text,
         gm_output=gm,
         strict_social_details=None,
@@ -372,7 +372,7 @@ def test_apply_layer_repaired_vs_fail_terminal_meta():
     bad_text = (
         "He keeps his voice low. \"The east gate is sealed until dawn; only what the dockhands say\u2014that could be drink talk.\""
     )
-    _o2, meta_rep, _ = _apply_narrative_authenticity_layer(
+    _o2, meta_rep, _ = apply_narrative_authenticity_layer(
         bad_text,
         gm_output=gm,
         strict_social_details=None,
@@ -384,7 +384,7 @@ def test_apply_layer_repaired_vs_fail_terminal_meta():
     assert meta_rep.get("narrative_authenticity_repair_mode") is None
 
     gm2 = _gm_with_na(c)
-    _o3, meta_fail, _ = _apply_narrative_authenticity_layer(
+    _o3, meta_fail, _ = apply_narrative_authenticity_layer(
         "The mist holds along the quay.",
         gm_output=gm2,
         strict_social_details=None,

@@ -1,9 +1,11 @@
-"""Shared shipped ``fallback_behavior`` / ``answer_completeness`` contract builders.
+"""Shared shipped ``fallback_behavior`` / ``answer_completeness`` contract builders (Cycle AS5).
 
 Support residue for gate, downstream consumer, and transcript suites. Predicate
 semantics stay owned by ``tests/test_fallback_behavior_validator.py`` and
 ``tests/test_final_emission_repairs.py``; these helpers only pin stable contract
 dict shapes for orchestration and wiring tests.
+
+Import from here — not from ``tests/test_fallback_behavior_gate.py`` or other test modules.
 """
 from __future__ import annotations
 

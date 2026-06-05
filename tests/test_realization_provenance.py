@@ -22,7 +22,7 @@ from game.upstream_response_repairs import (
     build_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
-from tests.helpers.final_emission_gate_fixtures import opening_gm_output
+from tests.helpers.opening_fallback_evidence import opening_gm_output
 
 pytestmark = pytest.mark.unit
 

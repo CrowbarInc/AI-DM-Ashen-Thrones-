@@ -14,7 +14,7 @@ from game.api_turn_support import _finalize_player_facing_for_turn
 from game.final_emission_gate import apply_final_emission_gate as real_apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement as real_apply_response_policy_enforcement
 from game.defaults import default_campaign, default_character, default_session, default_world
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GPT_BUDGET_OR_PROVIDER_FAILURE,
@@ -26,7 +26,7 @@ from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
 )
-from tests.helpers.final_emission_gate_fixtures import (
+from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     opening_gm_output,
 )
@@ -296,7 +296,7 @@ def test_finalize_player_facing_scene_opening_carries_upstream_opening_fallback_
     assert isinstance(pay, dict)
     assert pay["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 
@@ -644,7 +644,7 @@ def test_block_al_handoff_normal_gpt_then_policy_then_gate(monkeypatch: pytest.M
     seam_fin = md.get("narration_seam") if isinstance(md.get("narration_seam"), dict) else {}
     if pk_hub:
         assert seam_fin.get("path_kind") == pk_hub
-    fem = read_final_emission_meta_dict(gm_out) or {}
+    fem = final_emission_meta_from_output(gm_out) or {}
     assert fem.get("final_emitted_source") or md.get("final_emitted_source") or route_hub
 
 
@@ -673,7 +673,7 @@ def test_block_al_handoff_gpt_budget_exceeded_skips_provider_call_order(monkeypa
     assert events == ["final_emission_gate"]
     families = _assert_all_emitted_families_known(built)
     assert GPT_BUDGET_OR_PROVIDER_FAILURE in families
-    fem = read_final_emission_meta_dict(gm_out) or {}
+    fem = final_emission_meta_from_output(gm_out) or {}
     assert fem.get("final_emitted_source") or route_hub
 
 
@@ -712,7 +712,7 @@ def test_block_al_handoff_targeted_retry_second_gpt_before_policy_then_gate(monk
     assert events.index("response_policy_enforcement") < events.index("final_emission_gate")
     md = gm_out.get("metadata") if isinstance(gm_out.get("metadata"), dict) else {}
     assert md["existing_marker"] == "retry"
-    fem = read_final_emission_meta_dict(gm_out) or {}
+    fem = final_emission_meta_from_output(gm_out) or {}
     assert fem.get("final_emitted_source") or route_hub
 
 
@@ -752,7 +752,7 @@ def test_block_al_handoff_terminal_retry_force_fallback_before_policy_then_gate(
     assert events.index("response_policy_enforcement") < events.index("final_emission_gate")
     md = gm_out.get("metadata") if isinstance(gm_out.get("metadata"), dict) else {}
     assert md["existing_marker"] == "terminal"
-    fem = read_final_emission_meta_dict(gm_out) or {}
+    fem = final_emission_meta_from_output(gm_out) or {}
     assert fem.get("final_emitted_source") or route_hub
 
 
@@ -785,7 +785,7 @@ def test_block_al_handoff_planner_convergence_emergency_skips_gpt_and_retry_stac
 
     md_out = gm_out.get("metadata") if isinstance(gm_out.get("metadata"), dict) else {}
     assert md_out["narration_seam"]["path_kind"] == md["narration_seam"]["path_kind"]
-    fem = read_final_emission_meta_dict(gm_out) or {}
+    fem = final_emission_meta_from_output(gm_out) or {}
     assert fem.get("final_emitted_source") or _route_source(built)
 
 

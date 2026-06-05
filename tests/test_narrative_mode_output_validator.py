@@ -11,10 +11,10 @@ from game.final_emission_meta import (
 )
 from game.narrative_mode_contract import (
     build_narrative_mode_emission_trace,
-    build_narrative_mode_contract,
     validate_narrative_mode_output,
 )
 from tests.helpers.narrative_mode_validator_fixtures import (
+    build_validator_narrative_mode_contract,
     minimal_ctir_action_outcome,
     minimal_ctir_continuation,
     resolution_pending_check,
@@ -24,7 +24,7 @@ pytestmark = pytest.mark.unit
 
 
 def _contract(**kwargs: object) -> dict:
-    return build_narrative_mode_contract(**kwargs)
+    return build_validator_narrative_mode_contract(**kwargs)
 
 
 def test_skips_when_contract_disabled_or_invalid() -> None:

@@ -19,8 +19,6 @@ Block C: ``question_resolution_rule_check`` / first-sentence social legality (in
 rather than duplicated in ``tests/test_prompt_and_guard.py``."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 import game.final_emission_gate as feg
 
 from game.contract_registry import emergency_fallback_source_ids
@@ -33,6 +31,7 @@ from game.final_emission_gate import (
     validate_answer_completeness,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
@@ -302,7 +301,7 @@ def test_strict_social_emission_answer_contract_prefers_response_policy_surface_
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert out["player_facing_text"] == "Roll Sleight of Hand to determine whether the move goes unnoticed."
     # Response-type metadata shape is owned by ``test_final_emission_meta``; this suite is behavioral.
     assert meta.get("response_type_repair_used") is True
@@ -353,7 +352,7 @@ def test_strict_social_emission_answer_completeness_repairs_frontloaded_direct_a
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     assert_final_route_replaced_or_not_accept(meta)
@@ -385,7 +384,7 @@ def test_strict_social_emission_action_outcome_contract_repairs_exposition_only_
         world={},
     )
     low = out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert "you investigate the desk" in low
     assert "nothing new" in low
     assert meta.get("response_type_repair_used") is True
@@ -418,7 +417,7 @@ def test_strict_social_emission_non_hostile_contract_blocks_sudden_aggression():
         world={},
     )
     low = out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert "draws steel" not in low
     assert "lunges" not in low
     assert "sleight of hand" in low
@@ -458,7 +457,7 @@ def test_strict_social_emission_non_hostile_answer_contract_stays_non_escalatory
         world=world,
     )
     low = out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert "draws steel" not in low
     assert "lunges" not in low
     assert "sleight of hand" in low
@@ -491,7 +490,7 @@ def test_strict_social_emission_dialogue_contract_can_repair_from_debug_surface(
         world=world,
     )
     low = out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert "rain beads on stone" not in low
     assert "tavern runner" in low
     assert ('"' in out["player_facing_text"]) or ("starts to answer" in low) or ("stands nearby" in low)
@@ -1353,7 +1352,7 @@ def test_strict_social_emission_meta_documents_final_emitted_source():
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_active") is True
     fem = meta.get("final_emitted_source")
     assert isinstance(fem, str) and fem
@@ -1412,7 +1411,7 @@ def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatc
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_active") is True
     for key in (
         "social_response_structure_checked",
@@ -1444,7 +1443,7 @@ def test_strict_social_replacement_never_uses_global_scene_fallback_in_meta():
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("final_emitted_source") != "global_scene_fallback"
     assert meta.get("final_emitted_source") in (
         "deterministic_social_fallback",
@@ -1481,7 +1480,7 @@ def test_strict_social_visibility_replacement_prefers_social_owned_fallback_over
     low = out["player_facing_text"].lower()
     assert "stands nearby" not in low
     assert "stands in checkpoint" not in low
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_active") is True
     assert meta.get("final_emitted_source") in (
         "deterministic_social_fallback",
@@ -1521,7 +1520,7 @@ def test_final_emission_passive_pressure_restores_recent_suspicious_figure_from_
     assert "the tattered man" in low
     assert "cuts through the crowd" in low or "comes straight to you" in low
     assert "for a breath, the scene holds" not in low
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("final_emitted_source") == "passive_scene_pressure_fallback"
 
 
@@ -1571,7 +1570,7 @@ def test_generic_guard_direct_question_never_degrades_to_global_scene_hold():
     low = out["player_facing_text"].lower()
     assert "for a breath" not in low
     assert "scene holds" not in low
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_active") is True
     assert meta.get("final_emitted_source") != "global_scene_fallback"
 

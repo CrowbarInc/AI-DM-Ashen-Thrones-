@@ -6,7 +6,7 @@ import copy
 
 import pytest
 
-from game.final_emission_repairs import _apply_referent_clarity_emission_layer
+from tests.helpers.repairs_consumer_facade import apply_referent_clarity_emission_layer
 from game.final_emission_validators import validate_referent_clarity
 from game.prompt_context import _project_clause_referent_prompt_hints
 from tests.helpers.objective7_referent_fixtures import minimal_full_referent_artifact, referent_compact_mirror
@@ -58,7 +58,7 @@ def test_clause_plan_authorized_single_label_allows_bounded_repair_when_artifact
         clause_referent_plan=[_clause_row_single_label_speaker()],
     )
     gm = {"prompt_context": {"referent_tracking": art}}
-    text, dbg, _ = _apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
+    text, dbg, _ = apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
     assert text.startswith("Gate sergeant")
     assert dbg["referent_repair_applied"] is True
     assert dbg.get("referent_repair_label_source") == "clause_referent_plan"
@@ -77,7 +77,7 @@ def test_clause_plan_risky_row_without_authorized_label_skips_repair() -> None:
         ],
     )
     gm = {"prompt_context": {"referent_tracking": art}}
-    text, dbg, _ = _apply_referent_clarity_emission_layer("They disagree.", gm_output=gm)
+    text, dbg, _ = apply_referent_clarity_emission_layer("They disagree.", gm_output=gm)
     assert text == "They disagree."
     assert dbg["referent_repair_applied"] is False
 
@@ -136,7 +136,7 @@ def test_compact_only_path_no_repair_even_with_clause_plan_on_missing_full() -> 
             )
         },
     }
-    text, dbg, _ = _apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
+    text, dbg, _ = apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
     assert text == "They wait."
     assert dbg["referent_validation_input_source"] == "packet_compact"
     assert dbg.get("referent_repair_skipped_reason") == "limited_input_no_full_artifact"
@@ -162,7 +162,7 @@ def test_validate_repair_and_prompt_projection_do_not_mutate_referent_artifact()
     _project_clause_referent_prompt_hints(art)
     assert art == frozen
     gm = {"prompt_context": {"referent_tracking": art}}
-    _apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
+    apply_referent_clarity_emission_layer("They wait.", gm_output=gm)
     assert art == frozen
 
 

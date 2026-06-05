@@ -22,7 +22,11 @@ from typing import Any, Callable, Dict, Iterator, Mapping, Optional
 import game.final_emission_gate as feg
 import game.speaker_contract_enforcement as sce
 
-from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
+from tests.helpers.gate_equivalence_monkeypatch import (
+    patch_build_final_strict_social_response,
+    patch_get_speaker_selection_contract,
+)
+from tests.helpers.strict_social_harness import runner_strict_bundle
 from tests.helpers.speaker_gate_order import normalized_player_text_equal
 
 
@@ -55,6 +59,7 @@ def run_isolated_enforce_mirror(
     contract_loader: Optional[Callable[..., Dict[str, Any]]] = None,
 ) -> tuple[str, Dict[str, Any]]:
     """Mirror :func:`~game.final_emission_gate.enforce_emitted_speaker_with_contract` without FEM merge."""
+    # Default to gate namespace so monkeypatches on ``feg.get_speaker_selection_contract`` apply.
     loader = contract_loader or feg.get_speaker_selection_contract
     trace = gm_output.get("trace") if isinstance(gm_output.get("trace"), dict) else None
     md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else None
@@ -198,14 +203,10 @@ def build_finalize_stack_fixture(
     if configure_resolution is not None:
         configure_resolution(resolution)
 
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(contract))
-
-    def fake_build(candidate_text: str, *, resolution: dict[str, Any], tags: list[str], session: dict[str, Any], scene_id: str, world: dict[str, Any]):
-        del candidate_text, resolution, tags, session, scene_id, world
-        details = strict_social_details() if callable(strict_social_details) else strict_social_details
-        return line, dict(details)
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    patch_get_speaker_selection_contract(monkeypatch, contract)
+    patch_build_final_strict_social_response(
+        monkeypatch, line=line, strict_social_details=strict_social_details
+    )
     return FinalizeStackFixture(session=session, world=world, scene_id=scene_id, resolution=resolution, line=line)
 
 

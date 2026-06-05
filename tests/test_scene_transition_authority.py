@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from game import storage
 from game.api import app
-from game.final_emission_meta import read_debug_notes_from_turn_payload
+from tests.helpers.emission_smoke_assertions import read_turn_debug_notes
 from game.intent_parser import maybe_build_declared_travel_action, segment_mixed_player_turn
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.storage import get_scene_runtime
@@ -169,7 +169,7 @@ def test_gpt_transition_proposals_cannot_mutate_state_without_authoritative_tran
     gm = data.get("gm_output") or {}
     assert gm.get("activate_scene_id") == "scene_b"
     assert isinstance(gm.get("new_scene_draft"), dict)
-    dbg = str(read_debug_notes_from_turn_payload(data) or "")
+    dbg = str(read_turn_debug_notes(data) or "")
     # Debug notes are not a stable public contract; ensure observability survives via supported reader.
     # (Gate replacement can rewrite debug_notes, so don't hard-pin exact advisory tokens here.)
     assert dbg.strip()

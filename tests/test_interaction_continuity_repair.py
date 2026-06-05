@@ -16,10 +16,9 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
     assert_continuity_validation_failed_without_repair,
     assert_final_route_not_replaced_smoke,
     assert_final_route_present_smoke,
@@ -83,7 +82,7 @@ def test_emitted_output_exhibits_continuity_repaired_structure_strong_short_narr
         "response_policy": {"interaction_continuity": ic},
     }
     resolution = {"metadata": {"emission_debug": {}, "player_input": "Can I pass?"}}
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=None,
@@ -109,7 +108,7 @@ def test_emitted_output_preserves_continuity_constraints_under_strong_complex_na
         "response_policy": {"interaction_continuity": ic},
     }
     resolution = {"metadata": {"emission_debug": {}, "player_input": "What do you know?"}}
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=None,
@@ -119,7 +118,7 @@ def test_emitted_output_preserves_continuity_constraints_under_strong_complex_na
     )
     em = out["metadata"]["emission_debug"]
     assert_continuity_validation_failed_without_repair(em)
-    assert_final_route_not_replaced_smoke(read_final_emission_meta_dict(out) or {})
+    assert_final_route_not_replaced_smoke(fem)
 
 
 def test_emitted_output_preserves_continuity_constraints_soft_strength_on_violation():
@@ -138,7 +137,7 @@ def test_emitted_output_preserves_continuity_constraints_soft_strength_on_violat
         },
     }
     resolution = {"metadata": {"emission_debug": {}, "player_input": "What news?"}}
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=None,
@@ -161,7 +160,7 @@ def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
         "response_policy": {"interaction_continuity": c},
     }
     resolution = {"metadata": {"emission_debug": {}}, "player_input": "Who called out?"}
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=None,
@@ -171,5 +170,5 @@ def test_emitted_output_surfaces_stripped_interruption_repair_metadata():
     )
     em = out["metadata"]["emission_debug"]
     assert_continuity_validation_failed_without_repair(em)
-    assert_final_route_present_smoke(read_final_emission_meta_dict(out) or {})
+    assert_final_route_present_smoke(fem)
     assert "final_emission_gate_replaced" in out.get("tags", [])

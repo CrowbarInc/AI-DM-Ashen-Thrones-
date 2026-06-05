@@ -21,13 +21,17 @@ What stays in owner suites (do not restate here):
   ``tests/test_dialogue_routing_lock.py`` (``choose_interaction_route`` classification table)
 
 Intentionally separate (do not merge into this facade):
-- Gate harness fixtures and owner-bucket asserts:
-  ``tests/helpers/final_emission_gate_fixtures.py``
-- Opening fallback FEM evidence dicts: ``tests/helpers/opening_fallback_evidence.py``
+- Opening fallback scaffolds / owner-bucket asserts: ``tests/helpers/opening_fallback_evidence.py``
+- Strict-social harness bundle: ``tests/helpers/strict_social_harness.py``
+- Opening attach-then gate harness: ``tests/helpers/opening_fallback_gate_harness.py``
 - Golden replay / classifier FEM bucket projection:
   ``tests/helpers/golden_replay_projection.py``, ``tests/helpers/failure_classifier.py``
-- FEM read from gate output dicts:
-  ``final_emission_gate_fixtures.final_emission_meta_from_output``
+
+Cycle AS2 — downstream consumer suites should import gate integration and owned layer
+seams from this module instead of ``game.final_emission_gate`` / ``read_final_emission_meta_dict``.
+
+Cycle AS4 — downstream HTTP/pipeline/transcript smoke should use ``final_emission_meta_from_output``
+and ``read_turn_debug_notes`` here; golden-replay FEM reads use ``golden_replay_projection``.
 
 Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick reference).
 """
@@ -36,9 +40,105 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from game.final_emission_meta import read_debug_notes_from_turn_payload
+from game.final_emission_meta import read_debug_notes_from_turn_payload, read_final_emission_meta_dict
 
 _MISSING = object()
+
+
+def response_type_contract(required: str) -> dict:
+    """Minimal response-type contract scaffold for downstream smoke and integration tests."""
+    return {
+        "required_response_type": required,
+        "action_must_preserve_agency": required == "action_outcome",
+    }
+
+
+def final_emission_meta_from_output(gm_output: Mapping[str, Any]) -> dict[str, Any]:
+    """Read normalized FEM from a gate output dict (downstream wiring smoke)."""
+    return read_final_emission_meta_dict(dict(gm_output)) or {}
+
+
+def read_turn_debug_notes(payload: Mapping[str, Any]) -> str:
+    """Read turn-packet debug notes (downstream HTTP/pipeline wiring smoke)."""
+    return read_debug_notes_from_turn_payload(payload)
+
+
+STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH = "game.final_emission_gate.strict_social_emission_will_apply"
+
+
+def apply_final_emission_gate_consumer(
+    gm_output: Mapping[str, Any],
+    *,
+    resolution: Mapping[str, Any] | None = None,
+    session: Mapping[str, Any] | None = None,
+    scene_id: str = "",
+    scene: Mapping[str, Any] | None = None,
+    world: Mapping[str, Any] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Run full gate orchestration for downstream consumer integration tests; return (output, fem)."""
+    from game.final_emission_gate import apply_final_emission_gate
+
+    out = apply_final_emission_gate(
+        dict(gm_output),
+        resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution,
+        session=dict(session) if isinstance(session, Mapping) else session,
+        scene_id=scene_id,
+        scene=dict(scene) if isinstance(scene, Mapping) else scene,
+        world=dict(world) if isinstance(world, Mapping) else world,
+    )
+    return out, final_emission_meta_from_output(out)
+
+
+def validate_answer_completeness(text: str, contract: Mapping[str, Any], *, resolution: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Consumer-owned answer-completeness validator seam (delegates to gate layer)."""
+    from game.final_emission_gate import validate_answer_completeness as _fn
+
+    return _fn(text, dict(contract), resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution)
+
+
+def apply_answer_completeness_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
+    """Consumer-owned answer-completeness layer seam (delegates to gate layer)."""
+    from game.final_emission_gate import _apply_answer_completeness_layer as _fn
+
+    return _fn(*args, **kwargs)
+
+
+def apply_response_delta_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
+    """Consumer-owned response-delta layer seam (delegates to gate layer)."""
+    from game.final_emission_gate import _apply_response_delta_layer as _fn
+
+    return _fn(*args, **kwargs)
+
+
+def skip_answer_completeness_layer(*args: Any, **kwargs: Any) -> bool:
+    from game.final_emission_gate import _skip_answer_completeness_layer as _fn
+
+    return _fn(*args, **kwargs)
+
+
+def skip_response_delta_layer(*args: Any, **kwargs: Any) -> bool:
+    from game.final_emission_gate import _skip_response_delta_layer as _fn
+
+    return _fn(*args, **kwargs)
+
+
+def strict_social_answer_pressure_rd_contract_active(gm_output: Mapping[str, Any]) -> bool:
+    from game.final_emission_gate import _strict_social_answer_pressure_rd_contract_active as _fn
+
+    return _fn(dict(gm_output))
+
+
+def validate_response_delta(emitted: str, contract: Mapping[str, Any]) -> dict[str, Any]:
+    from game.final_emission_gate import validate_response_delta as _fn
+
+    return _fn(emitted, dict(contract))
+
+
+def inspect_response_delta_failure(result: Mapping[str, Any]) -> dict[str, Any]:
+    from game.final_emission_gate import inspect_response_delta_failure as _fn
+
+    return _fn(dict(result))
+
 
 _DEFAULT_REPAIR_TAG_MARKERS: tuple[str, ...] = (
     "final_emission_gate_replaced",

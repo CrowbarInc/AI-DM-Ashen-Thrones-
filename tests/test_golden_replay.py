@@ -6,7 +6,6 @@ import pytest
 
 from game import storage
 from game.api import chat
-import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
@@ -14,8 +13,8 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     opening_fallback_owner_bucket_from_meta,
-    read_final_emission_meta_dict,
 )
+from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from game.final_emission_replay_projection import SEALED_REPLACEMENT_SUBKINDS
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
@@ -93,14 +92,13 @@ from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
 )
-from tests.test_block_s_speaker_local_rebind_equivalence import (
-    _locked_runner_contract,
-    _stub_strict_social_details,
+from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
+from tests.helpers.gate_equivalence_monkeypatch import (
+    patch_build_final_strict_social_response,
+    patch_get_speaker_selection_contract,
 )
-from tests.helpers.final_emission_gate_fixtures import (
-    opening_gm_output,
-    runner_strict_bundle,
-)
+from tests.helpers.opening_fallback_evidence import opening_gm_output
+from tests.helpers.strict_social_harness import runner_strict_bundle
 from tests.helpers.golden_replay_fixtures import (
     fem_payload,
     gm_response,
@@ -1945,14 +1943,11 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
             speaker_alias_resolution_source="manual_bundle_override",
         ),
     )
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(_locked_runner_contract()))
-
+    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
     pre_gate_line = 'Ragged stranger says, "No names, only rumors."'
-
-    def _fake_build(_candidate_text, *, resolution, tags, session, scene_id, world):
-        return pre_gate_line, _stub_strict_social_details()
-
-    monkeypatch.setattr(feg, "build_final_strict_social_response", _fake_build)
+    patch_build_final_strict_social_response(
+        monkeypatch, line=pre_gate_line, strict_social_details=stub_strict_social_details
+    )
 
     out = apply_final_emission_gate(
         {"player_facing_text": pre_gate_line, "tags": []},
@@ -1963,7 +1958,7 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
     )
 
     final_text = str(out.get("player_facing_text") or "")
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = read_fem_meta_from_gate_output(out) or {}
     npc_id = (resolution.get("social") or {}).get("npc_id")
     turn = observed_turn_from_gate_output(
         scenario_id="declared_alias_dialogue_plan",
@@ -2118,7 +2113,7 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     )
 
     final_text = str(out.get("player_facing_text") or "")
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = read_fem_meta_from_gate_output(out) or {}
     turn = observed_turn_from_gate_output(
         scenario_id="opening_fallback_path",
         gm_output=out,
@@ -2164,7 +2159,7 @@ def test_golden_canonical_opening_fallback_never_reports_compatibility_local_own
         world={},
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = read_fem_meta_from_gate_output(out) or {}
     assert meta.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert opening_fallback_owner_bucket_from_meta(meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 

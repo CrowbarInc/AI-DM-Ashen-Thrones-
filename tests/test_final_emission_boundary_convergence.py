@@ -10,14 +10,8 @@ import json
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import default_response_type_debug, read_final_emission_meta_dict
+from game.final_emission_meta import default_response_type_debug
 from game.final_emission_validators import _default_response_type_debug as _validators_default_response_type_debug
-from game.final_emission_repairs import (
-    _apply_answer_completeness_layer,
-    _apply_response_delta_layer,
-    repair_fallback_behavior,
-)
 from game.final_emission_text import _normalize_text
 from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
@@ -25,7 +19,13 @@ from game.output_sanitizer import (
 )
 from game.social_exchange_emission import minimal_social_emergency_fallback_line, strict_social_ownership_terminal_fallback
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
+from tests.helpers.emission_smoke_assertions import (
+    apply_answer_completeness_layer,
+    apply_final_emission_gate_consumer,
+    apply_response_delta_layer,
+)
+from tests.helpers.repairs_consumer_facade import repair_fallback_behavior
+from tests.helpers.strict_social_harness import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -53,7 +53,7 @@ def test_answer_completeness_layer_does_not_reorder_on_failure():
         }
     }
     text = "I cannot say for certain. The captain is Jonas Hale."
-    out, meta, extra = _apply_answer_completeness_layer(
+    out, meta, extra = apply_answer_completeness_layer(
         text,
         gm_output=gm,
         resolution={"social": {"npc_name": "Guard"}},
@@ -81,7 +81,7 @@ def test_response_delta_layer_does_not_reorder_on_failure():
     }
     text = "We spoke of the east gate and the watch roster. Nothing new on the harbor clerk."
     ac_meta = {"answer_completeness_failed": False}
-    out, meta, extra = _apply_response_delta_layer(
+    out, meta, extra = apply_response_delta_layer(
         text,
         gm_output=gm,
         strict_social_details=None,
@@ -156,14 +156,13 @@ def test_gate_thin_answer_uses_upstream_prepared_marker_not_boundary_synthesis(_
             "prepared_action_fallback_text": "You act, and your position changes with that movement.",
         },
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "What do I see?"},
         session={},
         scene_id="yard",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(marker)
     assert meta.get("response_type_repair_kind") == "answer_upstream_prepared_repair"
     assert meta.get("response_type_upstream_prepared_absent") is not True
@@ -186,14 +185,13 @@ def test_gate_thin_action_outcome_uses_upstream_prepared_marker_not_boundary_syn
         },
     }
     session = {"last_player_action_text": "Pry the chest lid"}
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "investigate", "prompt": "Pry the chest lid"},
         session=session,
         scene_id="cellar",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(marker)
     assert meta.get("response_type_repair_kind") == "action_outcome_upstream_prepared_repair"
     assert meta.get("upstream_prepared_emission_used") is True
@@ -241,7 +239,7 @@ def test_gate_preserves_duplicate_speaker_subject_lines_no_quote_merge_for_caden
         "tags": [],
         "response_policy": {"response_type_contract": _rtc("dialogue")},
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "question", "prompt": "What does Rook say?"},
         session=None,
@@ -251,8 +249,7 @@ def test_gate_preserves_duplicate_speaker_subject_lines_no_quote_merge_for_caden
     txt = str(out.get("player_facing_text") or "")
     assert txt.count("Rook:") == 2
     assert "First watch" in txt and "Second watch" in txt
-    fem = read_final_emission_meta_dict(out) or {}
-    assert fem.get("social_response_structure_repair_applied") is not True
+    assert meta.get("social_response_structure_repair_applied") is not True
 
 
 def test_enforce_response_type_upstream_attribution_override():
@@ -363,7 +360,7 @@ def test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback(mo
         }
 
     monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "placeholder",
             "tags": [],
@@ -374,7 +371,6 @@ def test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback(mo
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("response_type_repair_kind") == "strict_social_dialogue_repair"
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(expected)
 
@@ -419,7 +415,7 @@ def test_gate_valid_answer_passes_unchanged_modulo_packaging_normalization(_noop
         "tags": [],
         "response_policy": {"response_type_contract": _rtc("answer")},
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "What blocks the road?"},
         session={},
@@ -429,7 +425,6 @@ def test_gate_valid_answer_passes_unchanged_modulo_packaging_normalization(_noop
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(
         "The east gate is barred."
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("response_type_candidate_ok") is True
     assert meta.get("upstream_prepared_emission_used") is not True
     assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
@@ -478,14 +473,13 @@ def test_gate_upstream_bundle_origin_preserved_separate_from_fem_source_attribut
             "upstream_prepared_bundle_origin": bundle_tag,
         },
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "What do I see?"},
         session={},
         scene_id="yard",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("upstream_prepared_emission_source") == "harness.attrib_only"
     up = out.get(UPSTREAM_PREPARED_EMISSION_KEY)
     assert isinstance(up, dict)
@@ -495,7 +489,7 @@ def test_gate_upstream_bundle_origin_preserved_separate_from_fem_source_attribut
 
 def test_gate_clean_neutral_narration_near_no_op_pass_through(_noop_visibility):
     src = "Rain hammers the slate roof; torchlight shivers in the gutter below."
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {
             "player_facing_text": src,
             "tags": [],
@@ -507,5 +501,4 @@ def test_gate_clean_neutral_narration_near_no_op_pass_through(_noop_visibility):
         world={},
     )
     assert _normalize_text(out.get("player_facing_text") or "") == _normalize_text(src)
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("response_type_repair_used") is False

@@ -1,10 +1,31 @@
-"""Block S — helpers for asserting strict-social gate phase order (local_rebind relocation harness).
+"""Block S/T/U — helpers for strict-social gate phase order and text equivalence (Cycle AS6).
 
 No runtime behavior in production code; tests-only utilities for equivalence proofs.
 """
 from __future__ import annotations
 
 from game.final_emission_text import _normalize_text
+
+# Strict-social trunk milestone ids (align with ``apply_final_emission_gate`` ordering).
+PHASE_BUILD_SOCIAL = "build_final_strict_social_response"
+PHASE_RESPONSE_TYPE = "_enforce_response_type_contract"
+PHASE_NARRATIVE_AUTHENTICITY = "_apply_narrative_authenticity_layer"
+PHASE_TONE_ESCALATION = "_apply_tone_escalation_layer"
+PHASE_NARRATIVE_AUTHORITY = "_apply_narrative_authority_layer"
+PHASE_SPEAKER = "enforce_emitted_speaker_with_contract"
+PHASE_ANTI_RAILROADING = "_apply_anti_railroading_layer"
+PHASE_SCENE_STATE_ANCHOR = "_apply_scene_state_anchor_layer"
+
+CHAIN_SOCIAL_TO_POST_SPEAKER: tuple[str, ...] = (
+    PHASE_BUILD_SOCIAL,
+    PHASE_RESPONSE_TYPE,
+    PHASE_NARRATIVE_AUTHENTICITY,
+    PHASE_TONE_ESCALATION,
+    PHASE_NARRATIVE_AUTHORITY,
+    PHASE_SPEAKER,
+    PHASE_ANTI_RAILROADING,
+    PHASE_SCENE_STATE_ANCHOR,
+)
 
 
 def assert_phase_subsequence(order_events: list[str], required_chain: tuple[str, ...]) -> None:

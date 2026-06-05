@@ -1,7 +1,7 @@
 """Unit tests for narrative_authenticity contract + validator."""
 from __future__ import annotations
 
-from game.final_emission_repairs import _apply_narrative_authenticity_layer
+from tests.helpers.repairs_consumer_facade import apply_narrative_authenticity_layer
 from game.narrative_authenticity import (
     build_narrative_authenticity_contract,
     build_narrative_authenticity_emission_trace,
@@ -306,7 +306,7 @@ def test_repair_rumor_fail_closed_single_clause_echo_without_safe_drop():
 def test_apply_na_layer_mirrors_trace_on_failure():
     gm = {"response_policy": {"narrative_authenticity": build_narrative_authenticity_contract()}}
     text = "The mist holds along the quay."
-    _t, meta, _extra = _apply_narrative_authenticity_layer(
+    _t, meta, _extra = apply_narrative_authenticity_layer(
         text,
         gm_output=gm,
         strict_social_details=None,
@@ -360,7 +360,7 @@ def test_apply_na_layer_repaired_sets_status_and_repair_modes():
         'say—that could be drink talk."'
     )
     gm = {"response_policy": {"narrative_authenticity": c}}
-    out, meta, _extra = _apply_narrative_authenticity_layer(
+    out, meta, _extra = apply_narrative_authenticity_layer(
         text,
         gm_output=gm,
         strict_social_details=None,

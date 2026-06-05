@@ -3,12 +3,10 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
 from game.diegetic_fallback_narration import (
     fallback_template_metadata,
     render_observe_perception_fallback_line,
 )
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
@@ -20,11 +18,12 @@ from game.realization_provenance import (
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
 )
-from tests.helpers.final_emission_gate_fixtures import (
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
-    opening_gate_attach_then_enforce_response_type_contract,
     opening_gm_output,
 )
+from tests.helpers.opening_fallback_gate_harness import opening_gate_attach_then_enforce_response_type_contract
 
 pytestmark = pytest.mark.unit
 
@@ -119,7 +118,7 @@ def test_final_emission_opening_repair_carries_upstream_prepared_realization_fam
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
-    out = feg.apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},
@@ -127,7 +126,6 @@ def test_final_emission_opening_repair_carries_upstream_prepared_realization_fam
         world={},
     )
 
-    fem = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert "final_route" in fem
     assert fem.get("final_emitted_source") == "opening_deterministic_fallback"
@@ -170,7 +168,7 @@ def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family()
     gm_output = opening_gm_output()
     gm_output["player_facing_text"] = candidate
     gm_output["tags"] = []
-    out = feg.apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},
@@ -178,7 +176,6 @@ def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family()
         world={},
     )
 
-    fem = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == candidate
     assert fem.get("final_route") != "replaced"
     assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) != LEGACY_DIEGETIC_FALLBACK

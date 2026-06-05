@@ -22,14 +22,12 @@ where needed for end-to-end metadata observation.
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement
 from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
-from tests.helpers.final_emission_gate_fixtures import response_type_contract
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
 from game.gm_retry import build_retry_prompt_for_failure
 
 
@@ -136,7 +134,7 @@ def test_downstream_gate_observesanswer_contract_meta_when_output_exhibits_smoot
         world={},
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
     text = str(out.get("player_facing_text") or "")
 

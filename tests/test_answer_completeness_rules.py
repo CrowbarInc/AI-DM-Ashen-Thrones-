@@ -17,15 +17,15 @@ import importlib
 
 import pytest
 
-from game.final_emission_gate import (
-    _apply_answer_completeness_layer,
-    apply_final_emission_gate,
+from game.social import determine_social_escalation_outcome
+from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
+from tests.helpers.emission_smoke_assertions import (
+    STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH,
+    apply_answer_completeness_layer,
+    apply_final_emission_gate_consumer,
+    assert_no_boundary_reorder_repair,
     validate_answer_completeness,
 )
-from game.upstream_response_repairs import apply_spoken_state_refinement_cash_out
-from game.social import determine_social_escalation_outcome
-from tests.helpers.emission_smoke_assertions import assert_no_boundary_reorder_repair
-from tests.helpers.final_emission_gate_fixtures import final_emission_meta_from_output
 from tests.helpers.social_escalation_fixtures import session_with_pressure
 
 _prompt_contracts = importlib.import_module("game.prompt_context")
@@ -397,14 +397,13 @@ def test_answer_completeness_contract_uses_grounded_partial_reason_buckets():
 def test_gate_skips_answer_completeness_when_contract_disabled(action_turn_contract):
     """Descriptive / action-only narration must not be front-loaded by answer completeness."""
     raw = "Rain beads on the checkpoint timbers while the line holds still."
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": action_turn_contract}},
         resolution={"kind": "investigate", "prompt": "I study the crowd."},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert out["player_facing_text"] == raw
     assert meta.get("answer_completeness_checked") is False
     assert meta.get("answer_completeness_repaired") is False
@@ -430,7 +429,7 @@ def test_gate_neutral_narration_not_mutated_when_no_player_question_contract():
         session_view={},
         uncertainty_hint=None,
     )
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution=None,
         session=None,
@@ -438,7 +437,6 @@ def test_gate_neutral_narration_not_mutated_when_no_player_question_contract():
         world={},
     )
     assert out["player_facing_text"] == raw
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is not True
 
 
@@ -467,14 +465,13 @@ def test_frontload_repair_keeps_referential_clarity_explicit_npc_in_opening():
         "The square holds its breath for a moment. "
         'The runner jerks a thumb toward the treeline. "East road, past the old mill."'
     )
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution=resolution,
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
@@ -502,7 +499,7 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
         "Fog thickens over the water. "
         "The runners used the east lane toward the warehouse district."
     )
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution={
             "kind": "adjudication_query",
@@ -512,7 +509,6 @@ def test_mixed_player_turn_question_plus_action_still_frontloads_answer():
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
@@ -555,14 +551,13 @@ def test_authoritative_refusal_stays_substantive_after_repair():
     assert v.get("passed") is False
     assert "direct_answer_not_frontloaded" in (v.get("failure_reasons") or [])
 
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution=resolution,
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.
@@ -590,14 +585,13 @@ def test_transcript_style_dodge_opening_repaired_with_meta_flags():
     )
     assert validate_answer_completeness(candidate, contract, resolution=None).get("passed") is False
 
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": candidate, "tags": [], "response_policy": {"answer_completeness": contract}},
         resolution={"kind": "question", "prompt": "Which route is watched?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_checked") is True
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
@@ -627,7 +621,7 @@ def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair
         "kind": "question",
         "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
     }
-    repaired, meta, extra = _apply_answer_completeness_layer(
+    repaired, meta, extra = apply_answer_completeness_layer(
         text,
         gm_output=gm,
         resolution=resolution,
@@ -649,7 +643,7 @@ def test_strict_social_path_preserves_npc_voice_after_answer_completeness_repair
 
 def test_spoken_state_refinement_cash_out_appends_refinement_on_answer_pressure(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH,
         lambda *a, **k: True,
     )
     ac = {
@@ -696,7 +690,7 @@ def test_spoken_state_refinement_cash_out_appends_refinement_on_answer_pressure(
 
 def test_spoken_state_refinement_cash_out_skips_when_already_spoken(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH,
         lambda *a, **k: True,
     )
     ac = {
@@ -737,7 +731,7 @@ def test_spoken_state_refinement_cash_out_skips_when_already_spoken(monkeypatch)
 def test_spoken_state_refinement_cash_out_default_source_minimum_actionable_lead(monkeypatch):
     """When ``enforced_lead_source`` is absent, debug uses ``minimum_actionable_lead`` bucket."""
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH,
         lambda *a, **k: True,
     )
     ac = {

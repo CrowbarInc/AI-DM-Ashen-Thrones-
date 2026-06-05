@@ -16,20 +16,17 @@ import importlib
 
 import pytest
 
-from game.final_emission_gate import (
-    _apply_response_delta_layer,
-    _skip_answer_completeness_layer,
-    _skip_response_delta_layer,
-    _strict_social_answer_pressure_rd_contract_active,
-    apply_final_emission_gate,
-    inspect_response_delta_failure,
-    validate_response_delta,
-)
 from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    apply_response_delta_layer,
     assert_no_boundary_reorder_repair,
     assert_response_delta_boundary_validate_only,
+    inspect_response_delta_failure,
+    skip_answer_completeness_layer,
+    skip_response_delta_layer,
+    strict_social_answer_pressure_rd_contract_active,
+    validate_response_delta,
 )
-from tests.helpers.final_emission_gate_fixtures import final_emission_meta_from_output
 
 _prompt_context = importlib.import_module("game.prompt_context")
 ANSWER_COMPLETENESS_PARTIAL_REASONS = _prompt_context.ANSWER_COMPLETENESS_PARTIAL_REASONS
@@ -111,7 +108,7 @@ def _apply_rd(
     strict_social_path: bool = False,
     strict_social_details: dict | None = None,
 ) -> tuple[str, dict, list]:
-    return _apply_response_delta_layer(
+    return apply_response_delta_layer(
         text,
         gm_output=_gm_with_delta(text, rd_contract),
         strict_social_details=strict_social_details,
@@ -128,7 +125,7 @@ def _apply_rd(
 
 def test_response_delta_skips_without_contract():
     raw = "East road past the mill, with the watch in sight lines."
-    out, meta, extra = _apply_response_delta_layer(
+    out, meta, extra = apply_response_delta_layer(
         raw,
         gm_output={"player_facing_text": raw, "tags": [], "response_policy": {}},
         strict_social_details=None,
@@ -256,7 +253,7 @@ def test_response_delta_does_not_skip_bridge_when_strict_social_answer_pressure_
     }
     raw = "East road past the mill."
     gm = _gm_with_delta(raw, c)
-    skip = _skip_response_delta_layer(
+    skip = skip_response_delta_layer(
         contract=c,
         emitted_text=raw,
         strict_social_details={"final_emitted_source": "neutral_reply_speaker_grounding_bridge"},
@@ -282,7 +279,7 @@ def test_answer_completeness_does_not_skip_bridge_when_strict_social_answer_pres
         "trace": {"strict_social_answer_seek_override": True},
     }
     gm = {"player_facing_text": "Line.", "tags": [], "response_policy": {"answer_completeness": ac}}
-    skip = _skip_answer_completeness_layer(
+    skip = skip_answer_completeness_layer(
         strict_social_details={"final_emitted_source": "structured_fact_candidate_emission"},
         response_type_debug=_response_type_debug(),
         gm_output=gm,
@@ -304,7 +301,7 @@ def test_strict_social_answer_pressure_rd_contract_active_from_trace_only():
             }
         },
     }
-    assert _strict_social_answer_pressure_rd_contract_active(gm) is True
+    assert strict_social_answer_pressure_rd_contract_active(gm) is True
 
 
 # =============================================================================
@@ -635,14 +632,13 @@ def test_response_delta_runs_after_answer_completeness_non_social():
     rd = _base_rd_contract()
     rd["previous_answer_snippet"] = "They went east past the mill toward the treeline."
     raw = "Maybe people talk about routes, but hard to say from here."
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": ac_contract, "response_delta": rd}},
         resolution={"kind": "adjudication_query", "prompt": "Where did they go?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_failed") is True
     assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
 
@@ -669,14 +665,13 @@ def test_ac_repair_precedence_then_delta_on_repaired_text():
         "The square holds for a moment. "
         "East road past the mill toward the customs ditch, specifically past the bonded warehouse."
     )
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"answer_completeness": ac_contract, "response_delta": rd}},
         resolution={"kind": "adjudication_query", "prompt": "Which way?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("answer_completeness_repaired") is False
     assert meta.get("answer_completeness_failed") is True
     assert meta.get("response_delta_skip_reason") == "answer_completeness_failed"
@@ -687,14 +682,13 @@ def test_final_emitted_source_reflects_response_delta_repair_mode():
     c["delta_must_come_early"] = True
     c["previous_answer_snippet"] = "The watch keeps a lane open on the east road past the mill."
     emitted = "Specifically the bonded warehouse sits just past the customs ditch on that lane."
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": emitted, "tags": [], "response_policy": {"response_delta": c}},
         resolution={"kind": "adjudication_query", "prompt": "Same road detail?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("response_delta_checked") is True
     assert meta.get("response_delta_repaired") is False
     assert meta.get("response_delta_failed") is False
@@ -712,14 +706,13 @@ def test_response_delta_unrepaired_failure_triggers_gate_replace_reason():
         "Rain slicks the cobbles. "
         "Fog drifts over the riverfront."
     )
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": raw, "tags": [], "response_policy": {"response_delta": c}},
         resolution={"kind": "adjudication_query", "prompt": "Tell me again?"},
         session=None,
         scene_id="frontier_gate",
         world={},
     )
-    meta = final_emission_meta_from_output(out)
     assert meta.get("response_delta_failed") is True
     assert meta.get("response_delta_repaired") is False
     # Downstream smoke: exact gate source/route is owned by test_final_emission_gate.py.

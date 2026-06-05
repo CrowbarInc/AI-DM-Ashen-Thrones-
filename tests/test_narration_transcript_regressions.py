@@ -32,7 +32,7 @@ cross-layer routing / gate behavior, not as the primary prompt-contract authorit
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import json
 import random
@@ -64,7 +64,7 @@ from game.social_exchange_emission import build_final_strict_social_response
 
 from tests.helpers.turn_pipeline_http_fixtures import _patch_storage
 from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
-from tests.helpers.final_emission_gate_fixtures import response_type_contract
+from tests.helpers.emission_smoke_assertions import response_type_contract
 
 pytestmark = [pytest.mark.regression, pytest.mark.transcript]
 
@@ -203,7 +203,7 @@ def assert_narration_transcript_outcome(gm_out: Mapping[str, Any], assertions: N
     for sub in assertions.forbidden_normalized_substrings:
         if sub:
             assert sub.lower() not in norm, f"forbidden normalized substring {sub!r} in {norm!r}"
-    meta = read_final_emission_meta_dict(gm_out)
+    meta = final_emission_meta_from_output(gm_out)
     meta_dict = meta if isinstance(meta, dict) else {}
     meta_blob = json.dumps(meta_dict, sort_keys=True, default=str)
     for fragment in assertions.meta_json_fragments:
@@ -774,7 +774,7 @@ def test_gate_integration_bounded_partial_thin_line_repaired_full_path(monkeypat
         ),
     )
     out = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=True)
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out) if isinstance(final_emission_meta_from_output(out), dict) else {}
     assert meta.get("final_emitted_source") != "bounded_partial"
 
 
@@ -889,7 +889,7 @@ def test_gate_chain_strict_social_forced_fallback_grounded_speaker_and_dialogue(
     out = run_gate_level_case(scenario, monkeypatch)
     text = str(out.get("player_facing_text") or "")
     assert '"' in text, "forced fallback must retain dialogue presence"
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out) if isinstance(final_emission_meta_from_output(out), dict) else {}
     assert meta.get("first_mention_strict_social_grounded_speaker_exemption_entity_id") == "tavern_runner"
     assert meta.get("first_mention_validation_passed") is True
     assert meta.get("first_mention_replacement_applied") is False
@@ -921,7 +921,7 @@ def test_gate_chain_phantom_speaker_not_accepted_via_grounding_exemption(monkeyp
         ),
     )
     out = run_gate_level_case(scenario, monkeypatch)
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out) if isinstance(final_emission_meta_from_output(out), dict) else {}
     assert meta.get("first_mention_strict_social_grounded_speaker_exemption_entity_id") == "tavern_runner"
 
 
@@ -1518,7 +1518,7 @@ def test_transcript_mixed_regression_table(
         run_gate_level_case(scenario, monkeypatch, tmp_path=tmp_path)
     elif runner_kind == "gate_bounded_partial_obj20":
         out = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=True)
-        meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+        meta = final_emission_meta_from_output(out) if isinstance(final_emission_meta_from_output(out), dict) else {}
         assert meta.get("final_emitted_source") != "bounded_partial"
     elif runner_kind == "gate_safety_obj20":
         _ = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=False)

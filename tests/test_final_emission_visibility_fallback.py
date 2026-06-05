@@ -21,9 +21,25 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
 )
 import game.final_emission_visibility_fallback as visibility_fallback
-from tests.helpers.final_emission_gate_fixtures import assert_visibility_pool
 
 pytestmark = pytest.mark.unit
+
+
+def assert_visibility_pool(
+    *,
+    fallback_pool: str = "",
+    fallback_kind: str = "",
+    final_emitted_source: str = "",
+    owner_bucket: str | None = None,
+) -> None:
+    """Owner-local: visibility fallback owner-bucket classification from pool/kind/source signals."""
+    kwargs = {
+        "fallback_pool": fallback_pool,
+        "fallback_kind": fallback_kind,
+        "final_emitted_source": final_emitted_source,
+    }
+    if owner_bucket is not None:
+        assert visibility_fallback.classify_visibility_fallback_owner_bucket(**kwargs) == owner_bucket
 
 def test_visibility_fallback_route_helper_importable_and_callable_from_new_module() -> None:
     fn = visibility_fallback.route_visibility_enforcement_after_failed_validation

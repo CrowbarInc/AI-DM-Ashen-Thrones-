@@ -26,7 +26,7 @@ from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
 )
-from tests.helpers.final_emission_gate_fixtures import (
+from tests.helpers.opening_fallback_evidence import (
     assert_final_emission_meta_contains,
     assert_sealed_fallback_owner_bucket,
     opening_gm_output,

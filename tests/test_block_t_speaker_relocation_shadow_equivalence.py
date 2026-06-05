@@ -8,8 +8,13 @@ import copy
 
 import pytest
 
-import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_gate import apply_final_emission_gate, enforce_emitted_speaker_with_contract
+from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
+from tests.helpers.dialogue_social_plan import (
+    attach_dialogue_social_plan_to_resolution,
+    make_valid_dialogue_social_plan,
+)
+from tests.helpers.gate_equivalence_monkeypatch import patch_get_speaker_selection_contract
 from tests.helpers.speaker_relocation_shadow_harness import (
     ShadowEnforceCapture,
     build_finalize_stack_fixture,
@@ -18,15 +23,7 @@ from tests.helpers.speaker_relocation_shadow_harness import (
     with_finalize_delta,
 )
 from tests.helpers.speaker_gate_order import normalized_player_text_equal
-from tests.test_block_s_speaker_local_rebind_equivalence import (
-    _locked_runner_contract,
-    _stub_strict_social_details,
-)
-from tests.helpers.dialogue_social_plan import (
-    attach_dialogue_social_plan_to_resolution,
-    make_valid_dialogue_social_plan,
-)
-from tests.helpers.final_emission_gate_fixtures import runner_strict_bundle
+from tests.helpers.strict_social_harness import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
 
@@ -43,8 +40,8 @@ def test_block_t_dual_run_gate_matches_isolated_continuity_locked_opening_mismat
     """Fixture: continuity-locked wrong opening label → ``local_rebind``; Gate vs isolated equivalence."""
     session, world, sid, resolution, line = build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
     )
 
     cap = ShadowEnforceCapture()
@@ -90,8 +87,8 @@ def test_block_aa_dual_run_declared_alias_dialogue_plan_shadow_equivalence(monke
 
     session, world, sid, resolution, line = build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
         configure_resolution=configure_resolution,
     )
 
@@ -126,8 +123,8 @@ def test_block_t_quoted_dialogue_layers_shadow_records_downstream_delta(monkeypa
     """Fixture: quoted strict-social line through NA/tone/authority (validation-only); finalize may reshape."""
     session, world, sid, resolution, line = build_finalize_stack_fixture(
         monkeypatch,
-        contract=_locked_runner_contract(),
-        strict_social_details=_stub_strict_social_details,
+        contract=locked_runner_contract(),
+        strict_social_details=stub_strict_social_details,
         line='Ragged stranger says, "The east lanes hear everything late."',
     )
 
@@ -154,13 +151,13 @@ def test_block_t_quoted_dialogue_layers_shadow_records_downstream_delta(monkeypa
 def test_block_t_unit_isolated_mirror_matches_gate_enforce_direct(monkeypatch):
     """Direct gate entry vs isolated mirror (no full gate): same repair metadata slice."""
     session, world, sid, resolution = runner_strict_bundle()
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(_locked_runner_contract()))
+    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
 
     line = 'Ragged stranger says, "No names, only rumors."'
     gm: dict = {"metadata": {}}
     eff = _eff_runner_aligned(resolution)
 
-    gate_text, gate_p = feg.enforce_emitted_speaker_with_contract(
+    gate_text, gate_p = enforce_emitted_speaker_with_contract(
         line,
         gm_output=gm,
         resolution=resolution,

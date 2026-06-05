@@ -72,18 +72,19 @@ from game.upstream_response_repairs import (
     maybe_attach_upstream_prepared_opening_fallback_payload,
 )
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-from tests.helpers.final_emission_gate_fixtures import (
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
+from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
     assert_opening_fallback_source,
     assert_sealed_fallback_owner_bucket,
-    final_emission_meta_from_output,
     opening_gm_output,
     opening_validation_context,
-    response_type_contract,
-    runner_strict_bundle,
+)
+from tests.helpers.strict_social_harness import (
     run_strict_social_motive_overclaim_gate_case,
+    runner_strict_bundle,
 )
 from tests.helpers.objective7_referent_fixtures import (
     minimal_full_referent_artifact,

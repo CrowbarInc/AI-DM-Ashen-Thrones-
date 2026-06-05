@@ -9,7 +9,7 @@ from __future__ import annotations
 import pytest
 
 from game.campaign_state import create_fresh_session_document
-from game.final_emission_repairs import repair_fallback_behavior
+from tests.helpers.repairs_consumer_facade import repair_fallback_behavior
 from game.final_emission_validators import validate_fallback_behavior
 from game.interaction_context import rebuild_active_scene_entities
 from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm

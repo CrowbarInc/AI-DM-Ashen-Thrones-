@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from game.interaction_context import inspect as inspect_interaction_context
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 
@@ -139,7 +139,7 @@ def compact_snapshot_summary(snap: dict[str, Any], *, gm_chars: int = 120) -> st
         gm = gm[: gm_chars - 3] + "..."
     tgt = latest_target_id(snap) or "-"
     src = latest_target_source(snap) or "-"
-    fem = read_final_emission_meta_dict(snap)
+    fem = final_emission_meta_from_output(snap)
     dt = fem.get("dead_turn") if isinstance(fem.get("dead_turn"), dict) else {}
     dead_hint = ""
     if dt.get("is_dead_turn"):

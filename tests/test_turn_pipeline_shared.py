@@ -24,7 +24,6 @@ Emission authority boundary (Cycle AD-1):
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_debug_notes_from_turn_payload
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 from tests.helpers.emission_smoke_assertions import (
     assert_emission_repair_evidence,
@@ -39,6 +38,7 @@ from tests.helpers.emission_smoke_assertions import (
     assert_player_text_present,
     assert_procedural_adjudication_smoke,
     assert_response_type_meta,
+    read_turn_debug_notes,
 )
 from tests.helpers.turn_pipeline_http_fixtures import (
     FAKE_GPT_RESPONSE,
@@ -240,7 +240,7 @@ def test_chat_targeted_retry_validator_voice_only(tmp_path, monkeypatch):
     assert "unresolved_question" not in retry_tail
     text = (data.get("gm_output") or {}).get("player_facing_text", "")
     assert_no_validator_voice_smoke(text)
-    assert "retry_strategy:selected=validator_voice" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=validator_voice" in read_turn_debug_notes(data)
 
 
 # feature: legality
@@ -493,7 +493,7 @@ def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatc
     gm_output = data.get("gm_output") or {}
     assert_no_uncertainty_fallback_stock_smoke(gm_output.get("player_facing_text") or "")
     assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
-    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
 
 
 # feature: retry, legality
@@ -535,7 +535,7 @@ def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
     assert_no_retry_coaching_leak_smoke(text)
     assert_no_uncertainty_fallback_stock_smoke(text)
     assert low.startswith("the report is") or "filing shelves" in low or "notice board" in low
-    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
 
 
 # feature: retry
@@ -568,7 +568,7 @@ def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, mo
     assert "Retry target: validator_voice." not in retry_tail
     text = (data.get("gm_output") or {}).get("player_facing_text", "")
     assert_no_validator_voice_smoke(text)
-    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
 
 
 # feature: retry, fallback
@@ -601,10 +601,10 @@ def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tm
     assert_emission_repair_evidence(
         data,
         tag_markers=("question_retry_fallback",),
-        debug_notes_reader=read_debug_notes_from_turn_payload,
+        debug_notes_reader=read_turn_debug_notes,
     )
     assert "known_fact_guard" in (gm_output.get("tags") or [])
-    dbg = read_debug_notes_from_turn_payload(data)
+    dbg = read_turn_debug_notes(data)
     assert "retry_strategy:selected=unresolved_question" in dbg
     assert "retry_fallback:unresolved_question:known_fact_guard:current_scene_state" in dbg
 
@@ -639,10 +639,10 @@ def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallbac
     assert_emission_repair_evidence(
         data,
         tag_markers=("question_retry_fallback",),
-        debug_notes_reader=read_debug_notes_from_turn_payload,
+        debug_notes_reader=read_turn_debug_notes,
     )
-    assert "retry_fallback:unresolved_question" in read_debug_notes_from_turn_payload(data)
-    assert "retry_strategy:selected=unresolved_question" in read_debug_notes_from_turn_payload(data)
+    assert "retry_fallback:unresolved_question" in read_turn_debug_notes(data)
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
 
 
 # feature: retry
@@ -681,7 +681,7 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     assert "validator_voice" not in retry_tail
     text = (data.get("gm_output") or {}).get("player_facing_text", "")
     assert_no_retry_coaching_leak_smoke(text)
-    assert "retry_strategy:selected=scene_stall" in read_debug_notes_from_turn_payload(data)
+    assert "retry_strategy:selected=scene_stall" in read_turn_debug_notes(data)
 
 
 # feature: social, continuity
@@ -735,7 +735,7 @@ def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, mo
     data = second.json()
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     _assert_concrete_pressure(text)
-    debug_notes = read_debug_notes_from_turn_payload(data)
+    debug_notes = read_turn_debug_notes(data)
     assert "passive_scene_pressure:" in debug_notes
     assert "streak=2" in debug_notes
 
@@ -772,7 +772,7 @@ def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_pat
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
     assert "the tattered man" in text.lower()
     _assert_concrete_pressure(text)
-    assert "passive_scene_pressure:lead_figure" in read_debug_notes_from_turn_payload(data)
+    assert "passive_scene_pressure:lead_figure" in read_turn_debug_notes(data)
 
 
 def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere(tmp_path, monkeypatch):
@@ -1737,7 +1737,7 @@ def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, mon
     assert "tavern runner" in low
     assert_emission_repair_evidence(
         data,
-        debug_notes_reader=read_debug_notes_from_turn_payload,
+        debug_notes_reader=read_turn_debug_notes,
     )
 
 
@@ -1765,7 +1765,7 @@ def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkey
     assert_no_advisory_prose(text)
     assert_emission_repair_evidence(
         data,
-        debug_notes_reader=read_debug_notes_from_turn_payload,
+        debug_notes_reader=read_turn_debug_notes,
     )
 
 

@@ -47,13 +47,15 @@ from dataclasses import dataclass
 from typing import Any, Mapping
 
 from game.final_emission_meta import (
-    build_fem_runtime_lineage_events,
     normalize_final_emission_meta_for_observability,
     opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
-from game.final_emission_replay_projection import is_sealed_replacement_lineage_kind
+from game.final_emission_replay_projection import (
+    build_fem_runtime_lineage_events,
+    is_sealed_replacement_lineage_kind,
+)
 from game.output_sanitizer import resembles_serialized_response_payload
 from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
@@ -75,6 +77,13 @@ REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS: tuple[str, ...] = (
 )
 
 MISSING = object()
+
+
+def read_fem_meta_from_gate_output(gm_output: Mapping[str, Any]) -> dict[str, Any]:
+    """Read raw FEM from post-gate ``gm_output`` (golden-replay / spine lineage diagnostics)."""
+    from game.final_emission_meta import read_final_emission_meta_dict
+
+    return read_final_emission_meta_dict(gm_output) or {}
 
 
 @dataclass(frozen=True)

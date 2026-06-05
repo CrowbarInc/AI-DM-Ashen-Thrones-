@@ -27,7 +27,7 @@ from game.final_emission_meta import (
     final_emission_meta_read_side_surface,
     opening_fallback_owner_bucket_from_fields,
 )
-from tests.helpers.final_emission_gate_fixtures import assert_fallback_owner_bucket
+from tests.helpers.opening_fallback_evidence import assert_fallback_owner_bucket
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     successful_opening_observed_fields,

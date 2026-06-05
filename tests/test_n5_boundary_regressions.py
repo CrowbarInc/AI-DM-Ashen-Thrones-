@@ -15,7 +15,7 @@ from typing import Any
 import pytest
 
 from game.ctir_runtime import detach_ctir, get_attached_ctir
-from game.final_emission_repairs import _apply_referent_clarity_emission_layer
+from tests.helpers.repairs_consumer_facade import apply_referent_clarity_emission_layer
 from game.final_emission_validators import validate_referent_clarity
 from game.narration_plan_bundle import build_narration_plan_bundle
 from game.prompt_context import _project_clause_referent_prompt_hints, build_narration_context
@@ -248,7 +248,7 @@ def test_repair_skips_unauthorized_clause_label_even_when_structurally_eligible(
         ],
     )
     gm = {"prompt_context": {"referent_tracking": art}}
-    text, dbg, _ = _apply_referent_clarity_emission_layer("They hesitate.", gm_output=gm)
+    text, dbg, _ = apply_referent_clarity_emission_layer("They hesitate.", gm_output=gm)
     assert text == "They hesitate."
     assert dbg.get("referent_repair_applied") is False
     assert "Totally Unauthorized" not in text
@@ -289,7 +289,7 @@ def test_clause_sourced_repair_uses_minimal_single_pronoun_strategy() -> None:
         ],
     )
     gm = {"prompt_context": {"referent_tracking": art}}
-    text, dbg, _ = _apply_referent_clarity_emission_layer("They wait. They leave.", gm_output=gm)
+    text, dbg, _ = apply_referent_clarity_emission_layer("They wait. They leave.", gm_output=gm)
     assert text.startswith("Gate sergeant")
     assert ". They leave." in text or text.endswith("They leave.")
     assert dbg.get("referent_repair_strategy") == "replace_first_risky_pronoun_with_explicit_label"

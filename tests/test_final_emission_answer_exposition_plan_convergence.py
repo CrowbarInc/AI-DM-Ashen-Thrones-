@@ -7,9 +7,8 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
-from game.final_emission_repairs import _apply_answer_exposition_plan_layer
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.repairs_consumer_facade import apply_answer_exposition_plan_layer
 
 pytestmark = pytest.mark.unit
 
@@ -58,7 +57,7 @@ def _aep_plan(
 
 
 def test_valid_direct_answer_passes() -> None:
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "The captain is Jonas Hale.",
             "tags": [],
@@ -76,7 +75,6 @@ def test_valid_direct_answer_passes() -> None:
         scene_id="s1",
         world={},
     )
-    fem = read_final_emission_meta_dict(out)
     assert fem.get("answer_exposition_plan_checked") is True
     assert fem.get("answer_exposition_plan_present") is True
     assert fem.get("answer_exposition_plan_valid") is True
@@ -94,7 +92,7 @@ def test_valid_lore_exposition_passes_when_grounded() -> None:
             "certainty": "known",
         }
     ]
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Ashen Thrones was founded after the Lantern War, and the old charters still bind its wards.",
             "tags": [],
@@ -112,12 +110,11 @@ def test_valid_lore_exposition_passes_when_grounded() -> None:
         scene_id="s1",
         world={},
     )
-    fem = read_final_emission_meta_dict(out)
     assert fem.get("answer_exposition_plan_passed") is True
 
 
 def test_missing_plan_fails_when_answer_required() -> None:
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "The captain is Jonas Hale.",
             "tags": [],
@@ -128,7 +125,6 @@ def test_missing_plan_fails_when_answer_required() -> None:
         scene_id="s1",
         world={},
     )
-    fem = read_final_emission_meta_dict(out)
     assert fem.get("answer_exposition_plan_checked") is True
     assert fem.get("answer_exposition_plan_present") is False
     assert fem.get("answer_exposition_plan_valid") is False
@@ -137,7 +133,7 @@ def test_missing_plan_fails_when_answer_required() -> None:
 
 
 def test_malformed_plan_fails() -> None:
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "The captain is Jonas Hale.",
             "tags": [],
@@ -154,7 +150,6 @@ def test_malformed_plan_fails() -> None:
         scene_id="s1",
         world={},
     )
-    fem = read_final_emission_meta_dict(out)
     assert fem.get("answer_exposition_plan_present") is True
     assert fem.get("answer_exposition_plan_valid") is False
     assert fem.get("answer_exposition_plan_passed") is False
@@ -173,7 +168,7 @@ def test_unsupported_lore_invention_fails() -> None:
         }
     }
     text = "The captain is Jonas Hale, and he secretly commands a dragon beneath the city."
-    _out_text, meta, _ = _apply_answer_exposition_plan_layer(
+    _out_text, meta, _ = apply_answer_exposition_plan_layer(
         text,
         gm_output=gm,
         response_type_debug={"response_type_candidate_ok": True},
@@ -204,7 +199,7 @@ def test_bounded_unknown_converted_to_certainty_fails() -> None:
         }
     }
     text = "The captain is Jonas Hale."
-    _out_text, meta, _ = _apply_answer_exposition_plan_layer(
+    _out_text, meta, _ = apply_answer_exposition_plan_layer(
         text,
         gm_output=gm,
         response_type_debug={"response_type_candidate_ok": True},
@@ -230,7 +225,7 @@ def test_safe_reorder_repair_does_not_invent_and_records_mode() -> None:
         }
     }
     text = "For a moment, the rain hisses on the cobbles. The captain is Jonas Hale."
-    out_text, meta, _ = _apply_answer_exposition_plan_layer(
+    out_text, meta, _ = apply_answer_exposition_plan_layer(
         text,
         gm_output=gm,
         response_type_debug={"response_type_candidate_ok": True},
@@ -242,7 +237,7 @@ def test_safe_reorder_repair_does_not_invent_and_records_mode() -> None:
 
 
 def test_metadata_identifies_failure_source() -> None:
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Hard to say. People whisper.",
             "tags": [],
@@ -260,7 +255,6 @@ def test_metadata_identifies_failure_source() -> None:
         scene_id="s1",
         world={},
     )
-    fem = read_final_emission_meta_dict(out)
     assert fem.get("answer_exposition_plan_checked") is True
     assert fem.get("answer_exposition_plan_passed") is False
     assert fem.get("answer_exposition_plan_failure_reasons")

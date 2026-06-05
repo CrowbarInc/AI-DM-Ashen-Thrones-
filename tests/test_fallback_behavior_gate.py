@@ -19,8 +19,6 @@ full adversarial fallback_behavior predicate matrix. Those are owned by
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 import pytest
 
 import game.final_emission_gate as feg
@@ -29,7 +27,7 @@ from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.storage import get_scene_runtime
 from tests.helpers.fallback_behavior_fixtures import fallback_contract
-from tests.helpers.final_emission_gate_fixtures import response_type_contract
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
 
 
 pytestmark = pytest.mark.unit
@@ -100,7 +98,7 @@ def test_gate_repairs_meta_fallback_voice_into_bounded_partial() -> None:
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
 
     # Gate ownership: the layer ran, produced player-facing text, and propagated FEM/debug.
@@ -127,7 +125,7 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
         world={},
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {}).get("fallback_behavior") or {}
 
     # Gate ownership: inactive contracts bypass the layer without changing output and
@@ -223,7 +221,7 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
         world=world,
     )
 
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert order.index("interaction_continuity") < order.index("fallback_behavior")
     assert "enough information" not in str(out.get("player_facing_text") or "").lower()
     assert meta.get("fallback_behavior_checked") is True
@@ -252,7 +250,7 @@ def test_gate_repairs_adversarial_uncertainty_followups_without_fabricating_cert
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
 
     # Gate ownership keeps one representative end-to-end sanity check. The full
     # adversarial predicate matrix belongs to validator/repair owner tests.
@@ -324,7 +322,7 @@ def test_gate_rewrites_open_call_move_plays_out_meta_leak_into_diegetic_partial(
 
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
 
     assert "move plays out" not in low
     assert "moment passes" in low or "stepping forward" in low
@@ -339,7 +337,7 @@ def test_finalize_emission_output_preserves_duplicate_subject_without_micro_smoo
     out: dict = {"player_facing_text": pre, "tags": []}
     _finalize_emission_output(out, pre_gate_text=pre)
     text = str(out.get("player_facing_text") or "")
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert text.count("Tavern Runner") == 2
     assert meta.get("sentence_micro_smoothing_applied") is False
     assert meta.get("final_emission_boundary_semantic_repair_disabled") is True
