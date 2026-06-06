@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
-"""Static + pytest inventory for tests/. Writes tests/test_inventory.json.
+"""Static + pytest inventory for tests/.
 
 Run from repo root: ``py -3 tools/test_audit.py`` (Windows) or ``python tools/test_audit.py``.
+Default write: slim governance artifact ``tests/test_inventory_governance.json`` (CI + ownership registry).
+Committed ``files[]`` rows are registry-owned paths only (direct owners, neighbors, cross-file dup files);
+whole-suite file coverage is derived during ``--check``.
+Full diagnostic payload: ``py -3 tools/test_audit.py --full`` → ``artifacts/test_inventory_full.json``,
+or ``py -3 tools/test_audit.py --output PATH``. Full output retains ``tests[]`` with per-test markers;
+committed governance omits ``tests[]`` (derived during ``--check``).
+
+Use ``py -3 tools/test_audit.py --check`` to verify committed governance JSON matches a fresh regen
+(ignores ``summary.generated_utc``). Use ``--check --full`` to verify an explicit full diagnostic file.
 Requires: the same interpreter used for pytest.
 
 Emits per-file ``collected_nodeids`` / ``collected_test_names``, AST duplicate-name
@@ -10,7 +19,8 @@ guardrails, parsed ``game.*`` imports, heuristic ``likely_ownership_theme`` and
 transcript / gauntlet / general), per-file ``marker_set`` / ``declared_pytest_markers``,
 ``collected_duplicate_base_names`` (parametrize / name reuse triage), parsed ``game.*`` imports,
 overlap hints, optional ``ownership_registry_index`` (direct owner + neighbor suites), and
-top-level ``block_b_overlap_clusters`` / ``import_hub_modules`` for consolidation triage.
+top-level ``block_b_overlap_clusters`` / ``import_hub_modules`` for consolidation triage
+(full diagnostic only; not committed in governance JSON since AQ7).
 
 JSON is written with sorted object keys for stable diffs aside from
 ``summary.generated_utc`` (see ``summary.inventory_schema_version``).
@@ -21,18 +31,32 @@ Also prints whether any module defines the same top-level ``test_*`` name twice
 """
 from __future__ import annotations
 
+import argparse
 import ast
+import copy
 import json
 import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = ROOT / "tests"
-OUT_JSON = TESTS / "test_inventory.json"
+GOVERNANCE_JSON = TESTS / "test_inventory_governance.json"
+FULL_INVENTORY_DEFAULT = ROOT / "artifacts" / "test_inventory_full.json"
+# Committed CI / governance artifact (AQ3 slim inventory).
+OUT_JSON = GOVERNANCE_JSON
+
+GOVERNANCE_FILE_FIELDS: tuple[str, ...] = (
+    "path",
+    "marker_set",
+    "collected_duplicate_base_names",
+    "likely_architecture_layer",
+    "pytest_collected",
+)
 
 # Running as ``python tools/test_audit.py`` puts ``tools/`` on ``sys.path[0]``; repo root must precede it
 # so ``tests.*`` imports (ownership registry snapshot) resolve.
@@ -42,6 +66,12 @@ if _ROOT_STR not in sys.path:
 
 # Bump when adding/removing inventory fields or changing semantics (governance / CI may assert).
 INVENTORY_SCHEMA_VERSION = 2
+
+GOVERNANCE_SUMMARY_FIELDS: tuple[str, ...] = (
+    "inventory_schema_version",
+    "inventory_kind",
+    "declared_pytest_markers",
+)
 
 # Heuristic: architecture scores at or below this ceiling resolve to ``general`` (weak signal).
 _ARCH_LAYER_GENERAL_THRESHOLD = 2
@@ -428,50 +458,13 @@ def _parse_module_pytestmarks_and_per_test_marks(
 
 
 def _build_ownership_registry_index() -> dict[str, object] | None:
-    """Snapshot of ``tests/test_ownership_registry.py`` for machine-readable neighbor maps."""
+    """Snapshot of ``tests/test_ownership_registry.py`` for full diagnostic inventory only."""
     try:
-        from tests.test_ownership_registry import RESPONSIBILITY_REGISTRY
+        from tests.test_ownership_registry import build_ownership_registry_index
+
+        return build_ownership_registry_index()
     except Exception:
         return None
-    groups: dict[str, dict[str, object]] = {}
-    for gid, rec in sorted(RESPONSIBILITY_REGISTRY.items()):
-        groups[gid] = {
-            "human_title": rec.human_title,
-            "declared_architecture_layer": rec.declared_architecture_layer,
-            "direct_owner": rec.direct_owner.replace("\\", "/"),
-            "smoke_suites": [p.replace("\\", "/") for p in rec.smoke_suites],
-            "transcript_suites": [p.replace("\\", "/") for p in rec.transcript_suites],
-            "gauntlet_suites": [p.replace("\\", "/") for p in rec.gauntlet_suites],
-            "evaluator_suites": [p.replace("\\", "/") for p in rec.evaluator_suites],
-            "downstream_consumer_suites": [p.replace("\\", "/") for p in rec.downstream_consumer_suites],
-            "compatibility_residue_suites": [p.replace("\\", "/") for p in rec.compatibility_residue_suites],
-        }
-    roles_by_path: dict[str, list[dict[str, str]]] = defaultdict(list)
-    for gid in sorted(groups):
-        row = groups[gid]
-        d = str(row["direct_owner"])
-        roles_by_path[d].append({"group_id": gid, "role": "direct_owner"})
-        for p in row["smoke_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "smoke_suite"})
-        for p in row["transcript_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "transcript_suite"})
-        for p in row["gauntlet_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "gauntlet_suite"})
-        for p in row["evaluator_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "evaluator_suite"})
-        for p in row["downstream_consumer_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "downstream_consumer_suite"})
-        for p in row["compatibility_residue_suites"]:
-            roles_by_path[str(p)].append({"group_id": gid, "role": "compatibility_residue_suite"})
-    files_roles = {
-        path: sorted(entries, key=lambda e: (e["role"], e["group_id"]))
-        for path, entries in sorted(roles_by_path.items())
-    }
-    return {
-        "available": True,
-        "groups": groups,
-        "files_roles": files_roles,
-    }
 
 
 def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str, int]:
@@ -483,7 +476,7 @@ def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str,
     if file_bucket == "transcript_gauntlet" or "transcript_gauntlet" in bn:
         scores["gauntlet"] += 12
     if "gauntlet_regressions" in bn or "manual_gauntlet" in bn:
-        scores["gauntlet"] += 8
+        scores["gauntlet"] += 12
     if "transcript" in bn and "gauntlet" not in bn and "transcript_gauntlet" not in bn:
         scores["transcript"] += 6
     if "run_transcript" in sl or "transcript_runner" in sl or ("session_log" in sl and "replay" in sl):
@@ -557,6 +550,12 @@ def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str,
         scores["engine"] += 6
     if re.search(r"\bgame\.final_emission_validators\b", sl):
         scores["gate"] += 12
+    if (
+        "validate_narrative_mode_output" in sl
+        or "narrative_mode_output_validator" in bn
+        or re.search(r"\bgame\.narrative_mode_contract\b", sl)
+    ):
+        scores["gpt"] += 10
     if "TestClient" not in src and "tmp_path" not in sl and max(scores.values()) <= 4:
         scores["engine"] += 2
 
@@ -663,7 +662,460 @@ def _test_keyword_overlap_hints(nodeid: str, body: str) -> list[str]:
     return hints[:6]
 
 
-def main() -> None:
+_CHECK_DRIFT_SAMPLE_LIMIT = 25
+
+
+def _inventory_test_nodeids(inventory: dict) -> set[str]:
+    tests = inventory.get("tests")
+    if not isinstance(tests, list):
+        return set()
+    return {str(t["nodeid"]) for t in tests if isinstance(t, dict) and "nodeid" in t}
+
+
+def governance_committed_file_paths(full_payload: dict) -> set[str]:
+    """Paths retained in committed governance ``files[]`` (registry + cross-file dup files)."""
+    paths: set[str] = set()
+    idx = _build_ownership_registry_index()
+    if isinstance(idx, dict):
+        files_roles = idx.get("files_roles")
+        if isinstance(files_roles, dict):
+            paths.update(str(fp).replace("\\", "/") for fp in files_roles)
+    dups = full_payload.get("cross_file_duplicate_test_names")
+    if isinstance(dups, list):
+        for block in dups:
+            if not isinstance(block, dict):
+                continue
+            files = block.get("files")
+            if isinstance(files, list):
+                paths.update(str(fp).replace("\\", "/") for fp in files)
+    return paths
+
+
+def build_governance_summary(full_payload: dict) -> dict[str, object]:
+    """Stable metadata retained in committed governance JSON (counts derived at --check)."""
+    full_summary = full_payload.get("summary")
+    src = full_summary if isinstance(full_summary, dict) else {}
+    markers = src.get("declared_pytest_markers")
+    if not isinstance(markers, list):
+        markers = sorted(_declared_markers_from_pytest_ini())
+    return {
+        "inventory_schema_version": src.get("inventory_schema_version", INVENTORY_SCHEMA_VERSION),
+        "inventory_kind": "governance",
+        "declared_pytest_markers": list(markers),
+    }
+
+
+def collect_cross_file_duplicate_governance_errors(
+    cross_file_duplicate_test_names: list | object,
+    *,
+    cross_file_allowlist: frozenset[str] | set[str] | Mapping[str, str],
+) -> list[str]:
+    """Allowlist enforcement for derived cross-file duplicate base names."""
+    errors: list[str] = []
+    if not isinstance(cross_file_duplicate_test_names, list):
+        errors.append("derived inventory missing cross_file_duplicate_test_names list")
+        return errors
+    for block in cross_file_duplicate_test_names:
+        if not isinstance(block, dict):
+            continue
+        base = block.get("base_name")
+        if not isinstance(base, str):
+            continue
+        if base in cross_file_allowlist:
+            continue
+        files = block.get("files")
+        fl = ", ".join(files) if isinstance(files, list) else "?"
+        errors.append(
+            f"cross-file duplicate test name {base!r} not allowlisted "
+            f"(files: {fl}); rename tests or extend allowlist with a reason.",
+        )
+    return errors
+
+
+def _validate_derived_cross_file_duplicate_governance(full_payload: dict) -> list[str]:
+    try:
+        from tests.test_ownership_registry import _CROSS_FILE_DUPLICATE_ALLOWLIST
+    except ImportError:
+        return ["cannot import cross-file duplicate allowlist from tests.test_ownership_registry"]
+    return collect_cross_file_duplicate_governance_errors(
+        full_payload.get("cross_file_duplicate_test_names", ()),
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+    )
+
+
+def _validate_governance_summary_shape(governance: dict) -> list[str]:
+    errors: list[str] = []
+    summary = governance.get("summary")
+    if not isinstance(summary, dict):
+        return ["governance summary must be an object"]
+    extra = sorted(set(summary) - set(GOVERNANCE_SUMMARY_FIELDS))
+    missing = sorted(set(GOVERNANCE_SUMMARY_FIELDS) - set(summary))
+    if extra:
+        errors.append(f"governance summary includes derivable fields: {extra[:8]!r}")
+    if missing:
+        errors.append(f"governance summary missing stable fields: {missing!r}")
+    if summary.get("inventory_kind") != "governance":
+        errors.append(f"governance summary inventory_kind must be 'governance', got {summary.get('inventory_kind')!r}")
+    return errors
+
+
+def _validate_derived_full_suite_counts(full_payload: dict) -> list[str]:
+    """Ensure full diagnostic summary counts match live collect output."""
+    errors: list[str] = []
+    full_summary = full_payload.get("summary")
+    if not isinstance(full_summary, dict):
+        errors.append("full inventory missing summary for count derivation")
+        return errors
+    full_files = _inventory_test_files(full_payload)
+    tests = full_payload.get("tests")
+    test_count = len(tests) if isinstance(tests, list) else 0
+    file_count = full_summary.get("test_file_count")
+    collected = full_summary.get("pytest_collected_items")
+    if file_count != len(full_files):
+        errors.append(
+            f"full inventory file count mismatch: summary.test_file_count={file_count!r}, "
+            f"files[]={len(full_files)}",
+        )
+    if collected != test_count:
+        errors.append(
+            f"full inventory collected item mismatch: summary.pytest_collected_items={collected!r}, "
+            f"tests[]={test_count}",
+        )
+    return errors
+
+
+def derive_per_test_marker_rows(full_payload: dict) -> list[dict[str, object]]:
+    """Slim per-test marker coverage derived from a full diagnostic inventory payload."""
+    rows: list[dict[str, object]] = []
+    for row in full_payload.get("tests", ()):
+        if not isinstance(row, dict) or "nodeid" not in row:
+            continue
+        rows.append(
+            {
+                "nodeid": row["nodeid"],
+                "marker_set": list(row.get("marker_set") or []),
+            }
+        )
+    return rows
+
+
+def _validate_derived_marker_governance(full_payload: dict) -> list[str]:
+    """Ensure fresh per-test marker coverage is complete and matches file-level marker_set unions."""
+    errors: list[str] = []
+    tests = full_payload.get("tests")
+    if not isinstance(tests, list) or not tests:
+        errors.append("fresh inventory has no tests[] rows for marker derivation")
+        return errors
+
+    missing = [t.get("nodeid") for t in tests if not isinstance(t, dict) or "marker_set" not in t]
+    if missing:
+        errors.append(
+            f"derived marker coverage missing marker_set on {len(missing)} tests "
+            f"(first: {missing[:3]!r})",
+        )
+
+    by_file: dict[str, set[str]] = defaultdict(set)
+    for row in tests:
+        if not isinstance(row, dict):
+            continue
+        fp = row.get("file")
+        marker_set = row.get("marker_set")
+        if isinstance(fp, str) and isinstance(marker_set, list):
+            by_file[fp.replace("\\", "/")].update(str(m) for m in marker_set)
+
+    for frow in full_payload.get("files", ()):
+        if not isinstance(frow, dict) or "path" not in frow:
+            continue
+        fp = str(frow["path"]).replace("\\", "/")
+        file_markers = set(frow.get("marker_set") or [])
+        derived_union = by_file.get(fp, set())
+        if file_markers != derived_union:
+            errors.append(
+                f"{fp}: files[].marker_set {sorted(file_markers)!r} != "
+                f"derived per-test union {sorted(derived_union)!r}",
+            )
+    return errors
+
+
+def _validate_governance_committed_file_paths(full_payload: dict, governance: dict) -> list[str]:
+    """Ensure committed governance files[] matches registry-owned path set derived from full audit."""
+    errors: list[str] = []
+    required = governance_committed_file_paths(full_payload)
+    full_files = _inventory_test_files(full_payload)
+    required_present = required & full_files
+    committed = _inventory_test_files(governance)
+    missing = sorted(required_present - committed)
+    extra = sorted(committed - required)
+    if missing:
+        errors.append(
+            f"governance files[] missing required paths ({len(missing)}): {missing[:8]!r}",
+        )
+    if extra:
+        errors.append(
+            f"governance files[] includes non-governance paths ({len(extra)}): {extra[:8]!r}",
+        )
+    summary = governance.get("summary") if isinstance(governance.get("summary"), dict) else {}
+    full_summary = full_payload.get("summary") if isinstance(full_payload.get("summary"), dict) else {}
+    expected_total = full_summary.get("test_file_count")
+    if isinstance(expected_total, int) and len(full_files) != expected_total:
+        errors.append(
+            f"full inventory covers {len(full_files)} files but derived summary.test_file_count is {expected_total!r}",
+        )
+    idx = _build_ownership_registry_index()
+    if isinstance(idx, dict):
+        files_roles = idx.get("files_roles")
+        if isinstance(files_roles, dict):
+            registry_present = {str(fp).replace("\\", "/") for fp in files_roles} & full_files
+            missing_registry = sorted(registry_present - committed)
+            if missing_registry:
+                errors.append(
+                    f"governance files[] missing registry-owned paths ({len(missing_registry)}): "
+                    f"{missing_registry[:8]!r}",
+                )
+    return errors
+
+
+def _validate_full_diagnostic_triage_aggregates(full_payload: dict) -> list[str]:
+    """Ensure full diagnostic payload retains triage aggregates removed from governance JSON."""
+    errors: list[str] = []
+    clusters = full_payload.get("block_b_overlap_clusters")
+    if not isinstance(clusters, list) or not clusters:
+        errors.append("full inventory missing non-empty block_b_overlap_clusters")
+    else:
+        kinds = {c.get("kind") for c in clusters if isinstance(c, dict)}
+        if "dense_ownership_theme_by_architecture_layer" not in kinds:
+            errors.append("full inventory block_b_overlap_clusters missing dense_ownership_theme_by_architecture_layer")
+    hubs = full_payload.get("import_hub_modules")
+    if not isinstance(hubs, list):
+        errors.append("full inventory missing import_hub_modules list")
+    return errors
+
+
+def _inventory_test_files(inventory: dict) -> set[str]:
+    files = inventory.get("files")
+    if not isinstance(files, list):
+        return set()
+    return {str(f["path"]).replace("\\", "/") for f in files if isinstance(f, dict) and "path" in f}
+
+
+def normalize_inventory_for_compare(inventory: dict) -> dict:
+    """Return a deep copy with ``summary.generated_utc`` removed for drift checks."""
+    norm = copy.deepcopy(inventory)
+    summary = norm.get("summary")
+    if isinstance(summary, dict):
+        summary.pop("generated_utc", None)
+    return norm
+
+
+def _canonical_inventory_json(inventory: dict) -> str:
+    return json.dumps(inventory, sort_keys=True, separators=(",", ":"))
+
+
+def inventories_match_excluding_timestamp(fresh: dict, committed: dict) -> bool:
+    return _canonical_inventory_json(normalize_inventory_for_compare(fresh)) == _canonical_inventory_json(
+        normalize_inventory_for_compare(committed)
+    )
+
+
+def format_inventory_drift_report(
+    fresh: dict,
+    committed: dict,
+    *,
+    artifact_path: Path,
+    regenerate_hint: str = "py -3 tools/test_audit.py",
+) -> list[str]:
+    """Human-readable drift lines when normalized inventories differ."""
+    lines: list[str] = [
+        f"Inventory drift: {artifact_path.as_posix()} does not match a fresh regen.",
+        f"Regenerate with: {regenerate_hint}",
+        "(comparison ignores summary.generated_utc)",
+    ]
+
+    fresh_files = _inventory_test_files(fresh)
+    committed_files = _inventory_test_files(committed)
+    added_files = sorted(fresh_files - committed_files)
+    removed_files = sorted(committed_files - fresh_files)
+    lines.append(f"Test files: +{len(added_files)} added, -{len(removed_files)} removed")
+    for path in added_files[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+        lines.append(f"  + {path}")
+    if len(added_files) > _CHECK_DRIFT_SAMPLE_LIMIT:
+        lines.append(f"  ... and {len(added_files) - _CHECK_DRIFT_SAMPLE_LIMIT} more added files")
+    for path in removed_files[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+        lines.append(f"  - {path}")
+    if len(removed_files) > _CHECK_DRIFT_SAMPLE_LIMIT:
+        lines.append(f"  ... and {len(removed_files) - _CHECK_DRIFT_SAMPLE_LIMIT} more removed files")
+
+    fresh_nodeids = _inventory_test_nodeids(fresh)
+    committed_nodeids = _inventory_test_nodeids(committed)
+    added_nodeids: list[str] = []
+    removed_nodeids: list[str] = []
+    if committed_nodeids:
+        added_nodeids = sorted(fresh_nodeids - committed_nodeids)
+        removed_nodeids = sorted(committed_nodeids - fresh_nodeids)
+        lines.append(f"Test nodeids: +{len(added_nodeids)} added, -{len(removed_nodeids)} removed")
+        for nodeid in added_nodeids[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            lines.append(f"  + {nodeid}")
+        if len(added_nodeids) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            lines.append(f"  ... and {len(added_nodeids) - _CHECK_DRIFT_SAMPLE_LIMIT} more added nodeids")
+        for nodeid in removed_nodeids[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            lines.append(f"  - {nodeid}")
+        if len(removed_nodeids) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            lines.append(f"  ... and {len(removed_nodeids) - _CHECK_DRIFT_SAMPLE_LIMIT} more removed nodeids")
+    else:
+        lines.append(
+            f"Test nodeids: fresh has {len(fresh_nodeids)} "
+            "(committed governance omits tests[]; per-test markers derived at check time)",
+        )
+
+    fresh_summary = fresh.get("summary") if isinstance(fresh.get("summary"), dict) else {}
+    committed_summary = committed.get("summary") if isinstance(committed.get("summary"), dict) else {}
+    derivable_summary_fields = ("pytest_collected_items", "test_file_count", "generated_utc")
+    fresh_derivable = {k: fresh_summary.get(k) for k in derivable_summary_fields if k in fresh_summary}
+    committed_derivable = {k: committed_summary.get(k) for k in derivable_summary_fields if k in committed_summary}
+    if fresh_derivable != committed_derivable:
+        lines.append(
+            "Derived summary counts differ "
+            f"(fresh={fresh_derivable!r}, committed={committed_derivable!r})",
+        )
+
+    if not added_files and not removed_files and not added_nodeids and not removed_nodeids and not fresh_derivable:
+        lines.append(
+            "Nodeid/file sets match, but other inventory fields differ "
+            "(heuristics, markers, registry embed, or aggregates)."
+        )
+
+    return lines
+
+
+def build_governance_payload(full_payload: dict) -> dict:
+    """Extract slim governance artifact from a full diagnostic inventory payload."""
+    committed_paths = governance_committed_file_paths(full_payload)
+    slim_files: list[dict] = []
+    for row in full_payload.get("files", ()):
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        if fp not in committed_paths:
+            continue
+        slim_files.append({key: row.get(key) if key != "marker_set" else list(row.get(key) or []) for key in GOVERNANCE_FILE_FIELDS})
+    slim_files.sort(key=lambda r: str(r.get("path", "")))
+
+    governance: dict[str, object] = {
+        "summary": build_governance_summary(full_payload),
+        "files": slim_files,
+    }
+    return governance
+
+
+def run_inventory_check(*, artifact_path: Path | None = None) -> int:
+    """Regenerate governance inventory in memory and compare to committed JSON."""
+    path = artifact_path or GOVERNANCE_JSON
+    if not path.is_file():
+        print(f"Missing inventory: {path} (run py -3 tools/test_audit.py)", file=sys.stderr)
+        return 1
+
+    committed = json.loads(path.read_text(encoding="utf-8"))
+    full_payload = build_inventory_payload()
+    fresh = build_governance_payload(full_payload)
+    if not inventories_match_excluding_timestamp(fresh, committed):
+        for line in format_inventory_drift_report(
+            fresh,
+            committed,
+            artifact_path=path,
+            regenerate_hint="py -3 tools/test_audit.py",
+        ):
+            print(line, file=sys.stderr)
+        return 1
+
+    marker_errors = _validate_derived_marker_governance(full_payload)
+    if marker_errors:
+        print(f"Derived marker governance failed for {path.as_posix()}:", file=sys.stderr)
+        for err in marker_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(marker_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(f"  ... and {len(marker_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more marker errors", file=sys.stderr)
+        return 1
+
+    triage_errors = _validate_full_diagnostic_triage_aggregates(full_payload)
+    if triage_errors:
+        print(f"Full diagnostic triage aggregates failed for {path.as_posix()}:", file=sys.stderr)
+        for err in triage_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
+    path_errors = _validate_governance_committed_file_paths(full_payload, fresh)
+    if path_errors:
+        print(f"Governance file-path coverage failed for {path.as_posix()}:", file=sys.stderr)
+        for err in path_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
+    summary_errors = _validate_governance_summary_shape(fresh)
+    if summary_errors:
+        print(f"Governance summary shape failed for {path.as_posix()}:", file=sys.stderr)
+        for err in summary_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
+    count_errors = _validate_derived_full_suite_counts(full_payload)
+    if count_errors:
+        print(f"Derived full-suite counts failed for {path.as_posix()}:", file=sys.stderr)
+        for err in count_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
+    duplicate_errors = _validate_derived_cross_file_duplicate_governance(full_payload)
+    if duplicate_errors:
+        print(f"Derived cross-file duplicate governance failed for {path.as_posix()}:", file=sys.stderr)
+        for err in duplicate_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(duplicate_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(f"  ... and {len(duplicate_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more duplicate errors", file=sys.stderr)
+        return 1
+
+    node_count = len(derive_per_test_marker_rows(full_payload))
+    registry_file_count = len(_inventory_test_files(fresh))
+    full_file_count = len(_inventory_test_files(full_payload))
+    print(
+        f"Inventory check OK: {path.as_posix()} matches fresh regen "
+        f"({node_count} tests derived, {registry_file_count} registry-owned files / "
+        f"{full_file_count} total; generated_utc ignored)."
+    )
+    return 0
+
+
+def run_full_inventory_check(*, artifact_path: Path | None = None) -> int:
+    """Regenerate full diagnostic inventory in memory and compare to committed JSON."""
+    path = artifact_path or FULL_INVENTORY_DEFAULT
+    if not path.is_file():
+        print(
+            f"Missing full inventory: {path} (run py -3 tools/test_audit.py --full)",
+            file=sys.stderr,
+        )
+        return 1
+
+    committed = json.loads(path.read_text(encoding="utf-8"))
+    fresh = build_inventory_payload()
+    if inventories_match_excluding_timestamp(fresh, committed):
+        node_count = len(_inventory_test_nodeids(fresh))
+        file_count = len(_inventory_test_files(fresh))
+        print(
+            f"Full inventory check OK: {path.as_posix()} matches fresh regen "
+            f"({node_count} tests, {file_count} files; generated_utc ignored)."
+        )
+        return 0
+
+    for line in format_inventory_drift_report(
+        fresh,
+        committed,
+        artifact_path=path,
+        regenerate_hint="py -3 tools/test_audit.py --full",
+    ):
+        print(line, file=sys.stderr)
+    return 1
+
+
+def build_inventory_payload() -> dict:
     nodeids = _collect_pytest_nodeids()
     by_file: dict[str, list[str]] = defaultdict(list)
     for nid in nodeids:
@@ -796,6 +1248,7 @@ def main() -> None:
     summary = {
         "generated_utc": datetime.now(timezone.utc).isoformat(),
         "inventory_schema_version": INVENTORY_SCHEMA_VERSION,
+        "inventory_kind": "full",
         "declared_pytest_markers": declared_pytest_markers,
         "test_file_count": len(file_rows),
         "pytest_collected_items": len(nodeids),
@@ -947,14 +1400,41 @@ def main() -> None:
     if ownership_registry_index is not None:
         payload["ownership_registry_index"] = ownership_registry_index
 
-    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
-    print(f"Wrote {OUT_JSON} ({len(nodeids)} tests, {len(file_rows)} files)")
-    # One-line overlap hint: themes touching the most distinct files (see JSON feature_areas_by_distinct_files).
+    return payload
+
+
+def write_governance_inventory(full_payload: dict) -> None:
+    governance = build_governance_payload(full_payload)
+    GOVERNANCE_JSON.write_text(json.dumps(governance, indent=2, sort_keys=True), encoding="utf-8")
+    registry_file_count = len(governance.get("files", []))
+    full_file_count = len(full_payload.get("files", [])) if isinstance(full_payload.get("files"), list) else 0
+    derived_test_count = len(derive_per_test_marker_rows(full_payload))
+    print(
+        f"Wrote {GOVERNANCE_JSON} (governance: {registry_file_count} registry-owned files / "
+        f"{full_file_count} total; {derived_test_count} per-test markers derived at check/full only)",
+    )
+
+
+def write_full_inventory(full_payload: dict, path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    nodeids = full_payload.get("tests")
+    file_rows = full_payload.get("files")
+    test_count = len(nodeids) if isinstance(nodeids, list) else 0
+    file_count = len(file_rows) if isinstance(file_rows, list) else 0
+    dup_report = []
+    summary = full_payload.get("summary")
+    if isinstance(summary, dict):
+        dup_report = summary.get("files_with_shadowed_duplicate_test_defs") or []
+    spread_ranked = full_payload.get("feature_areas_by_distinct_files")
+    if not isinstance(spread_ranked, list):
+        spread_ranked = []
+
+    path.write_text(json.dumps(full_payload, indent=2, sort_keys=True), encoding="utf-8")
+    print(f"Wrote {path} (full diagnostic: {test_count} tests, {file_count} files)")
     top_spread = spread_ranked[:8]
     if top_spread:
         parts = [f"{row['area']}: {row['distinct_files']} files" for row in top_spread]
         print("Overlap spread (heuristic primary feature tag; not proof of duplicate tests): " + "; ".join(parts))
-    # Surface module-level duplicate test_* names (Python shadowing); pytest only runs the last def.
     if dup_report:
         print("Duplicate top-level test_* names (same function name redefined in one module):")
         for row in sorted(dup_report, key=lambda r: r["file"]):
@@ -967,5 +1447,50 @@ def main() -> None:
         print("No duplicate top-level test_* names (module-level shadowing) in tests/test_*.py.")
 
 
+def write_inventory(payload: dict) -> None:
+    """Backward-compatible alias: write governance artifact from a full payload."""
+    write_governance_inventory(payload)
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate or verify test inventory artifacts (governance default, full diagnostic optional).",
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Verify committed governance inventory matches a fresh in-memory regen (no write).",
+    )
+    parser.add_argument(
+        "--check-full",
+        action="store_true",
+        help="With --check, compare full diagnostic inventory at --output (or default artifacts path).",
+    )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Also write full diagnostic inventory to --output or artifacts/test_inventory_full.json.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Path for full diagnostic inventory write/check (default: artifacts/test_inventory_full.json).",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    if args.check:
+        if args.check_full:
+            return run_full_inventory_check(artifact_path=args.output or FULL_INVENTORY_DEFAULT)
+        return run_inventory_check()
+    full_payload = build_inventory_payload()
+    write_governance_inventory(full_payload)
+    if args.full or args.output is not None:
+        write_full_inventory(full_payload, args.output or FULL_INVENTORY_DEFAULT)
+    return 0
+
+
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -87,6 +87,9 @@ jobs:
       - name: Pytest — test ownership registry
         run: python -m pytest tests/test_ownership_registry.py -q
 
+      - name: Test inventory drift check
+        run: python tools/test_audit.py --check
+
       - name: Protected replay manifest registry parity
         run: python tools/refresh_protected_replay_manifest.py --check
 

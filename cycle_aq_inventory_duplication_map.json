@@ -1,0 +1,124 @@
+{
+  "authoritative_sources": [
+    {
+      "source": "tests/test_ownership_registry.py::RESPONSIBILITY_REGISTRY",
+      "duplicated_in_inventory_as": "ownership_registry_index",
+      "verdict": "derivable",
+      "notes": "Embedded at regen time via _build_ownership_registry_index(); governance tests assert parity with live registry."
+    },
+    {
+      "source": "tests/test_ownership_registry.py::_CROSS_FILE_DUPLICATE_ALLOWLIST",
+      "duplicated_in_inventory_as": "cross_file_duplicate_test_names (minus allowlist)",
+      "verdict": "authoritative_in_python",
+      "notes": "Inventory lists collisions; allowlist reasons live only in Python."
+    },
+    {
+      "source": "pytest.ini [markers]",
+      "duplicated_in_inventory_as": "summary.declared_pytest_markers",
+      "verdict": "derivable",
+      "notes": "Parsed by _declared_markers_from_pytest_ini()."
+    },
+    {
+      "source": "pytest --collect-only",
+      "duplicated_in_inventory_as": "summary.pytest_collected_items, files[].collected_nodeids, tests[].nodeid",
+      "verdict": "derivable",
+      "notes": "files[].collected_nodeids and tests[].nodeid are identical sets when fresh."
+    },
+    {
+      "source": "tests/test_*.py AST",
+      "duplicated_in_inventory_as": "files[].ast_*, shadowed_duplicate_test_names, game_import_modules",
+      "verdict": "derivable",
+      "notes": "Static parse of test modules."
+    },
+    {
+      "source": "tests/validation_coverage_registry.py",
+      "duplicated_in_inventory_as": null,
+      "verdict": "separate_registry",
+      "notes": "Objective #12 feature→surface map; parallel governance system, not embedded in test_inventory.json."
+    },
+    {
+      "source": "docs/testing/protected_replay_manifest.md",
+      "duplicated_in_inventory_as": null,
+      "verdict": "separate_registry",
+      "notes": "Replay acceptance authority; golden_replay neighbor appears in ownership registry only."
+    },
+    {
+      "source": "game/contract_registry.py",
+      "duplicated_in_inventory_as": null,
+      "verdict": "separate_registry",
+      "notes": "Runtime contract keys; unrelated to test inventory."
+    }
+  ],
+  "internal_duplication_within_inventory": [
+    {
+      "field_a": "files[].collected_nodeids",
+      "field_b": "tests[].nodeid",
+      "relationship": "identical_set_when_fresh",
+      "estimated_redundancy_mb": 1.0
+    },
+    {
+      "field_a": "files[].collected_test_names",
+      "field_b": "tests[].name",
+      "relationship": "derivable_from_nodeid",
+      "estimated_redundancy_mb": 0.3
+    },
+    {
+      "field_a": "files[].ownership_registry_positions",
+      "field_b": "ownership_registry_index.files_roles[path]",
+      "relationship": "must_match",
+      "estimated_redundancy_mb": 0.01
+    },
+    {
+      "field_a": "cross_file_duplicate_test_names",
+      "field_b": "block_b_overlap_clusters[kind=cross_file_duplicate_test_base_names]",
+      "relationship": "same_data_two_shapes",
+      "estimated_redundancy_mb": 0.001
+    },
+    {
+      "field_a": "tests[].likely_architecture_layer",
+      "field_b": "files[].likely_architecture_layer",
+      "relationship": "file_layer_copied_to_each_test_row",
+      "estimated_redundancy_mb": 0.2
+    },
+    {
+      "field_a": "tests[].file_overlap_hints",
+      "field_b": "files[].overlap_hints",
+      "relationship": "file_hints_copied_to_each_test_row",
+      "estimated_redundancy_mb": 0.1
+    }
+  ],
+  "heuristic_fields_not_authoritative": [
+    "likely_architecture_layer",
+    "likely_ownership_theme",
+    "feature_areas",
+    "assertion_style",
+    "brittleness",
+    "redundancy_flag",
+    "keyword_overlap_hints",
+    "overlap_hints",
+    "block_b_overlap_clusters",
+    "feature_areas_by_distinct_files",
+    "import_hub_modules",
+    "primary_bucket"
+  ],
+  "governance_required_fields": [
+    "summary.inventory_schema_version",
+    "summary.declared_pytest_markers",
+    "files[].path",
+    "files[].likely_architecture_layer",
+    "files[].marker_set",
+    "files[].ownership_registry_positions",
+    "files[].collected_duplicate_base_names",
+    "ownership_registry_index",
+    "block_b_overlap_clusters",
+    "cross_file_duplicate_test_names",
+    "tests[].marker_set"
+  ],
+  "size_breakdown_mb_approx": {
+    "total_on_disk": 5.13,
+    "files_section": 1.01,
+    "tests_section": 3.12,
+    "ownership_registry_index": 0.01,
+    "aggregates_and_summary": 0.05
+  }
+}
