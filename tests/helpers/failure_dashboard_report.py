@@ -27,6 +27,27 @@ from tests.helpers.runtime_lineage_reporting import (
     build_runtime_lineage_summary,
     runtime_lineage_markdown_lines as _runtime_lineage_markdown_lines,
 )
+from tests.helpers.replay_drift_taxonomy import summarize_owner_drift_buckets
+from tests.helpers.replay_drift_longitudinal import (
+    aggregate_owner_drift_history,
+    build_owner_drift_trend_summary,
+    render_owner_drift_longitudinal_report,
+)
+from tests.helpers.replay_drift_hotspots import (
+    build_hotspot_rankings,
+    classification_rows_from_scorecards,
+    render_owner_drift_hotspot_report,
+)
+from tests.helpers.replay_drift_risk import (
+    build_risk_payload,
+    classifications_for_risk_analysis,
+    render_owner_drift_risk_report,
+)
+from tests.helpers.replay_drift_trends import (
+    build_trend_payload,
+    enrich_hotspots_with_field_trends,
+    render_owner_drift_trend_report,
+)
 
 # Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
 # re-enumerating protected replay field paths or failure categories inline.
@@ -51,6 +72,7 @@ FAILURE_DASHBOARD_TABLE_COLUMNS: tuple[str, ...] = (
     "Fallback",
     "Post-Gate Mutation",
     "Mutation Flags",
+    "Owner Drift Bucket",
 )
 
 # Cycle AO3 — dashboard consumes contract-owned evidence manifest; formatting stays here.
@@ -83,12 +105,60 @@ def expected_failure_dashboard_columns() -> tuple[str, ...]:
 def _failure_dashboard_table_header() -> str:
     return "| " + " | ".join(FAILURE_DASHBOARD_TABLE_COLUMNS) + " |"
 
+
+def _failure_dashboard_table_separator() -> str:
+    parts = ["---"] + ["---:" if index == 1 else "---" for index in range(1, len(FAILURE_DASHBOARD_TABLE_COLUMNS))]
+    return "|" + "|".join(parts) + "|"
+
+
+def _owner_drift_summary_table_lines(counts: Mapping[str, int]) -> list[str]:
+    """Render owner drift bucket frequency table for scorecard/failure reports."""
+    non_zero = [(bucket, count) for bucket, count in sorted(counts.items()) if count > 0]
+    lines = ["", "## Owner Drift Summary", ""]
+    if not non_zero:
+        lines.extend(["No owner drift classifications.", ""])
+        return lines
+    lines.extend(
+        [
+            "| Owner Drift Bucket | Count |",
+            "|---|---:|",
+        ]
+    )
+    for bucket, count in non_zero:
+        lines.append(f"| `{bucket}` | `{count}` |")
+    lines.append("")
+    return lines
+
+
+def _owner_drift_breakdown_lines(counts: Mapping[str, int]) -> list[str]:
+    """Render dot-aligned owner drift breakdown for protected failure reports."""
+    non_zero = [(bucket, count) for bucket, count in sorted(counts.items()) if count > 0]
+    lines = ["", "## Owner Drift Breakdown", ""]
+    if not non_zero:
+        lines.extend(["No owner drift buckets recorded.", ""])
+        return lines
+    width = max(len(bucket) for bucket, _count in non_zero)
+    lines.append("```")
+    for bucket, count in non_zero:
+        dots = "." * max(1, 18 - (width - len(bucket)))
+        lines.append(f"{bucket.ljust(width)} {dots} {count}")
+    lines.extend(["```", ""])
+    return lines
+
 FAILURE_DASHBOARD_ENV_VAR = "ASHEN_WRITE_FAILURE_DASHBOARD"
 RERUN_DRIFT_SCORECARD_ENV_VAR = "ASHEN_WRITE_RERUN_DRIFT_SCORECARD"
 FAILURE_DASHBOARD_LATEST_PATH = Path("audits/failure_dashboard_latest.md")
 PROTECTED_REPLAY_FAILURE_REPORT_PATH = Path("artifacts/golden_replay/replay_failure_report.md")
 RERUN_DRIFT_SCORECARD_JSON_PATH = Path("artifacts/golden_replay/rerun_drift_scorecard.json")
 RERUN_DRIFT_SCORECARD_MARKDOWN_PATH = Path("artifacts/golden_replay/rerun_drift_scorecard.md")
+OWNER_DRIFT_LONGITUDINAL_JSON_PATH = Path("artifacts/golden_replay/owner_drift_longitudinal.json")
+OWNER_DRIFT_LONGITUDINAL_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_longitudinal.md")
+OWNER_DRIFT_HOTSPOTS_JSON_PATH = Path("artifacts/golden_replay/owner_drift_hotspots.json")
+OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_hotspots.md")
+OWNER_DRIFT_TRENDS_JSON_PATH = Path("artifacts/golden_replay/owner_drift_trends.json")
+OWNER_DRIFT_TRENDS_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_trends.md")
+OWNER_DRIFT_RISK_JSON_PATH = Path("artifacts/golden_replay/owner_drift_risk.json")
+OWNER_DRIFT_RISK_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_risk.md")
 _RECORDED_FAILURE_DASHBOARD_ROWS: list[Mapping[str, Any]] = []
 _RECORDED_RUNTIME_LINEAGE_EVENTS: list[dict[str, Any]] = []
 _RECORDED_PROTECTED_REPLAY_FAILURE_ROWS: list[Mapping[str, Any]] = []
@@ -321,6 +391,192 @@ def recorded_rerun_drift_scorecards() -> list[Mapping[str, Any]]:
     return list(_RECORDED_RERUN_DRIFT_SCORECARDS)
 
 
+def scorecards_for_longitudinal_aggregation(
+    current: Mapping[str, Any] | None = None,
+) -> list[Mapping[str, Any]]:
+    """Return scorecard history for longitudinal aggregation."""
+    recorded = recorded_rerun_drift_scorecards()
+    if recorded:
+        return recorded
+    if isinstance(current, Mapping) and current.get("comparison_available") is not False:
+        return [current]
+    return []
+
+
+def write_owner_drift_longitudinal_artifacts(
+    scorecards: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    json_path: Path | str = OWNER_DRIFT_LONGITUDINAL_JSON_PATH,
+    markdown_path: Path | str = OWNER_DRIFT_LONGITUDINAL_MARKDOWN_PATH,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> tuple[Path, Path]:
+    """Write advisory longitudinal owner drift JSON and markdown artifacts."""
+    history = aggregate_owner_drift_history(scorecards)
+    payload = {
+        "schema_version": 1,
+        "report_only": True,
+        "advisory_only": True,
+        **history,
+        "trend_summary": build_owner_drift_trend_summary(history),
+    }
+    json_out = Path(json_path)
+    markdown_out = Path(markdown_path)
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    markdown_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_out.write_text(
+        render_owner_drift_longitudinal_report(
+            history,
+            generated_at=generated_at,
+            command_used=command_used,
+        ),
+        encoding="utf-8",
+    )
+    return json_out, markdown_out
+
+
+def append_owner_drift_longitudinal_markdown(
+    markdown_path: Path | str,
+    scorecards: Sequence[Mapping[str, Any]] | None,
+    *,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> None:
+    """Append longitudinal owner drift summary to an existing markdown artifact."""
+    path = Path(markdown_path)
+    if not path.exists():
+        return
+    history = aggregate_owner_drift_history(scorecards)
+    appendix = render_owner_drift_longitudinal_report(
+        history,
+        generated_at=generated_at,
+        command_used=command_used,
+    )
+    existing = path.read_text(encoding="utf-8").rstrip()
+    path.write_text(f"{existing}\n\n{appendix}\n", encoding="utf-8")
+
+
+def collected_hotspot_classifications(
+    *,
+    failure_rows: Sequence[Mapping[str, Any]] | None = None,
+) -> list[Mapping[str, Any]]:
+    """Collect classification rows available for hotspot aggregation."""
+    rows: list[Mapping[str, Any]] = []
+    if failure_rows is not None:
+        rows.extend(row for row in failure_rows if isinstance(row, Mapping))
+    else:
+        rows.extend(recorded_protected_replay_failure_rows())
+        rows.extend(recorded_failure_dashboard_rows())
+    rows.extend(classification_rows_from_scorecards(recorded_rerun_drift_scorecards()))
+    return rows
+
+
+def write_owner_drift_hotspot_artifacts(
+    classifications: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    json_path: Path | str = OWNER_DRIFT_HOTSPOTS_JSON_PATH,
+    markdown_path: Path | str = OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH,
+    scorecard_history: Sequence[Mapping[str, Any]] | None = None,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> tuple[Path, Path]:
+    """Write advisory owner drift hotspot JSON and markdown artifacts."""
+    rows = collected_hotspot_classifications() if classifications is None else list(classifications)
+    history = (
+        list(scorecard_history)
+        if scorecard_history is not None
+        else recorded_rerun_drift_scorecards()
+    )
+    hotspots = enrich_hotspots_with_field_trends(build_hotspot_rankings(rows), history)
+    payload = {
+        "schema_version": 1,
+        "report_only": True,
+        "advisory_only": True,
+        **hotspots,
+    }
+    json_out = Path(json_path)
+    markdown_out = Path(markdown_path)
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    markdown_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_out.write_text(
+        render_owner_drift_hotspot_report(
+            hotspots,
+            generated_at=generated_at,
+            command_used=command_used,
+        ),
+        encoding="utf-8",
+    )
+    return json_out, markdown_out
+
+
+def write_owner_drift_trend_artifacts(
+    scorecard_history: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    json_path: Path | str = OWNER_DRIFT_TRENDS_JSON_PATH,
+    markdown_path: Path | str = OWNER_DRIFT_TRENDS_MARKDOWN_PATH,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> tuple[Path, Path]:
+    """Write advisory owner drift trend JSON and markdown artifacts."""
+    history = (
+        list(scorecard_history)
+        if scorecard_history is not None
+        else recorded_rerun_drift_scorecards()
+    )
+    payload = build_trend_payload(history)
+    trends = payload.get("owner_drift_trends") if isinstance(payload.get("owner_drift_trends"), Mapping) else {}
+    json_out = Path(json_path)
+    markdown_out = Path(markdown_path)
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    markdown_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_out.write_text(
+        render_owner_drift_trend_report(
+            trends,
+            generated_at=generated_at,
+            command_used=command_used,
+        ),
+        encoding="utf-8",
+    )
+    return json_out, markdown_out
+
+
+def write_owner_drift_risk_artifacts(
+    classifications: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    json_path: Path | str = OWNER_DRIFT_RISK_JSON_PATH,
+    markdown_path: Path | str = OWNER_DRIFT_RISK_MARKDOWN_PATH,
+    scorecard_history: Sequence[Mapping[str, Any]] | None = None,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> tuple[Path, Path]:
+    """Write advisory owner drift risk JSON and markdown artifacts."""
+    history = (
+        list(scorecard_history)
+        if scorecard_history is not None
+        else recorded_rerun_drift_scorecards()
+    )
+    source_rows = collected_hotspot_classifications() if classifications is None else list(classifications)
+    rows = classifications_for_risk_analysis(source_rows, scorecard_history=history)
+    payload = build_risk_payload(rows, scorecard_history=history)
+    json_out = Path(json_path)
+    markdown_out = Path(markdown_path)
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    markdown_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_out.write_text(
+        render_owner_drift_risk_report(
+            payload,
+            generated_at=generated_at,
+            command_used=command_used,
+        ),
+        encoding="utf-8",
+    )
+    return json_out, markdown_out
+
+
 def render_failure_dashboard_markdown(
     rows: Sequence[Mapping[str, Any]],
     *,
@@ -346,7 +602,7 @@ def render_failure_dashboard_markdown(
     lines.extend(
         [
             _failure_dashboard_table_header(),
-            "|---|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+            _failure_dashboard_table_separator(),
         ]
     )
     for row in sorted(
@@ -387,11 +643,13 @@ def render_failure_dashboard_markdown(
                     _cell(row.get("fallback_family")),
                     _cell(row.get("post_gate_mutation_detected")),
                     _cell(mutation_flags),
+                    _cell(row.get("owner_drift_bucket")),
                 ]
             )
             + " |"
         )
     lines.append("")
+    lines.extend(_owner_drift_breakdown_lines(summarize_owner_drift_buckets(rows)))
     lines.extend(_runtime_lineage_markdown_lines(runtime_lineage_events))
     return "\n".join(lines)
 
@@ -513,6 +771,15 @@ def render_rerun_drift_scorecard_markdown(
             f"- Runtime-lineage deltas: `{summary.get('runtime_lineage_delta_count', 0)}`",
             f"- Semantic delta frequency deltas: `{summary.get('semantic_delta_frequency_delta_count', 0)}`",
             "",
+        ]
+    )
+    owner_classifications = scorecard.get("owner_drift_classifications")
+    if isinstance(owner_classifications, list):
+        lines.extend(_owner_drift_summary_table_lines(summarize_owner_drift_buckets(owner_classifications)))
+    else:
+        lines.extend(_owner_drift_summary_table_lines({}))
+    lines.extend(
+        [
             "## Semantic Delta Frequency",
             "",
             f"- Response-delta checked delta: `{_nested_delta(scorecard, 'checked')}`",
@@ -598,6 +865,8 @@ def write_rerun_drift_scorecard_artifacts(
     *,
     json_path: Path | str = RERUN_DRIFT_SCORECARD_JSON_PATH,
     markdown_path: Path | str = RERUN_DRIFT_SCORECARD_MARKDOWN_PATH,
+    longitudinal_json_path: Path | str = OWNER_DRIFT_LONGITUDINAL_JSON_PATH,
+    longitudinal_markdown_path: Path | str = OWNER_DRIFT_LONGITUDINAL_MARKDOWN_PATH,
     command_used: str | None = None,
     generated_at: str | None = None,
 ) -> tuple[Path, Path]:
@@ -615,6 +884,37 @@ def write_rerun_drift_scorecard_artifacts(
             command_used=command_used,
         ),
         encoding="utf-8",
+    )
+    history_scorecards = scorecards_for_longitudinal_aggregation(payload)
+    append_owner_drift_longitudinal_markdown(
+        markdown_out,
+        history_scorecards,
+        command_used=command_used,
+        generated_at=generated_at,
+    )
+    write_owner_drift_longitudinal_artifacts(
+        history_scorecards,
+        json_path=longitudinal_json_path,
+        markdown_path=longitudinal_markdown_path,
+        command_used=command_used,
+        generated_at=generated_at,
+    )
+    write_owner_drift_hotspot_artifacts(
+        collected_hotspot_classifications(),
+        scorecard_history=history_scorecards,
+        command_used=command_used,
+        generated_at=generated_at,
+    )
+    write_owner_drift_trend_artifacts(
+        history_scorecards,
+        command_used=command_used,
+        generated_at=generated_at,
+    )
+    write_owner_drift_risk_artifacts(
+        collected_hotspot_classifications(),
+        scorecard_history=history_scorecards,
+        command_used=command_used,
+        generated_at=generated_at,
     )
     return json_out, markdown_out
 
@@ -711,8 +1011,8 @@ def render_protected_replay_failure_report(
             "",
             "## Failure Table",
             "",
-            "| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First |",
-            "|---|---|---:|---|---|---|---|---|---|---|---|---|",
+            "| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First | Owner Drift Bucket |",
+            "|---|---|---:|---|---|---|---|---|---|---|---|---|---|",
         ]
     )
     for row in ordered_rows:
@@ -740,10 +1040,12 @@ def render_protected_replay_failure_report(
                     _cell(row.get("primary_owner")),
                     _cell(row.get("secondary_owner")),
                     _cell(row.get("investigate_first")),
+                    _cell(row.get("owner_drift_bucket")),
                 ]
             )
             + " |"
         )
+    owner_drift_counts = summarize_owner_drift_buckets(ordered_rows)
     category_counts: dict[str, int] = {}
     owner_counts: dict[str, int] = {}
     for row in ordered_rows:
@@ -759,6 +1061,11 @@ def render_protected_replay_failure_report(
             "- Categories: " + "; ".join(f"`{key}` ({value})" for key, value in sorted(category_counts.items())),
             "- Primary owners: " + "; ".join(f"`{key}` ({value})" for key, value in sorted(owner_counts.items())),
             "",
+        ]
+    )
+    lines.extend(_owner_drift_breakdown_lines(owner_drift_counts))
+    lines.extend(
+        [
             "## Fallback Summary",
             "",
             "| Scenario | Final Source | Fallback Family | Temporal Frame | Opening Authorship | Opening Owner | Sealed Owner | Sanitizer Empty Owner |",
@@ -847,5 +1154,15 @@ def write_protected_replay_failure_report_if_present(
             ),
         ),
         encoding="utf-8",
+    )
+    write_owner_drift_hotspot_artifacts(
+        report_rows,
+        command_used=command_used,
+        generated_at=generated_at,
+    )
+    write_owner_drift_risk_artifacts(
+        report_rows,
+        command_used=command_used,
+        generated_at=generated_at,
     )
     return out_path

@@ -20,6 +20,7 @@ from game.scenario_spine_eval import evaluate_scenario_spine_session, minimal_co
 from game import storage
 
 from tests.helpers.failure_classifier import classify_replay_failure
+from tests.helpers.replay_drift_taxonomy import owner_drift_classifications_from_per_turn_deltas
 from tests.helpers.golden_replay_projection import (
     MISSING as _MISSING,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
@@ -902,6 +903,8 @@ def compare_golden_replay_reruns(
         if row["deltas"]:
             per_turn_deltas.append(row)
 
+    owner_drift_classifications = owner_drift_classifications_from_per_turn_deltas(per_turn_deltas)
+
     previous_lineage_summary = build_runtime_lineage_summary(_runtime_lineage_events_for_turns(previous_turns))
     current_lineage_summary = build_runtime_lineage_summary(_runtime_lineage_events_for_turns(current_turns))
     previous_fallback_owners = [_fallback_owner_for_rerun_turn(turn) for turn in previous_turns]
@@ -975,6 +978,7 @@ def compare_golden_replay_reruns(
             },
         },
         "per_turn_deltas": per_turn_deltas,
+        "owner_drift_classifications": owner_drift_classifications,
     }
 
 

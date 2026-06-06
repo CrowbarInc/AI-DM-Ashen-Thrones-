@@ -18,6 +18,7 @@ from tests.failure_classification_contract import (
     ALLOWED_FALLBACK_SELECTION_OWNERS,
     ALLOWED_MISSING_SOURCE_KINDS,
     ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS,
+    ALLOWED_OWNER_DRIFT_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
     ALLOWED_REPLAY_TAGS,
     ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS,
@@ -29,6 +30,7 @@ from tests.failure_classification_contract import (
     MAJOR_OWNER_INVESTIGATION_TARGETS,
     REQUIRED_CLASSIFICATION_FIELDS,
 )
+from tests.helpers.replay_drift_taxonomy import classify_owner_drift_bucket
 
 
 FailureCategory = str
@@ -99,6 +101,7 @@ class FailureClassification(TypedDict):
     raw_signal_refs: list[str]
     classification_confidence: str
     investigate_first: str
+    owner_drift_bucket: NotRequired[str]
 
 
 CATEGORY_RULES: tuple[tuple[str, tuple[str, ...], FailureCategory, str], ...] = (
@@ -388,6 +391,10 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
     strict_social_prose_owner = row.get("sanitizer_strict_social_prose_owner")
     if strict_social_prose_owner not in (None, "") and strict_social_prose_owner != "strict_social_emission":
         errors.append(f"invalid sanitizer_strict_social_prose_owner: {strict_social_prose_owner!r}")
+
+    owner_drift_bucket = row.get("owner_drift_bucket")
+    if owner_drift_bucket not in (None, "") and owner_drift_bucket not in ALLOWED_OWNER_DRIFT_BUCKETS:
+        errors.append(f"invalid owner_drift_bucket: {owner_drift_bucket!r}")
 
     for key in sorted(row.keys()):
         if key not in ALLOWED_CLASSIFICATION_ROW_FIELDS:
@@ -896,5 +903,11 @@ def classify_replay_failure(
         row["repair_kind"] = repair_kind
         row["mutation_source"] = _mutation_source(observed_turn, emission_sublayer)
         row["missing_source_kind"] = missing_source_kind
+        row["owner_drift_bucket"] = classify_owner_drift_bucket(
+            field_path=field_path,
+            category=category,
+            measurement_drift_bucket=_drift_bucket(drift_row),
+            replay_tags=replay_tags,
+        )
         classifications.append(row)
     return classifications

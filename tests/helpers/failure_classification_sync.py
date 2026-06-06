@@ -454,9 +454,9 @@ def classifier_evidence_manifest_misalignments() -> list[str]:
         misalignments.append(
             f"PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must contain 32 fields, got {len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)}"
         )
-    if len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) != 15:
+    if len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) != 16:
         misalignments.append(
-            f"CLASSIFIER_EVIDENCE_EXTENSION_FIELDS must contain 15 fields, got {len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)}"
+            f"CLASSIFIER_EVIDENCE_EXTENSION_FIELDS must contain 16 fields, got {len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)}"
         )
 
     overlap = PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS

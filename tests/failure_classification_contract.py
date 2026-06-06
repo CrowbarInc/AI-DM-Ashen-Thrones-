@@ -15,6 +15,7 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
 )
 from tests.helpers.golden_replay_projection import protected_classifier_evidence_field_paths
+from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS
 
 ALLOWED_FAILURE_CATEGORIES: frozenset[str] = frozenset(
     {
@@ -167,6 +168,7 @@ CLASSIFIER_EVIDENCE_EXTENSION_FIELDS: frozenset[str] = frozenset(
         "final_text_hash",
         "missing_source_kind",
         "mutation_source",
+        "owner_drift_bucket",
         "post_gate_mutation_detected",
         "prepared_emission_owner",
         "repair_kind",
@@ -215,6 +217,7 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "repair_kind",
         "mutation_source",
         "missing_source_kind",
+        "owner_drift_bucket",
         "sanitizer_mode",
         "sanitizer_event_count",
         "sanitizer_changed_count",

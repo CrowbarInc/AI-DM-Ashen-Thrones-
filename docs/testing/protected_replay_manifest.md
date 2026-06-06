@@ -169,6 +169,37 @@ Compare two scenario-spine rerun artifact directories with:
 .\.venv\Scripts\python.exe tools/compare_scenario_spine_reruns.py --previous <dir> --current <dir> --out artifacts/scenario_spine/rerun_delta.md --json-out artifacts/scenario_spine/rerun_delta.json
 ```
 
+## Cycle AR Reporting Addendum
+
+Cycle AR adds **owner-oriented drift bucket** reporting on top of existing replay failure classification. This is **reporting-only** vocabulary for operator diagnostics.
+
+Policy:
+
+- `owner_drift_bucket` is an **additive reporting field** on classified failure rows and rerun scorecards. It does not replace `category`, `primary_owner`, `secondary_owner`, measurement drift buckets (`exact_drift`, `structural_drift`, `semantic_drift`), or `replay_tags`.
+- Owner drift buckets are **not acceptance-blocking**. Protected replay pass/fail remains governed by existing structural and semantic invariants only.
+- Rerun scorecard owner drift summaries remain **`ADVISORY`** / `report_only: true` alongside Cycle S rerun drift policy.
+- Lineage-derived `lineage_drift` buckets surface in advisory rerun reports only; lineage owner mismatch remains excluded from protected drift classification unless explicitly promoted in a future cycle.
+
+Canonical owner drift bucket vocabulary (9 buckets):
+
+| Bucket | Reporting role |
+|---|---|
+| `route_drift` | Route / interaction-context drift |
+| `speaker_drift` | Speaker contract drift |
+| `fallback_drift` | Fallback family / source drift |
+| `ownership_drift` | Fallback authorship / owner-bucket drift |
+| `emission_drift` | Gate emission / repair drift |
+| `semantic_drift` | Scaffold / semantic predicate drift |
+| `lineage_drift` | Runtime lineage frequency drift (advisory) |
+| `projection_drift` | Observation projection / unavailable drift |
+| `replay_drift_unclassified` | Exact-text fingerprint / catch-all reporting |
+
+Implementation surfaces:
+
+- Protected failure report: `Owner Drift Bucket` column + `Owner Drift Breakdown` rollup
+- Failure dashboard: `Owner Drift Bucket` column + breakdown rollup
+- Rerun scorecard markdown: `Owner Drift Summary` table from `owner_drift_classifications`
+
 ## End-To-End Protected Scenarios
 
 Category: `END_TO_END_PROTECTED`. These cases execute turns through `run_golden_replay(...)` and the chat pipeline with deterministic test setup/model responses.

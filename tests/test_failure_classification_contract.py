@@ -66,7 +66,7 @@ def test_classifier_evidence_manifest_matches_optional_contract_fields():
     assert_classifier_evidence_manifest_locked()
     assert CLASSIFIER_EVIDENCE_FIELDS == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     assert len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) == 32
-    assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 15
+    assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 16
     assert not (PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)
     assert classifier_evidence_manifest_misalignments() == []
 

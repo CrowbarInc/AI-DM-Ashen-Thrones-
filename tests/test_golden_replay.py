@@ -609,6 +609,9 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         assert "synthetic_turn_01" in report
         assert "structural_drift" in report
         assert "game/speaker_contract_enforcement.py" in report
+        assert "speaker_drift" in report
+        assert "## Owner Drift Breakdown" in report
+        assert "| Owner Drift Bucket |" in report
         assert "## Sanitizer Summary" in report
         assert "## Runtime Lineage Summary" in report
         assert "### Focused failing tests" in report
@@ -1013,6 +1016,8 @@ def test_rerun_drift_scorecard_markdown_summarizes_fabricated_scorecard():
     assert "- Fallback deltas: `1`" in markdown
     assert "- Text fingerprint deltas: `1`" in markdown
     assert "- Runtime-lineage deltas: `1`" in markdown
+    assert "## Owner Drift Summary" in markdown
+    assert "| `speaker_drift` |" in markdown
     assert "## Semantic Delta Frequency" in markdown
     assert "- Semantic delta frequency deltas: `0`" in markdown
     assert "| Turn | Previous Turn ID | Current Turn ID | Drift Fields | Details |" in markdown
