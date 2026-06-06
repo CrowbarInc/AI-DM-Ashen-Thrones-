@@ -15,6 +15,14 @@ from tests.helpers.replay_drift_hotspots import (
     aggregate_owner_drift_bucket_counts,
     classification_rows_from_scorecards,
 )
+from tests.helpers.replay_drift_taxonomy import (
+    aggregate_long_session_stability_classifications,
+    build_long_session_stability_history,
+    build_stability_hotspots,
+    render_stability_hotspots_markdown_lines,
+    render_stability_trends_markdown_lines,
+    stability_trend_rows_from_history,
+)
 from tests.helpers.replay_drift_trends import compute_field_drift_trends, compute_owner_drift_trends
 
 RiskLevel = Literal["low", "medium", "high"]
@@ -376,15 +384,184 @@ def build_risk_payload(
     classifications: Sequence[Mapping[str, Any]] | None,
     *,
     scorecard_history: Sequence[Mapping[str, Any]] | None = None,
+    stability_scorecards: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build JSON-serializable owner drift risk payload."""
     rankings = build_risk_rankings(classifications, scorecard_history=scorecard_history)
-    return {
+    payload = {
         "schema_version": 1,
         "report_only": True,
         "advisory_only": True,
         **rankings,
     }
+    return enrich_risk_payload_with_stability_ownership(payload, stability_scorecards)
+
+
+def _stability_bucket_risk_level(bucket: str, frequency: int) -> RiskLevel:
+    if frequency >= 3:
+        return "high"
+    if frequency >= REPEATED_OCCURRENCE_THRESHOLD:
+        return "medium"
+    if frequency >= 1 and bucket in PROTECTED_OWNER_BUCKETS:
+        return "low"
+    return "low"
+
+
+def enrich_risk_payload_with_stability_ownership(
+    payload: Mapping[str, Any],
+    stability_scorecards: Sequence[Mapping[str, Any]] | None,
+) -> dict[str, Any]:
+    """Add supplementary stability-ownership risk fields without changing drift rankings."""
+    enriched = dict(payload)
+    aggregation = aggregate_long_session_stability_classifications(stability_scorecards)
+    bucket_frequencies = (
+        aggregation.get("bucket_frequencies")
+        if isinstance(aggregation.get("bucket_frequencies"), Mapping)
+        else {}
+    )
+    status_counts = (
+        aggregation.get("stability_status_counts")
+        if isinstance(aggregation.get("stability_status_counts"), Mapping)
+        else {}
+    )
+
+    stability_risk_signals: list[dict[str, Any]] = []
+    for bucket in ("fallback_drift", "speaker_drift", "route_drift"):
+        frequency = _normalize_frequency(bucket_frequencies.get(bucket))
+        if frequency < REPEATED_OCCURRENCE_THRESHOLD:
+            continue
+        stability_risk_signals.append(
+            {
+                "signal": f"recurring_{bucket}",
+                "owner_drift_bucket": bucket,
+                "risk_level": _stability_bucket_risk_level(bucket, frequency),
+                "longitudinal_frequency": frequency,
+                "reason": f"{bucket} observed {frequency} time(s) across long-session stability scorecards",
+                "source": "stability_ownership",
+            }
+        )
+
+    degraded_count = _normalize_frequency(status_counts.get("degraded"))
+    if degraded_count > 0:
+        stability_risk_signals.append(
+            {
+                "signal": "degraded_stability_status",
+                "owner_drift_bucket": "semantic_drift",
+                "risk_level": "high" if degraded_count >= REPEATED_OCCURRENCE_THRESHOLD else "medium",
+                "longitudinal_frequency": degraded_count,
+                "reason": f"degraded stability status observed in {degraded_count} long-session scorecard(s)",
+                "source": "stability_ownership",
+            }
+        )
+
+    watch_count = _normalize_frequency(status_counts.get("watch"))
+    if watch_count >= REPEATED_OCCURRENCE_THRESHOLD:
+        stability_risk_signals.append(
+            {
+                "signal": "watch_stability_status",
+                "owner_drift_bucket": "replay_drift_unclassified",
+                "risk_level": "medium",
+                "longitudinal_frequency": watch_count,
+                "reason": f"watch stability status observed in {watch_count} long-session scorecard(s)",
+                "source": "stability_ownership",
+            }
+        )
+
+    stability_risk_signals.sort(
+        key=lambda row: (
+            _RISK_RANK.get(str(row.get("risk_level") or "low"), 2),
+            -_normalize_frequency(row.get("longitudinal_frequency")),
+            str(row.get("signal") or ""),
+        )
+    )
+
+    history = build_long_session_stability_history(stability_scorecards)
+    trend_rows = stability_trend_rows_from_history(history)
+    stability_trend_signals = _stability_trend_risk_signals(history, trend_rows)
+
+    stability_hotspots = build_stability_hotspots(stability_scorecards)
+
+    enriched["stability_ownership"] = {
+        "report_only": True,
+        "advisory_only": True,
+        "aggregation": aggregation,
+        "stability_risk_signals": stability_risk_signals,
+        "history": history,
+        "stability_trend_rows": trend_rows,
+        "stability_trend_signals": stability_trend_signals,
+        "stability_hotspots": stability_hotspots,
+    }
+    return enriched
+
+
+def _stability_trend_risk_signals(
+    history: Mapping[str, Any],
+    trend_rows: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    """Build supplementary stability trend signals without changing drift rankings."""
+    trend_summary = history.get("trend_summary") if isinstance(history.get("trend_summary"), Mapping) else {}
+    if not trend_summary.get("comparison_available"):
+        return []
+
+    signals: list[dict[str, Any]] = []
+    for row in trend_rows:
+        if not isinstance(row, Mapping):
+            continue
+        bucket = str(row.get("owner_drift_bucket") or "")
+        trend = str(row.get("trend") or "insufficient_data")
+        if trend != "worsening":
+            continue
+        if bucket in {"fallback_drift", "speaker_drift", "route_drift", "semantic_drift"}:
+            signals.append(
+                {
+                    "signal": f"worsening_{bucket}",
+                    "owner_drift_bucket": bucket,
+                    "risk_level": "high" if int(row.get("delta") or 0) >= 2 else "medium",
+                    "longitudinal_frequency": int(row.get("current_count") or 0),
+                    "reason": (
+                        f"{bucket} increased from {int(row.get('previous_count') or 0)} "
+                        f"to {int(row.get('current_count') or 0)} across stability scorecard generations"
+                    ),
+                    "source": "stability_trends",
+                    "trend": trend,
+                    "delta": int(row.get("delta") or 0),
+                }
+            )
+        elif bucket == "overall_stability":
+            signals.append(
+                {
+                    "signal": "worsening_overall_stability",
+                    "owner_drift_bucket": "semantic_drift",
+                    "risk_level": "high",
+                    "longitudinal_frequency": 1,
+                    "reason": "overall long-session stability trend is worsening",
+                    "source": "stability_trends",
+                    "trend": trend,
+                    "delta": 0,
+                }
+            )
+        elif bucket == "stability_status:degraded" and int(row.get("current_count") or 0) == 1:
+            signals.append(
+                {
+                    "signal": "repeated_degraded_stability_status",
+                    "owner_drift_bucket": "semantic_drift",
+                    "risk_level": "high",
+                    "longitudinal_frequency": 1,
+                    "reason": "latest long-session stability scorecard is degraded after a non-degraded prior run",
+                    "source": "stability_trends",
+                    "trend": trend,
+                    "delta": int(row.get("delta") or 0),
+                }
+            )
+
+    signals.sort(
+        key=lambda row: (
+            _RISK_RANK.get(str(row.get("risk_level") or "low"), 2),
+            -_normalize_frequency(row.get("longitudinal_frequency")),
+            str(row.get("signal") or ""),
+        )
+    )
+    return signals
 
 
 def _risk_table_lines(title: str, ranked_rows: Sequence[Mapping[str, Any]]) -> list[str]:
@@ -467,7 +644,103 @@ def render_owner_drift_risk_report(
             payload.get("recommended_investigation_order") or [],
         )
     )
+    lines.extend(_stability_ownership_risk_report_lines(payload))
     return "\n".join(lines)
+
+
+def _stability_ownership_risk_report_lines(payload: Mapping[str, Any]) -> list[str]:
+    stability = payload.get("stability_ownership") if isinstance(payload.get("stability_ownership"), Mapping) else {}
+    if not stability:
+        return []
+    lines = ["## Stability Ownership", ""]
+    aggregation = stability.get("aggregation") if isinstance(stability.get("aggregation"), Mapping) else {}
+    status_counts = aggregation.get("stability_status_counts") if isinstance(aggregation.get("stability_status_counts"), Mapping) else {}
+    bucket_frequencies = aggregation.get("bucket_frequencies") if isinstance(aggregation.get("bucket_frequencies"), Mapping) else {}
+    classification_rows = aggregation.get("classification_rows") if isinstance(aggregation.get("classification_rows"), list) else []
+
+    lines.append(f"- Stability scorecards aggregated: `{int(aggregation.get('total_scorecards') or 0)}`")
+    lines.append(f"- Stability status counts: `{dict(status_counts)}`")
+    lines.append(f"- Owner bucket frequencies: `{dict(bucket_frequencies)}`")
+    lines.append("")
+
+    signals = stability.get("stability_risk_signals")
+    if isinstance(signals, list) and signals:
+        lines.extend(["### Stability Risk Signals", ""])
+        for row in signals:
+            if not isinstance(row, Mapping):
+                continue
+            lines.append(
+                f"- `{row.get('signal')}` "
+                f"bucket=`{row.get('owner_drift_bucket')}` "
+                f"risk=`{row.get('risk_level')}` "
+                f"frequency=`{int(row.get('longitudinal_frequency') or 0)}` "
+                f"— {row.get('reason')}"
+            )
+        lines.append("")
+
+    if not classification_rows:
+        lines.extend(["No stability ownership classifications.", ""])
+    else:
+        lines.extend(
+            [
+                "### Stability Ownership Classifications",
+                "",
+                "| Scenario | Signal | Owner Drift Bucket | Stability Status | Severity | Reason |",
+                "|---|---|---|---|---|---|",
+            ]
+        )
+        for row in classification_rows:
+            if not isinstance(row, Mapping):
+                continue
+            lines.append(
+                "| "
+                + " | ".join(
+                    [
+                        f"`{row.get('scenario_id')}`",
+                        f"`{row.get('signal')}`",
+                        f"`{row.get('owner_drift_bucket')}`",
+                        f"`{row.get('stability_status')}`",
+                        f"`{row.get('severity_hint')}`",
+                        str(row.get("reason") or ""),
+                    ]
+                )
+                + " |"
+            )
+        lines.append("")
+
+    history = stability.get("history") if isinstance(stability.get("history"), Mapping) else {}
+    trend_rows = stability.get("stability_trend_rows")
+    lines.extend(
+        render_stability_trends_markdown_lines(
+            history=history,
+            trend_rows=trend_rows if isinstance(trend_rows, list) else None,
+        )
+    )
+
+    trend_signals = stability.get("stability_trend_signals")
+    if isinstance(trend_signals, list) and trend_signals:
+        lines.extend(["### Stability Trend Signals", ""])
+        for row in trend_signals:
+            if not isinstance(row, Mapping):
+                continue
+            lines.append(
+                f"- `{row.get('signal')}` "
+                f"bucket=`{row.get('owner_drift_bucket')}` "
+                f"risk=`{row.get('risk_level')}` "
+                f"trend=`{row.get('trend')}` "
+                f"— {row.get('reason')}"
+            )
+        lines.append("")
+
+    stability_hotspots = stability.get("stability_hotspots")
+    hotspot_rows = (
+        stability_hotspots.get("hotspot_rows")
+        if isinstance(stability_hotspots, Mapping)
+        else None
+    )
+    lines.extend(render_stability_hotspots_markdown_lines(hotspot_rows if isinstance(hotspot_rows, list) else None))
+
+    return lines
 
 
 def classifications_for_risk_analysis(

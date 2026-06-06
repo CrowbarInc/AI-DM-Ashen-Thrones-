@@ -10,7 +10,7 @@ import json
 import os
 from collections import Counter
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, Sequence
 
 from game.api import chat
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
@@ -20,7 +20,11 @@ from game.scenario_spine_eval import evaluate_scenario_spine_session, minimal_co
 from game import storage
 
 from tests.helpers.failure_classifier import classify_replay_failure
-from tests.helpers.replay_drift_taxonomy import owner_drift_classifications_from_per_turn_deltas
+from tests.helpers.replay_drift_taxonomy import (
+    owner_drift_buckets_from_long_session_stability_scorecard,
+    owner_drift_classifications_from_per_turn_deltas,
+    summarize_owner_drift_buckets,
+)
 from tests.helpers.golden_replay_projection import (
     MISSING as _MISSING,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
@@ -1225,6 +1229,170 @@ def summarize_long_session_replay_observations(
         "continuity_warning_count": continuity_warning_count,
         "continuity_violation_count": continuity_violation_count,
     }
+
+
+def _resolve_continuity_evaluation(continuity_result: Mapping[str, Any] | None) -> Mapping[str, Any]:
+    if not isinstance(continuity_result, Mapping):
+        return {}
+    evaluation = continuity_result.get("evaluation")
+    if isinstance(evaluation, Mapping):
+        return evaluation
+    return continuity_result
+
+
+def _has_recurring_lineage_fallback_patterns(lineage_summary: Mapping[str, Any]) -> bool:
+    recurring = lineage_summary.get("recurring_events")
+    if isinstance(recurring, list):
+        for event in recurring:
+            if isinstance(event, Mapping) and int(event.get("count") or 0) >= 2:
+                return True
+    by_event_kind = lineage_summary.get("by_event_kind")
+    if isinstance(by_event_kind, Mapping):
+        if int(by_event_kind.get("fallback_selected") or 0) >= 2:
+            return True
+    return False
+
+
+def _classify_long_session_stability_status(
+    *,
+    progressive_degradation_detected: bool,
+    warning_count: int,
+    recurring_patterns: bool,
+) -> str:
+    if progressive_degradation_detected:
+        return "degraded"
+    if warning_count > 0 or recurring_patterns:
+        return "watch"
+    return "stable"
+
+
+def build_long_session_stability_scorecard(
+    *,
+    scenario_id: str,
+    branch_id: str | None = None,
+    source_path: str | None = None,
+    observations: Sequence[Mapping[str, Any]],
+    continuity_result: Mapping[str, Any] | None = None,
+    lineage_summary: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build a report-only long-session stability scorecard from existing replay metrics."""
+    turns = [turn for turn in observations if isinstance(turn, Mapping)]
+    summary = summarize_long_session_replay_observations(turns)
+    fallback_escalation = (
+        summary.get("fallback_escalation_summary")
+        if isinstance(summary.get("fallback_escalation_summary"), Mapping)
+        else {}
+    )
+    resolved_lineage = (
+        dict(lineage_summary)
+        if isinstance(lineage_summary, Mapping)
+        else (
+            dict(summary.get("lineage_summary"))
+            if isinstance(summary.get("lineage_summary"), Mapping)
+            else {}
+        )
+    )
+    continuity_eval = _resolve_continuity_evaluation(continuity_result)
+    session_health = (
+        continuity_eval.get("session_health") if isinstance(continuity_eval.get("session_health"), Mapping) else {}
+    )
+    degradation = (
+        continuity_eval.get("degradation_over_time")
+        if isinstance(continuity_eval.get("degradation_over_time"), Mapping)
+        else {}
+    )
+    progressive_degradation_detected = bool(degradation.get("progressive_degradation_detected"))
+    reason_codes_raw = degradation.get("reason_codes")
+    reason_codes = (
+        [str(code) for code in reason_codes_raw if str(code).strip()]
+        if isinstance(reason_codes_raw, list)
+        else []
+    )
+    escalation_warnings_raw = fallback_escalation.get("escalation_warnings")
+    escalation_warnings = (
+        [str(item) for item in escalation_warnings_raw if str(item).strip()]
+        if isinstance(escalation_warnings_raw, list)
+        else []
+    )
+    recurring_patterns = _has_recurring_lineage_fallback_patterns(resolved_lineage)
+    warning_count = (
+        len(escalation_warnings)
+        + int(summary.get("continuity_warning_count") or 0)
+        + (1 if session_health.get("classification") == "warning" else 0)
+        + len(reason_codes)
+    )
+    stability_status = _classify_long_session_stability_status(
+        progressive_degradation_detected=progressive_degradation_detected,
+        warning_count=warning_count,
+        recurring_patterns=recurring_patterns,
+    )
+    resolved_branch_id = branch_id
+    resolved_source_path = source_path
+    if turns:
+        if not resolved_branch_id:
+            turn_branch = turns[0].get("branch_id")
+            if turn_branch is not None and str(turn_branch).strip():
+                resolved_branch_id = str(turn_branch)
+        if not resolved_source_path:
+            turn_source = turns[0].get("source_path")
+            if turn_source is not None and str(turn_source).strip():
+                resolved_source_path = str(turn_source)
+    event_counts = resolved_lineage.get("by_event_kind")
+    if not isinstance(event_counts, Mapping):
+        event_counts = {}
+    health_classification = session_health.get("classification")
+    scorecard = {
+        "schema_version": 1,
+        "artifact_kind": "long_session_stability_scorecard",
+        "report_only": True,
+        "scenario_id": scenario_id,
+        "branch_id": resolved_branch_id,
+        "source_path": resolved_source_path,
+        "turn_count": int(summary.get("turn_count") or len(turns)),
+        "route_stability": {
+            "route_change_count": int(summary.get("route_change_count") or 0),
+            "route_frequency": dict(summary.get("route_frequency") or {}),
+        },
+        "speaker_stability": {
+            "speaker_change_count": int(summary.get("speaker_change_count") or 0),
+            "speaker_missing_count": int(summary.get("speaker_missing_count") or 0),
+            "speaker_frequency": dict(summary.get("speaker_frequency") or {}),
+        },
+        "fallback_stability": {
+            "fallback_count": int(fallback_escalation.get("fallback_total_count") or 0),
+            "fallback_family_frequency": dict(
+                fallback_escalation.get("fallback_family_counts")
+                if isinstance(fallback_escalation.get("fallback_family_counts"), Mapping)
+                else (summary.get("fallback_frequency") or {})
+            ),
+            "max_fallback_streak": int(fallback_escalation.get("max_fallback_streak") or 0),
+            "late_window_fallback_count": int(fallback_escalation.get("late_window_fallback_count") or 0),
+            "escalation_warnings": escalation_warnings,
+        },
+        "lineage_stability": {
+            "recurring_events": list(resolved_lineage.get("recurring_events") or [])
+            if isinstance(resolved_lineage.get("recurring_events"), list)
+            else [],
+            "event_counts": dict(event_counts),
+        },
+        "degradation": {
+            "progressive_degradation_detected": progressive_degradation_detected,
+            "reason_codes": reason_codes,
+            "health": health_classification,
+            "classification": health_classification,
+            "long_session_band": session_health.get("long_session_band"),
+            "overall_passed": session_health.get("overall_passed"),
+        },
+        "operational_summary": {
+            "actionable": stability_status != "stable",
+            "warning_count": warning_count,
+            "stability_status": stability_status,
+        },
+    }
+    owner_drift_classifications = owner_drift_buckets_from_long_session_stability_scorecard(scorecard)
+    scorecard["owner_drift_classifications"] = owner_drift_classifications
+    scorecard["owner_drift_bucket_counts"] = summarize_owner_drift_buckets(owner_drift_classifications)
+    return scorecard
 
 
 def project_golden_replay_turns_to_scenario_spine_rows(

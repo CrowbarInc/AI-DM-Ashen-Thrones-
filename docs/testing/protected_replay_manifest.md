@@ -200,6 +200,77 @@ Implementation surfaces:
 - Failure dashboard: `Owner Drift Bucket` column + breakdown rollup
 - Rerun scorecard markdown: `Owner Drift Summary` table from `owner_drift_classifications`
 
+## Cycle AT Reporting Addendum
+
+Cycle AT adds **long-session stability scorecards** as advisory/reporting artifacts derived from existing golden replay long-session metrics.
+
+Policy:
+
+- Long-session stability scorecards are **`report_only: true`** and **`advisory_only`** at the artifact boundary.
+- They package route/speaker/fallback/lineage/degradation aggregates already computed by golden replay helpers; they do **not** introduce new protected observation paths or acceptance thresholds.
+- Protected replay pass/fail remains owned by existing golden replay tests and structural invariants only.
+- Generated artifacts under `artifacts/golden_replay/` must not be edited directly.
+
+Opt-in emission:
+
+```powershell
+python -m pytest -m golden_replay -q --write-long-session-stability-scorecard
+```
+
+Environment alias: `ASHEN_WRITE_LONG_SESSION_STABILITY_SCORECARD=1`
+
+Artifact paths:
+
+- `artifacts/golden_replay/long_session_stability_scorecard.json`
+- `artifacts/golden_replay/long_session_stability_scorecard.md`
+
+## Cycle AT6 Stability Governance Closure
+
+Cycle AT6 locks the AT1–AT5 stability reporting ecosystem into a contract-backed,
+maintenance-friendly structure. This is **governance only** — no gameplay changes,
+no replay behavior changes, no new metrics, no ranking logic changes, and no
+acceptance-threshold changes.
+
+Policy:
+
+- Stability reporting remains **`advisory_only: true`** and **`report_only: true`**.
+- Stability scorecards, ownership attribution, trend history, and hotspot ranking
+  do **not** own gameplay behavior, protected replay pass/fail, or acceptance
+  thresholds.
+- Future consumers should extend reporting surfaces through the public contract
+  in `tests/stability_reporting_contract.py` rather than ad hoc field growth.
+
+Schema authority:
+
+| Surface | Contract module | Projection / generation owner |
+|---|---|---|
+| Long-session stability scorecard | `tests/stability_reporting_contract.py` | `tests/helpers/golden_replay.py` |
+| Stability ownership classification rows | `tests/stability_reporting_contract.py` | `tests/helpers/replay_drift_taxonomy.py` |
+| Stability trend rows | `tests/stability_reporting_contract.py` | `tests/helpers/replay_drift_taxonomy.py` |
+| Stability hotspot rows | `tests/stability_reporting_contract.py` | `tests/helpers/replay_drift_taxonomy.py` |
+| Stability ownership risk payload | `tests/stability_reporting_contract.py` | `tests/helpers/replay_drift_risk.py` |
+
+Ownership boundaries:
+
+- **Taxonomy** (`tests/helpers/replay_drift_taxonomy.py`): classification, trend
+  projection, hotspot projection.
+- **Risk reporting** (`tests/helpers/replay_drift_risk.py`): enrichment and risk
+  report presentation hooks only.
+- **Dashboard/reporting** (`tests/helpers/failure_dashboard_report.py`): markdown
+  rendering and artifact emission only.
+- **Golden replay** (`tests/helpers/golden_replay.py`): long-session metric
+  generation only.
+
+Structural validation and drift-prevention tests live in
+`tests/test_stability_reporting_contract.py` and
+`tests/helpers/stability_reporting_sync.py`.
+
+Contract reproduction command:
+
+```powershell
+python -m pytest tests/test_stability_reporting_contract.py -q
+```
+
 ## End-To-End Protected Scenarios
 
 Category: `END_TO_END_PROTECTED`. These cases execute turns through `run_golden_replay(...)` and the chat pipeline with deterministic test setup/model responses.

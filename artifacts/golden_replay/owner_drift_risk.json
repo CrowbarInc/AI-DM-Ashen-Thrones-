@@ -1,84 +1,161 @@
 {
   "advisory_only": true,
-  "recommended_investigation_order": [
-    {
-      "item": "selected_speaker_id",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
+  "recommended_investigation_order": [],
   "report_only": true,
   "risk_by_level": {
     "high": [],
     "low": [],
-    "medium": [
+    "medium": []
+  },
+  "risk_signals": [],
+  "schema_version": 1,
+  "stability_ownership": {
+    "advisory_only": true,
+    "aggregation": {
+      "bucket_frequencies": {
+        "emission_drift": 0,
+        "fallback_drift": 0,
+        "lineage_drift": 0,
+        "ownership_drift": 0,
+        "projection_drift": 0,
+        "replay_drift_unclassified": 0,
+        "route_drift": 0,
+        "semantic_drift": 0,
+        "speaker_drift": 0
+      },
+      "classification_rows": [],
+      "scenario_frequencies": {},
+      "stability_status_counts": {},
+      "total_scorecards": 0
+    },
+    "history": {
+      "bucket_history": [],
+      "sample_count": 0,
+      "signal_history": [],
+      "status_history": [],
+      "trend_summary": {
+        "bucket_trends": {
+          "fallback_drift": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          },
+          "route_drift": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          },
+          "semantic_drift": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          },
+          "speaker_drift": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          }
+        },
+        "comparison_available": false,
+        "current_stability_status": "unknown",
+        "overall_stability_trend": "insufficient_data",
+        "previous_stability_status": null,
+        "status_trends": {
+          "degraded": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          },
+          "stable": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          },
+          "watch": {
+            "current": 0,
+            "delta": 0,
+            "previous": 0,
+            "trend": "insufficient_data"
+          }
+        }
+      }
+    },
+    "report_only": true,
+    "stability_hotspots": {
+      "bucket_rankings": [],
+      "hotspot_rows": [],
+      "scenario_rankings": [],
+      "signal_rankings": []
+    },
+    "stability_risk_signals": [],
+    "stability_trend_rows": [
       {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "selected_speaker_id",
-        "item_kind": "field",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "route_drift",
+        "previous_count": 0,
+        "trend": "insufficient_data"
       },
       {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "speaker_drift",
-        "item_kind": "owner",
-        "longitudinal_frequency": 1,
+        "current_count": 0,
+        "delta": 0,
         "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "fallback_drift",
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "semantic_drift",
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "stability_status:degraded",
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "stability_status:watch",
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "stability_status:stable",
+        "previous_count": 0,
+        "trend": "insufficient_data"
+      },
+      {
+        "current_count": 0,
+        "delta": 0,
+        "owner_drift_bucket": "overall_stability",
+        "previous_count": 0,
+        "trend": "insufficient_data"
       }
-    ]
+    ],
+    "stability_trend_signals": []
   },
-  "risk_signals": [
-    {
-      "category": "",
-      "field_path": "selected_speaker_id",
-      "field_source": "protected",
-      "item": "selected_speaker_id",
-      "item_kind": "field",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
-    },
-    {
-      "category": "",
-      "field_path": "selected_speaker_id",
-      "field_source": "protected",
-      "item": "speaker_drift",
-      "item_kind": "owner",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
-    }
-  ],
-  "schema_version": 1,
-  "top_risk_fields": [
-    {
-      "item": "selected_speaker_id",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
+  "top_risk_fields": [],
   "top_risk_investigation_targets": [],
-  "top_risk_owners": [
-    {
-      "item": "speaker_drift",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "total_signals": 2
+  "top_risk_owners": [],
+  "total_signals": 0
 }
