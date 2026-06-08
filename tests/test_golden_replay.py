@@ -1,17 +1,12 @@
 from __future__ import annotations
 
-import json
-
 import pytest
 
 from game import storage
 from game.api import chat
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
-    OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    SEALED_FALLBACK_OWNER_SEALED_GATE,
-    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     opening_fallback_owner_bucket_from_meta,
 )
 from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
@@ -34,7 +29,6 @@ from tests.helpers.golden_replay import (
     assert_golden_turn_observation,
     assert_protected_golden_turn_observation,
     build_long_session_stability_scorecard,
-    classify_golden_drift,
     compare_golden_replay_reruns,
     evaluate_golden_replay_continuity_drift,
     final_text_has_scaffold_leakage,
@@ -43,27 +37,12 @@ from tests.helpers.golden_replay import (
     frontier_gate_branch_turn_ids,
     load_frontier_gate_long_session_spine,
     protected_no_scaffold_expectation,
-    protected_route_expectation,
     protected_social_structural_base,
     protected_structural_expectation,
     protected_unavailable_expectation,
-    render_golden_replay_markdown_report,
     render_long_session_replay_summary_markdown,
     run_golden_replay,
     summarize_long_session_replay_observations,
-)
-from tests.helpers.golden_replay_projection import (
-    lookup_observation_path,
-    project_replay_fallback_family_from_fem,
-    dual_fallback_family_replay_precedence_surface,
-    REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS,
-    project_turn_observation,
-    protected_field_paths,
-    protected_observation_drift_bucket,
-    protected_observation_field_paths,
-    protected_observation_field_registry,
-    protected_observation_extraction_registry,
-    protected_path_representation_errors,
 )
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
@@ -72,23 +51,13 @@ from tests.helpers.transcript_runner import (
     write_default_bootstrap_scenes,
 )
 from tests.helpers.failure_dashboard_report import (
-    clear_recorded_failure_dashboard_rows,
     clear_recorded_protected_replay_failures,
-    clear_recorded_rerun_drift_scorecards,
     recorded_protected_replay_failure_rows,
-    record_rerun_drift_scorecard,
-    recorded_rerun_drift_scorecards,
-    recorded_runtime_lineage_events,
     render_long_session_stability_scorecard_markdown,
-    render_rerun_drift_scorecard_markdown,
     write_long_session_stability_scorecard_artifacts,
-    write_rerun_drift_scorecard_artifacts,
-    write_rerun_drift_scorecard_artifacts_if_requested,
     write_protected_replay_failure_report_if_present,
 )
 from tests.helpers.opening_fallback_evidence import (
-    fail_closed_opening_fem_meta,
-    successful_opening_fem_meta,
     successful_opening_observed_fields,
 )
 from tests.helpers.dialogue_social_plan import (
@@ -103,13 +72,9 @@ from tests.helpers.gate_equivalence_monkeypatch import (
 from tests.helpers.opening_fallback_evidence import opening_gm_output
 from tests.helpers.strict_social_harness import runner_strict_bundle
 from tests.helpers.golden_replay_fixtures import (
-    fem_payload,
     gm_response,
     golden_replay_chat_stubs,
-    minimal_gm_output_payload,
-    minimal_turn_payload,
     observed_turn_from_gate_output,
-    project_synthetic_turn,
     seed_frontier_gate_world,
     seed_investigator_runner_world,
     seed_runner_continuity_world,
@@ -122,424 +87,10 @@ from tests.helpers.golden_replay_fixtures import (
 pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
 # Ownership note:
-# Golden replay owns replay observation and projection contracts. Turn observation
-# projection is centralized in ``tests.helpers.golden_replay_projection`` (Cycle T1).
+# Golden replay owns protected replay orchestration and live replay bridge checks.
+# Synthetic projection contracts live in ``tests.test_golden_replay_projection``.
 # Repeated route/speaker/fallback/final-emission fields are intentional diagnostic
 # locks, not runtime ownership of those subsystems.
-
-
-def test_golden_replay_projection_adapter_wires_observed_turn():
-    turn_payload = minimal_turn_payload(
-        scenario_id="projection_adapter",
-        gm_text="Rain falls on the gate road.",
-        fem_meta=fem_payload(
-            response_type_required="neutral_narration",
-            final_emitted_source="upstream_prepared_emission",
-        ),
-    )
-    via_adapter = project_turn_observation(turn_payload)
-    via_wrapper = _observed_turn(
-        scenario_id=str(turn_payload["scenario_id"]),
-        snap=dict(turn_payload["snap"]),
-        payload=dict(turn_payload["payload"]),
-    )
-    assert via_adapter == via_wrapper
-    paths = protected_field_paths()
-    registry_paths = protected_observation_field_paths()
-    assert protected_field_paths() == registry_paths
-    assert len(paths) == len(set(paths))
-    assert protected_observation_drift_bucket("fallback_family") == "structural_drift"
-    assert protected_observation_drift_bucket("scaffold_leakage") == "semantic_drift"
-    assert "final_emitted_source" in paths
-    assert "scaffold_leakage" in paths
-    assert "route_kind" in paths
-    assert paths == tuple(sorted(set(paths)))
-
-
-def test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_used() -> None:
-    """Read-side ``fallback_family`` prefers diegetic taxonomy when both FEM fields are present."""
-    fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-    }
-    assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
-
-    turn = project_turn_observation(
-        minimal_turn_payload(
-            scenario_id="dual_family_diegetic_first",
-            gm_text="Rain on the gate road.",
-            fem_meta=fem,
-        )
-    )
-    assert turn["fallback_family"] == "scene_opening"
-    assert "fallback_family_used" in turn["fem_raw_keys"]
-    assert "realization_fallback_family" in turn["fem_raw_keys"]
-
-
-def test_golden_replay_dual_family_projection_falls_back_to_realization_when_diegetic_absent() -> None:
-    """Read-side projection uses governed provenance only when diegetic field is absent."""
-    fem = {"realization_fallback_family": "upstream_prepared_emission"}
-    assert project_replay_fallback_family_from_fem(fem) == "upstream_prepared_emission"
-
-    turn = project_turn_observation(
-        minimal_turn_payload(
-            scenario_id="dual_family_realization_fallback",
-            gm_text="The notice board creaks.",
-            fem_meta=fem,
-        )
-    )
-    assert turn["fallback_family"] == "upstream_prepared_emission"
-
-
-def test_golden_replay_dual_family_projection_returns_none_when_both_absent() -> None:
-    """Read-side projector returns None when neither FEM family field is present."""
-    assert project_replay_fallback_family_from_fem({}) is None
-    assert project_replay_fallback_family_from_fem({"final_emitted_source": "generated_candidate"}) is None
-
-    turn = project_turn_observation(
-        minimal_turn_payload(
-            scenario_id="dual_family_both_absent",
-            gm_text="The lane stays quiet.",
-            fem_meta={"final_emitted_source": "generated_candidate"},
-        )
-    )
-    assert turn["fallback_family"] is None
-    assert "fallback_family" in turn["unavailable"]
-
-
-def test_golden_replay_dual_family_precedence_surface_documents_read_side_rule() -> None:
-    surface = dual_fallback_family_replay_precedence_surface()
-    assert surface["prefer_field"] == "fallback_family_used"
-    assert surface["fallback_field"] == "realization_fallback_family"
-    assert surface["precedence_keys"] == list(REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
-    assert surface["read_side_only"] is True
-    assert project_replay_fallback_family_from_fem(
-        {"fallback_family_used": "social", "realization_fallback_family": "gate_terminal_repair"}
-    ) == "social"
-
-
-def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() -> None:
-    """Projection must not collapse or rewrite runtime FEM dual-family stamps."""
-    raw_fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-        "final_emitted_source": "opening_deterministic_fallback",
-    }
-    payload = minimal_gm_output_payload(fem_meta=raw_fem)
-    project_turn_observation(
-        minimal_turn_payload(
-            scenario_id="dual_family_no_rewrite",
-            gm_text="Torchlight on wet stone.",
-            payload=payload,
-        )
-    )
-    stored = payload["gm_output"]["_final_emission_meta"]
-    assert stored["fallback_family_used"] == "scene_opening"
-    assert stored["realization_fallback_family"] == "upstream_prepared_emission"
-
-
-def test_observed_turn_from_gate_output_projects_direct_seam_fields() -> None:
-    """Direct-seam helper uses canonical projection and supports extra assertion fields."""
-    raw_fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-        "final_emitted_source": "opening_deterministic_fallback",
-    }
-    gm_output = {
-        "player_facing_text": "Rain on the gate.",
-        "_final_emission_meta": dict(raw_fem),
-    }
-    turn = observed_turn_from_gate_output(
-        scenario_id="direct_seam_helper_probe",
-        gm_output=gm_output,
-        extra_fields={"dialogue_plan_valid": True},
-    )
-    assert turn["final_text"] == "Rain on the gate."
-    assert turn["final_emitted_source"] == "opening_deterministic_fallback"
-    assert turn["fallback_family"] == "scene_opening"
-    assert "fallback_family_used" in turn["fem_raw_keys"]
-    assert "realization_fallback_family" in turn["fem_raw_keys"]
-    assert turn["dialogue_plan_valid"] is True
-    stored = gm_output["_final_emission_meta"]
-    assert stored["fallback_family_used"] == "scene_opening"
-    assert stored["realization_fallback_family"] == "upstream_prepared_emission"
-
-
-def test_protected_replay_manifest_matches_observation_registry():
-    import importlib.util
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[1]
-    spec = importlib.util.spec_from_file_location(
-        "refresh_protected_replay_manifest",
-        root / "tools" / "refresh_protected_replay_manifest.py",
-    )
-    assert spec is not None and spec.loader is not None
-    refresh_mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(refresh_mod)
-
-    manifest_text = refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8")
-    expected = refresh_mod.render_generated_section()
-    current = refresh_mod.extract_generated_section(manifest_text)
-
-    assert current is not None, "protected replay manifest is missing generated protected_field_paths section"
-    assert current == expected, (
-        "protected replay manifest generated section is out of date; "
-        "run: python tools/refresh_protected_replay_manifest.py --write"
-    )
-    assert refresh_mod.manifest_section_is_current(manifest_text)
-
-    paths = tuple(sorted({field.path for field in protected_observation_field_registry()}))
-    assert str(len(paths)) in current
-    for field in protected_observation_field_registry():
-        assert f"| `{field.path}` | `{field.drift_bucket}` |" in current
-
-
-# Cycle AK5 — replay projection schema safety locks (pre-AK1 refactor guards).
-
-
-def test_ak5_every_protected_path_is_projected_or_marked_unavailable():
-    """Each protected registry path must appear on the observed turn or in unavailable."""
-    sparse = project_turn_observation(
-        minimal_turn_payload(
-            scenario_id="ak5_sparse_projection",
-            gm_text="Rain on the gate road.",
-        )
-    )
-    assert protected_path_representation_errors(sparse) == []
-
-    rich_payload = minimal_gm_output_payload(
-        fem_meta=fem_payload(
-            final_emitted_source="upstream_prepared_emission",
-            response_type_required="dialogue_response",
-            response_type_repair_used=True,
-            response_type_repair_kind="dialogue_minimal_repair",
-            fallback_temporal_frame="present",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
-            fallback_family_used="social",
-            realization_fallback_family="upstream_prepared_emission",
-            opening_recovered_via_fallback=False,
-            opening_fallback_authorship_source="upstream_prepared_opening_fallback",
-            sealed_fallback_owner_bucket="unknown-none",
-            visibility_fallback_owner_bucket="unknown-none",
-        ),
-        metadata={
-            "sanitizer_trace": {
-                "sanitizer_lineage_mode": "strip_only",
-                "sanitizer_empty_fallback_used": True,
-                "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                "sanitizer_empty_fallback_owner": "output_sanitizer",
-                "sanitizer_lineage_changed_count": 1,
-                "sanitizer_lineage_dropped_count": 0,
-                "sanitizer_lineage_empty_fallback_used": True,
-                "sanitizer_lineage_legacy_rewrite_active": False,
-                "sanitizer_strict_social_fallback_used": False,
-            }
-        },
-    )
-    rich_payload["sanitizer_debug"] = [
-        {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Planner scaffold."},
-    ]
-    rich_payload["debug_traces"] = [
-        {
-            "canonical_entry": {
-                "target_actor_id": "runner",
-                "target_source": "social",
-                "reason": "direct_vocative",
-            },
-            "turn_trace": {
-                "social_contract_trace": {"route_selected": "dialogue"},
-            },
-        }
-    ]
-    rich = project_synthetic_turn(
-        scenario_id="ak5_rich_projection",
-        gm_text="The runner says the patrol moved east.",
-        player_text="Ask the runner.",
-        resolution={"kind": "question", "social": {"npc_id": "runner"}},
-        payload=rich_payload,
-    )
-    assert protected_path_representation_errors(rich) == []
-
-
-def test_ak5_protected_observation_field_paths_are_sorted_unique():
-    paths = protected_observation_field_paths()
-    assert paths == tuple(sorted(set(paths)))
-    assert len(paths) == len(protected_observation_field_registry())
-
-
-def test_ao1_protected_extraction_registry_matches_observation_registry():
-    registry_paths = {field.path for field in protected_observation_field_registry()}
-    extraction_paths = set(protected_observation_extraction_registry())
-    assert extraction_paths == registry_paths
-    assert len(extraction_paths) == 41
-
-
-def test_ak5_manifest_generated_section_matches_registry():
-    import importlib.util
-    from pathlib import Path
-
-    root = Path(__file__).resolve().parents[1]
-    spec = importlib.util.spec_from_file_location(
-        "refresh_protected_replay_manifest",
-        root / "tools" / "refresh_protected_replay_manifest.py",
-    )
-    assert spec is not None and spec.loader is not None
-    refresh_mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(refresh_mod)
-
-    registry_paths = {field.path: field.drift_bucket for field in protected_observation_field_registry()}
-    manifest_paths = refresh_mod._registry_fields_by_path()
-
-    assert set(registry_paths) == set(manifest_paths)
-    for path, bucket in registry_paths.items():
-        assert manifest_paths[path] == bucket
-    assert refresh_mod.manifest_section_is_current(refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8"))
-
-
-def test_ak5_synthetic_turn_exercises_fem_backed_protected_fields():
-    observed = project_synthetic_turn(
-        scenario_id="ak5_fem_backed_projection",
-        gm_text="The runner confirms the patrol route.",
-        resolution={"kind": "question"},
-        fem_meta=fem_payload(
-            final_emitted_source="upstream_prepared_emission",
-            response_type_required="dialogue_response",
-            response_type_repair_used=True,
-            response_type_repair_kind="dialogue_minimal_repair",
-            fallback_temporal_frame="present",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
-        ),
-    )
-
-    assert observed["final_emitted_source"] == "upstream_prepared_emission"
-    assert observed["response_type_required"] == "dialogue_response"
-    assert observed["response_type_repair_used"] is True
-    assert observed["response_type_repair_kind"] == "dialogue_minimal_repair"
-    assert observed["fallback_temporal_frame"] == "present"
-    assert observed["upstream_prepared_emission_used"] is True
-    assert observed["upstream_prepared_emission_valid"] is True
-
-
-def test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields():
-    observed = project_synthetic_turn(
-        scenario_id="ak5_sanitizer_backed_projection",
-        gm_text="For a breath, the scene stays still.",
-        resolution={"kind": "observe"},
-        payload={
-            **minimal_gm_output_payload(
-                fem_meta=fem_payload(final_emitted_source="generated_candidate"),
-                metadata={
-                    "sanitizer_trace": {
-                        "sanitizer_lineage_mode": "strip_only",
-                        "sanitizer_empty_fallback_used": True,
-                        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                        "sanitizer_empty_fallback_owner": "output_sanitizer",
-                        "sanitizer_lineage_changed_count": 2,
-                        "sanitizer_lineage_dropped_count": 1,
-                    }
-                },
-            ),
-            "sanitizer_debug": [
-                {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Planner scaffold."},
-                {"event": "strip_only_dropped_non_diegetic", "sentence": "Validator scaffold."},
-            ],
-        },
-    )
-
-    assert observed["sanitizer_empty_fallback_used"] is True
-    assert observed["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
-    assert observed["sanitizer_empty_fallback_owner"] == "output_sanitizer"
-    assert observed["sanitizer_lineage_mode"] == "strip_only"
-    assert observed["sanitizer_lineage_changed_count"] == 2
-    assert observed["sanitizer_lineage_dropped_count"] == 1
-
-
-def test_ak5_complex_projection_contracts_remain_locked():
-    """Dual fallback-family, dotted trace lookup, and semantic drift bucket stay explicit."""
-    fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-    }
-    assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
-
-    observed = project_synthetic_turn(
-        scenario_id="ak5_complex_projection",
-        gm_text="planner scaffold leaked into final text",
-        payload={
-            **minimal_gm_output_payload(fem_meta=fem_payload(**fem)),
-            "debug_traces": [
-                {
-                    "canonical_entry": {
-                        "target_actor_id": "runner",
-                        "target_source": "social",
-                        "reason": "direct",
-                    },
-                    "turn_trace": {
-                        "social_contract_trace": {"route_selected": "dialogue"},
-                    },
-                }
-            ],
-        },
-    )
-
-    assert observed["fallback_family"] == "scene_opening"
-    assert lookup_observation_path(observed, "trace.canonical_entry.target_actor_id") == "runner"
-    assert lookup_observation_path(observed, "trace.canonical_entry.target_source") == "social"
-    assert lookup_observation_path(observed, "trace.canonical_entry.reason") == "direct"
-    assert lookup_observation_path(observed, "trace.social_contract_trace.route_selected") == "dialogue"
-    assert observed["scaffold_leakage"] is True
-    assert protected_observation_drift_bucket("scaffold_leakage") == "semantic_drift"
-    assert protected_observation_drift_bucket("fallback_family") == "structural_drift"
-
-
-def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages():
-    turn = {
-        "final_text": 'Tavern Runner says, "No names."',
-        "resolution_kind": "question",
-        "route_kind": "dialogue",
-        "selected_speaker_id": "runner",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "scaffold_leakage": False,
-        "unavailable": ["fallback_family"],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
-
-    assert_golden_turn_observation(
-        turn,
-        {
-            "require_present": ["final_text", "trace.canonical_entry.target_actor_id"],
-            "allow_unavailable": ["fallback_family"],
-            "equals": {"trace.canonical_entry.target_actor_id": "runner"},
-            "one_of": {"trace.social_contract_trace.route_selected": ["dialogue", "social"]},
-            "not_equals": {"final_emitted_source": "global_scene_fallback"},
-            "text_must_include": ["Tavern Runner"],
-            "text_must_not_include": ["planner"],
-            "scaffold_leakage": False,
-        },
-        debug_context="synthetic debug context",
-    )
-
-    with pytest.raises(AssertionError) as exc:
-        assert_golden_turn_observation(
-            turn,
-            {
-                "allow_unavailable": ["fallback_family"],
-                "equals": {"trace.canonical_entry.target_actor_id": "gate_guard"},
-            },
-            debug_context="synthetic debug context",
-        )
-    message = str(exc.value)
-    assert "trace.canonical_entry.target_actor_id" in message
-    assert "gate_guard" in message
-    assert "runner" in message
-    assert "synthetic debug context" in message
 
 
 def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
@@ -594,149 +145,8 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         assert rows[0]["severity"] == "critical"
         assert rows[0]["primary_owner"] == "speaker"
         assert rows[0]["investigate_first"] == "game/speaker_contract_enforcement.py"
-
-        written = write_protected_replay_failure_report_if_present(
-            path=report_path,
-            command_used="python -m pytest -m golden_replay -q",
-            generated_at="2026-05-26T00:00:00Z",
-        )
-        assert written == report_path
-        report = report_path.read_text(encoding="utf-8")
-        assert "# Protected Replay Failure Report" in report
-        assert "synthetic_protected_bridge" in report
-        assert "selected_speaker_id: exact value mismatch" in report
-        assert "## Failure Locator" in report
-        assert "| Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |" in report
-        assert "data/validation/scenario_spines/synthetic_fixture.json" in report
-        assert "synthetic_branch" in report
-        assert "synthetic_turn_01" in report
-        assert "structural_drift" in report
-        assert "game/speaker_contract_enforcement.py" in report
-        assert "speaker_drift" in report
-        assert "## Owner Drift Breakdown" in report
-        assert "| Owner Drift Bucket |" in report
-        assert "## Sanitizer Summary" in report
-        assert "## Runtime Lineage Summary" in report
-        assert "### Focused failing tests" in report
-        assert "### Protected replay lane" in report
-        assert "python -m pytest -m golden_replay -q --tb=short" in report
-
-        clear_recorded_protected_replay_failures()
-        no_identity_turn = {
-            key: value
-            for key, value in turn.items()
-            if key not in {"source_path", "branch_id", "turn_id"}
-        }
-        with pytest.raises(AssertionError):
-            assert_protected_golden_turn_observation(
-                no_identity_turn,
-                {"equals": {"selected_speaker_id": "runner"}},
-                scenario_id="synthetic_inline_bridge",
-                debug_context="synthetic inline reporting context",
-            )
-        no_identity_report_path = tmp_path / "replay_failure_report_no_identity.md"
-        written = write_protected_replay_failure_report_if_present(
-            path=no_identity_report_path,
-            command_used="python -m pytest -m golden_replay -q",
-            generated_at="2026-05-26T00:00:00Z",
-        )
-        assert written == no_identity_report_path
-        no_identity_report = no_identity_report_path.read_text(encoding="utf-8")
-        assert "synthetic_inline_bridge" in no_identity_report
-        assert "## Failure Locator" in no_identity_report
-        assert (
-            "| synthetic_inline_bridge | none | none | 0 | none | selected_speaker_id: exact value mismatch |"
-            in no_identity_report
-        )
-        assert "python -m pytest -m golden_replay -q --tb=short" in no_identity_report
     finally:
         clear_recorded_protected_replay_failures()
-
-
-def test_golden_drift_classifier_buckets_exact_structural_and_semantic_drift():
-    observed = {
-        "final_text": "Planner: the guard shrugs.",
-        "route_kind": "action",
-        "selected_speaker_id": "guard",
-        "final_emitted_source": "global_scene_fallback",
-        "fallback_family": "gate_terminal_repair",
-        "scaffold_leakage": True,
-        "unavailable": [],
-        "trace": {"canonical_entry": {"target_actor_id": "guard"}},
-    }
-    expectation = {
-        "exact_text": "The runner answers.",
-        "equals": {
-            "route_kind": "dialogue",
-            "selected_speaker_id": "runner",
-            "trace.canonical_entry.target_actor_id": "runner",
-        },
-        "not_equals": {"final_emitted_source": "global_scene_fallback"},
-        "text_must_not_include": ["Planner"],
-        "scaffold_leakage": False,
-    }
-
-    drift = classify_golden_drift(observed, expectation)
-
-    assert drift["status"] == "fail"
-    assert drift["summary"]["exact_drift"] == 1
-    assert drift["summary"]["structural_drift"] == 4
-    assert drift["summary"]["semantic_drift"] == 2
-
-
-def test_golden_drift_classification_ignores_runtime_lineage_diagnostics():
-    observed = {
-        "scenario_id": "lineage_diagnostic_only",
-        "turn_index": 0,
-        "final_text": "The runner answers.",
-        "route_kind": "dialogue",
-        "unavailable": [],
-    }
-    expectation = {"equals": {"route_kind": "dialogue"}}
-    baseline = classify_golden_drift(observed, expectation)
-    with_lineage = classify_golden_drift(
-        {
-            **observed,
-            "runtime_lineage_events": [
-                make_runtime_lineage_event(
-                    event_kind="fallback_selected",
-                    stage="gate",
-                    owner="game.final_emission_gate",
-                    fallback_kind="scene_opening",
-                )
-            ],
-        },
-        expectation,
-    )
-    assert with_lineage == baseline
-
-
-def test_golden_drift_opt_in_dashboard_records_lineage_outside_classification_rows(monkeypatch):
-    event = make_runtime_lineage_event(
-        event_kind="gate_outcome",
-        stage="gate",
-        owner="game.final_emission_gate",
-        gate_path="accept_unchanged",
-    )
-    clear_recorded_failure_dashboard_rows()
-    monkeypatch.setenv("ASHEN_WRITE_FAILURE_DASHBOARD", "1")
-    try:
-        drift = classify_golden_drift(
-            {
-                "scenario_id": "recorded_lineage",
-                "turn_index": 0,
-                "final_text": "The runner answers.",
-                "route_kind": "dialogue",
-                "unavailable": [],
-                "runtime_lineage_events": [event],
-            },
-            {"equals": {"route_kind": "dialogue"}},
-        )
-        assert drift["status"] == "pass"
-        assert drift["failure_classifications"] == []
-        assert recorded_runtime_lineage_events() == [event]
-    finally:
-        clear_recorded_failure_dashboard_rows()
 
 
 def _synthetic_rerun_turn(
@@ -894,29 +304,6 @@ def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
     assert scorecard["per_turn_deltas"] == []
 
 
-def test_golden_observed_turn_projects_response_delta_metadata():
-    observed = project_synthetic_turn(
-        scenario_id="response_delta_projection",
-        gm_text="The runner adds a new location lead.",
-        fem_meta=fem_payload(
-            response_delta_checked=True,
-            response_delta_failed=True,
-            response_delta_repaired=False,
-            response_delta_kind_detected="new_actionable_lead",
-            response_delta_echo_overlap_ratio=0.2,
-            response_delta_trigger_source="strict_social_answer_pressure",
-        ),
-    )
-
-    assert observed["response_delta_checked"] is True
-    assert observed["response_delta_failed"] is True
-    assert observed["response_delta_repaired"] is False
-    assert observed["response_delta_kind"] == "new_actionable_lead"
-    assert observed["response_delta_echo_overlap_ratio"] == 0.2
-    assert observed["response_delta_echo_overlap_band"] == "low"
-    assert observed["response_delta_trigger_source"] == "strict_social_answer_pressure"
-
-
 def test_long_session_summary_counts_response_delta_metadata():
     turns = [
         _synthetic_rerun_turn(
@@ -979,156 +366,6 @@ def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
         "previous": False,
         "current": True,
     }
-
-
-def _synthetic_rerun_scorecard() -> dict:
-    event = make_runtime_lineage_event(
-        event_kind="fallback_selected",
-        stage="gate",
-        owner="game.final_emission_gate",
-        fallback_kind="sealed_or_global_replacement",
-    )
-    return compare_golden_replay_reruns(
-        [_synthetic_rerun_turn(final_text="The runner answers.")],
-        [
-            _synthetic_rerun_turn(
-                selected_speaker_id="guard",
-                route_kind="action",
-                fallback_family="gate_terminal_repair",
-                fallback_owner="sealed_gate",
-                final_text="The guard answers.",
-                runtime_lineage_events=[event],
-            )
-        ],
-    )
-
-
-def test_rerun_drift_scorecard_markdown_summarizes_fabricated_scorecard():
-    scorecard = _synthetic_rerun_scorecard()
-
-    markdown = render_rerun_drift_scorecard_markdown(
-        scorecard,
-        generated_at="2026-05-30T00:00:00Z",
-        command_used="pytest synthetic",
-    )
-
-    assert "# Golden Rerun Drift Scorecard" in markdown
-    assert "- Total turns compared: `1`" in markdown
-    assert "- Speaker deltas: `1`" in markdown
-    assert "- Route deltas: `1`" in markdown
-    assert "- Fallback deltas: `1`" in markdown
-    assert "- Text fingerprint deltas: `1`" in markdown
-    assert "- Runtime-lineage deltas: `1`" in markdown
-    assert "## Owner Drift Summary" in markdown
-    assert "| `speaker_drift` |" in markdown
-    assert "## Semantic Delta Frequency" in markdown
-    assert "- Semantic delta frequency deltas: `0`" in markdown
-    assert "| Turn | Previous Turn ID | Current Turn ID | Drift Fields | Details |" in markdown
-    assert "text_hash" in markdown
-
-
-def test_rerun_drift_scorecard_writer_creates_json_and_markdown(tmp_path):
-    scorecard = _synthetic_rerun_scorecard()
-    json_path = tmp_path / "rerun_drift_scorecard.json"
-    markdown_path = tmp_path / "rerun_drift_scorecard.md"
-
-    written_json, written_markdown = write_rerun_drift_scorecard_artifacts(
-        scorecard,
-        json_path=json_path,
-        markdown_path=markdown_path,
-        generated_at="2026-05-30T00:00:00Z",
-        command_used="pytest synthetic",
-    )
-
-    assert written_json == json_path
-    assert written_markdown == markdown_path
-    assert json.loads(json_path.read_text(encoding="utf-8")) == scorecard
-    markdown = markdown_path.read_text(encoding="utf-8")
-    assert "Golden Rerun Drift Scorecard" in markdown
-    assert "Speaker deltas: `1`" in markdown
-
-
-def test_rerun_drift_scorecard_writer_is_opt_in_by_default(tmp_path):
-    scorecard = _synthetic_rerun_scorecard()
-    json_path = tmp_path / "default_off.json"
-    markdown_path = tmp_path / "default_off.md"
-
-    written = write_rerun_drift_scorecard_artifacts_if_requested(
-        scorecard,
-        json_path=json_path,
-        markdown_path=markdown_path,
-        env={},
-    )
-
-    assert written is None
-    assert not json_path.exists()
-    assert not markdown_path.exists()
-
-
-def test_rerun_drift_scorecard_writer_handles_missing_comparison(tmp_path):
-    json_path = tmp_path / "no_comparison.json"
-    markdown_path = tmp_path / "no_comparison.md"
-
-    written_json, written_markdown = write_rerun_drift_scorecard_artifacts(
-        None,
-        json_path=json_path,
-        markdown_path=markdown_path,
-        generated_at="2026-05-30T00:00:00Z",
-        command_used="pytest synthetic",
-    )
-
-    assert written_json == json_path
-    assert written_markdown == markdown_path
-    payload = json.loads(json_path.read_text(encoding="utf-8"))
-    assert payload["comparison_available"] is False
-    assert "No rerun comparison available" in markdown_path.read_text(encoding="utf-8")
-
-
-def test_rerun_drift_scorecard_recording_does_not_change_failure_dashboard_behavior(tmp_path):
-    scorecard = _synthetic_rerun_scorecard()
-    clear_recorded_rerun_drift_scorecards()
-    clear_recorded_protected_replay_failures()
-    try:
-        record_rerun_drift_scorecard(scorecard)
-
-        assert recorded_rerun_drift_scorecards() == [scorecard]
-        assert write_protected_replay_failure_report_if_present(path=tmp_path / "failure_report.md") is None
-    finally:
-        clear_recorded_rerun_drift_scorecards()
-        clear_recorded_protected_replay_failures()
-
-
-def test_golden_markdown_report_renderer_is_compact_and_deterministic():
-    rows = [
-        {
-            "scenario_id": "zeta",
-            "mode": "end-to-end",
-            "turn_count": 1,
-            "status": "pass",
-            "drift": {"status": "pass", "summary": {"exact_drift": 0, "structural_drift": 0, "semantic_drift": 0}},
-            "final_emitted_source": ["generated_candidate"],
-            "fallback_family": [],
-            "unavailable_fields": ["fallback_family"],
-            "required_invariants": ["speaker lock"],
-        },
-        {
-            "scenario_id": "alpha",
-            "mode": "schema-smoke",
-            "turn_count": 3,
-            "status": "pass",
-            "drift_summary": "exact=0, structural=0, semantic=0",
-            "final_emitted_source": ["retry_output"],
-            "fallback_family": ["none"],
-            "unavailable_fields": [],
-            "required_invariants": ["branch ids"],
-        },
-    ]
-
-    report = render_golden_replay_markdown_report(rows, title="Synthetic Report")
-
-    assert report.index("| alpha |") < report.index("| zeta |")
-    assert "Exact prose comparison is opt-in" in report
-    assert "| Scenario | Mode | Turns | Status | Drift | Classifications |" in report
 
 
 def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
@@ -1510,99 +747,6 @@ def test_stability_ownership_projection_degraded_scorecard_surfaces_rows():
     assert any(row["owner_drift_bucket"] == "semantic_drift" for row in rows)
 
 
-# Opening fallback projection fields are repeated here as replay contract locks;
-# the owner-bucket mapper itself is owned by tests/test_opening_fallback_owner_bucket.py.
-def test_golden_observed_turn_projects_canonical_upstream_prepared_opening_owner_bucket():
-    observed = project_synthetic_turn(
-        scenario_id="synthetic_opening_owner",
-        gm_text="The road opens.",
-        fem_meta=successful_opening_fem_meta(
-            response_type_repair_kind="opening_deterministic_fallback",
-            fallback_temporal_frame="first_impression",
-        ),
-    )
-
-    assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-
-
-def test_golden_observed_turn_projects_runtime_lineage_and_prefers_existing_events():
-    existing = make_runtime_lineage_event(
-        event_kind="speaker_repair",
-        stage="gate",
-        owner="game.speaker_contract_enforcement",
-        source="provided_projection",
-        repair_kind="local_rebind",
-    )
-    observed = project_synthetic_turn(
-        scenario_id="existing_lineage_projection",
-        gm_text="The road opens.",
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(
-                final_emitted_source="opening_deterministic_fallback",
-                opening_recovered_via_fallback=True,
-                fallback_family_used="scene_opening",
-            ),
-            metadata={"observability_bundle": {"fem_runtime_lineage_events": [existing]}},
-        ),
-    )
-    assert observed["runtime_lineage_events"] == [existing]
-
-    from_fem = project_synthetic_turn(
-        scenario_id="fem_lineage_projection",
-        gm_text="The road opens.",
-        fem_meta=successful_opening_fem_meta(),
-    )
-    opening_selected = next(
-        event for event in from_fem["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
-    )
-    assert opening_selected["fallback_kind"] == "scene_opening"
-    assert opening_selected["owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_content_owner"] == "game.opening_deterministic_fallback"
-    assert opening_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
-    assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-    debug = format_golden_replay_debug(
-        {"scenario_id": from_fem["scenario_id"], "turn_count": 1, "turns": [from_fem]}
-    )
-    assert "'fallback_authorship_source': 'upstream_prepared_opening_fallback'" in debug
-    assert "'fallback_owner_bucket': 'upstream-prepared'" in debug
-
-    missing = project_synthetic_turn(
-        scenario_id="missing_lineage_projection",
-        gm_text="The road remains quiet.",
-        payload=minimal_gm_output_payload(player_facing_text="The road remains quiet."),
-    )
-    assert missing["runtime_lineage_events"] == []
-
-
-def test_golden_observed_turn_projects_neutral_speaker_grounding_replacement_family():
-    observed = project_synthetic_turn(
-        scenario_id="neutral_grounding_family_projection",
-        gm_text="The moment passes without anyone stepping forward to own that thread.",
-        player_text="I force the side door.",
-        fem_meta=fem_payload(
-            final_route="replaced",
-            final_emitted_source=NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-            response_type_repair_used=False,
-        ),
-    )
-
-    assert observed["fallback_family"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
-    assert "fallback_family" not in observed["unavailable"]
-    fallback_selected = [
-        event
-        for event in observed["runtime_lineage_events"]
-        if event.get("event_kind") == "fallback_selected"
-    ]
-    assert fallback_selected[0]["fallback_kind"] == "sealed_unknown_replacement"
-
-    summary = summarize_long_session_replay_observations([observed])
-    fallback_escalation = summary["fallback_escalation_summary"]
-    assert summary["fallback_turn_count"] == 1
-    assert fallback_escalation["fallback_selected_without_family_count"] == 0
-    assert "fallback_selected_without_family_recurrence" not in fallback_escalation["escalation_warnings"]
-
-
 def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_optional():
     turns = [
         {
@@ -1649,408 +793,6 @@ def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_op
     assert fallback_escalation["max_blocking_fallback_streak"] == 0
     assert "fallback_streak_gt_1" not in fallback_escalation["escalation_warnings"]
     assert "unavailable_to_fallback_coupling_recurrence" not in fallback_escalation["escalation_warnings"]
-
-
-def test_golden_observed_turn_projects_fail_closed_sealed_gate_opening_owner_bucket():
-    observed = project_synthetic_turn(
-        scenario_id="synthetic_opening_owner_fail_closed",
-        gm_text="[opening_fallback_failed_closed:no_curated_facts]",
-        fem_meta=fail_closed_opening_fem_meta(
-            opening_recovered_via_fallback=True,
-            fallback_family_used="scene_opening",
-        ),
-    )
-
-    assert observed["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
-    failed_closed_selected = next(
-        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
-    )
-    assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
-    assert failed_closed_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_content_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_authorship_source"] is None
-    assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
-    debug = format_golden_replay_debug(
-        {"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]}
-    )
-    assert "'fallback_kind': 'opening_failed_closed'" in debug
-    assert "'fallback_owner_bucket': 'sealed-gate'" in debug
-
-
-# Sealed fallback projection fields are replay contract locks. Helper shaping is
-# owned by final_emission_sealed_fallback; gate branch selection/output remains
-# owned by final_emission_gate.
-def test_golden_observed_turn_projects_sealed_fallback_owner_bucket():
-    observed = project_synthetic_turn(
-        scenario_id="synthetic_sealed_owner",
-        gm_text="A sealed fallback line.",
-        fem_meta=fem_payload(
-            final_route="replaced",
-            final_emitted_source="global_scene_fallback",
-            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
-            realization_fallback_family="gate_terminal_repair",
-        ),
-    )
-
-    assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
-
-
-def test_golden_observed_turn_projects_strict_social_sealed_fallback_owner_bucket():
-    observed = project_synthetic_turn(
-        scenario_id="synthetic_strict_social_sealed_owner",
-        gm_text="A strict-social sealed fallback line.",
-        fem_meta=fem_payload(
-            final_route="replaced",
-            final_emitted_source="minimal_social_emergency_fallback",
-            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-            realization_fallback_family="strict_social_deterministic_fallback",
-        ),
-    )
-
-    assert observed["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
-    fallback_selected = next(
-        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
-    )
-    assert fallback_selected["fallback_kind"] == "minimal_social_emergency_fallback"
-    assert fallback_selected["owner"] == "game.final_emission_gate"
-    assert fallback_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert fallback_selected["fallback_content_owner"] == "game.social_exchange_emission"
-
-
-def test_golden_observed_turn_projects_visibility_fallback_evidence():
-    observed = project_synthetic_turn(
-        scenario_id="synthetic_visibility_owner",
-        gm_text="A visibility fallback line.",
-        fem_meta=fem_payload(
-            final_route="replaced",
-            final_emitted_source="global_scene_fallback",
-            visibility_fallback_owner_bucket="sealed-gate",
-            visibility_replacement_applied=True,
-            visibility_fallback_pool="global_scene_narrative",
-            visibility_fallback_kind="narrative_safe_fallback",
-            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
-        ),
-    )
-
-    assert observed["visibility_fallback_owner_bucket"] == "sealed-gate"
-    assert observed["visibility_replacement_applied"] is True
-    assert observed["visibility_fallback_pool"] == "global_scene_narrative"
-    assert observed["visibility_fallback_kind"] == "narrative_safe_fallback"
-    fallback_selected = next(
-        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
-    )
-    gate_outcome = next(
-        event for event in observed["runtime_lineage_events"] if event["event_kind"] == "gate_outcome"
-    )
-    assert fallback_selected["fallback_kind"] == "visibility_or_scene_replacement"
-    assert gate_outcome["gate_path"] == "visibility_or_scene_replaced"
-
-
-@pytest.mark.parametrize(
-    ("required", "repair_kind", "source"),
-    [
-        (
-            "answer",
-            "answer_upstream_prepared_repair",
-            "upstream_prepared_emission.prepared_answer_fallback_text",
-        ),
-        (
-            "action_outcome",
-            "action_outcome_upstream_prepared_repair",
-            "upstream_prepared_emission.prepared_action_fallback_text",
-        ),
-    ],
-)
-def test_golden_observed_turn_projects_valid_upstream_prepared_emission_telemetry(required, repair_kind, source):
-    observed = project_synthetic_turn(
-        scenario_id=f"{required}_prepared_projection",
-        gm_text="Projected prepared text.",
-        player_text="Do the thing.",
-        resolution={"kind": "investigate"},
-        fem_meta=fem_payload(
-            final_emitted_source=repair_kind,
-            response_type_required=required,
-            response_type_candidate_ok=True,
-            response_type_repair_used=True,
-            response_type_repair_kind=repair_kind,
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
-            upstream_prepared_emission_source=source,
-            upstream_prepared_emission_reject_reason=None,
-            realization_fallback_family="upstream_prepared_emission",
-        ),
-    )
-
-    assert observed["upstream_prepared_emission_used"] is True
-    assert observed["upstream_prepared_emission_valid"] is True
-    assert observed["upstream_prepared_emission_source"] == source
-    assert observed["upstream_prepared_emission_reject_reason"] is None
-    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
-    assert f"upstream_prepared_emission_source: {source!r}" in debug
-
-
-def test_golden_observed_turn_projects_rejected_upstream_prepared_emission_telemetry():
-    observed = project_synthetic_turn(
-        scenario_id="rejected_prepared_projection",
-        gm_text="You pry the chest, but nothing gives yet.",
-        player_text="Pry the chest.",
-        resolution={"kind": "investigate"},
-        fem_meta=fem_payload(
-            final_emitted_source="generated_candidate",
-            response_type_required="action_outcome",
-            response_type_candidate_ok=False,
-            response_type_repair_used=False,
-            response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=False,
-            upstream_prepared_emission_valid=False,
-            upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
-            upstream_prepared_emission_reject_reason="action_outcome_replaced_by_dialogue",
-            realization_fallback_family="upstream_prepared_emission",
-        ),
-    )
-
-    assert observed["upstream_prepared_emission_used"] is False
-    assert observed["upstream_prepared_emission_valid"] is False
-    assert observed["upstream_prepared_emission_source"] == "upstream_prepared_emission.prepared_action_fallback_text"
-    assert observed["upstream_prepared_emission_reject_reason"] == "action_outcome_replaced_by_dialogue"
-    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
-    assert "upstream_prepared_emission_reject_reason: 'action_outcome_replaced_by_dialogue'" in debug
-
-
-@pytest.mark.parametrize(
-    ("required", "repair_kind", "source"),
-    [
-        ("answer", None, "absent"),
-        ("action_outcome", None, "absent"),
-    ],
-)
-def test_golden_observed_turn_projects_absent_upstream_prepared_emission_telemetry(required, repair_kind, source):
-    observed = project_synthetic_turn(
-        scenario_id=f"{required}_prepared_absent_projection",
-        gm_text="Only mist between the torches.",
-        player_text="Can I do it?",
-        resolution={"kind": "investigate"},
-        fem_meta=fem_payload(
-            final_emitted_source="generated_candidate",
-            response_type_required=required,
-            response_type_candidate_ok=False,
-            response_type_repair_used=False,
-            response_type_repair_kind=repair_kind,
-            response_type_upstream_prepared_absent=True,
-            upstream_prepared_emission_used=False,
-            upstream_prepared_emission_valid=False,
-            upstream_prepared_emission_source=source,
-            upstream_prepared_emission_reject_reason=None,
-        ),
-    )
-
-    assert observed["upstream_prepared_emission_used"] is False
-    assert observed["upstream_prepared_emission_valid"] is False
-    assert observed["upstream_prepared_emission_source"] == "absent"
-    assert observed["upstream_prepared_emission_reject_reason"] is None
-    assert observed["raw_signal_presence"]["upstream_prepared_emission_used"] is True
-    assert observed["raw_signal_presence"]["upstream_prepared_emission_valid"] is True
-    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
-    assert "upstream_prepared_emission_used: False" in debug
-    assert "upstream_prepared_emission_source: 'absent'" in debug
-
-
-def test_golden_drift_classification_preserves_malformed_prepared_emission_reject_reason():
-    observed = project_synthetic_turn(
-        scenario_id="malformed_prepared_projection",
-        gm_text="The lock remains stubborn.",
-        player_text="Pry the lock.",
-        resolution={"kind": "investigate"},
-        fem_meta=fem_payload(
-            final_emitted_source="generated_candidate",
-            response_type_required="action_outcome",
-            response_type_candidate_ok=False,
-            response_type_repair_used=False,
-            response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=False,
-            upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
-            upstream_prepared_emission_reject_reason="action_outcome_missing_result",
-            realization_fallback_family="upstream_prepared_emission",
-        ),
-    )
-
-    drift = classify_golden_drift(
-        observed,
-        {
-            "equals": {
-                "upstream_prepared_emission_valid": True,
-            }
-        },
-    )
-
-    assert observed["upstream_prepared_emission_used"] is True
-    assert observed["upstream_prepared_emission_valid"] is False
-    assert observed["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
-    row = drift["failure_classifications"][0]
-    assert row["primary_owner"] == "upstream_prepared_emission"
-    assert row["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
-    debug = format_golden_replay_debug(
-        {"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed], "drift": drift}
-    )
-    assert "upstream_prepared_emission_reject_reason: 'action_outcome_missing_result'" in debug
-    assert "owner='upstream_prepared_emission'" in debug
-
-
-def test_golden_observed_turn_projects_sanitizer_empty_fallback_as_sanitizer_owned():
-    observed = project_synthetic_turn(
-        scenario_id="sanitizer_empty_projection",
-        gm_text="For a breath, the scene stays still.",
-        player_text="Wait.",
-        resolution={"kind": "observe"},
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(
-                final_emitted_source="generated_candidate",
-                final_emission_mutation_lineage=[
-                    "pre_gate_sanitizer",
-                    "sanitizer_empty_fallback",
-                    "finalize_packaging",
-                ],
-                response_type_repair_used=False,
-                upstream_prepared_emission_used=False,
-                upstream_prepared_emission_valid=False,
-                upstream_prepared_emission_source=None,
-                upstream_prepared_emission_reject_reason=None,
-            ),
-            metadata={
-                "sanitizer_trace": {
-                    "sanitizer_boundary_mode": "strip_only",
-                    "sanitizer_empty_fallback_used": True,
-                    "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                    "sanitizer_empty_fallback_owner": "output_sanitizer",
-                }
-            },
-        ),
-    )
-
-    assert observed["sanitizer_empty_fallback_used"] is True
-    assert observed["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
-    assert observed["sanitizer_empty_fallback_owner"] == "output_sanitizer"
-    assert observed["upstream_prepared_emission_used"] is False
-    assert observed["sanitizer_lineage_mode"] == "strip_only"
-    assert observed["sanitizer_lineage_empty_fallback_used"] is True
-    assert "sanitizer_empty_fallback" in observed["final_emission_mutation_lineage"]
-    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
-    assert "sanitizer_empty_fallback_owner: 'output_sanitizer'" in debug
-    assert "sanitizer_lineage_empty_fallback_used: True" in debug
-    assert "final_emission_mutation_lineage" in debug
-
-
-def test_golden_observed_turn_projects_strict_social_sanitizer_fallback_owner_split():
-    observed = project_synthetic_turn(
-        scenario_id="strict_social_sanitizer_split",
-        gm_text='The runner says, "No names."',
-        player_text="Ask the runner.",
-        resolution={"kind": "question"},
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(
-                final_emitted_source="generated_candidate",
-                strict_social_active=True,
-                upstream_prepared_emission_used=False,
-                upstream_prepared_emission_valid=False,
-                upstream_prepared_emission_source=None,
-                upstream_prepared_emission_reject_reason=None,
-            ),
-            metadata={
-                "sanitizer_trace": {
-                    "sanitizer_lineage_mode": "strip_only",
-                    "sanitizer_strict_social_fallback_used": True,
-                    "sanitizer_strict_social_selection_owner": "output_sanitizer",
-                    "sanitizer_strict_social_prose_owner": "strict_social_emission",
-                    "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
-                }
-            },
-        ),
-    )
-
-    assert observed["sanitizer_strict_social_fallback_used"] is True
-    assert observed["sanitizer_strict_social_selection_owner"] == "output_sanitizer"
-    assert observed["sanitizer_strict_social_prose_owner"] == "strict_social_emission"
-    assert observed["sanitizer_strict_social_source"] == "social_fallback_line_for_sanitizer.empty_output"
-    assert observed["sanitizer_empty_fallback_used"] is None
-    assert observed["upstream_prepared_emission_used"] is False
-    debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
-    assert "sanitizer_strict_social_selection_owner: 'output_sanitizer'" in debug
-    assert "sanitizer_strict_social_prose_owner: 'strict_social_emission'" in debug
-
-
-def test_golden_observed_turn_projects_clean_sanitizer_lineage():
-    observed = project_synthetic_turn(
-        scenario_id="sanitizer_clean_lineage",
-        gm_text="Rain needles across the checkpoint.",
-        player_text="Wait.",
-        resolution={"kind": "observe"},
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
-            metadata={
-                "sanitizer_trace": {
-                    "sanitizer_lineage_mode": "strip_only",
-                    "sanitizer_lineage_changed_count": 0,
-                    "sanitizer_lineage_dropped_count": 0,
-                    "sanitizer_lineage_empty_fallback_used": False,
-                    "sanitizer_lineage_legacy_rewrite_active": False,
-                }
-            },
-        ),
-    )
-
-    assert observed["sanitizer_lineage_mode"] == "strip_only"
-    assert observed["sanitizer_lineage_changed_count"] == 0
-    assert observed["sanitizer_lineage_dropped_count"] == 0
-    assert observed["sanitizer_lineage_empty_fallback_used"] is False
-    assert observed["sanitizer_lineage_legacy_rewrite_active"] is False
-
-
-def test_golden_observed_turn_projects_sanitizer_lineage_from_debug_events():
-    observed = project_synthetic_turn(
-        scenario_id="sanitizer_debug_lineage",
-        gm_text="",
-        player_text="Wait.",
-        resolution={"kind": "observe"},
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
-            metadata={
-                "sanitizer_trace": {"sanitizer_boundary_mode": "strip_only"},
-                "sanitizer_debug": [
-                    {"event": "strip_only_dropped_rewrite_candidate", "sentence": "Validator scaffold."},
-                    {"event": "strip_only_dropped_non_diegetic", "sentence": "Planner scaffold."},
-                ],
-            },
-        ),
-    )
-
-    assert observed["sanitizer_lineage_mode"] == "strip_only"
-    assert observed["sanitizer_lineage_changed_count"] == 2
-    assert observed["sanitizer_lineage_dropped_count"] == 2
-
-
-def test_golden_observed_turn_projects_legacy_sanitizer_lineage():
-    observed = project_synthetic_turn(
-        scenario_id="sanitizer_legacy_lineage",
-        gm_text="The answer has not formed yet.",
-        player_text="Wait.",
-        resolution={"kind": "observe"},
-        payload=minimal_gm_output_payload(
-            fem_meta=fem_payload(final_emitted_source="generated_candidate"),
-            metadata={
-                "sanitizer_trace": {
-                    "sanitizer_lineage_mode": "legacy_sentence_rewrite",
-                    "sanitizer_lineage_changed_count": 1,
-                    "sanitizer_lineage_dropped_count": 0,
-                    "sanitizer_lineage_empty_fallback_used": False,
-                    "sanitizer_lineage_legacy_rewrite_active": True,
-                }
-            },
-        ),
-    )
-
-    assert observed["sanitizer_lineage_mode"] == "legacy_sentence_rewrite"
-    assert observed["sanitizer_lineage_legacy_rewrite_active"] is True
 
 
 def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, monkeypatch):
@@ -2141,10 +883,10 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if "route_kind" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation("fallback_family"),
-                **protected_route_expectation(),
-            },
+            protected_structural_expectation(
+                allow_unavailable=("fallback_family",),
+                no_scaffold=False,
+            ),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -2152,10 +894,10 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if canonical_entry:
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation("fallback_family"),
-                "equals": {"trace.canonical_entry.target_actor_id": "guard"},
-                "one_of": {
+            protected_structural_expectation(
+                allow_unavailable=("fallback_family",),
+                equals={"trace.canonical_entry.target_actor_id": "guard"},
+                one_of={
                     "trace.canonical_entry.target_source": ["spoken_vocative", "vocative"],
                     "trace.canonical_entry.reason": [
                         "spoken_vocative_address",
@@ -2164,7 +906,9 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
                         "spoken_vocative_overrode_continuity",
                     ],
                 },
-            },
+                include_route_kind=False,
+                no_scaffold=False,
+            ),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -2172,10 +916,12 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if social_contract_trace.get("route_selected") is not None:
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation("fallback_family"),
-                **protected_route_expectation(include_route_kind=False, include_trace_route=True),
-            },
+            protected_structural_expectation(
+                allow_unavailable=("fallback_family",),
+                include_route_kind=False,
+                include_trace_route=True,
+                no_scaffold=False,
+            ),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -2214,10 +960,12 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     if "final_emitted_source" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation("fallback_family"),
-                "require_present": ["final_emitted_source"],
-            },
+            protected_structural_expectation(
+                require_present=("final_emitted_source",),
+                allow_unavailable=("fallback_family",),
+                include_route_kind=False,
+                no_scaffold=False,
+            ),
             scenario_id="wrong_speaker_strict_social_emission",
             debug_context=debug_context,
         )
@@ -2499,10 +1247,12 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
     if canonical_entry:
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation("fallback_family"),
-                "equals": {"trace.canonical_entry.target_actor_id": "tavern_runner"},
-            },
+            protected_structural_expectation(
+                allow_unavailable=("fallback_family",),
+                equals={"trace.canonical_entry.target_actor_id": "tavern_runner"},
+                include_route_kind=False,
+                no_scaffold=False,
+            ),
             scenario_id="lead_followup_with_dialogue_lock",
             debug_context=debug_context,
         )
