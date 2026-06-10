@@ -26,6 +26,18 @@ ROUTE_DRIFT_FIELD_PATH = "route_kind"
 ROUTE_DRIFT_OWNER_BUCKET = "route_drift"
 ROUTE_DRIFT_INVESTIGATION_TARGET = "game/interaction_context.py"
 ROUTE_DRIFT_CATEGORY = "route"
+SPEAKER_DRIFT_FIELD_PATH = "selected_speaker_id"
+SPEAKER_DRIFT_OWNER_BUCKET = "speaker_drift"
+SPEAKER_DRIFT_INVESTIGATION_TARGET = "game/speaker_contract_enforcement.py"
+SPEAKER_DRIFT_CATEGORY = "speaker"
+FALLBACK_DRIFT_FIELD_PATH = "fallback_family"
+FALLBACK_DRIFT_OWNER_BUCKET = "fallback_drift"
+FALLBACK_DRIFT_INVESTIGATION_TARGET = "game/final_emission_gate.py"
+FALLBACK_DRIFT_CATEGORY = "fallback"
+REPLAY_UNCLASSIFIED_FIELD_PATH = "final_text_hash"
+REPLAY_UNCLASSIFIED_OWNER_BUCKET = "replay_drift_unclassified"
+REPLAY_UNCLASSIFIED_INVESTIGATION_TARGET = "tests/helpers/golden_replay.py"
+REPLAY_UNCLASSIFIED_CATEGORY = "evaluator"
 
 _ROUTE_NEEDLES: tuple[str, ...] = (
     "route_kind",
@@ -87,6 +99,85 @@ def route_drift_classification_kwargs(
     }
 
 
+def speaker_drift_classification_kwargs(
+    *,
+    investigate_first: str = SPEAKER_DRIFT_INVESTIGATION_TARGET,
+    category: str = SPEAKER_DRIFT_CATEGORY,
+) -> dict[str, str]:
+    """Return canonical speaker-drift classification fixture kwargs for reporting consumers."""
+    return {
+        "field_path": SPEAKER_DRIFT_FIELD_PATH,
+        "owner_drift_bucket": SPEAKER_DRIFT_OWNER_BUCKET,
+        "investigate_first": investigate_first,
+        "category": category,
+    }
+
+
+def fallback_drift_classification_kwargs(
+    *,
+    investigate_first: str = FALLBACK_DRIFT_INVESTIGATION_TARGET,
+    category: str = FALLBACK_DRIFT_CATEGORY,
+) -> dict[str, str]:
+    """Return canonical fallback-drift classification fixture kwargs for reporting consumers."""
+    return {
+        "field_path": FALLBACK_DRIFT_FIELD_PATH,
+        "owner_drift_bucket": FALLBACK_DRIFT_OWNER_BUCKET,
+        "investigate_first": investigate_first,
+        "category": category,
+    }
+
+
+def replay_unclassified_classification_kwargs(
+    *,
+    investigate_first: str = REPLAY_UNCLASSIFIED_INVESTIGATION_TARGET,
+    category: str = REPLAY_UNCLASSIFIED_CATEGORY,
+) -> dict[str, str]:
+    """Return canonical replay-unclassified classification fixture kwargs for reporting consumers."""
+    return {
+        "field_path": REPLAY_UNCLASSIFIED_FIELD_PATH,
+        "owner_drift_bucket": REPLAY_UNCLASSIFIED_OWNER_BUCKET,
+        "investigate_first": investigate_first,
+        "category": category,
+    }
+
+
+def owner_drift_classification_fixture(
+    *,
+    field_path: str,
+    owner_drift_bucket: str,
+    investigate_first: str,
+    category: str,
+    severity: str = "high",
+    scenario_id: str = "owner_drift_probe",
+    turn_index: int = 0,
+) -> dict[str, Any]:
+    """Build one classifier-shaped owner-drift row for drift report tests."""
+    from tests.helpers.failure_classifier import classify_replay_failure
+    from tests.helpers.replay_observed_row_fixtures import observed_failure_row
+
+    rows = classify_replay_failure(
+        scenario_id=scenario_id,
+        turn_index=turn_index,
+        observed_turn=observed_failure_row(),
+        drift_rows=[
+            {
+                "field_path": field_path,
+                "expected": "a",
+                "actual": "b",
+                "reason": "probe",
+                "drift_bucket": "structural_drift",
+                "replay_tags": ["structural_drift"],
+            }
+        ],
+    )
+    row = dict(rows[0])
+    row["owner_drift_bucket"] = owner_drift_bucket
+    row["investigate_first"] = investigate_first
+    row["category"] = category
+    row["severity"] = severity
+    return row
+
+
 def route_drift_scorecard_fixture(
     *,
     scenario_id: str = "route_drift_fixture",
@@ -105,6 +196,82 @@ def route_drift_scorecard_fixture(
             }
         ],
     }
+
+
+def speaker_drift_scorecard_fixture(
+    *,
+    scenario_id: str = "speaker_drift_fixture",
+    turn_index: int = 0,
+) -> dict[str, Any]:
+    """Return a minimal scorecard carrying a speaker owner-drift row for reporting consumers."""
+    return {
+        "scenario_id": scenario_id,
+        "comparison_available": True,
+        "report_only": True,
+        "owner_drift_classifications": [
+            {
+                "turn_index": turn_index,
+                "owner_drift_bucket": SPEAKER_DRIFT_OWNER_BUCKET,
+                "delta_key": "speaker",
+            }
+        ],
+    }
+
+
+def speaker_route_scorecard_history(
+    *,
+    scenario_prefix: str = "owner_drift",
+    duplicate_speaker: bool = False,
+) -> list[dict[str, Any]]:
+    """Return a reusable speaker-then-route scorecard history for trend/risk tests."""
+    history = [speaker_drift_scorecard_fixture(scenario_id=f"{scenario_prefix}_speaker_scorecard")]
+    if duplicate_speaker:
+        history.append(speaker_drift_scorecard_fixture(scenario_id=f"{scenario_prefix}_speaker_scorecard"))
+    history.append(route_drift_scorecard_fixture(scenario_id=f"{scenario_prefix}_route_scorecard"))
+    return history
+
+
+def stable_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
+    """Return a long-session stability scorecard with no owner drift rows."""
+    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+
+    return build_long_session_stability_scorecard(
+        scenario_id=scenario_id,
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+        ],
+    )
+
+
+def route_drift_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
+    """Return a long-session stability scorecard containing route drift."""
+    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+
+    return build_long_session_stability_scorecard(
+        scenario_id=scenario_id,
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "social", "selected_speaker_id": "runner"},
+        ],
+    )
+
+
+def fallback_drift_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
+    """Return a long-session stability scorecard containing fallback drift."""
+    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+
+    return build_long_session_stability_scorecard(
+        scenario_id=scenario_id,
+        observations=[
+            {
+                "turn_index": 0,
+                "route_kind": "action",
+                "fallback_family": "gate_terminal_repair",
+                "runtime_lineage_events": [{"event_kind": "fallback_selected"}],
+            }
+        ],
+    )
 
 
 def _field_matches(field_path: str, needles: tuple[str, ...]) -> bool:

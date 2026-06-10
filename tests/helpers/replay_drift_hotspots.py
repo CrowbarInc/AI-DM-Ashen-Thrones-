@@ -7,64 +7,8 @@ from __future__ import annotations
 
 from typing import Any, Mapping, Sequence
 
+from tests.helpers.replay_drift_rows import valid_classification_rows
 from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS
-
-RERUN_DELTA_KEY_FIELD_PATHS: dict[str, str] = {
-    "speaker": "selected_speaker_id",
-    "route": "route_kind",
-    "fallback": "fallback_family",
-    "scaffold": "scaffold_leakage",
-    "text_fingerprint": "final_text",
-    "response_delta": "response_delta",
-    "runtime_lineage": "runtime_lineage",
-}
-
-
-def _valid_classification_rows(
-    classifications: Sequence[Mapping[str, Any]] | None,
-) -> list[Mapping[str, Any]]:
-    if not classifications:
-        return []
-    rows: list[Mapping[str, Any]] = []
-    for row in classifications:
-        if not isinstance(row, Mapping):
-            continue
-        field_path = str(row.get("field_path") or "").strip()
-        if not field_path:
-            continue
-        rows.append(row)
-    return rows
-
-
-def classification_rows_from_scorecards(
-    scorecards: Sequence[Mapping[str, Any]] | None,
-) -> list[dict[str, Any]]:
-    """Expand rerun scorecard owner drift rows into pseudo-classification rows."""
-    if not scorecards:
-        return []
-    rows: list[dict[str, Any]] = []
-    for scorecard in scorecards:
-        if not isinstance(scorecard, Mapping) or scorecard.get("comparison_available") is False:
-            continue
-        owner_rows = scorecard.get("owner_drift_classifications")
-        if not isinstance(owner_rows, list):
-            continue
-        for row in owner_rows:
-            if not isinstance(row, Mapping):
-                continue
-            delta_key = str(row.get("delta_key") or "").strip()
-            field_path = RERUN_DELTA_KEY_FIELD_PATHS.get(delta_key, delta_key or "unknown")
-            rows.append(
-                {
-                    "field_path": field_path,
-                    "owner_drift_bucket": row.get("owner_drift_bucket"),
-                    "category": None,
-                    "investigate_first": None,
-                    "turn_index": row.get("turn_index"),
-                    "source": "rerun_scorecard",
-                }
-            )
-    return rows
 
 
 def aggregate_field_drift_counts(
@@ -72,7 +16,7 @@ def aggregate_field_drift_counts(
 ) -> dict[str, int]:
     """Count drift events by ``field_path``."""
     counts: dict[str, int] = {}
-    for row in _valid_classification_rows(classifications):
+    for row in valid_classification_rows(classifications):
         field_path = str(row.get("field_path") or "")
         counts[field_path] = counts.get(field_path, 0) + 1
     return dict(sorted(counts.items()))
@@ -83,7 +27,7 @@ def aggregate_investigation_target_counts(
 ) -> dict[str, int]:
     """Count drift events by ``investigate_first`` target."""
     counts: dict[str, int] = {}
-    for row in _valid_classification_rows(classifications):
+    for row in valid_classification_rows(classifications):
         target = str(row.get("investigate_first") or "").strip()
         if not target:
             continue
@@ -96,7 +40,7 @@ def aggregate_owner_bucket_by_field(
 ) -> list[dict[str, Any]]:
     """Count (field_path, owner_drift_bucket) pairs."""
     pair_counts: dict[tuple[str, str], int] = {}
-    for row in _valid_classification_rows(classifications):
+    for row in valid_classification_rows(classifications):
         field_path = str(row.get("field_path") or "")
         bucket = str(row.get("owner_drift_bucket") or "").strip()
         if bucket not in ALLOWED_OWNER_DRIFT_BUCKETS:
@@ -116,7 +60,7 @@ def aggregate_owner_drift_bucket_counts(
 ) -> dict[str, int]:
     """Count drift events by ``owner_drift_bucket``."""
     counts = {bucket: 0 for bucket in sorted(ALLOWED_OWNER_DRIFT_BUCKETS)}
-    for row in _valid_classification_rows(classifications):
+    for row in valid_classification_rows(classifications):
         bucket = str(row.get("owner_drift_bucket") or "").strip()
         if bucket in ALLOWED_OWNER_DRIFT_BUCKETS:
             counts[bucket] += 1
@@ -139,7 +83,7 @@ def build_hotspot_rankings(
     investigation_counts = aggregate_investigation_target_counts(classifications)
     owner_bucket_counts = aggregate_owner_drift_bucket_counts(classifications)
     owner_bucket_by_field = aggregate_owner_bucket_by_field(classifications)
-    rows = _valid_classification_rows(classifications)
+    rows = valid_classification_rows(classifications)
 
     return {
         "total_classifications": len(rows),

@@ -74,6 +74,7 @@ from tests.helpers.gate_equivalence_monkeypatch import (
 )
 from tests.helpers.opening_fallback_evidence import opening_gm_output
 from tests.helpers.strict_social_harness import runner_strict_bundle
+from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
 from tests.helpers.golden_replay_fixtures import (
     gm_response,
     golden_replay_chat_stubs,
@@ -97,31 +98,7 @@ pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
 
 def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
-    turn = {
-        "turn_index": 0,
-        "source_path": "data/validation/scenario_spines/synthetic_fixture.json",
-        "branch_id": "synthetic_branch",
-        "turn_id": "synthetic_turn_01",
-        "final_text": 'Gate Guard says, "No names."',
-        "route_kind": "dialogue",
-        "selected_speaker_id": "guard",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "scaffold_leakage": False,
-        "unavailable": [],
-        "runtime_lineage_events": [
-            make_runtime_lineage_event(
-                event_kind="gate_outcome",
-                stage="gate",
-                owner="game.final_emission_gate",
-                gate_path="accept_unchanged",
-            )
-        ],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
+    turn = protected_speaker_failure_turn()
     report_path = tmp_path / "replay_failure_report.md"
     clear_recorded_protected_replay_failures()
     try:
@@ -152,53 +129,10 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         clear_recorded_protected_replay_failures()
 
 
-def _synthetic_rerun_turn(
-    *,
-    turn_index: int = 0,
-    turn_id: str = "t01",
-    route_kind: str | None = "dialogue",
-    selected_speaker_id: str | None = "runner",
-    fallback_family: str | None = None,
-    fallback_owner: str | None = None,
-    final_text: str = "The runner answers.",
-    scaffold_leakage: bool | None = False,
-    runtime_lineage_events: list[dict] | None = None,
-    response_delta_checked: bool | None = None,
-    response_delta_failed: bool | None = None,
-    response_delta_repaired: bool | None = None,
-    response_delta_kind: str | None = None,
-    response_delta_echo_overlap_band: str | None = None,
-) -> dict:
-    row = {
-        "turn_index": turn_index,
-        "turn_id": turn_id,
-        "route_kind": route_kind,
-        "selected_speaker_id": selected_speaker_id,
-        "fallback_family": fallback_family,
-        "final_text": final_text,
-        "runtime_lineage_events": list(runtime_lineage_events or []),
-    }
-    if fallback_owner is not None:
-        row["sealed_fallback_owner_bucket"] = fallback_owner
-    if scaffold_leakage is not None:
-        row["scaffold_leakage"] = scaffold_leakage
-    if response_delta_checked is not None:
-        row["response_delta_checked"] = response_delta_checked
-    if response_delta_failed is not None:
-        row["response_delta_failed"] = response_delta_failed
-    if response_delta_repaired is not None:
-        row["response_delta_repaired"] = response_delta_repaired
-    if response_delta_kind is not None:
-        row["response_delta_kind"] = response_delta_kind
-    if response_delta_echo_overlap_band is not None:
-        row["response_delta_echo_overlap_band"] = response_delta_echo_overlap_band
-    return row
-
-
 def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
     turns = [
-        _synthetic_rerun_turn(turn_index=0, turn_id="t01"),
-        _synthetic_rerun_turn(turn_index=1, turn_id="t02", route_kind="action", selected_speaker_id=None),
+        synthetic_rerun_turn(turn_index=0, turn_id="t01"),
+        synthetic_rerun_turn(turn_index=1, turn_id="t02", route_kind="action", selected_speaker_id=None),
     ]
 
     scorecard = compare_golden_replay_reruns(turns, [dict(turn) for turn in turns])
@@ -218,8 +152,8 @@ def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
 
 
 def test_compare_golden_replay_reruns_counts_speaker_only_drift():
-    previous = [_synthetic_rerun_turn(selected_speaker_id="runner")]
-    current = [_synthetic_rerun_turn(selected_speaker_id="guard")]
+    previous = [synthetic_rerun_turn(selected_speaker_id="runner")]
+    current = [synthetic_rerun_turn(selected_speaker_id="guard")]
 
     scorecard = compare_golden_replay_reruns(previous, current)
 
@@ -233,8 +167,8 @@ def test_compare_golden_replay_reruns_counts_speaker_only_drift():
 
 
 def test_compare_golden_replay_reruns_counts_route_only_drift():
-    previous = [_synthetic_rerun_turn(route_kind="dialogue")]
-    current = [_synthetic_rerun_turn(route_kind="action")]
+    previous = [synthetic_rerun_turn(route_kind="dialogue")]
+    current = [synthetic_rerun_turn(route_kind="action")]
 
     scorecard = compare_golden_replay_reruns(previous, current)
 
@@ -255,9 +189,9 @@ def test_compare_golden_replay_reruns_counts_fallback_frequency_drift():
         fallback_kind="sealed_or_global_replacement",
         fallback_selection_owner="final_emission_gate",
     )
-    previous = [_synthetic_rerun_turn()]
+    previous = [synthetic_rerun_turn()]
     current = [
-        _synthetic_rerun_turn(
+        synthetic_rerun_turn(
             fallback_family="gate_terminal_repair",
             fallback_owner="sealed_gate",
             runtime_lineage_events=[event],
@@ -277,8 +211,8 @@ def test_compare_golden_replay_reruns_counts_fallback_frequency_drift():
 
 
 def test_compare_golden_replay_reruns_reports_text_fingerprints_without_failing():
-    previous = [_synthetic_rerun_turn(final_text="The runner answers.")]
-    current = [_synthetic_rerun_turn(final_text="The runner answers with a warning.")]
+    previous = [synthetic_rerun_turn(final_text="The runner answers.")]
+    current = [synthetic_rerun_turn(final_text="The runner answers with a warning.")]
 
     scorecard = compare_golden_replay_reruns(previous, current)
 
@@ -309,14 +243,14 @@ def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
 
 def test_long_session_summary_counts_response_delta_metadata():
     turns = [
-        _synthetic_rerun_turn(
+        synthetic_rerun_turn(
             response_delta_checked=True,
             response_delta_failed=False,
             response_delta_repaired=False,
             response_delta_kind="new_fact",
             response_delta_echo_overlap_band="low",
         ),
-        _synthetic_rerun_turn(
+        synthetic_rerun_turn(
             turn_index=1,
             response_delta_checked=True,
             response_delta_failed=True,
@@ -324,7 +258,7 @@ def test_long_session_summary_counts_response_delta_metadata():
             response_delta_kind="new_fact",
             response_delta_echo_overlap_band="high",
         ),
-        _synthetic_rerun_turn(turn_index=2),
+        synthetic_rerun_turn(turn_index=2),
     ]
 
     summary = summarize_long_session_replay_observations(turns)["response_delta_summary"]
@@ -339,7 +273,7 @@ def test_long_session_summary_counts_response_delta_metadata():
 
 def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
     previous = [
-        _synthetic_rerun_turn(
+        synthetic_rerun_turn(
             response_delta_checked=True,
             response_delta_failed=False,
             response_delta_repaired=False,
@@ -348,7 +282,7 @@ def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
         )
     ]
     current = [
-        _synthetic_rerun_turn(
+        synthetic_rerun_turn(
             response_delta_checked=True,
             response_delta_failed=True,
             response_delta_repaired=True,

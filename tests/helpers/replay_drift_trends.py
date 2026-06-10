@@ -7,10 +7,8 @@ from __future__ import annotations
 
 from typing import Any, Literal, Mapping, Sequence
 
-from tests.helpers.replay_drift_hotspots import (
-    aggregate_field_drift_counts,
-    classification_rows_from_scorecards,
-)
+from tests.helpers.replay_drift_hotspots import aggregate_field_drift_counts
+from tests.helpers.replay_drift_rows import classification_rows_from_scorecards
 from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS, summarize_owner_drift_buckets
 
 TrendDirection = Literal["up", "down", "stable"]

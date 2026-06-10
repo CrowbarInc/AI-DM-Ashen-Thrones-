@@ -9,7 +9,6 @@ from tests.helpers.failure_dashboard_report import (
     clear_recorded_rerun_drift_scorecards,
     recorded_protected_replay_failure_rows,
     recorded_runtime_lineage_events,
-    record_protected_replay_assertion_failure,
     record_rerun_drift_scorecard,
     recorded_rerun_drift_scorecards,
     render_rerun_drift_scorecard_markdown,
@@ -18,47 +17,8 @@ from tests.helpers.failure_dashboard_report import (
     write_rerun_drift_scorecard_artifacts_if_requested,
 )
 from tests.helpers.golden_replay import classify_golden_drift, compare_golden_replay_reruns
-
-
-def _protected_failure_turn() -> dict:
-    return {
-        "turn_index": 0,
-        "source_path": "data/validation/scenario_spines/synthetic_fixture.json",
-        "branch_id": "synthetic_branch",
-        "turn_id": "synthetic_turn_01",
-        "final_text": 'Gate Guard says, "No names."',
-        "route_kind": "dialogue",
-        "selected_speaker_id": "guard",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "scaffold_leakage": False,
-        "unavailable": [],
-        "runtime_lineage_events": [
-            make_runtime_lineage_event(
-                event_kind="gate_outcome",
-                stage="gate",
-                owner="game.final_emission_gate",
-                gate_path="accept_unchanged",
-            )
-        ],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
-
-
-def _record_selected_speaker_failure(turn: dict, *, scenario_id: str, test_node_id: str) -> None:
-    record_protected_replay_assertion_failure(
-        scenario_id=scenario_id,
-        test_node_id=test_node_id,
-        observed_turn=turn,
-        field_path="selected_speaker_id",
-        expected="runner",
-        actual="guard",
-        reason="exact value mismatch",
-        drift_bucket="structural_drift",
-    )
+from tests.helpers.failure_dashboard_fixtures import record_selected_speaker_protected_failure
+from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
 
 
 def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) -> None:
@@ -66,10 +26,8 @@ def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) ->
     clear_recorded_protected_replay_failures()
     try:
         assert write_protected_replay_failure_report_if_present(path=report_path) is None
-        _record_selected_speaker_failure(
-            _protected_failure_turn(),
-            scenario_id="synthetic_protected_bridge",
-            test_node_id="tests/test_golden_replay.py::synthetic_protected_bridge",
+        record_selected_speaker_protected_failure(
+            protected_speaker_failure_turn(),
         )
 
         rows = recorded_protected_replay_failure_rows()
@@ -116,15 +74,11 @@ def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) ->
 
 
 def test_protected_replay_failure_report_handles_missing_replay_identity(tmp_path) -> None:
-    turn = {
-        key: value
-        for key, value in _protected_failure_turn().items()
-        if key not in {"source_path", "branch_id", "turn_id"}
-    }
+    turn = protected_speaker_failure_turn(include_replay_identity=False)
     report_path = tmp_path / "replay_failure_report_no_identity.md"
     clear_recorded_protected_replay_failures()
     try:
-        _record_selected_speaker_failure(
+        record_selected_speaker_protected_failure(
             turn,
             scenario_id="synthetic_inline_bridge",
             test_node_id="tests/test_golden_replay.py::synthetic_inline_bridge",
@@ -233,31 +187,6 @@ def test_golden_drift_opt_in_dashboard_records_lineage_outside_classification_ro
         clear_recorded_failure_dashboard_rows()
 
 
-def _synthetic_rerun_turn(
-    *,
-    turn_index: int = 0,
-    turn_id: str = "t01",
-    route_kind: str | None = "dialogue",
-    selected_speaker_id: str | None = "runner",
-    fallback_family: str | None = None,
-    fallback_owner: str | None = None,
-    final_text: str = "The runner answers.",
-    runtime_lineage_events: list[dict] | None = None,
-) -> dict:
-    row = {
-        "turn_index": turn_index,
-        "turn_id": turn_id,
-        "route_kind": route_kind,
-        "selected_speaker_id": selected_speaker_id,
-        "fallback_family": fallback_family,
-        "final_text": final_text,
-        "runtime_lineage_events": list(runtime_lineage_events or []),
-    }
-    if fallback_owner is not None:
-        row["sealed_fallback_owner_bucket"] = fallback_owner
-    return row
-
-
 def _synthetic_rerun_scorecard() -> dict:
     event = make_runtime_lineage_event(
         event_kind="fallback_selected",
@@ -266,9 +195,9 @@ def _synthetic_rerun_scorecard() -> dict:
         fallback_kind="sealed_or_global_replacement",
     )
     return compare_golden_replay_reruns(
-        [_synthetic_rerun_turn(final_text="The runner answers.")],
+        [synthetic_rerun_turn(final_text="The runner answers.")],
         [
-            _synthetic_rerun_turn(
+            synthetic_rerun_turn(
                 selected_speaker_id="guard",
                 route_kind="action",
                 fallback_family="gate_terminal_repair",

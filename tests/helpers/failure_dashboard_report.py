@@ -42,13 +42,15 @@ from tests.helpers.replay_drift_longitudinal import (
 )
 from tests.helpers.replay_drift_hotspots import (
     build_hotspot_rankings,
-    classification_rows_from_scorecards,
     render_owner_drift_hotspot_report,
 )
 from tests.helpers.replay_drift_risk import (
     build_risk_payload,
-    classifications_for_risk_analysis,
     render_owner_drift_risk_report,
+)
+from tests.helpers.replay_drift_rows import (
+    classification_rows_for_analysis,
+    classification_rows_from_scorecards,
 )
 from tests.helpers.replay_drift_trends import (
     build_trend_payload,
@@ -665,7 +667,7 @@ def write_owner_drift_risk_artifacts(
     )
     stability_history = recorded_long_session_stability_scorecards()
     source_rows = collected_hotspot_classifications() if classifications is None else list(classifications)
-    rows = classifications_for_risk_analysis(source_rows, scorecard_history=history)
+    rows = classification_rows_for_analysis(source_rows, scorecard_history=history)
     payload = build_risk_payload(
         rows,
         scorecard_history=history,

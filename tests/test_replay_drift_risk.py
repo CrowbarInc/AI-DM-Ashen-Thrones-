@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.failure_dashboard_report import write_owner_drift_risk_artifacts
-from tests.helpers.golden_replay import compare_golden_replay_reruns
 from tests.helpers.replay_drift_risk import (
     build_risk_payload,
     build_risk_rankings,
@@ -11,60 +9,20 @@ from tests.helpers.replay_drift_risk import (
     render_owner_drift_risk_report,
     score_drift_risk,
 )
-from tests.helpers.golden_replay import build_long_session_stability_scorecard
 from tests.helpers.replay_drift_taxonomy import (
     build_long_session_stability_history,
     build_stability_hotspots,
+    fallback_drift_long_session_scorecard_fixture,
+    owner_drift_classification_fixture,
+    replay_unclassified_classification_kwargs,
     render_stability_hotspots_markdown_lines,
+    route_drift_long_session_scorecard_fixture,
     route_drift_classification_kwargs,
-    route_drift_scorecard_fixture,
+    speaker_route_scorecard_history,
+    stable_long_session_scorecard_fixture,
     stability_hotspot_rows,
     stability_trend_rows_from_history,
 )
-from tests.helpers.replay_observed_row_fixtures import observed_failure_row
-
-
-def _classification(
-    *,
-    field_path: str,
-    owner_drift_bucket: str,
-    investigate_first: str,
-    category: str,
-    severity: str = "high",
-) -> dict:
-    observed = observed_failure_row()
-    rows = classify_replay_failure(
-        scenario_id="risk_probe",
-        turn_index=0,
-        observed_turn=observed,
-        drift_rows=[
-            {
-                "field_path": field_path,
-                "expected": "a",
-                "actual": "b",
-                "reason": "probe",
-                "drift_bucket": "structural_drift",
-                "replay_tags": ["structural_drift"],
-            }
-        ],
-    )
-    row = dict(rows[0])
-    row["owner_drift_bucket"] = owner_drift_bucket
-    row["investigate_first"] = investigate_first
-    row["category"] = category
-    row["severity"] = severity
-    return row
-
-
-def _route_scorecard() -> dict:
-    return route_drift_scorecard_fixture(scenario_id="risk_route_scorecard")
-
-
-def _speaker_scorecard() -> dict:
-    return compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "A."}],
-        [{"selected_speaker_id": "guard", "route_kind": "dialogue", "final_text": "A."}],
-    )
 
 
 def test_score_drift_risk_high_protected_worsening_repeated() -> None:
@@ -128,21 +86,18 @@ def test_classify_field_source_protected_route_kind() -> None:
 
 def test_build_risk_rankings_orders_high_before_low() -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
-        _classification(
-            field_path="final_text_hash",
-            owner_drift_bucket="replay_drift_unclassified",
-            investigate_first="tests/helpers/golden_replay.py",
-            category="evaluator",
+        owner_drift_classification_fixture(
+            **replay_unclassified_classification_kwargs(),
             severity="low",
         ),
     ]
-    history = [_speaker_scorecard(), _route_scorecard()]
+    history = speaker_route_scorecard_history(scenario_prefix="risk")
     rankings = build_risk_rankings(rows, scorecard_history=history)
 
     assert rankings["top_risk_fields"][0]["item"] == "route_kind"
@@ -156,14 +111,17 @@ def test_build_risk_rankings_orders_high_before_low() -> None:
 
 def test_render_owner_drift_risk_report() -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
     ]
-    payload = build_risk_payload(rows, scorecard_history=[_speaker_scorecard(), _route_scorecard()])
+    payload = build_risk_payload(
+        rows,
+        scorecard_history=speaker_route_scorecard_history(scenario_prefix="risk"),
+    )
     report = render_owner_drift_risk_report(payload, generated_at="2026-06-06T00:00:00Z")
 
     assert "# Owner Drift Risk Report" in report
@@ -178,10 +136,10 @@ def test_render_owner_drift_risk_report() -> None:
 
 def test_write_owner_drift_risk_artifacts(tmp_path) -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         ),
     ]
@@ -190,7 +148,7 @@ def test_write_owner_drift_risk_artifacts(tmp_path) -> None:
 
     written_json, written_markdown = write_owner_drift_risk_artifacts(
         rows,
-        scorecard_history=[_speaker_scorecard(), _route_scorecard()],
+        scorecard_history=speaker_route_scorecard_history(scenario_prefix="risk"),
         json_path=json_path,
         markdown_path=markdown_path,
         generated_at="2026-06-06T00:00:00Z",
@@ -209,7 +167,7 @@ def test_write_owner_drift_risk_artifacts(tmp_path) -> None:
 
 def test_risk_payload_stability_enrichment_is_additive_only() -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         )
     ]
@@ -234,17 +192,7 @@ def test_risk_payload_stability_enrichment_is_additive_only() -> None:
 
 def test_risk_payload_recurring_fallback_drift_increases_stability_risk() -> None:
     scorecards = [
-        build_long_session_stability_scorecard(
-            scenario_id=f"fallback_probe_{index}",
-            observations=[
-                {
-                    "turn_index": 0,
-                    "route_kind": "action",
-                    "fallback_family": "gate_terminal_repair",
-                    "runtime_lineage_events": [{"event_kind": "fallback_selected"}],
-                }
-            ],
-        )
+        fallback_drift_long_session_scorecard_fixture(f"fallback_probe_{index}")
         for index in range(2)
     ]
     payload = build_risk_payload([], stability_scorecards=scorecards)
@@ -258,28 +206,11 @@ def test_risk_payload_recurring_fallback_drift_increases_stability_risk() -> Non
     assert "recurring_fallback_drift" in report
 
 
-def _stable_stability_scorecard(scenario_id: str) -> dict:
-    return build_long_session_stability_scorecard(
-        scenario_id=scenario_id,
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-        ],
-    )
-
-
-def _route_drift_scorecard(scenario_id: str) -> dict:
-    return build_long_session_stability_scorecard(
-        scenario_id=scenario_id,
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "social", "selected_speaker_id": "runner"},
-        ],
-    )
-
-
 def test_long_session_stability_history_aggregation() -> None:
-    scorecards = [_stable_stability_scorecard("history_a"), _route_drift_scorecard("history_b")]
+    scorecards = [
+        stable_long_session_scorecard_fixture("history_a"),
+        route_drift_long_session_scorecard_fixture("history_b"),
+    ]
     history = build_long_session_stability_history(scorecards)
 
     assert history["sample_count"] == 2
@@ -294,7 +225,10 @@ def test_long_session_stability_history_aggregation() -> None:
 
 def test_stability_trend_rows_worsening() -> None:
     history = build_long_session_stability_history(
-        [_stable_stability_scorecard("prior"), _route_drift_scorecard("current")]
+        [
+            stable_long_session_scorecard_fixture("prior"),
+            route_drift_long_session_scorecard_fixture("current"),
+        ]
     )
     rows = stability_trend_rows_from_history(history)
     route_row = next(row for row in rows if row["owner_drift_bucket"] == "route_drift")
@@ -304,7 +238,10 @@ def test_stability_trend_rows_worsening() -> None:
 
 def test_stability_trend_rows_improving() -> None:
     history = build_long_session_stability_history(
-        [_route_drift_scorecard("prior"), _stable_stability_scorecard("current")]
+        [
+            route_drift_long_session_scorecard_fixture("prior"),
+            stable_long_session_scorecard_fixture("current"),
+        ]
     )
     rows = stability_trend_rows_from_history(history)
     route_row = next(row for row in rows if row["owner_drift_bucket"] == "route_drift")
@@ -314,7 +251,10 @@ def test_stability_trend_rows_improving() -> None:
 
 def test_stability_trend_rows_stable() -> None:
     history = build_long_session_stability_history(
-        [_stable_stability_scorecard("prior"), _stable_stability_scorecard("current")]
+        [
+            stable_long_session_scorecard_fixture("prior"),
+            stable_long_session_scorecard_fixture("current"),
+        ]
     )
     rows = stability_trend_rows_from_history(history)
     route_row = next(row for row in rows if row["owner_drift_bucket"] == "route_drift")
@@ -326,7 +266,7 @@ def test_stability_trend_rows_stable() -> None:
 
 def test_stability_history_risk_enrichment_is_additive_only() -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         )
     ]
@@ -336,7 +276,10 @@ def test_stability_history_risk_enrichment_is_additive_only() -> None:
         "advisory_only": True,
         **build_risk_rankings(rows),
     }
-    scorecards = [_stable_stability_scorecard("prior"), _route_drift_scorecard("current")]
+    scorecards = [
+        stable_long_session_scorecard_fixture("prior"),
+        route_drift_long_session_scorecard_fixture("current"),
+    ]
     enriched = enrich_risk_payload_with_stability_ownership(base_payload, scorecards)
 
     for key in (
@@ -361,9 +304,9 @@ def test_stability_history_risk_enrichment_is_additive_only() -> None:
 
 def test_build_stability_hotspots() -> None:
     scorecards = [
-        _stable_stability_scorecard("stable_a"),
-        _route_drift_scorecard("route_b"),
-        _route_drift_scorecard("route_c"),
+        stable_long_session_scorecard_fixture("stable_a"),
+        route_drift_long_session_scorecard_fixture("route_b"),
+        route_drift_long_session_scorecard_fixture("route_c"),
     ]
     hotspots = build_stability_hotspots(scorecards)
 
@@ -418,7 +361,10 @@ def test_stability_hotspot_priority_ordering() -> None:
 
 def test_stability_hotspot_rows_projection() -> None:
     history = build_long_session_stability_history(
-        [_stable_stability_scorecard("prior"), _route_drift_scorecard("current")]
+        [
+            stable_long_session_scorecard_fixture("prior"),
+            route_drift_long_session_scorecard_fixture("current"),
+        ]
     )
     rows = stability_hotspot_rows(
         [
@@ -456,7 +402,7 @@ def test_stability_hotspot_reporting_empty() -> None:
 
 def test_stability_hotspot_risk_integration_is_additive() -> None:
     rows = [
-        _classification(
+        owner_drift_classification_fixture(
             **route_drift_classification_kwargs(),
         )
     ]
@@ -466,7 +412,10 @@ def test_stability_hotspot_risk_integration_is_additive() -> None:
         "advisory_only": True,
         **build_risk_rankings(rows),
     }
-    scorecards = [_stable_stability_scorecard("prior"), _route_drift_scorecard("current")]
+    scorecards = [
+        stable_long_session_scorecard_fixture("prior"),
+        route_drift_long_session_scorecard_fixture("current"),
+    ]
     enriched = enrich_risk_payload_with_stability_ownership(base_payload, scorecards)
 
     for key in (

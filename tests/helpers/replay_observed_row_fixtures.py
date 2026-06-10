@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
+from game.runtime_lineage_telemetry import make_runtime_lineage_event
+
 SyntheticObservedRowProfile = Literal["classifier_probe", "dashboard_probe"]
 
 _CLASSIFIER_PROBE_DEFAULTS: dict[str, Any] = {
@@ -84,3 +86,85 @@ def observed_failure_row(**overrides: Any) -> dict[str, Any]:
 def observed_dashboard_probe_row(**overrides: Any) -> dict[str, Any]:
     """Dashboard controlled-probe synthetic observed replay row (legacy ``_observed``)."""
     return synthetic_observed_replay_row(profile="dashboard_probe", **overrides)
+
+
+def synthetic_rerun_turn(
+    *,
+    turn_index: int = 0,
+    turn_id: str = "t01",
+    route_kind: str | None = "dialogue",
+    selected_speaker_id: str | None = "runner",
+    fallback_family: str | None = None,
+    fallback_owner: str | None = None,
+    final_text: str = "The runner answers.",
+    scaffold_leakage: bool | None = False,
+    runtime_lineage_events: list[dict[str, Any]] | None = None,
+    response_delta_checked: bool | None = None,
+    response_delta_failed: bool | None = None,
+    response_delta_repaired: bool | None = None,
+    response_delta_kind: str | None = None,
+    response_delta_echo_overlap_band: str | None = None,
+) -> dict[str, Any]:
+    """Synthetic observed turn for report-only rerun drift scorecard tests."""
+    row: dict[str, Any] = {
+        "turn_index": turn_index,
+        "turn_id": turn_id,
+        "route_kind": route_kind,
+        "selected_speaker_id": selected_speaker_id,
+        "fallback_family": fallback_family,
+        "final_text": final_text,
+        "runtime_lineage_events": list(runtime_lineage_events or []),
+    }
+    if fallback_owner is not None:
+        row["sealed_fallback_owner_bucket"] = fallback_owner
+    if scaffold_leakage is not None:
+        row["scaffold_leakage"] = scaffold_leakage
+    if response_delta_checked is not None:
+        row["response_delta_checked"] = response_delta_checked
+    if response_delta_failed is not None:
+        row["response_delta_failed"] = response_delta_failed
+    if response_delta_repaired is not None:
+        row["response_delta_repaired"] = response_delta_repaired
+    if response_delta_kind is not None:
+        row["response_delta_kind"] = response_delta_kind
+    if response_delta_echo_overlap_band is not None:
+        row["response_delta_echo_overlap_band"] = response_delta_echo_overlap_band
+    return row
+
+
+def protected_speaker_failure_turn(
+    *,
+    include_replay_identity: bool = True,
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Canonical protected replay speaker-failure observed turn for dashboard reports."""
+    row: dict[str, Any] = {
+        "turn_index": 0,
+        "source_path": "data/validation/scenario_spines/synthetic_fixture.json",
+        "branch_id": "synthetic_branch",
+        "turn_id": "synthetic_turn_01",
+        "final_text": 'Gate Guard says, "No names."',
+        "route_kind": "dialogue",
+        "selected_speaker_id": "guard",
+        "final_emitted_source": "generated_candidate",
+        "fallback_family": None,
+        "scaffold_leakage": False,
+        "unavailable": [],
+        "runtime_lineage_events": [
+            make_runtime_lineage_event(
+                event_kind="gate_outcome",
+                stage="gate",
+                owner="game.final_emission_gate",
+                gate_path="accept_unchanged",
+            )
+        ],
+        "trace": {
+            "canonical_entry": {"target_actor_id": "runner"},
+            "social_contract_trace": {"route_selected": "dialogue"},
+        },
+    }
+    if not include_replay_identity:
+        for key in ("source_path", "branch_id", "turn_id"):
+            row.pop(key, None)
+    row.update(overrides)
+    return row

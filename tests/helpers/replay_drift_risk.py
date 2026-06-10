@@ -13,8 +13,8 @@ from tests.helpers.replay_drift_hotspots import (
     aggregate_field_drift_counts,
     aggregate_investigation_target_counts,
     aggregate_owner_drift_bucket_counts,
-    classification_rows_from_scorecards,
 )
+from tests.helpers.replay_drift_rows import valid_classification_rows
 from tests.helpers.replay_drift_taxonomy import (
     aggregate_long_session_stability_classifications,
     build_long_session_stability_history,
@@ -139,22 +139,6 @@ def score_drift_risk(
     return "low"
 
 
-def _valid_classification_rows(
-    classifications: Sequence[Mapping[str, Any]] | None,
-) -> list[Mapping[str, Any]]:
-    if not classifications:
-        return []
-    rows: list[Mapping[str, Any]] = []
-    for row in classifications:
-        if not isinstance(row, Mapping):
-            continue
-        field_path = str(row.get("field_path") or "").strip()
-        if not field_path:
-            continue
-        rows.append(row)
-    return rows
-
-
 def _dominant_value(rows: Sequence[Mapping[str, Any]], key: str) -> str:
     counts: dict[str, int] = {}
     for row in rows:
@@ -183,7 +167,7 @@ def _risk_signal_rows_for_fields(
     classifications: Sequence[Mapping[str, Any]],
     field_trends: Mapping[str, Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
-    rows = _valid_classification_rows(classifications)
+    rows = valid_classification_rows(classifications)
     field_counts = aggregate_field_drift_counts(rows)
     grouped: dict[str, list[Mapping[str, Any]]] = {}
     for row in rows:
@@ -225,7 +209,7 @@ def _risk_signal_rows_for_owners(
     classifications: Sequence[Mapping[str, Any]],
     bucket_trends: Mapping[str, Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
-    rows = _valid_classification_rows(classifications)
+    rows = valid_classification_rows(classifications)
     bucket_counts = aggregate_owner_drift_bucket_counts(rows)
     grouped: dict[str, list[Mapping[str, Any]]] = {}
     for row in rows:
@@ -269,7 +253,7 @@ def _risk_signal_rows_for_investigation_targets(
     classifications: Sequence[Mapping[str, Any]],
     field_trends: Mapping[str, Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
-    rows = _valid_classification_rows(classifications)
+    rows = valid_classification_rows(classifications)
     target_counts = aggregate_investigation_target_counts(rows)
     grouped: dict[str, list[Mapping[str, Any]]] = {}
     for row in rows:
@@ -743,15 +727,3 @@ def _stability_ownership_risk_report_lines(payload: Mapping[str, Any]) -> list[s
     return lines
 
 
-def classifications_for_risk_analysis(
-    classifications: Sequence[Mapping[str, Any]] | None,
-    *,
-    scorecard_history: Sequence[Mapping[str, Any]] | None = None,
-) -> list[dict[str, Any]]:
-    """Normalize classification rows for risk analysis, including scorecard expansion."""
-    rows: list[dict[str, Any]] = []
-    if classifications:
-        rows.extend(dict(row) for row in classifications if isinstance(row, Mapping))
-    if scorecard_history:
-        rows.extend(classification_rows_from_scorecards(scorecard_history))
-    return rows

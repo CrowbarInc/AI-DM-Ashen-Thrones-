@@ -8,9 +8,13 @@ from __future__ import annotations
 from typing import Any
 
 from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
-from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows
+from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, record_protected_replay_assertion_failure
 from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
 from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
+
+SYNTHETIC_PROTECTED_BRIDGE_SCENARIO_ID = "synthetic_protected_bridge"
+SYNTHETIC_PROTECTED_BRIDGE_TEST_NODE_ID = "tests/test_golden_replay.py::synthetic_protected_bridge"
+
 CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
     (
         "wrong_speaker",
@@ -559,3 +563,22 @@ def classified_rows() -> list[dict[str, Any]]:
             )
         )
     return rows
+
+
+def record_selected_speaker_protected_failure(
+    turn: dict[str, Any],
+    *,
+    scenario_id: str = SYNTHETIC_PROTECTED_BRIDGE_SCENARIO_ID,
+    test_node_id: str = SYNTHETIC_PROTECTED_BRIDGE_TEST_NODE_ID,
+) -> None:
+    """Record the canonical protected replay selected-speaker failure."""
+    record_protected_replay_assertion_failure(
+        scenario_id=scenario_id,
+        test_node_id=test_node_id,
+        observed_turn=turn,
+        field_path="selected_speaker_id",
+        expected="runner",
+        actual="guard",
+        reason="exact value mismatch",
+        drift_bucket="structural_drift",
+    )
