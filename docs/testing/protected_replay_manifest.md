@@ -200,6 +200,33 @@ Implementation surfaces:
 - Failure dashboard: `Owner Drift Bucket` column + breakdown rollup
 - Rerun scorecard markdown: `Owner Drift Summary` table from `owner_drift_classifications`
 
+## Cycle AY Recurrence Reporting Addendum
+
+Cycle AY adds **bug-class recurrence tracking** as a report-only layer over
+existing replay failure classification and owner drift reporting. It is
+diagnostic vocabulary for operator review, not a replay acceptance rule.
+
+Policy:
+
+- Recurrence tracking remains **`report_only: true`** and **`advisory_only: true`**.
+- Recurrence keys are derived from existing classification fields:
+  `owner_drift_bucket`, `category`, `field_path`, and `investigate_first`.
+- Recurrence statuses are diagnostic only:
+  - `active` means the same recurrence key appears repeatedly in the available report history.
+  - `watch` means the recurrence key has only a single event or insufficient history.
+  - `retired` means an input explicitly marked the recurrence as retired or deprecated.
+- `retired` is explicit-only. Absence from a short history must never be interpreted as retirement.
+- Recurrence artifacts do not change protected replay pass/fail behavior, drift thresholds,
+  governance registry decisions, or runtime gameplay behavior.
+
+Implementation surfaces:
+
+- Recurrence projection and aggregation: `tests/helpers/replay_bug_recurrence.py`
+- Recurrence JSON/Markdown artifact emission: `tests/helpers/failure_dashboard_report.py`
+- Artifact paths:
+  - `artifacts/golden_replay/bug_recurrence_history.json`
+  - `artifacts/golden_replay/bug_recurrence_history.md`
+
 ## Cycle AT Reporting Addendum
 
 Cycle AT adds **long-session stability scorecards** as advisory/reporting artifacts derived from existing golden replay long-session metrics.

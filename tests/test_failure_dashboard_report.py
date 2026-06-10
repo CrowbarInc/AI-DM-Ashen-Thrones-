@@ -11,7 +11,9 @@ from tests.helpers.failure_dashboard_report import (
     recorded_runtime_lineage_events,
     record_rerun_drift_scorecard,
     recorded_rerun_drift_scorecards,
+    render_bug_recurrence_history_markdown,
     render_rerun_drift_scorecard_markdown,
+    write_bug_recurrence_history_artifacts,
     write_protected_replay_failure_report_if_present,
     write_rerun_drift_scorecard_artifacts,
     write_rerun_drift_scorecard_artifacts_if_requested,
@@ -302,3 +304,97 @@ def test_rerun_drift_scorecard_recording_does_not_change_failure_dashboard_behav
     finally:
         clear_recorded_rerun_drift_scorecards()
         clear_recorded_protected_replay_failures()
+
+
+def _recurrence_classification_row(**overrides: object) -> dict[str, object]:
+    row: dict[str, object] = {
+        "scenario_id": "bug_recurrence_probe",
+        "turn_index": 0,
+        "category": "speaker",
+        "primary_owner": "speaker",
+        "owner_drift_bucket": "speaker_drift",
+        "field_path": "selected_speaker_id",
+        "investigate_first": "game/speaker_contract_enforcement.py",
+    }
+    row.update(overrides)
+    return row
+
+
+def test_bug_recurrence_history_writer_creates_report_only_json_and_markdown(tmp_path) -> None:
+    json_path = tmp_path / "bug_recurrence_history.json"
+    markdown_path = tmp_path / "bug_recurrence_history.md"
+
+    written_json, written_markdown = write_bug_recurrence_history_artifacts(
+        [
+            _recurrence_classification_row(scenario_id="b"),
+            _recurrence_classification_row(scenario_id="a"),
+        ],
+        json_path=json_path,
+        markdown_path=markdown_path,
+        generated_at="2026-06-10T00:00:00Z",
+        command_used="pytest recurrence",
+    )
+
+    assert written_json == json_path
+    assert written_markdown == markdown_path
+    payload = json.loads(json_path.read_text(encoding="utf-8"))
+    assert payload["report_only"] is True
+    assert payload["advisory_only"] is True
+    assert payload["total_rows"] == 2
+    assert payload["unique_recurrence_count"] == 1
+    assert {row["status"] for row in payload["summary"]} <= {"active", "watch", "retired"}
+    assert payload["summary"][0]["affected_scenarios"] == ["a", "b"]
+
+    markdown = markdown_path.read_text(encoding="utf-8")
+    assert "# Bug-Class Recurrence History" in markdown
+    assert "- Report only: `true`" in markdown
+    assert "- Advisory only: `true`" in markdown
+    assert "| Key | Count | Owner | Status | Categories | Field Paths | Affected Scenarios | Investigate First |" in markdown
+    assert "| recurrence:v1:speaker_drift" in markdown
+    assert " | active | " in markdown
+    assert "selected_speaker_id" in markdown
+    assert "game/speaker_contract_enforcement.py" in markdown
+
+
+def test_bug_recurrence_history_markdown_shows_watch_and_retired_statuses(tmp_path) -> None:
+    json_path = tmp_path / "bug_recurrence_history.json"
+    markdown_path = tmp_path / "bug_recurrence_history.md"
+
+    write_bug_recurrence_history_artifacts(
+        [
+            _recurrence_classification_row(
+                scenario_id="single",
+                field_path="route_kind",
+                investigate_first="game/interaction_context.py",
+            ),
+            _recurrence_classification_row(scenario_id="old", status="deprecated"),
+        ],
+        json_path=json_path,
+        markdown_path=markdown_path,
+        generated_at="2026-06-10T00:00:00Z",
+        command_used="pytest recurrence statuses",
+    )
+
+    markdown = markdown_path.read_text(encoding="utf-8")
+    assert " | watch | " in markdown
+    assert " | retired | " in markdown
+
+
+def test_bug_recurrence_history_markdown_renders_empty_state_cleanly() -> None:
+    report = render_bug_recurrence_history_markdown(
+        {
+            "schema_version": 1,
+            "report_only": True,
+            "advisory_only": True,
+            "total_rows": 0,
+            "unique_recurrence_count": 0,
+            "recurrences": [],
+        },
+        generated_at="2026-06-10T00:00:00Z",
+        command_used="pytest empty recurrence",
+    )
+
+    assert "# Bug-Class Recurrence History" in report
+    assert "- Total recurrence keys: `0`" in report
+    assert "- Total recurrence events: `0`" in report
+    assert "No recurrence history recorded." in report

@@ -57,6 +57,11 @@ from tests.helpers.replay_drift_trends import (
     enrich_hotspots_with_field_trends,
     render_owner_drift_trend_report,
 )
+from tests.helpers.replay_bug_recurrence import (
+    aggregate_recurrence_history,
+    build_recurrence_summary,
+    recurrence_rows,
+)
 
 # Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
 # re-enumerating protected replay field paths or failure categories inline.
@@ -240,6 +245,8 @@ OWNER_DRIFT_TRENDS_JSON_PATH = Path("artifacts/golden_replay/owner_drift_trends.
 OWNER_DRIFT_TRENDS_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_trends.md")
 OWNER_DRIFT_RISK_JSON_PATH = Path("artifacts/golden_replay/owner_drift_risk.json")
 OWNER_DRIFT_RISK_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_risk.md")
+BUG_RECURRENCE_HISTORY_JSON_PATH = Path("artifacts/golden_replay/bug_recurrence_history.json")
+BUG_RECURRENCE_HISTORY_MARKDOWN_PATH = Path("artifacts/golden_replay/bug_recurrence_history.md")
 _RECORDED_FAILURE_DASHBOARD_ROWS: list[Mapping[str, Any]] = []
 _RECORDED_RUNTIME_LINEAGE_EVENTS: list[dict[str, Any]] = []
 _RECORDED_PROTECTED_REPLAY_FAILURE_ROWS: list[Mapping[str, Any]] = []
@@ -650,6 +657,91 @@ def write_owner_drift_trend_artifacts(
     return json_out, markdown_out
 
 
+def render_bug_recurrence_history_markdown(
+    history: Mapping[str, Any] | None,
+    *,
+    generated_at: str | None = None,
+    command_used: str | None = None,
+) -> str:
+    """Render report-only bug-class recurrence history markdown."""
+    payload = history if isinstance(history, Mapping) else aggregate_recurrence_history([])
+    generated_at_s = generated_at or datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    command_s = command_used if command_used is not None else " ".join(sys.argv)
+    summary_rows = build_recurrence_summary(payload)
+    report_only = str(bool(payload.get("report_only", True))).lower()
+    advisory_only = str(bool(payload.get("advisory_only", True))).lower()
+    lines = [
+        "# Bug-Class Recurrence History",
+        "",
+        f"- Generated at: `{generated_at_s}`",
+        f"- Command: `{command_s or 'unavailable'}`",
+        f"- Report only: `{report_only}`",
+        f"- Advisory only: `{advisory_only}`",
+        f"- Total recurrence keys: `{int(payload.get('unique_recurrence_count') or 0)}`",
+        f"- Total recurrence events: `{int(payload.get('total_rows') or 0)}`",
+        "",
+    ]
+    if not summary_rows:
+        lines.extend(["No recurrence history recorded.", ""])
+        return "\n".join(lines)
+
+    lines.extend(
+        [
+            "| Key | Count | Owner | Status | Categories | Field Paths | Affected Scenarios | Investigate First |",
+            "|---|---:|---|---|---|---|---|---|",
+        ]
+    )
+    for row in summary_rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _cell(row.get("recurrence_key")),
+                    _cell(row.get("occurrence_count")),
+                    _cell(row.get("owner")),
+                    _cell(row.get("status")),
+                    _cell(row.get("categories")),
+                    _cell(row.get("field_paths")),
+                    _cell(row.get("affected_scenarios")),
+                    _cell(row.get("latest_investigate_first")),
+                ]
+            )
+            + " |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_bug_recurrence_history_artifacts(
+    rows: Sequence[Mapping[str, Any]] | None = None,
+    *,
+    json_path: Path | str = BUG_RECURRENCE_HISTORY_JSON_PATH,
+    markdown_path: Path | str = BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+) -> tuple[Path, Path]:
+    """Write report-only bug-class recurrence JSON and markdown artifacts."""
+    recurrence_history = aggregate_recurrence_history(recurrence_rows(rows))
+    payload = {
+        **recurrence_history,
+        "summary": build_recurrence_summary(recurrence_history),
+    }
+    json_out = Path(json_path)
+    markdown_out = Path(markdown_path)
+    json_out.parent.mkdir(parents=True, exist_ok=True)
+    markdown_out.parent.mkdir(parents=True, exist_ok=True)
+    json_out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    markdown_out.write_text(
+        render_bug_recurrence_history_markdown(
+            payload,
+            generated_at=generated_at,
+            command_used=command_used,
+        ),
+        encoding="utf-8",
+    )
+    return json_out, markdown_out
+
+
 def write_owner_drift_risk_artifacts(
     classifications: Sequence[Mapping[str, Any]] | None = None,
     *,
@@ -685,6 +777,13 @@ def write_owner_drift_risk_artifacts(
             command_used=command_used,
         ),
         encoding="utf-8",
+    )
+    write_bug_recurrence_history_artifacts(
+        rows,
+        json_path=json_out.with_name(BUG_RECURRENCE_HISTORY_JSON_PATH.name),
+        markdown_path=markdown_out.with_name(BUG_RECURRENCE_HISTORY_MARKDOWN_PATH.name),
+        command_used=command_used,
+        generated_at=generated_at,
     )
     return json_out, markdown_out
 
