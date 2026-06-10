@@ -60,6 +60,13 @@ PROTECTED_SOCIAL_RESOLUTION_KINDS = ("question", "social", "social_exchange", "d
 PROTECTED_SOCIAL_ROUTE_KINDS = ("social", "question", "social_engine", "dialogue")
 PROTECTED_DIALOGUE_TRACE_ROUTES = ("social", "dialogue")
 PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
+PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES = ("spoken_vocative", "vocative")
+PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS = (
+    "spoken_vocative_address",
+    "spoken_vocative_resolved_to_addressable_actor",
+    "explicit_spoken_vocative_overrode_continuity",
+    "spoken_vocative_overrode_continuity",
+)
 
 
 def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
@@ -202,6 +209,69 @@ def protected_social_structural_base(
         include_trace_route=include_trace_route,
         disallow_global_scene_fallback=disallow_global_scene_fallback,
         extra_no_scaffold_terms=extra_no_scaffold_terms,
+    )
+
+
+def protected_social_directed_question_expectation(
+    selected_speaker_id: str,
+    *,
+    canonical_target_id: str | None = None,
+) -> dict[str, Any]:
+    """Preset protected social lock for directed NPC question E2E scenarios."""
+    return protected_social_structural_base(
+        selected_speaker_id=selected_speaker_id,
+        canonical_target_id=canonical_target_id or selected_speaker_id,
+        require_resolution_kind=True,
+        require_final_emitted_source=True,
+        require_trace_target=True,
+        require_trace_route=True,
+        include_resolution_kind=True,
+        include_trace_route=True,
+        disallow_global_scene_fallback=True,
+    )
+
+
+def protected_social_trace_target_expectation(
+    canonical_target_id: str,
+    *,
+    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
+    one_of: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Supplemental protected fragment when ``trace.canonical_entry`` is present."""
+    return protected_structural_expectation(
+        allow_unavailable=allow_unavailable,
+        equals={"trace.canonical_entry.target_actor_id": canonical_target_id},
+        one_of=one_of,
+        include_route_kind=False,
+        no_scaffold=False,
+    )
+
+
+def protected_social_vocative_canonical_entry_expectation(
+    canonical_target_id: str,
+) -> dict[str, Any]:
+    """Supplemental protected fragment for vocative canonical-entry shape locks."""
+    return protected_social_trace_target_expectation(
+        canonical_target_id,
+        one_of={
+            "trace.canonical_entry.target_source": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES),
+            "trace.canonical_entry.reason": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS),
+        },
+    )
+
+
+def protected_social_supplemental_structural_expectation(
+    *,
+    require_present: tuple[str, ...] | list[str] = (),
+    include_trace_route: bool = False,
+) -> dict[str, Any]:
+    """Supplemental protected fragment for optional projected social fields."""
+    return protected_structural_expectation(
+        require_present=require_present,
+        allow_unavailable=("fallback_family",),
+        include_route_kind=False,
+        include_trace_route=include_trace_route,
+        no_scaffold=False,
     )
 
 

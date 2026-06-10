@@ -5,7 +5,7 @@ field-path enumeration. Test-only; no runtime behavior changes.
 
 **Cycle AO5 boundary — acceptance observation only (do not merge with runtime lineage):**
 
-This **test-only acceptance** module owns the 41 protected observation paths
+This **test-only acceptance** module owns the canonical protected observation paths
 (``PROTECTED_OBSERVATION_FIELDS``), ``project_turn_observation``, drift buckets, and
 classifier/dashboard overlap derivation. It is CI acceptance authority.
 
@@ -597,6 +597,99 @@ def protected_observation_field_registry() -> tuple[ProtectedObservationField, .
 def protected_observation_field_paths() -> tuple[str, ...]:
     """Return sorted unique dotted paths from the protected observation registry."""
     return tuple(sorted({field.path for field in PROTECTED_OBSERVATION_FIELDS}))
+
+
+PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN = "<!-- BEGIN GENERATED: protected_field_paths -->"
+PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END = "<!-- END GENERATED: protected_field_paths -->"
+
+
+def protected_observation_manifest_field_rows() -> tuple[tuple[str, str], ...]:
+    """Return sorted ``(path, drift_bucket)`` rows derived from ``PROTECTED_OBSERVATION_FIELDS``."""
+    buckets_by_path: dict[str, str] = {}
+    for field in PROTECTED_OBSERVATION_FIELDS:
+        previous = buckets_by_path.setdefault(field.path, field.drift_bucket)
+        if previous != field.drift_bucket:
+            raise ValueError(
+                f"Protected observation field {field.path!r} has conflicting drift buckets: "
+                f"{previous!r} and {field.drift_bucket!r}"
+            )
+    return tuple((path, buckets_by_path[path]) for path in sorted(buckets_by_path))
+
+
+def protected_observation_manifest_counts() -> dict[str, int]:
+    """Return structural/semantic/total counts for manifest generation."""
+    rows = protected_observation_manifest_field_rows()
+    structural_count = sum(bucket == "structural_drift" for _path, bucket in rows)
+    semantic_count = sum(bucket == "semantic_drift" for _path, bucket in rows)
+    return {
+        "total": len(rows),
+        "structural_drift": structural_count,
+        "semantic_drift": semantic_count,
+    }
+
+
+def render_protected_observation_manifest_section(
+    *,
+    begin_marker: str = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN,
+    end_marker: str = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END,
+    refresh_command: str = "python tools/refresh_protected_replay_manifest.py --write",
+    check_command: str = "python tools/refresh_protected_replay_manifest.py --check",
+) -> str:
+    """Render the bounded protected-field-paths section for ``protected_replay_manifest.md``."""
+    rows = protected_observation_manifest_field_rows()
+    counts = protected_observation_manifest_counts()
+    lines = [
+        begin_marker,
+        "",
+        "## Protected Observation Field Paths (Generated)",
+        "",
+        "Bounded registry of golden replay observation paths locked by protected replay.",
+        "Source: `tests/helpers/golden_replay_projection.py::PROTECTED_OBSERVATION_FIELDS`.",
+        "",
+        "Refresh this section:",
+        "",
+        "```bash",
+        refresh_command,
+        "```",
+        "",
+        "Verify without writing:",
+        "",
+        "```bash",
+        check_command,
+        "```",
+        "",
+        f"- **Path count:** {counts['total']}",
+        f"- **Structural drift fields:** {counts['structural_drift']}",
+        f"- **Semantic drift fields:** {counts['semantic_drift']}",
+        "",
+        "| Field path | Drift bucket |",
+        "|---|---|",
+    ]
+    for path, bucket in rows:
+        lines.append(f"| `{path}` | `{bucket}` |")
+    lines.extend(["", end_marker])
+    return "\n".join(lines)
+
+
+def extract_protected_observation_manifest_section(
+    manifest_text: str,
+    *,
+    begin_marker: str = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN,
+    end_marker: str = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END,
+) -> str | None:
+    """Extract the generated protected-field-paths section from manifest markdown."""
+    begin = manifest_text.find(begin_marker)
+    end = manifest_text.find(end_marker)
+    if begin == -1 or end == -1 or end < begin:
+        return None
+    return manifest_text[begin : end + len(end_marker)]
+
+
+def protected_observation_manifest_section_is_current(manifest_text: str) -> bool:
+    """Return True when the manifest generated section matches ``PROTECTED_OBSERVATION_FIELDS``."""
+    current = extract_protected_observation_manifest_section(manifest_text)
+    expected = render_protected_observation_manifest_section()
+    return current is not None and current == expected
 
 
 def protected_observation_drift_bucket(path: str) -> str:

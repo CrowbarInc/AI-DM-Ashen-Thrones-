@@ -37,9 +37,11 @@ from game.upstream_response_repairs import (
 from tests.helpers.emission_smoke_assertions import response_type_contract
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    OPENING_SUCCESS_SOURCE,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
     opening_gm_output,
+    opening_upstream_composition_meta_slice,
 )
 from tests.helpers.opening_fallback_gate_harness import opening_gate_attach_then_enforce_response_type_contract
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
@@ -61,11 +63,7 @@ def _prepared_payload() -> Dict[str, Any]:
     return {
         "prepared_opening_fallback_text": PREPARED_TEXT,
         "opening_fallback_meta": {"opening_fallback_failed_closed": False},
-        "opening_fallback_composition_meta": {
-            "fallback_family_used": "scene_opening",
-            "fallback_temporal_frame": "first_impression",
-            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-        },
+        "opening_fallback_composition_meta": opening_upstream_composition_meta_slice(),
     }
 
 
@@ -80,7 +78,7 @@ def _assert_owner_bucket(meta: Dict[str, Any], *, repair_kind: str, expected: st
     assert_fallback_owner_bucket(
         expected,
         from_fields={
-            "final_emitted_source": "opening_deterministic_fallback",
+            "final_emitted_source": OPENING_SUCCESS_SOURCE,
             "opening_recovered_via_fallback": True,
             "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
             "response_type_repair_kind": repair_kind,

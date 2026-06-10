@@ -9,7 +9,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
 )
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
-from tests.helpers.golden_replay import (
+from tests.helpers.golden_replay_api import (
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     assert_runtime_lineage_event_matches,
     classify_golden_drift,

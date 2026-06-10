@@ -18,7 +18,7 @@ from tests.helpers.failure_dashboard_report import (
     write_rerun_drift_scorecard_artifacts,
     write_rerun_drift_scorecard_artifacts_if_requested,
 )
-from tests.helpers.golden_replay import classify_golden_drift, compare_golden_replay_reruns
+from tests.helpers.golden_replay_api import classify_golden_drift, compare_golden_replay_reruns
 from tests.helpers.failure_dashboard_fixtures import record_selected_speaker_protected_failure
 from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 import inspect
+import sys
 from typing import Any
 
 import pytest
@@ -30,6 +31,7 @@ from tests.helpers.opening_fallback_evidence import (
     assert_final_emission_meta_contains,
     assert_sealed_fallback_owner_bucket,
     opening_gm_output,
+    opening_upstream_composition_meta_slice,
 )
 
 pytestmark = pytest.mark.unit
@@ -75,7 +77,7 @@ def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None
 
 
 def test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple() -> None:
-    composition_meta = {"fallback_family_used": "scene_opening", "fallback_temporal_frame": "first_impression"}
+    composition_meta = opening_upstream_composition_meta_slice()
     legacy = (
         "Selected fallback text.",
         "opening_scene_safe_fallback",
@@ -496,3 +498,21 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines()
         "Nothing confirms progress toward that lead",
     ):
         assert forbidden not in helper_source
+
+
+def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None:
+    """Regression anchor: relocated Block AI sealed helper tests must stay importable."""
+    mod = sys.modules[__name__]
+    for name in (
+        "test_block_ai_sealed_fallback_metadata_module_exports_helpers_only",
+        "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
+        "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
+        "test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks",
+        "test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts",
+        "test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output",
+        "test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only",
+        "test_block_ai_extracted_non_strict_branch_selector_preserves_order",
+        "test_block_ai_non_strict_assembler_selects_each_injected_candidate_branch",
+        "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines",
+    ):
+        assert callable(getattr(mod, name, None)), name

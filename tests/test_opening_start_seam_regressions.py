@@ -21,7 +21,10 @@ from game.api import (
 from game.defaults import default_scene, default_world
 from game.storage import load_log, load_session
 from tests.helpers.emission_smoke_assertions import has_non_accept_final_route_smoke
-from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE as TURN_FAKE_GPT
+from tests.helpers.turn_pipeline_http_fixtures import (
+    FAKE_GPT_RESPONSE as TURN_FAKE_GPT,
+    _seed_campaign_start_storage,
+)
 
 pytestmark = pytest.mark.integration
 
@@ -33,29 +36,12 @@ _BAD_OPENER_MARKERS = (
 )
 
 
-def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    base = tmp_path
-    monkeypatch.setattr(st, "BASE_DIR", base)
-    monkeypatch.setattr(st, "DATA_DIR", base / "data")
-    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
-    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
-    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
-    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
-    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
-    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
-    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
-    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
-    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
-
-
 def _write_scenes_default(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, *, frontier_overrides: dict | None = None) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
-    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
-        scene = default_scene(sid)
-        if sid == "frontier_gate" and frontier_overrides:
-            scene["scene"].update(frontier_overrides)
-        (st.SCENES_DIR / f"{sid}.json").write_text(json.dumps(scene, indent=2), encoding="utf-8")
+    _seed_campaign_start_storage(
+        tmp_path,
+        monkeypatch,
+        frontier_gate_overrides=frontier_overrides,
+    )
 
 
 def _frontier_visible_facts_mixed() -> list[str]:

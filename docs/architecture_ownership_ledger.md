@@ -118,6 +118,7 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Belongs in runtime owner:** final-emission layer ordering, gate-level integration, last-mile finalize flow, calls into validators, repairs, sanitizer, metadata packaging.
 - **Does not belong in runtime owner:** canonical metadata schema ownership, standalone contract-authority logic, telemetry field semantics.
 - **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not mixed gate/meta/telemetry/pipeline parallel ownership.
+- **Test magnet guard (BA-7):** `tests/test_final_emission_gate.py` and other gate-layer direct-owner suites (validators, repairs, visibility, sanitizer, social emission) must not import golden-replay projection, failure-classifier, or dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors own those contracts. Enforced by `tests/test_ownership_registry.py` (`test_ba7_gate_direct_owners_*`).
 
 ## Final Emission Repairs
 

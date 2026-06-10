@@ -5,9 +5,11 @@ seed contents stable for suites that exercise the shared ``/api/chat`` and
 ``/api/action`` pipeline.
 
 Import HTTP seeds and GPT stubs from this module — not from
-``tests/test_turn_pipeline_shared.py`` (Cycle AL1).
+``tests/test_turn_pipeline_shared.py`` (Cycle AL1 / BA-8).
 """
 from __future__ import annotations
+
+from typing import Any, Mapping
 
 from game import storage
 from game.defaults import (
@@ -31,6 +33,8 @@ FAKE_GPT_RESPONSE = {
     "suggested_action": None,
     "debug_notes": "",
 }
+
+CAMPAIGN_START_SCENE_IDS: tuple[str, ...] = ("frontier_gate", "market_quarter", "old_milestone")
 
 
 def _patch_storage(tmp_path, monkeypatch):
@@ -102,3 +106,26 @@ def _seed_runner_dialogue_context(tmp_path, monkeypatch):
     session_ctx["interaction_mode"] = "social"
     session_ctx["engagement_level"] = "engaged"
     storage.save_session(session)
+
+
+def _write_campaign_start_scene_files(
+    *,
+    frontier_gate_overrides: Mapping[str, Any] | None = None,
+) -> None:
+    """Write default campaign-start scene envelopes under the patched storage tree."""
+    for sid in CAMPAIGN_START_SCENE_IDS:
+        scene = default_scene(sid)
+        if sid == "frontier_gate" and frontier_gate_overrides:
+            scene["scene"].update(dict(frontier_gate_overrides))
+        storage._save_json(storage.scene_path(sid), scene)
+
+
+def _seed_campaign_start_storage(
+    tmp_path,
+    monkeypatch,
+    *,
+    frontier_gate_overrides: Mapping[str, Any] | None = None,
+) -> None:
+    """Patch storage to ``tmp_path`` and seed campaign-start scene files."""
+    _patch_storage(tmp_path, monkeypatch)
+    _write_campaign_start_scene_files(frontier_gate_overrides=frontier_gate_overrides)

@@ -3296,7 +3296,8 @@ def _visibility_offscene_npc_gate_bundle() -> tuple[dict, dict, dict, str]:
 
 
 # Visibility/sealed gate integration: routing and FEM projection only (legality in
-# tests/test_final_emission_visibility.py; helper shaping in test_final_emission_sealed_fallback.py).
+# tests/test_final_emission_visibility.py; helper-shape/tuple round-trips in
+# tests/test_final_emission_visibility_fallback.py and test_final_emission_sealed_fallback.py).
 def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
     """Visibility replace uses sealed tuples for text; FEM source pins global_scene_fallback today."""
     session, world, scene, sid = _visibility_offscene_npc_gate_bundle()
@@ -3616,7 +3617,12 @@ def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
 
 
 def test_block_ai_block_ag_selector_order_snapshots_remain_entrypoints() -> None:
-    """Regression anchor: Block AG tests must stay importable so selector/order contracts do not drift unnoticed."""
+    """Regression anchor: Block AG gate-orchestration snapshots must stay importable.
+
+    Pure visibility/sealed helper importability and tuple round-trips live in
+    tests/test_final_emission_visibility_fallback.py and
+    tests/test_final_emission_sealed_fallback.py (see their entrypoint anchors).
+    """
     mod = sys.modules[__name__]
     for name in (
         "test_sealed_branch_order_accept_path_visibility_before_n4",

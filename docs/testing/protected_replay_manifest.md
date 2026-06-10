@@ -23,7 +23,7 @@ python -m pytest tests/test_golden_replay.py -q
 
 `tests/test_golden_replay.py` currently contains protected and supporting tests in one pytest module. This manifest classifies their acceptance ownership; it does not alter today's test execution behavior.
 
-Inventory-only regeneration is a maintenance workflow, not logic ownership. Run `python tools/test_audit.py` only when refreshing `tests/test_inventory.json` and keep that generated JSON output separate from behavior, replay, or protected-observation changes.
+Inventory-only regeneration is a maintenance workflow, not logic ownership. Run `python tools/test_audit.py` only when refreshing `tests/test_inventory.json` and keep that generated JSON output separate from behavior, replay, or protected-observation changes. Protected observation field paths are **generated only** from `PROTECTED_OBSERVATION_FIELDS` in `tests/helpers/golden_replay_projection.py`; refresh with `python tools/refresh_protected_replay_manifest.py --write` and verify with `--check` (also enforced in CI).
 
 ## Metadata Ownership
 
@@ -38,7 +38,7 @@ Replay projection is intentionally split across two modules that must **not** be
 | Layer | Module | Owns |
 |---|---|---|
 | **Runtime (diagnostic/read-side)** | `game/final_emission_replay_projection.py` | `fem_runtime_lineage_events` derivation from finalized FEM; sealed replacement sub-kinds; lineage selection/content owner fields on events |
-| **Acceptance (test-only)** | `tests/helpers/golden_replay_projection.py` | 41 protected observation paths; `project_turn_observation`; drift buckets; classifier evidence overlap derivation |
+| **Acceptance (test-only)** | `tests/helpers/golden_replay_projection.py` | canonical protected observation paths (`PROTECTED_OBSERVATION_FIELDS`; generated table below); `project_turn_observation`; drift buckets; classifier evidence overlap derivation |
 
 Rules:
 
@@ -80,7 +80,7 @@ They are **not** protected golden replay observation fields and do not rewrite r
 ## Protected Observation Field Paths (Generated)
 
 Bounded registry of golden replay observation paths locked by protected replay.
-Source: `tests/helpers/golden_replay_projection.py::protected_observation_field_registry()`.
+Source: `tests/helpers/golden_replay_projection.py::PROTECTED_OBSERVATION_FIELDS`.
 
 Refresh this section:
 

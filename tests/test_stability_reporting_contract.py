@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from tests.helpers.golden_replay import build_long_session_stability_scorecard
-from tests.helpers.replay_drift_risk import build_risk_payload, enrich_risk_payload_with_stability_ownership
-from tests.helpers.replay_drift_taxonomy import (
+from tests.helpers.golden_replay_api import build_long_session_stability_scorecard
+from tests.helpers.replay_drift_reports import (
     build_long_session_stability_history,
+    build_risk_payload,
     build_stability_hotspots,
     stability_classification_rows_from_scorecard,
+)
+from tests.helpers.replay_drift_risk import enrich_risk_payload_with_stability_ownership
+from tests.helpers.replay_drift_taxonomy import (
     stability_trend_rows_from_history,
 )
 from tests.stability_reporting_contract import (

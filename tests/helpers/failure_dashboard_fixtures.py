@@ -8,7 +8,18 @@ from __future__ import annotations
 from typing import Any
 
 from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
-from tests.helpers.failure_dashboard_report import build_failure_dashboard_rows, record_protected_replay_assertion_failure
+from tests.helpers.failure_classification_sync import (
+    exact_value_drift_row,
+    global_fallback_source_drift_row,
+    post_gate_mutation_drift_row,
+    projection_unavailable_drift_row,
+    replay_drift_row,
+    response_type_repair_drift_row,
+    scaffold_leakage_drift_row,
+    semantic_text_fragment_drift_row,
+    speaker_mismatch_drift_row,
+)
+from tests.helpers.failure_dashboard_report import build_classified_dashboard_row, record_protected_replay_assertion_failure
 from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
 from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
 
@@ -19,13 +30,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "wrong_speaker",
         _observed(selected_speaker_id="guard"),
-        {
-            "field_path": "selected_speaker_id",
-            "expected": "runner",
-            "actual": "guard",
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        speaker_mismatch_drift_row(),
         {
             "category": "speaker",
             "primary_owner": "speaker",
@@ -37,13 +42,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "forced_fallback_source",
         _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair"),
-        {
-            "field_path": "final_emitted_source",
-            "expected": "generated_candidate",
-            "actual": "global_scene_fallback",
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        global_fallback_source_drift_row(),
         {
             "category": "fallback",
             "primary_owner": "fallback",
@@ -60,13 +59,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "opening_fallback_owner_bucket",
         _observed(**successful_opening_observed_fields(include_owner_bucket=True)),
-        {
-            "field_path": "opening_fallback_owner_bucket",
-            "expected": "sealed-gate",
-            "actual": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        exact_value_drift_row(
+            "opening_fallback_owner_bucket",
+            expected="sealed-gate",
+            actual=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
         {
             "category": "fallback",
             "primary_owner": "fallback",
@@ -84,13 +81,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             opening_fallback_authorship_source="compatibility_local_opening_deterministic",
             fallback_family="scene_opening",
         ),
-        {
-            "field_path": "opening_fallback_authorship_source",
-            "expected": "upstream_prepared_opening_fallback",
-            "actual": "compatibility_local_opening_deterministic",
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        exact_value_drift_row(
+            "opening_fallback_authorship_source",
+            expected="upstream_prepared_opening_fallback",
+            actual="compatibility_local_opening_deterministic",
+        ),
         {
             "category": "fallback",
             "primary_owner": "fallback",
@@ -106,13 +101,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             opening_recovered_via_fallback=True,
             fallback_family="scene_opening",
         ),
-        {
-            "field_path": "opening_final_fallback_basis",
-            "expected": ["journal seed"],
-            "actual": ["visible fact"],
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        exact_value_drift_row(
+            "opening_final_fallback_basis",
+            expected=["journal seed"],
+            actual=["visible fact"],
+        ),
         {
             "category": "replay_drift",
             "primary_owner": "replay",
@@ -128,13 +121,10 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             unavailable=["opening_fallback_owner_bucket"],
             raw_signal_presence={"opening_fallback_owner_bucket": True},
         ),
-        {
-            "field_path": "opening_fallback_owner_bucket",
-            "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-            "actual": None,
-            "reason": "unexpected unavailable field",
-            "drift_bucket": "structural_drift",
-        },
+        projection_unavailable_drift_row(
+            "opening_fallback_owner_bucket",
+            expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
         {
             "category": "projection",
             "primary_owner": "projection",
@@ -153,13 +143,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             fallback_family="gate_terminal_repair",
             sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
         ),
-        {
-            "field_path": "sealed_fallback_owner_bucket",
-            "expected": "strict-social-sealed",
-            "actual": SEALED_FALLBACK_OWNER_SEALED_GATE,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        exact_value_drift_row(
+            "sealed_fallback_owner_bucket",
+            expected="strict-social-sealed",
+            actual=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        ),
         {
             "category": "fallback",
             "primary_owner": "fallback",
@@ -179,13 +167,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             visibility_fallback_pool="global_scene_narrative",
             visibility_fallback_kind="narrative_safe_fallback",
         ),
-        {
-            "field_path": "visibility_fallback_owner_bucket",
-            "expected": "strict-social-visibility",
-            "actual": "sealed-gate",
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        exact_value_drift_row(
+            "visibility_fallback_owner_bucket",
+            expected="strict-social-visibility",
+            actual="sealed-gate",
+        ),
         {
             "category": "fallback",
             "primary_owner": "fallback",
@@ -210,13 +196,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             sanitizer_lineage_empty_fallback_used=False,
             sanitizer_lineage_legacy_rewrite_active=False,
         ),
-        {
-            "field_path": "scaffold_leakage",
-            "expected": False,
-            "actual": True,
-            "reason": "scaffold leakage mismatch",
-            "drift_bucket": "semantic_drift",
-        },
+        scaffold_leakage_drift_row(),
         {
             "category": "sanitizer",
             "primary_owner": "sanitizer",
@@ -249,13 +229,12 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             upstream_prepared_emission_used=False,
             upstream_prepared_emission_valid=False,
         ),
-        {
-            "field_path": "sanitizer_empty_fallback_used",
-            "expected": False,
-            "actual": True,
-            "reason": "sanitizer empty fallback selected",
-            "drift_bucket": "structural_drift",
-        },
+        replay_drift_row(
+            "sanitizer_empty_fallback_used",
+            expected=False,
+            actual=True,
+            reason="sanitizer empty fallback selected",
+        ),
         {
             "category": "sanitizer",
             "primary_owner": "sanitizer",
@@ -284,13 +263,12 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             upstream_prepared_emission_used=False,
             upstream_prepared_emission_valid=False,
         ),
-        {
-            "field_path": "sanitizer_strict_social_fallback_used",
-            "expected": False,
-            "actual": True,
-            "reason": "sanitizer selected strict-social fallback",
-            "drift_bucket": "structural_drift",
-        },
+        replay_drift_row(
+            "sanitizer_strict_social_fallback_used",
+            expected=False,
+            actual=True,
+            reason="sanitizer selected strict-social fallback",
+        ),
         {
             "category": "sanitizer",
             "primary_owner": "sanitizer",
@@ -314,13 +292,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             sanitizer_lineage_empty_fallback_used=False,
             sanitizer_lineage_legacy_rewrite_active=True,
         ),
-        {
-            "field_path": "scaffold_leakage",
-            "expected": False,
-            "actual": True,
-            "reason": "legacy sentence rewrite diagnostic evidence",
-            "drift_bucket": "semantic_drift",
-        },
+        scaffold_leakage_drift_row(reason="legacy sentence rewrite diagnostic evidence"),
         {
             "category": "sanitizer",
             "primary_owner": "sanitizer",
@@ -345,13 +317,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
                 "finalize_packaging",
             ],
         ),
-        {
-            "field_path": "response_type_repair_used",
-            "expected": False,
-            "actual": True,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        response_type_repair_drift_row(),
         {
             "category": "emission",
             "primary_owner": "upstream_prepared_emission",
@@ -378,13 +344,12 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             upstream_prepared_emission_source="prepared_answer_fallback_text",
             upstream_prepared_emission_reject_reason="missing_answer_specificity",
         ),
-        {
-            "field_path": "upstream_prepared_emission_valid",
-            "expected": True,
-            "actual": False,
-            "reason": "malformed prepared emission rejected",
-            "drift_bucket": "structural_drift",
-        },
+        replay_drift_row(
+            "upstream_prepared_emission_valid",
+            expected=True,
+            actual=False,
+            reason="malformed prepared emission rejected",
+        ),
         {
             "category": "emission",
             "primary_owner": "upstream_prepared_emission",
@@ -399,13 +364,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "missing_route_metadata_raw_absent",
         _observed(route_kind=None, unavailable=["route_kind"], raw_signal_presence={"route_kind": False}),
-        {
-            "field_path": "route_kind",
-            "expected": "present",
-            "actual": None,
-            "reason": "unexpected unavailable field",
-            "drift_bucket": "structural_drift",
-        },
+        projection_unavailable_drift_row("route_kind", expected="present"),
         {
             "category": "route",
             "primary_owner": "route",
@@ -418,13 +377,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "missing_route_metadata_raw_present",
         _observed(route_kind=None, unavailable=["route_kind"], raw_signal_presence={"route_kind": True}),
-        {
-            "field_path": "route_kind",
-            "expected": "present",
-            "actual": None,
-            "reason": "unexpected unavailable field",
-            "drift_bucket": "structural_drift",
-        },
+        projection_unavailable_drift_row("route_kind", expected="present"),
         {
             "category": "projection",
             "primary_owner": "projection",
@@ -437,13 +390,10 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     (
         "semantic_mutation",
         _observed(),
-        {
-            "field_path": "final_text",
-            "expected": "include 'east-road talk'",
-            "actual": "The answer changed.",
-            "reason": "required text fragment missing",
-            "drift_bucket": "semantic_drift",
-        },
+        semantic_text_fragment_drift_row(
+            expected="include 'east-road talk'",
+            actual="The answer changed.",
+        ),
         {
             "category": "semantic_mutation",
             "primary_owner": "semantic_mutation",
@@ -457,13 +407,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         _observed(
             post_gate_mutation_detected=True,
         ),
-        {
-            "field_path": "post_gate_mutation_detected",
-            "expected": False,
-            "actual": True,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        post_gate_mutation_drift_row(),
         {
             "category": "emission",
             "primary_owner": "emission",
@@ -481,13 +425,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             post_gate_mutation_detected=True,
             final_emission_mutation_lineage=["finalize_route_illegal_strip", "finalize_packaging"],
         ),
-        {
-            "field_path": "post_gate_mutation_detected",
-            "expected": False,
-            "actual": True,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        post_gate_mutation_drift_row(),
         {
             "category": "emission",
             "primary_owner": "emission",
@@ -505,13 +443,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             post_gate_mutation_detected=True,
             final_emission_mutation_lineage=["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
         ),
-        {
-            "field_path": "post_gate_mutation_detected",
-            "expected": False,
-            "actual": True,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        post_gate_mutation_drift_row(),
         {
             "category": "emission",
             "primary_owner": "emission",
@@ -529,13 +461,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             post_gate_mutation_detected=True,
             final_emission_mutation_lineage=["response_type_repair", "finalize_packaging"],
         ),
-        {
-            "field_path": "post_gate_mutation_detected",
-            "expected": False,
-            "actual": True,
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        },
+        post_gate_mutation_drift_row(),
         {
             "category": "emission",
             "primary_owner": "emission",
@@ -554,10 +480,10 @@ def classified_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for index, (case_id, observed, drift_row, _expected) in enumerate(CONTROLLED_FAILURE_CASES):
         case_observed = {**observed, "scenario_id": case_id, "turn_index": index}
-        rows.extend(
-            build_failure_dashboard_rows(
+        rows.append(
+            build_classified_dashboard_row(
                 observed_turn=case_observed,
-                drift_rows=[drift_row],
+                drift_row=drift_row,
                 scenario_id=case_id,
                 turn_index=index,
             )

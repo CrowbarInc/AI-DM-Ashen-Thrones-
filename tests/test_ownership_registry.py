@@ -28,6 +28,10 @@ Design notes (read before extending):
   gate ownership).
 - New validation rules should land with a clear direct owner first; only then add broad
   regression, transcript, or gauntlet coverage so failures stay attributable.
+- **Gate magnet guard** (Cycle BA-7 / AG-10): gate-layer direct-owner suites (except FEM meta
+  projection and gauntlet) must not import ``golden_replay_projection``, classifier, or
+  dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions.
+  Enforced by ``test_ba7_gate_direct_owners_*`` in this module.
 
 Governance consumes the live inventory from ``tests/test_inventory_governance.json`` (regenerate via
 ``py -3 tools/test_audit.py``). Unclassified test files elsewhere in the repo do not affect
@@ -48,6 +52,7 @@ Cycle AL4 legality-owner quick reference (downstream suites assert wiring/smoke 
 
 from __future__ import annotations
 
+import ast
 import json
 from collections import defaultdict
 from dataclasses import dataclass, replace
@@ -121,6 +126,50 @@ _AL4_LEGALITY_OWNER_PATHS: Final[Mapping[str, str]] = {
     "social_exchange_emission": "tests/test_social_exchange_emission.py",
     "turn_pipeline_http_smoke": "tests/test_turn_pipeline_shared.py",
 }
+
+# Cycle BA-7 / AG-10: gate orchestration direct owners must not import replay/dashboard/classifier
+# read-side projection helpers (FEM meta projection + gauntlet/classifier neighbors are excluded).
+_GATE_MAGNET_GUARD_EXCLUDED_GROUP_IDS: Final[frozenset[str]] = frozenset(
+    {
+        "final_emission_meta_projection",
+        "gauntlet_playability_validation",
+    }
+)
+_GATE_MAGNET_GUARD_EXCLUDED_PATHS: Final[frozenset[str]] = frozenset(
+    {
+        "tests/test_failure_classifier.py",
+        "tests/test_failure_classification_contract.py",
+        "tests/test_failure_dashboard_controlled_failures.py",
+        "tests/test_golden_replay.py",
+    }
+)
+_FORBIDDEN_REPLAY_READ_SIDE_IMPORT_PREFIXES: Final[tuple[str, ...]] = (
+    "tests.helpers.golden_replay_projection",
+    "tests.helpers.golden_replay",
+    "tests.helpers.failure_classifier",
+    "tests.helpers.failure_dashboard_report",
+    "tests.helpers.failure_dashboard_fixtures",
+    "game.final_emission_replay_projection",
+)
+_FORBIDDEN_GATE_READ_SIDE_SOURCE_FRAGMENTS: Final[tuple[str, ...]] = (
+    "game.final_emission_replay_projection",
+    "read_side_lineage_projection_surface",
+    "project_sealed_replacement_subkind_from_fem",
+    "SEALED_REPLACEMENT_SUBKIND",
+    "SEALED_REPLACEMENT_SUBKINDS",
+    "build_fem_runtime_lineage_events",
+    "final_emission_meta_read_side_surface",
+    "fem_runtime_lineage_events",
+    "tests.helpers.golden_replay_projection",
+    "tests.helpers.failure_classifier",
+    "tests.helpers.failure_dashboard_report",
+    "protected_observation_field_registry",
+    "protected_observation_field_paths",
+    "project_turn_observation",
+    "build_classified_dashboard_row",
+    "validate_failure_classification_row",
+    "FailureClassification",
+)
 
 
 def _normalize_layer(name: str | None) -> str | None:
@@ -461,6 +510,74 @@ def build_ownership_registry_index(
         "groups": groups,
         "files_roles": files_roles,
     }
+
+
+def gate_magnet_guard_paths(
+    registry: Mapping[str, ResponsibilityRecord] | None = None,
+) -> tuple[str, ...]:
+    """Gate-layer direct owners that must not accumulate replay read-side projection ownership."""
+    reg = RESPONSIBILITY_REGISTRY if registry is None else registry
+    paths: list[str] = []
+    for gid, rec in reg.items():
+        if gid in _GATE_MAGNET_GUARD_EXCLUDED_GROUP_IDS:
+            continue
+        if rec.declared_architecture_layer != "gate":
+            continue
+        rel = rec.direct_owner.replace("\\", "/")
+        if rel in _GATE_MAGNET_GUARD_EXCLUDED_PATHS:
+            continue
+        paths.append(rel)
+    return tuple(sorted(paths))
+
+
+def _collect_import_module_paths(source: str) -> set[str]:
+    tree = ast.parse(source)
+    out: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                out.add(alias.name)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            out.add(node.module)
+    return out
+
+
+def _import_matches_forbidden_prefix(module: str, prefix: str) -> bool:
+    return module == prefix or module.startswith(prefix + ".")
+
+
+def collect_gate_magnet_guard_import_violations(
+    rel_path: str,
+    source: str,
+    *,
+    forbidden_prefixes: tuple[str, ...] = _FORBIDDEN_REPLAY_READ_SIDE_IMPORT_PREFIXES,
+) -> list[str]:
+    """Return import violations when a gate direct-owner suite pulls replay read-side projection helpers."""
+    violations: list[str] = []
+    for mod in sorted(_collect_import_module_paths(source)):
+        for prefix in forbidden_prefixes:
+            if _import_matches_forbidden_prefix(mod, prefix):
+                violations.append(
+                    f"{rel_path}: forbidden import {mod!r} "
+                    f"(replay/dashboard/classifier read-side projection; owner is "
+                    f"tests/test_final_emission_meta.py, tests/test_golden_replay.py, or classifier/dashboard suites)",
+                )
+    return violations
+
+
+def collect_gate_magnet_guard_source_fragment_violations(
+    rel_path: str,
+    source: str,
+    *,
+    forbidden_fragments: tuple[str, ...] = _FORBIDDEN_GATE_READ_SIDE_SOURCE_FRAGMENTS,
+) -> list[str]:
+    """Return source-fragment violations for read-side projection assertion creep in gate owners."""
+    return [
+        f"{rel_path}: forbidden read-side projection fragment {fragment!r} "
+        f"(move replay/dashboard/classifier contracts to meta projection or gauntlet/classifier owners)"
+        for fragment in forbidden_fragments
+        if fragment in source
+    ]
 
 
 def _load_inventory() -> dict:
@@ -1062,25 +1179,46 @@ def test_final_emission_meta_projection_read_side_ownership_boundaries() -> None
     assert "gate orchestration" not in title
 
 
-def test_final_emission_gate_does_not_accumulate_read_side_projection_assertions() -> None:
-    """AG-10: gate owner must not re-own FEM replay/read-side projection contracts."""
-    gate_source = (_REPO_ROOT / "tests" / "test_final_emission_gate.py").read_text(encoding="utf-8")
-    forbidden_fragments = (
-        "game.final_emission_replay_projection",
-        "read_side_lineage_projection_surface",
-        "project_sealed_replacement_subkind_from_fem",
-        "SEALED_REPLACEMENT_SUBKIND",
-        "SEALED_REPLACEMENT_SUBKINDS",
-        "build_fem_runtime_lineage_events",
-        "final_emission_meta_read_side_surface",
-        "fem_runtime_lineage_events",
-    )
+def test_ba7_gate_magnet_guard_paths_cover_gate_orchestration_owners() -> None:
+    """BA-7: magnet guard spans gate-layer direct owners except meta projection and gauntlet."""
+    guarded = gate_magnet_guard_paths()
+    assert "tests/test_final_emission_gate.py" in guarded
+    assert "tests/test_final_emission_validators.py" in guarded
+    assert "tests/test_output_sanitizer.py" in guarded
+    assert "tests/test_final_emission_meta.py" not in guarded
+    assert "tests/test_gauntlet_regressions.py" not in guarded
 
-    found = [fragment for fragment in forbidden_fragments if fragment in gate_source]
-    assert not found, (
+
+def test_ba7_gate_direct_owners_do_not_import_replay_read_side_projection_helpers() -> None:
+    """BA-7 / AG-10: gate direct-owner suites must not import replay/dashboard/classifier projection helpers."""
+    violations: list[str] = []
+    for rel in gate_magnet_guard_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing gate magnet-guard path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_gate_magnet_guard_import_violations(rel, source))
+    assert not violations, "gate magnet-guard import violations:\n" + "\n".join(violations)
+
+
+def test_ba7_gate_direct_owners_do_not_accumulate_read_side_projection_assertions() -> None:
+    """BA-7 / AG-10: gate direct-owner suites must not re-own replay/dashboard/classifier projection contracts."""
+    violations: list[str] = []
+    for rel in gate_magnet_guard_paths():
+        path = _REPO_ROOT / rel
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_gate_magnet_guard_source_fragment_violations(rel, source))
+    assert not violations, "gate magnet-guard source-fragment violations:\n" + "\n".join(violations)
+
+
+def test_final_emission_gate_does_not_accumulate_read_side_projection_assertions() -> None:
+    """AG-10: primary gate owner stays free of replay read-side projection assertion creep."""
+    rel = "tests/test_final_emission_gate.py"
+    source = (_REPO_ROOT / rel).read_text(encoding="utf-8")
+    violations = collect_gate_magnet_guard_source_fragment_violations(rel, source)
+    assert not violations, (
         "tests/test_final_emission_gate.py owns gate orchestration/wrappers, not read-side "
-        "replay projection assertions. Move these contracts to tests/test_final_emission_meta.py: "
-        + ", ".join(found)
+        "replay projection assertions. Move these contracts to tests/test_final_emission_meta.py:\n"
+        + "\n".join(violations)
     )
 
 
@@ -1139,6 +1277,32 @@ def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
     assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
 
 
+def test_ba1_protected_replay_manifest_registry_parity() -> None:
+    """Cycle BA-1: manifest generated section is derived only from PROTECTED_OBSERVATION_FIELDS."""
+    import importlib.util
+
+    import tests.helpers.golden_replay_projection as acceptance_projection
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "refresh_protected_replay_manifest",
+        root / "tools" / "refresh_protected_replay_manifest.py",
+    )
+    assert spec is not None and spec.loader is not None
+    refresh_mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(refresh_mod)
+
+    manifest_text = refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8")
+    assert acceptance_projection.protected_observation_manifest_section_is_current(manifest_text)
+    assert refresh_mod.manifest_section_is_current(manifest_text)
+
+    registry_paths = {
+        field.path: field.drift_bucket
+        for field in acceptance_projection.protected_observation_field_registry()
+    }
+    assert refresh_mod._registry_fields_by_path() == registry_paths
+
+
 def test_ao5_runtime_and_acceptance_projection_modules_remain_separate() -> None:
     """Cycle AO5: runtime lineage projection and acceptance observation projection stay split."""
     import game.final_emission_replay_projection as runtime_projection
@@ -1156,7 +1320,9 @@ def test_ao5_runtime_and_acceptance_projection_modules_remain_separate() -> None
 
     lineage_surface = runtime_projection.read_side_lineage_projection_surface()
     assert lineage_surface["mutation_lineage_key"] == "final_emission_mutation_lineage"
-    assert len(acceptance_projection.protected_observation_field_registry()) == 41
+    assert len(acceptance_projection.protected_observation_field_registry()) == len(
+        acceptance_projection.protected_observation_field_paths()
+    )
 
     meta_proj = RESPONSIBILITY_REGISTRY["final_emission_meta_projection"]
     gauntlet = RESPONSIBILITY_REGISTRY["gauntlet_playability_validation"]

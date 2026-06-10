@@ -9,64 +9,53 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events
-from tests.failure_classification_contract import (
-    FAILURE_DASHBOARD_EVIDENCE_LABELS,
-    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
-    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
-)
 from tests.helpers.failure_classifier import (
     FailureClassification,
     classify_replay_failure,
 )
 from tests.helpers.failure_classification_sync import (
+    failure_dashboard_evidence_labels,
+    failure_dashboard_evidence_manifest,
+    failure_dashboard_evidence_row_keys,
     failure_dashboard_row_shape_errors,
     known_failure_categories,
+    protected_replay_observation_field_paths,
 )
-from tests.helpers.golden_replay_projection import protected_observation_field_paths
 from tests.helpers.runtime_lineage_reporting import (
     build_runtime_lineage_summary,
     runtime_lineage_markdown_lines as _runtime_lineage_markdown_lines,
 )
-from tests.helpers.replay_drift_taxonomy import (
-    stability_classification_rows_from_scorecard,
-    summarize_owner_drift_buckets,
-    build_long_session_stability_history,
-    build_stability_hotspots,
-    render_stability_hotspots_markdown_lines,
-    render_stability_trends_markdown_lines,
-)
-from tests.helpers.replay_drift_longitudinal import (
+from tests.helpers.replay_drift_reports import (
     aggregate_owner_drift_history,
-    build_owner_drift_trend_summary,
-    render_owner_drift_longitudinal_report,
-)
-from tests.helpers.replay_drift_hotspots import (
+    aggregate_recurrence_history,
     build_hotspot_rankings,
-    render_owner_drift_hotspot_report,
-)
-from tests.helpers.replay_drift_risk import (
+    build_long_session_stability_history,
+    build_owner_drift_trend_summary,
+    build_recurrence_summary,
     build_risk_payload,
-    render_owner_drift_risk_report,
-)
-from tests.helpers.replay_drift_rows import (
+    build_stability_hotspots,
+    build_trend_payload,
     classification_rows_for_analysis,
     classification_rows_from_scorecards,
-)
-from tests.helpers.replay_drift_trends import (
-    build_trend_payload,
     enrich_hotspots_with_field_trends,
-    render_owner_drift_trend_report,
-)
-from tests.helpers.replay_bug_recurrence import (
-    aggregate_recurrence_history,
-    build_recurrence_summary,
     recurrence_rows,
+    render_owner_drift_hotspot_report,
+    render_owner_drift_longitudinal_report,
+    render_owner_drift_risk_report,
+    render_owner_drift_trend_report,
+    render_stability_hotspots_markdown_lines,
+    render_stability_trends_markdown_lines,
+    stability_classification_rows_from_scorecard,
+    summarize_owner_drift_buckets,
 )
 
 # Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
 # re-enumerating protected replay field paths or failure categories inline.
-REPLAY_PROTECTED_FIELD_PATHS = protected_observation_field_paths()
+REPLAY_PROTECTED_FIELD_PATHS = protected_replay_observation_field_paths()
 KNOWN_FAILURE_CATEGORIES = known_failure_categories()
+FAILURE_DASHBOARD_EVIDENCE_MANIFEST = failure_dashboard_evidence_manifest()
+FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS = failure_dashboard_evidence_row_keys()
+FAILURE_DASHBOARD_EVIDENCE_LABELS = failure_dashboard_evidence_labels()
 
 FAILURE_DASHBOARD_TABLE_COLUMNS: tuple[str, ...] = (
     "Scenario",
@@ -255,6 +244,8 @@ _RECORDED_RERUN_DRIFT_SCORECARDS: list[Mapping[str, Any]] = []
 _RECORDED_LONG_SESSION_STABILITY_SCORECARDS: list[Mapping[str, Any]] = []
 
 
+# Data shaping helpers -----------------------------------------------------
+
 def _as_list(value: Any) -> list[Any]:
     if value is None:
         return []
@@ -342,6 +333,25 @@ def build_failure_dashboard_rows(
     return rows
 
 
+def build_classified_dashboard_row(
+    *,
+    observed_turn: Mapping[str, Any],
+    drift_row: Mapping[str, Any],
+    scenario_id: str,
+    turn_index: int = 0,
+) -> FailureClassification:
+    """Build one classified dashboard row from an observed turn and drift row."""
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed_turn,
+        drift_rows=[drift_row],
+        scenario_id=scenario_id,
+        turn_index=turn_index,
+    )
+    if not rows:
+        raise ValueError("build_classified_dashboard_row expected at least one classified row")
+    return rows[0]
+
+
 def _cell(value: Any) -> str:
     if value is None or value == "":
         text = "none"
@@ -376,6 +386,8 @@ def _evidence_cell(row: Mapping[str, Any]) -> str:
     return "; ".join(parts) or "none"
 
 
+# Artifact request helpers -------------------------------------------------
+
 def failure_dashboard_requested(env: Mapping[str, str] | None = None) -> bool:
     """Return whether replay classification rows should be recorded/written."""
     env_map = env if env is not None else os.environ
@@ -398,6 +410,8 @@ def long_session_stability_scorecard_requested(env: Mapping[str, str] | None = N
         "on",
     }
 
+
+# Artifact recording helpers ----------------------------------------------
 
 def record_failure_dashboard_rows(rows: Sequence[Mapping[str, Any]]) -> None:
     """Record rows for the pytest session-level dashboard artifact."""
@@ -503,6 +517,16 @@ def record_long_session_stability_scorecard(scorecard: Mapping[str, Any] | None)
 
 def recorded_long_session_stability_scorecards() -> list[Mapping[str, Any]]:
     return list(_RECORDED_LONG_SESSION_STABILITY_SCORECARDS)
+
+
+def clear_requested_artifact_recordings(env: Mapping[str, str] | None = None) -> None:
+    """Clear recorder state for artifact writers requested in this pytest session."""
+    if failure_dashboard_requested(env):
+        clear_recorded_failure_dashboard_rows()
+    if rerun_drift_scorecard_requested(env):
+        clear_recorded_rerun_drift_scorecards()
+    if long_session_stability_scorecard_requested(env):
+        clear_recorded_long_session_stability_scorecards()
 
 
 def scorecards_for_longitudinal_aggregation(
@@ -912,6 +936,51 @@ def write_failure_dashboard_artifact_if_requested(
         generated_at=generated_at,
         runtime_lineage_events=runtime_lineage_events,
     )
+
+
+# Session artifact writer facade ------------------------------------------
+
+def write_requested_dashboard_artifacts(
+    *,
+    exitstatus: int,
+    command_used: str | None = None,
+    env: Mapping[str, str] | None = None,
+) -> list[Path]:
+    """Write all pytest-session dashboard artifacts requested by status and env."""
+    written: list[Path] = []
+
+    if exitstatus != 0:
+        failure_report = write_protected_replay_failure_report_if_present(command_used=command_used)
+        if failure_report is not None:
+            written.append(failure_report)
+
+    if exitstatus == 0 and rerun_drift_scorecard_requested(env):
+        scorecards = recorded_rerun_drift_scorecards()
+        written.extend(
+            write_rerun_drift_scorecard_artifacts(
+                scorecards[-1] if scorecards else None,
+                command_used=command_used,
+            )
+        )
+
+    if exitstatus == 0 and long_session_stability_scorecard_requested(env):
+        stability_scorecards = recorded_long_session_stability_scorecards()
+        written.extend(
+            write_long_session_stability_scorecard_artifacts(
+                stability_scorecards[-1] if stability_scorecards else None,
+                command_used=command_used,
+            )
+        )
+
+    if failure_dashboard_requested(env):
+        written.append(
+            write_failure_dashboard_artifact(
+                recorded_failure_dashboard_rows(),
+                command_used=command_used,
+            )
+        )
+
+    return written
 
 
 def _scorecard_summary(scorecard: Mapping[str, Any] | None) -> Mapping[str, Any]:

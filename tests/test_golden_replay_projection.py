@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-from tests.helpers.golden_replay import _observed_turn
+from tests.helpers.golden_replay_api import observed_turn_from_payload
 from tests.helpers.golden_replay_fixtures import (
     fem_payload,
     minimal_gm_output_payload,
@@ -11,6 +11,7 @@ from tests.helpers.golden_replay_fixtures import (
     observed_turn_from_gate_output,
     project_synthetic_turn,
 )
+from tests.helpers.opening_fallback_evidence import opening_dual_family_fem_meta
 from tests.helpers.golden_replay_projection import (
     REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS,
     dual_fallback_family_replay_precedence_surface,
@@ -22,7 +23,9 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_extraction_registry,
     protected_observation_field_paths,
     protected_observation_field_registry,
+    protected_observation_manifest_section_is_current,
     protected_path_representation_errors,
+    render_protected_observation_manifest_section,
 )
 
 
@@ -48,7 +51,7 @@ def test_golden_replay_projection_adapter_wires_observed_turn():
         ),
     )
     via_adapter = project_turn_observation(turn_payload)
-    via_wrapper = _observed_turn(
+    via_wrapper = observed_turn_from_payload(
         scenario_id=str(turn_payload["scenario_id"]),
         snap=dict(turn_payload["snap"]),
         payload=dict(turn_payload["payload"]),
@@ -68,10 +71,7 @@ def test_golden_replay_projection_adapter_wires_observed_turn():
 
 def test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_used() -> None:
     """Read-side ``fallback_family`` prefers diegetic taxonomy when both FEM fields are present."""
-    fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-    }
+    fem = opening_dual_family_fem_meta(realization_family="upstream_prepared_emission")
     assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
 
     turn = project_turn_observation(
@@ -130,11 +130,7 @@ def test_golden_replay_dual_family_precedence_surface_documents_read_side_rule()
 
 def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() -> None:
     """Projection must not collapse or rewrite runtime FEM dual-family stamps."""
-    raw_fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-        "final_emitted_source": "opening_deterministic_fallback",
-    }
+    raw_fem = opening_dual_family_fem_meta(realization_family="upstream_prepared_emission")
     payload = minimal_gm_output_payload(fem_meta=raw_fem)
     project_turn_observation(
         minimal_turn_payload(
@@ -150,11 +146,7 @@ def test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields() 
 
 def test_observed_turn_from_gate_output_projects_direct_seam_fields() -> None:
     """Direct-seam helper uses canonical projection and supports extra assertion fields."""
-    raw_fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-        "final_emitted_source": "opening_deterministic_fallback",
-    }
+    raw_fem = opening_dual_family_fem_meta(realization_family="upstream_prepared_emission")
     gm_output = {
         "player_facing_text": "Rain on the gate.",
         "_final_emission_meta": dict(raw_fem),
@@ -178,7 +170,7 @@ def test_observed_turn_from_gate_output_projects_direct_seam_fields() -> None:
 def test_protected_replay_manifest_matches_observation_registry():
     refresh_mod = _load_manifest_tool()
     manifest_text = refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8")
-    expected = refresh_mod.render_generated_section()
+    expected = render_protected_observation_manifest_section()
     current = refresh_mod.extract_generated_section(manifest_text)
 
     assert current is not None, "protected replay manifest is missing generated protected_field_paths section"
@@ -186,7 +178,8 @@ def test_protected_replay_manifest_matches_observation_registry():
         "protected replay manifest generated section is out of date; "
         "run: python tools/refresh_protected_replay_manifest.py --write"
     )
-    assert refresh_mod.manifest_section_is_current(manifest_text)
+    assert protected_observation_manifest_section_is_current(manifest_text)
+    assert refresh_mod.render_generated_section() == expected
 
     paths = tuple(sorted({field.path for field in protected_observation_field_registry()}))
     assert str(len(paths)) in current
@@ -344,10 +337,7 @@ def test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields():
 
 def test_ak5_complex_projection_contracts_remain_locked():
     """Dual fallback-family, dotted trace lookup, and semantic drift bucket stay explicit."""
-    fem = {
-        "fallback_family_used": "scene_opening",
-        "realization_fallback_family": "upstream_prepared_emission",
-    }
+    fem = opening_dual_family_fem_meta(realization_family="upstream_prepared_emission")
     assert project_replay_fallback_family_from_fem(fem) == "scene_opening"
 
     observed = project_synthetic_turn(

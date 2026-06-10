@@ -14,8 +14,12 @@ from tests.helpers.failure_classification_sync import (
     assert_contract_classifier_alignment,
     assert_failure_dashboard_row_shape,
     classification_contract_summary,
+    classify_replay_probe_row,
     expected_failure_classification_row_fields,
+    exact_value_drift_row,
     failure_dashboard_row_shape_errors,
+    forbidden_global_fallback_source_drift_row,
+    global_fallback_source_drift_row,
     known_failure_categories,
     known_owner_buckets,
     observed_fail_closed_opening_fallback_row,
@@ -28,9 +32,19 @@ from tests.helpers.failure_classification_sync import (
     observed_sealed_replacement_row,
     observed_social_fallback_row,
     observed_visibility_replacement_row,
+    opening_recovered_drift_row,
+    post_gate_mutation_drift_row,
+    projection_unavailable_drift_row,
     protected_observation_registry_summary,
+    replay_drift_row,
+    response_type_repair_drift_row,
+    route_mismatch_drift_row,
+    scaffold_leakage_drift_row,
+    semantic_text_fragment_drift_row,
+    speaker_mismatch_drift_row,
 )
 from tests.helpers.failure_dashboard_report import (
+    build_classified_dashboard_row,
     build_failure_dashboard_rows,
     build_runtime_lineage_summary,
     expected_failure_dashboard_columns,
@@ -83,121 +97,77 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
         (
             "wrong speaker",
             _observed(selected_speaker_id="guard"),
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            },
+            speaker_mismatch_drift_row(),
             ("speaker", "speaker", "critical", "game/speaker_contract_enforcement.py"),
         ),
         (
             "fallback substitution",
             observed_global_replacement_row(),
-            {
-                "field_path": "final_emitted_source",
-                "expected": "anything except 'global_scene_fallback'",
-                "actual": "global_scene_fallback",
-                "reason": "forbidden value observed",
-                "drift_bucket": "structural_drift",
-            },
+            forbidden_global_fallback_source_drift_row(),
             ("fallback", "fallback", "high", "game/final_emission_gate.py"),
         ),
         (
             "sanitizer leakage",
             _observed(),
-            {
-                "field_path": "scaffold_leakage",
-                "expected": False,
-                "actual": True,
-                "reason": "scaffold leakage mismatch",
-                "drift_bucket": "semantic_drift",
-            },
+            scaffold_leakage_drift_row(),
             ("sanitizer", "sanitizer", "critical", "game/output_sanitizer.py"),
         ),
         (
             "projection ambiguity",
             _observed(unavailable=["trace.canonical_entry"], trace={"canonical_entry": {}, "social_contract_trace": {}}),
-            {
-                "field_path": "trace.canonical_entry",
-                "expected": "available",
-                "actual": None,
-                "reason": "unexpected unavailable field",
-                "drift_bucket": "structural_drift",
-            },
+            projection_unavailable_drift_row("trace.canonical_entry", expected="available"),
             ("projection", "projection", "medium", "tests/helpers/golden_replay.py"),
         ),
         (
             "route mismatch",
             _observed(route_kind="action"),
-            {
-                "field_path": "route_kind",
-                "expected": "dialogue",
-                "actual": "action",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            },
+            route_mismatch_drift_row(expected="dialogue", actual="action"),
             ("route", "route", "high", "game/interaction_context.py"),
         ),
         (
             "continuity break",
             _observed(),
-            {
-                "field_path": "continuity.active_interaction_target_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            },
+            exact_value_drift_row(
+                "continuity.active_interaction_target_id",
+                expected="runner",
+                actual="guard",
+            ),
             ("continuity", "continuity", "high", "game/interaction_context.py"),
         ),
         (
             "semantic mutation",
             _observed(),
-            {
-                "field_path": "final_text",
-                "expected": "include 'east-road talk'",
-                "actual": "The answer changed.",
-                "reason": "required text fragment missing",
-                "drift_bucket": "semantic_drift",
-            },
+            semantic_text_fragment_drift_row(
+                expected="include 'east-road talk'",
+                actual="The answer changed.",
+            ),
             ("semantic_mutation", "semantic_mutation", "critical", "game/stage_diff_telemetry.py"),
         ),
         (
             "exact-only prose drift",
             _observed(),
-            {
-                "field_path": "final_text",
-                "expected": "hash-a",
-                "actual": "hash-b",
-                "reason": "opt-in exact text hash mismatch",
-                "drift_bucket": "exact_drift",
-            },
+            replay_drift_row(
+                "final_text",
+                expected="hash-a",
+                actual="hash-b",
+                reason="opt-in exact text hash mismatch",
+                drift_bucket="exact_drift",
+            ),
             ("replay_drift", "replay", "low", "tests/helpers/golden_replay.py"),
         ),
         (
             "response-type repair",
             _observed(response_type_repair_used=True, response_type_repair_kind="dialogue_shape"),
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            },
+            response_type_repair_drift_row(),
             ("emission", "emission", "medium", "game/final_emission_gate.py"),
         ),
         (
             "missing route metadata",
             _observed(route_kind=None, unavailable=["route_kind"]),
-            {
-                "field_path": "route_kind",
-                "expected": "available or allowed unavailable; allowed=[]",
-                "actual": None,
-                "reason": "unexpected unavailable field",
-                "drift_bucket": "structural_drift",
-            },
+            projection_unavailable_drift_row(
+                "route_kind",
+                expected="available or allowed unavailable; allowed=[]",
+            ),
             ("route", "route", "medium", "game/interaction_context.py"),
         ),
     ],
@@ -205,15 +175,12 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
 def test_failure_classifier_routes_canonical_failure_cases(case, observed, drift_row, expected):
     category, owner, severity, target = expected
 
-    rows = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id=f"{case}_scenario",
         turn_index=0,
         observed_turn=observed,
-        drift_rows=[drift_row],
+        drift_row=drift_row,
     )
-
-    assert len(rows) == 1
-    row = rows[0]
     assert row["category"] == category
     assert row["primary_owner"] == owner
     assert row["severity"] == severity
@@ -222,15 +189,7 @@ def test_failure_classifier_routes_canonical_failure_cases(case, observed, drift
 
 def test_failure_dashboard_report_includes_required_replay_columns():
     observed = observed_global_replacement_row()
-    drift_rows = [
-        {
-            "field_path": "final_emitted_source",
-            "expected": "generated_candidate",
-            "actual": "global_scene_fallback",
-            "reason": "exact value mismatch",
-            "drift_bucket": "structural_drift",
-        }
-    ]
+    drift_rows = [global_fallback_source_drift_row()]
 
     rows = build_failure_dashboard_rows(
         observed_turn=observed,
@@ -252,15 +211,7 @@ def test_failure_dashboard_report_includes_required_replay_columns():
 def test_failure_dashboard_row_shape_accepts_classified_row():
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(),
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[speaker_mismatch_drift_row()],
         scenario_id="row_shape_probe",
         turn_index=0,
     )
@@ -272,15 +223,7 @@ def test_failure_dashboard_row_shape_accepts_classified_row():
 def test_failure_dashboard_row_shape_rejects_missing_required_fields():
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(),
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[speaker_mismatch_drift_row()],
         scenario_id="row_shape_missing_probe",
         turn_index=0,
     )
@@ -295,15 +238,7 @@ def test_failure_dashboard_row_shape_rejects_missing_required_fields():
 def test_failure_dashboard_markdown_raises_on_invalid_row_shape():
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(),
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[speaker_mismatch_drift_row()],
         scenario_id="invalid_row_shape_probe",
         turn_index=0,
     )
@@ -322,15 +257,7 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     observed = observed_global_replacement_row()
     rows = build_failure_dashboard_rows(
         observed_turn=observed,
-        drift_rows=[
-            {
-                "field_path": "final_emitted_source",
-                "expected": "generated_candidate",
-                "actual": "global_scene_fallback",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[global_fallback_source_drift_row()],
         scenario_id="lineage_report_probe",
         turn_index=2,
     )
@@ -431,20 +358,12 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
     ],
 )
 def test_failure_classifier_rows_split_canonical_legacy_and_sealed_opening_owner_buckets(case, observed, expected_bucket):
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id=f"{case}_scenario",
         turn_index=0,
         observed_turn=observed,
-        drift_rows=[
-            {
-                "field_path": "opening_recovered_via_fallback",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=opening_recovered_drift_row(),
+    )
 
     assert row["category"] == "fallback"
     assert row["source_family"] == "opening_fallback"
@@ -454,20 +373,16 @@ def test_failure_classifier_rows_split_canonical_legacy_and_sealed_opening_owner
 
 
 def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="projected_owner_scenario",
         turn_index=0,
         observed_turn=observed_opening_fallback_row(owner_bucket=True),
-        drift_rows=[
-            {
-                "field_path": "opening_fallback_owner_bucket",
-                "expected": OPENING_FALLBACK_OWNER_SEALED_GATE,
-                "actual": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "opening_fallback_owner_bucket",
+            expected=OPENING_FALLBACK_OWNER_SEALED_GATE,
+            actual=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+    )
 
     assert row["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert row["source_family"] == "opening_fallback"
@@ -475,20 +390,16 @@ def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
 
 
 def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstream_repairs():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="opening_authorship_payload",
         turn_index=0,
         observed_turn=observed_legacy_opening_fallback_row(),
-        drift_rows=[
-            {
-                "field_path": "opening_fallback_authorship_source",
-                "expected": "upstream_prepared_opening_fallback",
-                "actual": "compatibility_local_opening_deterministic",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "opening_fallback_authorship_source",
+            expected="upstream_prepared_opening_fallback",
+            actual="compatibility_local_opening_deterministic",
+        ),
+    )
 
     assert row["category"] == "fallback"
     assert row["source_family"] == "opening_fallback"
@@ -496,82 +407,64 @@ def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstrea
 
 
 def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_composer():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="opening_basis_divergence",
         turn_index=0,
         observed_turn=observed_opening_fallback_row(),
-        drift_rows=[
-            {
-                "field_path": "opening_final_fallback_basis",
-                "expected": ["journal seed"],
-                "actual": ["visible fact"],
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "opening_final_fallback_basis",
+            expected=["journal seed"],
+            actual=["visible fact"],
+        ),
+    )
 
     assert row["investigate_first"] == "game/opening_deterministic_fallback.py"
 
 
 def test_failure_classifier_routes_opening_projection_omission_to_golden_replay():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="opening_projection_missing",
         turn_index=0,
         observed_turn=_observed(
             unavailable=["opening_fallback_owner_bucket"],
             raw_signal_presence={"opening_fallback_owner_bucket": True},
         ),
-        drift_rows=[
-            {
-                "field_path": "opening_fallback_owner_bucket",
-                "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-                "actual": None,
-                "reason": "unexpected unavailable field",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=projection_unavailable_drift_row(
+            "opening_fallback_owner_bucket",
+            expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+    )
 
     assert row["category"] == "projection"
     assert row["investigate_first"] == "tests/helpers/golden_replay.py"
 
 
 def test_failure_classifier_keeps_opening_gate_selection_symptom_gate_routed():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="opening_gate_selection",
         turn_index=0,
         observed_turn=observed_opening_fallback_row(),
-        drift_rows=[
-            {
-                "field_path": "final_emitted_source",
-                "expected": "generated_candidate",
-                "actual": "opening_deterministic_fallback",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=global_fallback_source_drift_row(
+            expected="generated_candidate",
+            actual="opening_deterministic_fallback",
+        ),
+    )
 
     assert row["category"] == "fallback"
     assert row["investigate_first"] == "game/final_emission_gate.py"
 
 
 def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="invalid_owner_scenario",
         turn_index=0,
         observed_turn=observed_opening_fallback_row(opening_fallback_owner_bucket="not-a-bucket"),
-        drift_rows=[
-            {
-                "field_path": "opening_fallback_owner_bucket",
-                "expected": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-                "actual": "not-a-bucket",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "opening_fallback_owner_bucket",
+            expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            actual="not-a-bucket",
+        ),
+    )
 
     assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
     assert row["investigate_first"] == "game/final_emission_meta.py"
@@ -580,40 +473,32 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
 # Sealed owner-bucket evidence is intentionally preserved as classifier
 # projection; it does not re-own sealed helper prose/output behavior.
 def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="projected_sealed_owner_scenario",
         turn_index=0,
         observed_turn=observed_sealed_replacement_row(),
-        drift_rows=[
-            {
-                "field_path": "sealed_fallback_owner_bucket",
-                "expected": "not-sealed",
-                "actual": SEALED_FALLBACK_OWNER_SEALED_GATE,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "sealed_fallback_owner_bucket",
+            expected="not-sealed",
+            actual=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        ),
+    )
 
     assert row["category"] == "fallback"
     assert row["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
 
 
 def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="projected_visibility_owner_scenario",
         turn_index=0,
         observed_turn=observed_visibility_replacement_row(),
-        drift_rows=[
-            {
-                "field_path": "visibility_fallback_owner_bucket",
-                "expected": "strict-social-visibility",
-                "actual": "sealed-gate",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "visibility_fallback_owner_bucket",
+            expected="strict-social-visibility",
+            actual="sealed-gate",
+        ),
+    )
 
     assert row["category"] == "fallback"
     assert row["visibility_fallback_owner_bucket"] == "sealed-gate"
@@ -623,20 +508,16 @@ def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
 
 
 def test_failure_classification_contract_rejects_invalid_visibility_owner_bucket():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="invalid_visibility_owner_scenario",
         turn_index=0,
         observed_turn=observed_visibility_replacement_row(visibility_fallback_owner_bucket="not-a-bucket"),
-        drift_rows=[
-            {
-                "field_path": "visibility_fallback_owner_bucket",
-                "expected": "sealed-gate",
-                "actual": "not-a-bucket",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=exact_value_drift_row(
+            "visibility_fallback_owner_bucket",
+            expected="sealed-gate",
+            actual="not-a-bucket",
+        ),
+    )
 
     assert "invalid visibility_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
 
@@ -665,13 +546,7 @@ def test_failure_dashboard_markdown_renders_one_failure_with_required_fields():
     rows = build_failure_dashboard_rows(
         observed_turn=observed,
         drift_rows=[
-            {
-                "field_path": "route_kind",
-                "expected": "dialogue",
-                "actual": None,
-                "reason": "unexpected unavailable field",
-                "drift_bucket": "structural_drift",
-            }
+            projection_unavailable_drift_row("route_kind", expected="dialogue"),
         ],
         scenario_id="one_failure",
         turn_index=7,
@@ -699,15 +574,7 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
     path = tmp_path / "failure_dashboard_latest.md"
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(),
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[speaker_mismatch_drift_row()],
         scenario_id="opt_in_probe",
         turn_index=1,
     )
@@ -741,79 +608,82 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
         (
             "answer upstream prepared repair sublayer",
             _observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
-            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "answer_upstream_prepared_repair", None),
         ),
         (
             "action outcome upstream prepared repair sublayer",
             _observed(response_type_repair_used=True, response_type_repair_kind="action_outcome_upstream_prepared_repair"),
-            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "action_outcome_upstream_prepared_repair", None),
         ),
         (
             "strict social dialogue repair sublayer",
             _observed(response_type_repair_used=True, response_type_repair_kind="strict_social_dialogue_repair"),
-            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "strict_social_dialogue_repair", None),
         ),
         (
             "dialogue minimal repair sublayer",
             _observed(response_type_repair_used=True, response_type_repair_kind="dialogue_minimal_repair"),
-            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "dialogue_minimal_repair", None),
         ),
         (
             "legacy thin answer backward-compatible sublayer",
             _observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
-            {"field_path": "response_type_repair_used", "expected": False, "actual": True, "reason": "legacy backward-compatible fixture", "drift_bucket": "structural_drift"},
+            response_type_repair_drift_row(reason="legacy backward-compatible fixture"),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "thin_answer", None),
         ),
         (
             "strict-social replacement sublayer",
             observed_social_fallback_row(),
-            {"field_path": "final_emitted_source", "expected": "generated_candidate", "actual": "strict_social_visibility_minimal", "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            global_fallback_source_drift_row(
+                expected="generated_candidate",
+                actual="strict_social_visibility_minimal",
+            ),
             ("fallback", "fallback", "emission", "high", "game/final_emission_gate.py", "strict_social_replacement", None, None),
         ),
         (
             "opening fallback sublayer",
             observed_opening_fallback_row(response_type_repair_kind=None),
-            {"field_path": "opening_recovered_via_fallback", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            opening_recovered_drift_row(),
             ("fallback", "fallback", "emission", "high", "game/final_emission_gate.py", "opening_fallback", None, None),
         ),
         (
             "post-gate mutation unknown",
             _observed(post_gate_mutation_detected=True),
-            {"field_path": "post_gate_mutation_detected", "expected": False, "actual": True, "reason": "exact value mismatch", "drift_bucket": "structural_drift"},
+            post_gate_mutation_drift_row(),
             ("emission", "emission", "validator", "high", "game/final_emission_gate.py", "emission.post_gate_mutation_unknown", None, None),
         ),
         (
             "sanitizer leakage metadata present",
             observed_sanitizer_row(),
-            {"field_path": "scaffold_leakage", "expected": False, "actual": True, "reason": "scaffold leakage mismatch", "drift_bucket": "semantic_drift"},
+            scaffold_leakage_drift_row(),
             ("sanitizer", "sanitizer", "emission", "critical", "game/output_sanitizer.py", "sanitizer", None, None),
         ),
         (
             "sanitizer leakage metadata absent",
             _observed(),
-            {"field_path": "scaffold_leakage", "expected": False, "actual": True, "reason": "scaffold leakage mismatch", "drift_bucket": "semantic_drift"},
+            scaffold_leakage_drift_row(),
             ("sanitizer", "sanitizer", "emission", "critical", "game/output_sanitizer.py", None, None, None),
         ),
         (
             "projection missing raw-present",
             _observed(unavailable=["trace.canonical_entry"], raw_signal_presence={"trace.canonical_entry": True}),
-            {"field_path": "trace.canonical_entry", "expected": "present", "actual": None, "reason": "unexpected unavailable field", "drift_bucket": "structural_drift"},
+            projection_unavailable_drift_row("trace.canonical_entry", expected="present"),
             ("projection", "projection", None, "medium", "tests/helpers/golden_replay.py", None, None, "projection_missing_raw_present"),
         ),
         (
             "runtime missing raw-absent",
             _observed(route_kind=None, unavailable=["route_kind"], raw_signal_presence={"route_kind": False}),
-            {"field_path": "route_kind", "expected": "present", "actual": None, "reason": "unexpected unavailable field", "drift_bucket": "structural_drift"},
+            projection_unavailable_drift_row("route_kind", expected="present"),
             ("route", "route", "projection", "medium", "game/interaction_context.py", None, None, "runtime_missing_raw_absent"),
         ),
         (
             "normalized missing raw-present",
             _observed(unavailable=["fallback_family"], raw_signal_presence={"fallback_family": True}, normalized_signal_presence={"fallback_family": False}),
-            {"field_path": "fallback_family", "expected": "present", "actual": None, "reason": "unexpected unavailable field", "drift_bucket": "structural_drift"},
+            projection_unavailable_drift_row("fallback_family", expected="present"),
             ("normalization", "normalization", "projection", "low", "game/final_emission_meta.py", None, None, "normalized_view_missing_raw_present"),
         ),
     ],
@@ -821,12 +691,12 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
 def test_failure_classifier_uses_precision_evidence_for_ambiguous_locality(case, observed, drift_row, expected):
     category, primary, secondary, severity, target, sublayer, repair_kind, missing_kind = expected
 
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id=f"{case}_scenario",
         turn_index=0,
         observed_turn=observed,
-        drift_rows=[drift_row],
-    )[0]
+        drift_row=drift_row,
+    )
 
     assert row["category"] == category
     assert row["primary_owner"] == primary
@@ -854,15 +724,7 @@ def test_failure_classifier_reduces_post_gate_unknown_from_final_emission_lineag
             post_gate_mutation_detected=True,
             final_emission_mutation_lineage=lineage,
         ),
-        drift_rows=[
-            {
-                "field_path": "post_gate_mutation_detected",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
     assert row["category"] == "emission"
@@ -876,15 +738,7 @@ def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_
         scenario_id="post_gate_no_lineage_unknown",
         turn_index=0,
         observed_turn=_observed(post_gate_mutation_detected=True, final_emission_mutation_lineage=None),
-        drift_rows=[
-            {
-                "field_path": "post_gate_mutation_detected",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
     assert row["emission_sublayer"] == "emission.post_gate_mutation_unknown"
@@ -910,15 +764,7 @@ def test_failure_classifier_maps_valid_prepared_answer_action_repairs_to_upstrea
             upstream_prepared_emission_source=source_field,
             upstream_prepared_emission_reject_reason=None,
         ),
-        drift_rows=[
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[response_type_repair_drift_row()],
     )[0]
 
     assert row["category"] == "emission"
@@ -934,7 +780,7 @@ def test_failure_classifier_maps_valid_prepared_answer_action_repairs_to_upstrea
 
 
 def test_failure_classifier_preserves_rejected_prepared_emission_reason():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="malformed_prepared_owner",
         turn_index=0,
         observed_turn=_observed(
@@ -945,16 +791,13 @@ def test_failure_classifier_preserves_rejected_prepared_emission_reason():
             upstream_prepared_emission_source="prepared_action_fallback_text",
             upstream_prepared_emission_reject_reason="missing_concrete_action_outcome",
         ),
-        drift_rows=[
-            {
-                "field_path": "upstream_prepared_emission_valid",
-                "expected": True,
-                "actual": False,
-                "reason": "malformed prepared emission rejected",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=replay_drift_row(
+            "upstream_prepared_emission_valid",
+            expected=True,
+            actual=False,
+            reason="malformed prepared emission rejected",
+        ),
+    )
 
     assert row["primary_owner"] == "upstream_prepared_emission"
     assert row["prepared_emission_owner"] == "upstream_prepared_emission"
@@ -973,13 +816,12 @@ def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
             upstream_prepared_emission_reject_reason="action_outcome_missing_result",
         ),
         drift_rows=[
-            {
-                "field_path": "upstream_prepared_emission_valid",
-                "expected": True,
-                "actual": False,
-                "reason": "malformed prepared emission rejected",
-                "drift_bucket": "structural_drift",
-            }
+            replay_drift_row(
+                "upstream_prepared_emission_valid",
+                expected=True,
+                actual=False,
+                reason="malformed prepared emission rejected",
+            )
         ],
         scenario_id="rejected_prepared_dashboard",
         turn_index=0,
@@ -997,7 +839,7 @@ def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
 
 
 def test_failure_classifier_absent_prepared_emission_telemetry_does_not_assign_upstream_owner():
-    row = classify_replay_failure(
+    row = classify_replay_probe_row(
         scenario_id="absent_prepared_telemetry",
         turn_index=0,
         observed_turn=_observed(
@@ -1008,16 +850,13 @@ def test_failure_classifier_absent_prepared_emission_telemetry_does_not_assign_u
             upstream_prepared_emission_source="absent",
             upstream_prepared_emission_reject_reason=None,
         ),
-        drift_rows=[
-            {
-                "field_path": "upstream_prepared_emission_used",
-                "expected": True,
-                "actual": False,
-                "reason": "absent prepared emission telemetry",
-                "drift_bucket": "structural_drift",
-            }
-        ],
-    )[0]
+        drift_row=replay_drift_row(
+            "upstream_prepared_emission_used",
+            expected=True,
+            actual=False,
+            reason="absent prepared emission telemetry",
+        ),
+    )
 
     assert row["category"] == "emission"
     assert row["primary_owner"] == "emission"
@@ -1035,13 +874,12 @@ def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prep
             upstream_prepared_emission_reject_reason=None,
         ),
         drift_rows=[
-            {
-                "field_path": "sanitizer_empty_fallback_used",
-                "expected": False,
-                "actual": True,
-                "reason": "sanitizer empty fallback selected",
-                "drift_bucket": "structural_drift",
-            }
+            replay_drift_row(
+                "sanitizer_empty_fallback_used",
+                expected=False,
+                actual=True,
+                reason="sanitizer empty fallback selected",
+            )
         ],
     )[0]
 
@@ -1061,15 +899,7 @@ def test_failure_classifier_keeps_dialogue_repairs_separate_from_prepared_emissi
         scenario_id=f"{repair_kind}_separate",
         turn_index=0,
         observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind=repair_kind),
-        drift_rows=[
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[response_type_repair_drift_row()],
     )[0]
 
     assert row["primary_owner"] == "emission"
@@ -1082,13 +912,12 @@ def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly(
     rows = build_failure_dashboard_rows(
         observed_turn=observed_sanitizer_empty_fallback_row(),
         drift_rows=[
-            {
-                "field_path": "sanitizer_empty_fallback_used",
-                "expected": False,
-                "actual": True,
-                "reason": "sanitizer empty fallback selected",
-                "drift_bucket": "structural_drift",
-            }
+            replay_drift_row(
+                "sanitizer_empty_fallback_used",
+                expected=False,
+                actual=True,
+                reason="sanitizer empty fallback selected",
+            )
         ],
         scenario_id="sanitizer_empty_dashboard",
         turn_index=0,
@@ -1113,15 +942,7 @@ def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy
         scenario_id="legacy_no_prepared_telemetry",
         turn_index=0,
         observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
-        drift_rows=[
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[response_type_repair_drift_row()],
     )[0]
 
     assert row["primary_owner"] == "emission"
@@ -1153,15 +974,7 @@ def test_failure_dashboard_evidence_column_compacts_precision_fields():
             sanitizer_lineage_empty_fallback_used=False,
             sanitizer_lineage_legacy_rewrite_active=False,
         ),
-        drift_rows=[
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[response_type_repair_drift_row()],
         scenario_id="evidence_probe",
         turn_index=3,
     )
@@ -1189,15 +1002,7 @@ def test_failure_dashboard_evidence_column_compacts_precision_fields():
 def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_compatible_label():
     rows = build_failure_dashboard_rows(
         observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
-        drift_rows=[
-            {
-                "field_path": "response_type_repair_used",
-                "expected": False,
-                "actual": True,
-                "reason": "legacy backward-compatible fixture",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_rows=[response_type_repair_drift_row(reason="legacy backward-compatible fixture")],
         scenario_id="legacy_thin_answer_probe",
         turn_index=1,
     )
@@ -1222,15 +1027,7 @@ def test_failure_classifier_legacy_sanitizer_rewrite_is_diagnostic_output_saniti
             sanitizer_lineage_empty_fallback_used=False,
             sanitizer_lineage_legacy_rewrite_active=True,
         ),
-        drift_rows=[
-            {
-                "field_path": "scaffold_leakage",
-                "expected": False,
-                "actual": True,
-                "reason": "legacy sentence rewrite diagnostic evidence",
-                "drift_bucket": "semantic_drift",
-            }
-        ],
+        drift_rows=[scaffold_leakage_drift_row(reason="legacy sentence rewrite diagnostic evidence")],
         scenario_id="legacy_sanitizer_rewrite_probe",
         turn_index=2,
     )
@@ -1264,13 +1061,12 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
             upstream_prepared_emission_valid=False,
         ),
         drift_rows=[
-            {
-                "field_path": "sanitizer_strict_social_fallback_used",
-                "expected": False,
-                "actual": True,
-                "reason": "sanitizer selected strict-social fallback",
-                "drift_bucket": "structural_drift",
-            }
+            replay_drift_row(
+                "sanitizer_strict_social_fallback_used",
+                expected=False,
+                actual=True,
+                reason="sanitizer selected strict-social fallback",
+            )
         ],
         scenario_id="strict_social_sanitizer_split_probe",
         turn_index=2,
@@ -1311,13 +1107,12 @@ def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
             ],
         ),
         drift_rows=[
-            {
-                "field_path": "fallback_content_owner",
-                "expected": "game.final_emission_gate",
-                "actual": "game.opening_deterministic_fallback",
-                "reason": "split owner projection changed",
-                "drift_bucket": "structural_drift",
-            }
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected="game.final_emission_gate",
+                actual="game.opening_deterministic_fallback",
+                reason="split owner projection changed",
+            )
         ],
         scenario_id="opening_split_owner_probe",
         turn_index=0,
@@ -1348,13 +1143,12 @@ def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_
             ],
         ),
         drift_rows=[
-            {
-                "field_path": "fallback_content_owner",
-                "expected": "game.final_emission_gate",
-                "actual": "game.social_exchange_emission",
-                "reason": "strict-social split owner projection changed",
-                "drift_bucket": "structural_drift",
-            }
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected="game.final_emission_gate",
+                actual="game.social_exchange_emission",
+                reason="strict-social split owner projection changed",
+            )
         ],
         scenario_id="strict_social_split_owner_probe",
         turn_index=0,
@@ -1380,13 +1174,12 @@ def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_o
             ],
         ),
         drift_rows=[
-            {
-                "field_path": "fallback_content_owner",
-                "expected": "game.opening_deterministic_fallback",
-                "actual": "game.unknown_content_owner",
-                "reason": "unknown split owner",
-                "drift_bucket": "structural_drift",
-            }
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected="game.opening_deterministic_fallback",
+                actual="game.unknown_content_owner",
+                reason="unknown split owner",
+            )
         ],
         scenario_id="unknown_split_owner_probe",
         turn_index=0,

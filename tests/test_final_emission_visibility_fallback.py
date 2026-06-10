@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import ast
 import inspect
+import sys
 from typing import Any
 
 import pytest
@@ -782,6 +783,47 @@ def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
     assert visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(legacy) == selected
 
 
+def test_block_ai_route_visibility_selector_does_not_mutate_inputs() -> None:
+    """Relocated from gate::test_block_ai_route_visibility_and_opening_rt_selectors_do_not_mutate_inputs (visibility portion)."""
+    tags = ["a", "b"]
+    vks = ["unseen_entity_reference"]
+    ce: list[Any] = []
+    cf: list[Any] = []
+    tags_s, vks_s = list(tags), list(vks)
+    visibility_fallback.route_visibility_enforcement_after_failed_validation(
+        tag_list_gate=tags,
+        dbg_gate="x",
+        violation_kinds=vks,
+        checked_entities=ce,
+        checked_facts=cf,
+        candidate_text="x",
+    )
+    assert tags == tags_s and vks == vks_s
+
+
+def test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass() -> None:
+    """Relocated from gate::test_block_ai_standard_visibility_safe_fallback_tuple_round_trips_selection (tuple wrapper retired)."""
+    import game.final_emission_gate as feg
+
+    from tests.helpers.opening_fallback_evidence import opening_gm_output
+
+    gm = opening_gm_output()
+    selected = feg._standard_visibility_safe_fallback(
+        gm_output=gm,
+        session={},
+        scene={"scene": gm["prompt_context"]["scene"]["public"]},
+        world={},
+        scene_id="frontier_gate",
+        eff_resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    assert isinstance(selected, visibility_fallback.VisibilitySelectedFallback)
+    round_tripped = visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(selected.as_legacy_tuple())
+    assert round_tripped == selected
+
+
 def test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass() -> None:
     """Gate global integrity selection returns the canonical visibility dataclass wire."""
     import game.final_emission_gate as feg
@@ -1508,3 +1550,18 @@ def test_build_visibility_route_decision_inputs_collects_selector_arguments() ->
     observation.violation_kinds.append("late_kind")
     assert bundle.tag_list_gate == ["known_fact_guard", "other"]
     assert bundle.violation_kinds == ["unseen_entity_reference"]
+
+
+def test_block_ai_visibility_fallback_helper_entrypoints_remain_importable() -> None:
+    """Regression anchor: relocated Block AI visibility helper tests must stay importable."""
+    mod = sys.modules[__name__]
+    for name in (
+        "test_visibility_fallback_route_helper_importable_and_callable_from_new_module",
+        "test_visibility_selected_fallback_round_trips_legacy_tuple",
+        "test_block_ai_route_visibility_selector_does_not_mutate_inputs",
+        "test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass",
+        "test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass",
+        "test_passive_scene_pressure_candidates_return_canonical_dataclass",
+        "test_grounded_scene_intro_fallback_candidates_return_canonical_dataclass",
+    ):
+        assert callable(getattr(mod, name, None)), name

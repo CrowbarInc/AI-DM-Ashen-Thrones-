@@ -45,9 +45,10 @@ from tests.helpers.failure_classification_sync import (
     failure_classification_typeddict_field_sets,
     known_failure_categories,
     known_owner_buckets,
+    speaker_mismatch_drift_row,
 )
 from tests.helpers.failure_dashboard_report import (
-    build_failure_dashboard_rows,
+    build_classified_dashboard_row,
     render_failure_dashboard_markdown,
 )
 from tests.helpers.failure_dashboard_fixtures import classified_rows
@@ -174,7 +175,7 @@ def test_sync_helper_reports_investigation_target_drift():
 
 
 def _valid_sample_row() -> dict[str, Any]:
-    return build_failure_dashboard_rows(
+    return build_classified_dashboard_row(
         observed_turn={
             "scenario_id": "contract_sample",
             "turn_index": 0,
@@ -185,18 +186,20 @@ def _valid_sample_row() -> dict[str, Any]:
             "unavailable": [],
             "trace": {"canonical_entry": {"target_actor_id": "runner"}},
         },
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "exact value mismatch",
-                "drift_bucket": "structural_drift",
-            }
-        ],
+        drift_row=speaker_mismatch_drift_row(),
         scenario_id="contract_sample",
         turn_index=0,
-    )[0]
+    )
+
+
+def test_replay_drift_row_helpers_preserve_probe_shapes() -> None:
+    assert speaker_mismatch_drift_row() == {
+        "field_path": "selected_speaker_id",
+        "expected": "runner",
+        "actual": "guard",
+        "reason": "exact value mismatch",
+        "drift_bucket": "structural_drift",
+    }
 
 
 def test_controlled_probe_rows_validate_against_contract():

@@ -233,7 +233,7 @@ def speaker_route_scorecard_history(
 
 def stable_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
     """Return a long-session stability scorecard with no owner drift rows."""
-    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+    from tests.helpers.golden_replay_api import build_long_session_stability_scorecard
 
     return build_long_session_stability_scorecard(
         scenario_id=scenario_id,
@@ -246,7 +246,7 @@ def stable_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
 
 def route_drift_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
     """Return a long-session stability scorecard containing route drift."""
-    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+    from tests.helpers.golden_replay_api import build_long_session_stability_scorecard
 
     return build_long_session_stability_scorecard(
         scenario_id=scenario_id,
@@ -259,7 +259,7 @@ def route_drift_long_session_scorecard_fixture(scenario_id: str) -> dict[str, An
 
 def fallback_drift_long_session_scorecard_fixture(scenario_id: str) -> dict[str, Any]:
     """Return a long-session stability scorecard containing fallback drift."""
-    from tests.helpers.golden_replay import build_long_session_stability_scorecard
+    from tests.helpers.golden_replay_api import build_long_session_stability_scorecard
 
     return build_long_session_stability_scorecard(
         scenario_id=scenario_id,

@@ -4,7 +4,7 @@ import pytest
 
 from tests.failure_classification_contract import ALLOWED_OWNER_DRIFT_BUCKETS
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
-from tests.helpers.golden_replay import compare_golden_replay_reruns
+from tests.helpers.golden_replay_api import compare_golden_replay_reruns
 from tests.helpers.replay_drift_taxonomy import (
     classify_owner_drift_bucket,
     classify_rerun_delta_owner_drift_bucket,

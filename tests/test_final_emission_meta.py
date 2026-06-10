@@ -103,11 +103,15 @@ from game.runtime_lineage_telemetry import (
     runtime_lineage_vocabulary_summary,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-from tests.helpers.golden_replay import (
+from tests.helpers.golden_replay_api import (
     assert_runtime_lineage_event_matches,
     expected_runtime_fallback_lineage_event,
 )
-from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
+from tests.helpers.opening_fallback_evidence import (
+    fail_closed_opening_fem_meta,
+    opening_dual_family_fem_meta,
+    successful_opening_fem_meta,
+)
 
 from game.narrative_mode_contract import (
     build_narrative_mode_contract,
@@ -1327,7 +1331,7 @@ def test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection
 
 def test_project_sealed_replacement_subkind_maps_terminal_replace_sources() -> None:
     cases = (
-        ({"final_route": "replaced", "final_emitted_source": "opening_deterministic_fallback"}, SEALED_REPLACEMENT_SUBKIND_OPENING),
+        (successful_opening_fem_meta(final_route="replaced"), SEALED_REPLACEMENT_SUBKIND_OPENING),
         ({"final_route": "replaced", "final_emitted_source": "social_interlocutor_minimal_fallback"}, SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR),
         ({"final_route": "replaced", "final_emitted_source": "passive_scene_pressure_fallback"}, SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE),
         ({"final_route": "replaced", "final_emitted_source": "npc_pursuit_neutral_fallback"}, SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL),
@@ -1521,11 +1525,10 @@ def test_write_time_mutation_seam_helpers_ensure_and_patch_fem_in_place() -> Non
 
 def test_normalize_fem_preserves_dual_fallback_family_fields_without_collapse() -> None:
     """Observability normalization must not rewrite diegetic vs provenance family stamps."""
-    raw = {
-        "fallback_family_used": "scene_opening",
-        REALIZATION_FALLBACK_FAMILY_FIELD: "legacy_diegetic_fallback",
-        "fallback_temporal_frame": "first_impression",
-    }
+    raw = opening_dual_family_fem_meta(
+        realization_family="legacy_diegetic_fallback",
+        fallback_temporal_frame="first_impression",
+    )
     normalized = normalize_final_emission_meta_for_observability(raw)
     assert normalized["fallback_family_used"] == "scene_opening"
     assert normalized[REALIZATION_FALLBACK_FAMILY_FIELD] == "legacy_diegetic_fallback"
@@ -1539,10 +1542,7 @@ def test_golden_replay_dual_family_precedence_matches_fem_normalization() -> Non
         project_replay_fallback_family_from_fem,
     )
 
-    raw = {
-        "fallback_family_used": "scene_opening",
-        REALIZATION_FALLBACK_FAMILY_FIELD: "upstream_prepared_emission",
-    }
+    raw = opening_dual_family_fem_meta(realization_family="upstream_prepared_emission")
     normalized = normalize_final_emission_meta_for_observability(raw)
     assert project_replay_fallback_family_from_fem(normalized) == "scene_opening"
     assert set(REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS) <= set(normalized.keys())

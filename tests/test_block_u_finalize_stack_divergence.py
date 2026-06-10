@@ -12,10 +12,6 @@ from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,
 )
-from tests.helpers.gate_equivalence_monkeypatch import (
-    patch_build_final_strict_social_response,
-    patch_get_speaker_selection_contract,
-)
 from tests.helpers.post_speaker_finalize_probe import (
     POST_SPEAKER_PROBE_ORDER,
     chain_enforce_phase_marker,
@@ -28,8 +24,6 @@ from tests.helpers.speaker_relocation_shadow_harness import (
     build_finalize_stack_fixture,
     install_dual_run_enforce,
 )
-from tests.helpers.strict_social_harness import runner_strict_bundle
-
 pytestmark = pytest.mark.unit
 
 
@@ -183,23 +177,23 @@ def test_block_v_passing_dialogue_plan_avoids_subtractive_strip_as_first_diverge
 
 def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monkeypatch):
     """Canonical plan without declared alias rows still fails closed on pregate writer alias."""
-    session, world, sid, resolution = runner_strict_bundle()
-    attach_dialogue_social_plan_to_resolution(
-        resolution,
-        make_valid_dialogue_social_plan(
-            speaker_id="tavern_runner",
-            speaker_name="Tavern Runner",
-            dialogue_intent="question",
-        ),
-    )
-    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
-
     build_inputs: list[str] = []
-    pre_gate_line = 'Ragged stranger says, "No names, only rumors."'
-    patch_build_final_strict_social_response(
+
+    def configure_resolution(resolution: dict) -> None:
+        attach_dialogue_social_plan_to_resolution(
+            resolution,
+            make_valid_dialogue_social_plan(
+                speaker_id="tavern_runner",
+                speaker_name="Tavern Runner",
+                dialogue_intent="question",
+            ),
+        )
+
+    session, world, sid, resolution, pre_gate_line = build_finalize_stack_fixture(
         monkeypatch,
-        line=pre_gate_line,
+        contract=locked_runner_contract(),
         strict_social_details=stub_strict_social_details,
+        configure_resolution=configure_resolution,
         build_inputs=build_inputs,
     )
     out = apply_final_emission_gate(
@@ -219,25 +213,25 @@ def test_block_w_canonical_only_plan_still_mismatch_without_declared_alias(monke
 
 def test_block_z_canonical_plan_with_declared_alias_passes_dialogue_plan_gate(monkeypatch):
     """Phase 2: declared ``allowed_pregate_speaker_labels`` accepts pregate alias before speaker repair."""
-    session, world, sid, resolution = runner_strict_bundle()
-    attach_dialogue_social_plan_to_resolution(
-        resolution,
-        make_valid_dialogue_social_plan(
-            speaker_id="tavern_runner",
-            speaker_name="Tavern Runner",
-            dialogue_intent="question",
-            allowed_pregate_speaker_labels=["Ragged stranger"],
-            speaker_alias_resolution_source="manual_bundle_override",
-        ),
-    )
-    patch_get_speaker_selection_contract(monkeypatch, locked_runner_contract())
-
     build_inputs: list[str] = []
-    pre_gate_line = 'Ragged stranger says, "No names, only rumors."'
-    patch_build_final_strict_social_response(
+
+    def configure_resolution(resolution: dict) -> None:
+        attach_dialogue_social_plan_to_resolution(
+            resolution,
+            make_valid_dialogue_social_plan(
+                speaker_id="tavern_runner",
+                speaker_name="Tavern Runner",
+                dialogue_intent="question",
+                allowed_pregate_speaker_labels=["Ragged stranger"],
+                speaker_alias_resolution_source="manual_bundle_override",
+            ),
+        )
+
+    session, world, sid, resolution, pre_gate_line = build_finalize_stack_fixture(
         monkeypatch,
-        line=pre_gate_line,
+        contract=locked_runner_contract(),
         strict_social_details=stub_strict_social_details,
+        configure_resolution=configure_resolution,
         build_inputs=build_inputs,
     )
 

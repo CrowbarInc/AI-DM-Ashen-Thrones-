@@ -34,6 +34,7 @@ from tests.helpers.failure_classifier import (
     INVESTIGATION_TARGETS,
     PRIMARY_OWNER_RULES,
     SECONDARY_OWNER_RULES,
+    classify_replay_failure,
     validate_failure_classification_row,
 )
 from tests.helpers.golden_replay_projection import (
@@ -42,6 +43,7 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_drift_bucket,
     protected_observation_field_paths,
     protected_observation_field_registry,
+    project_turn_observation,
 )
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
@@ -63,15 +65,12 @@ def observed_fail_closed_opening_fallback_row(*, owner_bucket: bool = False, **o
 
 def observed_legacy_opening_fallback_row(**overrides: Any) -> dict[str, Any]:
     """Return observed-row evidence for legacy compatibility-local opening fallback."""
-    fields = {
-        "final_emitted_source": "opening_deterministic_fallback",
-        "response_type_repair_kind": "opening_deterministic_fallback",
-        "opening_recovered_via_fallback": True,
-        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-        "fallback_family": "scene_opening",
-    }
-    fields.update(overrides)
-    return observed_failure_row(**fields)
+    return observed_failure_row(
+        **successful_opening_observed_fields(
+            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+            **overrides,
+        )
+    )
 
 
 def observed_global_replacement_row(**overrides: Any) -> dict[str, Any]:
@@ -140,9 +139,181 @@ def observed_sanitizer_empty_fallback_row(**overrides: Any) -> dict[str, Any]:
     return observed_failure_row(**fields)
 
 
+def replay_drift_row(
+    field_path: str,
+    *,
+    expected: Any,
+    actual: Any,
+    reason: str = "exact value mismatch",
+    drift_bucket: str = "structural_drift",
+) -> dict[str, Any]:
+    """Build one replay drift row dict for classifier/dashboard probes."""
+    return {
+        "field_path": field_path,
+        "expected": expected,
+        "actual": actual,
+        "reason": reason,
+        "drift_bucket": drift_bucket,
+    }
+
+
+def speaker_mismatch_drift_row(*, expected: str = "runner", actual: str = "guard") -> dict[str, Any]:
+    """Shared selected-speaker mismatch drift row for dashboard/classifier probes."""
+    return replay_drift_row("selected_speaker_id", expected=expected, actual=actual)
+
+
+def global_fallback_source_drift_row(
+    *,
+    expected: Any = "generated_candidate",
+    actual: Any = "global_scene_fallback",
+    reason: str = "exact value mismatch",
+) -> dict[str, Any]:
+    """Shared final-emitted-source fallback drift row for dashboard/classifier probes."""
+    return replay_drift_row("final_emitted_source", expected=expected, actual=actual, reason=reason)
+
+
+def forbidden_global_fallback_source_drift_row() -> dict[str, Any]:
+    """Shared forbidden global-scene-fallback drift row for classifier routing probes."""
+    return global_fallback_source_drift_row(
+        expected="anything except 'global_scene_fallback'",
+        reason="forbidden value observed",
+    )
+
+
+def scaffold_leakage_drift_row(*, reason: str = "scaffold leakage mismatch") -> dict[str, Any]:
+    """Shared scaffold-leakage drift row for dashboard/classifier probes."""
+    return replay_drift_row(
+        "scaffold_leakage",
+        expected=False,
+        actual=True,
+        reason=reason,
+        drift_bucket="semantic_drift",
+    )
+
+
+def response_type_repair_drift_row(*, reason: str = "exact value mismatch") -> dict[str, Any]:
+    """Shared response-type repair drift row for dashboard/classifier probes."""
+    return replay_drift_row("response_type_repair_used", expected=False, actual=True, reason=reason)
+
+
+def projection_unavailable_drift_row(
+    field_path: str,
+    *,
+    expected: Any,
+    actual: Any = None,
+    reason: str = "unexpected unavailable field",
+) -> dict[str, Any]:
+    """Shared projection-unavailable drift row for dashboard/classifier probes."""
+    return replay_drift_row(field_path, expected=expected, actual=actual, reason=reason)
+
+
+def post_gate_mutation_drift_row() -> dict[str, Any]:
+    """Shared post-gate mutation drift row for dashboard/classifier probes."""
+    return replay_drift_row("post_gate_mutation_detected", expected=False, actual=True)
+
+
+def opening_recovered_drift_row() -> dict[str, Any]:
+    """Shared opening-recovered drift row for opening fallback classifier probes."""
+    return replay_drift_row("opening_recovered_via_fallback", expected=False, actual=True)
+
+
+def route_mismatch_drift_row(*, expected: str, actual: str) -> dict[str, Any]:
+    """Shared route-kind mismatch drift row for dashboard/classifier probes."""
+    return replay_drift_row("route_kind", expected=expected, actual=actual)
+
+
+def semantic_text_fragment_drift_row(*, expected: str, actual: str) -> dict[str, Any]:
+    """Shared final-text semantic fragment drift row for dashboard/classifier probes."""
+    return replay_drift_row(
+        "final_text",
+        expected=expected,
+        actual=actual,
+        reason="required text fragment missing",
+        drift_bucket="semantic_drift",
+    )
+
+
+def exact_value_drift_row(
+    field_path: str,
+    *,
+    expected: Any,
+    actual: Any,
+    reason: str = "exact value mismatch",
+    drift_bucket: str = "structural_drift",
+) -> dict[str, Any]:
+    """Shared exact-value drift row for dashboard/classifier probes."""
+    return replay_drift_row(
+        field_path,
+        expected=expected,
+        actual=actual,
+        reason=reason,
+        drift_bucket=drift_bucket,
+    )
+
+
+def classify_replay_probe_row(
+    *,
+    observed_turn: Mapping[str, Any],
+    drift_row: Mapping[str, Any],
+    scenario_id: str,
+    turn_index: int = 0,
+) -> FailureClassification:
+    """Classify one replay probe turn into a single dashboard row."""
+    rows = classify_replay_failure(
+        scenario_id=scenario_id,
+        turn_index=turn_index,
+        observed_turn=observed_turn,
+        drift_rows=[drift_row],
+    )
+    if not rows:
+        raise AssertionError("classify_replay_probe_row expected one classified row")
+    return rows[0]
+
+
 def known_failure_categories() -> tuple[str, ...]:
     """Return contract-locked failure categories in stable order."""
     return tuple(sorted(ALLOWED_FAILURE_CATEGORIES))
+
+
+def classifier_evidence_field_paths() -> frozenset[str]:
+    """Return the contract-locked classifier evidence field paths."""
+    return frozenset(CLASSIFIER_EVIDENCE_FIELDS)
+
+
+def protected_replay_observation_field_paths() -> tuple[str, ...]:
+    """Return protected golden replay observation field paths via the sync facade."""
+    return protected_observation_field_paths()
+
+
+def protected_replay_classifier_evidence_field_paths() -> frozenset[str]:
+    """Return protected classifier evidence paths derived from protected replay projection."""
+    return protected_classifier_evidence_field_paths()
+
+
+def project_replay_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Project a replay-shaped turn payload through the acceptance projection adapter."""
+    return project_turn_observation(turn_payload)
+
+
+def failure_dashboard_evidence_manifest() -> tuple[tuple[str, str], ...]:
+    """Return the contract-owned dashboard Evidence-column manifest."""
+    from tests.failure_classification_contract import FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+
+    return FAILURE_DASHBOARD_EVIDENCE_MANIFEST
+
+
+def failure_dashboard_evidence_row_keys() -> tuple[str, ...]:
+    """Return dashboard Evidence-column row keys in contract order."""
+    from tests.failure_classification_contract import FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
+
+    return FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
+
+
+def failure_dashboard_evidence_labels() -> tuple[str, ...]:
+    """Return dashboard Evidence-column labels in contract order."""
+    from tests.failure_classification_contract import FAILURE_DASHBOARD_EVIDENCE_LABELS
+
+    return FAILURE_DASHBOARD_EVIDENCE_LABELS
 
 
 def known_owner_buckets() -> dict[str, tuple[str, ...]]:
@@ -277,7 +448,7 @@ def protected_observation_registry_summary() -> dict[str, Any]:
         "protected_field_count": len(registry),
         "structural_field_count": len(structural_paths),
         "semantic_field_count": len(semantic_paths),
-        "protected_classifier_evidence_count": len(protected_classifier_evidence_field_paths()),
+        "protected_classifier_evidence_count": len(protected_replay_classifier_evidence_field_paths()),
         "protected_classifier_evidence_excluded_count": len(protected_classifier_evidence_excluded_paths()),
         "paths_unique": len(set(paths)) == len(paths),
         "paths_sorted": list(paths) == sorted(paths),

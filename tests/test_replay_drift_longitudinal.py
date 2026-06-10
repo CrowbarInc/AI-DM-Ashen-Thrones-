@@ -4,7 +4,7 @@ from tests.helpers.failure_dashboard_report import (
     write_owner_drift_longitudinal_artifacts,
     write_rerun_drift_scorecard_artifacts,
 )
-from tests.helpers.golden_replay import compare_golden_replay_reruns
+from tests.helpers.golden_replay_api import compare_golden_replay_reruns
 from tests.helpers.replay_drift_taxonomy import route_drift_scorecard_fixture
 from tests.helpers.replay_drift_longitudinal import (
     aggregate_owner_drift_history,

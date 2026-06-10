@@ -623,11 +623,7 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
             "gm_output": {
                 "player_facing_text": "ok",
                 "metadata": {"observational_telemetry_bundle": {"fem_runtime_lineage_events": [projected]}},
-                "_final_emission_meta": {
-                    "opening_recovered_via_fallback": True,
-                    "fallback_family_used": "scene_opening",
-                    "final_emitted_source": "opening_deterministic_fallback",
-                },
+                "_final_emission_meta": successful_opening_fem_meta(),
             },
         },
         spine=spine,

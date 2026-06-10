@@ -6,9 +6,15 @@ from tests.helpers.golden_replay import (
     PROTECTED_NO_SCAFFOLD_TERMS,
     PROTECTED_SOCIAL_RESOLUTION_KINDS,
     PROTECTED_SOCIAL_ROUTE_KINDS,
+    PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS,
+    PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES,
     assert_golden_turn_observation,
     protected_route_expectation,
+    protected_social_directed_question_expectation,
     protected_social_structural_base,
+    protected_social_supplemental_structural_expectation,
+    protected_social_trace_target_expectation,
+    protected_social_vocative_canonical_entry_expectation,
     protected_source_expectation,
     protected_structural_expectation,
     protected_unavailable_expectation,
@@ -78,6 +84,52 @@ def test_protected_structural_expectation_can_emit_only_unavailable_equals_and_t
     ) == {
         "allow_unavailable": ["fallback_family"],
         "equals": {"trace.canonical_entry.target_actor_id": "guard"},
+        "one_of": {"trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES)},
+    }
+
+
+def test_protected_social_directed_question_expectation_matches_full_social_lock() -> None:
+    assert protected_social_directed_question_expectation("runner") == protected_social_structural_base(
+        selected_speaker_id="runner",
+        canonical_target_id="runner",
+        require_resolution_kind=True,
+        require_final_emitted_source=True,
+        require_trace_target=True,
+        require_trace_route=True,
+        include_resolution_kind=True,
+        include_trace_route=True,
+        disallow_global_scene_fallback=True,
+    )
+
+
+def test_protected_social_trace_target_expectation_locks_canonical_actor() -> None:
+    assert protected_social_trace_target_expectation("guard") == {
+        "allow_unavailable": ["fallback_family"],
+        "equals": {"trace.canonical_entry.target_actor_id": "guard"},
+    }
+
+
+def test_protected_social_vocative_canonical_entry_expectation_uses_shared_enums() -> None:
+    assert protected_social_vocative_canonical_entry_expectation("guard") == {
+        "allow_unavailable": ["fallback_family"],
+        "equals": {"trace.canonical_entry.target_actor_id": "guard"},
+        "one_of": {
+            "trace.canonical_entry.target_source": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES),
+            "trace.canonical_entry.reason": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS),
+        },
+    }
+
+
+def test_protected_social_supplemental_structural_expectation_supports_optional_fields() -> None:
+    assert protected_social_supplemental_structural_expectation() == {
+        "allow_unavailable": ["fallback_family"],
+    }
+    assert protected_social_supplemental_structural_expectation(
+        require_present=("final_emitted_source",),
+        include_trace_route=True,
+    ) == {
+        "allow_unavailable": ["fallback_family"],
+        "require_present": ["final_emitted_source"],
         "one_of": {"trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES)},
     }
 
@@ -245,4 +297,3 @@ def test_golden_expectation_helper_supports_dotted_paths_and_debug_messages() ->
     assert "gate_guard" in message
     assert "runner" in message
     assert "synthetic debug context" in message
-    assert_golden_turn_observation,

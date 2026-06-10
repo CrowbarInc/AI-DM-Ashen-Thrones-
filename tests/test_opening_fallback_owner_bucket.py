@@ -27,9 +27,11 @@ from game.final_emission_meta import (
     final_emission_meta_read_side_surface,
     opening_fallback_owner_bucket_from_fields,
 )
-from tests.helpers.opening_fallback_evidence import assert_fallback_owner_bucket
 from tests.helpers.opening_fallback_evidence import (
+    OPENING_FAILED_CLOSED_REPAIR_KIND,
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    assert_fallback_owner_bucket,
+    fail_closed_opening_observed_fields,
     successful_opening_observed_fields,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
@@ -67,10 +69,9 @@ def test_canonical_upstream_prepared_authorship_source_maps_to_upstream_prepared
 def test_fail_closed_repair_kind_maps_to_sealed_gate() -> None:
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_SEALED_GATE,
-        meta={
-            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
-            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-        },
+        meta=fail_closed_opening_observed_fields(
+            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        ),
     )
 
 
@@ -141,10 +142,7 @@ def test_retry_signal_maps_to_retry_only_when_explicit() -> None:
 def test_conflicting_upstream_prepared_and_fail_closed_signals_choose_sealed_gate() -> None:
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_SEALED_GATE,
-        meta={
-            "opening_recovered_via_fallback": True,
-            "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-            "response_type_repair_kind": "opening_deterministic_fallback_failed_closed",
-            "final_emitted_source": "opening_deterministic_fallback",
-        },
+        meta=successful_opening_observed_fields(
+            response_type_repair_kind=OPENING_FAILED_CLOSED_REPAIR_KIND,
+        ),
     )

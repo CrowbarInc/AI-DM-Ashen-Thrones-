@@ -203,3 +203,24 @@ def fail_closed_opening_observed_fields(*, include_owner_bucket: bool = False, *
         evidence["opening_fallback_owner_bucket"] = OPENING_FALLBACK_OWNER_SEALED_GATE
     evidence.update(overrides)
     return evidence
+
+
+def opening_dual_family_fem_meta(*, realization_family: str, **overrides: Any) -> dict[str, Any]:
+    """Return FEM slice with both diegetic ``fallback_family_used`` and provenance family."""
+    from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
+
+    evidence = successful_opening_fem_meta()
+    evidence[REALIZATION_FALLBACK_FAMILY_FIELD] = realization_family
+    evidence.update(overrides)
+    return evidence
+
+
+def opening_upstream_composition_meta_slice(**overrides: Any) -> dict[str, Any]:
+    """Return upstream-prepared opening composition-meta slice used by adapter/payload tests."""
+    evidence: dict[str, Any] = {
+        "fallback_family_used": OPENING_FALLBACK_FAMILY,
+        "fallback_temporal_frame": "first_impression",
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    }
+    evidence.update(overrides)
+    return evidence

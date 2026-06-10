@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any
 
@@ -10,37 +9,15 @@ import pytest
 from fastapi.testclient import TestClient
 
 import game.api as api_mod
-import game.storage as st
 from game.api import app
-from game.defaults import default_scene
 from game.storage import append_log, load_log
-from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE
+from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE, _seed_campaign_start_storage
 
 pytestmark = pytest.mark.integration
 
 
-def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    base = tmp_path
-    monkeypatch.setattr(st, "BASE_DIR", base)
-    monkeypatch.setattr(st, "DATA_DIR", base / "data")
-    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
-    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
-    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
-    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
-    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
-    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
-    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
-    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
-    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
-    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
-        (st.SCENES_DIR / f"{sid}.json").write_text(
-            json.dumps(default_scene(sid), indent=2), encoding="utf-8"
-        )
-
-
 def test_new_campaign_response_and_log_empty(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 
     append_log(
@@ -68,7 +45,7 @@ def test_state_reload_after_new_campaign_does_not_persist_transcript(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Read-only hydration must not append session_log rows (regression guard)."""
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 
     append_log({"timestamp": "t", "gm_output": {"player_facing_text": "x"}})
@@ -92,7 +69,7 @@ def test_state_reload_after_new_campaign_does_not_persist_transcript(
 def test_explicit_start_campaign_chat_still_produces_opening_resolution(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda _messages: dict(FAKE_GPT_RESPONSE))
 

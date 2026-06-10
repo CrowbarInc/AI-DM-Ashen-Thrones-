@@ -197,6 +197,7 @@ def build_finalize_stack_fixture(
     strict_social_details: Mapping[str, Any] | Callable[[], Mapping[str, Any]],
     line: str = 'Ragged stranger says, "No names, only rumors."',
     configure_resolution: Callable[[dict[str, Any]], None] | None = None,
+    build_inputs: list[str] | None = None,
 ) -> FinalizeStackFixture:
     """Build the common strict-social finalize-stack fixture without owning assertions."""
     session, world, scene_id, resolution = runner_strict_bundle()
@@ -205,7 +206,10 @@ def build_finalize_stack_fixture(
 
     patch_get_speaker_selection_contract(monkeypatch, contract)
     patch_build_final_strict_social_response(
-        monkeypatch, line=line, strict_social_details=strict_social_details
+        monkeypatch,
+        line=line,
+        strict_social_details=strict_social_details,
+        build_inputs=build_inputs,
     )
     return FinalizeStackFixture(session=session, world=world, scene_id=scene_id, resolution=resolution, line=line)
 

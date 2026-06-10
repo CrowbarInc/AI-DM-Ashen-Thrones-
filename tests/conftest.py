@@ -39,23 +39,17 @@ def pytest_configure(config):
         os.environ["ASHEN_WRITE_RERUN_DRIFT_SCORECARD"] = "1"
     if config.getoption("--write-long-session-stability-scorecard", default=False):
         os.environ["ASHEN_WRITE_LONG_SESSION_STABILITY_SCORECARD"] = "1"
-    if str(os.environ.get("ASHEN_WRITE_FAILURE_DASHBOARD") or "").strip().lower() in {"1", "true", "yes", "on"}:
-        from tests.helpers.failure_dashboard_report import clear_recorded_failure_dashboard_rows
+    if any(
+        str(os.environ.get(name) or "").strip().lower() in {"1", "true", "yes", "on"}
+        for name in (
+            "ASHEN_WRITE_FAILURE_DASHBOARD",
+            "ASHEN_WRITE_RERUN_DRIFT_SCORECARD",
+            "ASHEN_WRITE_LONG_SESSION_STABILITY_SCORECARD",
+        )
+    ):
+        from tests.helpers.failure_dashboard_report import clear_requested_artifact_recordings
 
-        clear_recorded_failure_dashboard_rows()
-    if str(os.environ.get("ASHEN_WRITE_RERUN_DRIFT_SCORECARD") or "").strip().lower() in {"1", "true", "yes", "on"}:
-        from tests.helpers.failure_dashboard_report import clear_recorded_rerun_drift_scorecards
-
-        clear_recorded_rerun_drift_scorecards()
-    if str(os.environ.get("ASHEN_WRITE_LONG_SESSION_STABILITY_SCORECARD") or "").strip().lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }:
-        from tests.helpers.failure_dashboard_report import clear_recorded_long_session_stability_scorecards
-
-        clear_recorded_long_session_stability_scorecards()
+        clear_requested_artifact_recordings()
 
 
 def _failure_dashboard_probe_requested(config) -> bool:
@@ -82,38 +76,9 @@ def pytest_collection_modifyitems(config, items):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    from tests.helpers.failure_dashboard_report import (
-        recorded_long_session_stability_scorecards,
-        recorded_rerun_drift_scorecards,
-        long_session_stability_scorecard_requested,
-        rerun_drift_scorecard_requested,
-        write_protected_replay_failure_report_if_present,
-        write_long_session_stability_scorecard_artifacts,
-        write_rerun_drift_scorecard_artifacts,
-    )
+    from tests.helpers.failure_dashboard_report import write_requested_dashboard_artifacts
 
-    if exitstatus != 0:
-        write_protected_replay_failure_report_if_present(command_used=" ".join(sys.argv))
-    if exitstatus == 0 and rerun_drift_scorecard_requested():
-        scorecards = recorded_rerun_drift_scorecards()
-        write_rerun_drift_scorecard_artifacts(
-            scorecards[-1] if scorecards else None,
-            command_used=" ".join(sys.argv),
-        )
-    if exitstatus == 0 and long_session_stability_scorecard_requested():
-        stability_scorecards = recorded_long_session_stability_scorecards()
-        write_long_session_stability_scorecard_artifacts(
-            stability_scorecards[-1] if stability_scorecards else None,
-            command_used=" ".join(sys.argv),
-        )
-    if str(os.environ.get("ASHEN_WRITE_FAILURE_DASHBOARD") or "").strip().lower() not in {"1", "true", "yes", "on"}:
-        return
-    from tests.helpers.failure_dashboard_report import (
-        recorded_failure_dashboard_rows,
-        write_failure_dashboard_artifact,
-    )
-
-    write_failure_dashboard_artifact(
-        recorded_failure_dashboard_rows(),
+    write_requested_dashboard_artifacts(
+        exitstatus=exitstatus,
         command_used=" ".join(sys.argv),
     )

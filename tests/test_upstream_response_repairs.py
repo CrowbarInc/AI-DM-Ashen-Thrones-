@@ -25,9 +25,10 @@ from game.upstream_response_repairs import (
 )
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    OPENING_FALLBACK_RESULT_META_FIELD_NAMES,
     opening_gm_output,
+    opening_upstream_composition_meta_slice,
 )
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_RESULT_META_FIELD_NAMES
 
 pytestmark = pytest.mark.unit
 
@@ -216,10 +217,11 @@ def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -
     assert meta["opening_curated_facts_source"] == "realization"
 
     comp = payload["opening_fallback_composition_meta"]
-    assert comp["fallback_family_used"] == "scene_opening"
-    assert comp["fallback_temporal_frame"] == "first_impression"
+    expected_comp = opening_upstream_composition_meta_slice()
+    assert comp["fallback_family_used"] == expected_comp["fallback_family_used"]
+    assert comp["fallback_temporal_frame"] == expected_comp["fallback_temporal_frame"]
     assert comp["opening_fallback_context_source"] == "opening_curated_facts"
-    assert comp["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert comp["opening_fallback_authorship_source"] == expected_comp["opening_fallback_authorship_source"]
     for key in OPENING_FALLBACK_RESULT_META_FIELD_NAMES:
         assert comp[key] == meta[key]
 

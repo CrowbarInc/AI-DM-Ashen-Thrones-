@@ -2,96 +2,102 @@
 """Refresh or verify the generated protected-field-paths section in the replay manifest.
 
 Report-only governance helper: reads the canonical protected observation registry
-from golden replay projection and keeps ``docs/testing/protected_replay_manifest.md``
-aligned.
+(``PROTECTED_OBSERVATION_FIELDS``) from golden replay projection and keeps
+``docs/testing/protected_replay_manifest.md`` aligned.
 """
 
 from __future__ import annotations
 
 import argparse
 import sys
+from difflib import unified_diff
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tests.helpers.golden_replay_projection import protected_observation_field_registry  # noqa: E402
+from tests.helpers.golden_replay_projection import (  # noqa: E402
+    PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN,
+    PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END,
+    extract_protected_observation_manifest_section,
+    protected_observation_field_paths,
+    protected_observation_manifest_section_is_current,
+    protected_observation_manifest_field_rows,
+    render_protected_observation_manifest_section,
+)
 
 MANIFEST_PATH = ROOT / "docs" / "testing" / "protected_replay_manifest.md"
-BEGIN_MARKER = "<!-- BEGIN GENERATED: protected_field_paths -->"
-END_MARKER = "<!-- END GENERATED: protected_field_paths -->"
+BEGIN_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN
+END_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END
 INSERT_BEFORE_HEADING = "## Cycle S Drift Policy Addendum"
 
 
 def _registry_fields_by_path() -> dict[str, str]:
-    """Return registry path -> drift bucket, preserving the registry as sole authority."""
-    buckets_by_path: dict[str, str] = {}
-    for field in protected_observation_field_registry():
-        previous = buckets_by_path.setdefault(field.path, field.drift_bucket)
-        if previous != field.drift_bucket:
-            raise ValueError(
-                f"Protected observation field {field.path!r} has conflicting drift buckets: "
-                f"{previous!r} and {field.drift_bucket!r}"
-            )
-    return buckets_by_path
+    """Return registry path -> drift bucket (delegates to ``PROTECTED_OBSERVATION_FIELDS``)."""
+    return {path: bucket for path, bucket in protected_observation_manifest_field_rows()}
 
 
 def render_generated_section() -> str:
     """Return the bounded manifest section for protected observation field paths."""
-    buckets_by_path = _registry_fields_by_path()
-    paths = tuple(sorted(buckets_by_path))
-    structural_count = sum(bucket == "structural_drift" for bucket in buckets_by_path.values())
-    semantic_count = sum(bucket == "semantic_drift" for bucket in buckets_by_path.values())
-    lines = [
-        BEGIN_MARKER,
-        "",
-        "## Protected Observation Field Paths (Generated)",
-        "",
-        "Bounded registry of golden replay observation paths locked by protected replay.",
-        "Source: `tests/helpers/golden_replay_projection.py::protected_observation_field_registry()`.",
-        "",
-        "Refresh this section:",
-        "",
-        "```bash",
-        "python tools/refresh_protected_replay_manifest.py --write",
-        "```",
-        "",
-        "Verify without writing:",
-        "",
-        "```bash",
-        "python tools/refresh_protected_replay_manifest.py --check",
-        "```",
-        "",
-        f"- **Path count:** {len(paths)}",
-        f"- **Structural drift fields:** {structural_count}",
-        f"- **Semantic drift fields:** {semantic_count}",
-        "",
-        "| Field path | Drift bucket |",
-        "|---|---|",
-    ]
-    for path in paths:
-        lines.append(f"| `{path}` | `{buckets_by_path[path]}` |")
-    lines.extend(["", END_MARKER])
-    return "\n".join(lines)
+    return render_protected_observation_manifest_section()
 
 
 def extract_generated_section(manifest_text: str) -> str | None:
-    begin = manifest_text.find(BEGIN_MARKER)
-    end = manifest_text.find(END_MARKER)
-    if begin == -1 or end == -1 or end < begin:
-        return None
-    return manifest_text[begin : end + len(END_MARKER)]
+    return extract_protected_observation_manifest_section(manifest_text)
 
 
 def manifest_section_is_current(manifest_text: str | None = None) -> bool:
     text = manifest_text if manifest_text is not None else MANIFEST_PATH.read_text(encoding="utf-8")
-    current = extract_generated_section(text)
-    expected = render_generated_section()
-    return current is not None and current == expected
+    return protected_observation_manifest_section_is_current(text)
+
+
+def _validate_registry_invariants() -> str | None:
+    paths = protected_observation_field_paths()
+    if len(paths) != len(set(paths)):
+        from collections import Counter
+
+        duplicates = sorted(path for path, count in Counter(paths).items() if count > 1)
+        return f"Protected observation registry has duplicate paths: {duplicates!r}"
+    rows = protected_observation_manifest_field_rows()
+    if len(rows) != len(paths):
+        return (
+            "Protected observation manifest rows disagree with registry path count: "
+            f"rows={len(rows)!r} paths={len(paths)!r}"
+        )
+    return None
+
+
+def _manifest_drift_message(manifest_text: str, expected: str, current: str | None) -> str:
+    if current is None:
+        return (
+            f"Missing generated section markers {BEGIN_MARKER!r} / {END_MARKER!r} in {MANIFEST_PATH}."
+        )
+    diff_lines = list(
+        unified_diff(
+            current.splitlines(),
+            expected.splitlines(),
+            fromfile="manifest (current)",
+            tofile="registry (expected)",
+            lineterm="",
+        )
+    )
+    preview = "\n".join(diff_lines[:40])
+    if len(diff_lines) > 40:
+        preview += f"\n... ({len(diff_lines) - 40} more diff lines)"
+    return (
+        "Protected replay manifest generated section is out of date.\n"
+        "Run: python tools/refresh_protected_replay_manifest.py --write\n"
+        f"{preview}"
+    )
 
 
 def refresh_manifest(*, write: bool) -> int:
+    invariant_error = _validate_registry_invariants()
+    if invariant_error is not None:
+        print(invariant_error, file=sys.stderr)
+        return 1
+
     manifest = MANIFEST_PATH.read_text(encoding="utf-8")
     expected = render_generated_section()
     current = extract_generated_section(manifest)
@@ -100,6 +106,10 @@ def refresh_manifest(*, write: bool) -> int:
         if write:
             print(f"{MANIFEST_PATH}: generated protected_field_paths section already current")
         return 0
+
+    if not write:
+        print(_manifest_drift_message(manifest, expected, current), file=sys.stderr)
+        return 1
 
     if current is None:
         anchor = manifest.find(INSERT_BEFORE_HEADING)
@@ -110,23 +120,19 @@ def refresh_manifest(*, write: bool) -> int:
     else:
         updated = manifest.replace(current, expected)
 
-    if write:
-        MANIFEST_PATH.write_text(updated, encoding="utf-8")
-        print(f"Wrote generated protected_field_paths section to {MANIFEST_PATH}")
-        return 0
-
-    print(
-        "Protected replay manifest generated section is out of date. "
-        "Run: python tools/refresh_protected_replay_manifest.py --write",
-        file=sys.stderr,
-    )
-    return 1
+    MANIFEST_PATH.write_text(updated, encoding="utf-8")
+    print(f"Wrote generated protected_field_paths section to {MANIFEST_PATH}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--check", action="store_true", help="Verify the generated section matches projection.")
+    mode.add_argument(
+        "--check",
+        action="store_true",
+        help="Verify the generated section matches PROTECTED_OBSERVATION_FIELDS.",
+    )
     mode.add_argument("--write", action="store_true", help="Rewrite the generated section in the manifest.")
     args = parser.parse_args(argv)
     return refresh_manifest(write=args.write)

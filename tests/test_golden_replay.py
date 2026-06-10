@@ -40,7 +40,11 @@ from tests.helpers.golden_replay import (
     frontier_gate_branch_turn_ids,
     load_frontier_gate_long_session_spine,
     protected_no_scaffold_expectation,
+    protected_social_directed_question_expectation,
     protected_social_structural_base,
+    protected_social_supplemental_structural_expectation,
+    protected_social_trace_target_expectation,
+    protected_social_vocative_canonical_entry_expectation,
     protected_structural_expectation,
     protected_unavailable_expectation,
     render_long_session_replay_summary_markdown,
@@ -752,20 +756,9 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
     assert captured_prompts
     assert result["turn_count"] == 1
     turn = result["turns"][0]
-    directed_npc_question_expectation = protected_social_structural_base(
-        selected_speaker_id="runner",
-        canonical_target_id="runner",
-        require_resolution_kind=True,
-        require_final_emitted_source=True,
-        require_trace_target=True,
-        require_trace_route=True,
-        include_resolution_kind=True,
-        include_trace_route=True,
-        disallow_global_scene_fallback=True,
-    )
     assert_protected_golden_turn_observation(
         turn,
-        directed_npc_question_expectation,
+        protected_social_directed_question_expectation("runner"),
         scenario_id="directed_npc_question",
         debug_context=format_golden_replay_debug(result),
     )
@@ -820,10 +813,7 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if "route_kind" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            protected_structural_expectation(
-                allow_unavailable=("fallback_family",),
-                no_scaffold=False,
-            ),
+            protected_social_supplemental_structural_expectation(),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -831,21 +821,7 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if canonical_entry:
         assert_protected_golden_turn_observation(
             turn,
-            protected_structural_expectation(
-                allow_unavailable=("fallback_family",),
-                equals={"trace.canonical_entry.target_actor_id": "guard"},
-                one_of={
-                    "trace.canonical_entry.target_source": ["spoken_vocative", "vocative"],
-                    "trace.canonical_entry.reason": [
-                        "spoken_vocative_address",
-                        "spoken_vocative_resolved_to_addressable_actor",
-                        "explicit_spoken_vocative_overrode_continuity",
-                        "spoken_vocative_overrode_continuity",
-                    ],
-                },
-                include_route_kind=False,
-                no_scaffold=False,
-            ),
+            protected_social_vocative_canonical_entry_expectation("guard"),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -853,12 +829,7 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     if social_contract_trace.get("route_selected") is not None:
         assert_protected_golden_turn_observation(
             turn,
-            protected_structural_expectation(
-                allow_unavailable=("fallback_family",),
-                include_route_kind=False,
-                include_trace_route=True,
-                no_scaffold=False,
-            ),
+            protected_social_supplemental_structural_expectation(include_trace_route=True),
             scenario_id="vocative_override_after_prior_continuity",
             debug_context=debug_context,
         )
@@ -897,11 +868,8 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     if "final_emitted_source" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            protected_structural_expectation(
+            protected_social_supplemental_structural_expectation(
                 require_present=("final_emitted_source",),
-                allow_unavailable=("fallback_family",),
-                include_route_kind=False,
-                no_scaffold=False,
             ),
             scenario_id="wrong_speaker_strict_social_emission",
             debug_context=debug_context,
@@ -1184,12 +1152,7 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
     if canonical_entry:
         assert_protected_golden_turn_observation(
             turn,
-            protected_structural_expectation(
-                allow_unavailable=("fallback_family",),
-                equals={"trace.canonical_entry.target_actor_id": "tavern_runner"},
-                include_route_kind=False,
-                no_scaffold=False,
-            ),
+            protected_social_trace_target_expectation("tavern_runner"),
             scenario_id="lead_followup_with_dialogue_lock",
             debug_context=debug_context,
         )

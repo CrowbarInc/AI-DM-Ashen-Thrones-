@@ -14,9 +14,8 @@ import game.api as api_mod
 import game.api_turn_support as turn_support
 import game.storage as st
 from game.api import app, compose_state
-from game.defaults import default_scene
 from game.storage import load_log, load_session
-from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE
+from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE, _seed_campaign_start_storage
 
 pytestmark = pytest.mark.integration
 
@@ -50,26 +49,6 @@ SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE = {
         "prepared_scene_opening_text": RICH_OPENING_GPT_RESPONSE["player_facing_text"],
     },
 }
-
-
-def _patch_data_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    base = tmp_path
-    monkeypatch.setattr(st, "BASE_DIR", base)
-    monkeypatch.setattr(st, "DATA_DIR", base / "data")
-    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
-    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
-    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
-    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
-    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
-    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
-    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
-    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
-    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
-    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
-        (st.SCENES_DIR / f"{sid}.json").write_text(
-            json.dumps(default_scene(sid), indent=2), encoding="utf-8"
-        )
 
 
 def _assert_scene_opening_reads_like_scene(text: str) -> None:
@@ -106,7 +85,7 @@ def _assert_scene_opening_reads_like_scene(text: str) -> None:
 
 
 def test_compose_state_ui_campaign_flags_fresh_vs_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 
     with TestClient(app) as client:
@@ -123,7 +102,7 @@ def test_compose_state_ui_campaign_flags_fresh_vs_started(tmp_path: Path, monkey
 
 
 def test_new_campaign_leaves_log_empty_and_no_gm_payload(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 
     with TestClient(app) as client:
@@ -136,7 +115,7 @@ def test_new_campaign_leaves_log_empty_and_no_gm_payload(tmp_path: Path, monkeyp
 
 
 def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(RICH_OPENING_GPT_RESPONSE))
 
@@ -219,7 +198,7 @@ def test_start_campaign_emits_opening_and_sets_started(tmp_path: Path, monkeypat
 def test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(RICH_OPENING_GPT_RESPONSE))
 
@@ -265,7 +244,7 @@ def test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_te
 def test_start_campaign_promotes_valid_upstream_prepared_scene_opening(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr(
         "game.api.call_gpt",
@@ -304,7 +283,7 @@ def test_start_campaign_promotes_valid_upstream_prepared_scene_opening(
 def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
 
@@ -330,7 +309,7 @@ def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_
 def test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
 
@@ -367,7 +346,7 @@ def test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_fac
 
 
 def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
 
@@ -381,7 +360,7 @@ def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch
 
 
 def test_second_start_campaign_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
 
@@ -398,7 +377,7 @@ def test_second_start_campaign_rejected(tmp_path: Path, monkeypatch: pytest.Monk
 def test_start_campaign_prompt_includes_opening_contract_fields(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
     captured: list[Any] = []
 
@@ -439,7 +418,7 @@ def test_play_ui_bootstrap_copy_and_no_gm_ready_placeholder() -> None:
 
 
 def test_failed_start_campaign_does_not_mark_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    _patch_data_dir(tmp_path, monkeypatch)
+    _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 
     def _boom(**_kwargs: Any) -> tuple[Any, ...]:

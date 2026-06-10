@@ -2,27 +2,27 @@ from __future__ import annotations
 
 import pytest
 
-from tests.failure_classification_contract import (
-    CLASSIFIER_EVIDENCE_FIELDS,
-    FAILURE_DASHBOARD_EVIDENCE_LABELS,
-    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
-    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
-)
 from tests.helpers.failure_classification_sync import (
     assert_contract_classifier_alignment,
+    classifier_evidence_field_paths,
     classification_contract_summary,
+    failure_dashboard_evidence_labels,
+    failure_dashboard_evidence_manifest,
+    failure_dashboard_evidence_row_keys,
     dashboard_evidence_manifest_misalignments,
     known_failure_categories,
     known_owner_buckets,
+    project_replay_turn_observation,
+    protected_replay_observation_field_paths,
 )
 from tests.helpers.failure_dashboard_report import (
-    FAILURE_DASHBOARD_EVIDENCE_LABELS,
-    FAILURE_DASHBOARD_EVIDENCE_MANIFEST,
-    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS,
+    FAILURE_DASHBOARD_EVIDENCE_LABELS as DASHBOARD_EVIDENCE_LABELS,
+    FAILURE_DASHBOARD_EVIDENCE_MANIFEST as DASHBOARD_EVIDENCE_MANIFEST,
+    FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS as DASHBOARD_EVIDENCE_ROW_KEYS,
     KNOWN_FAILURE_CATEGORIES,
     REPLAY_PROTECTED_FIELD_PATHS,
     _evidence_cell,
-    build_failure_dashboard_rows,
+    build_classified_dashboard_row,
     failure_dashboard_requested,
     record_failure_dashboard_rows,
     render_failure_dashboard_markdown,
@@ -32,7 +32,6 @@ from tests.helpers.failure_dashboard_fixtures import (
     classified_rows,
     _observed,
 )
-from tests.helpers.golden_replay_projection import project_turn_observation, protected_field_paths
 
 pytestmark = pytest.mark.failure_dashboard_probe
 
@@ -56,19 +55,22 @@ _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS = frozenset(
 
 
 def test_dashboard_report_module_exports_projection_and_taxonomy_surfaces():
-    assert REPLAY_PROTECTED_FIELD_PATHS == protected_field_paths()
+    assert REPLAY_PROTECTED_FIELD_PATHS == protected_replay_observation_field_paths()
     assert KNOWN_FAILURE_CATEGORIES == known_failure_categories()
     assert_contract_classifier_alignment()
 
 
 def test_dashboard_evidence_row_keys_are_classifier_contract_backed():
-    assert set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) <= CLASSIFIER_EVIDENCE_FIELDS
+    assert set(DASHBOARD_EVIDENCE_ROW_KEYS) <= classifier_evidence_field_paths()
+    assert DASHBOARD_EVIDENCE_ROW_KEYS == failure_dashboard_evidence_row_keys()
     assert dashboard_evidence_manifest_misalignments() == []
 
 
 def test_dashboard_evidence_manifest_labels_are_locked():
     assert dashboard_evidence_manifest_misalignments() == []
-    assert tuple(label for label, _row_key in FAILURE_DASHBOARD_EVIDENCE_MANIFEST) == FAILURE_DASHBOARD_EVIDENCE_LABELS
+    assert DASHBOARD_EVIDENCE_MANIFEST == failure_dashboard_evidence_manifest()
+    assert DASHBOARD_EVIDENCE_LABELS == failure_dashboard_evidence_labels()
+    assert tuple(label for label, _row_key in DASHBOARD_EVIDENCE_MANIFEST) == DASHBOARD_EVIDENCE_LABELS
 
 
 _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
@@ -168,7 +170,7 @@ def test_controlled_failure_probe_owner_buckets_use_sync_taxonomy():
 
 
 def test_controlled_failure_probe_field_paths_use_projection_surface():
-    protected = set(protected_field_paths())
+    protected = set(protected_replay_observation_field_paths())
     for _case_id, _observed, drift_row, _expected in CONTROLLED_FAILURE_CASES:
         field_path = str(drift_row["field_path"])
         assert field_path in protected or field_path in _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS
@@ -176,7 +178,7 @@ def test_controlled_failure_probe_field_paths_use_projection_surface():
 
 def test_controlled_wrong_speaker_projection_matches_hand_observed_shape():
     observed = _observed(selected_speaker_id="guard")
-    projected = project_turn_observation(
+    projected = project_replay_turn_observation(
         {
             "scenario_id": "controlled_probe",
             "snap": {
@@ -205,12 +207,12 @@ def test_controlled_failure_dashboard_summary_matches_sync_helpers():
 
 @pytest.mark.parametrize(("case_id", "observed", "drift_row", "expected"), CONTROLLED_FAILURE_CASES)
 def test_controlled_failure_probe_classifies_known_bad_case(case_id, observed, drift_row, expected):
-    row = build_failure_dashboard_rows(
+    row = build_classified_dashboard_row(
         observed_turn={**observed, "scenario_id": case_id},
-        drift_rows=[drift_row],
+        drift_row=drift_row,
         scenario_id=case_id,
         turn_index=0,
-    )[0]
+    )
 
     for key, value in expected.items():
         assert row.get(key) == value
