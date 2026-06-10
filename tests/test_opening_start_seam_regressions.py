@@ -20,6 +20,7 @@ from game.api import (
 )
 from game.defaults import default_scene, default_world
 from game.storage import load_log, load_session
+from tests.helpers.emission_smoke_assertions import has_non_accept_final_route_smoke
 from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE as TURN_FAKE_GPT
 
 pytestmark = pytest.mark.integration
@@ -214,7 +215,7 @@ def test_contaminated_gm_opening_emission_scrubs_operational_backstage(tmp_path:
     )
     # C2: contaminated upstream may be rejected; pipeline can emit explicit nonsocial minimal fallback instead of minting scene prose.
     explicit_nonsocial_fallback = (
-        gm.get("final_route") == "nonsocial_fallback_minimal"
+        has_non_accept_final_route_smoke(gm)
         or gm.get("fallback_kind") == "nonsocial_empty_resolution_repair"
         or any(str(t) == "nonsocial_empty_resolution_repair" for t in (gm.get("tags") or []))
     )

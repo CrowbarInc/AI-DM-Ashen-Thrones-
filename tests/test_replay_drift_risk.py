@@ -16,6 +16,8 @@ from tests.helpers.replay_drift_taxonomy import (
     build_long_session_stability_history,
     build_stability_hotspots,
     render_stability_hotspots_markdown_lines,
+    route_drift_classification_kwargs,
+    route_drift_scorecard_fixture,
     stability_hotspot_rows,
     stability_trend_rows_from_history,
 )
@@ -55,10 +57,7 @@ def _classification(
 
 
 def _route_scorecard() -> dict:
-    return compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "B."}],
-        [{"selected_speaker_id": "runner", "route_kind": "action", "final_text": "B."}],
-    )
+    return route_drift_scorecard_fixture(scenario_id="risk_route_scorecard")
 
 
 def _speaker_scorecard() -> dict:
@@ -130,16 +129,10 @@ def test_classify_field_source_protected_route_kind() -> None:
 def test_build_risk_rankings_orders_high_before_low() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
             field_path="final_text_hash",
@@ -164,16 +157,10 @@ def test_build_risk_rankings_orders_high_before_low() -> None:
 def test_render_owner_drift_risk_report() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
     ]
     payload = build_risk_payload(rows, scorecard_history=[_speaker_scorecard(), _route_scorecard()])
@@ -192,16 +179,10 @@ def test_render_owner_drift_risk_report() -> None:
 def test_write_owner_drift_risk_artifacts(tmp_path) -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
     ]
     json_path = tmp_path / "owner_drift_risk.json"
@@ -229,10 +210,7 @@ def test_write_owner_drift_risk_artifacts(tmp_path) -> None:
 def test_risk_payload_stability_enrichment_is_additive_only() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         )
     ]
     base_payload = {
@@ -349,10 +327,7 @@ def test_stability_trend_rows_stable() -> None:
 def test_stability_history_risk_enrichment_is_additive_only() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         )
     ]
     base_payload = {
@@ -482,10 +457,7 @@ def test_stability_hotspot_reporting_empty() -> None:
 def test_stability_hotspot_risk_integration_is_additive() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         )
     ]
     base_payload = {

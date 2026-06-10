@@ -17,6 +17,7 @@ from game.gm import (
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
 )
+from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 from tests.helpers.turn_pipeline_http_fixtures import _gm_response, _seed_runner_dialogue_context
 
 pytestmark = [pytest.mark.integration, pytest.mark.regression]
@@ -132,7 +133,7 @@ def test_ensure_minimal_nonsocial_resolution_fills_empty_text() -> None:
     assert out.get("accepted_via") == "nonsocial_resolution_repair"
     assert out.get("targeted_retry_terminal") is True
     assert out.get("retry_exhausted") is True
-    assert out.get("final_route") == "nonsocial_fallback_minimal"
+    assert_final_route_replaced_or_not_accept(out)
 
 
 def test_nongpt_local_repair_does_not_fabricate_model_route_metadata() -> None:

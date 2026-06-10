@@ -1231,6 +1231,241 @@ def summarize_long_session_replay_observations(
     }
 
 
+def _assert_mapping_exact_values(
+    actual: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    debug_context: str,
+) -> None:
+    for key, value in expected.items():
+        assert actual.get(key) == value, debug_context
+
+
+def _assert_mapping_max_values(
+    actual: Mapping[str, Any],
+    expected: Mapping[str, int],
+    *,
+    debug_context: str,
+) -> None:
+    for key, value in expected.items():
+        assert int(actual.get(key) or 0) <= value, debug_context
+
+
+def _assert_mapping_min_values(
+    actual: Mapping[str, Any],
+    expected: Mapping[str, int],
+    *,
+    debug_context: str,
+) -> None:
+    for key, value in expected.items():
+        assert int(actual.get(key) or 0) >= value, debug_context
+
+
+def expected_runtime_fallback_lineage_event(
+    *,
+    fallback_kind: str,
+    owner: str | None | object = _MISSING,
+    fallback_selection_owner: str | None | object = _MISSING,
+    fallback_content_owner: str | None | object = _MISSING,
+    fallback_authorship_source: str | None | object = _MISSING,
+    fallback_owner_bucket: str | None | object = _MISSING,
+    source: str | None | object = _MISSING,
+    stage: str | None | object = _MISSING,
+) -> dict[str, Any]:
+    """Build expected fields for a fallback-selected runtime-lineage event."""
+    expected: dict[str, Any] = {
+        "event_kind": "fallback_selected",
+        "fallback_kind": fallback_kind,
+    }
+    optional_fields = {
+        "owner": owner,
+        "fallback_selection_owner": fallback_selection_owner,
+        "fallback_content_owner": fallback_content_owner,
+        "fallback_authorship_source": fallback_authorship_source,
+        "fallback_owner_bucket": fallback_owner_bucket,
+        "source": source,
+        "stage": stage,
+    }
+    expected.update(
+        {
+            key: value
+            for key, value in optional_fields.items()
+            if value is not _MISSING
+        }
+    )
+    return expected
+
+
+def assert_runtime_lineage_event_matches(
+    event: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    debug_context: str = "",
+) -> None:
+    """Assert expected runtime-lineage event fields without treating missing as None."""
+    context = debug_context or f"expected={dict(expected)!r} actual={dict(event)!r}"
+    for key, value in expected.items():
+        assert key in event, context
+        assert event[key] == value, context
+
+
+def assert_long_session_stability_profile(
+    *,
+    result: Mapping[str, Any],
+    turns: Sequence[Mapping[str, Any]],
+    summary: Mapping[str, Any],
+    continuity_eval: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    debug_context: str,
+) -> None:
+    """Assert shared long-session replay stability metrics with caller-owned thresholds."""
+    if "result_turn_count" in expected:
+        assert result.get("turn_count") == expected["result_turn_count"], debug_context
+    if "summary_equals" in expected:
+        _assert_mapping_exact_values(
+            summary,
+            expected["summary_equals"],
+            debug_context=debug_context,
+        )
+    if expected.get("no_scaffold_leakage"):
+        assert all(not turn.get("scaffold_leakage") for turn in turns), debug_context
+    if "summary_max" in expected:
+        _assert_mapping_max_values(
+            summary,
+            expected["summary_max"],
+            debug_context=debug_context,
+        )
+    if "summary_min" in expected:
+        _assert_mapping_min_values(
+            summary,
+            expected["summary_min"],
+            debug_context=debug_context,
+        )
+
+    route_frequency = summary.get("route_frequency")
+    if "min_resolved_routes" in expected and isinstance(route_frequency, Mapping):
+        assert sum(int(v) for v in route_frequency.values()) >= expected["min_resolved_routes"], debug_context
+
+    session_health = continuity_eval.get("session_health")
+    assert isinstance(session_health, Mapping), debug_context
+    health_expected = expected.get("session_health")
+    if isinstance(health_expected, Mapping):
+        if "equals" in health_expected:
+            _assert_mapping_exact_values(
+                session_health,
+                health_expected["equals"],
+                debug_context=debug_context,
+            )
+        classification_in = health_expected.get("classification_in")
+        if classification_in is not None:
+            assert session_health.get("classification") in set(classification_in), debug_context
+
+    degradation = continuity_eval.get("degradation_over_time")
+    assert isinstance(degradation, Mapping), debug_context
+    degradation_expected = expected.get("degradation")
+    if isinstance(degradation_expected, Mapping):
+        if "equals" in degradation_expected:
+            _assert_mapping_exact_values(
+                degradation,
+                degradation_expected["equals"],
+                debug_context=debug_context,
+            )
+        reason_codes = degradation.get("reason_codes")
+        assert isinstance(reason_codes, Sequence), debug_context
+        for code in degradation_expected.get("absent_reason_codes", ()):
+            assert code not in reason_codes, debug_context
+
+    axes = continuity_eval.get("axes")
+    assert isinstance(axes, Mapping), debug_context
+    for axis in expected.get("continuity_axes_passed", ()):
+        axis_result = axes.get(axis)
+        assert isinstance(axis_result, Mapping), debug_context
+        assert axis_result.get("passed") is True, debug_context
+
+
+def assert_runtime_lineage_profile(
+    *,
+    lineage_summary: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    debug_context: str,
+) -> None:
+    """Assert shared runtime-lineage replay metrics with caller-owned thresholds."""
+    fallback_frequency = lineage_summary.get("fallback_frequency")
+    if "fallback_frequency_total_max" in expected and isinstance(fallback_frequency, Mapping):
+        assert sum(int(v) for v in fallback_frequency.values()) <= expected["fallback_frequency_total_max"], debug_context
+
+    event_frequency = lineage_summary.get("by_event_kind") or {}
+    assert isinstance(event_frequency, Mapping), debug_context
+    if "event_kind_equals" in expected:
+        _assert_mapping_exact_values(
+            event_frequency,
+            expected["event_kind_equals"],
+            debug_context=debug_context,
+        )
+    if "event_kind_max" in expected:
+        _assert_mapping_max_values(
+            event_frequency,
+            expected["event_kind_max"],
+            debug_context=debug_context,
+        )
+
+    mutation_frequency = lineage_summary.get("mutation_kind_frequency") or {}
+    assert isinstance(mutation_frequency, Mapping), debug_context
+    if "mutation_kind_max" in expected:
+        _assert_mapping_max_values(
+            mutation_frequency,
+            expected["mutation_kind_max"],
+            debug_context=debug_context,
+        )
+
+    recurring_events = lineage_summary.get("recurring_events") or []
+    assert isinstance(recurring_events, Sequence), debug_context
+    recurring_keys = {
+        str(event.get("recurrence_key"))
+        for event in recurring_events
+        if isinstance(event, Mapping)
+    }
+    if "allowed_recurring_keys" in expected:
+        assert recurring_keys <= set(expected["allowed_recurring_keys"]), debug_context
+    if "max_recurring_event_count" in expected:
+        assert all(
+            int(event.get("count") or 0) <= expected["max_recurring_event_count"]
+            for event in recurring_events
+            if isinstance(event, Mapping)
+        ), debug_context
+
+
+def assert_fallback_escalation_profile(
+    *,
+    fallback_escalation: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    debug_context: str,
+) -> None:
+    """Assert shared fallback-escalation replay metrics with caller-owned thresholds."""
+    if "equals" in expected:
+        _assert_mapping_exact_values(
+            fallback_escalation,
+            expected["equals"],
+            debug_context=debug_context,
+        )
+    if "max" in expected:
+        _assert_mapping_max_values(
+            fallback_escalation,
+            expected["max"],
+            debug_context=debug_context,
+        )
+
+    family_counts = fallback_escalation.get("fallback_family_counts") or {}
+    assert isinstance(family_counts, Mapping), debug_context
+    allowed_families = expected.get("allowed_fallback_families")
+    if allowed_families is not None:
+        assert set(family_counts) <= set(allowed_families), debug_context
+    expected_family_counts = expected.get("fallback_family_counts")
+    if isinstance(expected_family_counts, Mapping):
+        for family, count in expected_family_counts.items():
+            assert family_counts.get(family) == count, debug_context
+
+
 def _resolve_continuity_evaluation(continuity_result: Mapping[str, Any] | None) -> Mapping[str, Any]:
     if not isinstance(continuity_result, Mapping):
         return {}

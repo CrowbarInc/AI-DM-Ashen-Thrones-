@@ -22,6 +22,11 @@ ALLOWED_OWNER_DRIFT_BUCKETS: frozenset[str] = frozenset(
     }
 )
 
+ROUTE_DRIFT_FIELD_PATH = "route_kind"
+ROUTE_DRIFT_OWNER_BUCKET = "route_drift"
+ROUTE_DRIFT_INVESTIGATION_TARGET = "game/interaction_context.py"
+ROUTE_DRIFT_CATEGORY = "route"
+
 _ROUTE_NEEDLES: tuple[str, ...] = (
     "route_kind",
     "resolution_kind",
@@ -66,6 +71,40 @@ _EMISSION_NEEDLES: tuple[str, ...] = (
     "final_emission_mutation_lineage",
     "validator",
 )
+
+
+def route_drift_classification_kwargs(
+    *,
+    investigate_first: str = ROUTE_DRIFT_INVESTIGATION_TARGET,
+    category: str = ROUTE_DRIFT_CATEGORY,
+) -> dict[str, str]:
+    """Return canonical route-drift classification fixture kwargs for reporting consumers."""
+    return {
+        "field_path": ROUTE_DRIFT_FIELD_PATH,
+        "owner_drift_bucket": ROUTE_DRIFT_OWNER_BUCKET,
+        "investigate_first": investigate_first,
+        "category": category,
+    }
+
+
+def route_drift_scorecard_fixture(
+    *,
+    scenario_id: str = "route_drift_fixture",
+    turn_index: int = 0,
+) -> dict[str, Any]:
+    """Return a minimal scorecard carrying a route owner-drift row for reporting consumers."""
+    return {
+        "scenario_id": scenario_id,
+        "comparison_available": True,
+        "report_only": True,
+        "owner_drift_classifications": [
+            {
+                "turn_index": turn_index,
+                "owner_drift_bucket": ROUTE_DRIFT_OWNER_BUCKET,
+                "delta_key": "route",
+            }
+        ],
+    }
 
 
 def _field_matches(field_path: str, needles: tuple[str, ...]) -> bool:

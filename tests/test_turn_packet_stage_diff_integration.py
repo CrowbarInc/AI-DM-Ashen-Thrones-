@@ -16,6 +16,7 @@ from game.fallback_provenance_debug import METADATA_KEY as FB_PROV_KEY, attach_u
 from game.final_emission_gate import apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
+from tests.helpers.emission_smoke_assertions import assert_final_route_present_smoke
 
 pytestmark = pytest.mark.unit
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"
@@ -127,7 +128,8 @@ def test_gate_output_keeps_provenance_packet_and_observability_metadata_together
     assert isinstance(md.get(STAGE_DIFF_METADATA_KEY), dict)
     assert md.get("preexisting_emission_debug_note") == "keep-me"
     fem = read_final_emission_meta_dict(out) or {}
-    assert isinstance(fem, dict) and "final_route" in fem
+    assert isinstance(fem, dict)
+    assert_final_route_present_smoke(fem)
 
 
 def test_retry_paths_emit_expected_transition_records() -> None:

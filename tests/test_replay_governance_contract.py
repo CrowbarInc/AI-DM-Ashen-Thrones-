@@ -7,18 +7,7 @@ from tests.replay_governance_contract import (
     governance_record_shape_errors,
     is_valid_governance_decision,
 )
-
-
-def _valid_record() -> dict[str, str]:
-    return {
-        "drift_bucket": "structural_drift",
-        "owner_bucket": "speaker_drift",
-        "category": "speaker",
-        "severity": "critical",
-        "governance_decision": REPLAY_GOVERNANCE_DECISION_BLOCKED,
-        "governance_reason": "Existing protected speaker invariant mismatch blocks when asserted.",
-        "policy_source": "docs/testing/protected_replay_manifest.md",
-    }
+from tests.helpers.replay_governance_fixtures import governance_decision_record_fixture
 
 
 def test_replay_governance_decision_vocabulary_is_contract_locked() -> None:
@@ -59,7 +48,7 @@ def test_is_valid_governance_decision_accepts_only_canonical_values() -> None:
 
 
 def test_governance_record_shape_errors_accepts_valid_record() -> None:
-    assert governance_record_shape_errors(_valid_record()) == []
+    assert governance_record_shape_errors(governance_decision_record_fixture()) == []
 
 
 def test_governance_record_shape_errors_requires_mapping() -> None:
@@ -67,7 +56,7 @@ def test_governance_record_shape_errors_requires_mapping() -> None:
 
 
 def test_governance_record_shape_errors_reports_missing_fields() -> None:
-    record = _valid_record()
+    record = governance_decision_record_fixture()
     del record["owner_bucket"]
     del record["policy_source"]
 
@@ -78,14 +67,14 @@ def test_governance_record_shape_errors_reports_missing_fields() -> None:
 
 
 def test_governance_record_shape_errors_rejects_invalid_decision() -> None:
-    record = _valid_record()
+    record = governance_decision_record_fixture()
     record["governance_decision"] = "REPORT_ONLY"
 
     assert governance_record_shape_errors(record) == ["invalid governance_decision: 'REPORT_ONLY'"]
 
 
 def test_governance_record_shape_errors_requires_reason_and_source_text() -> None:
-    record = _valid_record()
+    record = governance_decision_record_fixture()
     record["governance_reason"] = " "
     record["policy_source"] = ""
 

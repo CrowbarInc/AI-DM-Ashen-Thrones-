@@ -103,6 +103,10 @@ from game.runtime_lineage_telemetry import (
     runtime_lineage_vocabulary_summary,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+from tests.helpers.golden_replay import (
+    assert_runtime_lineage_event_matches,
+    expected_runtime_fallback_lineage_event,
+)
 from tests.helpers.opening_fallback_evidence import fail_closed_opening_fem_meta, successful_opening_fem_meta
 
 from game.narrative_mode_contract import (
@@ -632,6 +636,10 @@ def test_evaluator_fem_prefix_registry_includes_acceptance_quality_family() -> N
 
 
 def test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes() -> None:
+    # Opening fallback owner-bucket boundary: this file owns normalized FEM
+    # projection helpers and lineage construction only. Gate selection/path
+    # behavior remains in test_final_emission_gate.py, golden replay owns
+    # observed-field transport, and the failure classifier owns diagnostics.
     source = {
         "opening_fallback_context_source": "opening_curated_facts",
         "opening_fallback_basis_count": "3",
@@ -1110,30 +1118,43 @@ def test_build_fem_runtime_lineage_events_acceptance_outcomes_do_not_invent_fall
 
 
 def test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks() -> None:
+    # Meta/lineage owner: exact owner buckets are asserted here because this is
+    # where FEM fields become runtime-lineage events, not because this suite owns
+    # final-gate fallback selection behavior.
     opening_meta = successful_opening_fem_meta(final_route="accept_candidate")
     opening = build_fem_runtime_lineage_events(opening_meta)
     assert opening_fallback_owner_bucket_from_meta(opening_meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     opening_selected = _lineage_event(opening, "fallback_selected")
-    assert opening_selected["fallback_kind"] == "scene_opening"
     # P1 owner vocabulary: runtime-lineage owner remains selector/application owner for now.
     # Content/prose ownership is preserved separately via fallback attribution fields.
-    assert opening_selected["owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_content_owner"] == "game.opening_deterministic_fallback"
-    assert opening_selected["fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-    assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert_runtime_lineage_event_matches(
+        opening_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="scene_opening",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.opening_deterministic_fallback",
+            fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+            fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+    )
     assert _lineage_event(opening, "gate_outcome")["gate_path"] == "opening_fallback"
 
     failed_closed_meta = fail_closed_opening_fem_meta(final_route="replaced", opening_fallback_failed_closed=True)
     failed_closed = build_fem_runtime_lineage_events(failed_closed_meta)
     assert opening_fallback_owner_bucket_from_meta(failed_closed_meta) == OPENING_FALLBACK_OWNER_SEALED_GATE
     failed_closed_selected = _lineage_event(failed_closed, "fallback_selected")
-    assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
-    assert failed_closed_selected["owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_content_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_authorship_source"] is None
-    assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert_runtime_lineage_event_matches(
+        failed_closed_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="opening_failed_closed",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.final_emission_gate",
+            fallback_authorship_source=None,
+            fallback_owner_bucket=OPENING_FALLBACK_OWNER_SEALED_GATE,
+        ),
+    )
     assert _lineage_event(failed_closed, "gate_outcome")["gate_path"] == "opening_failed_closed"
     assert opening_selected["fallback_kind"] != failed_closed_selected["fallback_kind"]
 
@@ -1147,12 +1168,17 @@ def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_f
         }
     )
     strict_selected = _lineage_event(strict_social, "fallback_selected")
-    assert strict_selected["fallback_kind"] == "strict_social_fallback"
-    assert strict_selected["owner"] == "game.final_emission_gate"
-    assert strict_selected["fallback_authorship_source"] is None
-    assert strict_selected["fallback_owner_bucket"] is None
-    assert strict_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert strict_selected["fallback_content_owner"] == "game.social_exchange_emission"
+    assert_runtime_lineage_event_matches(
+        strict_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="strict_social_fallback",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.social_exchange_emission",
+            fallback_authorship_source=None,
+            fallback_owner_bucket=None,
+        ),
+    )
     assert _lineage_event(strict_social, "gate_outcome")["gate_path"] == "strict_social_fallback"
 
     emergency = build_fem_runtime_lineage_events(
@@ -1163,10 +1189,15 @@ def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_f
         }
     )
     emergency_selected = _lineage_event(emergency, "fallback_selected")
-    assert emergency_selected["fallback_kind"] == "minimal_social_emergency_fallback"
-    assert emergency_selected["owner"] == "game.final_emission_gate"
-    assert emergency_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert emergency_selected["fallback_content_owner"] == "game.social_exchange_emission"
+    assert_runtime_lineage_event_matches(
+        emergency_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="minimal_social_emergency_fallback",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.social_exchange_emission",
+        ),
+    )
     assert _lineage_event(emergency, "gate_outcome")["gate_path"] == "strict_social_emergency"
 
     sanitizer = build_fem_runtime_lineage_events(
@@ -1176,11 +1207,16 @@ def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_f
         }
     )
     fallback = _lineage_event(sanitizer, "fallback_selected")
-    assert fallback["stage"] == "sanitizer"
-    assert fallback["owner"] == "game.output_sanitizer"
-    assert fallback["fallback_kind"] == "sanitizer_empty_output"
-    assert fallback["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
-    assert fallback["fallback_content_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert_runtime_lineage_event_matches(
+        fallback,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="sanitizer_empty_output",
+            owner="game.output_sanitizer",
+            fallback_selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+            stage="sanitizer",
+        ),
+    )
     assert _lineage_event(sanitizer, "gate_outcome")["gate_path"] == "sanitizer_fallback"
 
     sanitizer_social = build_fem_runtime_lineage_events(
@@ -1192,10 +1228,15 @@ def test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_f
         }
     )
     sanitizer_social_selected = _lineage_event(sanitizer_social, "fallback_selected")
-    assert sanitizer_social_selected["owner"] == "game.output_sanitizer"
-    assert sanitizer_social_selected["fallback_kind"] == "sanitizer_strict_social"
-    assert sanitizer_social_selected["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
-    assert sanitizer_social_selected["fallback_content_owner"] == SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
+    assert_runtime_lineage_event_matches(
+        sanitizer_social_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="sanitizer_strict_social",
+            owner="game.output_sanitizer",
+            fallback_selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+        ),
+    )
     assert _lineage_event(sanitizer_social, "gate_outcome")["gate_path"] == "sanitizer_fallback"
 
 
@@ -1211,12 +1252,17 @@ def test_build_fem_runtime_lineage_events_projects_upstream_fast_fallback_split_
         }
     )
     selected = _lineage_event(events, "fallback_selected")
-    assert selected["fallback_kind"] == "upstream_fast_fallback"
-    assert selected["owner"] == "game.api"
-    assert selected["source"] == "fallback_provenance_trace"
-    assert selected["stage"] == "retry"
-    assert selected["fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
-    assert selected["fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    assert_runtime_lineage_event_matches(
+        selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="upstream_fast_fallback",
+            owner="game.api",
+            fallback_selection_owner=UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+            source="fallback_provenance_trace",
+            stage="retry",
+        ),
+    )
     assert not any(event.get("event_kind") == "gate_outcome" for event in events)
 
 
@@ -1318,10 +1364,15 @@ def test_build_fem_runtime_lineage_events_sealed_branches_remain_distinct_read_s
             }
         )
         fallback = _lineage_event(events, "fallback_selected")
-        assert fallback["fallback_kind"] == expected_subkind
-        assert fallback["owner"] == "game.final_emission_gate"
-        assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
-        assert fallback["fallback_content_owner"] == expected_content_owner
+        assert_runtime_lineage_event_matches(
+            fallback,
+            expected_runtime_fallback_lineage_event(
+                fallback_kind=expected_subkind,
+                owner="game.final_emission_gate",
+                fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+                fallback_content_owner=expected_content_owner,
+            ),
+        )
         projected_kinds.append(str(fallback["fallback_kind"]))
     assert len(set(projected_kinds)) == len(branches)
 
@@ -1337,10 +1388,15 @@ def test_build_fem_runtime_lineage_events_sealed_opening_subkind_maps_opening_co
     opening_meta = successful_opening_fem_meta(final_route="replaced")
     events = build_fem_runtime_lineage_events(opening_meta)
     opening_selected = _lineage_event(events, "fallback_selected")
-    assert opening_selected["fallback_kind"] == "scene_opening"
-    assert opening_selected["owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
-    assert opening_selected["fallback_content_owner"] == OPENING_FALLBACK_CONTENT_OWNER
+    assert_runtime_lineage_event_matches(
+        opening_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="scene_opening",
+            owner="game.final_emission_gate",
+            fallback_selection_owner=OPENING_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=OPENING_FALLBACK_CONTENT_OWNER,
+        ),
+    )
 
 
 def test_build_fem_runtime_lineage_events_sealed_unknown_replacement_is_conservative() -> None:
@@ -1352,10 +1408,15 @@ def test_build_fem_runtime_lineage_events_sealed_unknown_replacement_is_conserva
         }
     )
     fallback = _lineage_event(events, "fallback_selected")
-    assert fallback["fallback_kind"] == SEALED_REPLACEMENT_SUBKIND_UNKNOWN
-    assert fallback["owner"] == "game.final_emission_gate"
-    assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
-    assert fallback["fallback_content_owner"] == SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER
+    assert_runtime_lineage_event_matches(
+        fallback,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind=SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+            owner="game.final_emission_gate",
+            fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        ),
+    )
 
 
 def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:

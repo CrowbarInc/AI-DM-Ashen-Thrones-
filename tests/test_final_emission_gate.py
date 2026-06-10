@@ -2683,6 +2683,11 @@ def _purity_contract(**kwargs):
 
 # Opening adapter/tuple/helper semantics: tests/test_final_emission_opening_fallback.py
 # Owner-bucket read mapping: tests/test_opening_fallback_owner_bucket.py
+# Opening fallback boundary: this gate suite keeps behavior/selection-path
+# assertions, including fail-closed vs upstream-prepared routing. FEM lineage
+# construction lives in test_final_emission_meta.py, replay observation transport
+# in test_golden_replay_fallback_projection.py, and diagnostic routing in
+# test_failure_classifier.py.
 
 
 def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without_prepared_text():

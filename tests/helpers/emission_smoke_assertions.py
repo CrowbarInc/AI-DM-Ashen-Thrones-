@@ -455,17 +455,25 @@ def assert_final_route_present_smoke(meta: Mapping[str, Any]) -> None:
 
 def assert_final_route_accept_candidate_smoke(meta: Mapping[str, Any]) -> None:
     """Smoke: gate took the accept-candidate path (not a full route-table owner check)."""
-    assert meta.get("final_route") == "accept_candidate"
+    route = meta.get("final_route")
+    assert route == "accept_candidate", f"expected accept-candidate final_route smoke, got {route!r}"
 
 
 def assert_final_route_not_replaced_smoke(meta: Mapping[str, Any]) -> None:
     """Smoke: gate did not route through replacement (e.g. continuity validate-only)."""
-    assert meta.get("final_route") != "replaced"
+    route = meta.get("final_route")
+    assert route != "replaced", f"expected non-replacement final_route smoke, got {route!r}"
+
+
+def has_non_accept_final_route_smoke(meta: Mapping[str, Any]) -> bool:
+    """Predicate companion for composite downstream smoke conditions."""
+    return meta.get("final_route") not in (None, "", "accept_candidate")
 
 
 def assert_final_route_replaced_or_not_accept(meta: Mapping[str, Any]) -> None:
     """Smoke: final route is not an accept path (replacement or other non-accept wiring)."""
-    assert meta.get("final_route") not in (None, "", "accept_candidate")
+    route = meta.get("final_route")
+    assert has_non_accept_final_route_smoke(meta), f"expected non-accept final_route smoke, got {route!r}"
 
 
 def assert_no_boundary_reorder_repair(meta: Mapping[str, Any], reason: str) -> None:

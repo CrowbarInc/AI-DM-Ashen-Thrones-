@@ -402,6 +402,9 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
 
 # Opening fallback owner-bucket assertions here are classifier projection locks,
 # not duplicate ownership of gate selection or deterministic opening prose.
+# Gate behavior/selection remains in test_final_emission_gate.py, FEM projection
+# and runtime-lineage construction in test_final_emission_meta.py, and golden
+# replay observed-field transport in test_golden_replay_fallback_projection.py.
 # Current rows keep category/source-family taxonomy stable while routing selected
 # opening symptoms to first-fault targets: gate selection remains gate-owned,
 # owner-bucket mapping routes to FEM metadata, payload symptoms to upstream

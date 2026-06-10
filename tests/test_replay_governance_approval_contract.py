@@ -9,17 +9,7 @@ from tests.replay_governance_approval_contract import (
     approval_record_shape_errors,
     is_valid_approval_status,
 )
-
-
-def _valid_approval_record() -> dict[str, str]:
-    return {
-        "approval_status": REPLAY_GOVERNANCE_APPROVAL_STATUS_PENDING_REVIEW,
-        "decision_reference": "structural_drift:speaker_drift:speaker:critical",
-        "approval_reason": "Protected speaker invariant review is pending.",
-        "reviewed_by": "governance-review",
-        "review_date": "2026-06-08",
-        "approval_source": "docs/testing/replay_governance_registry.md",
-    }
+from tests.helpers.replay_governance_fixtures import approval_record_fixture
 
 
 def test_approval_status_vocabulary_is_contract_locked() -> None:
@@ -64,11 +54,11 @@ def test_is_valid_approval_status_accepts_only_canonical_values() -> None:
 
 
 def test_approval_record_shape_errors_accepts_valid_record() -> None:
-    assert approval_record_shape_errors(_valid_approval_record()) == []
+    assert approval_record_shape_errors(approval_record_fixture()) == []
 
 
 def test_approval_record_shape_errors_accepts_optional_notes() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     record["notes"] = "Documentary approval metadata only."
 
     assert approval_record_shape_errors(record) == []
@@ -79,7 +69,7 @@ def test_approval_record_shape_errors_requires_mapping() -> None:
 
 
 def test_approval_record_shape_errors_reports_missing_fields() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     del record["approval_reason"]
     del record["reviewed_by"]
 
@@ -90,14 +80,14 @@ def test_approval_record_shape_errors_reports_missing_fields() -> None:
 
 
 def test_approval_record_shape_errors_rejects_invalid_status() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     record["approval_status"] = "WAIVED"
 
     assert approval_record_shape_errors(record) == ["invalid approval_status: 'WAIVED'"]
 
 
 def test_approval_record_shape_errors_requires_text_fields() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     record["decision_reference"] = ""
     record["approval_reason"] = " "
     record["approval_source"] = None
@@ -110,14 +100,14 @@ def test_approval_record_shape_errors_requires_text_fields() -> None:
 
 
 def test_approval_record_shape_errors_rejects_non_text_notes() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     record["notes"] = 123
 
     assert approval_record_shape_errors(record) == ["notes must be a string when present"]
 
 
 def test_approval_record_shape_errors_rejects_unknown_fields() -> None:
-    record = _valid_approval_record()
+    record = approval_record_fixture()
     record["waiver_override"] = "not allowed"
 
     assert approval_record_shape_errors(record) == ["unknown approval field: waiver_override"]

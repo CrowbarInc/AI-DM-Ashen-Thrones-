@@ -11,7 +11,9 @@ from game.final_emission_meta import (
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.golden_replay import (
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+    assert_runtime_lineage_event_matches,
     classify_golden_drift,
+    expected_runtime_fallback_lineage_event,
     format_golden_replay_debug,
     summarize_long_session_replay_observations,
 )
@@ -24,6 +26,13 @@ from tests.helpers.opening_fallback_evidence import (
     fail_closed_opening_fem_meta,
     successful_opening_fem_meta,
 )
+
+# Opening fallback owner-bucket boundary:
+# this suite owns transport from FEM/runtime-lineage metadata into replay
+# observations and debug output. Gate behavior/selection remains in
+# test_final_emission_gate.py; FEM owner-bucket/lineage construction remains in
+# test_final_emission_meta.py; classifier diagnostics remain in
+# test_failure_classifier.py.
 
 
 def test_golden_projection_projects_canonical_upstream_prepared_opening_owner_bucket() -> None:
@@ -69,12 +78,17 @@ def test_golden_projection_projects_runtime_lineage_and_prefers_existing_events(
     opening_selected = next(
         event for event in from_fem["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
     )
-    assert opening_selected["fallback_kind"] == "scene_opening"
-    assert opening_selected["owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert opening_selected["fallback_content_owner"] == "game.opening_deterministic_fallback"
-    assert opening_selected["fallback_authorship_source"] == "upstream_prepared_opening_fallback"
-    assert opening_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert_runtime_lineage_event_matches(
+        opening_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="scene_opening",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.opening_deterministic_fallback",
+            fallback_authorship_source="upstream_prepared_opening_fallback",
+            fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+    )
     debug = format_golden_replay_debug(
         {"scenario_id": from_fem["scenario_id"], "turn_count": 1, "turns": [from_fem]}
     )
@@ -131,11 +145,16 @@ def test_golden_projection_projects_fail_closed_sealed_gate_opening_owner_bucket
     failed_closed_selected = next(
         event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
     )
-    assert failed_closed_selected["fallback_kind"] == "opening_failed_closed"
-    assert failed_closed_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_content_owner"] == "game.final_emission_gate"
-    assert failed_closed_selected["fallback_authorship_source"] is None
-    assert failed_closed_selected["fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert_runtime_lineage_event_matches(
+        failed_closed_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="opening_failed_closed",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.final_emission_gate",
+            fallback_authorship_source=None,
+            fallback_owner_bucket=OPENING_FALLBACK_OWNER_SEALED_GATE,
+        ),
+    )
     debug = format_golden_replay_debug(
         {"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]}
     )
@@ -174,10 +193,15 @@ def test_golden_projection_projects_strict_social_sealed_fallback_owner_bucket()
     fallback_selected = next(
         event for event in observed["runtime_lineage_events"] if event["event_kind"] == "fallback_selected"
     )
-    assert fallback_selected["fallback_kind"] == "minimal_social_emergency_fallback"
-    assert fallback_selected["owner"] == "game.final_emission_gate"
-    assert fallback_selected["fallback_selection_owner"] == "game.final_emission_gate"
-    assert fallback_selected["fallback_content_owner"] == "game.social_exchange_emission"
+    assert_runtime_lineage_event_matches(
+        fallback_selected,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind="minimal_social_emergency_fallback",
+            owner="game.final_emission_gate",
+            fallback_selection_owner="game.final_emission_gate",
+            fallback_content_owner="game.social_exchange_emission",
+        ),
+    )
 
 
 def test_golden_projection_projects_visibility_fallback_evidence() -> None:

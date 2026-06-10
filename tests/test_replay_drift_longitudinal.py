@@ -5,6 +5,7 @@ from tests.helpers.failure_dashboard_report import (
     write_rerun_drift_scorecard_artifacts,
 )
 from tests.helpers.golden_replay import compare_golden_replay_reruns
+from tests.helpers.replay_drift_taxonomy import route_drift_scorecard_fixture
 from tests.helpers.replay_drift_longitudinal import (
     aggregate_owner_drift_history,
     build_owner_drift_trend_summary,
@@ -20,10 +21,7 @@ def _scorecard_with_speaker_drift() -> dict:
 
 
 def _scorecard_with_route_drift() -> dict:
-    return compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "B."}],
-        [{"selected_speaker_id": "runner", "route_kind": "action", "final_text": "B."}],
-    )
+    return route_drift_scorecard_fixture(scenario_id="longitudinal_route_scorecard")
 
 
 def test_aggregate_owner_drift_history_empty() -> None:

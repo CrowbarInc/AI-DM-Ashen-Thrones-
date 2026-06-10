@@ -10,7 +10,7 @@ from tests.helpers.replay_drift_trends import (
     enrich_hotspots_with_field_trends,
     render_owner_drift_trend_report,
 )
-from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS
+from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS, route_drift_scorecard_fixture
 
 
 def _speaker_scorecard() -> dict:
@@ -21,10 +21,7 @@ def _speaker_scorecard() -> dict:
 
 
 def _route_scorecard() -> dict:
-    return compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "B."}],
-        [{"selected_speaker_id": "runner", "route_kind": "action", "final_text": "B."}],
-    )
+    return route_drift_scorecard_fixture(scenario_id="trend_route_scorecard")
 
 
 def test_compute_owner_drift_trends_empty_history() -> None:

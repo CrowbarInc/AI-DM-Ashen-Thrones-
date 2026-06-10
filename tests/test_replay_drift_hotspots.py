@@ -11,6 +11,10 @@ from tests.helpers.replay_drift_hotspots import (
     classification_rows_from_scorecards,
     render_owner_drift_hotspot_report,
 )
+from tests.helpers.replay_drift_taxonomy import (
+    route_drift_classification_kwargs,
+    route_drift_scorecard_fixture,
+)
 from tests.helpers.replay_drift_trends import enrich_hotspots_with_field_trends
 from tests.helpers.replay_observed_row_fixtures import observed_failure_row
 
@@ -53,16 +57,10 @@ def test_aggregate_field_drift_counts_empty() -> None:
 def test_aggregate_field_drift_counts_and_investigation_targets() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
             field_path="selected_speaker_id",
@@ -85,10 +83,7 @@ def test_aggregate_field_drift_counts_and_investigation_targets() -> None:
 def test_aggregate_owner_bucket_by_field() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
             field_path="selected_speaker_id",
@@ -107,10 +102,7 @@ def test_aggregate_owner_bucket_by_field() -> None:
 def test_build_hotspot_rankings_orders_by_count_with_tie_break() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
             field_path="fallback_family",
@@ -143,10 +135,7 @@ def test_build_hotspot_rankings_orders_by_count_with_tie_break() -> None:
 def test_render_owner_drift_hotspot_report() -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
         _classification(
             field_path="selected_speaker_id",
@@ -176,10 +165,7 @@ def test_render_owner_drift_hotspot_report_shows_field_trends() -> None:
             [{"selected_speaker_id": "runner", "final_text": "A."}],
             [{"selected_speaker_id": "guard", "final_text": "A."}],
         ),
-        compare_golden_replay_reruns(
-            [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "B."}],
-            [{"selected_speaker_id": "runner", "route_kind": "action", "final_text": "B."}],
-        ),
+        route_drift_scorecard_fixture(scenario_id="hotspot_route_trend"),
     ]
     rows = classification_rows_from_scorecards(history)
     hotspots = enrich_hotspots_with_field_trends(build_hotspot_rankings(rows), history)
@@ -198,10 +184,7 @@ def test_render_owner_drift_hotspot_report_empty() -> None:
 def test_write_owner_drift_hotspot_artifacts(tmp_path) -> None:
     rows = [
         _classification(
-            field_path="route_kind",
-            owner_drift_bucket="route_drift",
-            investigate_first="game/interaction_context.py",
-            category="route",
+            **route_drift_classification_kwargs(),
         ),
     ]
     json_path = tmp_path / "owner_drift_hotspots.json"

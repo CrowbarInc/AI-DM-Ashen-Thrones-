@@ -18,7 +18,11 @@ from game.realization_provenance import (
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    assert_final_route_not_replaced_smoke,
+    assert_final_route_present_smoke,
+)
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     opening_gm_output,
@@ -127,7 +131,7 @@ def test_final_emission_opening_repair_carries_upstream_prepared_realization_fam
     )
 
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    assert "final_route" in fem
+    assert_final_route_present_smoke(fem)
     assert fem.get("final_emitted_source") == "opening_deterministic_fallback"
     assert fem.get("fallback_family_used") == "scene_opening"
     family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
@@ -177,5 +181,5 @@ def test_valid_final_emission_candidate_does_not_gain_diegetic_fallback_family()
     )
 
     assert out["player_facing_text"] == candidate
-    assert fem.get("final_route") != "replaced"
+    assert_final_route_not_replaced_smoke(fem)
     assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) != LEGACY_DIEGETIC_FALLBACK
