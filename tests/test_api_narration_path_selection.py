@@ -11,7 +11,7 @@ import game.api as api_mod
 import game.api_turn_support as api_turn_support_module
 from game.api import _build_gpt_narration_from_authoritative_state
 from game.api_turn_support import _finalize_player_facing_for_turn
-from game.final_emission_gate import apply_final_emission_gate as real_apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as real_apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement as real_apply_response_policy_enforcement
 from game.defaults import default_campaign, default_character, default_session, default_world
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output

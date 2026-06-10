@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.final_emission_meta import classify_dead_turn, read_dead_turn_from_gm_output
 
 pytestmark = pytest.mark.unit

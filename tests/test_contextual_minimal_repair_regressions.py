@@ -19,7 +19,7 @@ from game.gm import (
 from game.social_exchange_emission import is_route_illegal_global_or_sanitizer_fallback_text
 from game.storage import get_scene_runtime
 from game.tone_escalation import validate_tone_escalation
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.narrative_authority import build_narrative_authority_contract
 
 pytestmark = [pytest.mark.unit, pytest.mark.regression]

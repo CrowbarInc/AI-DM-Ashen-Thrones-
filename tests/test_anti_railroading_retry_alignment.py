@@ -6,7 +6,7 @@ from game.final_emission_meta import read_final_emission_meta_dict
 import pytest
 
 from game.anti_railroading import build_anti_railroading_contract, validate_anti_railroading
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm import build_retry_prompt_for_failure
 
 pytestmark = pytest.mark.unit

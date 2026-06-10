@@ -6,7 +6,7 @@ from game.api import (
     _session_ongoing_social_exchange,
     _update_interaction_context_after_action,
 )
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.defaults import default_session, default_world
 from game.interaction_context import (
     inspect as inspect_interaction_context,

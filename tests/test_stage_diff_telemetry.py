@@ -13,7 +13,7 @@ from typing import Any, Dict
 from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anchor  # noqa: F401
 
 from game import stage_diff_telemetry as sdt
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet, resolve_turn_packet_for_gate
 

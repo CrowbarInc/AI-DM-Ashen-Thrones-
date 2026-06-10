@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import game.emitted_speaker_signature as ess
 import game.final_emission_gate as feg
 import game.speaker_contract_enforcement as sce
 from game.speaker_contract_enforcement import (
@@ -20,6 +21,7 @@ pytestmark = pytest.mark.unit
 def test_block_r_gate_reexports_speaker_enforcement_api():
     assert feg.get_speaker_selection_contract is sce.get_speaker_selection_contract
     assert feg.validate_emitted_speaker_against_contract is sce.validate_emitted_speaker_against_contract
+    assert sce.detect_emitted_speaker_signature is ess.detect_emitted_speaker_signature
     assert feg.detect_emitted_speaker_signature is sce.detect_emitted_speaker_signature
     assert feg._sync_eff_social_to_resolution is sce._sync_eff_social_to_resolution
     assert feg.SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES is SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES

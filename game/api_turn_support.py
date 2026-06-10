@@ -20,7 +20,7 @@ from game.upstream_response_repairs import (
     SANITIZER_BOUNDARY_STRIP_ONLY,
     merge_upstream_prepared_emission_into_gm_output,
 )
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.final_emission_validators import candidate_satisfies_scene_opening_contract
 from game.narration_state_consistency import reconcile_final_text_with_structured_state
 from game.social_exchange_emission import strict_social_emission_will_apply

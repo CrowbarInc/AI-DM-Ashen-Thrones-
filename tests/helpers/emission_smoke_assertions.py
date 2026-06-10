@@ -34,6 +34,10 @@ Cycle AS4 — downstream HTTP/pipeline/transcript smoke should use ``final_emiss
 and ``read_turn_debug_notes`` here; golden-replay FEM reads use ``golden_replay_projection``.
 
 Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick reference).
+
+Normal full-emission consumer execution delegates through ``game.final_emission_runtime``.
+Private layer seams below delegate to their narrower validator/repair owners while
+keeping this downstream facade stable.
 """
 from __future__ import annotations
 
@@ -76,9 +80,9 @@ def apply_final_emission_gate_consumer(
     world: Mapping[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Run full gate orchestration for downstream consumer integration tests; return (output, fem)."""
-    from game.final_emission_gate import apply_final_emission_gate
+    from game.final_emission_runtime import finalize_player_facing_emission
 
-    out = apply_final_emission_gate(
+    out = finalize_player_facing_emission(
         dict(gm_output),
         resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution,
         session=dict(session) if isinstance(session, Mapping) else session,
@@ -90,52 +94,52 @@ def apply_final_emission_gate_consumer(
 
 
 def validate_answer_completeness(text: str, contract: Mapping[str, Any], *, resolution: Mapping[str, Any] | None = None) -> dict[str, Any]:
-    """Consumer-owned answer-completeness validator seam (delegates to gate layer)."""
-    from game.final_emission_gate import validate_answer_completeness as _fn
+    """Consumer-owned answer-completeness validator seam (delegates to validator owner)."""
+    from game.final_emission_validators import validate_answer_completeness as _fn
 
     return _fn(text, dict(contract), resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution)
 
 
 def apply_answer_completeness_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
-    """Consumer-owned answer-completeness layer seam (delegates to gate layer)."""
-    from game.final_emission_gate import _apply_answer_completeness_layer as _fn
+    """Consumer-owned answer-completeness layer seam (delegates to repair owner)."""
+    from game.final_emission_repairs import _apply_answer_completeness_layer as _fn
 
     return _fn(*args, **kwargs)
 
 
 def apply_response_delta_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
-    """Consumer-owned response-delta layer seam (delegates to gate layer)."""
-    from game.final_emission_gate import _apply_response_delta_layer as _fn
+    """Consumer-owned response-delta layer seam (delegates to repair owner)."""
+    from game.final_emission_repairs import _apply_response_delta_layer as _fn
 
     return _fn(*args, **kwargs)
 
 
 def skip_answer_completeness_layer(*args: Any, **kwargs: Any) -> bool:
-    from game.final_emission_gate import _skip_answer_completeness_layer as _fn
+    from game.final_emission_repairs import _skip_answer_completeness_layer as _fn
 
     return _fn(*args, **kwargs)
 
 
 def skip_response_delta_layer(*args: Any, **kwargs: Any) -> bool:
-    from game.final_emission_gate import _skip_response_delta_layer as _fn
+    from game.final_emission_repairs import _skip_response_delta_layer as _fn
 
     return _fn(*args, **kwargs)
 
 
 def strict_social_answer_pressure_rd_contract_active(gm_output: Mapping[str, Any]) -> bool:
-    from game.final_emission_gate import _strict_social_answer_pressure_rd_contract_active as _fn
+    from game.final_emission_repairs import _strict_social_answer_pressure_rd_contract_active as _fn
 
     return _fn(dict(gm_output))
 
 
 def validate_response_delta(emitted: str, contract: Mapping[str, Any]) -> dict[str, Any]:
-    from game.final_emission_gate import validate_response_delta as _fn
+    from game.final_emission_validators import validate_response_delta as _fn
 
     return _fn(emitted, dict(contract))
 
 
 def inspect_response_delta_failure(result: Mapping[str, Any]) -> dict[str, Any]:
-    from game.final_emission_gate import inspect_response_delta_failure as _fn
+    from game.final_emission_validators import inspect_response_delta_failure as _fn
 
     return _fn(dict(result))
 

@@ -13,7 +13,7 @@ from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anc
 
 import game.final_emission_gate as feg
 from game.fallback_provenance_debug import METADATA_KEY as FB_PROV_KEY, attach_upstream_fast_fallback_provenance
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
 from tests.helpers.emission_smoke_assertions import assert_final_route_present_smoke

@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement
 from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract

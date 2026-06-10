@@ -2,7 +2,8 @@
 
 Live strict-social orchestration (when enforcement runs, and relative to other gate layers)
 remains in :mod:`game.final_emission_gate` (:func:`~game.final_emission_gate.apply_final_emission_gate`).
-This module owns the speaker-contract implementation surface consumed by that orchestrator.
+This module owns the speaker-contract implementation surface consumed by that orchestrator;
+emitted text signature parsing lives in :mod:`game.emitted_speaker_signature`.
 """
 from __future__ import annotations
 
@@ -10,6 +11,7 @@ import hashlib
 import re
 from typing import Any, Dict, Optional
 
+from game.emitted_speaker_signature import detect_emitted_speaker_signature
 from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS, neutral_reply_speaker_grounding_bridge_line
 from game.social_exchange_emission import (
     _has_explicit_interruption_shape,
@@ -139,88 +141,6 @@ def get_speaker_selection_contract(
             return hit
 
     return empty
-
-
-def detect_emitted_speaker_signature(
-    text: str,
-    resolution: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
-    """Infer opening attribution / dialogue-ownership cues from emitted text."""
-    t = _normalize_text(text)
-    speaker_label: str | None = None
-    speaker_name: str | None = None
-    is_explicit = False
-    confidence: str = "low"
-
-    mq = _QUOTED_THEN_PRONOUN_SPEECH_RE.match(t)
-    if not mq:
-        mq = _QUOTED_THEN_PRONOUN_BEAT_RE.match(t)
-    if mq:
-        raw = str(mq.group(1) or "").strip()
-        low = raw.lower()
-        speaker_label = raw
-        if low and low not in _NON_NAME_ATTRIBUTION_PREFIXES:
-            speaker_name = raw
-            is_explicit = True
-            confidence = "high"
-        elif raw:
-            confidence = "medium"
-        forbidden = list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
-        is_generic_fb = False
-        if speaker_label:
-            sl = speaker_label.strip().lower()
-            for fb in forbidden:
-                fbl = str(fb or "").strip().lower()
-                if fbl and (fbl == sl or fbl in sl or sl in fbl):
-                    is_generic_fb = True
-                    break
-        intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
-        return {
-            "speaker_name": speaker_name,
-            "speaker_label": speaker_label,
-            "is_explicitly_attributed": is_explicit,
-            "is_generic_fallback_label": is_generic_fb,
-            "has_interruption_framing": intr,
-            "confidence": confidence,
-        }
-
-    m = _SPEECH_VERB_ATTRIBUTION_RE.match(t)
-    if not m:
-        m = _BEAT_ATTRIBUTION_RE.match(t)
-    if m:
-        raw = str(m.group(1) or "").strip()
-        low = raw.lower()
-        if raw and low not in _NON_NAME_ATTRIBUTION_PREFIXES and not low.startswith(
-            tuple(p + " " for p in _NON_NAME_ATTRIBUTION_PREFIXES)
-        ):
-            speaker_label = raw
-            speaker_name = raw
-            is_explicit = True
-            confidence = "high"
-        elif raw:
-            speaker_label = raw
-            confidence = "medium"
-
-    forbidden = list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS)
-    is_generic_fb = False
-    if speaker_label:
-        sl = speaker_label.strip().lower()
-        for fb in forbidden:
-            fbl = fb.strip().lower()
-            if fbl == sl or fbl in sl or sl in fbl:
-                is_generic_fb = True
-                break
-
-    intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
-
-    return {
-        "speaker_name": speaker_name,
-        "speaker_label": speaker_label,
-        "is_explicitly_attributed": is_explicit,
-        "is_generic_fallback_label": is_generic_fb,
-        "has_interruption_framing": intr,
-        "confidence": confidence,
-    }
 
 
 def _display_from_npc_id(npc_id: str | None) -> str:

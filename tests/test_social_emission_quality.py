@@ -11,7 +11,7 @@ from game.final_emission_meta import read_final_emission_meta_dict
 import pytest
 
 from game.defaults import default_session, default_world
-from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.social_exchange_emission import (
     build_final_strict_social_response,

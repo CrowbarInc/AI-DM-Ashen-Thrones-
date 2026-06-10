@@ -160,13 +160,14 @@ from game.final_emission_meta import (
 )
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+# Compatibility re-export: parsing ownership lives in game.emitted_speaker_signature.
+from game.emitted_speaker_signature import detect_emitted_speaker_signature
 from game.speaker_contract_enforcement import (
     SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES,
     SPEAKER_REASON_SPEAKER_BINDING_MISMATCH,
     _apply_speaker_contract_repairs,
     _merge_speaker_enforcement_into_outputs,
     _sync_eff_social_to_resolution,
-    detect_emitted_speaker_signature,
     get_speaker_selection_contract,
     validate_emitted_speaker_against_contract,
 )
