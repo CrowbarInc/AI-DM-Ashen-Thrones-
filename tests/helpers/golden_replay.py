@@ -68,6 +68,127 @@ PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS = (
     "spoken_vocative_overrode_continuity",
 )
 
+# Frontier Gate social-inquiry 25-turn protected acceptance thresholds (Cycle BC5).
+# The full 25-turn branch crosses the evaluator's long-session band; the prior
+# protected 20-turn slice was still classified as standard.
+FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE: dict[str, Any] = {
+    "result_turn_count": 25,
+    "summary_equals": {"turn_count": 25},
+    "no_scaffold_leakage": True,
+    "summary_max": {
+        "speaker_change_count": 2,
+        "speaker_missing_count": 2,
+        "fallback_turn_count": 1,
+        "fallback_owner_change_count": 1,
+        "route_change_count": 2,
+    },
+    "min_resolved_routes": 12,
+    "session_health": {
+        "equals": {"long_session_band": "long", "overall_passed": True},
+        "classification_in": {"clean", "warning"},
+    },
+    "degradation": {
+        "equals": {"progressive_degradation_detected": False},
+        "absent_reason_codes": {
+            "late_session_reset_or_amnesia",
+            "rising_generic_filler_strong",
+            "rising_generic_filler_progressive",
+            "debug_leak_late_window",
+            "referent_loss_late",
+            "continuity_anchor_late_loss",
+        },
+    },
+    "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
+}
+
+FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE: dict[str, Any] = {
+    "fallback_frequency_total_max": 1,
+    "event_kind_max": {"fallback_selected": 1, "mutation": 25},
+    "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
+    "allowed_recurring_keys": {
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+    },
+    "max_recurring_event_count": 25,
+}
+
+FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE: dict[str, Any] = {
+    "equals": {
+        "late_window_fallback_count": 0,
+        "fallback_owner_change_count": 0,
+        "fallback_lineage_owner_change_count": 0,
+        "fallback_behavior_repair_count": 0,
+        "sanitizer_fallback_count": 0,
+        "escalation_warnings": [],
+        "model_routing_escalation_observable": False,
+    },
+    "max": {
+        "fallback_total_count": 1,
+        "max_fallback_streak": 1,
+        "response_type_repair_count": 1,
+        "unavailable_with_fallback_count": 1,
+        "fallback_selected_without_family_count": 1,
+    },
+}
+
+FRONTIER_GATE_RESUME_STABILITY_PROFILE: dict[str, Any] = {
+    "result_turn_count": 25,
+    "summary_equals": {"turn_count": 25},
+    "no_scaffold_leakage": True,
+    "summary_max": {
+        "speaker_change_count": 2,
+        "speaker_missing_count": 2,
+        "fallback_turn_count": 1,
+        "fallback_owner_change_count": 1,
+        "route_change_count": 2,
+    },
+    "session_health": {
+        "equals": {"long_session_band": "long", "overall_passed": True},
+        "classification_in": {"clean", "warning"},
+    },
+    "degradation": {
+        "equals": {"progressive_degradation_detected": False},
+        "absent_reason_codes": {
+            "late_session_reset_or_amnesia",
+            "rising_generic_filler_strong",
+            "rising_generic_filler_progressive",
+            "debug_leak_late_window",
+            "referent_loss_late",
+            "continuity_anchor_late_loss",
+        },
+    },
+    "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
+}
+
+FRONTIER_GATE_RESUME_LINEAGE_PROFILE: dict[str, Any] = {
+    "event_kind_max": {"fallback_selected": 1, "mutation": 25},
+    "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
+    "allowed_recurring_keys": {
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+    },
+    "max_recurring_event_count": 25,
+}
+
+FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE: dict[str, Any] = {
+    "equals": {
+        "late_window_fallback_count": 0,
+        "fallback_owner_change_count": 0,
+        "fallback_lineage_owner_change_count": 0,
+        "fallback_behavior_repair_count": 0,
+        "sanitizer_fallback_count": 0,
+        "escalation_warnings": [],
+        "model_routing_escalation_observable": False,
+    },
+    "max": {
+        "fallback_total_count": 1,
+        "max_fallback_streak": 1,
+        "response_type_repair_count": 1,
+        "unavailable_with_fallback_count": 1,
+        "fallback_selected_without_family_count": 1,
+    },
+}
+
 
 def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
     """Protected replay fragment for the shared player-facing scaffold leak lock."""

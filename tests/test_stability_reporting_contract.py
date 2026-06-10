@@ -1,6 +1,14 @@
 from __future__ import annotations
 
-from tests.helpers.golden_replay_api import build_long_session_stability_scorecard
+import pytest
+
+from tests.helpers.failure_dashboard_report import render_long_session_stability_scorecard_markdown
+from tests.helpers.golden_replay import FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+from tests.helpers.golden_replay_api import (
+    build_long_session_stability_scorecard,
+    summarize_long_session_replay_observations,
+)
+from tests.helpers.replay_observed_row_fixtures import synthetic_rerun_turn
 from tests.helpers.replay_drift_reports import (
     build_long_session_stability_history,
     build_risk_payload,
@@ -142,3 +150,255 @@ def test_stability_reporting_boundary_documented() -> None:
     assert STABILITY_REPORTING_OWNERSHIP["dashboard_reporting"]["owns"].startswith("markdown rendering")
     enriched = enrich_risk_payload_with_stability_ownership({"report_only": True}, [_route_drift_scorecard("probe")])
     assert "stability_ownership" in enriched
+
+
+def test_long_session_stability_scorecard_projects_existing_metrics(monkeypatch):
+    def _forbidden_eval(*_args, **_kwargs):
+        raise AssertionError("evaluate_scenario_spine_session must not be called from scorecard projection")
+
+    monkeypatch.setattr(
+        "tests.helpers.golden_replay.evaluate_scenario_spine_session",
+        _forbidden_eval,
+    )
+    turns = [
+        {
+            "turn_index": 0,
+            "route_kind": "dialogue",
+            "selected_speaker_id": "runner",
+            "branch_id": "branch_social_inquiry",
+            "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+            "runtime_lineage_events": [],
+        },
+        {
+            "turn_index": 1,
+            "route_kind": "social",
+            "selected_speaker_id": "runner",
+            "branch_id": "branch_social_inquiry",
+            "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+            "runtime_lineage_events": [],
+        },
+    ]
+    continuity_result = {
+        "evaluation": {
+            "session_health": {
+                "classification": "clean",
+                "long_session_band": "long",
+                "overall_passed": True,
+            },
+            "degradation_over_time": {
+                "progressive_degradation_detected": False,
+                "reason_codes": [],
+            },
+        }
+    }
+
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="synthetic_long_session",
+        branch_id="branch_social_inquiry",
+        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+        observations=turns,
+        continuity_result=continuity_result,
+    )
+
+    assert scorecard["schema_version"] == 1
+    assert scorecard["artifact_kind"] == "long_session_stability_scorecard"
+    assert scorecard["report_only"] is True
+    assert scorecard["scenario_id"] == "synthetic_long_session"
+    assert scorecard["branch_id"] == "branch_social_inquiry"
+    assert scorecard["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
+    assert scorecard["turn_count"] == 2
+    assert scorecard["route_stability"]["route_change_count"] == 1
+    assert scorecard["route_stability"]["route_frequency"] == {"dialogue": 1, "social": 1}
+    assert scorecard["speaker_stability"]["speaker_change_count"] == 0
+    assert scorecard["speaker_stability"]["speaker_missing_count"] == 0
+    assert scorecard["fallback_stability"]["fallback_count"] == 0
+    assert scorecard["fallback_stability"]["escalation_warnings"] == []
+    assert scorecard["degradation"]["progressive_degradation_detected"] is False
+    assert scorecard["operational_summary"]["stability_status"] == "stable"
+    assert scorecard["operational_summary"]["actionable"] is False
+    assert scorecard["operational_summary"]["warning_count"] == 0
+    route_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "route_drift"]
+    assert len(route_rows) == 1
+    assert route_rows[0]["signal"] == "route_change"
+    assert scorecard["owner_drift_bucket_counts"]["route_drift"] == 1
+
+    markdown = render_long_session_stability_scorecard_markdown(scorecard)
+    assert "- Stability status: `stable`" in markdown
+    assert "- Route changes: `1`" in markdown
+    assert "- Speaker changes: `0`" in markdown
+    assert "## Stability Ownership" in markdown
+    assert "`route_drift`" in markdown
+
+
+def test_long_session_stability_scorecard_marks_degradation_report_only(monkeypatch):
+    def _forbidden_eval(*_args, **_kwargs):
+        raise AssertionError("evaluate_scenario_spine_session must not be called from scorecard projection")
+
+    monkeypatch.setattr(
+        "tests.helpers.golden_replay.evaluate_scenario_spine_session",
+        _forbidden_eval,
+    )
+    turns = [
+        {
+            "turn_index": 0,
+            "route_kind": "dialogue",
+            "selected_speaker_id": "runner",
+            "runtime_lineage_events": [],
+        }
+    ]
+    continuity_result = {
+        "evaluation": {
+            "session_health": {
+                "classification": "warning",
+                "long_session_band": "long",
+                "overall_passed": False,
+            },
+            "degradation_over_time": {
+                "progressive_degradation_detected": True,
+                "reason_codes": ["rising_generic_filler_progressive"],
+            },
+        }
+    }
+
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="synthetic_degraded_session",
+        observations=turns,
+        continuity_result=continuity_result,
+        lineage_summary={
+            "by_event_kind": {"fallback_selected": 3},
+            "recurring_events": [
+                {"recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair", "count": 3}
+            ],
+        },
+    )
+
+    assert scorecard["report_only"] is True
+    assert scorecard["degradation"]["progressive_degradation_detected"] is True
+    assert scorecard["degradation"]["reason_codes"] == ["rising_generic_filler_progressive"]
+    assert scorecard["operational_summary"]["stability_status"] == "degraded"
+    assert scorecard["operational_summary"]["actionable"] is True
+    assert scorecard["operational_summary"]["warning_count"] >= 2
+    assert scorecard["lineage_stability"]["event_counts"] == {"fallback_selected": 3}
+    assert scorecard["report_only"] is True
+    degradation_rows = [
+        row for row in scorecard["owner_drift_classifications"] if row["signal"] == "progressive_degradation"
+    ]
+    assert len(degradation_rows) == 1
+    assert degradation_rows[0]["owner_drift_bucket"] == "semantic_drift"
+    assert scorecard["owner_drift_bucket_counts"]["semantic_drift"] >= 1
+    fallback_rows = [
+        row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "fallback_drift"
+    ]
+    assert fallback_rows
+    markdown = render_long_session_stability_scorecard_markdown(scorecard)
+    assert "## Stability Ownership" in markdown
+    assert "`semantic_drift`" in markdown
+
+
+def test_long_session_stability_scorecard_owner_drift_speaker_signal():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="speaker_drift_probe",
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "guard"},
+            {"turn_index": 2, "route_kind": "dialogue"},
+        ],
+    )
+    speaker_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "speaker_drift"]
+    assert {row["signal"] for row in speaker_rows} == {"speaker_change", "speaker_missing"}
+    assert scorecard["owner_drift_bucket_counts"]["speaker_drift"] == 2
+
+
+def test_long_session_stability_scorecard_owner_drift_fallback_recurrence():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="fallback_drift_probe",
+        observations=[
+            {
+                "turn_index": 0,
+                "route_kind": "action",
+                "fallback_family": "gate_terminal_repair",
+                "runtime_lineage_events": [
+                    {
+                        "event_kind": "fallback_selected",
+                        "recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair",
+                    }
+                ],
+            },
+            {
+                "turn_index": 1,
+                "route_kind": "action",
+                "fallback_family": "gate_terminal_repair",
+                "runtime_lineage_events": [
+                    {
+                        "event_kind": "fallback_selected",
+                        "recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair",
+                    }
+                ],
+            },
+        ],
+        lineage_summary={
+            "by_event_kind": {"fallback_selected": 2},
+            "recurring_events": [
+                {"recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair", "count": 2}
+            ],
+        },
+    )
+    fallback_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "fallback_drift"]
+    assert any(row["signal"] == "fallback_count" for row in fallback_rows)
+    assert any(row["signal"] == "lineage_recurrence" for row in fallback_rows)
+    assert scorecard["owner_drift_bucket_counts"]["fallback_drift"] >= 2
+
+
+def test_long_session_stability_scorecard_owner_drift_stable_has_no_classifications():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="stable_probe",
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+        ],
+        continuity_result={
+            "evaluation": {
+                "session_health": {"classification": "clean", "overall_passed": True},
+                "degradation_over_time": {
+                    "progressive_degradation_detected": False,
+                    "reason_codes": [],
+                },
+            }
+        },
+    )
+    assert scorecard["owner_drift_classifications"] == []
+    assert scorecard["owner_drift_bucket_counts"]["route_drift"] == 0
+    assert scorecard["owner_drift_bucket_counts"]["speaker_drift"] == 0
+    assert scorecard["owner_drift_bucket_counts"]["fallback_drift"] == 0
+    markdown = render_long_session_stability_scorecard_markdown(scorecard)
+    assert "No stability ownership classifications." in markdown
+
+
+def test_long_session_summary_counts_response_delta_metadata():
+    turns = [
+        synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=False,
+            response_delta_repaired=False,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="low",
+        ),
+        synthetic_rerun_turn(
+            turn_index=1,
+            response_delta_checked=True,
+            response_delta_failed=True,
+            response_delta_repaired=True,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="high",
+        ),
+        synthetic_rerun_turn(turn_index=2),
+    ]
+
+    summary = summarize_long_session_replay_observations(turns)["response_delta_summary"]
+
+    assert summary["response_delta_checked_count"] == 2
+    assert summary["response_delta_failed_count"] == 1
+    assert summary["response_delta_repaired_count"] == 1
+    assert summary["response_delta_kind_counts"] == {"new_fact": 2}
+    assert summary["response_delta_unknown_count"] == 1
+    assert summary["echo_overlap_band_counts"] == {"high": 1, "low": 1}

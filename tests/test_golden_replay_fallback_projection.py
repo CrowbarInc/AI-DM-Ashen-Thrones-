@@ -472,3 +472,51 @@ def test_golden_projection_projects_strict_social_sanitizer_fallback_owner_split
     debug = format_golden_replay_debug({"scenario_id": observed["scenario_id"], "turn_count": 1, "turns": [observed]})
     assert "sanitizer_strict_social_selection_owner: 'output_sanitizer'" in debug
     assert "sanitizer_strict_social_prose_owner: 'strict_social_emission'" in debug
+
+
+def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_optional():
+    turns = [
+        {
+            "turn_index": 0,
+            "route_kind": "undecided",
+            "response_type_required": "neutral_narration",
+            "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            "fallback_family": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            "unavailable": ["selected_speaker_id"],
+            "runtime_lineage_events": [
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="sealed_or_global_replacement",
+                )
+            ],
+        },
+        {
+            "turn_index": 1,
+            "route_kind": "action",
+            "response_type_required": "action_outcome",
+            "final_emitted_source": "anti_reset_local_continuation_fallback",
+            "fallback_family": "gate_terminal_repair",
+            "unavailable": ["selected_speaker_id"],
+            "runtime_lineage_events": [
+                make_runtime_lineage_event(
+                    event_kind="fallback_selected",
+                    stage="gate",
+                    owner="game.final_emission_gate",
+                    fallback_kind="response_type_prepared_emission",
+                )
+            ],
+        },
+    ]
+
+    fallback_escalation = summarize_long_session_replay_observations(turns)["fallback_escalation_summary"]
+
+    assert fallback_escalation["unavailable_with_fallback_count"] == 2
+    assert fallback_escalation["scene_action_speaker_optional_unavailable_count"] == 2
+    assert fallback_escalation["blocking_unavailable_with_fallback_count"] == 0
+    assert fallback_escalation["max_fallback_streak"] == 2
+    assert fallback_escalation["max_scene_action_nonblocking_fallback_streak"] == 2
+    assert fallback_escalation["max_blocking_fallback_streak"] == 0
+    assert "fallback_streak_gt_1" not in fallback_escalation["escalation_warnings"]
+    assert "unavailable_to_fallback_coupling_recurrence" not in fallback_escalation["escalation_warnings"]

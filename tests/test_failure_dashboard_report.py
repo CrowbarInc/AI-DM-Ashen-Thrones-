@@ -18,7 +18,11 @@ from tests.helpers.failure_dashboard_report import (
     write_rerun_drift_scorecard_artifacts,
     write_rerun_drift_scorecard_artifacts_if_requested,
 )
-from tests.helpers.golden_replay_api import classify_golden_drift, compare_golden_replay_reruns
+from tests.helpers.golden_replay_api import (
+    classify_golden_drift,
+    compare_golden_replay_reruns,
+    render_long_session_replay_summary_markdown,
+)
 from tests.helpers.failure_dashboard_fixtures import record_selected_speaker_protected_failure
 from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
 
@@ -398,3 +402,98 @@ def test_bug_recurrence_history_markdown_renders_empty_state_cleanly() -> None:
     assert "- Total recurrence keys: `0`" in report
     assert "- Total recurrence events: `0`" in report
     assert "No recurrence history recorded." in report
+
+
+def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
+    turns = [
+        {
+            "turn_index": 0,
+            "route_kind": "dialogue",
+            "selected_speaker_id": "runner",
+            "post_gate_mutation_detected": False,
+            "unavailable": [],
+            "runtime_lineage_events": [],
+        },
+        {
+            "turn_index": 1,
+            "route_kind": "dialogue",
+            "selected_speaker_id": "runner",
+            "post_gate_mutation_detected": True,
+            "unavailable": ["fallback_family"],
+            "runtime_lineage_events": [
+                {
+                    "event_type": "runtime_lineage",
+                    "event_kind": "fallback_selected",
+                    "stage": "gate",
+                    "owner": "game.final_emission_gate",
+                    "source": "neutral_reply_speaker_grounding_bridge",
+                    "fallback_kind": "sealed_or_global_replacement",
+                    "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
+                }
+            ],
+        },
+    ]
+    summary = {
+        "turn_count": 2,
+        "route_frequency": {"dialogue": 2},
+        "route_change_count": 0,
+        "speaker_frequency": {"runner": 2},
+        "speaker_change_count": 0,
+        "speaker_missing_count": 0,
+        "mutation_turn_count": 1,
+        "unavailable_counts": {"fallback_family": 1},
+        "response_delta_summary": {
+            "response_delta_checked_count": 1,
+            "response_delta_failed_count": 0,
+            "response_delta_repaired_count": 0,
+            "response_delta_kind_counts": {"new_fact": 1},
+            "response_delta_unknown_count": 1,
+            "echo_overlap_band_counts": {"low": 1},
+        },
+        "lineage_summary": {
+            "by_event_kind": {"fallback_selected": 1},
+            "recurring_events": [
+                {
+                    "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+                    "count": 2,
+                }
+            ],
+        },
+        "fallback_escalation_summary": {
+            "fallback_total_count": 1,
+            "fallback_family_counts": {},
+            "fallback_owner_counts": {},
+            "fallback_lineage_kind_counts": {"sealed_or_global_replacement": 1},
+            "max_fallback_streak": 1,
+            "late_window_fallback_count": 0,
+            "escalation_warnings": [],
+        },
+        "continuity_warning_count": 0,
+        "continuity_violation_count": 0,
+        "continuity_drift": {
+            "session_health": {"classification": "clean", "degradation_detected": False},
+            "degradation_over_time": {"reason_codes": [], "late_window": {"signals": []}},
+        },
+    }
+
+    report = render_long_session_replay_summary_markdown(
+        scenario_id="synthetic_long_session",
+        turns=turns,
+        summary=summary,
+        title="Synthetic Long Session",
+    )
+
+    assert "- Route changes: `0`" in report
+    assert "- Speaker changes / missing: `0` / `0`" in report
+    assert "- Continuity classification: `clean`" in report
+    assert "- Fallback total count: `1`" in report
+    assert "- Fallback lineage kinds: `{'sealed_or_global_replacement': 1}`" in report
+    assert "- Mutation turn count: `1`" in report
+    assert "- Response-delta checked / failed / repaired: `1` / `0` / `0`" in report
+    assert "- Response-delta kinds: `{'new_fact': 1}`" in report
+    assert "- Response-delta unknown count: `1`" in report
+    assert "- Echo-overlap bands: `{'low': 1}`" in report
+    assert "- Unavailable counts: `{'fallback_family': 1}`" in report
+    assert "- Lineage recurrence: `[" in report
+    assert "- Fallback frequency:" not in report
+    assert "- Mutation turns:" not in report

@@ -4,13 +4,16 @@ import pytest
 
 from tests.failure_classification_contract import ALLOWED_OWNER_DRIFT_BUCKETS
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
-from tests.helpers.golden_replay_api import compare_golden_replay_reruns
+from game.runtime_lineage_telemetry import make_runtime_lineage_event
+from tests.helpers.golden_replay_api import build_long_session_stability_scorecard, compare_golden_replay_reruns
 from tests.helpers.replay_drift_taxonomy import (
+    aggregate_long_session_stability_classifications,
     classify_owner_drift_bucket,
     classify_rerun_delta_owner_drift_bucket,
     owner_drift_classifications_from_per_turn_deltas,
+    stability_classification_rows_from_scorecard,
 )
-from tests.helpers.replay_observed_row_fixtures import observed_failure_row
+from tests.helpers.replay_observed_row_fixtures import observed_failure_row, synthetic_rerun_turn
 
 
 @pytest.mark.parametrize(
@@ -284,3 +287,203 @@ def test_render_rerun_scorecard_empty_owner_drift_summary() -> None:
     markdown = render_rerun_drift_scorecard_markdown(scorecard)
     assert "## Owner Drift Summary" in markdown
     assert "No owner drift classifications." in markdown
+
+
+def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
+    turns = [
+        synthetic_rerun_turn(turn_index=0, turn_id="t01"),
+        synthetic_rerun_turn(turn_index=1, turn_id="t02", route_kind="action", selected_speaker_id=None),
+    ]
+
+    scorecard = compare_golden_replay_reruns(turns, [dict(turn) for turn in turns])
+
+    assert scorecard["report_only"] is True
+    assert scorecard["total_turns_compared"] == 2
+    assert scorecard["summary"] == {
+        "speaker_delta_count": 0,
+        "route_delta_count": 0,
+        "fallback_delta_count": 0,
+        "text_fingerprint_delta_count": 0,
+        "scaffold_delta_count": 0,
+        "runtime_lineage_delta_count": 0,
+        "semantic_delta_frequency_delta_count": 0,
+    }
+    assert scorecard["per_turn_deltas"] == []
+
+
+def test_compare_golden_replay_reruns_counts_speaker_only_drift():
+    previous = [synthetic_rerun_turn(selected_speaker_id="runner")]
+    current = [synthetic_rerun_turn(selected_speaker_id="guard")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["speaker_delta_count"] == 1
+    assert scorecard["summary"]["route_delta_count"] == 0
+    assert scorecard["per_turn_deltas"][0]["deltas"]["speaker"] == {
+        "previous": "runner",
+        "current": "guard",
+    }
+    assert scorecard["frequencies"]["speakers"]["delta"] == {"guard": 1, "runner": -1}
+
+
+def test_compare_golden_replay_reruns_counts_route_only_drift():
+    previous = [synthetic_rerun_turn(route_kind="dialogue")]
+    current = [synthetic_rerun_turn(route_kind="action")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["route_delta_count"] == 1
+    assert scorecard["summary"]["speaker_delta_count"] == 0
+    assert scorecard["per_turn_deltas"][0]["deltas"]["route"] == {
+        "previous": "dialogue",
+        "current": "action",
+    }
+    assert scorecard["frequencies"]["routes"]["delta"] == {"action": 1, "dialogue": -1}
+
+
+def test_compare_golden_replay_reruns_counts_fallback_frequency_drift():
+    event = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner="game.final_emission_gate",
+        fallback_kind="sealed_or_global_replacement",
+        fallback_selection_owner="final_emission_gate",
+    )
+    previous = [synthetic_rerun_turn()]
+    current = [
+        synthetic_rerun_turn(
+            fallback_family="gate_terminal_repair",
+            fallback_owner="sealed_gate",
+            runtime_lineage_events=[event],
+        )
+    ]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["fallback_delta_count"] == 1
+    assert scorecard["summary"]["runtime_lineage_delta_count"] == 1
+    assert scorecard["frequencies"]["fallback_families"]["delta"] == {"gate_terminal_repair": 1}
+    assert scorecard["frequencies"]["fallback_owners"]["delta"] == {"sealed_gate": 1}
+    assert (
+        scorecard["frequencies"]["runtime_lineage"]["frequency_deltas"]["fallback_frequency"]["delta"]
+        == {"sealed_or_global_replacement": 1}
+    )
+
+
+def test_compare_golden_replay_reruns_reports_text_fingerprints_without_failing():
+    previous = [synthetic_rerun_turn(final_text="The runner answers.")]
+    current = [synthetic_rerun_turn(final_text="The runner answers with a warning.")]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["text_fingerprint_delta_count"] == 1
+    fingerprint_delta = scorecard["per_turn_deltas"][0]["deltas"]["text_fingerprint"]
+    assert fingerprint_delta["previous"] != fingerprint_delta["current"]
+    assert len(fingerprint_delta["previous"]) == 16
+    assert len(fingerprint_delta["current"]) == 16
+    assert scorecard["report_only"] is True
+
+
+def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
+    previous = [{"turn_index": 0, "final_text": "Rain falls."}]
+    current = [{"turn_index": 0, "final_text": "Rain falls.", "runtime_lineage_events": "not-a-list"}]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["total_turns_compared"] == 1
+    assert scorecard["summary"]["speaker_delta_count"] == 0
+    assert scorecard["summary"]["route_delta_count"] == 0
+    assert scorecard["summary"]["fallback_delta_count"] == 0
+    assert scorecard["summary"]["runtime_lineage_delta_count"] == 0
+    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 0
+    assert scorecard["frequencies"]["response_delta"]["previous"]["response_delta_unknown_count"] == 1
+    assert scorecard["frequencies"]["response_delta"]["current"]["response_delta_unknown_count"] == 1
+    assert scorecard["per_turn_deltas"] == []
+
+
+def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
+    previous = [
+        synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=False,
+            response_delta_repaired=False,
+            response_delta_kind="new_fact",
+            response_delta_echo_overlap_band="low",
+        )
+    ]
+    current = [
+        synthetic_rerun_turn(
+            response_delta_checked=True,
+            response_delta_failed=True,
+            response_delta_repaired=True,
+            response_delta_kind="new_actionable_lead",
+            response_delta_echo_overlap_band="high",
+        )
+    ]
+
+    scorecard = compare_golden_replay_reruns(previous, current)
+
+    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 1
+    response_delta = scorecard["frequencies"]["response_delta"]
+    assert response_delta["failed"]["delta"] == {"failed": 1}
+    assert response_delta["repaired"]["delta"] == {"repaired": 1}
+    assert response_delta["kinds"]["delta"] == {"new_actionable_lead": 1, "new_fact": -1}
+    assert response_delta["echo_overlap_bands"]["delta"] == {"high": 1, "low": -1}
+    assert scorecard["per_turn_deltas"][0]["deltas"]["response_delta"]["response_delta_failed"] == {
+        "previous": False,
+        "current": True,
+    }
+
+
+def test_stability_classification_rows_from_scorecard_projects_owner_fields():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="projection_probe",
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "social", "selected_speaker_id": "runner"},
+        ],
+    )
+
+    rows = stability_classification_rows_from_scorecard(scorecard)
+    assert rows
+    assert rows[0]["scenario_id"] == "projection_probe"
+    assert {"signal", "owner_drift_bucket", "severity_hint", "stability_status", "reason", "evidence"} <= set(rows[0])
+    assert rows[0]["owner_drift_bucket"] == "route_drift"
+
+    aggregation = aggregate_long_session_stability_classifications([scorecard])
+    assert aggregation["total_scorecards"] == 1
+    assert aggregation["bucket_frequencies"]["route_drift"] == 1
+    assert aggregation["scenario_frequencies"]["projection_probe"] == 1
+    assert aggregation["stability_status_counts"]["stable"] == 1
+    assert aggregation == aggregate_long_session_stability_classifications([scorecard])
+
+
+def test_stability_ownership_projection_stable_scorecard_empty():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="stable_projection_probe",
+        observations=[
+            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
+        ],
+    )
+    assert stability_classification_rows_from_scorecard(scorecard) == []
+
+
+def test_stability_ownership_projection_degraded_scorecard_surfaces_rows():
+    scorecard = build_long_session_stability_scorecard(
+        scenario_id="degraded_projection_probe",
+        observations=[{"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"}],
+        continuity_result={
+            "evaluation": {
+                "session_health": {"classification": "warning", "overall_passed": False},
+                "degradation_over_time": {
+                    "progressive_degradation_detected": True,
+                    "reason_codes": ["rising_generic_filler_progressive"],
+                },
+            }
+        },
+    )
+    rows = stability_classification_rows_from_scorecard(scorecard)
+    assert rows
+    assert all(row["stability_status"] == "degraded" for row in rows)
+    assert any(row["owner_drift_bucket"] == "semantic_drift" for row in rows)

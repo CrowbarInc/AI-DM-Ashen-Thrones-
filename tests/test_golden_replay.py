@@ -5,12 +5,8 @@ import pytest
 from game import storage
 from game.api import chat
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import (
-    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    opening_fallback_owner_bucket_from_meta,
-)
+from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
-from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from game.final_emission_replay_projection import SEALED_REPLACEMENT_SUBKINDS
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 from game.scenario_spine import (
@@ -24,6 +20,12 @@ from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
 from game.models import ChatRequest
 from tests.helpers.golden_replay import (
     FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+    FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
+    FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
+    FRONTIER_GATE_RESUME_STABILITY_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     _observed_turn,
     assert_fallback_escalation_profile,
@@ -31,10 +33,7 @@ from tests.helpers.golden_replay import (
     assert_long_session_stability_profile,
     assert_protected_golden_turn_observation,
     assert_runtime_lineage_profile,
-    build_long_session_stability_scorecard,
-    compare_golden_replay_reruns,
     evaluate_golden_replay_continuity_drift,
-    final_text_has_scaffold_leakage,
     format_golden_replay_debug,
     frontier_gate_branch_prompts,
     frontier_gate_branch_turn_ids,
@@ -60,8 +59,6 @@ from tests.helpers.transcript_runner import (
 from tests.helpers.failure_dashboard_report import (
     clear_recorded_protected_replay_failures,
     recorded_protected_replay_failure_rows,
-    render_long_session_stability_scorecard_markdown,
-    write_long_session_stability_scorecard_artifacts,
     write_protected_replay_failure_report_if_present,
 )
 from tests.helpers.opening_fallback_evidence import (
@@ -78,7 +75,7 @@ from tests.helpers.gate_equivalence_monkeypatch import (
 )
 from tests.helpers.opening_fallback_evidence import opening_gm_output
 from tests.helpers.strict_social_harness import runner_strict_bundle
-from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
+from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn
 from tests.helpers.golden_replay_fixtures import (
     gm_response,
     golden_replay_chat_stubs,
@@ -131,609 +128,6 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         assert rows[0]["investigate_first"] == "game/speaker_contract_enforcement.py"
     finally:
         clear_recorded_protected_replay_failures()
-
-
-def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
-    turns = [
-        synthetic_rerun_turn(turn_index=0, turn_id="t01"),
-        synthetic_rerun_turn(turn_index=1, turn_id="t02", route_kind="action", selected_speaker_id=None),
-    ]
-
-    scorecard = compare_golden_replay_reruns(turns, [dict(turn) for turn in turns])
-
-    assert scorecard["report_only"] is True
-    assert scorecard["total_turns_compared"] == 2
-    assert scorecard["summary"] == {
-        "speaker_delta_count": 0,
-        "route_delta_count": 0,
-        "fallback_delta_count": 0,
-        "text_fingerprint_delta_count": 0,
-        "scaffold_delta_count": 0,
-        "runtime_lineage_delta_count": 0,
-        "semantic_delta_frequency_delta_count": 0,
-    }
-    assert scorecard["per_turn_deltas"] == []
-
-
-def test_compare_golden_replay_reruns_counts_speaker_only_drift():
-    previous = [synthetic_rerun_turn(selected_speaker_id="runner")]
-    current = [synthetic_rerun_turn(selected_speaker_id="guard")]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["summary"]["speaker_delta_count"] == 1
-    assert scorecard["summary"]["route_delta_count"] == 0
-    assert scorecard["per_turn_deltas"][0]["deltas"]["speaker"] == {
-        "previous": "runner",
-        "current": "guard",
-    }
-    assert scorecard["frequencies"]["speakers"]["delta"] == {"guard": 1, "runner": -1}
-
-
-def test_compare_golden_replay_reruns_counts_route_only_drift():
-    previous = [synthetic_rerun_turn(route_kind="dialogue")]
-    current = [synthetic_rerun_turn(route_kind="action")]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["summary"]["route_delta_count"] == 1
-    assert scorecard["summary"]["speaker_delta_count"] == 0
-    assert scorecard["per_turn_deltas"][0]["deltas"]["route"] == {
-        "previous": "dialogue",
-        "current": "action",
-    }
-    assert scorecard["frequencies"]["routes"]["delta"] == {"action": 1, "dialogue": -1}
-
-
-def test_compare_golden_replay_reruns_counts_fallback_frequency_drift():
-    event = make_runtime_lineage_event(
-        event_kind="fallback_selected",
-        stage="gate",
-        owner="game.final_emission_gate",
-        fallback_kind="sealed_or_global_replacement",
-        fallback_selection_owner="final_emission_gate",
-    )
-    previous = [synthetic_rerun_turn()]
-    current = [
-        synthetic_rerun_turn(
-            fallback_family="gate_terminal_repair",
-            fallback_owner="sealed_gate",
-            runtime_lineage_events=[event],
-        )
-    ]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["summary"]["fallback_delta_count"] == 1
-    assert scorecard["summary"]["runtime_lineage_delta_count"] == 1
-    assert scorecard["frequencies"]["fallback_families"]["delta"] == {"gate_terminal_repair": 1}
-    assert scorecard["frequencies"]["fallback_owners"]["delta"] == {"sealed_gate": 1}
-    assert (
-        scorecard["frequencies"]["runtime_lineage"]["frequency_deltas"]["fallback_frequency"]["delta"]
-        == {"sealed_or_global_replacement": 1}
-    )
-
-
-def test_compare_golden_replay_reruns_reports_text_fingerprints_without_failing():
-    previous = [synthetic_rerun_turn(final_text="The runner answers.")]
-    current = [synthetic_rerun_turn(final_text="The runner answers with a warning.")]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["summary"]["text_fingerprint_delta_count"] == 1
-    fingerprint_delta = scorecard["per_turn_deltas"][0]["deltas"]["text_fingerprint"]
-    assert fingerprint_delta["previous"] != fingerprint_delta["current"]
-    assert len(fingerprint_delta["previous"]) == 16
-    assert len(fingerprint_delta["current"]) == 16
-    assert scorecard["report_only"] is True
-
-
-def test_compare_golden_replay_reruns_handles_missing_optional_metadata():
-    previous = [{"turn_index": 0, "final_text": "Rain falls."}]
-    current = [{"turn_index": 0, "final_text": "Rain falls.", "runtime_lineage_events": "not-a-list"}]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["total_turns_compared"] == 1
-    assert scorecard["summary"]["speaker_delta_count"] == 0
-    assert scorecard["summary"]["route_delta_count"] == 0
-    assert scorecard["summary"]["fallback_delta_count"] == 0
-    assert scorecard["summary"]["runtime_lineage_delta_count"] == 0
-    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 0
-    assert scorecard["frequencies"]["response_delta"]["previous"]["response_delta_unknown_count"] == 1
-    assert scorecard["frequencies"]["response_delta"]["current"]["response_delta_unknown_count"] == 1
-    assert scorecard["per_turn_deltas"] == []
-
-
-def test_long_session_summary_counts_response_delta_metadata():
-    turns = [
-        synthetic_rerun_turn(
-            response_delta_checked=True,
-            response_delta_failed=False,
-            response_delta_repaired=False,
-            response_delta_kind="new_fact",
-            response_delta_echo_overlap_band="low",
-        ),
-        synthetic_rerun_turn(
-            turn_index=1,
-            response_delta_checked=True,
-            response_delta_failed=True,
-            response_delta_repaired=True,
-            response_delta_kind="new_fact",
-            response_delta_echo_overlap_band="high",
-        ),
-        synthetic_rerun_turn(turn_index=2),
-    ]
-
-    summary = summarize_long_session_replay_observations(turns)["response_delta_summary"]
-
-    assert summary["response_delta_checked_count"] == 2
-    assert summary["response_delta_failed_count"] == 1
-    assert summary["response_delta_repaired_count"] == 1
-    assert summary["response_delta_kind_counts"] == {"new_fact": 2}
-    assert summary["response_delta_unknown_count"] == 1
-    assert summary["echo_overlap_band_counts"] == {"high": 1, "low": 1}
-
-
-def test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas():
-    previous = [
-        synthetic_rerun_turn(
-            response_delta_checked=True,
-            response_delta_failed=False,
-            response_delta_repaired=False,
-            response_delta_kind="new_fact",
-            response_delta_echo_overlap_band="low",
-        )
-    ]
-    current = [
-        synthetic_rerun_turn(
-            response_delta_checked=True,
-            response_delta_failed=True,
-            response_delta_repaired=True,
-            response_delta_kind="new_actionable_lead",
-            response_delta_echo_overlap_band="high",
-        )
-    ]
-
-    scorecard = compare_golden_replay_reruns(previous, current)
-
-    assert scorecard["summary"]["semantic_delta_frequency_delta_count"] == 1
-    response_delta = scorecard["frequencies"]["response_delta"]
-    assert response_delta["failed"]["delta"] == {"failed": 1}
-    assert response_delta["repaired"]["delta"] == {"repaired": 1}
-    assert response_delta["kinds"]["delta"] == {"new_actionable_lead": 1, "new_fact": -1}
-    assert response_delta["echo_overlap_bands"]["delta"] == {"high": 1, "low": -1}
-    assert scorecard["per_turn_deltas"][0]["deltas"]["response_delta"]["response_delta_failed"] == {
-        "previous": False,
-        "current": True,
-    }
-
-
-def test_long_session_replay_summary_renderer_surfaces_operator_metrics():
-    turns = [
-        {
-            "turn_index": 0,
-            "route_kind": "dialogue",
-            "selected_speaker_id": "runner",
-            "post_gate_mutation_detected": False,
-            "unavailable": [],
-            "runtime_lineage_events": [],
-        },
-        {
-            "turn_index": 1,
-            "route_kind": "dialogue",
-            "selected_speaker_id": "runner",
-            "post_gate_mutation_detected": True,
-            "unavailable": ["fallback_family"],
-            "runtime_lineage_events": [
-                {
-                    "event_type": "runtime_lineage",
-                    "event_kind": "fallback_selected",
-                    "stage": "gate",
-                    "owner": "game.final_emission_gate",
-                    "source": "neutral_reply_speaker_grounding_bridge",
-                    "fallback_kind": "sealed_or_global_replacement",
-                    "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
-                }
-            ],
-        },
-    ]
-    summary = {
-        "turn_count": 2,
-        "route_frequency": {"dialogue": 2},
-        "route_change_count": 0,
-        "speaker_frequency": {"runner": 2},
-        "speaker_change_count": 0,
-        "speaker_missing_count": 0,
-        "mutation_turn_count": 1,
-        "unavailable_counts": {"fallback_family": 1},
-        "response_delta_summary": {
-            "response_delta_checked_count": 1,
-            "response_delta_failed_count": 0,
-            "response_delta_repaired_count": 0,
-            "response_delta_kind_counts": {"new_fact": 1},
-            "response_delta_unknown_count": 1,
-            "echo_overlap_band_counts": {"low": 1},
-        },
-        "lineage_summary": {
-            "by_event_kind": {"fallback_selected": 1},
-            "recurring_events": [
-                {
-                    "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-                    "count": 2,
-                }
-            ],
-        },
-        "fallback_escalation_summary": {
-            "fallback_total_count": 1,
-            "fallback_family_counts": {},
-            "fallback_owner_counts": {},
-            "fallback_lineage_kind_counts": {"sealed_or_global_replacement": 1},
-            "max_fallback_streak": 1,
-            "late_window_fallback_count": 0,
-            "escalation_warnings": [],
-        },
-        "continuity_warning_count": 0,
-        "continuity_violation_count": 0,
-        "continuity_drift": {
-            "session_health": {"classification": "clean", "degradation_detected": False},
-            "degradation_over_time": {"reason_codes": [], "late_window": {"signals": []}},
-        },
-    }
-
-    report = render_long_session_replay_summary_markdown(
-        scenario_id="synthetic_long_session",
-        turns=turns,
-        summary=summary,
-        title="Synthetic Long Session",
-    )
-
-    assert "- Route changes: `0`" in report
-    assert "- Speaker changes / missing: `0` / `0`" in report
-    assert "- Continuity classification: `clean`" in report
-    assert "- Fallback total count: `1`" in report
-    assert "- Fallback lineage kinds: `{'sealed_or_global_replacement': 1}`" in report
-    assert "- Mutation turn count: `1`" in report
-    assert "- Response-delta checked / failed / repaired: `1` / `0` / `0`" in report
-    assert "- Response-delta kinds: `{'new_fact': 1}`" in report
-    assert "- Response-delta unknown count: `1`" in report
-    assert "- Echo-overlap bands: `{'low': 1}`" in report
-    assert "- Unavailable counts: `{'fallback_family': 1}`" in report
-    assert "- Lineage recurrence: `[" in report
-    assert "- Fallback frequency:" not in report
-    assert "- Mutation turns:" not in report
-
-
-def test_long_session_stability_scorecard_projects_existing_metrics(monkeypatch):
-    def _forbidden_eval(*_args, **_kwargs):
-        raise AssertionError("evaluate_scenario_spine_session must not be called from scorecard projection")
-
-    monkeypatch.setattr(
-        "tests.helpers.golden_replay.evaluate_scenario_spine_session",
-        _forbidden_eval,
-    )
-    turns = [
-        {
-            "turn_index": 0,
-            "route_kind": "dialogue",
-            "selected_speaker_id": "runner",
-            "branch_id": "branch_social_inquiry",
-            "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-            "runtime_lineage_events": [],
-        },
-        {
-            "turn_index": 1,
-            "route_kind": "social",
-            "selected_speaker_id": "runner",
-            "branch_id": "branch_social_inquiry",
-            "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-            "runtime_lineage_events": [],
-        },
-    ]
-    continuity_result = {
-        "evaluation": {
-            "session_health": {
-                "classification": "clean",
-                "long_session_band": "long",
-                "overall_passed": True,
-            },
-            "degradation_over_time": {
-                "progressive_degradation_detected": False,
-                "reason_codes": [],
-            },
-        }
-    }
-
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="synthetic_long_session",
-        branch_id="branch_social_inquiry",
-        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-        observations=turns,
-        continuity_result=continuity_result,
-    )
-
-    assert scorecard["schema_version"] == 1
-    assert scorecard["artifact_kind"] == "long_session_stability_scorecard"
-    assert scorecard["report_only"] is True
-    assert scorecard["scenario_id"] == "synthetic_long_session"
-    assert scorecard["branch_id"] == "branch_social_inquiry"
-    assert scorecard["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
-    assert scorecard["turn_count"] == 2
-    assert scorecard["route_stability"]["route_change_count"] == 1
-    assert scorecard["route_stability"]["route_frequency"] == {"dialogue": 1, "social": 1}
-    assert scorecard["speaker_stability"]["speaker_change_count"] == 0
-    assert scorecard["speaker_stability"]["speaker_missing_count"] == 0
-    assert scorecard["fallback_stability"]["fallback_count"] == 0
-    assert scorecard["fallback_stability"]["escalation_warnings"] == []
-    assert scorecard["degradation"]["progressive_degradation_detected"] is False
-    assert scorecard["operational_summary"]["stability_status"] == "stable"
-    assert scorecard["operational_summary"]["actionable"] is False
-    assert scorecard["operational_summary"]["warning_count"] == 0
-    route_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "route_drift"]
-    assert len(route_rows) == 1
-    assert route_rows[0]["signal"] == "route_change"
-    assert scorecard["owner_drift_bucket_counts"]["route_drift"] == 1
-
-    markdown = render_long_session_stability_scorecard_markdown(scorecard)
-    assert "- Stability status: `stable`" in markdown
-    assert "- Route changes: `1`" in markdown
-    assert "- Speaker changes: `0`" in markdown
-    assert "## Stability Ownership" in markdown
-    assert "`route_drift`" in markdown
-
-
-def test_long_session_stability_scorecard_marks_degradation_report_only(monkeypatch):
-    def _forbidden_eval(*_args, **_kwargs):
-        raise AssertionError("evaluate_scenario_spine_session must not be called from scorecard projection")
-
-    monkeypatch.setattr(
-        "tests.helpers.golden_replay.evaluate_scenario_spine_session",
-        _forbidden_eval,
-    )
-    turns = [
-        {
-            "turn_index": 0,
-            "route_kind": "dialogue",
-            "selected_speaker_id": "runner",
-            "runtime_lineage_events": [],
-        }
-    ]
-    continuity_result = {
-        "evaluation": {
-            "session_health": {
-                "classification": "warning",
-                "long_session_band": "long",
-                "overall_passed": False,
-            },
-            "degradation_over_time": {
-                "progressive_degradation_detected": True,
-                "reason_codes": ["rising_generic_filler_progressive"],
-            },
-        }
-    }
-
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="synthetic_degraded_session",
-        observations=turns,
-        continuity_result=continuity_result,
-        lineage_summary={
-            "by_event_kind": {"fallback_selected": 3},
-            "recurring_events": [
-                {"recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair", "count": 3}
-            ],
-        },
-    )
-
-    assert scorecard["report_only"] is True
-    assert scorecard["degradation"]["progressive_degradation_detected"] is True
-    assert scorecard["degradation"]["reason_codes"] == ["rising_generic_filler_progressive"]
-    assert scorecard["operational_summary"]["stability_status"] == "degraded"
-    assert scorecard["operational_summary"]["actionable"] is True
-    assert scorecard["operational_summary"]["warning_count"] >= 2
-    assert scorecard["lineage_stability"]["event_counts"] == {"fallback_selected": 3}
-    assert scorecard["report_only"] is True
-    degradation_rows = [
-        row for row in scorecard["owner_drift_classifications"] if row["signal"] == "progressive_degradation"
-    ]
-    assert len(degradation_rows) == 1
-    assert degradation_rows[0]["owner_drift_bucket"] == "semantic_drift"
-    assert scorecard["owner_drift_bucket_counts"]["semantic_drift"] >= 1
-    fallback_rows = [
-        row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "fallback_drift"
-    ]
-    assert fallback_rows
-    markdown = render_long_session_stability_scorecard_markdown(scorecard)
-    assert "## Stability Ownership" in markdown
-    assert "`semantic_drift`" in markdown
-
-
-def test_long_session_stability_scorecard_owner_drift_speaker_signal():
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="speaker_drift_probe",
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "guard"},
-            {"turn_index": 2, "route_kind": "dialogue"},
-        ],
-    )
-    speaker_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "speaker_drift"]
-    assert {row["signal"] for row in speaker_rows} == {"speaker_change", "speaker_missing"}
-    assert scorecard["owner_drift_bucket_counts"]["speaker_drift"] == 2
-
-
-def test_long_session_stability_scorecard_owner_drift_fallback_recurrence():
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="fallback_drift_probe",
-        observations=[
-            {
-                "turn_index": 0,
-                "route_kind": "action",
-                "fallback_family": "gate_terminal_repair",
-                "runtime_lineage_events": [
-                    {
-                        "event_kind": "fallback_selected",
-                        "recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair",
-                    }
-                ],
-            },
-            {
-                "turn_index": 1,
-                "route_kind": "action",
-                "fallback_family": "gate_terminal_repair",
-                "runtime_lineage_events": [
-                    {
-                        "event_kind": "fallback_selected",
-                        "recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair",
-                    }
-                ],
-            },
-        ],
-        lineage_summary={
-            "by_event_kind": {"fallback_selected": 2},
-            "recurring_events": [
-                {"recurrence_key": "fallback_selected:gate:game.final_emission_gate:repair", "count": 2}
-            ],
-        },
-    )
-    fallback_rows = [row for row in scorecard["owner_drift_classifications"] if row["owner_drift_bucket"] == "fallback_drift"]
-    assert any(row["signal"] == "fallback_count" for row in fallback_rows)
-    assert any(row["signal"] == "lineage_recurrence" for row in fallback_rows)
-    assert scorecard["owner_drift_bucket_counts"]["fallback_drift"] >= 2
-
-
-def test_long_session_stability_scorecard_owner_drift_stable_has_no_classifications():
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="stable_probe",
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-        ],
-        continuity_result={
-            "evaluation": {
-                "session_health": {"classification": "clean", "overall_passed": True},
-                "degradation_over_time": {
-                    "progressive_degradation_detected": False,
-                    "reason_codes": [],
-                },
-            }
-        },
-    )
-    assert scorecard["owner_drift_classifications"] == []
-    assert scorecard["owner_drift_bucket_counts"]["route_drift"] == 0
-    assert scorecard["owner_drift_bucket_counts"]["speaker_drift"] == 0
-    assert scorecard["owner_drift_bucket_counts"]["fallback_drift"] == 0
-    markdown = render_long_session_stability_scorecard_markdown(scorecard)
-    assert "No stability ownership classifications." in markdown
-
-
-def test_stability_classification_rows_from_scorecard_projects_owner_fields():
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="projection_probe",
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "social", "selected_speaker_id": "runner"},
-        ],
-    )
-    from tests.helpers.replay_drift_taxonomy import (
-        aggregate_long_session_stability_classifications,
-        stability_classification_rows_from_scorecard,
-    )
-
-    rows = stability_classification_rows_from_scorecard(scorecard)
-    assert rows
-    assert rows[0]["scenario_id"] == "projection_probe"
-    assert {"signal", "owner_drift_bucket", "severity_hint", "stability_status", "reason", "evidence"} <= set(rows[0])
-    assert rows[0]["owner_drift_bucket"] == "route_drift"
-
-    aggregation = aggregate_long_session_stability_classifications([scorecard])
-    assert aggregation["total_scorecards"] == 1
-    assert aggregation["bucket_frequencies"]["route_drift"] == 1
-    assert aggregation["scenario_frequencies"]["projection_probe"] == 1
-    assert aggregation["stability_status_counts"]["stable"] == 1
-    assert aggregation == aggregate_long_session_stability_classifications([scorecard])
-
-
-def test_stability_ownership_projection_stable_scorecard_empty():
-    from tests.helpers.replay_drift_taxonomy import stability_classification_rows_from_scorecard
-
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="stable_projection_probe",
-        observations=[
-            {"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-            {"turn_index": 1, "route_kind": "dialogue", "selected_speaker_id": "runner"},
-        ],
-    )
-    assert stability_classification_rows_from_scorecard(scorecard) == []
-
-
-def test_stability_ownership_projection_degraded_scorecard_surfaces_rows():
-    from tests.helpers.replay_drift_taxonomy import stability_classification_rows_from_scorecard
-
-    scorecard = build_long_session_stability_scorecard(
-        scenario_id="degraded_projection_probe",
-        observations=[{"turn_index": 0, "route_kind": "dialogue", "selected_speaker_id": "runner"}],
-        continuity_result={
-            "evaluation": {
-                "session_health": {"classification": "warning", "overall_passed": False},
-                "degradation_over_time": {
-                    "progressive_degradation_detected": True,
-                    "reason_codes": ["rising_generic_filler_progressive"],
-                },
-            }
-        },
-    )
-    rows = stability_classification_rows_from_scorecard(scorecard)
-    assert rows
-    assert all(row["stability_status"] == "degraded" for row in rows)
-    assert any(row["owner_drift_bucket"] == "semantic_drift" for row in rows)
-
-
-def test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_optional():
-    turns = [
-        {
-            "turn_index": 0,
-            "route_kind": "undecided",
-            "response_type_required": "neutral_narration",
-            "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-            "fallback_family": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-            "unavailable": ["selected_speaker_id"],
-            "runtime_lineage_events": [
-                make_runtime_lineage_event(
-                    event_kind="fallback_selected",
-                    stage="gate",
-                    owner="game.final_emission_gate",
-                    fallback_kind="sealed_or_global_replacement",
-                )
-            ],
-        },
-        {
-            "turn_index": 1,
-            "route_kind": "action",
-            "response_type_required": "action_outcome",
-            "final_emitted_source": "anti_reset_local_continuation_fallback",
-            "fallback_family": "gate_terminal_repair",
-            "unavailable": ["selected_speaker_id"],
-            "runtime_lineage_events": [
-                make_runtime_lineage_event(
-                    event_kind="fallback_selected",
-                    stage="gate",
-                    owner="game.final_emission_gate",
-                    fallback_kind="response_type_prepared_emission",
-                )
-            ],
-        },
-    ]
-
-    fallback_escalation = summarize_long_session_replay_observations(turns)["fallback_escalation_summary"]
-
-    assert fallback_escalation["unavailable_with_fallback_count"] == 2
-    assert fallback_escalation["scene_action_speaker_optional_unavailable_count"] == 2
-    assert fallback_escalation["blocking_unavailable_with_fallback_count"] == 0
-    assert fallback_escalation["max_fallback_streak"] == 2
-    assert fallback_escalation["max_scene_action_nonblocking_fallback_streak"] == 2
-    assert fallback_escalation["max_blocking_fallback_streak"] == 0
-    assert "fallback_streak_gt_1" not in fallback_escalation["escalation_warnings"]
-    assert "unavailable_to_fallback_coupling_recurrence" not in fallback_escalation["escalation_warnings"]
 
 
 def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, monkeypatch):
@@ -1091,24 +485,6 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     assert meta.get("fallback_family_used") != meta.get("realization_fallback_family")
 
 
-def test_golden_canonical_opening_fallback_never_reports_compatibility_local_ownership():
-    gm_output = opening_gm_output()
-    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
-    gm_output["tags"] = []
-
-    out = apply_final_emission_gate(
-        gm_output,
-        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
-        session={},
-        scene_id="frontier_gate",
-        world={},
-    )
-
-    meta = read_fem_meta_from_gate_output(out) or {}
-    assert meta.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert opening_fallback_owner_bucket_from_meta(meta) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-
-
 def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tmp_path, monkeypatch):
     responses = iter(
         [
@@ -1220,83 +596,24 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
     assert "branch_id: 'branch_social_inquiry'" in debug_context
     assert "turn_id: 'inv_01'" in debug_context
 
-    social_inquiry_stability_profile = {
-        "result_turn_count": 25,
-        "summary_equals": {"turn_count": 25},
-        "no_scaffold_leakage": True,
-        "summary_max": {
-            "speaker_change_count": 2,
-            "speaker_missing_count": 2,
-            "fallback_turn_count": 1,
-            "fallback_owner_change_count": 1,
-            "route_change_count": 2,
-        },
-        "min_resolved_routes": 12,
-        # The full 25-turn branch crosses the evaluator's long-session band; the prior
-        # protected 20-turn slice was still classified as standard.
-        "session_health": {
-            "equals": {"long_session_band": "long", "overall_passed": True},
-            "classification_in": {"clean", "warning"},
-        },
-        "degradation": {
-            "equals": {"progressive_degradation_detected": False},
-            "absent_reason_codes": {
-                "late_session_reset_or_amnesia",
-                "rising_generic_filler_strong",
-                "rising_generic_filler_progressive",
-                "debug_leak_late_window",
-                "referent_loss_late",
-                "continuity_anchor_late_loss",
-            },
-        },
-        "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
-    }
     assert_long_session_stability_profile(
         result=result,
         turns=observed_turns,
         summary=summary,
         continuity_eval=continuity_eval,
-        expected=social_inquiry_stability_profile,
+        expected=FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
         debug_context=debug_context,
     )
 
-    social_inquiry_lineage_profile = {
-        "fallback_frequency_total_max": 1,
-        "event_kind_max": {"fallback_selected": 1, "mutation": 25},
-        "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
-        "allowed_recurring_keys": {
-            "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-            "mutation:gate:game.final_emission_gate:final_emission_mutation",
-        },
-        "max_recurring_event_count": 25,
-    }
     assert_runtime_lineage_profile(
         lineage_summary=summary["lineage_summary"],
-        expected=social_inquiry_lineage_profile,
+        expected=FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
         debug_context=debug_context,
     )
 
-    social_inquiry_fallback_escalation_profile = {
-        "equals": {
-            "late_window_fallback_count": 0,
-            "fallback_owner_change_count": 0,
-            "fallback_lineage_owner_change_count": 0,
-            "fallback_behavior_repair_count": 0,
-            "sanitizer_fallback_count": 0,
-            "escalation_warnings": [],
-            "model_routing_escalation_observable": False,
-        },
-        "max": {
-            "fallback_total_count": 1,
-            "max_fallback_streak": 1,
-            "response_type_repair_count": 1,
-            "unavailable_with_fallback_count": 1,
-            "fallback_selected_without_family_count": 1,
-        },
-    }
     assert_fallback_escalation_profile(
         fallback_escalation=summary["fallback_escalation_summary"],
-        expected=social_inquiry_fallback_escalation_profile,
+        expected=FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
         debug_context=debug_context,
     )
 
@@ -1443,79 +760,24 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     assert post_summary["speaker_missing_count"] <= 1, debug_context
     assert observed_turns[split_at]["selected_speaker_id"] is not None, debug_context
     assert observed_turns[split_at]["selected_speaker_source"] is not None, debug_context
-    resume_stability_profile = {
-        "result_turn_count": 25,
-        "summary_equals": {"turn_count": 25},
-        "no_scaffold_leakage": True,
-        "summary_max": {
-            "speaker_change_count": 2,
-            "speaker_missing_count": 2,
-            "fallback_turn_count": 1,
-            "fallback_owner_change_count": 1,
-            "route_change_count": 2,
-        },
-        "session_health": {
-            "equals": {"long_session_band": "long", "overall_passed": True},
-            "classification_in": {"clean", "warning"},
-        },
-        "degradation": {
-            "equals": {"progressive_degradation_detected": False},
-            "absent_reason_codes": {
-                "late_session_reset_or_amnesia",
-                "rising_generic_filler_strong",
-                "rising_generic_filler_progressive",
-                "debug_leak_late_window",
-                "referent_loss_late",
-                "continuity_anchor_late_loss",
-            },
-        },
-        "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
-    }
     assert_long_session_stability_profile(
         result=result,
         turns=observed_turns,
         summary=summary,
         continuity_eval=continuity_eval,
-        expected=resume_stability_profile,
+        expected=FRONTIER_GATE_RESUME_STABILITY_PROFILE,
         debug_context=debug_context,
     )
 
-    resume_lineage_profile = {
-        "event_kind_max": {"fallback_selected": 1, "mutation": 25},
-        "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
-        "allowed_recurring_keys": {
-            "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-            "mutation:gate:game.final_emission_gate:final_emission_mutation",
-        },
-        "max_recurring_event_count": 25,
-    }
     assert_runtime_lineage_profile(
         lineage_summary=summary["lineage_summary"],
-        expected=resume_lineage_profile,
+        expected=FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
         debug_context=debug_context,
     )
 
-    resume_fallback_escalation_profile = {
-        "equals": {
-            "late_window_fallback_count": 0,
-            "fallback_owner_change_count": 0,
-            "fallback_lineage_owner_change_count": 0,
-            "fallback_behavior_repair_count": 0,
-            "sanitizer_fallback_count": 0,
-            "escalation_warnings": [],
-            "model_routing_escalation_observable": False,
-        },
-        "max": {
-            "fallback_total_count": 1,
-            "max_fallback_streak": 1,
-            "response_type_repair_count": 1,
-            "unavailable_with_fallback_count": 1,
-            "fallback_selected_without_family_count": 1,
-        },
-    }
     assert_fallback_escalation_profile(
         fallback_escalation=summary["fallback_escalation_summary"],
-        expected=resume_fallback_escalation_profile,
+        expected=FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
         debug_context=debug_context,
     )
 
