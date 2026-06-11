@@ -33,7 +33,6 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     infer_accept_path_final_emitted_source,
-    opening_fallback_owner_bucket_from_meta,
     read_final_emission_meta_dict,
 )
 
@@ -2981,7 +2980,7 @@ def test_block_n_opening_attach_build_failure_fails_closed_preserves_block_m_tel
     assert fem.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed"
     assert fem.get("opening_fallback_authorship_source") is None
     assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
     assert not calls
 
 
@@ -3002,7 +3001,7 @@ def test_block_m_successful_upstream_attach_has_no_attach_failure_telemetry() ->
     assert fem.get("opening_upstream_prepare_attach_failure_exc_type") in (None, "")
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
 
 
 def test_fail_closed_sealed_gate_empty_curated_facts_skips_upstream_opening_payload() -> None:
@@ -3037,7 +3036,7 @@ def test_fail_closed_sealed_gate_empty_curated_facts_skips_upstream_opening_payl
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert fem.get("opening_fallback_compatibility_local_disabled") is True
     assert fem.get("opening_fallback_missing_upstream_prepared_payload") is True
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
 
 
 def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(monkeypatch) -> None:
@@ -3067,7 +3066,7 @@ def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(mon
     assert fem["opening_fallback_context_source"] == "opening_curated_facts"
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
 
 
 def test_final_gate_mirrors_authorship_from_upstream_payload_not_route_inference() -> None:
@@ -3387,8 +3386,8 @@ def test_selector_snapshot_n4_replace_vs_generic_terminal_distinct_markers() -> 
     assert gen_fem["final_emitted_source"] == "global_scene_fallback"
     assert n4_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
     assert gen_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
-    assert n4_fem["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
-    assert gen_fem["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
+    assert_sealed_fallback_owner_bucket(n4_fem, SEALED_FALLBACK_OWNER_SEALED_GATE)
+    assert_sealed_fallback_owner_bucket(gen_fem, SEALED_FALLBACK_OWNER_SEALED_GATE)
     assert n4_fem.get("acceptance_quality_gate_replaced_candidate") is True
     assert gen_fem.get("acceptance_quality_gate_replaced_candidate") is not True
 
@@ -3467,7 +3466,7 @@ def test_selector_snapshot_strict_social_emergency_vs_gate_terminal_family(monke
     ss_fem = read_final_emission_meta_dict(ss_out) or {}
     assert ss_fem["final_emitted_source"] == "minimal_social_emergency_fallback"
     assert ss_fem[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
-    assert ss_fem["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+    assert_sealed_fallback_owner_bucket(ss_fem, SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED)
     tl = [str(t) for t in (ss_out.get("tags") or []) if isinstance(t, str)]
     assert any("final_emission_gate:narrative_mode_output" in t for t in tl)
 
@@ -3486,7 +3485,7 @@ def test_selector_snapshot_valid_candidate_bypasses_sealed_branches() -> None:
     assert fem["final_route"] == "accept_candidate"
     assert fem["final_emitted_source"] == "generated_candidate"
     assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
-    assert fem.get("sealed_fallback_owner_bucket") is None
+    assert_sealed_fallback_owner_bucket(fem, None)
     assert "visibility_enforcement_replaced" not in tl
     assert "final_emission_gate:acceptance_quality" not in tl
     assert "final_emission_gate_replaced" not in tl
@@ -3684,7 +3683,7 @@ def test_canonical_missing_curated_facts_upstream_prepared_payload_still_wins(mo
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert fem.get("opening_fallback_missing_curated_facts") is True
     assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback"
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
 
 
 def test_fail_closed_sealed_gate_missing_curated_facts_records_fem() -> None:
@@ -3705,7 +3704,7 @@ def test_fail_closed_sealed_gate_missing_curated_facts_records_fem() -> None:
     assert fem.get("opening_fallback_missing_curated_facts") is True
     assert fem.get("blocked_repair_kind") == "opening_missing_curated_facts"
     assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
-    assert opening_fallback_owner_bucket_from_meta(fem) == OPENING_FALLBACK_OWNER_SEALED_GATE
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
 
 
 # Ownership note:

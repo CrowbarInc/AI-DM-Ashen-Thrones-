@@ -1657,6 +1657,38 @@ def assert_fallback_escalation_profile(
             assert family_counts.get(family) == count, debug_context
 
 
+def assert_golden_replay_profile_bundle(
+    *,
+    result: Mapping[str, Any],
+    turns: Sequence[Mapping[str, Any]],
+    summary: Mapping[str, Any],
+    continuity_eval: Mapping[str, Any],
+    stability_expected: Mapping[str, Any],
+    lineage_expected: Mapping[str, Any],
+    fallback_escalation_expected: Mapping[str, Any],
+    debug_context: str,
+) -> None:
+    """Assert long-session stability, runtime lineage, and fallback escalation profiles."""
+    assert_long_session_stability_profile(
+        result=result,
+        turns=turns,
+        summary=summary,
+        continuity_eval=continuity_eval,
+        expected=stability_expected,
+        debug_context=debug_context,
+    )
+    assert_runtime_lineage_profile(
+        lineage_summary=summary["lineage_summary"],
+        expected=lineage_expected,
+        debug_context=debug_context,
+    )
+    assert_fallback_escalation_profile(
+        fallback_escalation=summary["fallback_escalation_summary"],
+        expected=fallback_escalation_expected,
+        debug_context=debug_context,
+    )
+
+
 def _resolve_continuity_evaluation(continuity_result: Mapping[str, Any] | None) -> Mapping[str, Any]:
     if not isinstance(continuity_result, Mapping):
         return {}

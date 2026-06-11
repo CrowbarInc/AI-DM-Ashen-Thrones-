@@ -26,7 +26,11 @@ import pytest
 
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement
-from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
+from tests.helpers.fallback_behavior_fixtures import (
+    answer_contract,
+    assert_retry_debug_fallback_contract,
+    fallback_contract,
+)
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
 from game.gm_retry import build_retry_prompt_for_failure
 
@@ -68,13 +72,14 @@ def test_downstream_retry_observes_shipped_fallback_contract_and_final_emission_
         player_text="Who did it?",
     )
 
-    assert retry_debug.get("retry_fallback_behavior_contract_present") is True
-    assert retry_debug.get("retry_fallback_behavior_uncertainty_active") is True
-    assert retry_debug.get("retry_fallback_behavior_checked") is True
-    assert retry_debug.get("retry_fallback_behavior_repaired") is True
-    assert retry_debug.get("retry_fallback_behavior_failure_reasons") == [
-        "missing_allowed_fallback_shape"
-    ]
+    assert_retry_debug_fallback_contract(
+        retry_debug,
+        contract_present=True,
+        uncertainty_active=True,
+        checked=True,
+        repaired=True,
+        failure_reasons=["missing_allowed_fallback_shape"],
+    )
 
 
 def test_retry_consumer_prefers_upstream_fallback_meta_over_nested_debug_noise() -> None:
@@ -104,13 +109,16 @@ def test_retry_consumer_prefers_upstream_fallback_meta_over_nested_debug_noise()
         player_text="No. Exactly who?",
     )
 
-    assert retry_debug.get("retry_fallback_behavior_contract_present") is True
-    assert retry_debug.get("retry_fallback_behavior_uncertainty_active") is True
-    assert retry_debug.get("retry_fallback_behavior_checked") is False
-    assert retry_debug.get("retry_fallback_behavior_failed") is True
-    assert retry_debug.get("retry_fallback_behavior_repaired") is False
-    assert retry_debug.get("retry_fallback_behavior_skip_reason") == "upstream_skip"
-    assert retry_debug.get("retry_fallback_behavior_failure_reasons") == ["residual_shape_gap"]
+    assert_retry_debug_fallback_contract(
+        retry_debug,
+        contract_present=True,
+        uncertainty_active=True,
+        checked=False,
+        repaired=False,
+        failed=True,
+        skip_reason="upstream_skip",
+        failure_reasons=["residual_shape_gap"],
+    )
 
 
 def test_downstream_gate_observesanswer_contract_meta_when_output_exhibits_smoothed_fallback_shape() -> None:

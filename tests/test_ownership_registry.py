@@ -51,6 +51,16 @@ Cycle AL4 legality-owner quick reference (downstream suites assert wiring/smoke 
   (``social_emission_legality_surface``)
 - Downstream HTTP smoke/wiring → ``tests/test_turn_pipeline_shared.py`` (registered neighbor)
 - Downstream smoke facade → ``tests/helpers/emission_smoke_assertions.py`` (helpers module)
+
+Cycle BE6 — triple-layer scaffold / phrase split (documentation lock; **do not merge**):
+
+1. ``tests/test_output_sanitizer.py`` — full sanitizer/procedural phrase **legality matrices**
+2. ``tests/helpers/emission_smoke_assertions.py`` — weak HTTP/pipeline **smoke** phrases only
+3. ``tests/helpers/golden_replay_projection.py`` — replay **scaffold-leakage projection**
+   (``final_text_has_scaffold_leakage``, protected observation path)
+
+Assertion-economy blocks must not unify these into one shared phrase matrix. Enforced by
+``test_be6_scaffold_phrase_triple_layer_split_locked``.
 """
 
 from __future__ import annotations
@@ -177,6 +187,12 @@ _FORBIDDEN_GATE_READ_SIDE_SOURCE_FRAGMENTS: Final[tuple[str, ...]] = (
 # Cycle BD-6: compressed gate-owned imports non-owner tests must not reintroduce (BD-2–BD-5).
 _BD6_SMOKE_FACADE: Final[str] = "tests/helpers/emission_smoke_assertions.py"
 _BD6_GOLDEN_REPLAY_FACADE: Final[str] = "tests/helpers/golden_replay_projection.py"
+# Cycle BE6: scaffold/phrase ownership layers — intentional separation; do not merge matrices.
+_BE6_SCAFFOLD_PHRASE_LAYER_OWNERS: Final[Mapping[str, str]] = {
+    "sanitizer_legality": "tests/test_output_sanitizer.py",
+    "http_smoke_facade": _DOWNSTREAM_SMOKE_FACADE,
+    "replay_scaffold_projection": _BD6_GOLDEN_REPLAY_FACADE,
+}
 _BD6_OPENING_FACADE: Final[str] = "tests/helpers/opening_fallback_evidence.py"
 _BD6_FORBIDDEN_FEM_READ_SYMBOLS: Final[frozenset[str]] = frozenset(
     {
@@ -412,8 +428,9 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         downstream_consumer_suites=("tests/test_prompt_and_guard.py",),
     ),
     "output_sanitizer_final_string_cleanup": ResponsibilityRecord(
-        # Direct owner: full procedural phrase-ban matrix. Downstream neighbors: HTTP smoke via
-        # emission_smoke_assertions helpers — not duplicate sanitizer tables.
+        # Direct owner: full procedural phrase-ban matrix (BE6 layer 1). Downstream neighbors:
+        # HTTP smoke via emission_smoke_assertions (BE6 layer 2); replay scaffold observation
+        # via golden_replay_projection (BE6 layer 3) — never merge into one phrase matrix.
         human_title="Output sanitizer final string cleanup",
         declared_architecture_layer="gate",
         direct_owner="tests/test_output_sanitizer.py",
@@ -1571,3 +1588,23 @@ def test_al4_legality_owners_and_smoke_facade_locked() -> None:
     assert route_owner.is_file(), (
         "dialogue route legality owner must remain tests/test_dialogue_routing_lock.py"
     )
+
+
+def test_be6_scaffold_phrase_triple_layer_split_locked() -> None:
+    """Cycle BE6: sanitizer legality, HTTP smoke phrases, and replay scaffold projection stay separate."""
+    for label, rel_path in _BE6_SCAFFOLD_PHRASE_LAYER_OWNERS.items():
+        path = (_REPO_ROOT / rel_path).resolve()
+        assert path.is_file(), f"BE6 layer {label!r} missing owner path: {rel_path}"
+
+    smoke_doc = (_REPO_ROOT / _DOWNSTREAM_SMOKE_FACADE).read_text(encoding="utf-8")
+    assert "BE6" in smoke_doc, "emission_smoke_assertions must document Cycle BE6 triple-layer split"
+    assert "do not merge" in smoke_doc.lower(), (
+        "emission_smoke_assertions must warn against merging phrase matrices"
+    )
+    assert "tests/test_output_sanitizer.py" in smoke_doc
+    assert "golden_replay_projection" in smoke_doc
+    assert "final_text_has_scaffold_leakage" in smoke_doc
+
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BE6" in registry_doc, "ownership registry must document Cycle BE6 triple-layer split"
+    assert "do not merge" in registry_doc.lower()

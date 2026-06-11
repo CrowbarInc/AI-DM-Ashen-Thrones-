@@ -21,13 +21,18 @@ Emission authority boundary (Cycle AD-1):
   needed to prove prompt→payload packaging through ``/api/chat`` and ``/api/action``.
 - Prefer ``tests/helpers/emission_smoke_assertions.py`` for repeated smoke checks;
   do not restate exact gate internals here unless guarding HTTP packaging explicitly.
+- Helper/facade contract tests for the smoke module live in
+  ``tests/test_emission_smoke_assertions_contract.py`` (not here).
 """
 from __future__ import annotations
 
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 from tests.helpers.emission_smoke_assertions import (
+    assert_dialogue_lock_non_dialogue_route_smoke,
+    assert_dialogue_lock_social_route_smoke,
     assert_emission_repair_evidence,
     assert_global_visibility_stock_absent,
+    assert_http_chat_response_smoke,
     assert_no_advisory_prose,
     assert_no_internal_scaffold_labels,
     assert_no_retry_coaching_leak_smoke,
@@ -37,6 +42,7 @@ from tests.helpers.emission_smoke_assertions import (
     assert_no_validator_voice_smoke,
     assert_player_text_present,
     assert_procedural_adjudication_smoke,
+    assert_response_type_contract_surfaces,
     assert_response_type_meta,
     read_turn_debug_notes,
 )
@@ -333,8 +339,7 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     assert resp.status_code == 200
     data = resp.json()
     resolution = data.get("resolution") or {}
-    gm_output = data.get("gm_output") or {}
-    text = str(gm_output.get("player_facing_text") or "")
+    text = assert_http_chat_response_smoke(data)
     low = text.lower()
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
     trace_contract = (
@@ -343,17 +348,19 @@ def test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contrac
     )
     resolution_contract = (resolution.get("metadata") or {}).get("response_type_contract") or {}
 
-    assert resolution.get("kind") == "question"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(resolution, allowed_kinds=("question",))
     if "scene holds" in bad_text.lower():
         assert_global_visibility_stock_absent(text)
     assert_no_social_visible_intro_filler_smoke(text)
     assert "tavern runner" in low
     assert ('"' in text) or ("don't know" in low) or ("do not know" in low) or ("starts to answer" in low)
     # Downstream smoke: player-facing output beat generic filler; exact FEM source/route owned by gate.
-    assert debug_contract.get("required_response_type") == "dialogue"
-    assert trace_contract.get("required_response_type") == "dialogue"
-    assert resolution_contract.get("required_response_type") == "dialogue"
+    assert_response_type_contract_surfaces(
+        required="dialogue",
+        debug=debug_contract,
+        trace=trace_contract,
+        resolution=resolution_contract,
+    )
 
 
 # feature: routing, emission, social
@@ -894,10 +901,11 @@ def test_chat_active_target_location_question_routes_to_social_exchange(tmp_path
 
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") == "question"
-    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(
+        data.get("resolution") or {},
+        allowed_kinds=("question",),
+    )
+    assert_http_chat_response_smoke(data)
 
 
 # feature: routing, social
@@ -926,10 +934,11 @@ def test_chat_dialogue_lock_routes_npc_directed_question_regressions(tmp_path, m
         resp = client.post("/api/chat", json={"text": user_text})
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") == "question"
-    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(
+        data.get("resolution") or {},
+        allowed_kinds=("question",),
+    )
+    assert_http_chat_response_smoke(data)
     # GM legality for procedural phrasing is covered by sanitizer / emission-gate tests below.
 
 
@@ -957,10 +966,8 @@ def test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc(
         resp = client.post("/api/chat", json={"text": user_text})
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") in {"question", "social_probe"}
-    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(data.get("resolution") or {})
+    assert_http_chat_response_smoke(data)
 
 
 # feature: social
@@ -1061,10 +1068,8 @@ def test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane(tmp_path, monk
         resp = client.post("/api/chat", json={"text": user_text})
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") in {"question", "social_probe"}
-    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(data.get("resolution") or {})
+    assert_http_chat_response_smoke(data)
 
 
 # feature: routing
@@ -1078,10 +1083,8 @@ def test_chat_dialogue_lock_does_not_override_forceful_world_action(tmp_path, mo
 
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") != "question"
-    assert resolution.get("kind") != "social_probe"
-    assert resolution.get("kind") != "adjudication_query"
+    assert_dialogue_lock_non_dialogue_route_smoke(data.get("resolution") or {})
+    assert_http_chat_response_smoke(data)
 
 
 # feature: routing, social
@@ -1136,10 +1139,11 @@ def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, m
 
     assert resp.status_code == 200
     data = resp.json()
-    resolution = data.get("resolution") or {}
-    assert resolution.get("kind") == "social_probe"
-    assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
-    assert (resolution.get("social") or {}).get("npc_id") == "runner"
+    assert_dialogue_lock_social_route_smoke(
+        data.get("resolution") or {},
+        allowed_kinds=("social_probe",),
+    )
+    assert_http_chat_response_smoke(data)
 
 
 # feature: routing, emission
@@ -1975,32 +1979,3 @@ def test_pipeline_interruption_denial_still_emits_coherent_strict_social(tmp_pat
     low = text.lower()
     assert "check the board" not in low
     assert "tavern runner" in low or '"' in text
-
-
-def test_emission_smoke_helpers_reject_global_visibility_stock():
-    with pytest.raises(AssertionError):
-        assert_global_visibility_stock_absent(
-            "For a breath, the scene holds while voices shift around you."
-        )
-
-
-def test_emission_smoke_helpers_reject_advisory_prose():
-    with pytest.raises(AssertionError):
-        assert_no_advisory_prose("I'd suggest you ask the captain.")
-
-
-def test_emission_smoke_helpers_reject_procedural_adjudication_leak():
-    with pytest.raises(AssertionError):
-        assert_procedural_adjudication_smoke(
-            "State exactly what you do; the scene offers no clear answer yet."
-        )
-
-
-def test_emission_smoke_helpers_accept_repair_evidence_from_tags_or_debug():
-    assert_emission_repair_evidence(
-        {"gm_output": {"tags": ["final_emission_gate_replaced"]}},
-    )
-    assert_emission_repair_evidence(
-        {"debug_notes": "retry_fallback:unresolved_question"},
-        debug_notes_reader=lambda payload: str(payload.get("debug_notes") or ""),
-    )

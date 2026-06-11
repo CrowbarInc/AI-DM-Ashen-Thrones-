@@ -8,7 +8,8 @@ What belongs here (downstream smoke):
 - Non-empty player-facing text and obvious leakage bans (subset tuples, not full matrices)
 - Repair/replacement evidence via tags or debug notes
 - Consumer-layer meta smoke (``response_type_*``, continuity validate-only)
-- Route **wiring** smoke (``final_route`` present / accept vs non-accept) — not gate route tables
+- Route **wiring** smoke (``final_route`` present / accept vs non-accept; dialogue-lock HTTP
+  sentinels via ``assert_dialogue_lock_*``) — not ``choose_interaction_route`` tables
 - Broadcast / open-call routing smoke (``assert_open_social_solicitation_route``,
   ``assert_broadcast_open_call_rejected_smoke``, open-call retry exemption helpers)
 
@@ -26,6 +27,22 @@ Intentionally separate (do not merge into this facade):
 - Opening attach-then gate harness: ``tests/helpers/opening_fallback_gate_harness.py``
 - Golden replay / classifier FEM bucket projection:
   ``tests/helpers/golden_replay_projection.py``, ``tests/helpers/failure_classifier.py``
+
+Cycle BE6 — triple-layer scaffold / phrase split (**do not merge into one shared matrix**):
+
+1. **Sanitizer legality owner** — ``tests/test_output_sanitizer.py`` owns the full
+   procedural/scaffold/validator phrase **legality matrices** (post-process cleanup rules).
+2. **HTTP smoke facade (this module)** — owns **weak** downstream phrase tuples only
+   (``SMOKE_*_PHRASES``, ``assert_*_smoke`` helpers) for ``/api/chat`` / pipeline wiring.
+3. **Replay scaffold projection** — ``tests/helpers/golden_replay_projection.py`` owns
+   golden-replay **observation** of scaffold leakage (``final_text_has_scaffold_leakage``,
+   protected ``scaffold_leakage`` path) — diagnostic drift, not HTTP smoke.
+
+Future assertion-economy work must **not** collapse these layers into a single shared
+phrase list or helper. Overlap in banned *words* is intentional; each layer guards a
+different failure surface (legality vs integration smoke vs protected replay drift).
+
+Registry lock: ``tests/test_ownership_registry.py`` (``test_be6_scaffold_phrase_triple_layer_split_locked``).
 
 Cycle AS2 — downstream consumer suites should import gate integration and owned layer
 seams from this module instead of ``game.final_emission_gate`` / ``read_final_emission_meta_dict``.
@@ -376,6 +393,68 @@ def assert_response_type_meta(
         assert meta.get("response_type_repair_used") is repair_used
     if repair_kinds is not None:
         assert meta.get("response_type_repair_kind") in set(repair_kinds)
+
+
+_DIALOGUE_LOCK_SOCIAL_KINDS: tuple[str, ...] = ("question", "social_probe")
+
+
+def assert_http_chat_response_smoke(data: Mapping[str, Any]) -> str:
+    """HTTP smoke: ``/api/chat`` returned ok with non-empty player-facing text."""
+    assert data.get("ok") is True, "expected chat response ok=True"
+    return assert_player_text_present(data)
+
+
+def assert_dialogue_lock_social_route_smoke(
+    resolution: Mapping[str, Any],
+    *,
+    npc_id: str = "runner",
+    allowed_kinds: Sequence[str] = _DIALOGUE_LOCK_SOCIAL_KINDS,
+) -> None:
+    """HTTP smoke: dialogue-lock turn reached active-target social exchange wiring."""
+    kind = resolution.get("kind")
+    allowed = set(allowed_kinds)
+    assert kind in allowed, (
+        f"expected resolution.kind in {sorted(allowed)!r}, got {kind!r}"
+    )
+    social = resolution.get("social") or {}
+    assert social.get("social_intent_class") == "social_exchange", (
+        "expected social_intent_class='social_exchange' "
+        f"got {social.get('social_intent_class')!r}"
+    )
+    assert social.get("npc_id") == npc_id, (
+        f"expected social.npc_id={npc_id!r}, got {social.get('npc_id')!r}"
+    )
+
+
+def assert_dialogue_lock_non_dialogue_route_smoke(resolution: Mapping[str, Any]) -> None:
+    """HTTP smoke: world-action turn did not remain on dialogue or adjudication lanes."""
+    kind = resolution.get("kind")
+    forbidden = {"question", "social_probe", "adjudication_query"}
+    assert kind not in forbidden, (
+        f"expected world-action resolution.kind outside {sorted(forbidden)!r}, got {kind!r}"
+    )
+
+
+def assert_response_type_contract_surfaces(
+    *,
+    required: str,
+    debug: Mapping[str, Any] | None = None,
+    trace: Mapping[str, Any] | None = None,
+    resolution: Mapping[str, Any] | None = None,
+) -> None:
+    """HTTP smoke: ``response_type_contract`` threaded through named debug surfaces."""
+    for surface_name, contract in (
+        ("debug", debug),
+        ("trace", trace),
+        ("resolution", resolution),
+    ):
+        if contract is None:
+            continue
+        actual = contract.get("required_response_type")
+        assert actual == required, (
+            f"{surface_name} response_type_contract.required_response_type: "
+            f"expected {required!r}, got {actual!r}"
+        )
 
 
 def assert_social_grounding_smoke(

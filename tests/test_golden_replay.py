@@ -32,11 +32,9 @@ from tests.helpers.golden_replay import (
     FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     _observed_turn,
-    assert_fallback_escalation_profile,
+    assert_golden_replay_profile_bundle,
     assert_golden_turn_observation,
-    assert_long_session_stability_profile,
     assert_protected_golden_turn_observation,
-    assert_runtime_lineage_profile,
     evaluate_golden_replay_continuity_drift,
     format_golden_replay_debug,
     frontier_gate_branch_prompts,
@@ -600,24 +598,14 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
     assert "branch_id: 'branch_social_inquiry'" in debug_context
     assert "turn_id: 'inv_01'" in debug_context
 
-    assert_long_session_stability_profile(
+    assert_golden_replay_profile_bundle(
         result=result,
         turns=observed_turns,
         summary=summary,
         continuity_eval=continuity_eval,
-        expected=FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
-        debug_context=debug_context,
-    )
-
-    assert_runtime_lineage_profile(
-        lineage_summary=summary["lineage_summary"],
-        expected=FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
-        debug_context=debug_context,
-    )
-
-    assert_fallback_escalation_profile(
-        fallback_escalation=summary["fallback_escalation_summary"],
-        expected=FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
+        stability_expected=FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
+        lineage_expected=FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
+        fallback_escalation_expected=FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
         debug_context=debug_context,
     )
 
@@ -764,24 +752,14 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     assert post_summary["speaker_missing_count"] <= 1, debug_context
     assert observed_turns[split_at]["selected_speaker_id"] is not None, debug_context
     assert observed_turns[split_at]["selected_speaker_source"] is not None, debug_context
-    assert_long_session_stability_profile(
+    assert_golden_replay_profile_bundle(
         result=result,
         turns=observed_turns,
         summary=summary,
         continuity_eval=continuity_eval,
-        expected=FRONTIER_GATE_RESUME_STABILITY_PROFILE,
-        debug_context=debug_context,
-    )
-
-    assert_runtime_lineage_profile(
-        lineage_summary=summary["lineage_summary"],
-        expected=FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
-        debug_context=debug_context,
-    )
-
-    assert_fallback_escalation_profile(
-        fallback_escalation=summary["fallback_escalation_summary"],
-        expected=FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
+        stability_expected=FRONTIER_GATE_RESUME_STABILITY_PROFILE,
+        lineage_expected=FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
+        fallback_escalation_expected=FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
         debug_context=debug_context,
     )
 
@@ -883,14 +861,6 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         },
         "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
     }
-    assert_long_session_stability_profile(
-        result=result,
-        turns=observed_turns,
-        summary=summary,
-        continuity_eval=continuity_eval,
-        expected=direct_intrusion_stability_profile,
-        debug_context=debug_context,
-    )
 
     fallback_frequency = summary["fallback_frequency"]
     assert set(fallback_frequency) <= {
@@ -925,11 +895,6 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         "allowed_recurring_keys": allowed_recurring_keys,
         "max_recurring_event_count": 25,
     }
-    assert_runtime_lineage_profile(
-        lineage_summary=summary["lineage_summary"],
-        expected=direct_intrusion_lineage_profile,
-        debug_context=debug_context,
-    )
 
     direct_intrusion_fallback_escalation_profile = {
         "equals": {
@@ -961,9 +926,14 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
             "gate_terminal_repair": 3,
         },
     }
-    assert_fallback_escalation_profile(
-        fallback_escalation=summary["fallback_escalation_summary"],
-        expected=direct_intrusion_fallback_escalation_profile,
+    assert_golden_replay_profile_bundle(
+        result=result,
+        turns=observed_turns,
+        summary=summary,
+        continuity_eval=continuity_eval,
+        stability_expected=direct_intrusion_stability_profile,
+        lineage_expected=direct_intrusion_lineage_profile,
+        fallback_escalation_expected=direct_intrusion_fallback_escalation_profile,
         debug_context=debug_context,
     )
 

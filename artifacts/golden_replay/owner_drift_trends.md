@@ -2,8 +2,7 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-05-30T00:00:00Z`
-- Command: `pytest synthetic`
+- Generated at: `2026-06-06T00:00:00Z`
 
 ## Drift Trend Summary
 
@@ -17,7 +16,7 @@
 | `replay_drift_unclassified` | `0` | `0` | 0 | `stable` |
 | `route_drift` | `0` | `0` | 0 | `stable` |
 | `semantic_drift` | `0` | `0` | 0 | `stable` |
-| `speaker_drift` | `0` | `0` | 0 | `stable` |
+| `speaker_drift` | `0` | `1` | +1 | `up` |
 
 ## Improving Areas
 
@@ -25,7 +24,7 @@ No improving owner drift buckets in the latest comparison.
 
 ## Worsening Areas
 
-No worsening owner drift buckets in the latest comparison.
+- `speaker_drift` (+1)
 
 ## Stable Areas
 
@@ -37,4 +36,3 @@ No worsening owner drift buckets in the latest comparison.
 - `replay_drift_unclassified`
 - `route_drift`
 - `semantic_drift`
-- `speaker_drift`

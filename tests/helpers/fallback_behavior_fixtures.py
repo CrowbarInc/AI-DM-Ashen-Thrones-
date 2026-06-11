@@ -5,9 +5,16 @@ semantics stay owned by ``tests/test_fallback_behavior_validator.py`` and
 ``tests/test_final_emission_repairs.py``; these helpers only pin stable contract
 dict shapes for orchestration and wiring tests.
 
+``assert_retry_debug_fallback_contract`` (Cycle BE Block 2) centralizes
+``build_retry_prompt_for_failure`` retry_debug sink assertions for downstream
+fallback-consumer tests.
+
 Import from here — not from ``tests/test_fallback_behavior_gate.py`` or other test modules.
 """
 from __future__ import annotations
+
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 
 def fallback_contract(**overrides: object) -> dict:
@@ -82,3 +89,45 @@ def answer_contract(**overrides: object) -> dict:
     }
     contract.update(overrides)
     return contract
+
+
+def assert_retry_debug_fallback_contract(
+    retry_debug: Mapping[str, Any],
+    *,
+    contract_present: bool,
+    uncertainty_active: bool,
+    checked: bool,
+    repaired: bool,
+    failure_reasons: Sequence[str],
+    failed: bool | None = None,
+    skip_reason: str | None = None,
+) -> None:
+    """Assert ``gm_retry`` fallback contract fields written to a retry_debug sink."""
+    bool_expectations: tuple[tuple[str, bool], ...] = (
+        ("retry_fallback_behavior_contract_present", contract_present),
+        ("retry_fallback_behavior_uncertainty_active", uncertainty_active),
+        ("retry_fallback_behavior_checked", checked),
+        ("retry_fallback_behavior_repaired", repaired),
+    )
+    for key, expected in bool_expectations:
+        actual = retry_debug.get(key)
+        assert actual is expected, (
+            f"retry_debug {key!r}: expected {expected!r}, got {actual!r}"
+        )
+    expected_reasons = list(failure_reasons)
+    actual_reasons = retry_debug.get("retry_fallback_behavior_failure_reasons")
+    assert actual_reasons == expected_reasons, (
+        "retry_debug 'retry_fallback_behavior_failure_reasons': "
+        f"expected {expected_reasons!r}, got {actual_reasons!r}"
+    )
+    if failed is not None:
+        actual = retry_debug.get("retry_fallback_behavior_failed")
+        assert actual is failed, (
+            f"retry_debug 'retry_fallback_behavior_failed': expected {failed!r}, got {actual!r}"
+        )
+    if skip_reason is not None:
+        actual = retry_debug.get("retry_fallback_behavior_skip_reason")
+        assert actual == skip_reason, (
+            f"retry_debug 'retry_fallback_behavior_skip_reason': "
+            f"expected {skip_reason!r}, got {actual!r}"
+        )
