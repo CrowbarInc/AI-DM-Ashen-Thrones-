@@ -9,6 +9,7 @@ import pytest
 
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.final_emission_meta import classify_dead_turn, read_dead_turn_from_gm_output
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 pytestmark = pytest.mark.unit
 
@@ -72,9 +73,7 @@ def test_gate_packages_non_dead_snapshot_for_ordinary_candidate() -> None:
         scene_id="scene_investigate",
         world={},
     )
-    from game.final_emission_meta import read_final_emission_meta_dict
-
-    dt = (read_final_emission_meta_dict(out) or {}).get("dead_turn") or {}
+    dt = final_emission_meta_from_output(out).get("dead_turn") or {}
     assert dt.get("is_dead_turn") is False
     assert dt.get("dead_turn_class") == "none"
     assert dt.get("validation_playable") is True

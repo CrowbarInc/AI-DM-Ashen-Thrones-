@@ -28,8 +28,6 @@ from game.defaults import (
     default_world,
 )
 from game.exploration import resolve_exploration_action
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.intent_parser import parse_freeform_to_action
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 from game.leads import LeadLifecycle, LeadStatus, create_lead, upsert_lead
@@ -40,6 +38,7 @@ from game.scene_destination_binding import (
     reconcile_scene_transition_destination,
 )
 from game.storage import get_scene_runtime
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 
 def _gate_with_stone_boar_and_milestone_exits() -> dict:
@@ -618,7 +617,7 @@ def test_sti_e2e_incompatible_forced_target_blocks_before_scene_mutation_and_gat
     assert session.get("active_scene_id") == "frontier_gate"
 
     wrong_envelope = _load_old_milestone_envelope()
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {"player_facing_text": _banned_stock_gm_line(), "tags": []},
         resolution=resolution,
         session=session,
@@ -626,7 +625,6 @@ def test_sti_e2e_incompatible_forced_target_blocks_before_scene_mutation_and_gat
         scene=wrong_envelope,
         world=world,
     )
-    fem = read_final_emission_meta_dict(out) or {}
     _assert_scene_integrity_meta_shape(fem, expect_failure=True)
     low = str(out.get("player_facing_text") or "").lower()
     assert "blasted scrub" not in low
@@ -653,7 +651,7 @@ def test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line():
             "blocked_incompatible_scene_transition": False,
         },
     }
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {"player_facing_text": _banned_stock_gm_line(), "tags": []},
         resolution=resolution,
         session=session,
@@ -661,7 +659,6 @@ def test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line():
         scene=envelope,
         world=world,
     )
-    fem = read_final_emission_meta_dict(out) or {}
     _assert_scene_integrity_meta_shape(fem, expect_failure=False)
     assert fem.get("final_emitted_source") == "global_scene_fallback"
     low = str(out.get("player_facing_text") or "").lower()
@@ -734,7 +731,7 @@ def test_sti_integration_innkeeper_bed_stone_boar_with_milestone_lead_bug_shape(
     )
     assert session.get("active_scene_id") == "frontier_gate"
 
-    gate_out = apply_final_emission_gate(
+    gate_out, gate_fem = apply_final_emission_gate_consumer(
         {"player_facing_text": _banned_stock_gm_line(), "tags": []},
         resolution=blocked,
         session=session,
@@ -746,7 +743,7 @@ def test_sti_integration_innkeeper_bed_stone_boar_with_milestone_lead_bug_shape(
     assert "blasted scrub" not in low
     assert "black rainwater" not in low
     assert "weathered milestone" not in low
-    assert (read_final_emission_meta_dict(gate_out) or {}).get("final_emitted_source") == "scene_emit_integrity_safe_fallback"
+    assert gate_fem.get("final_emitted_source") == "scene_emit_integrity_safe_fallback"
 
 
 def test_sti_metadata_invariants_blocked_case_layers_sti1_sti2_sti3():
@@ -796,7 +793,7 @@ def test_sti_metadata_invariants_blocked_case_layers_sti1_sti2_sti3():
     ):
         assert k in md
 
-    out = apply_final_emission_gate(
+    out, fem = apply_final_emission_gate_consumer(
         {"player_facing_text": _banned_stock_gm_line(), "tags": []},
         resolution=resolution,
         session=session,
@@ -804,7 +801,6 @@ def test_sti_metadata_invariants_blocked_case_layers_sti1_sti2_sti3():
         scene=_load_old_milestone_envelope(),
         world=world,
     )
-    fem = read_final_emission_meta_dict(out) or {}
     for k in _STI_SCENE_INTEGRITY_META_KEYS:
         assert k in fem
     assert "blocked_incompatible_scene_transition" in (fem.get("scene_integrity_failure_reasons") or [])

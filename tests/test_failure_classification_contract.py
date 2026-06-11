@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from game.final_emission_meta import (
+from tests.helpers.golden_replay_projection import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,

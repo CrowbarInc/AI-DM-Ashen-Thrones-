@@ -32,6 +32,9 @@ Design notes (read before extending):
   projection and gauntlet) must not import ``golden_replay_projection``, classifier, or
   dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions.
   Enforced by ``test_ba7_gate_direct_owners_*`` in this module.
+- **Gate dependency compression guard** (Cycle BD-6): non-owner tests must not reintroduce
+  direct imports of gate entry, FEM read, replay projection, or owner-bucket constants already
+  routed through helper facades during BD-2–BD-5. Enforced by ``test_bd6_gate_dependency_compression_*``.
 
 Governance consumes the live inventory from ``tests/test_inventory_governance.json`` (regenerate via
 ``py -3 tools/test_audit.py``). Unclassified test files elsewhere in the repo do not affect
@@ -170,6 +173,62 @@ _FORBIDDEN_GATE_READ_SIDE_SOURCE_FRAGMENTS: Final[tuple[str, ...]] = (
     "validate_failure_classification_row",
     "FailureClassification",
 )
+
+# Cycle BD-6: compressed gate-owned imports non-owner tests must not reintroduce (BD-2–BD-5).
+_BD6_SMOKE_FACADE: Final[str] = "tests/helpers/emission_smoke_assertions.py"
+_BD6_GOLDEN_REPLAY_FACADE: Final[str] = "tests/helpers/golden_replay_projection.py"
+_BD6_OPENING_FACADE: Final[str] = "tests/helpers/opening_fallback_evidence.py"
+_BD6_FORBIDDEN_FEM_READ_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {
+        "read_final_emission_meta_dict",
+        "read_final_emission_meta_from_turn_payload",
+        "read_emission_debug_lane_from_turn_payload",
+    },
+)
+_BD6_FORBIDDEN_OWNER_BUCKET_PREFIXES: Final[tuple[str, ...]] = (
+    "OPENING_FALLBACK_OWNER_",
+    "SEALED_FALLBACK_OWNER_",
+    "VISIBILITY_FALLBACK_OWNER_",
+)
+_BD6_COMPRESSED_OWNER_MODULES: Final[frozenset[str]] = frozenset(
+    {
+        "game.final_emission_gate",
+        "game.final_emission_meta",
+        "game.final_emission_replay_projection",
+    },
+)
+# Narrow allowlist: primary owners, BD-2–BD-5 KEEP suites, facade delegates, gate monkeypatch helpers,
+# and audit fixture modules that embed gate-import strings intentionally.
+_BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST: Final[Mapping[str, str]] = {
+    "tests/test_final_emission_gate.py": "Gate orchestration owner (BD-2/BD-5 KEEP)",
+    "tests/test_final_emission_meta.py": "FEM projection / runtime-lineage owner (BD-3/BD-4/BD-5 KEEP)",
+    "tests/test_fallback_behavior_gate.py": "Gate-adjacent behavior owner (BD-2 KEEP)",
+    "tests/test_final_emission_boundary_no_semantic_repair.py": "Gate boundary owner; private feg._* seams (BD-2 KEEP)",
+    "tests/test_block_s_speaker_local_rebind_equivalence.py": "Speaker equivalence / orchestration-order proof (BD-2 KEEP)",
+    "tests/test_block_t_speaker_relocation_shadow_equivalence.py": "Speaker equivalence / orchestration-order proof (BD-2 KEEP)",
+    "tests/test_block_u_finalize_stack_divergence.py": "Finalize-stack divergence proof (BD-2 KEEP)",
+    "tests/test_social_exchange_emission.py": "Strict-social emission legality owner (BD-2 KEEP)",
+    "tests/test_tone_escalation_rules.py": "Layer-order monkeypatch on feg namespace (BD-2 KEEP)",
+    "tests/test_final_emission_visibility.py": "Visibility semantics owner (BD-3 KEEP)",
+    "tests/test_final_emission_channel_separation.py": "FEM channel packaging owner-adjacent (BD-3 KEEP)",
+    "tests/test_opening_fallback_owner_bucket.py": "Opening fallback owner-bucket mapping owner (BD-5 KEEP)",
+    "tests/test_final_emission_opening_fallback.py": "Opening fallback owner (BD-5 KEEP)",
+    "tests/test_final_emission_sealed_fallback.py": "Sealed fallback owner (BD-5 KEEP)",
+    "tests/test_final_emission_visibility_fallback.py": "Visibility fallback owner-adjacent (BD-5 KEEP)",
+    _BD6_SMOKE_FACADE: "Downstream smoke facade delegate (BD-2/BD-3 internal imports)",
+    _BD6_GOLDEN_REPLAY_FACADE: "Golden replay / replay-projection facade delegate (BD-3/BD-4/BD-5)",
+    _BD6_OPENING_FACADE: "Opening fallback evidence facade delegate (BD-5)",
+    "tests/helpers/gate_equivalence_monkeypatch.py": "Gate namespace monkeypatch equivalence helper (BD-2 KEEP)",
+    "tests/helpers/opening_fallback_gate_harness.py": "Opening attach-then gate harness; private feg._* seams (BD-2 KEEP)",
+    "tests/helpers/post_speaker_finalize_probe.py": "Gate finalize-stack probe wrappers (BD-2 KEEP)",
+    "tests/helpers/speaker_relocation_shadow_harness.py": "Speaker relocation shadow harness; feg namespace (BD-2 KEEP)",
+    "tests/helpers/strict_social_harness.py": "Strict-social harness; feg monkeypatch + consumer entry (BD-2 KEEP)",
+    "tests/test_architecture_audit_tool.py": "Audit fixture strings embed gate-import examples",
+    "tests/test_validation_layer_audit_smoke.py": "Audit fixture strings embed gate-import examples",
+    "tests/test_test_audit_tool.py": "Inventory audit fixture strings embed gate-import examples",
+    "tests/test_realization_layer_audit.py": "Realization audit fixture strings embed gate-import examples",
+    "tests/test_ownership_registry.py": "Governance module; AO5 runtime vs acceptance boundary check imports replay projection",
+}
 
 
 def _normalize_layer(name: str | None) -> str | None:
@@ -578,6 +637,115 @@ def collect_gate_magnet_guard_source_fragment_violations(
         for fragment in forbidden_fragments
         if fragment in source
     ]
+
+
+def _normalize_test_rel_path(path: str | Path) -> str:
+    return str(path).replace("\\", "/")
+
+
+def _bd6_is_forbidden_owner_bucket_symbol(module: str, symbol: str) -> bool:
+    if module not in _BD6_COMPRESSED_OWNER_MODULES:
+        return False
+    if symbol == "FINAL_EMISSION_META_KEY":
+        return True
+    return any(symbol.startswith(prefix) for prefix in _BD6_FORBIDDEN_OWNER_BUCKET_PREFIXES)
+
+
+def _bd6_facade_replacement(module: str, symbol: str) -> str:
+    if module == "game.final_emission_gate" and symbol == "apply_final_emission_gate":
+        return f"{_BD6_SMOKE_FACADE}::apply_final_emission_gate_consumer"
+    if module == "game.final_emission_meta" and symbol in _BD6_FORBIDDEN_FEM_READ_SYMBOLS:
+        return (
+            f"{_BD6_SMOKE_FACADE}::final_emission_meta_from_output "
+            f"(integration/smoke) or {_BD6_GOLDEN_REPLAY_FACADE}::read_fem_meta_from_gate_output "
+            f"(golden/replay observation)"
+        )
+    if module == "game.final_emission_replay_projection":
+        return (
+            f"{_BD6_GOLDEN_REPLAY_FACADE} "
+            f"(e.g. build_runtime_lineage_events_from_fem, SEALED_REPLACEMENT_SUBKINDS)"
+        )
+    if _bd6_is_forbidden_owner_bucket_symbol(module, symbol):
+        if symbol.startswith("OPENING_FALLBACK_OWNER_"):
+            return f"{_BD6_OPENING_FACADE} (opening bucket/route constants)"
+        return f"{_BD6_GOLDEN_REPLAY_FACADE} (sealed/visibility bucket constants)"
+    return "tests.helpers emission/golden/opening facades per BD-2–BD-5"
+
+
+def collect_gate_dependency_compression_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: Mapping[str, str] = _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST,
+) -> list[str]:
+    """Return import violations when a non-owner test reintroduces compressed gate-owned imports."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm in allowlist:
+        return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[tuple[str, str]] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module:
+            module = node.module
+            for alias in node.names:
+                symbol = alias.name
+                forbidden = False
+                if module == "game.final_emission_gate" and symbol == "apply_final_emission_gate":
+                    forbidden = True
+                elif module == "game.final_emission_meta" and symbol in _BD6_FORBIDDEN_FEM_READ_SYMBOLS:
+                    forbidden = True
+                elif module == "game.final_emission_replay_projection":
+                    forbidden = True
+                elif _bd6_is_forbidden_owner_bucket_symbol(module, symbol):
+                    forbidden = True
+                if not forbidden:
+                    continue
+                key = (module, symbol)
+                if key in seen:
+                    continue
+                seen.add(key)
+                imported = f"{module}.{symbol}"
+                replacement = _bd6_facade_replacement(module, symbol)
+                violations.append(
+                    f"{norm}: forbidden compressed gate import {imported!r} "
+                    f"(use facade replacement: {replacement})",
+                )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                module = alias.name
+                if module != "game.final_emission_replay_projection" and not module.startswith(
+                    "game.final_emission_replay_projection.",
+                ):
+                    continue
+                key = (module, "")
+                if key in seen:
+                    continue
+                seen.add(key)
+                replacement = _bd6_facade_replacement("game.final_emission_replay_projection", module.rsplit(".", 1)[-1] or module)
+                violations.append(
+                    f"{norm}: forbidden compressed gate import {module!r} "
+                    f"(use facade replacement: {replacement})",
+                )
+    return violations
+
+
+def iter_gate_dependency_compression_guard_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    allowlist: Mapping[str, str] = _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST,
+) -> tuple[str, ...]:
+    """All tests/**/*.py paths subject to BD-6 import guard (excluding allowlisted paths)."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for path in sorted((root / "tests").rglob("*.py")):
+        rel = _normalize_test_rel_path(path.relative_to(root))
+        if rel in allowlist:
+            continue
+        paths.append(rel)
+    return tuple(paths)
 
 
 def _load_inventory() -> dict:
@@ -1220,6 +1388,44 @@ def test_final_emission_gate_does_not_accumulate_read_side_projection_assertions
         "replay projection assertions. Move these contracts to tests/test_final_emission_meta.py:\n"
         + "\n".join(violations)
     )
+
+
+def test_bd6_gate_dependency_compression_allowlist_entries_have_non_empty_reasons() -> None:
+    """BD-6: every compression-guard allowlist path documents why it may import compressed gate symbols."""
+    for path, reason in _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST.items():
+        assert path.startswith("tests/"), path
+        assert reason.strip(), f"empty BD-6 allowlist reason for {path!r}"
+
+
+def test_bd6_gate_dependency_compression_guard_detects_synthetic_violation() -> None:
+    """BD-6: guard flags representative compressed imports with facade guidance."""
+    synthetic = (
+        "from game.final_emission_gate import apply_final_emission_gate\n"
+        "from game.final_emission_meta import read_final_emission_meta_dict, OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED\n"
+        "import game.final_emission_replay_projection as replay\n"
+    )
+    rel = "tests/test_synthetic_bd6_violation.py"
+    violations = collect_gate_dependency_compression_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert any("apply_final_emission_gate" in v for v in violations)
+    assert any("read_final_emission_meta_dict" in v for v in violations)
+    assert any("OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED" in v for v in violations)
+    assert any("final_emission_replay_projection" in v for v in violations)
+    assert "apply_final_emission_gate_consumer" in joined
+    assert "final_emission_meta_from_output" in joined
+    assert "opening_fallback_evidence" in joined
+    assert "golden_replay_projection" in joined
+
+
+def test_bd6_gate_dependency_compression_guard_non_owners_avoid_compressed_gate_imports() -> None:
+    """BD-6: non-owner tests must not reintroduce direct imports compressed during BD-2–BD-5."""
+    violations: list[str] = []
+    for rel in iter_gate_dependency_compression_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BD-6 scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_gate_dependency_compression_guard_violations(rel, source))
+    assert not violations, "gate dependency compression-guard import violations:\n" + "\n".join(violations)
 
 
 def test_ad3_gate_orchestration_direct_owner_is_final_emission_gate() -> None:

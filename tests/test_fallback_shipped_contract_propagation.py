@@ -8,19 +8,19 @@ consumption of already-shipped policy.
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
 from game.campaign_state import create_fresh_session_document
 from game.context_separation import build_context_separation_contract
-from game.final_emission_gate import apply_final_emission_gate
 from game.gm import apply_deterministic_retry_fallback, apply_response_policy_enforcement
 from game.gm_retry import force_terminal_retry_fallback
 from game.interaction_context import rebuild_active_scene_entities
 from game.social_exchange_emission import strict_social_emission_will_apply
 from game.storage import load_scene
 
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 pytestmark = pytest.mark.unit
 
 
@@ -58,7 +58,7 @@ def _gate_session_scene_frontier():
 
 
 def _emission_cs_meta(out: dict) -> dict:
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out)
     return {
         "resolution_source": meta.get("context_separation_contract_resolution_source"),
         "skip_reason": meta.get("context_separation_skip_reason"),
@@ -89,7 +89,7 @@ def test_apply_response_policy_enforcement_mirrors_shipped_policy_onto_gm() -> N
 def test_final_gate_resolves_context_separation_from_shipped_gm_policy() -> None:
     cs = _shipped_cs_contract()
     pol = _shipped_response_policy(cs)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Rain threads along the slate; the gate's iron has gone velvet with rust.",
             "response_policy": pol,
@@ -111,7 +111,7 @@ def test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it() -
     cs = _shipped_cs_contract()
     pol = _shipped_response_policy(cs)
     session: dict = {"last_turn_response_policy": pol}
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Rain threads along the slate; the gate's iron has gone velvet with rust.",
             "tags": ["forced_retry_fallback", "retry_escape_hatch"],
@@ -131,7 +131,7 @@ def test_final_gate_merges_session_last_turn_shipped_policy_when_gm_lacks_it() -
 def test_explore_observe_resolution_stays_non_social_in_metadata() -> None:
     cs = _shipped_cs_contract(kind="observe", player_text="I scan the courtyard.")
     session = {"last_turn_response_policy": _shipped_response_policy(cs)}
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Courtyard stones hold last night's ash in their seams.",
             "tags": ["forced_retry_fallback"],
@@ -142,7 +142,7 @@ def test_explore_observe_resolution_stays_non_social_in_metadata() -> None:
         scene={},
         world={},
     )
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("context_separation_skip_reason") != "no_shipped_contract"
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert "speaker_contract_enforcement" not in em
@@ -172,7 +172,7 @@ def test_force_terminal_fallback_plus_enforcement_then_gate_retains_shipped_cs_c
         world={},
         resolution={"kind": "observe", "prompt": "I look around."},
     )
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I look around."},
         session={},
@@ -226,7 +226,7 @@ def test_open_call_recovery_path_gate_merges_session_shipped_policy(
     assert "open_social_recovery" in tags
     assert gm_fb.get("response_policy") is None
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm_fb,
         resolution=resolution,
         session=session,

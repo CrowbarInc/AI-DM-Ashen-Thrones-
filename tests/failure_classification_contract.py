@@ -9,12 +9,12 @@ Alignment with classifier rule tables is enforced by
 """
 from __future__ import annotations
 
-from game.final_emission_meta import (
+from tests.helpers.golden_replay_projection import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
+    protected_classifier_evidence_field_paths,
 )
-from tests.helpers.golden_replay_projection import protected_classifier_evidence_field_paths
 from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS
 
 ALLOWED_FAILURE_CATEGORIES: frozenset[str] = frozenset(

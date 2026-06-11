@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -125,6 +125,6 @@ def test_integration_exploration_alley_doorways_not_replaced():
     out = _finalize_via_turn_support(candidate, session=session, world=world, scene=scene)
     assert out["player_facing_text"] == candidate
     assert "doorway" in out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out)
+    meta = final_emission_meta_from_output(out)
     assert meta.get("referential_clarity_validation_passed") is True
     assert meta.get("referential_clarity_replacement_applied") is False

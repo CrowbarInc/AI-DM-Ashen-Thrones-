@@ -1,8 +1,6 @@
 """Block 5B — NPC-target lead payoff on grounded contact + neutral fallback for failed pursuit turns."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 from game.api import _apply_authoritative_resolution_state_mutation
 from game.exploration import (
     NPC_PURSUIT_CONTACT_SESSION_KEY,
@@ -11,7 +9,7 @@ from game.exploration import (
     maybe_finalize_pursued_lead_npc_contact_payoff,
     maybe_finalize_pursued_lead_destination_payoff_after_scene_transition,
 )
-from game.final_emission_gate import apply_final_emission_gate
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.scene_actions import normalize_scene_action
 
@@ -266,7 +264,7 @@ def test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_soc
             "target_resolved": False,
         },
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "From here, no certain answer presents itself about the patrol.",
             "tags": [],
@@ -280,7 +278,6 @@ def test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_soc
     assert "For a breath, the scene holds while voices shift around you." not in text
     assert "voices shift around you" not in text.lower()
     assert "unresolved" in text.lower() or "nothing confirms" in text.lower()
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("final_emitted_source") == "npc_pursuit_neutral_fallback"
 
 

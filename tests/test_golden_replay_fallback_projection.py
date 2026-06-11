@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_meta import (
-    OPENING_FALLBACK_OWNER_SEALED_GATE,
-    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+from tests.helpers.golden_replay_projection import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+)
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
 )
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.golden_replay_api import (

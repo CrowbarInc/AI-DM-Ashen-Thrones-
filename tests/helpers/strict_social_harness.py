@@ -11,13 +11,12 @@ import pytest
 
 import game.final_emission_gate as feg
 from game.defaults import default_session, default_world
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narrative_authority import build_narrative_authority_contract
 from game.social_exchange_emission import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
 
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 def runner_strict_bundle():
     session = default_session()
@@ -90,7 +89,7 @@ def run_strict_social_motive_overclaim_gate_case(monkeypatch: pytest.MonkeyPatch
 
     monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
 
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {
             "player_facing_text": bad,
             "tags": [],
@@ -102,7 +101,6 @@ def run_strict_social_motive_overclaim_gate_case(monkeypatch: pytest.MonkeyPatch
         world=world,
     )
     text = out.get("player_facing_text") or ""
-    meta = read_final_emission_meta_dict(out) or {}
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert meta.get("narrative_authority_repaired") is False
     assert meta.get("narrative_authority_failed") is True

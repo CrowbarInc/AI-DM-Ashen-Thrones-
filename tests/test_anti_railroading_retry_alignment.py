@@ -1,7 +1,7 @@
 """Retry prompt alignment with anti-railroading policy (prompt_context + final_emission_gate)."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -100,7 +100,7 @@ def test_exemplar_retry_style_passes_validator_and_gate_without_ar_repair() -> N
             scene_id="gate",
             world={},
         )
-        meta = read_final_emission_meta_dict(out) or {}
+        meta = final_emission_meta_from_output(out)
         assert meta.get("anti_railroading_repaired") is not True
         assert meta.get("anti_railroading_ok") is not False
 

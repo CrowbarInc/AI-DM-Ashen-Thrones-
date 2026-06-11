@@ -1,7 +1,7 @@
 """Regression: empty strict-social terminal output is repaired; continuity and API sweep stay live."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 from typing import Any
 
@@ -117,7 +117,7 @@ def test_force_terminal_retry_fallback_preserves_final_emission_meta_continuity(
         resolution=resolution,
         base_gm=base_gm,
     )
-    meta = read_final_emission_meta_dict(out)
+    meta = final_emission_meta_from_output(out)
     assert isinstance(meta, dict)
     assert meta.get("active_interlocutor_id") == "continuity_npc"
     assert meta.get("npc_id") == "continuity_npc"

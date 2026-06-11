@@ -12,9 +12,9 @@ from game.final_emission_meta import (
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
     normalize_final_emission_meta_for_observability,
-    read_final_emission_meta_dict,
     stage_diff_narrative_authenticity_projection,
 )
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from game.narrative_authenticity_eval import (
     build_evaluator_observability_events,
     evaluate_narrative_authenticity,
@@ -207,7 +207,7 @@ def test_mutating_bundle_copy_does_not_poison_sources_or_reprojection() -> None:
     assert ev_copy == evaluator_result
 
     gm_payload = {"ok": True, "gm_output": {"player_facing_text": "x", "_final_emission_meta": copy.deepcopy(fem)}}
-    meta = read_final_emission_meta_dict(gm_payload["gm_output"])
+    meta = final_emission_meta_from_output(gm_payload["gm_output"])
     r1 = evaluate_narrative_authenticity({}, gm_payload, meta)
     events = build_evaluator_observability_events(r1)
     if events:

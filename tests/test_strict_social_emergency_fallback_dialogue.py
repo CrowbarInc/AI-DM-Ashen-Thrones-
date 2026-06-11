@@ -6,18 +6,18 @@ first-mention gate integration, and historical compatibility alias coverage only
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 from typing import Any
 
 import pytest
 
 from game.defaults import default_scene, default_session, default_world
-from game.final_emission_gate import apply_final_emission_gate
 from game.gm import (
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
 )
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import validate_player_facing_first_mentions
 from game.social_exchange_emission import (
@@ -137,7 +137,7 @@ def test_strict_social_terminal_fallback_grimace_line_survives_first_mention_gat
         ),
     )
     text = 'Tavern Runner grimaces. "Not something I can say here."'
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": text, "tags": []},
         resolution=res,
         session=session,
@@ -146,7 +146,6 @@ def test_strict_social_terminal_fallback_grimace_line_survives_first_mention_gat
         scene=default_scene(sid),
     )
     assert "grimaces" in out["player_facing_text"].lower()
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("first_mention_validation_passed") is True
     assert meta.get("first_mention_replacement_applied") is False
     assert meta.get("first_mention_strict_social_grounded_speaker_exemption_entity_id") == "tavern_runner"
@@ -238,7 +237,7 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
             dialogue_intent="question",
         ),
     )
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {"player_facing_text": repaired, "tags": ["targeted_retry_terminal"]},
         resolution=res,
         session=session,
@@ -247,7 +246,7 @@ def test_retry_terminal_repaired_dialogue_survives_first_mention_gate(monkeypatc
         scene=_scene_env(),
     )
     assert '"' in out["player_facing_text"]
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("first_mention_replacement_applied") is False
     assert meta.get("first_mention_validation_passed") is True
 

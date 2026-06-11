@@ -26,7 +26,6 @@ import game.narrative_planning as narrative_planning
 from game import ctir
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.defaults import default_session, default_world
-from game.final_emission_gate import apply_final_emission_gate
 import game.final_emission_gate as feg_module
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_plan_bundle import attach_narration_plan_bundle, get_attached_narration_plan_bundle
@@ -34,6 +33,7 @@ from game.narrative_mode_contract import build_narrative_mode_contract
 from game.prompt_context import build_narration_context
 from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
     assert_final_route_accept_candidate_smoke,
     assert_final_route_replaced_or_not_accept,
     final_emission_meta_from_output,
@@ -142,7 +142,7 @@ def test_c4_smoke_shipped_continuation_contract_accept_candidate() -> None:
         "You keep your weight forward; the east lane stays open ahead of you "
         "while torchlight holds the stones."
     )
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text=text, contract=nmc),
         resolution={"kind": "observe", "prompt": "I wait."},
         session={},
@@ -160,7 +160,7 @@ def test_c4_smoke_bad_continuation_candidate_replaced_without_crash() -> None:
     """Smoke: obvious continuation violation is replaced; exact subcodes owned by gate/validator suites."""
     nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
     bad = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text=bad, contract=nmc),
         resolution={"kind": "observe", "prompt": "wait"},
         session={},
@@ -213,7 +213,7 @@ def test_c4_smoke_bundle_prompt_gate_absent_contract_cross_cut() -> None:
     assert "nmc_missing_contract" in seam_blob
     assert ctx.get("instructions")
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text="The lane holds.", contract=None, narrative_mode_field="continuation"),
         resolution={"kind": "observe"},
         session={},
@@ -272,7 +272,7 @@ def test_c4_smoke_bundle_prompt_gate_invalid_contract_cross_cut() -> None:
     seam = " ".join((ctx.get("prompt_debug") or {}).get("narrative_mode_instructions", {}).get("seam_codes") or [])
     assert "nmc_contract_invalid" in seam
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text="The lane holds.", contract=invalid),
         resolution={"kind": "observe"},
         session={},
@@ -322,7 +322,7 @@ def test_c4_smoke_bundle_prompt_gate_disabled_contract_cross_cut() -> None:
     instr_blob = "\n".join(ctx.get("instructions") or [])
     assert "disabled" in instr_blob.lower()
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text="You wake to a new day.", contract=nmc),
         resolution={"kind": "observe"},
         session={},
@@ -355,7 +355,7 @@ def test_c4_strict_social_nmo_terminal_fallback_metadata_and_reassessment(monkey
         }
 
     monkeypatch.setattr(feg_module, "build_final_strict_social_response", fake_build)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text="stub", contract=nmc),
         resolution=resolution,
         session=session,
@@ -382,7 +382,7 @@ def test_c4_gate_does_not_invoke_planner_build_during_emit(monkeypatch) -> None:
 
     monkeypatch.setattr(narrative_planning, "build_narrative_plan", boom)
     nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
-    apply_final_emission_gate(
+    _, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(
             text=(
                 "You keep your weight forward; the east lane stays open ahead of you "
@@ -452,7 +452,7 @@ def test_c4_gate_does_not_mutate_shipped_plan_contract() -> None:
         contract=nmc,
     )
     snap = json.dumps(gm["prompt_context"]["narrative_plan"], sort_keys=True)
-    apply_final_emission_gate(
+    _, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe"},
         session={},
@@ -469,7 +469,7 @@ def test_c4_continuation_stable_single_gate_pass_smoke() -> None:
         "You keep your weight forward; the east lane stays open ahead of you "
         "while torchlight holds the stones."
     )
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text=text, contract=nmc),
         resolution={"kind": "observe", "prompt": "I wait."},
         session={},
@@ -494,7 +494,7 @@ def test_c4_no_second_planner_call_on_gate_emit(monkeypatch) -> None:
 
     monkeypatch.setattr(narrative_planning, "build_narrative_plan", traced)
     nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
-    apply_final_emission_gate(
+    _, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(
             text=(
                 "You keep your weight forward; the east lane stays open ahead of you "

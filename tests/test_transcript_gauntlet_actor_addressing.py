@@ -1,7 +1,7 @@
 """Transcript-level gauntlet: actor binding, generic addressing, continuity (real chat turns)."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
 
 import json
 from pathlib import Path
@@ -71,7 +71,7 @@ def _actor_struct_from_snap(snap: dict[str, Any], payload: dict[str, Any] | None
     soc = snap.get("social_resolution") if isinstance(snap.get("social_resolution"), dict) else {}
     ctx = snap.get("interaction_context") if isinstance(snap.get("interaction_context"), dict) else {}
     gm = payload.get("gm_output") if isinstance(payload, dict) and isinstance(payload.get("gm_output"), dict) else {}
-    meta = read_final_emission_meta_dict(gm) if isinstance(read_final_emission_meta_dict(gm), dict) else {}
+    meta = read_fem_meta_from_gate_output(gm)
     return {
         "target_id": (str(soc.get("npc_id") or "").strip() or None),
         "target_source": (str(soc.get("target_source") or "").strip() or None),

@@ -22,7 +22,7 @@ from game.defaults import (
     default_session,
     default_world,
 )
-from game.final_emission_gate import apply_final_emission_gate
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.interaction_context import inspect as inspect_interaction_context
 from game.interaction_context import rebuild_active_scene_entities, set_non_social_activity, set_social_target
 from game.affordances import generate_scene_affordances
@@ -187,7 +187,7 @@ def test_block3_gate_bare_question_after_redirect_activity_mode_no_strict_social
         "tags": [],
     }
     resolution = {"kind": "question", "prompt": rt["last_player_action_text"]}
-    out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
+    out, _ = apply_final_emission_gate_consumer(gm, resolution=resolution, session=session, scene_id=sid, world=world)
     meta = final_emission_meta_from_output(out) or {}
     # Bare question shape without social payload: strict-social must not activate on an activity-mode turn.
     assert meta.get("strict_social_active") is False
@@ -260,7 +260,7 @@ def test_block3_boundary_post_dialogue_gate_unit_reflective_question_without_soc
         "tags": [],
     }
     resolution = {"kind": "question", "prompt": rt["last_player_action_text"]}
-    out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
+    out, _ = apply_final_emission_gate_consumer(gm, resolution=resolution, session=session, scene_id=sid, world=world)
     meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_suppressed_non_social_turn") is True
     assert meta.get("strict_social_suppression_reason") == "reflective_or_world_action_prompt"
@@ -284,7 +284,7 @@ def test_block3_boundary_post_dialogue_gate_unit_invalid_blob_uses_global_not_np
         "tags": [],
     }
     resolution = {"kind": "observe", "prompt": rt["last_player_action_text"]}
-    out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
+    out, _ = apply_final_emission_gate_consumer(gm, resolution=resolution, session=session, scene_id=sid, world=world)
     meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_suppressed_non_social_turn") is True
     low = out["player_facing_text"].lower()
@@ -495,7 +495,7 @@ def test_block3_boundary_native_social_control_still_allows_speaker_owned_emissi
         ),
         "tags": [],
     }
-    out = apply_final_emission_gate(gm, resolution=resolution, session=session, scene_id=sid, world=world)
+    out, _ = apply_final_emission_gate_consumer(gm, resolution=resolution, session=session, scene_id=sid, world=world)
     assert "Tavern Runner" in out["player_facing_text"] or "tavern runner" in out["player_facing_text"].lower()
     meta = final_emission_meta_from_output(out) or {}
     assert meta.get("strict_social_active") is True

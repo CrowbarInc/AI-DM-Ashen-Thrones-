@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 import pytest
 
 from game import storage
 from game.api import chat
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
-from game.final_emission_replay_projection import SEALED_REPLACEMENT_SUBKINDS
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+from tests.helpers.golden_replay_projection import (
+    SEALED_REPLACEMENT_SUBKINDS,
+    read_fem_meta_from_gate_output,
+)
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+)
 from game.scenario_spine import (
     ScenarioBranch,
     ScenarioSpine,
@@ -288,7 +292,7 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
         monkeypatch, line=pre_gate_line, strict_social_details=stub_strict_social_details
     )
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {"player_facing_text": pre_gate_line, "tags": []},
         resolution=resolution,
         session=session,
@@ -443,7 +447,7 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
         session={},

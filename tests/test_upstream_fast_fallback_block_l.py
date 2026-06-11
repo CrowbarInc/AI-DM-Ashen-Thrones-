@@ -24,6 +24,7 @@ from game.api import (
     _build_gpt_narration_from_authoritative_state,
     _synthetic_manual_play_gpt_budget_gm,
 )
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.defaults import default_campaign, default_character, default_session, default_world
 from game.fallback_provenance_debug import (
     FALLBACK_PROVENANCE_SELECTOR_KEYS,
@@ -33,7 +34,6 @@ from game.fallback_provenance_debug import (
     attach_upstream_fast_fallback_provenance,
     realign_fallback_provenance_selector_to_current_text,
 )
-from game.final_emission_gate import apply_final_emission_gate
 from game.gm import _classify_upstream_gpt_error
 from game.storage import get_scene_runtime
 
@@ -197,7 +197,7 @@ def test_retry_loop_upstream_error_goes_straight_to_fast_fallback(monkeypatch: p
     assert md.get("human_adjacent_intent_family") == "listen"
     assert md.get("implicit_focus_resolution") == "speaking_group"
 
-    gated = apply_final_emission_gate(
+    gated, _ = apply_final_emission_gate_consumer(
         dict(out),
         resolution=resolution,
         session=session,

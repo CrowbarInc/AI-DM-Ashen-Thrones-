@@ -1,7 +1,7 @@
 """BLOCK 14: contextual minimal repair improves wording without inventing state."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import copy
 import re
@@ -261,7 +261,7 @@ def test_final_gate_anti_railroading_runs_with_narrative_authority_and_tone_cont
         scene_id="hall",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("narrative_authority_checked") is True
     assert meta.get("tone_escalation_checked") is True
     assert meta.get("anti_railroading_checked") is True

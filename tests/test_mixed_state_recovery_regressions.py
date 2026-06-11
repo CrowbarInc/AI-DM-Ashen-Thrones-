@@ -4,8 +4,6 @@ Failure blocks intentionally echo the fields needed when manual runs disagree wi
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 
 import json

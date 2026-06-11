@@ -7,7 +7,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from game.final_emission_meta import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, SEALED_FALLBACK_OWNER_SEALED_GATE
+from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
     global_fallback_source_drift_row,

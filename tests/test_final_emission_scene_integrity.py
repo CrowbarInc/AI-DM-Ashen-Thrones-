@@ -7,14 +7,12 @@ launder a mismatched scene envelope into ``global_scene_fallback`` narration (se
 """
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 import json
 from pathlib import Path
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -52,7 +50,7 @@ def test_blocked_incompatible_scene_transition_blocks_global_scene_fallback():
         "player_facing_text": _banned_pregate_text(),
         "tags": [],
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm_out,
         resolution=resolution,
         session=session,
@@ -60,7 +58,6 @@ def test_blocked_incompatible_scene_transition_blocks_global_scene_fallback():
         scene=wrong_place,
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
 
@@ -91,7 +88,7 @@ def test_stone_boar_blocked_transition_does_not_emit_old_milestone_roadside_pros
         },
     }
     gm_out = {"player_facing_text": _banned_pregate_text(), "tags": []}
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm_out,
         resolution=resolution,
         session=session,
@@ -101,7 +98,6 @@ def test_stone_boar_blocked_transition_does_not_emit_old_milestone_roadside_pros
     )
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
-    meta = read_final_emission_meta_dict(out) or {}
 
     assert meta.get("final_emitted_source") == "scene_emit_integrity_safe_fallback"
     assert "blasted scrub" not in low
@@ -123,7 +119,7 @@ def test_valid_resolved_scene_transition_allows_global_scene_fallback():
         },
     }
     gm_out = {"player_facing_text": _banned_pregate_text(), "tags": []}
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm_out,
         resolution=resolution,
         session=session,
@@ -131,7 +127,6 @@ def test_valid_resolved_scene_transition_allows_global_scene_fallback():
         scene=envelope,
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     text = str(out.get("player_facing_text") or "")
     low = text.lower()
 
@@ -170,7 +165,7 @@ def test_named_place_unresolved_suppresses_global_fallback(binding_source: str, 
         }
     }
     gm_out = {"player_facing_text": _banned_pregate_text(), "tags": []}
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm_out,
         resolution=resolution,
         session=session,
@@ -178,7 +173,6 @@ def test_named_place_unresolved_suppresses_global_fallback(binding_source: str, 
         scene=gate_scene,
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     if expect_block:
         assert meta.get("scene_integrity_blocked_global_fallback") is True
         assert meta.get("final_emitted_source") == "scene_emit_integrity_safe_fallback"

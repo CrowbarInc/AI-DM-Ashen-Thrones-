@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 import json
 from typing import Any, Dict, Mapping, Tuple
 
@@ -9,8 +10,6 @@ from game import ctir
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.defaults import default_session, default_world
 from game.dialogue_social_plan import validate_dialogue_social_plan
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.gm import build_messages
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.prompt_context import build_narration_context
@@ -271,14 +270,13 @@ def _assert_social_chain(
     rt = get_scene_runtime(sess, scene_id)
     rt["last_player_action_text"] = strict_res["prompt"]
 
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": f'{dsp_full["speaker_name"]} says, "Answer."', "tags": []},
         resolution=strict_res,
         session=sess,
         scene_id=scene_id,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("dialogue_plan_checked") is True
     assert meta.get("dialogue_plan_required") is True
     assert meta.get("dialogue_plan_present") is True
@@ -421,14 +419,13 @@ def test_scene_directed_question_does_not_force_npc_dialogue() -> None:
     instr = "\n".join([str(x) for x in (ctx.get("instructions") or [])])
     assert "DIALOGUE SOCIAL PLAN (HARD RULE)" not in instr
 
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": "You see a wet cobblestone street under grey light.", "tags": []},
         resolution={"kind": "observe", "prompt": "What do I see?"},
         session={},
         scene_id="s1",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     # Not strict-social: no unnecessary dialogue-plan requirement or enforcement.
     assert meta.get("dialogue_plan_checked") in (None, False)
 
@@ -475,14 +472,13 @@ def test_relationship_tension_constrains_tone_bounds_via_intent_only() -> None:
 
 
 def test_non_dialogue_narration_unaffected_and_no_unnecessary_plan_requirement() -> None:
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         {"player_facing_text": "Rain beads on the checkpoint stones.", "tags": []},
         resolution=None,
         session={},
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("dialogue_plan_checked") in (None, False)
     assert out["player_facing_text"] == "Rain beads on the checkpoint stones."
 

@@ -1,7 +1,7 @@
 """Retry prompt alignment with tone escalation policy (no invalid hostility before final gate)."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -126,7 +126,7 @@ def test_retry_exemplar_passes_final_gate_minimal() -> None:
         scene_id="office",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("tone_escalation_repaired") is not True
     assert meta.get("tone_escalation_ok") is not False
 

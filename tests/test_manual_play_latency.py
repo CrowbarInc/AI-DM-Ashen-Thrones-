@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from game.narrative_authenticity_eval import _extract_final_emission_meta
 
 import json
@@ -399,7 +399,7 @@ def test_final_emission_fast_path_skips_optional_smoothing():
         pre_gate_text=out["player_facing_text"],
         fast_path=feg._final_emission_fast_path_eligible(out),
     )
-    meta = read_final_emission_meta_dict(finalized) or {}
+    meta = final_emission_meta_from_output(finalized)
     assert meta.get("final_emission_fast_path_used") is True
     assert meta.get("sentence_decompression_applied") is False
     assert meta.get("sentence_fragment_repair_applied") is False

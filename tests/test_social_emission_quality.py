@@ -6,7 +6,7 @@ families stay in ``test_social_exchange_emission.py`` / ``test_output_sanitizer.
 
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -107,7 +107,7 @@ def test_emission_quality_lirael_who_next_then_where_preserves_grounded_location
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(gate_out) or {}
+    meta = final_emission_meta_from_output(gate_out)
     g_low = gate_out["player_facing_text"].lower()
     assert "tavern runner" in g_low
     assert "north road" in g_low or "sheepfold" in g_low or "milestone" in g_low
@@ -162,7 +162,7 @@ def test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_f
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(gate_out) or {}
+    meta = final_emission_meta_from_output(gate_out)
     assert meta.get("final_emitted_source") == "resolved_grounded_social_answer"
     assert meta.get("resolved_answer_source") == "topic_pressure:last_answer:redirect"
 
@@ -404,7 +404,7 @@ def test_strict_social_emission_meta_records_preference_decision():
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(gate_out) or {}
+    meta = final_emission_meta_from_output(gate_out)
     low = gate_out["player_facing_text"].lower()
     assert "river docks" in low or "night watch" in low or "south road" in low
     assert meta.get("resolved_answer_preferred") is True

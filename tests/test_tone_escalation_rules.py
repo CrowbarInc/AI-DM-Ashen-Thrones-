@@ -1,13 +1,12 @@
 """Regression tests for tone escalation contract, validator, final gate, and pregate audit."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 import pytest
 
 import game.final_emission_gate as feg
 from game.final_emission_gate import apply_final_emission_gate
 from game.tone_escalation import build_tone_escalation_contract, validate_tone_escalation
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 pytestmark = pytest.mark.unit
 
@@ -107,7 +106,7 @@ def test_final_gate_downgrades_unsupported_threat() -> None:
         "tags": [],
         "response_policy": {"tone_escalation": ctr},
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I watch the crowd."},
         session={},
@@ -115,7 +114,6 @@ def test_final_gate_downgrades_unsupported_threat() -> None:
         world={},
     )
     text = str(out.get("player_facing_text") or "").lower()
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("tone_escalation_repaired") is True or "regret" not in text
 
 
@@ -126,7 +124,7 @@ def test_final_gate_downgrades_unsupported_physical() -> None:
         "tags": [],
         "response_policy": {"tone_escalation": ctr},
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I wait."},
         session={},
@@ -134,7 +132,7 @@ def test_final_gate_downgrades_unsupported_physical() -> None:
         world={},
     )
     text = str(out.get("player_facing_text") or "").lower()
-    assert "shoves" not in text or (read_final_emission_meta_dict(out) or {}).get("tone_escalation_repaired") is True
+    assert "shoves" not in text or meta.get("tone_escalation_repaired") is True
 
 
 def test_final_gate_repairs_forced_drama_to_grounded_friction() -> None:
@@ -144,7 +142,7 @@ def test_final_gate_repairs_forced_drama_to_grounded_friction() -> None:
         "tags": [],
         "response_policy": {"tone_escalation": ctr},
     }
-    out = apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I listen."},
         session={},
@@ -153,7 +151,6 @@ def test_final_gate_repairs_forced_drama_to_grounded_friction() -> None:
     )
     text = str(out.get("player_facing_text") or "").lower()
     assert "chaos erupts" not in text
-    meta = read_final_emission_meta_dict(out) or {}
     assert meta.get("tone_escalation_violation_before_repair") is True
 
 

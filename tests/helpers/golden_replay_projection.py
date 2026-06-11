@@ -47,12 +47,18 @@ from dataclasses import dataclass
 from typing import Any, Mapping
 
 from game.final_emission_meta import (
+    OPENING_FALLBACK_OWNER_BUCKETS,
+    SEALED_FALLBACK_OWNER_BUCKETS,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    VISIBILITY_FALLBACK_OWNER_BUCKETS,
     normalize_final_emission_meta_for_observability,
     opening_fallback_owner_bucket_from_meta,
     read_emission_debug_lane_from_turn_payload,
     read_final_emission_meta_from_turn_payload,
 )
 from game.final_emission_replay_projection import (
+    SEALED_REPLACEMENT_SUBKINDS,
     build_fem_runtime_lineage_events,
     is_sealed_replacement_lineage_kind,
 )
@@ -84,6 +90,15 @@ def read_fem_meta_from_gate_output(gm_output: Mapping[str, Any]) -> dict[str, An
     from game.final_emission_meta import read_final_emission_meta_dict
 
     return read_final_emission_meta_dict(gm_output) or {}
+
+
+def build_runtime_lineage_events_from_fem(fem: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """Project runtime lineage events from post-gate FEM (golden-replay / spine observation).
+
+    Delegates to :mod:`game.final_emission_replay_projection`; runtime lineage ownership
+    stays in the game module (Cycle BD-4 downstream read compression).
+    """
+    return build_fem_runtime_lineage_events(fem)
 
 
 @dataclass(frozen=True)

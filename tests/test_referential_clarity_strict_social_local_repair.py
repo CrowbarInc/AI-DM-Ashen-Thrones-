@@ -1,7 +1,7 @@
 """Block 3: strict-social dialogue + local pronoun substitution before referential fallback."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import re
 
@@ -13,6 +13,7 @@ from game.interaction_context import rebuild_active_scene_entities, set_social_t
 from game.narration_visibility import validate_player_facing_referential_clarity
 from game.storage import get_scene_runtime
 
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 pytestmark = pytest.mark.unit
 
 
@@ -57,7 +58,7 @@ def test_strict_social_guarded_dialogue_single_she_gets_local_substitution_not_e
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -66,7 +67,7 @@ def test_strict_social_guarded_dialogue_single_she_gets_local_substitution_not_e
         world=world,
     )
     text = out["player_facing_text"]
-    meta = read_final_emission_meta_dict(out)
+    meta = final_emission_meta_from_output(out)
     low = f" {text.lower()} "
     assert " she " not in low and " she," not in text.lower()
     assert "the tavern runner" in text.lower()
@@ -97,7 +98,7 @@ def test_strict_social_local_substitution_preserves_substantive_guarded_payload(
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -106,7 +107,7 @@ def test_strict_social_local_substitution_preserves_substantive_guarded_payload(
         world=world,
     )
     text = out["player_facing_text"]
-    meta = read_final_emission_meta_dict(out)
+    meta = final_emission_meta_from_output(out)
     assert "east road" in text.lower()
     assert "name" in text.lower()
     assert meta.get("referential_clarity_local_substitution_applied") is True
@@ -127,7 +128,7 @@ def test_strict_social_local_substitution_changes_only_the_ambiguous_pronoun():
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -136,7 +137,7 @@ def test_strict_social_local_substitution_changes_only_the_ambiguous_pronoun():
         world=world,
     )
     text = out["player_facing_text"]
-    meta = read_final_emission_meta_dict(out)
+    meta = final_emission_meta_from_output(out)
     rep = str(meta.get("referential_clarity_local_substitution_replacement") or "")
     assert rep
     expected = re.sub(r"(?<!\w)she(?!\w)", rep, candidate, count=1, flags=re.IGNORECASE)
@@ -186,7 +187,7 @@ def test_strict_social_stall_acknowledgement_not_local_repaired():
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -194,7 +195,6 @@ def test_strict_social_stall_acknowledgement_not_local_repaired():
         scene=scene,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out)
     assert meta.get("referential_clarity_local_substitution_applied") is not True
     assert meta.get("referential_clarity_local_substitution_attempted") is not True
     assert meta.get("referential_clarity_replacement_applied") is True
@@ -214,7 +214,7 @@ def test_strict_social_local_substitution_uses_speaker_label_not_invented_facts(
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -222,7 +222,6 @@ def test_strict_social_local_substitution_uses_speaker_label_not_invented_facts(
         scene=scene,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out)
     rep = str(meta.get("referential_clarity_local_substitution_replacement") or "")
     assert "innkeeper" not in rep.lower()
     assert "mysterious stranger" not in rep.lower()
@@ -242,7 +241,7 @@ def test_strict_social_local_substitution_response_type_and_delta_meta_remain_co
             }
         },
     }
-    out = final_emission_gate.apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -250,7 +249,6 @@ def test_strict_social_local_substitution_response_type_and_delta_meta_remain_co
         scene=scene,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out)
     assert meta.get("response_type_required") == "dialogue"
     assert meta.get("response_type_candidate_ok") is not False
     assert meta.get("referential_clarity_local_substitution_applied") is True
@@ -300,7 +298,7 @@ def test_strict_social_second_pass_referential_fail_falls_back_without_chaining(
         "validate_player_facing_referential_clarity",
         wrapped_validate,
     )
-    out = final_emission_gate.apply_final_emission_gate(
+    out, meta = apply_final_emission_gate_consumer(
         gm,
         resolution=resolution,
         session=session,
@@ -308,7 +306,6 @@ def test_strict_social_second_pass_referential_fail_falls_back_without_chaining(
         scene=scene,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out)
     assert meta.get("referential_clarity_local_substitution_attempted") is True
     assert meta.get("referential_clarity_local_substitution_applied") is False
     assert meta.get("referential_clarity_fallback_after_failed_local_repair") is True

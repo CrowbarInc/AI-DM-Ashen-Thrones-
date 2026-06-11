@@ -5,11 +5,8 @@ from __future__ import annotations
 import importlib
 import sys
 
-from game.final_emission_meta import (
-    assemble_unified_observational_telemetry_bundle,
-    read_final_emission_meta_dict,
-    read_final_emission_meta_from_turn_payload,
-)
+from game.final_emission_meta import assemble_unified_observational_telemetry_bundle
+from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
 
 import pytest
 
@@ -71,12 +68,12 @@ def test_transcript_snapshot_carries_final_emission_meta_for_manual_gauntlet_row
         "world": None,
     }
     snap = snapshot_from_chat_payload(0, "What do I see?", payload)
-    fem = read_final_emission_meta_dict(snap)
+    fem = read_fem_meta_from_gate_output(snap)
     assert isinstance(fem, dict)
     dt = (fem.get("dead_turn") or {})
     assert dt.get("is_dead_turn") is True
 
-    fem_for_bundle = read_final_emission_meta_from_turn_payload(payload)
+    fem_for_bundle = read_fem_meta_from_gate_output(payload["gm_output"])
     na_eval = evaluate_narrative_authenticity({}, payload, fem_for_bundle)
     bundle = assemble_unified_observational_telemetry_bundle(
         fem=fem_for_bundle,

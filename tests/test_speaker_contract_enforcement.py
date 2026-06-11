@@ -5,11 +5,11 @@ from copy import deepcopy
 
 import pytest
 
-from game.final_emission_gate import (
+from game.emitted_speaker_signature import detect_emitted_speaker_signature
+from game.final_emission_gate import enforce_emitted_speaker_with_contract
+from game.speaker_contract_enforcement import (
     SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES,
     _sync_eff_social_to_resolution,
-    detect_emitted_speaker_signature,
-    enforce_emitted_speaker_with_contract,
     get_speaker_selection_contract,
     validate_emitted_speaker_against_contract,
 )

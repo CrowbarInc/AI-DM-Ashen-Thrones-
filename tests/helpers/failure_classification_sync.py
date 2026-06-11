@@ -7,9 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping, NotRequired, Sequence, get_origin, get_type_hints
 
-from game.final_emission_meta import (
-    SEALED_FALLBACK_OWNER_SEALED_GATE,
-)
+from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.failure_classification_contract import (
     ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_FAILURE_CATEGORIES,

@@ -14,7 +14,7 @@ assertions are intentional incident-boundary locks, not accidental duplication.
 
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -22,7 +22,7 @@ from game.fallback_provenance_debug import (
     FALLBACK_PROVENANCE_SELECTOR_KEYS,
     attach_upstream_fast_fallback_provenance,
 )
-from game.final_emission_gate import apply_final_emission_gate
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 import game.final_emission_gate as feg
 
 
@@ -49,7 +49,7 @@ def test_attach_upstream_fast_fallback_provenance_selector_shape_is_stable() -> 
 def test_upstream_fast_fallback_no_overwrite_no_containment():
     text = "Fog rolls low between the river tents."
     gm = _fallback_gm(text)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I watch the fog."},
         session={},
@@ -65,7 +65,7 @@ def test_upstream_fast_fallback_no_overwrite_no_containment():
 def test_upstream_fast_fallback_pregate_overwrite_contained():
     gm = _fallback_gm("The gate stands closed against the wind.")
     gm["player_facing_text"] = "Unrelated bridge line inserted by a buggy pre-gate rewriter."
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I look at the gate."},
         session={},
@@ -75,7 +75,7 @@ def test_upstream_fast_fallback_pregate_overwrite_contained():
     assert "gate stands closed" in (out.get("player_facing_text") or "").lower()
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
     assert prov.get("overwrite_containment_applied") == "pre_gate"
-    trace = (read_final_emission_meta_dict(out) or {}).get("fallback_provenance_trace") or {}
+    trace = (final_emission_meta_from_output(out) or {}).get("fallback_provenance_trace") or {}
     assert trace.get("gate_exit_vs_selector_match") is True
 
 
@@ -87,7 +87,7 @@ def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pyt
         return str(t) + " INJECT_BAD_FINALIZE_SEGMENT"
 
     monkeypatch.setattr(feg, "_decompress_overpacked_sentences", _inject)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I listen to the rain."},
         session={},
@@ -99,12 +99,12 @@ def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pyt
     assert "Rain drums" in (out.get("player_facing_text") or "")
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
     assert prov.get("gate_exit_vs_selector_match") is True
-    trace = (read_final_emission_meta_dict(out) or {}).get("fallback_provenance_trace") or {}
+    trace = (final_emission_meta_from_output(out) or {}).get("fallback_provenance_trace") or {}
     assert trace.get("gate_exit_vs_selector_match") is True
 
 
 def test_non_fallback_output_has_no_fallback_containment():
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "Torchlight trembles on wet stone.",
             "tags": [],
@@ -116,7 +116,7 @@ def test_non_fallback_output_has_no_fallback_containment():
         world={},
     )
     assert "fallback_provenance" not in (out.get("metadata") or {})
-    assert (read_final_emission_meta_dict(out) or {}).get("fallback_overwrite_contained") is None
+    assert (final_emission_meta_from_output(out) or {}).get("fallback_overwrite_contained") is None
 
 
 def test_upstream_fallback_finalize_strip_survives_containment_fingerprint_mismatch():
@@ -126,7 +126,7 @@ def test_upstream_fallback_finalize_strip_survives_containment_fingerprint_misma
         "For a breath, the scene stays still."
     )
     gm = _fallback_gm(selector)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I listen to the rain."},
         session={},

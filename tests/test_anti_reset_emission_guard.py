@@ -1,7 +1,7 @@
 """Anti-reset guard: opener-style stock fallbacks must not replay during established local exchange."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 
 import pytest
 
@@ -11,8 +11,8 @@ from game.anti_reset_emission_guard import (
     resolution_allows_scene_intro_framing,
     text_overlaps_known_scene_intro_sources,
 )
-from game.final_emission_gate import apply_final_emission_gate
 from game.defaults import default_scene, default_session, default_world
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 pytestmark = [pytest.mark.regression]
 
@@ -55,7 +55,7 @@ def test_mid_scene_strict_social_first_mention_no_scene_summary_replay():
     assert anti_reset_suppresses_intro_style_fallbacks(session, scene, world, "frontier_gate", res) is True
 
     gm = {"player_facing_text": "He waits, watching the gate.", "tags": []}
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=res,
         session=session,
@@ -94,7 +94,7 @@ def test_non_social_replace_uses_anti_reset_not_global_anchor(monkeypatch: pytes
     assert anti_reset_suppresses_intro_style_fallbacks(session, scene, world, "frontier_gate", res) is True
 
     gm = {"player_facing_text": "From here, no certain answer presents itself.", "tags": []}
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=res,
         session=session,
@@ -102,7 +102,7 @@ def test_non_social_replace_uses_anti_reset_not_global_anchor(monkeypatch: pytes
         scene=scene,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) if isinstance(read_final_emission_meta_dict(out), dict) else {}
+    meta = final_emission_meta_from_output(out)
     assert meta.get("final_emitted_source") == "anti_reset_local_continuation_fallback"
     assert meta.get("anti_reset_intro_suppressed") is True
     text_norm = " ".join(str(out.get("player_facing_text") or "").lower().split())

@@ -32,7 +32,11 @@ cross-layer routing / gate behavior, not as the primary prompt-contract authorit
 """
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+    response_type_contract,
+)
 
 import json
 import random
@@ -44,7 +48,6 @@ import pytest
 import game.final_emission_gate as _feg
 from game.interaction_routing import choose_interaction_route
 from game.defaults import default_scene, default_session, default_world
-from game.final_emission_gate import apply_final_emission_gate
 from game.intent_parser import parse_freeform_to_action
 from game.interaction_context import (
     inspect as inspect_interaction_context,
@@ -64,7 +67,6 @@ from game.social_exchange_emission import build_final_strict_social_response
 
 from tests.helpers.turn_pipeline_http_fixtures import _patch_storage
 from tests.helpers.fallback_behavior_fixtures import answer_contract, fallback_contract
-from tests.helpers.emission_smoke_assertions import response_type_contract
 
 pytestmark = [pytest.mark.regression, pytest.mark.transcript]
 
@@ -238,7 +240,7 @@ def run_gate_level_case(
     session, world, _scene_env, sid = seed_minimal_play_context(scenario)
     gm: dict[str, Any] = {"player_facing_text": scenario.raw_or_model_output, "tags": list(scenario.tags)}
     gate_scene = dict(scenario.emission_scene) if scenario.emission_scene is not None else None
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=dict(scenario.resolution),
         session=session,
@@ -665,7 +667,7 @@ def _run_object20_bounded_gate_case(
     apply_transcript_seeds(scenario)
     patch_final_emission_helpers(monkeypatch, patch_visibility=scenario.patch_visibility_enforcement)
     session, world, _, sid = seed_minimal_play_context(scenario)
-    out = apply_final_emission_gate(
+    out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution=dict(scenario.resolution),
         session=session,
