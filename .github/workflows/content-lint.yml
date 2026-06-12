@@ -1,6 +1,9 @@
 # Content lint (author-time only): runs on every push and pull request.
 # Phase 1 is non-blocking (observer): the lint always runs and uploads JSON; the job does not
 # fail on findings. Phase 2 is an optional warning gate — disabled until you opt in.
+#
+# Cycle BF8/BF9: test ownership registry + inventory drift live ONLY in
+# .github/workflows/convergence-checks.yml — do not duplicate here without closeout justification.
 name: Content lint
 
 on:
@@ -33,9 +36,6 @@ jobs:
 
       - name: Planner convergence static audit
         run: python tools/planner_convergence_audit.py
-
-      - name: Test ownership registry (governance)
-        run: python -m pytest tests/test_ownership_registry.py -q
 
       - name: Run content lint (Phase 1 — informational, non-blocking)
         # Observer: always produce logs + JSON; do not fail the workflow on errors or warnings.

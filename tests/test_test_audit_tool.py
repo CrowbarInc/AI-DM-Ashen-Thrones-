@@ -18,20 +18,28 @@ GOVERNANCE_FIXTURE_PATH = "tests/test_final_emission_gate.py"
 NON_REGISTRY_FIXTURE_PATH = "tests/test_non_registry_module.py"
 
 
-def _governance_file_row(*, path: str = GOVERNANCE_FIXTURE_PATH, layer: str = "gate") -> dict:
+def _governance_file_row(*, path: str = GOVERNANCE_FIXTURE_PATH) -> dict:
+    return {
+        "path": path,
+    }
+
+
+def _full_file_row(*, path: str = GOVERNANCE_FIXTURE_PATH, layer: str = "gate") -> dict:
     return {
         "path": path,
         "marker_set": ["unit"],
-        "collected_duplicate_base_names": [],
         "likely_architecture_layer": layer,
         "pytest_collected": 1,
+        "collected_duplicate_base_names": [],
+        "collected_nodeids": [f"{path}::test_ok"],
+        "overlap_hints": ["module_shadowed_duplicate_test_names"],
     }
 
 
 def _minimal_inventory(*, generated_utc: str = "2026-01-01T00:00:00+00:00", inventory_kind: str = "governance") -> dict:
     return {
         "summary": {
-            "inventory_schema_version": 2,
+            "inventory_schema_version": 3,
             "inventory_kind": inventory_kind,
             "declared_pytest_markers": ["unit"],
         },
@@ -42,13 +50,9 @@ def _minimal_inventory(*, generated_utc: str = "2026-01-01T00:00:00+00:00", inve
 def _minimal_full_inventory(*, generated_utc: str = "2026-01-01T00:00:00+00:00") -> dict:
     gov = _minimal_inventory(generated_utc=generated_utc, inventory_kind="full")
     gov["files"] = [
+        _full_file_row(),
         {
-            **_governance_file_row(),
-            "collected_nodeids": [f"{GOVERNANCE_FIXTURE_PATH}::test_ok"],
-            "overlap_hints": ["module_shadowed_duplicate_test_names"],
-        },
-        {
-            **_governance_file_row(path=NON_REGISTRY_FIXTURE_PATH, layer="engine"),
+            **_full_file_row(path=NON_REGISTRY_FIXTURE_PATH, layer="engine"),
             "collected_nodeids": [f"{NON_REGISTRY_FIXTURE_PATH}::test_other"],
             "overlap_hints": [],
         },
@@ -218,7 +222,7 @@ def test_inventories_match_when_only_timestamp_differs(audit_mod) -> None:
 def test_inventories_do_not_match_when_file_rows_differ(audit_mod) -> None:
     committed = _minimal_inventory()
     fresh = _minimal_inventory()
-    fresh["files"] = [dict(fresh["files"][0], likely_architecture_layer="engine")]
+    fresh["files"] = [{"path": "tests/test_other_registry_module.py"}]
     assert not audit_mod.inventories_match_excluding_timestamp(fresh, committed)
 
 
@@ -228,10 +232,6 @@ def test_format_inventory_drift_report_lists_nodeid_and_file_deltas(audit_mod) -
     fresh["files"] = list(committed["files"]) + [
         {
             "path": "tests/test_new_module.py",
-            "marker_set": [],
-            "collected_duplicate_base_names": [],
-            "likely_architecture_layer": "engine",
-            "pytest_collected": 1,
         }
     ]
     fresh["summary"] = dict(committed["summary"])
@@ -265,9 +265,9 @@ def test_run_inventory_check_passes_when_committed_matches_fresh(audit_mod, tmp_
 def test_run_inventory_check_fails_when_committed_stale(audit_mod, tmp_path: Path, monkeypatch) -> None:
     inv_path = tmp_path / "test_inventory_governance.json"
     committed = _minimal_inventory()
+    committed["summary"]["inventory_schema_version"] = 2
     inv_path.write_text(json.dumps(committed, indent=2, sort_keys=True), encoding="utf-8")
     full = _minimal_full_inventory()
-    full["files"][0]["likely_architecture_layer"] = "engine"
     monkeypatch.setattr(audit_mod, "GOVERNANCE_JSON", inv_path)
     monkeypatch.setattr(audit_mod, "build_inventory_payload", lambda: full)
     assert audit_mod.run_inventory_check() == 1
@@ -279,6 +279,17 @@ def test_run_inventory_check_fails_when_registry_path_missing(audit_mod, tmp_pat
     gov = audit_mod.build_governance_payload(full)
     gov["files"] = []
     inv_path.write_text(json.dumps(gov, indent=2, sort_keys=True), encoding="utf-8")
+    monkeypatch.setattr(audit_mod, "GOVERNANCE_JSON", inv_path)
+    monkeypatch.setattr(audit_mod, "build_inventory_payload", lambda: full)
+    assert audit_mod.run_inventory_check() == 1
+
+
+def test_run_inventory_check_fails_when_marker_governance_breaks(audit_mod, tmp_path: Path, monkeypatch) -> None:
+    inv_path = tmp_path / "test_inventory_governance.json"
+    full = _minimal_full_inventory()
+    gov = audit_mod.build_governance_payload(full)
+    inv_path.write_text(json.dumps(gov, indent=2, sort_keys=True), encoding="utf-8")
+    full["files"][0]["marker_set"] = ["integration"]
     monkeypatch.setattr(audit_mod, "GOVERNANCE_JSON", inv_path)
     monkeypatch.setattr(audit_mod, "build_inventory_payload", lambda: full)
     assert audit_mod.run_inventory_check() == 1
@@ -327,6 +338,9 @@ def test_build_governance_payload_strips_diagnostic_fields(audit_mod) -> None:
     assert "import_hub_modules" not in gov
     assert "ownership_registry_index" not in gov
     assert "ownership_registry_positions" not in gov["files"][0]
+    assert "pytest_collected" not in gov["files"][0]
+    assert "collected_duplicate_base_names" not in gov["files"][0]
+    assert "likely_architecture_layer" not in gov["files"][0]
     for key in audit_mod.GOVERNANCE_FILE_FIELDS:
         assert key in gov["files"][0]
     assert set(gov.keys()) == {
@@ -334,6 +348,70 @@ def test_build_governance_payload_strips_diagnostic_fields(audit_mod) -> None:
         "files",
     }
     assert set(gov["summary"]) == set(audit_mod.GOVERNANCE_SUMMARY_FIELDS)
+
+
+def test_validate_derived_registry_file_marker_sets(audit_mod) -> None:
+    full = _minimal_full_inventory()
+    gov = audit_mod.build_governance_payload(full)
+    assert not audit_mod._validate_derived_registry_file_marker_sets(full, gov)
+    full["files"][0].pop("marker_set", None)
+    errors = audit_mod._validate_derived_registry_file_marker_sets(full, gov)
+    assert errors
+
+
+def test_validate_derived_registry_file_architecture_layers(audit_mod) -> None:
+    full = _minimal_full_inventory()
+    gov = audit_mod.build_governance_payload(full)
+    assert not audit_mod._validate_derived_registry_file_architecture_layers(full, gov)
+    full["files"][0].pop("likely_architecture_layer", None)
+    errors = audit_mod._validate_derived_registry_file_architecture_layers(full, gov)
+    assert errors
+
+
+def test_validate_governance_file_row_shape_rejects_marker_set(audit_mod) -> None:
+    gov = _minimal_inventory()
+    gov["files"][0]["marker_set"] = ["unit"]
+    errors = audit_mod._validate_governance_file_row_shape(gov)
+    assert any("marker_set" in e for e in errors)
+
+
+def test_validate_governance_file_row_shape_rejects_likely_architecture_layer(audit_mod) -> None:
+    gov = _minimal_inventory()
+    gov["files"][0]["likely_architecture_layer"] = "gate"
+    errors = audit_mod._validate_governance_file_row_shape(gov)
+    assert any("likely_architecture_layer" in e for e in errors)
+
+
+def test_validate_governance_file_row_shape_rejects_collected_duplicate_base_names(audit_mod) -> None:
+    gov = _minimal_inventory()
+    gov["files"][0]["collected_duplicate_base_names"] = ["test_dup"]
+    errors = audit_mod._validate_governance_file_row_shape(gov)
+    assert any("collected_duplicate_base_names" in e for e in errors)
+
+
+def test_validate_derived_registry_file_duplicate_base_names(audit_mod) -> None:
+    full = _minimal_full_inventory()
+    gov = audit_mod.build_governance_payload(full)
+    assert not audit_mod._validate_derived_registry_file_duplicate_base_names(full, gov)
+    full["files"][0].pop("collected_duplicate_base_names", None)
+    errors = audit_mod._validate_derived_registry_file_duplicate_base_names(full, gov)
+    assert errors
+
+
+def test_validate_governance_file_row_shape_rejects_pytest_collected(audit_mod) -> None:
+    gov = _minimal_inventory()
+    gov["files"][0]["pytest_collected"] = 5
+    errors = audit_mod._validate_governance_file_row_shape(gov)
+    assert any("pytest_collected" in e for e in errors)
+
+
+def test_validate_derived_registry_file_collected_counts(audit_mod) -> None:
+    full = _minimal_full_inventory()
+    gov = audit_mod.build_governance_payload(full)
+    assert not audit_mod._validate_derived_registry_file_collected_counts(full, gov)
+    full["files"][0]["pytest_collected"] = 99
+    errors = audit_mod._validate_derived_registry_file_collected_counts(full, gov)
+    assert any("pytest_collected" in e for e in errors)
 
 
 def test_validate_governance_summary_shape_rejects_derivable_fields(audit_mod) -> None:
@@ -398,6 +476,9 @@ def test_write_full_inventory_writes_diagnostic_payload(audit_mod, tmp_path: Pat
     loaded = json.loads(out.read_text(encoding="utf-8"))
     assert loaded["summary"]["inventory_kind"] == "full"
     assert "collected_nodeids" in loaded["files"][0]
+    assert "pytest_collected" in loaded["files"][0]
+    assert "collected_duplicate_base_names" in loaded["files"][0]
+    assert "likely_architecture_layer" in loaded["files"][0]
     assert "brittleness" in loaded["tests"][0]
     assert "block_b_overlap_clusters" in loaded
     assert "import_hub_modules" in loaded
@@ -413,3 +494,19 @@ def test_main_full_flag_writes_diagnostic_file(audit_mod, tmp_path: Path, monkey
     assert gov_path.is_file()
     assert full_path.is_file()
     assert "collected_nodeids" in json.loads(full_path.read_text(encoding="utf-8"))["files"][0]
+
+
+def test_content_lint_workflow_does_not_rerun_ownership_registry() -> None:
+    """BF8/BF9: inventory governance CI must not duplicate convergence-checks ownership pytest."""
+    workflow = (ROOT / ".github/workflows/content-lint.yml").read_text(encoding="utf-8")
+    assert "test_ownership_registry.py" not in workflow, (
+        "content-lint must not rerun tests/test_ownership_registry.py; "
+        "ownership lives in convergence-checks.yml unless closeout-justified"
+    )
+
+
+def test_convergence_checks_workflow_owns_inventory_governance() -> None:
+    """BF8/BF9: convergence-checks remains the sole CI owner for registry + drift gate."""
+    workflow = (ROOT / ".github/workflows/convergence-checks.yml").read_text(encoding="utf-8")
+    assert "tests/test_ownership_registry.py" in workflow
+    assert "tools/test_audit.py --check" in workflow

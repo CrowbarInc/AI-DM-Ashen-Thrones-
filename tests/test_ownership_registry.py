@@ -66,7 +66,9 @@ Assertion-economy blocks must not unify these into one shared phrase matrix. Enf
 from __future__ import annotations
 
 import ast
+import importlib.util
 import json
+import types
 from collections import defaultdict
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -81,6 +83,7 @@ except ImportError:  # pragma: no cover - repo layout guard
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _INVENTORY_PATH = _REPO_ROOT / "tests" / "test_inventory_governance.json"
+_TEST_AUDIT_PATH = _REPO_ROOT / "tools" / "test_audit.py"
 
 # ---------------------------------------------------------------------------
 # Canonical validation-layer ids (engine / planner / gpt / gate / evaluator)
@@ -781,6 +784,15 @@ def _inventory_paths(data: dict) -> dict[str, dict]:
     return out
 
 
+def _full_inventory_by_path(full_inventory: dict) -> dict[str, dict]:
+    """Index full diagnostic ``files[]`` rows by normalized path."""
+    out: dict[str, dict] = {}
+    for row in full_inventory.get("files", ()):
+        if isinstance(row, dict) and "path" in row:
+            out[str(row["path"]).replace("\\", "/")] = row
+    return out
+
+
 @pytest.fixture(scope="module")
 def inventory() -> dict:
     return _load_inventory()
@@ -791,20 +803,32 @@ def inventory_by_path(inventory: dict) -> dict[str, dict]:
     return _inventory_paths(inventory)
 
 
+@pytest.fixture(scope="module")
+def test_audit_module() -> types.ModuleType:
+    """Load ``tools/test_audit.py`` once per module (BF1: avoid repeated importlib loads)."""
+    spec = importlib.util.spec_from_file_location("_inv_audit", _TEST_AUDIT_PATH)
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+@pytest.fixture(scope="module")
+def full_inventory(test_audit_module: types.ModuleType) -> dict:
+    """Fresh full audit payload once per module (BF1: single pytest collect-only per run)."""
+    return test_audit_module.build_inventory_payload()
+
+
 def test_registry_defines_all_required_groups() -> None:
     assert set(RESPONSIBILITY_REGISTRY) == _REQUIRED_GROUP_IDS
 
 
-def test_inventory_schema_version_matches_audit_tool() -> None:
+def test_inventory_schema_version_matches_audit_tool(
+    test_audit_module: types.ModuleType,
+    inventory: dict,
+) -> None:
     """Block A: inventory generator and governance tests agree on schema generation."""
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    data = _load_inventory()
-    assert data.get("summary", {}).get("inventory_schema_version") == mod.INVENTORY_SCHEMA_VERSION
+    assert inventory.get("summary", {}).get("inventory_schema_version") == test_audit_module.INVENTORY_SCHEMA_VERSION
 
 
 def test_governance_inventory_contains_required_fields(inventory: dict) -> None:
@@ -831,8 +855,20 @@ def test_governance_inventory_contains_required_fields(inventory: dict) -> None:
     )
     assert inventory.get("summary", {}).get("inventory_kind") == "governance"
     sample = inventory["files"][0]
-    for key in ("path", "marker_set", "collected_duplicate_base_names", "likely_architecture_layer", "pytest_collected"):
+    for key in ("path",):
         assert key in sample, f"missing governance file row key {key!r}"
+    assert "marker_set" not in sample, (
+        "governance file rows must not store marker_set; derive via tools/test_audit.py --check"
+    )
+    assert "likely_architecture_layer" not in sample, (
+        "governance file rows must not store likely_architecture_layer; derive via tools/test_audit.py --check"
+    )
+    assert "pytest_collected" not in sample, (
+        "governance file rows must not store pytest_collected; derive via tools/test_audit.py --check"
+    )
+    assert "collected_duplicate_base_names" not in sample, (
+        "governance file rows must not store collected_duplicate_base_names; derive via tools/test_audit.py --check"
+    )
     assert "ownership_registry_positions" not in sample, (
         "governance file rows must not store ownership_registry_positions; derive via build_ownership_registry_index()"
     )
@@ -893,6 +929,114 @@ def test_governance_rejects_stored_per_test_rows(inventory: dict, inventory_by_p
     assert any("must not store tests[]" in e for e in errs)
 
 
+def test_governance_file_rows_omit_marker_set(inventory: dict) -> None:
+    """BF7: per-file marker sets are derived at check time, not committed."""
+    with_markers = [
+        row.get("path")
+        for row in inventory.get("files", [])
+        if isinstance(row, dict) and "marker_set" in row
+    ]
+    assert not with_markers, f"governance files must not store marker_set: {with_markers[:3]!r}"
+
+
+def test_governance_rejects_stored_marker_set(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    """BF7: committed governance must not embed derived per-file marker sets."""
+    polluted = json.loads(json.dumps(inventory))
+    polluted["files"][0]["marker_set"] = ["unit"]
+    polluted_by_path = _inventory_paths(polluted)
+    errs = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        polluted,
+        polluted_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("must not store marker_set" in e for e in errs)
+
+
+def test_governance_file_rows_omit_likely_architecture_layer(inventory: dict) -> None:
+    """BF6: architecture-layer heuristics are derived at check time, not committed."""
+    with_layers = [
+        row.get("path")
+        for row in inventory.get("files", [])
+        if isinstance(row, dict) and "likely_architecture_layer" in row
+    ]
+    assert not with_layers, f"governance files must not store likely_architecture_layer: {with_layers[:3]!r}"
+
+
+def test_governance_rejects_stored_likely_architecture_layer(
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+) -> None:
+    """BF6: committed governance must not embed derived architecture-layer heuristics."""
+    polluted = json.loads(json.dumps(inventory))
+    polluted["files"][0]["likely_architecture_layer"] = "gate"
+    polluted_by_path = _inventory_paths(polluted)
+    errs = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        polluted,
+        polluted_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("must not store likely_architecture_layer" in e for e in errs)
+
+
+def test_governance_file_rows_omit_collected_duplicate_base_names(inventory: dict) -> None:
+    """BF5: in-file duplicate base names are derived at check time, not committed."""
+    with_dups = [
+        row.get("path")
+        for row in inventory.get("files", [])
+        if isinstance(row, dict) and "collected_duplicate_base_names" in row
+    ]
+    assert not with_dups, (
+        f"governance files must not store collected_duplicate_base_names: {with_dups[:3]!r}"
+    )
+
+
+def test_governance_rejects_stored_collected_duplicate_base_names(
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+) -> None:
+    """BF5: committed governance must not embed derived in-file duplicate-base-name lists."""
+    polluted = json.loads(json.dumps(inventory))
+    polluted["files"][0]["collected_duplicate_base_names"] = ["test_dup"]
+    polluted_by_path = _inventory_paths(polluted)
+    errs = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        polluted,
+        polluted_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("must not store collected_duplicate_base_names" in e for e in errs)
+
+
+def test_governance_file_rows_omit_pytest_collected(inventory: dict) -> None:
+    """BF4: per-file collect counts are derived at check time, not committed."""
+    with_counts = [
+        row.get("path")
+        for row in inventory.get("files", [])
+        if isinstance(row, dict) and "pytest_collected" in row
+    ]
+    assert not with_counts, f"governance files must not store pytest_collected: {with_counts[:3]!r}"
+
+
+def test_governance_rejects_stored_pytest_collected(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+    """BF4: committed governance must not embed derived per-file collect counts."""
+    polluted = json.loads(json.dumps(inventory))
+    polluted["files"][0]["pytest_collected"] = 99
+    polluted_by_path = _inventory_paths(polluted)
+    errs = collect_ownership_governance_errors(
+        RESPONSIBILITY_REGISTRY,
+        polluted,
+        polluted_by_path,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+        live_legality_group_ids=frozenset(),
+    )
+    assert any("must not store pytest_collected" in e for e in errs)
+
+
 def test_governance_file_rows_omit_registry_positions(inventory: dict) -> None:
     """AQ5: per-file registry positions are derived, not committed."""
     with_positions = [
@@ -903,16 +1047,13 @@ def test_governance_file_rows_omit_registry_positions(inventory: dict) -> None:
     assert not with_positions, f"governance files must not store ownership_registry_positions: {with_positions[:3]!r}"
 
 
-def test_governance_committed_files_exclude_non_registry_paths(inventory: dict) -> None:
+def test_governance_committed_files_exclude_non_registry_paths(
+    inventory: dict,
+    full_inventory: dict,
+    test_audit_module: types.ModuleType,
+) -> None:
     """AQ8: committed governance files[] retains registry-owned paths only (+ cross-file dup files)."""
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    full = mod.build_inventory_payload()
-    allowed = mod.governance_committed_file_paths(full)
+    allowed = test_audit_module.governance_committed_file_paths(full_inventory)
     committed = {str(row["path"]).replace("\\", "/") for row in inventory.get("files", []) if isinstance(row, dict)}
     extra = sorted(committed - allowed)
     assert not extra, f"governance files[] includes non-governance paths: {extra[:5]!r}"
@@ -932,10 +1073,6 @@ def test_governance_rejects_non_registry_committed_file_row(inventory: dict, inv
     polluted["files"] = list(polluted.get("files", [])) + [
         {
             "path": "tests/test_non_registry_module.py",
-            "marker_set": [],
-            "collected_duplicate_base_names": [],
-            "likely_architecture_layer": "engine",
-            "pytest_collected": 1,
         }
     ]
     polluted_by_path = _inventory_paths(polluted)
@@ -949,7 +1086,10 @@ def test_governance_rejects_non_registry_committed_file_row(inventory: dict, inv
     assert any("must not store non-governance path" in e for e in errs)
 
 
-def test_derived_registry_paths_present_in_inventory(inventory_by_path: dict[str, dict]) -> None:
+def test_derived_registry_paths_present_in_inventory(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
     """AQ5: derived files_roles paths remain inventory-backed for direct-owner/neighbor checks."""
     files_roles = build_ownership_registry_index().get("files_roles", {})
     assert isinstance(files_roles, dict) and files_roles
@@ -958,7 +1098,8 @@ def test_derived_registry_paths_present_in_inventory(inventory_by_path: dict[str
     gate = "tests/test_final_emission_gate.py"
     assert gate in files_roles
     assert files_roles[gate] == [{"group_id": "final_emission_gate_orchestration", "role": "direct_owner"}]
-    assert inventory_by_path[gate].get("likely_architecture_layer") == "gate"
+    full_by_path = _full_inventory_by_path(full_inventory)
+    assert full_by_path[gate].get("likely_architecture_layer") == "gate"
 
 
 def test_derived_registry_index_matches_live_registry() -> None:
@@ -1006,20 +1147,16 @@ def test_governance_rejects_stored_triage_aggregates(inventory: dict, inventory_
     assert any("must not store block_b_overlap_clusters" in e for e in errs)
 
 
-def test_inventory_block_b_schema_v2_coherence(inventory_by_path: dict[str, dict]) -> None:
+def test_inventory_block_b_schema_v2_coherence(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
     """AQ7: triage aggregates and registry paths are validated; clusters/hubs derived from full audit."""
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    full = mod.build_inventory_payload()
-    clusters = full.get("block_b_overlap_clusters")
+    clusters = full_inventory.get("block_b_overlap_clusters")
     assert isinstance(clusters, list) and clusters, "block_b_overlap_clusters must be a non-empty list in full output"
     kinds = {c.get("kind") for c in clusters if isinstance(c, dict)}
     assert "dense_ownership_theme_by_architecture_layer" in kinds
-    hubs = full.get("import_hub_modules")
+    hubs = full_inventory.get("import_hub_modules")
     assert isinstance(hubs, list)
     files_roles = build_ownership_registry_index().get("files_roles", {})
     assert isinstance(files_roles, dict)
@@ -1028,17 +1165,23 @@ def test_inventory_block_b_schema_v2_coherence(inventory_by_path: dict[str, dict
         assert isinstance(roles, list) and roles
 
 
-def test_evaluator_neighbor_may_have_general_inventory_layer(inventory_by_path: dict[str, dict]) -> None:
+def test_evaluator_neighbor_may_have_general_inventory_layer(
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
     """Heuristic ``general`` is allowed for non-owner paths; governance only sharpens direct owners."""
     p = "tests/test_player_agency_evaluator.py"
-    row = inventory_by_path.get(p)
-    assert row is not None and row.get("likely_architecture_layer") == "general"
+    assert p in inventory_by_path
+    full_row = _full_inventory_by_path(full_inventory).get(p)
+    assert full_row is not None and full_row.get("likely_architecture_layer") == "general"
     errs = collect_ownership_governance_errors(
         RESPONSIBILITY_REGISTRY,
-        _load_inventory(),
+        inventory,
         inventory_by_path,
         cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
         live_legality_group_ids=_LIVE_LEGALITY_GROUP_IDS,
+        full_inventory_by_path=_full_inventory_by_path(full_inventory),
     )
     assert not any(p in e for e in errs)
 
@@ -1100,7 +1243,11 @@ def test_direct_owner_general_disallowed_when_declared_layer_set() -> None:
     assert _direct_owner_inventory_layer_ok("engine", "engine")
 
 
-def test_governance_rejects_sharp_direct_owner_layer_mismatch(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
+def test_governance_rejects_sharp_direct_owner_layer_mismatch(
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
     reg = {
         "__layer__": ResponsibilityRecord(
             human_title="Synthetic layer mismatch",
@@ -1114,37 +1261,85 @@ def test_governance_rejects_sharp_direct_owner_layer_mismatch(inventory: dict, i
         inventory_by_path,
         cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
         live_legality_group_ids=frozenset(),
+        full_inventory_by_path=_full_inventory_by_path(full_inventory),
     )
     assert any("inventory layer incompatible" in e for e in errs)
 
 
-def test_inventory_per_test_rows_include_marker_set() -> None:
+def test_inventory_per_test_rows_include_marker_set(
+    test_audit_module: types.ModuleType,
+    full_inventory: dict,
+) -> None:
     """AQ6: per-test marker_set is derived from fresh audit output, not committed JSON."""
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    full = mod.build_inventory_payload()
-    rows = mod.derive_per_test_marker_rows(full)
+    rows = test_audit_module.derive_per_test_marker_rows(full_inventory)
     assert rows, "expected derived per-test marker rows from fresh inventory"
     missing = [r.get("nodeid") for r in rows if not isinstance(r, dict) or "marker_set" not in r]
     assert not missing, f"missing marker_set on {len(missing)} derived rows (first: {missing[:3]!r})"
 
 
-def test_cross_file_duplicate_allowlist_from_derived_full_audit(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ9: duplicate allowlist enforcement uses derived full audit output."""
-    import importlib.util
+def test_governance_registry_paths_have_derived_marker_sets(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
+    """BF7: registry-owned paths retain marker_set data in derived full audit."""
+    full_by_path = _full_inventory_by_path(full_inventory)
+    for fp in inventory_by_path:
+        frow = full_by_path.get(fp)
+        assert frow is not None, f"{fp} missing from full inventory"
+        marker_set = frow.get("marker_set")
+        assert isinstance(marker_set, list)
 
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    full = mod.build_inventory_payload()
-    dups = full.get("cross_file_duplicate_test_names")
+
+def test_governance_registry_paths_have_derived_architecture_layers(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
+    """BF6: registry-owned paths retain architecture-layer heuristics in derived full audit."""
+    full_by_path = _full_inventory_by_path(full_inventory)
+    for fp in inventory_by_path:
+        frow = full_by_path.get(fp)
+        assert frow is not None, f"{fp} missing from full inventory"
+        layer = frow.get("likely_architecture_layer")
+        assert isinstance(layer, str) and layer.strip()
+
+
+def test_governance_registry_paths_have_derived_duplicate_base_names(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
+    """BF5: registry-owned paths retain in-file duplicate-base-name data in derived full audit."""
+    full_by_path = _full_inventory_by_path(full_inventory)
+    for fp in inventory_by_path:
+        frow = full_by_path.get(fp)
+        assert frow is not None, f"{fp} missing from full inventory"
+        dup_bases = frow.get("collected_duplicate_base_names")
+        assert isinstance(dup_bases, list)
+
+
+def test_governance_registry_paths_have_live_collected_counts(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
+    """BF4: registry-owned paths retain live per-file collect counts in derived full audit."""
+    full_by_path = _full_inventory_by_path(full_inventory)
+    for fp in inventory_by_path:
+        frow = full_by_path.get(fp)
+        assert frow is not None, f"{fp} missing from full inventory"
+        collected = frow.get("pytest_collected")
+        nodeids = frow.get("collected_nodeids")
+        assert isinstance(collected, int) and collected >= 0
+        assert isinstance(nodeids, list)
+        assert collected == len(nodeids), f"{fp}: pytest_collected mismatch vs collected_nodeids"
+
+
+def test_cross_file_duplicate_allowlist_from_derived_full_audit(
+    test_audit_module: types.ModuleType,
+    full_inventory: dict,
+) -> None:
+    """AQ9: duplicate allowlist enforcement uses derived full audit output."""
+    dups = full_inventory.get("cross_file_duplicate_test_names")
     assert isinstance(dups, list)
-    errs = mod.collect_cross_file_duplicate_governance_errors(
+    errs = test_audit_module.collect_cross_file_duplicate_governance_errors(
         dups,
         cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
     )
@@ -1188,6 +1383,7 @@ def collect_ownership_governance_errors(
     cross_file_allowlist: Mapping[str, str],
     live_legality_group_ids: AbstractSet[str],
     cross_file_duplicate_test_names: list | None = None,
+    full_inventory_by_path: Mapping[str, dict] | None = None,
 ) -> list[str]:
     """Pure governance checks for tests and unit tests with synthetic registries."""
     errors: list[str] = []
@@ -1230,13 +1426,30 @@ def collect_ownership_governance_errors(
         if not isinstance(row, dict):
             errors.append(f"inventory row for {_fp!r} is not an object")
             continue
-        for key in ("marker_set", "collected_duplicate_base_names"):
-            if key not in row:
-                errors.append(f"{_fp}: missing inventory field {key!r}")
+        if "marker_set" in row:
+            errors.append(
+                f"{_fp}: governance inventory must not store marker_set "
+                f"(derive via tools/test_audit.py --check)",
+            )
         if "ownership_registry_positions" in row:
             errors.append(
                 f"{_fp}: governance inventory must not store ownership_registry_positions "
                 f"(derive via build_ownership_registry_index())",
+            )
+        if "pytest_collected" in row:
+            errors.append(
+                f"{_fp}: governance inventory must not store pytest_collected "
+                f"(derive via tools/test_audit.py --check)",
+            )
+        if "collected_duplicate_base_names" in row:
+            errors.append(
+                f"{_fp}: governance inventory must not store collected_duplicate_base_names "
+                f"(derive via tools/test_audit.py --check)",
+            )
+        if "likely_architecture_layer" in row:
+            errors.append(
+                f"{_fp}: governance inventory must not store likely_architecture_layer "
+                f"(derive via tools/test_audit.py --check)",
             )
 
     derived_roles = build_ownership_registry_index(registry).get("files_roles", {})
@@ -1279,7 +1492,9 @@ def collect_ownership_governance_errors(
                 f"playability/evaluator suite; pick a unit/integration gate owner instead.",
             )
 
-        row = inventory_by_path.get(rec.direct_owner.replace("\\", "/"))
+        row = None
+        if full_inventory_by_path is not None:
+            row = full_inventory_by_path.get(rec.direct_owner.replace("\\", "/"))
         if row is not None:
             likely = row.get("likely_architecture_layer")
             if isinstance(likely, str) and not _direct_owner_inventory_layer_ok(rec.declared_architecture_layer, likely):
@@ -1315,15 +1530,12 @@ def collect_ownership_governance_errors(
     return errors
 
 
-def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    import importlib.util
-
-    spec = importlib.util.spec_from_file_location("_inv_audit", _REPO_ROOT / "tools" / "test_audit.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    full = mod.build_inventory_payload()
-    derived_dups = full.get("cross_file_duplicate_test_names")
+def test_ownership_registry_governance(
+    inventory: dict,
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+) -> None:
+    derived_dups = full_inventory.get("cross_file_duplicate_test_names")
     errors = collect_ownership_governance_errors(
         RESPONSIBILITY_REGISTRY,
         inventory,
@@ -1331,6 +1543,7 @@ def test_ownership_registry_governance(inventory: dict, inventory_by_path: dict[
         cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
         live_legality_group_ids=_LIVE_LEGALITY_GROUP_IDS,
         cross_file_duplicate_test_names=derived_dups if isinstance(derived_dups, list) else None,
+        full_inventory_by_path=_full_inventory_by_path(full_inventory),
     )
     assert not errors, "ownership governance failures:\n" + "\n".join(errors)
 

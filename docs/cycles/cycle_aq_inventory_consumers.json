@@ -1,31 +1,46 @@
 {
-  "inventory_path": "tests/test_inventory.json",
-  "schema_version": 2,
-  "generated_utc_snapshot": "2026-05-30T19:07:18.816659+00:00",
+  "inventory_path": "tests/test_inventory_governance.json",
+  "full_diagnostic_path": "artifacts/test_inventory_full.json",
+  "schema_version": 3,
+  "status_note": "Updated Cycle BF9 (2026-06-11). Path-only committed files[]; CI ownership in convergence-checks.yml only.",
+  "committed_schema": {
+    "top_level_keys": ["summary", "files"],
+    "file_row_fields": [
+      "path"
+    ],
+    "derived_at_check_not_committed": [
+      "files[].marker_set",
+      "files[].likely_architecture_layer",
+      "files[].pytest_collected",
+      "files[].collected_duplicate_base_names",
+      "tests[]",
+      "ownership_registry_index",
+      "files[].ownership_registry_positions",
+      "cross_file_duplicate_test_names",
+      "block_b_overlap_clusters",
+      "import_hub_modules",
+      "summary.pytest_collected_items",
+      "summary.test_file_count",
+      "summary.generated_utc"
+    ]
+  },
   "consumers": {
     "reporting_dashboard": [],
     "smoke_contract_tests": [
       {
         "path": "tests/test_test_audit_tool.py",
         "reads_json": false,
-        "notes": "Unit-tests tools/test_audit.py helpers only; does not load test_inventory.json."
+        "notes": "Unit-tests tools/test_audit.py helpers only; does not load governance JSON."
       }
     ],
     "replay_protected_manifest": [],
     "ci_check_scripts": [
       {
-        "path": ".github/workflows/content-lint.yml",
-        "reads_json": false,
-        "step": "Test ownership registry (governance)",
-        "command": "python -m pytest tests/test_ownership_registry.py -q",
-        "notes": "Indirect consumer via ownership registry tests."
-      },
-      {
         "path": ".github/workflows/convergence-checks.yml",
         "reads_json": false,
-        "step": "Pytest — test ownership registry",
-        "command": "python -m pytest tests/test_ownership_registry.py -q",
-        "notes": "Indirect consumer via ownership registry tests."
+        "step": "Pytest — test ownership registry; Test inventory drift check",
+        "command": "python -m pytest tests/test_ownership_registry.py -q; python tools/test_audit.py --check",
+        "notes": "Sole CI owner for registry pytest + governance JSON drift gate (Cycle BF8)."
       }
     ],
     "governance_runtime": [
@@ -33,45 +48,46 @@
         "path": "tests/test_ownership_registry.py",
         "reads_json": true,
         "load_function": "_load_inventory",
-        "fields_used": [
+        "fields_used_committed": [
           "summary.inventory_schema_version",
-          "files[].path",
-          "files[].likely_architecture_layer",
-          "files[].marker_set",
-          "files[].ownership_registry_positions",
-          "files[].collected_duplicate_base_names",
-          "ownership_registry_index",
-          "ownership_registry_index.groups",
-          "ownership_registry_index.files_roles",
-          "block_b_overlap_clusters",
-          "cross_file_duplicate_test_names",
-          "tests[].marker_set"
+          "summary.inventory_kind",
+          "summary.declared_pytest_markers",
+          "files[].path"
         ],
-        "notes": "Primary runtime consumer. Validates registry paths exist, layer alignment, embedded registry index, schema v2 coherence, cross-file duplicate allowlist."
+        "fields_derived_at_runtime": [
+          "files[].likely_architecture_layer via build_inventory_payload()",
+          "files[].pytest_collected via build_inventory_payload()",
+          "files[].collected_duplicate_base_names via build_inventory_payload()",
+          "ownership_registry_index via build_ownership_registry_index()",
+          "cross_file_duplicate_test_names via build_inventory_payload()",
+          "tests[].marker_set via derive_per_test_marker_rows()",
+          "block_b_overlap_clusters and import_hub_modules via build_inventory_payload()"
+        ],
+        "notes": "Primary runtime JSON reader. Full audit payload built once per module via shared fixture (Cycle BF1)."
       },
       {
         "path": "tools/test_audit.py",
-        "reads_json": false,
+        "reads_json": true,
         "writes_json": true,
-        "notes": "Generator. Imports tests.test_ownership_registry.RESPONSIBILITY_REGISTRY to embed ownership_registry_index."
+        "notes": "Generator + --check drift gate. Writes tests/test_inventory_governance.json; --full writes artifacts/test_inventory_full.json."
       }
     ],
     "documentation_only": [
       {
         "path": "tests/TEST_AUDIT.md",
-        "notes": "Human governance map; references JSON as live ground truth for counts and per-file metadata."
+        "notes": "Active runbook; AQ/BF governance vs full diagnostic schema (updated BF3)."
       },
       {
         "path": "tests/TEST_CONSOLIDATION_PLAN.md",
-        "notes": "Campaign history; points to JSON for live counts."
+        "notes": "Campaign history; updated BF3 for governance artifact path."
       },
       {
         "path": "tests/README_TESTS.md",
-        "notes": "Runbook; references regenerate command."
+        "notes": "Runbook; updated BF3."
       },
       {
         "path": "docs/architecture_ownership_ledger.md",
-        "notes": "Ownership routing prose; cites test_audit.py → test_inventory.json."
+        "notes": "Ownership routing prose; cites test_audit.py → test_inventory_governance.json."
       },
       {
         "path": "docs/narrative_integrity_architecture.md",
@@ -79,27 +95,19 @@
       },
       {
         "path": "docs/convergence_ci_inventory.md",
-        "notes": "Notes test_audit.py not yet in convergence-checks.yml."
+        "notes": "CI seam matrix; test_audit --check wired in convergence-checks.yml."
       },
       {
         "path": "docs/testing/protected_replay_manifest.md",
-        "notes": "Explicitly separates inventory regen from replay ownership."
+        "notes": "Separates test inventory regen from replay ownership."
       },
       {
-        "path": "docs/current_focus.md",
-        "notes": "Block D inventory schema v2 status."
-      },
-      {
-        "path": "docs/post_evaluator_next_target_scan.md",
-        "notes": "CI drift risk callout."
-      },
-      {
-        "path": "docs/ownership_cleanup_delta.md",
-        "notes": "Refresh reminder after large suite edits."
+        "path": "docs/cycles/cycle_aq_test_inventory_compression_closeout.md",
+        "notes": "Authoritative AQ closeout for final committed schema."
       },
       {
         "path": "docs/cycles/cycle_r_block_r4_inventory_registry_refresh_2026-05-30.md",
-        "notes": "Historical refresh evidence."
+        "notes": "Historical refresh evidence (pre-AQ paths)."
       },
       {
         "path": "docs/cycles/cycle_l_test_ownership_compression_recon_2026-05-26.md",
@@ -110,7 +118,7 @@
       {
         "path": "tools/architecture_audit.py",
         "reads_json": false,
-        "notes": "Keyword/heuristic scan of TEST_AUDIT.md and test_audit.py; does not parse test_inventory.json."
+        "notes": "Keyword/heuristic scan of TEST_AUDIT.md and test_audit.py; does not parse governance JSON."
       },
       {
         "path": "tests/test_architecture_audit_tool.py",
@@ -118,7 +126,7 @@
       },
       {
         "path": "tests/test_gate_convergence_closeout.py",
-        "notes": "Cross-doc check for docs/gate_cleanup_inventory.md only; not test_inventory.json."
+        "notes": "Cross-doc check for docs/gate_cleanup_inventory.md only; not test inventory JSON."
       },
       {
         "path": "tests/test_turn_pipeline_shared.py",

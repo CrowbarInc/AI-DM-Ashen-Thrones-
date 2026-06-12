@@ -204,7 +204,7 @@ This seam prevents “prompt-layer answer authorship” and “final-emission an
 
 ## Test ownership (canonical)
 
-See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rather than overrule them. **`tests/test_inventory.json`** is the machine-readable inventory (regenerate with `py -3 tools/test_audit.py`).
+See **`tests/TEST_AUDIT.md`** for the current governance map and **`tests/TEST_CONSOLIDATION_PLAN.md`** for recorded consolidation boundaries. Those docs should follow runtime owners and practical direct-owner suites rather than overrule them. **`tests/test_inventory_governance.json`** is the committed machine-readable inventory for registry-owned test modules (regenerate with `py -3 tools/test_audit.py`; full diagnostic via `--full` → `artifacts/test_inventory_full.json`).
 
 Governance scope split: `tools/architecture_audit.py` is the broad repo ownership/test-doc-runtime audit, while `tools/validation_layer_audit.py` is the narrow Objective #11 validation-layer separation checker.
 

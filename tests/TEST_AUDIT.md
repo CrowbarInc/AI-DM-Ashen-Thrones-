@@ -21,7 +21,18 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 | **Downstream consumer coverage** | Other suites that ship, observe, or regress behavior **through** the owner boundary; they are not alternate semantic homes. |
 | **Compatibility residue** | Supported legacy paths, aliases, or read-side helpers that may remain importable without splitting authority. |
 
-**Regenerate artifacts:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). That refreshes `tests/test_inventory.json` using `pytest --collect-only` (non-quiet, so full nodeids are captured) plus static heuristics. **`summary.inventory_schema_version` is 2** — required fields for drift checks include `summary.declared_pytest_markers`, each `files[]` row’s `likely_architecture_layer`, `marker_set`, and `ownership_registry_positions`, plus top-level `ownership_registry_index`, `block_b_overlap_clusters`, and `import_hub_modules`. The script prints a one-line summary of **module-level duplicate `test_*` names** (shadowed defs); details are in JSON under `summary.files_with_shadowed_duplicate_test_defs`. It also prints a short **overlap spread** line (themes by distinct file count; heuristic, not semantic duplicate detection).
+**Inventory artifacts (Cycle AQ / BF — read before regen):**
+
+| Artifact | Path | Contents |
+| --- | --- | --- |
+| **Committed governance** | `tests/test_inventory_governance.json` | `summary` (schema v2, `inventory_kind: governance`, `declared_pytest_markers`) + registry-owned `files[]` (~45 rows): `path`, `marker_set` |
+| **Full diagnostic (local / optional)** | `artifacts/test_inventory_full.json` | Complete suite inventory via `py -3 tools/test_audit.py --full` (gitignored): all test modules, `tests[]`, triage aggregates, duplicate reports, embedded registry snapshot |
+
+**Regenerate committed governance:** from repo root run `py -3 tools/test_audit.py` (or `python tools/test_audit.py`). Uses `pytest --collect-only` plus static heuristics, then writes the slim governance artifact only.
+
+**Verify drift (CI):** `py -3 tools/test_audit.py --check` — rebuilds full inventory in memory, compares normalized governance JSON, and validates derived concerns (per-test markers, cross-file duplicate allowlist, registry-owned path coverage, full-payload triage shape).
+
+**Not in committed JSON (derived at `--check` or `--full` only):** `tests[]`, `files[].pytest_collected`, `files[].collected_duplicate_base_names`, `files[].likely_architecture_layer`, `ownership_registry_index` (derive via `build_ownership_registry_index()` in `tests/test_ownership_registry.py`), `files[].ownership_registry_positions`, `cross_file_duplicate_test_names`, `block_b_overlap_clusters`, `import_hub_modules`, and derivable `summary` counts (`pytest_collected_items`, `test_file_count`, shadowed-duplicate reports, bucket histograms). The audit script prints module-level duplicate `test_*` warnings on stdout; shadowed-name details live in the full diagnostic `summary`.
 
 **Test roles (pytest; not runtime layers):** **Engine**-aligned tests defend **state correctness**; **planner** tests defend **structure** / shipped contract assembly; **gate** tests defend **legality** and **final emission**; **evaluator** tests defend **scoring / playability** artifacts; **transcript** tests own **cross-turn sequencing** and regression stories; **gauntlet** tests own **harness / slice** behavior; **smoke** owns **wiring only**. **`general`** in `likely_architecture_layer` is an inventory **weak-signal bucket**, not an ownership layer. **Downstream consumer** and **compatibility residue** neighbor slots in the registry mean the same as in `docs/validation_layer_separation.md` — consumer behavior vs preserved historical coverage, not canonical invariant homes.
 
@@ -31,15 +42,15 @@ Diagnostic inventory of `tests/` only. **How to run tests (fast/full lanes, coll
 
 **Cycle R governance (2026-05-30):** R1–R3 thinned downstream duplication (gate fixture imports, passive phrase bans, `final_route` smoke). Registry neighbors now list Cycle R consumers under `final_emission_gate_orchestration`, `final_emission_meta_projection`, `final_emission_visibility_semantics`, `output_sanitizer_final_string_cleanup`, and `social_emission_legality_surface`. `tests/test_golden_replay.py` is a **gauntlet_suite** replay/observation neighbor (not a gate `downstream_consumer`); do not thin golden replay as downstream duplication. Phrase legality: `test_output_sanitizer.py`, `test_final_emission_visibility.py`, `test_social_exchange_emission.py`. See `docs/cycles/cycle_r_block_r4_inventory_registry_refresh_2026-05-30.md`.
 
-**`block_b_overlap_clusters`:** JSON clusters (for example `dense_ownership_theme_by_architecture_layer`, `imports_final_emission_gate_and_prompt_context`) are **triage signals**—many files touching a theme or importing the same gate helpers does **not** prove redundant tests. Use them to spot candidates; decide merges or thinnings with the governance tables in this file and `tests/TEST_CONSOLIDATION_PLAN.md`.
+**`block_b_overlap_clusters` (full diagnostic only):** JSON clusters (for example `dense_ownership_theme_by_architecture_layer`, `imports_final_emission_gate_and_prompt_context`) are **triage signals** in `artifacts/test_inventory_full.json` — many files touching a theme or importing the same gate helpers does **not** prove redundant tests. Use them to spot candidates; decide merges or thinnings with the governance tables in this file and `tests/TEST_CONSOLIDATION_PLAN.md`.
 
 **Smoke vs transcript consolidation examples:** `tests/test_c4_narrative_mode_live_pipeline.py` is scoped as **wiring / orchestration smoke** for the C4 narrative-mode path; `tests/test_narration_transcript_regressions.py` stays a **transcript** home for multi-turn narration behavior while avoiding duplicate **direct-legality** matrices owned elsewhere.
 
-**Machine-readable ownership map (first pass):** each `files[]` row includes `collected_nodeids`, `collected_test_names`, `collected_duplicate_base_names` (same `test_*` base collected more than once in-file — usually parametrization), `shadowed_duplicate_test_names` (AST duplicate top-level `def test_*` / Python shadowing), `marker_set` (module `pytestmark` ∪ per-test `@pytest.mark.*`, excluding built-ins such as `parametrize`), `ownership_registry_positions` (when the file is a **direct_owner** or a declared neighbor in `tests/test_ownership_registry.py`: **smoke / transcript / gauntlet / evaluator / downstream_consumer / compatibility_residue**), `game_import_modules` / `game_import_roots`, `likely_ownership_theme`, `likely_architecture_layer` (one of `engine` / `planner` / `gpt` / `gate` / `evaluator` / `smoke` / `transcript` / `gauntlet` / **`general`** when layer scores are weak), `architecture_layer_scores`, and `overlap_hints`. Each `tests[]` row adds `marker_set`, `keyword_overlap_hints`, `file_overlap_hints`, and the same `likely_*` fields. Top-level `summary.inventory_schema_version` and `summary.declared_pytest_markers` (from `pytest.ini`), optional `ownership_registry_index` (`groups` + `files_roles`; each group lists `downstream_consumer_suites` and `compatibility_residue_suites` alongside the four original neighbor lists), `cross_file_duplicate_test_names`, `import_hub_modules`, and `block_b_overlap_clusters` summarize Block B–style overlap without maintaining giant markdown tables. JSON objects use sorted keys for stable diffs aside from `summary.generated_utc` (run timestamp only).
+**Machine-readable ownership map:** committed `tests/test_inventory_governance.json` holds one row per **registry-owned** test module with `path` and `marker_set` only. Per-file heuristics (`likely_architecture_layer`, `pytest_collected`, `collected_duplicate_base_names`) are derived at `--check` from the full audit payload; direct-owner layer alignment runs in `tests/test_ownership_registry.py` against that derived data. Neighbor/direct-owner roles come from `tests/test_ownership_registry.py::RESPONSIBILITY_REGISTRY` via `build_ownership_registry_index()` — not from committed JSON. For per-test rows (`tests[]`), import hubs, overlap hints, layer scores, and triage aggregates, run `py -3 tools/test_audit.py --full` and read `artifacts/test_inventory_full.json`.
 
 **Validation layer drift (Objective #11):** For the five-layer phase contract (truth / structure / expression / legality / offline scoring), run `py -3 tools/validation_layer_audit.py` and read `docs/validation_layer_audit.md`. The audit uses `game/validation_layer_contracts.py` plus `docs/validation_layer_separation.md` and surfaces Block B residue as tolerated context; it does not replace semantic review. Smoke tests: `tests/test_validation_layer_audit_smoke.py`.
 
-**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only` plus `tests/test_inventory.json` (regenerate with `tools/test_audit.py`). Dated sanity snapshots in later sections are **illustrative**; `summary.generated_utc` in JSON is the inventory timestamp. For file totals, read the JSON inventory or count collected modules under `tests/` that match `test_*.py`.
+**Counts in this markdown:** detailed per-file tables drift as the suite grows. For live numbers, prefer `pytest --collect-only`, `py -3 tools/test_audit.py --check` (prints derived test/file counts), or `py -3 tools/test_audit.py --full` for full diagnostic totals. Dated sanity snapshots in later sections are **illustrative**. Committed governance JSON holds registry-owned file rows only — not whole-suite counts.
 
 ---
 
@@ -248,7 +259,7 @@ secondary downstream retry-terminal / first-mention / compatibility coverage, wi
 and gate/retry-oriented suites may continue to exercise the seam, but they should read as
 consumer/application, harness, or regression evidence rather than alternate semantic owners for the same seam. **`tests/test_final_emission_gate.py`** remains the orchestration owner for **`apply_final_emission_gate`**.
 
-Heuristic tags (`test_inventory.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes (breadth diagnostic, not proof of duplicate ownership). For **live** distinct-file counts and import hubs, regenerate the inventory and read `feature_areas_by_distinct_files`, `import_hub_modules`, and `block_b_overlap_clusters` (especially `dense_ownership_theme_by_architecture_layer` and `imports_final_emission_gate_and_prompt_context`). The qualitative hotspots below remain the highest-risk *semantic* overlap areas for double-locking (counts intentionally not duplicated here):
+Heuristic tags in the **full diagnostic** (`artifacts/test_inventory_full.json` → `feature_areas_by_distinct_files`) show **many files** touching the same themes (breadth diagnostic, not proof of duplicate ownership). For **live** distinct-file counts and import hubs, run `py -3 tools/test_audit.py --full` and read `feature_areas_by_distinct_files`, `import_hub_modules`, and `block_b_overlap_clusters` (especially `dense_ownership_theme_by_architecture_layer` and `imports_final_emission_gate_and_prompt_context`). The qualitative hotspots below remain the highest-risk *semantic* overlap areas for double-locking (counts intentionally not duplicated here):
 
 1. **Lead extraction + clue system** — many `test_lead_*.py` modules plus `test_social_lead_landing.py`, `test_clue_lead_registry_integration.py`, pipeline, and prompt/guard.
 2. **Resolution / emission** — `test_social_exchange_emission.py`, `test_turn_pipeline_shared.py`, `test_social_emission_quality.py`, `test_social.py`, and several lead payoff modules.
@@ -278,7 +289,7 @@ Prioritize **marker normalization + overlap trimming** (not mass deletion). **Ro
 
 **Block 20 — feature ownership:** Inventory `feature_areas` now honor optional per-test `# feature: tag1, tag2` lines (immediately above the test, optionally above `@pytest.mark.*`), module-level `# feature:` before the first top-level `def test_`, and `@pytest.mark.routing|retry|fallback|social|continuity|clues|leads|emission|legality` when present. Tags map into the existing inventory labels (e.g. `clues` → `clue system`, `leads` → `lead extraction`). See `pytest.ini` for registered markers.
 
-**Per-test rows:** `tests/test_inventory.json` — each collected pytest item includes `nodeid`, heuristic `primary_bucket`, `feature_areas`, `historically_motivated`, `assertion_style`, `brittleness`, `redundancy_flag`, `keyword_overlap_hints`, `likely_architecture_layer`, `likely_ownership_theme`, and `file_overlap_hints` (mirrors the owning file row). **Tool tests:** `tests/test_test_audit_tool.py` locks helper behavior without re-running full collection.
+**Per-test rows (full diagnostic only):** `artifacts/test_inventory_full.json` — each collected pytest item includes `nodeid`, heuristic `primary_bucket`, `feature_areas`, `historically_motivated`, `assertion_style`, `brittleness`, `redundancy_flag`, `keyword_overlap_hints`, `likely_architecture_layer`, `likely_ownership_theme`, and `file_overlap_hints` (mirrors the owning file row). **Tool tests:** `tests/test_test_audit_tool.py` locks helper behavior without re-running full collection.
 
 ---
 
@@ -286,7 +297,7 @@ Prioritize **marker normalization + overlap trimming** (not mass deletion). **Ro
 
 **Purpose:** Document how **fast** (day-to-day) and **full** (pre-merge / milestone) pytest lanes are run today. Exclusion markers `transcript` and `slow` define fast-lane membership; scope tags `unit` / `integration` / `regression` support inventory and optional filters but **do not** replace that expression. Commands and collect-only expectations: `tests/README_TESTS.md`.
 
-**Ground truth:** `tests/test_inventory.json` (`summary`, `files[].primary_bucket`, `files[].high_brittleness_test_count`). Regenerate with `py -3 tools/test_audit.py`.
+**Ground truth:** `tests/test_inventory_governance.json` for registry-owned file metadata; whole-suite counts and per-test buckets via `py -3 tools/test_audit.py --check` or `--full`. Regenerate committed governance with `py -3 tools/test_audit.py`.
 
 ### Lane definitions
 
@@ -318,7 +329,7 @@ Use this order when tagging in Block 2:
    - Re-evaluate **`test_social_emission_quality.py`**: some tests already carry `transcript`; align with **module-level** `pytestmark` so behavior matches intent.
 2. **Mark `slow` without `transcript` when:** a module is integration-weighted but unusually expensive (many sequential API turns, huge fixtures) and should drop out of fast lane even if not “transcript” by naming.
 3. **Fast-eligible default:** all other modules — typical `TestClient` + `tmp_path` + mocks, pure logic, or single-turn API checks — **no** `transcript` / `slow` unless measured otherwise.
-4. **Scope markers:** add module-level `pytestmark` with one or more of `unit`, `integration`, `regression` consistent with the majority `primary_bucket` in `test_inventory.json` (heuristic: `unit`-majority files → prefer `unit`; `integration`-majority → `integration`; files already in `tests/*_regressions.py` or regression-majority → include `regression`).
+4. **Scope markers:** add module-level `pytestmark` with one or more of `unit`, `integration`, `regression` consistent with the majority `primary_bucket` in the full diagnostic inventory (heuristic: `unit`-majority files → prefer `unit`; `integration`-majority → `integration`; files already in `tests/*_regressions.py` or regression-majority → include `regression`).
 
 ### Module tiers (inventory-informed snapshot)
 
@@ -335,7 +346,7 @@ Tiers describe **expected lane membership** from `transcript` / `slow` (and thus
 
 ### Current marker coverage vs target
 
-- **Module-level `pytestmark`:** lane-related marker adoption drifts with the suite. Treat `tests/test_inventory.json` + `pytest.ini` as ground truth; do not rely on stale per-file counts in this markdown unless refreshed alongside `tools/test_audit.py`.
+- **Module-level `pytestmark`:** lane-related marker adoption drifts with the suite. Treat `tests/test_inventory_governance.json`, `pytest.ini`, and `py -3 tools/test_audit.py --check` as ground truth; do not rely on stale per-file counts in this markdown unless refreshed alongside `tools/test_audit.py --full`.
 - **Per-test markers:** `test_turn_pipeline_shared.py` adds `unit`+`regression` on one test while the module is `integration`. `test_social_emission_quality.py` marks `transcript` on a subset of tests only — normalize in Block 2.
 - **`test_prompt_and_guard.py`:** module is `brittle` only — add `integration` (or `unit`) alongside `brittle` so scope is explicit for inventory and optional filters.
 
@@ -363,37 +374,38 @@ Example `pytest --collect-only` check from repo root (replace counts after large
 
 | Command | Result |
 | --- | --- |
-| `pytest --collect-only` | matches `summary.pytest_collected_items` in `tests/test_inventory.json` when inventory was regenerated the same day |
+| `pytest --collect-only` | matches derived counts printed by `py -3 tools/test_audit.py --check` when governance was regenerated the same day |
 | `pytest --collect-only -m "not transcript and not slow"` | marker-complement fast lane; deselected = `transcript` or `slow` |
 
-Re-run after large suite edits; treat `tests/test_inventory.json` as the inventory ground truth.
+Re-run after large suite edits; treat `tests/test_inventory_governance.json` plus `--check` output as inventory ground truth for governance paths.
 
 ---
 
 ## Executive counts
 
-| Metric | Latest `test_inventory.json` summary (regenerate locally) | Notes |
-| --- | ---: | --- |
-| Test files (`tests/` modules matching `test_*.py`) | *see JSON* | `summary.test_file_count` |
-| Pytest collected items | *see JSON* | `summary.pytest_collected_items` |
-| Cross-file duplicate `test_*` base names | *see JSON* | `summary.cross_file_duplicate_test_name_count` + `cross_file_duplicate_test_names` |
+| Metric | Source (regenerate locally) | Notes |
+| --- | --- | --- |
+| Registry-owned test files | `tests/test_inventory_governance.json` → `files[]` | ~45 rows (direct owners + neighbors + cross-file dup files) |
+| Whole-suite test files | `py -3 tools/test_audit.py --check` stdout | Derived at check time |
+| Pytest collected items | `py -3 tools/test_audit.py --check` stdout | Derived at check time |
+| Cross-file duplicate `test_*` base names | Full diagnostic or `--check` validation | Not committed; allowlist in `test_ownership_registry.py` |
 | Fast lane (`not transcript and not slow`) | *(re-run)* | `pytest --collect-only -m "not transcript and not slow"` — counts drift with markers |
 
-**Heuristic breakdowns** (bucket mixes, brittleness histograms, AST duplicate-name summaries): regenerate `tests/test_inventory.json` via `py -3 tools/test_audit.py` and read `summary` / `files` — the suite has outgrown static markdown tables here.
+**Heuristic breakdowns** (bucket mixes, brittleness histograms, AST duplicate-name summaries): run `py -3 tools/test_audit.py --full` and read `artifacts/test_inventory_full.json` — the suite has outgrown static markdown tables here.
 
 ### Counts by test-level primary bucket
 
-Regenerate `tests/test_inventory.json` for current per-item bucket totals (filename hint + body heuristics).
+Run `py -3 tools/test_audit.py --full` for current per-item bucket totals (filename hint + body heuristics).
 
 ### Counts by file-level primary bucket
 
-Regenerate `tests/test_inventory.json` — `primary_bucket` on each file record is the **majority** bucket among that file’s collected tests. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
+Full diagnostic only — `primary_bucket` on each file record is the **majority** bucket among that file’s collected tests. The JSON field `filename_bucket` records path-pattern hints only (`transcript_gauntlet`, `regression`, or `mixed/unclear`).
 
 ---
 
 ## Module-level duplicate `test_*` names (guardrail)
 
-If the same top-level `def test_foo` appears twice in one module, Python keeps only the last definition; pytest then collects **one** item for that name and earlier bodies never run. **`tools/test_audit.py` detects this** (AST duplicate names per file) and reports it on stdout and in `tests/test_inventory.json` → `summary.files_with_shadowed_duplicate_test_defs`.
+If the same top-level `def test_foo` appears twice in one module, Python keeps only the last definition; pytest then collects **one** item for that name and earlier bodies never run. **`tools/test_audit.py` detects this** (AST duplicate names per file) and reports it on stdout; full details are in `artifacts/test_inventory_full.json` → `summary.files_with_shadowed_duplicate_test_defs` when using `--full`.
 
 `tests/test_exploration_resolution.py` currently has **38** unique top-level `test_*` names, **38** AST def lines (no shadowing), and **42** collected items (one parametrized test adds 4 extra cases). An older version of this audit text incorrectly claimed mass shadowing here; that was **stale documentation** — the live source of truth is `pytest --collect-only` plus the audit JSON.
 
@@ -401,14 +413,14 @@ If the same top-level `def test_foo` appears twice in one module, Python keeps o
 
 ## Top files by count of high-brittleness tests (heuristic)
 
-Snapshot from `test_inventory.json` → `top_high_brittleness_files` (2026-04-03):  
+Snapshot from full diagnostic `top_high_brittleness_files` (2026-04-03; re-run `--full` for updates):  
 `test_mixed_state_recovery_regressions.py` — 6; `test_transcript_regression.py` — 5; `test_empty_social_retry_regressions.py`, `test_social_emission_quality.py`, `test_transcript_gauntlet_actor_addressing.py` — 4 each; then several files at 3 or 1. Re-run the audit for an updated ordered list.
 
 ---
 
 ## Top “likely overlap” **areas** (by spread across files)
 
-These are **feature tags** (keyword heuristics), not proof of duplicate tests. High file counts mean trims/consolidation require reading tests, not deleting by tag. **Do not maintain a ranked markdown table here** — it rots immediately. After `py -3 tools/test_audit.py`, read `feature_areas_by_distinct_files` (and `feature_area_primary_counts` for item-weighted totals).
+These are **feature tags** (keyword heuristics), not proof of duplicate tests. High file counts mean trims/consolidation require reading tests, not deleting by tag. **Do not maintain a ranked markdown table here** — it rots immediately. After `py -3 tools/test_audit.py --full`, read `artifacts/test_inventory_full.json` → `feature_areas_by_distinct_files` (and `feature_area_primary_counts` for item-weighted totals).
 
 The **general** bucket still indicates tagging debt where modules do not match keyword rules; refine rules or add explicit `# feature:` / markers over time.
 
@@ -501,7 +513,7 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 `primary_bucket` = majority of tests in that file. **High-brittleness** = count of tests with heuristic `brittleness: high` in that file. Feature tags = top primary feature labels (first keyword hit per test, aggregated).
 
-**Authoritative list:** Every `test_*.py` under `tests/` is one row in `tests/test_inventory.json` → `files`, including `pytest_collected`, `collected_nodeids`, `likely_architecture_layer`, `likely_ownership_theme`, `overlap_hints`, and `primary_feature_area_breakdown`. The old static markdown table was removed to avoid rot; use your editor’s JSON viewer, `jq`, or ad-hoc Python to slice `files[]`.
+**Authoritative list:** Registry-owned modules are rows in `tests/test_inventory_governance.json` → `files[]` (`path`, `marker_set`). Per-file heuristics and collect counts: derive via `--check` or read from full diagnostic. Every `test_*.py` under `tests/` appears in the full diagnostic (`py -3 tools/test_audit.py --full`) with extended fields (`likely_architecture_layer`, `collected_nodeids`, `likely_ownership_theme`, `overlap_hints`, `primary_feature_area_breakdown`, etc.). The old static markdown table was removed to avoid rot; use your editor’s JSON viewer, `jq`, or ad-hoc Python to slice `files[]`.
 
 ---
 
@@ -519,4 +531,4 @@ Concrete “source of truth” examples for recurring themes (prefer extending t
 
 ## Optional metadata comments
 
-Use `# feature: routing, fallback` on the line before a test (or once per file before the first top-level `def test_`) so `test_inventory.json` picks up ownership without relying on `nodeid` keywords. Equivalent: `@pytest.mark.routing` (see `pytest.ini`). Large or previously-`general` modules are partially tagged; extend over time.
+Use `# feature: routing, fallback` on the line before a test (or once per file before the first top-level `def test_`) so the audit inventory picks up ownership without relying on `nodeid` keywords. Equivalent: `@pytest.mark.routing` (see `pytest.ini`). Large or previously-`general` modules are partially tagged; extend over time.

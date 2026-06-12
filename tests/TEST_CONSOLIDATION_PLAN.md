@@ -9,15 +9,15 @@ Documentation and tooling only; **no runtime game behavior** changes in this tra
 **Block A — inventory audit**
 
 - **`tools/test_audit.py` enhanced** — richer inventory, overlap hints, and JSON fields aligned with triage (see `tests/TEST_AUDIT.md` → *Methodology & limitations*).
-- **`tests/test_inventory.json`** — regenerated from collection + heuristics; **live** ground truth for counts and per-file metadata (`py -3 tools/test_audit.py` from repo root).
+- **`tests/test_inventory_governance.json`** — committed governance artifact (registry-owned `files[]` + stable `summary`); regenerate via `py -3 tools/test_audit.py`. Full diagnostic: `py -3 tools/test_audit.py --full` → `artifacts/test_inventory_full.json`.
 - **`tests/TEST_AUDIT.md`** — static rotting tables removed in favor of JSON-backed methodology and prose governance tables; counts and brittleness leaders are **regenerate**, not hand-maintained.
 
 **Block B — ownership registry governance**
 
 - **`tests/test_ownership_registry.py` added** — declares required **responsibility** groups with a single **direct_owner** path each (plus optional **neighbor** suites), checks inventory presence and layer alignment, and rejects **live legality** groups whose direct owner is classified as transcript/gauntlet/playability/evaluator-only.
-- **Neighbor categories (exactly one slot per listed path within a group):** `smoke_suites`, `transcript_suites`, `gauntlet_suites`, `evaluator_suites`, `downstream_consumer_suites`, `compatibility_residue_suites`. Use **downstream_consumer** for integration suites that consume the owner boundary without being thin smoke; use **compatibility_residue** for documented legacy or read-side harnesses. The audit mirrors these lists under `ownership_registry_index.groups` and `files_roles` in `tests/test_inventory.json`.
+- **Neighbor categories (exactly one slot per listed path within a group):** `smoke_suites`, `transcript_suites`, `gauntlet_suites`, `evaluator_suites`, `downstream_consumer_suites`, `compatibility_residue_suites`. Use **downstream_consumer** for integration suites that consume the owner boundary without being thin smoke; use **compatibility_residue** for documented legacy or read-side harnesses. Neighbor maps are derived at runtime via `build_ownership_registry_index()` in `tests/test_ownership_registry.py` (not embedded in committed governance JSON).
 - **Direct-owner governance checks** — registry + pytest prevent silent drift of “who owns this seam” and accidental double-claim of the same `direct_owner` path across groups. Inventory `likely_architecture_layer` heuristics treat **`general` as permissive for neighbors only**; a **direct owner** with a non-null `declared_architecture_layer` must not resolve to `general`, and must align with declared layer (with the same soft adjacency rules as before).
-- **Duplicate base names** — cross-file identical `test_*` base names remain **heuristic triage** (`tests/test_inventory.json`, `block_b_overlap_clusters`); a small **allowlist** documents intentional collisions with **non-empty reasons**.
+- **Duplicate base names** — cross-file identical `test_*` base names remain **heuristic** triage (derived at `py -3 tools/test_audit.py --check`; full diagnostic has `block_b_overlap_clusters`); a small **allowlist** in `test_ownership_registry.py` documents intentional collisions with **non-empty reasons**.
 
 **Block C — smoke / transcript consolidation (examples)**
 
@@ -40,7 +40,7 @@ Documentation and tooling only; **no runtime game behavior** changes in this tra
 
 **Terminology:** use **canonical owner**, **smoke overlap**, **deferred**, **orchestration**, and **deterministic / contract-driven** consistently with `tests/TEST_AUDIT.md`.
 
-**Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory.json` (regenerate via `py -3 tools/test_audit.py`), and spot review of transcript vs pipeline modules.
+**Source:** Derived from `tests/TEST_AUDIT.md`, `tests/test_inventory_governance.json` (and `--full` diagnostic when needed), and spot review of transcript vs pipeline modules.
 
 **Goal:** A concrete, low-risk roadmap so cleanup can run in small batches with full-suite checks between steps—prioritizing **final emission metadata packaging**, **telemetry/meta normalization**, and **test ownership** trimming aligned with runtime **orchestration** boundaries.
 
@@ -205,7 +205,7 @@ See **§3** for per-item detail. High-level targets:
 
 ### C. Leave alone for now
 
-- **`test_inventory.json` / `tools/test_audit.py`:** Inventory tooling; keep until consolidation stabilizes.
+- **`test_inventory_governance.json` / `tools/test_audit.py`:** Inventory tooling; keep until consolidation stabilizes. Committed governance JSON holds registry-owned rows only; run `--full` for whole-suite triage.
 - **Files with single high-brittleness tests** (`test_agenda_simulation.py`, `test_clue_discovery.py`, `test_emergent_scene_actors.py`, `test_gauntlet_regressions.py`): not priority targets until broader batches complete.
 - **World/state, snapshots, save/load, schema, clocks/lint:** Lower overlap in audit; avoid drive-by merges.
 - **Broad scope-marker refactors:** Defer mass `unit` / `integration` / `regression` cleanup until done in small batches; optional `brittle` / extra `slow` tuning can follow the same pilot pattern (§5).
@@ -285,7 +285,7 @@ Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` f
 4. **Extract shared helpers (R1, R6):** Move duplicate `_patch_storage` / seed helpers into shared test utilities **without** deleting tests. *Low risk.*
 5. **Merge duplicate regression scenarios (R2, R4, R5):** After helper dedup, merge **only** pairs that have been read side-by-side; keep mapping table of removed nodeids → replacements.
 6. **Reduce transcript overlap (R5, R6):** Remove or slim transcript steps only when covered by smaller tests; prefer **weaken** before **delete**.
-7. **Periodic audit:** After each batch, regenerate `test_inventory.json` and spot-check high-brittleness counts in `TEST_AUDIT.md` methodology section.
+7. **Periodic audit:** After each batch, regenerate `tests/test_inventory_governance.json` (`py -3 tools/test_audit.py`) and spot-check high-brittleness counts via `--full` in `tests/TEST_AUDIT.md` methodology section.
 
 ---
 
@@ -304,5 +304,5 @@ Execute **one bullet per PR** (or smaller), then **full test suite** (`pytest` f
 
 - `tests/README_TESTS.md` — full lane, fast lane, stricter fast, collect-only, Windows `py -3 -m pytest`.
 - `tests/TEST_AUDIT.md` — counts, brittleness leaders, canonical examples, duplicate-name guardrail notes.
-- `tests/test_inventory.json` — per-item `nodeid`, buckets, heuristics.
+- `artifacts/test_inventory_full.json` — per-item `nodeid`, buckets, heuristics (via `py -3 tools/test_audit.py --full`).
 - `pytest.ini` — markers: `unit`, `integration`, `regression`, `transcript`, `slow`, `brittle`.

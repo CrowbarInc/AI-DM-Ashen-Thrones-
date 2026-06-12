@@ -23,7 +23,7 @@ python -m pytest tests/test_golden_replay.py -q
 
 `tests/test_golden_replay.py` currently contains protected and supporting tests in one pytest module. This manifest classifies their acceptance ownership; it does not alter today's test execution behavior.
 
-Inventory-only regeneration is a maintenance workflow, not logic ownership. Run `python tools/test_audit.py` only when refreshing `tests/test_inventory.json` and keep that generated JSON output separate from behavior, replay, or protected-observation changes. Protected observation field paths are **generated only** from `PROTECTED_OBSERVATION_FIELDS` in `tests/helpers/golden_replay_projection.py`; refresh with `python tools/refresh_protected_replay_manifest.py --write` and verify with `--check` (also enforced in CI).
+Inventory-only regeneration is a maintenance workflow, not logic ownership. Run `python tools/test_audit.py` only when refreshing `tests/test_inventory_governance.json` and keep that generated JSON output separate from behavior, replay, or protected-observation changes. Protected observation field paths are **generated only** from `PROTECTED_OBSERVATION_FIELDS` in `tests/helpers/golden_replay_projection.py`; refresh with `python tools/refresh_protected_replay_manifest.py --write` and verify with `--check` (also enforced in CI).
 
 ## Metadata Ownership
 

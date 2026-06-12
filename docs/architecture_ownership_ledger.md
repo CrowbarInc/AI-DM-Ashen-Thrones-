@@ -200,7 +200,7 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - Current state: `governance map; refresh inventory with tools/test_audit.py`
 - **Concern name:** `test inventory / governance docs`
 - **Runtime owner:** (prose contract) `tests/TEST_AUDIT.md` — canonical **map** of where pytest coverage should land by theme.
-- **Practical primary direct-owner suite:** governance tables and notes in `tests/TEST_AUDIT.md`; regenerate numbers via `tools/test_audit.py` → `tests/test_inventory.json`.
+- **Practical primary direct-owner suite:** governance tables and notes in `tests/TEST_AUDIT.md`; regenerate committed governance via `tools/test_audit.py` → `tests/test_inventory_governance.json` (full diagnostic: `--full` → `artifacts/test_inventory_full.json`).
 - **Secondary downstream suites:** `tests/README_TESTS.md` (how to run), `tests/TEST_CONSOLIDATION_PLAN.md` (campaign / execution history), `tools/test_audit.py` (inventory generator only).
 - **Compatibility / support residue:** dated markdown snapshots coexisting with JSON inventory until refreshed; heuristic tags may over-count files touching a theme—interpret as spread diagnostics, not proof of duplicate tests.
 - **Forbidden owner interpretations:** README is not the canonical governance map; `test_audit.py` is not the prose authority for suite semantics; consolidation plan is not the day-to-day ledger.

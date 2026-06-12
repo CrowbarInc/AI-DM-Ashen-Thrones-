@@ -52,10 +52,6 @@ OUT_JSON = GOVERNANCE_JSON
 
 GOVERNANCE_FILE_FIELDS: tuple[str, ...] = (
     "path",
-    "marker_set",
-    "collected_duplicate_base_names",
-    "likely_architecture_layer",
-    "pytest_collected",
 )
 
 # Running as ``python tools/test_audit.py`` puts ``tools/`` on ``sys.path[0]``; repo root must precede it
@@ -65,7 +61,7 @@ if _ROOT_STR not in sys.path:
     sys.path.insert(0, _ROOT_STR)
 
 # Bump when adding/removing inventory fields or changing semantics (governance / CI may assert).
-INVENTORY_SCHEMA_VERSION = 2
+INVENTORY_SCHEMA_VERSION = 3
 
 GOVERNANCE_SUMMARY_FIELDS: tuple[str, ...] = (
     "inventory_schema_version",
@@ -759,6 +755,116 @@ def _validate_governance_summary_shape(governance: dict) -> list[str]:
     return errors
 
 
+def _validate_governance_file_row_shape(governance: dict) -> list[str]:
+    """Ensure committed governance file rows retain stable fields only (BF4–BF6: no derived heuristics)."""
+    errors: list[str] = []
+    allowed = set(GOVERNANCE_FILE_FIELDS)
+    files = governance.get("files")
+    if not isinstance(files, list):
+        return ["governance files must be a list"]
+    for row in files:
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        extra = sorted(set(row) - allowed)
+        if extra:
+            errors.append(f"governance files[] row {fp!r} includes derivable fields: {extra[:8]!r}")
+        missing = sorted(allowed - set(row))
+        if missing:
+            errors.append(f"governance files[] row {fp!r} missing stable fields: {missing!r}")
+    return errors
+
+
+def _validate_derived_registry_file_collected_counts(full_payload: dict, governance: dict) -> list[str]:
+    """Ensure registry-owned governance paths have live per-file collect counts in full audit."""
+    errors: list[str] = []
+    full_by_path: dict[str, dict] = {}
+    for row in full_payload.get("files", ()):
+        if isinstance(row, dict) and "path" in row:
+            full_by_path[str(row["path"]).replace("\\", "/")] = row
+    for row in governance.get("files", ()):
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        frow = full_by_path.get(fp)
+        if frow is None:
+            errors.append(f"registry governance path missing from full inventory files[]: {fp!r}")
+            continue
+        collected = frow.get("pytest_collected")
+        nodeids = frow.get("collected_nodeids")
+        if not isinstance(collected, int):
+            errors.append(f"{fp}: full inventory missing pytest_collected")
+            continue
+        if isinstance(nodeids, list) and collected != len(nodeids):
+            errors.append(
+                f"{fp}: pytest_collected={collected!r} != len(collected_nodeids)={len(nodeids)}",
+            )
+    return errors
+
+
+def _validate_derived_registry_file_duplicate_base_names(full_payload: dict, governance: dict) -> list[str]:
+    """Ensure registry-owned governance paths have in-file duplicate-base-name data in full audit."""
+    errors: list[str] = []
+    full_by_path: dict[str, dict] = {}
+    for row in full_payload.get("files", ()):
+        if isinstance(row, dict) and "path" in row:
+            full_by_path[str(row["path"]).replace("\\", "/")] = row
+    for row in governance.get("files", ()):
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        frow = full_by_path.get(fp)
+        if frow is None:
+            errors.append(f"registry governance path missing from full inventory files[]: {fp!r}")
+            continue
+        dup_bases = frow.get("collected_duplicate_base_names")
+        if not isinstance(dup_bases, list):
+            errors.append(f"{fp}: full inventory missing collected_duplicate_base_names list")
+    return errors
+
+
+def _validate_derived_registry_file_marker_sets(full_payload: dict, governance: dict) -> list[str]:
+    """Ensure registry-owned governance paths have derived marker_set data in full audit."""
+    errors: list[str] = []
+    full_by_path: dict[str, dict] = {}
+    for row in full_payload.get("files", ()):
+        if isinstance(row, dict) and "path" in row:
+            full_by_path[str(row["path"]).replace("\\", "/")] = row
+    for row in governance.get("files", ()):
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        frow = full_by_path.get(fp)
+        if frow is None:
+            errors.append(f"registry governance path missing from full inventory files[]: {fp!r}")
+            continue
+        marker_set = frow.get("marker_set")
+        if not isinstance(marker_set, list):
+            errors.append(f"{fp}: full inventory missing marker_set list")
+    return errors
+
+
+def _validate_derived_registry_file_architecture_layers(full_payload: dict, governance: dict) -> list[str]:
+    """Ensure registry-owned governance paths have derived architecture-layer heuristics in full audit."""
+    errors: list[str] = []
+    full_by_path: dict[str, dict] = {}
+    for row in full_payload.get("files", ()):
+        if isinstance(row, dict) and "path" in row:
+            full_by_path[str(row["path"]).replace("\\", "/")] = row
+    for row in governance.get("files", ()):
+        if not isinstance(row, dict) or "path" not in row:
+            continue
+        fp = str(row["path"]).replace("\\", "/")
+        frow = full_by_path.get(fp)
+        if frow is None:
+            errors.append(f"registry governance path missing from full inventory files[]: {fp!r}")
+            continue
+        layer = frow.get("likely_architecture_layer")
+        if not isinstance(layer, str) or not layer.strip():
+            errors.append(f"{fp}: full inventory missing likely_architecture_layer")
+    return errors
+
+
 def _validate_derived_full_suite_counts(full_payload: dict) -> list[str]:
     """Ensure full diagnostic summary counts match live collect output."""
     errors: list[str] = []
@@ -997,7 +1103,7 @@ def build_governance_payload(full_payload: dict) -> dict:
         fp = str(row["path"]).replace("\\", "/")
         if fp not in committed_paths:
             continue
-        slim_files.append({key: row.get(key) if key != "marker_set" else list(row.get(key) or []) for key in GOVERNANCE_FILE_FIELDS})
+        slim_files.append({key: row[key] for key in GOVERNANCE_FILE_FIELDS})
     slim_files.sort(key=lambda r: str(r.get("path", "")))
 
     governance: dict[str, object] = {
@@ -1057,11 +1163,73 @@ def run_inventory_check(*, artifact_path: Path | None = None) -> int:
             print(f"  {err}", file=sys.stderr)
         return 1
 
+    committed_row_errors = _validate_governance_file_row_shape(committed)
+    if committed_row_errors:
+        print(f"Committed governance file-row shape failed for {path.as_posix()}:", file=sys.stderr)
+        for err in committed_row_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
+    fresh_row_errors = _validate_governance_file_row_shape(fresh)
+    if fresh_row_errors:
+        print(f"Fresh governance file-row shape failed for {path.as_posix()}:", file=sys.stderr)
+        for err in fresh_row_errors:
+            print(f"  {err}", file=sys.stderr)
+        return 1
+
     count_errors = _validate_derived_full_suite_counts(full_payload)
     if count_errors:
         print(f"Derived full-suite counts failed for {path.as_posix()}:", file=sys.stderr)
         for err in count_errors:
             print(f"  {err}", file=sys.stderr)
+        return 1
+
+    registry_count_errors = _validate_derived_registry_file_collected_counts(full_payload, fresh)
+    if registry_count_errors:
+        print(f"Derived registry file collect counts failed for {path.as_posix()}:", file=sys.stderr)
+        for err in registry_count_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(registry_count_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(
+                f"  ... and {len(registry_count_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more collect-count errors",
+                file=sys.stderr,
+            )
+        return 1
+
+    registry_dup_errors = _validate_derived_registry_file_duplicate_base_names(full_payload, fresh)
+    if registry_dup_errors:
+        print(f"Derived registry file duplicate-base-name data failed for {path.as_posix()}:", file=sys.stderr)
+        for err in registry_dup_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(registry_dup_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(
+                f"  ... and {len(registry_dup_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more duplicate-base-name errors",
+                file=sys.stderr,
+            )
+        return 1
+
+    registry_marker_errors = _validate_derived_registry_file_marker_sets(full_payload, fresh)
+    if registry_marker_errors:
+        print(f"Derived registry file marker sets failed for {path.as_posix()}:", file=sys.stderr)
+        for err in registry_marker_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(registry_marker_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(
+                f"  ... and {len(registry_marker_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more marker-set errors",
+                file=sys.stderr,
+            )
+        return 1
+
+    registry_layer_errors = _validate_derived_registry_file_architecture_layers(full_payload, fresh)
+    if registry_layer_errors:
+        print(f"Derived registry file architecture layers failed for {path.as_posix()}:", file=sys.stderr)
+        for err in registry_layer_errors[:_CHECK_DRIFT_SAMPLE_LIMIT]:
+            print(f"  {err}", file=sys.stderr)
+        if len(registry_layer_errors) > _CHECK_DRIFT_SAMPLE_LIMIT:
+            print(
+                f"  ... and {len(registry_layer_errors) - _CHECK_DRIFT_SAMPLE_LIMIT} more architecture-layer errors",
+                file=sys.stderr,
+            )
         return 1
 
     duplicate_errors = _validate_derived_cross_file_duplicate_governance(full_payload)
