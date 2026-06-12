@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import (
+    read_final_emission_meta_dict,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
+)
 from game.realization_provenance import GATE_TERMINAL_REPAIR, REALIZATION_FALLBACK_FAMILY_FIELD
 
 from copy import deepcopy
@@ -8,25 +11,33 @@ from copy import deepcopy
 import pytest
 
 import game.api_turn_support as api_turn_support
+import game.final_emission_gate as feg
 from game.defaults import default_scene, default_session, default_world
+from game.final_emission_gate import apply_final_emission_gate
+from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.final_emission_gate import (
     _decompress_overpacked_sentences,
     _repair_fragmentary_participial_splits,
 )
-from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import (
     validate_player_facing_first_mentions,
     validate_player_facing_referential_clarity,
 )
 from game.storage import get_scene_runtime
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.opening_fallback_evidence import (
+    assert_final_emission_meta_contains,
+    assert_sealed_fallback_owner_bucket,
+)
 
 
 pytestmark = pytest.mark.unit
 
 # Ownership note:
 # This file owns semantic visibility, first-mention, and referential-clarity
-# legality expectations with game/narration_visibility.py. Final-gate tests
-# should cover ordering, routing, projection, and integration seams only.
+# legality expectations with game/narration_visibility.py, plus last-mile stripping
+# of appended global-visibility stock contamination via final-emission helpers.
+# Final-gate tests should cover ordering, routing, projection, and integration seams only.
 
 GLOBAL_VISIBILITY_FALLBACK = "For a breath, the scene holds while voices shift around you."
 VISIBLE_FACT = "A brazier throws orange sparks over the checkpoint."
@@ -965,3 +976,110 @@ def test_finalization_pipeline_metadata_for_micro_smoothing():
     assert read_final_emission_meta_dict(plain_out)["sentence_decompression_applied"] is False
     assert read_final_emission_meta_dict(plain_out)["sentence_fragment_repair_applied"] is False
     assert read_final_emission_meta_dict(plain_out)["sentence_micro_smoothing_applied"] is False
+
+
+# --- Appended global-visibility stock stripping (last-mile finalization ownership) ---
+
+
+def test_strip_appended_global_visibility_stock_multi_sentence_trailing():
+    raw = (
+        "The clerk taps the ledger. "
+        "For a breath, the scene holds while voices shift around you."
+    )
+    stripped = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    assert stripped == "The clerk taps the ledger."
+
+
+def test_strip_appended_global_visibility_stock_alt_sentence_variant():
+    raw = "Fog hugs the river tents. For a breath, the scene stays still."
+    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == "Fog hugs the river tents."
+
+
+def test_strip_placeholder_stock_single_sentence_output_unchanged():
+    solo = "For a breath, the scene stays still."
+    assert feg._strip_appended_route_illegal_contamination_sentences(solo) == solo
+
+
+def test_strip_preserves_dialogue_sentence_containing_for_a_breath_stock_phrase():
+    text = 'The runner shrugs. "For a breath, the scene stays still," she adds with a smirk.'
+    assert feg._strip_appended_route_illegal_contamination_sentences(text) == text
+
+
+def test_strip_preserves_interruption_setup_strips_only_trailing_stock_sentence():
+    intr = (
+        "The clerk starts to answer, but a shout from the square cuts across the room. "
+        "For a breath, the scene holds while voices shift around you."
+    )
+    out = feg._strip_appended_route_illegal_contamination_sentences(intr)
+    assert "shout from the square" in out.lower()
+    assert "voices shift around you" not in out.lower()
+
+
+def test_strip_preserves_paragraph_break_when_stripping_within_second_block():
+    raw = "First block line.\n\nSecond block body. For a breath, the scene stays still."
+    got = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    assert "\n\n" in got
+    assert "First block line." in got
+    assert "Second block body." in got
+    assert "scene stays still" not in got.lower()
+
+
+def test_strip_does_not_remove_unrelated_multi_sentence_atmosphere():
+    raw = (
+        "Mist threads between the tents. "
+        "Somewhere a dog barks once, and the sound thins in damp air."
+    )
+    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == raw
+
+
+def test_finalize_emission_output_post_containment_reseals_appended_stock(monkeypatch):
+    """Block I containment can revert to selector text after exit fingerprinting; stock strip must still win."""
+    selector = (
+        "Rain drums steady on the slate roof above. "
+        "For a breath, the scene stays still."
+    )
+    out = {
+        "player_facing_text": selector,
+        "_final_emission_meta": {"final_route": "accept_candidate"},
+        "tags": [],
+        "metadata": {},
+    }
+
+    def _simulate_containment_revert(o: dict, **kwargs):
+        o["player_facing_text"] = selector
+        return False
+
+    monkeypatch.setattr(feg, "_finalize_upstream_fallback_overwrite_containment", _simulate_containment_revert)
+    pre = feg._normalize_text(selector)
+    finalized = feg._finalize_emission_output(out, pre_gate_text=pre, fast_path=True)
+    pft = (finalized.get("player_facing_text") or "").lower()
+    assert "rain drums" in pft
+    assert "scene stays still" not in pft
+    fem = read_final_emission_meta_dict(finalized) or {}
+    lineage = fem.get("final_emission_mutation_lineage")
+    assert "finalize_route_illegal_strip" in lineage
+    assert "finalize_packaging" in lineage
+    assert "post_gate_mutation_detected" in lineage
+
+
+def test_visibility_safe_fallback_final_emitted_source_snapshot() -> None:
+    """Visibility replace uses sealed tuples for text; FEM source pins global_scene_fallback today."""
+    session, world, scene, sid = _base_visibility_bundle()
+    out = apply_final_emission_gate(
+        {"player_facing_text": "Lord Aldric watches the checkpoint from the square.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session=session,
+        scene_id=sid,
+        world=world,
+        scene=scene,
+    )
+    tl = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    assert "visibility_enforcement_replaced" in tl
+    fem = final_emission_meta_from_output(out)
+    assert_final_emission_meta_contains(
+        fem,
+        final_route="replaced",
+        final_emitted_source="global_scene_fallback",
+    )
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) == GATE_TERMINAL_REPAIR
+    assert_sealed_fallback_owner_bucket(fem, SEALED_FALLBACK_OWNER_SEALED_GATE)

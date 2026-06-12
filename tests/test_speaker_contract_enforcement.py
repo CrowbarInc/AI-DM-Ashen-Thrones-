@@ -1,11 +1,21 @@
-"""Regression tests for Block 2 speaker_selection_contract enforcement (shipped API)."""
+"""Regression tests for Block 2 speaker_selection_contract enforcement (shipped API).
+
+Gate-integration speaker semantics extracted from ``tests/test_final_emission_gate.py`` (BH-4). Gate skip-path and layer-order pins remain in the gate suite."""
 from __future__ import annotations
 
 from copy import deepcopy
 
 import pytest
 
+import game.final_emission_gate as feg
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
+from game.final_emission_gate import apply_final_emission_gate
+from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.strict_social_harness import (
+    run_strict_social_motive_overclaim_gate_case,
+    runner_strict_bundle,
+)
 from game.final_emission_gate import enforce_emitted_speaker_with_contract
 from game.speaker_contract_enforcement import (
     SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES,
@@ -350,3 +360,475 @@ def test_reason_codes_tuple_is_stable_export():
     assert "continuity_locked_speaker_repair" in SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES
     assert "canonical_speaker_rewrite" in SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES
     assert "narrator_neutral_no_allowed_speaker" in SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES
+
+# ---------------------------------------------------------------------------
+# BH-4: extracted from tests/test_final_emission_gate.py
+# ---------------------------------------------------------------------------
+
+def test_block_b_speaker_local_rebind_is_metadata_visible_and_sync_traceable():
+    session, world, sid, resolution = runner_strict_bundle()
+    eff_resolution = deepcopy(resolution)
+    eff_resolution["social"]["npc_id"] = "runner"
+    eff_resolution["social"]["npc_name"] = "Tavern Runner"
+    gm = {"metadata": {}}
+
+    contract = {
+        "primary_speaker_id": "runner",
+        "primary_speaker_name": "Tavern Runner",
+        "allowed_speaker_ids": ["runner"],
+        "continuity_locked": True,
+        "speaker_switch_allowed": False,
+        "generic_fallback_forbidden": False,
+        "offscene_speakers_forbidden": True,
+        "debug": {"contract_missing": False},
+    }
+
+    def fake_contract(*args, **kwargs):
+        return dict(contract)
+
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(feg, "get_speaker_selection_contract", fake_contract)
+        repaired, payload = feg.enforce_emitted_speaker_with_contract(
+            'Ragged stranger says, "East lanes."',
+            gm_output=gm,
+            resolution=resolution,
+            eff_resolution=eff_resolution,
+            world=world,
+            scene_id=sid,
+        )
+
+    assert repaired == 'Tavern Runner says, "East lanes."'
+    assert payload["final_reason_code"] == "continuity_locked_speaker_repair"
+    assert payload["repair"]["local_rebind_applied"] is True
+
+    feg._sync_eff_social_to_resolution(eff_resolution, resolution)
+    assert resolution["social"]["npc_id"] == "runner"
+    assert resolution["social"]["npc_name"] == "Tavern Runner"
+
+    em = (gm.get("metadata") or {}).get("emission_debug") or {}
+    assert em["speaker_contract_enforcement"] is payload
+    assert em["speaker_contract_enforcement"]["repair"]["local_rebind_applied"] is True
+
+
+def test_block_b_strict_social_pronoun_substitution_records_explicit_metadata(monkeypatch):
+    out = {
+        "player_facing_text": 'She says, "East gate is watched."',
+        "tags": [],
+        "_final_emission_meta": {"response_type_required": "dialogue"},
+    }
+    eff_resolution = {
+        "kind": "question",
+        "social": {"npc_id": "runner", "npc_name": "Tavern Runner"},
+    }
+
+    calls = {"ref": 0}
+
+    def fake_ref(text, **kwargs):
+        calls["ref"] += 1
+        if calls["ref"] == 1:
+            return {
+                "ok": False,
+                "violations": [
+                    {
+                        "kind": "ambiguous_entity_reference",
+                        "token": "She",
+                        "candidate_entity_ids": ["runner"],
+                        "sentence_text": text,
+                    }
+                ],
+                "checked_entities": ["runner"],
+            }
+        return {"ok": True, "violations": [], "checked_entities": ["runner"]}
+
+    monkeypatch.setattr(feg, "validate_player_facing_referential_clarity", fake_ref)
+    monkeypatch.setattr(feg, "validate_player_facing_first_mentions", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "validate_player_facing_visibility", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "_active_interlocutor_visible_person_like", lambda *a, **k: True)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=eff_resolution,
+        active_interlocutor="runner",
+        strict_social_active=True,
+        strict_social_suppressed_non_social_turn=False,
+    )
+
+    meta = result["_final_emission_meta"]
+    assert result["player_facing_text"].startswith("The Tavern Runner says")
+    assert meta["referential_clarity_local_substitution_attempted"] is True
+    assert meta["referential_clarity_local_substitution_applied"] is True
+    assert meta["referential_clarity_local_substitution_token"] == "She"
+    assert meta["referential_clarity_local_substitution_replacement"] == "The Tavern Runner"
+    assert "referential_clarity_local_substitution" in result["tags"]
+
+
+# === BLOCK E — Strict-social referential substitution (gate routing/fencing only) ===
+# Semantic legality: game/narration_visibility.py and tests/test_final_emission_visibility.py.
+
+_BLOCK_E_REFCLARITY_FAIL_VIOLATION = {
+    "kind": "ambiguous_entity_reference",
+    "token": "She",
+    "candidate_entity_ids": ["runner"],
+    "sentence_text": 'She says, "East gate is watched."',
+}
+
+
+def _block_e_failing_referential_validation(text: str, **_kwargs):
+    return {
+        "ok": False,
+        "violations": [dict(_BLOCK_E_REFCLARITY_FAIL_VIOLATION, sentence_text=text)],
+        "checked_entities": ["runner"],
+    }
+
+
+def _block_e_benign_fallback_selection(*_args, **_kwargs) -> visibility_fallback.VisibilitySelectedFallback:
+    return visibility_fallback.VisibilitySelectedFallback(
+        text="Block E sealed fallback line.",
+        fallback_pool="block_e_test_pool",
+        fallback_kind="block_e_test_kind",
+        final_emitted_source="block_e_test_source",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="block_e_test_candidate_source",
+        composition_meta=feg._first_mention_composition_meta(),
+    )
+
+
+def _block_e_seed_strict_social_dialogue_out() -> dict:
+    return {
+        "player_facing_text": 'She says, "East gate is watched."',
+        "tags": [],
+        "_final_emission_meta": {"response_type_required": "dialogue"},
+    }
+
+
+def _block_e_eff_resolution() -> dict:
+    return {
+        "kind": "question",
+        "social": {"npc_id": "runner", "npc_name": "Tavern Runner"},
+    }
+
+
+def test_block_e_strict_social_referential_substitution_skipped_on_non_strict_path(monkeypatch):
+    """Block E: non-strict callers must not reach the substitution helper, even when validation fails."""
+    out = _block_e_seed_strict_social_dialogue_out()
+    monkeypatch.setattr(
+        feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
+    )
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
+
+    def boom(*_a, **_k):
+        raise AssertionError(
+            "_try_strict_social_local_pronoun_substitution_repair must not run on non-strict-social paths"
+        )
+
+    monkeypatch.setattr(feg, "_try_strict_social_local_pronoun_substitution_repair", boom)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=_block_e_eff_resolution(),
+        active_interlocutor="runner",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    meta = result["_final_emission_meta"]
+    assert meta["referential_clarity_local_substitution_attempted"] is False
+    assert meta["referential_clarity_local_substitution_applied"] is False
+    assert meta["referential_clarity_local_substitution_token"] is None
+    assert meta["referential_clarity_local_substitution_replacement"] is None
+    assert meta["referential_clarity_fallback_avoided"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert "referential_clarity_local_substitution" not in (result.get("tags") or [])
+    assert "referential_clarity_enforcement_replaced" in (result.get("tags") or [])
+
+
+def test_block_e_strict_social_referential_substitution_skipped_on_non_dialogue_response_type(monkeypatch):
+    """Block E: even strict-social, a non-dialogue response_type_required must not reach the helper."""
+    out = _block_e_seed_strict_social_dialogue_out()
+    out["_final_emission_meta"]["response_type_required"] = "action_outcome"
+    monkeypatch.setattr(
+        feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
+    )
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
+
+    def boom(*_a, **_k):
+        raise AssertionError(
+            "_try_strict_social_local_pronoun_substitution_repair must not run when response_type != dialogue"
+        )
+
+    monkeypatch.setattr(feg, "_try_strict_social_local_pronoun_substitution_repair", boom)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=_block_e_eff_resolution(),
+        active_interlocutor="runner",
+        strict_social_active=True,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    meta = result["_final_emission_meta"]
+    assert meta["referential_clarity_local_substitution_attempted"] is False
+    assert meta["referential_clarity_local_substitution_applied"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+
+
+def test_block_e_strict_social_referential_substitution_skipped_when_suppressed_non_social_turn(monkeypatch):
+    """Block E: strict-social-suppressed-non-social-turn blocks substitution; sealed fallback runs instead."""
+    out = _block_e_seed_strict_social_dialogue_out()
+    monkeypatch.setattr(
+        feg, "validate_player_facing_referential_clarity", _block_e_failing_referential_validation
+    )
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
+
+    def boom(*_a, **_k):
+        raise AssertionError(
+            "_try_strict_social_local_pronoun_substitution_repair must not run when "
+            "strict_social_suppressed_non_social_turn=True"
+        )
+
+    monkeypatch.setattr(feg, "_try_strict_social_local_pronoun_substitution_repair", boom)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=_block_e_eff_resolution(),
+        active_interlocutor="runner",
+        strict_social_active=True,
+        strict_social_suppressed_non_social_turn=True,
+    )
+    meta = result["_final_emission_meta"]
+    assert meta["referential_clarity_local_substitution_attempted"] is False
+    assert meta["referential_clarity_local_substitution_applied"] is False
+    assert meta["referential_clarity_replacement_applied"] is True
+
+
+def test_block_e_strict_social_referential_substitution_post_validation_rejection_records_failure_reason(monkeypatch):
+    """Block E: helper attempts substitution but post-validation fails; metadata records attempted-but-not-applied."""
+    out = _block_e_seed_strict_social_dialogue_out()
+
+    calls = {"ref": 0}
+
+    def fake_ref(text, **_kwargs):
+        calls["ref"] += 1
+        return {
+            "ok": False,
+            "violations": [dict(_BLOCK_E_REFCLARITY_FAIL_VIOLATION, sentence_text=text)],
+            "checked_entities": ["runner"],
+        }
+
+    monkeypatch.setattr(feg, "validate_player_facing_referential_clarity", fake_ref)
+    monkeypatch.setattr(feg, "validate_player_facing_first_mentions", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "validate_player_facing_visibility", lambda *a, **k: {"ok": True})
+    monkeypatch.setattr(feg, "_active_interlocutor_visible_person_like", lambda *a, **k: True)
+    monkeypatch.setattr(feg, "_standard_visibility_safe_fallback", _block_e_benign_fallback_selection)
+
+    result = feg._apply_referential_clarity_enforcement(
+        out,
+        session={},
+        scene={},
+        world={},
+        scene_id="scene_investigate",
+        eff_resolution=_block_e_eff_resolution(),
+        active_interlocutor="runner",
+        strict_social_active=True,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    meta = result["_final_emission_meta"]
+    assert meta["referential_clarity_local_substitution_attempted"] is True
+    assert meta["referential_clarity_local_substitution_applied"] is False
+    assert meta["referential_clarity_fallback_after_failed_local_repair"] is True
+    assert meta["referential_clarity_replacement_applied"] is True
+    assert calls["ref"] >= 2
+
+
+def test_block_f_canonical_rewrite_and_narrator_neutral_repair_metadata_visible(monkeypatch):
+    """Block F: canonical rewrite and narrator-neutral branches record repair flags on enforcement payload."""
+    from copy import deepcopy
+
+    from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS
+
+    def _contract_canonical(**overrides):
+        c = {
+            "primary_speaker_id": "runner",
+            "primary_speaker_name": "Tavern Runner",
+            "allowed_speaker_ids": ["runner"],
+            "continuity_locked": True,
+            "speaker_switch_allowed": True,
+            "interruption_allowed": True,
+            "interruption_requires_scene_event": False,
+            "generic_fallback_forbidden": True,
+            "forbidden_fallback_labels": list(SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS),
+            "offscene_speakers_forbidden": True,
+            "debug": {"contract_missing": False},
+        }
+        c.update(overrides)
+        return c
+
+    session, world, sid, resolution = runner_strict_bundle()
+
+    c_cr = _contract_canonical()
+    eff_cr = {
+        "kind": "question",
+        "social": {"npc_id": "runner", "npc_name": "Tavern Runner", "social_intent_class": "social_exchange"},
+        "metadata": {"emission_debug": {"speaker_selection_contract": c_cr}},
+    }
+    gm_cr = {"metadata": deepcopy(eff_cr["metadata"]), "trace": {}}
+    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c_cr))
+    out_cr, payload_cr = feg.enforce_emitted_speaker_with_contract(
+        "Merchant mutters under his breath without giving a straight answer.",
+        gm_output=gm_cr,
+        resolution=eff_cr,
+        eff_resolution=eff_cr,
+        world={},
+        scene_id=sid,
+    )
+    assert "Merchant" not in out_cr
+    assert payload_cr["final_reason_code"] == "canonical_speaker_rewrite"
+    assert (payload_cr.get("repair") or {}).get("canonical_rewrite_applied") is True
+
+    c_nn = _contract_canonical(
+        allowed_speaker_ids=[],
+        primary_speaker_id=None,
+        primary_speaker_name=None,
+        generic_fallback_forbidden=True,
+    )
+    eff_nn = {
+        "kind": "question",
+        "social": {"npc_id": "runner", "npc_name": "Tavern Runner", "social_intent_class": "social_exchange"},
+        "metadata": {"emission_debug": {"speaker_selection_contract": c_nn}},
+    }
+    gm_nn = {"metadata": deepcopy(eff_nn["metadata"]), "trace": {}}
+    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(c_nn))
+    out_nn, payload_nn = feg.enforce_emitted_speaker_with_contract(
+        'Someone says, "Hello."',
+        gm_output=gm_nn,
+        resolution=eff_nn,
+        eff_resolution=eff_nn,
+        world={},
+        scene_id=sid,
+    )
+    assert eff_nn["social"].get("reply_speaker_grounding_neutral_bridge") is True
+    assert (payload_nn.get("repair") or {}).get("narrator_neutral_applied") is True
+    assert payload_nn["final_reason_code"] == "narrator_neutral_no_allowed_speaker"
+    assert len(out_nn or "") > 0
+
+
+def test_strict_social_gate_repairs_motive_overclaim_and_keeps_speaker(monkeypatch):
+    """Strict-social: NA is validate-only; motive overclaim remains visible in meta, not silently rewritten."""
+    run_strict_social_motive_overclaim_gate_case(monkeypatch)
+
+
+def _monoblob_dialogue_quote() -> str:
+    core = " ".join(f"w{i}" for i in range(110))
+    return f'Tavern Runner says "{core}."'
+
+
+def _secondary_social_response_structure_contract(
+    required_response_type: str,
+    **overrides,
+):
+    # Downstream gate tests consume the shipped shape without re-importing the prompt owner helper.
+    contract = {
+        "enabled": required_response_type == "dialogue",
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": required_response_type == "dialogue",
+        "discourage_expository_monologue": required_response_type == "dialogue",
+        "require_natural_cadence": required_response_type == "dialogue",
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2 if required_response_type == "dialogue" else None,
+        "max_dialogue_paragraphs_before_break": 2 if required_response_type == "dialogue" else None,
+        "prefer_single_speaker_turn": required_response_type == "dialogue",
+        "forbid_bulleted_or_list_like_dialogue": required_response_type == "dialogue",
+        "required_response_type": required_response_type,
+        "debug_reason": (
+            "response_type_contract_requires_dialogue"
+            if required_response_type == "dialogue"
+            else f"response_type_not_dialogue:{required_response_type}"
+        ),
+        "debug_inputs": {},
+    }
+    contract.update(overrides)
+    return contract
+
+
+def _dialogue_response_policy_with_social_structure(**srs_overrides):
+    rtc = response_type_contract("dialogue")
+    srs = _secondary_social_response_structure_contract("dialogue")
+    srs.update(srs_overrides)
+    return {"response_type_contract": rtc, "social_response_structure": srs}
+
+
+def test_bare_speech_attribution_shell_line_heuristic() -> None:
+    assert feg._is_bare_speech_attribution_shell_line("Tavern Runner says") is True
+    assert feg._is_bare_speech_attribution_shell_line("  Runner replies  ") is True
+    assert feg._is_bare_speech_attribution_shell_line("") is True
+    assert feg._is_bare_speech_attribution_shell_line('Runner mutters, "East."') is False
+    assert feg._is_bare_speech_attribution_shell_line("Rain falls hard on the square.") is False
+
+
+def test_subtractive_dialogue_strip_on_long_monoblob_yields_shell_not_playable_narration() -> None:
+    stripped = feg._strip_dialogue_from_text(_monoblob_dialogue_quote())
+    assert '"' not in stripped
+    assert feg._is_bare_speech_attribution_shell_line(stripped)
+
+
+def test_strict_social_long_quoted_line_retains_speaker_and_dialogue_payload(monkeypatch) -> None:
+    """Invalid dialogue plan must not truncate strict-social output to a bare '… says' tail."""
+    session, world, sid, resolution = runner_strict_bundle()
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+    bad = _monoblob_dialogue_quote()
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        return bad, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {"player_facing_text": bad, "tags": [], "response_policy": pol},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    txt = str(out.get("player_facing_text") or "")
+    low = txt.lower()
+    assert "tavern runner" in low
+    assert '"' in txt
+    assert "w0" in low and "w109" in low
+    banned = (
+        "that is all i can give you",
+        "from here, no",
+        "no certain answer",
+        "truth is still buried",
+        "nothing in the scene",
+        "scene holds",
+        "hard to say",
+        "i can only point you",
+        "best lead",
+    )
+    for phrase in banned:
+        assert phrase not in low, phrase

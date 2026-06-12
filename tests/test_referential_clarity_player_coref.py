@@ -1,6 +1,13 @@
 from __future__ import annotations
 
+import game.final_emission_gate as feg
+from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_text import _normalize_text
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.objective7_referent_fixtures import (
+    minimal_full_referent_artifact,
+    referent_compact_mirror,
+)
 
 import pytest
 
@@ -128,3 +135,38 @@ def test_integration_exploration_alley_doorways_not_replaced():
     meta = final_emission_meta_from_output(out)
     assert meta.get("referential_clarity_validation_passed") is True
     assert meta.get("referential_clarity_replacement_applied") is False
+
+
+def test_referent_clarity_pre_finalize_merges_fem_and_tracks_input_source():
+    art = minimal_full_referent_artifact(referential_ambiguity_class="none", ambiguity_risk=5)
+    out = {
+        "player_facing_text": "They halt.",
+        "prompt_context": {"referent_tracking": art},
+        "_gate_turn_packet_cache": {
+            "referent_tracking_compact": referent_compact_mirror(
+                referential_ambiguity_class="ambiguous_singular",
+                ambiguity_risk=40,
+            )
+        },
+        "_final_emission_meta": {"final_route": "accept_candidate", "tone_escalation": {"lane": "stub"}},
+    }
+    feg._apply_referent_clarity_pre_finalize(out, pre_gate_text="They halt.")
+    fem = read_final_emission_meta_dict(out)
+    assert fem["referent_validation_input_source"] == "full_artifact"
+    assert fem["referent_validation_ran"] is True
+    assert fem["referent_repair_applied"] is False
+    assert fem.get("referent_boundary_semantic_repair_disabled") is True
+    assert out["player_facing_text"] == "They halt."
+    assert fem.get("tone_escalation") == {"lane": "stub"}
+    gtxt = _normalize_text(out["player_facing_text"])
+    preview = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
+    assert fem.get("final_text_preview") == preview
+    assert fem.get("post_gate_mutation_detected") is False
+
+
+def test_referent_clarity_pre_finalize_four_gate_exit_paths_all_use_same_hook():
+    """Documentation-by-test: referent pre-finalize is invoked from each finalize branch."""
+    import inspect
+
+    src = inspect.getsource(feg.apply_final_emission_gate)
+    assert src.count("_apply_referent_clarity_pre_finalize") == 4

@@ -1,21 +1,22 @@
-"""Downstream continuity-repair consumer coverage.
+"""Interaction Continuity repair and gate-step ownership coverage.
 
-This suite validates how continuity-repair effects appear in emitted outputs
-after final-emission gate orchestration.
+This suite owns IC validation attachment, emission-step bridge/repair/enforcement
+semantics, validate-only repair isolation, and strict-social continuity fallback.
 
 It does NOT own:
 
-* gate ordering
-* continuity emission step semantics
-* repair derivation logic
+* gate ordering (response-type vs continuity placement)
+* repair derivation logic in ``game.interaction_continuity``
 
-These are owned by:
-tests/test_final_emission_gate.py
+Gate ordering remains in ``tests/test_final_emission_gate.py``.
 """
 from __future__ import annotations
 
 import pytest
 
+import game.final_emission_gate as feg
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
@@ -45,6 +46,269 @@ def _soft_contract() -> dict:
         "preserve_conversational_thread": True,
         "speaker_selection_contract": None,
     }
+
+
+_IC_BRIDGE_LIVE_MALFORMED = 'South road." Tavern Runner nods once. "Old Millstone.'
+
+
+def _strong_interaction_continuity_contract(*, anchor: str = "npc_melka") -> dict:
+    return _strong_contract(anchor=anchor)
+
+
+def _ssc_locked_tavern_runner() -> dict:
+    return {
+        "continuity_locked": True,
+        "primary_speaker_id": "tavern_runner",
+        "primary_speaker_name": "Tavern Runner",
+        "allowed_speaker_ids": ["tavern_runner"],
+        "speaker_switch_allowed": False,
+    }
+
+
+def _strong_runner_interaction_continuity() -> dict:
+    return {
+        "enabled": True,
+        "continuity_strength": "strong",
+        "anchored_interlocutor_id": "tavern_runner",
+        "preserve_conversational_thread": True,
+        "speaker_selection_contract": _ssc_locked_tavern_runner(),
+    }
+
+
+def _speaker_binding_mismatch_malformed_enforcement() -> dict:
+    return {
+        "validation": {
+            "ok": False,
+            "reason_code": "speaker_binding_mismatch",
+            "canonical_speaker_name": "Tavern Runner",
+            "details": {
+                "signature": {
+                    "speaker_label": 'South road." Tavern Runner',
+                    "speaker_name": 'South road." Tavern Runner',
+                    "is_explicitly_attributed": True,
+                }
+            },
+        },
+        "post_validation": {
+            "ok": False,
+            "reason_code": "speaker_binding_mismatch",
+            "canonical_speaker_name": "Tavern Runner",
+            "details": {
+                "signature": {
+                    "speaker_label": 'South road." Tavern Runner',
+                    "speaker_name": 'South road." Tavern Runner',
+                    "is_explicitly_attributed": True,
+                }
+            },
+        },
+    }
+
+
+def _assert_interaction_continuity_validation_shape(v: dict) -> None:
+    assert set(v.keys()) == {
+        "ok",
+        "enabled",
+        "continuity_strength",
+        "violations",
+        "warnings",
+        "facts",
+        "debug",
+    }
+    assert isinstance(v["violations"], list)
+    assert isinstance(v["warnings"], list)
+    assert isinstance(v["facts"], dict)
+    assert isinstance(v["debug"], dict)
+    for k in (
+        "anchored_interlocutor_id",
+        "anchor_required",
+        "speaker_switch_detected",
+        "explicit_switch_cue_present",
+        "thread_drop_detected",
+        "narrator_bridge_present",
+        "multi_speaker_pattern_present",
+        "dialogue_presence",
+    ):
+        assert k in v["facts"]
+    assert "speaker_labels_detected" in v["debug"]
+    assert "cue_labels" in v["debug"]
+    assert "reason_path" in v["debug"]
+
+
+def _interaction_continuity_gate_payload(text: str, *, ic: dict | None = None) -> tuple[dict, dict]:
+    return (
+        {
+            "player_facing_text": text,
+            "metadata": {"emission_debug": {"speaker_contract_enforcement": _speaker_binding_mismatch_malformed_enforcement()}},
+            "response_policy": {"interaction_continuity": ic or _strong_runner_interaction_continuity()},
+        },
+        {"metadata": {"emission_debug": {}}},
+    )
+
+
+def test_attach_interaction_continuity_validation_populates_debug_and_final_meta():
+    out = {
+        "player_facing_text": "The scene holds.",
+        "_final_emission_meta": {},
+        "metadata": {},
+        "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
+    }
+    resolution = {"metadata": {"emission_debug": {}}}
+
+    feg._attach_interaction_continuity_validation(
+        out,
+        resolution_for_contracts=resolution,
+        eff_resolution=None,
+        session=None,
+    )
+
+    assert out["player_facing_text"] == "The scene holds."
+    icv = out["metadata"]["emission_debug"]["interaction_continuity_validation"]
+    _assert_interaction_continuity_validation_shape(icv)
+    assert read_final_emission_meta_dict(out)["interaction_continuity_validation"] is icv
+    assert resolution["metadata"]["emission_debug"]["interaction_continuity_validation"] is icv
+
+
+def test_apply_interaction_continuity_step_records_bridge_metadata_when_bridge_fires():
+    out, resolution = _interaction_continuity_gate_payload(_IC_BRIDGE_LIVE_MALFORMED)
+
+    feg._apply_interaction_continuity_emission_step(
+        out,
+        text=_IC_BRIDGE_LIVE_MALFORMED,
+        resolution_for_contracts=resolution,
+        eff_resolution=None,
+        session=None,
+        validate_only=False,
+        strict_social_path=False,
+    )
+
+    bridge = (out["metadata"].get("emission_debug") or {}).get("interaction_continuity_speaker_binding_bridge")
+    assert isinstance(bridge, dict)
+    assert bridge.get("applied") is True
+    assert bridge.get("synthetic_violation") == "malformed_speaker_attribution_under_continuity"
+    assert bridge.get("malformed_attribution_detected") is True
+
+
+def test_apply_interaction_continuity_step_repairs_malformed_bridge_case_before_enforcement():
+    out, resolution = _interaction_continuity_gate_payload(_IC_BRIDGE_LIVE_MALFORMED)
+
+    feg._apply_interaction_continuity_emission_step(
+        out,
+        text=_IC_BRIDGE_LIVE_MALFORMED,
+        resolution_for_contracts=resolution,
+        eff_resolution=None,
+        session=None,
+        validate_only=False,
+        strict_social_path=False,
+    )
+
+    em = out["metadata"]["emission_debug"]
+    icv = em.get("interaction_continuity_validation") or {}
+    rep = em.get("interaction_continuity_repair") or {}
+    assert icv.get("ok") is True
+    assert rep.get("applied") is True
+    assert rep.get("repair_type") == "repair_malformed_speaker_attribution"
+    assert "malformed_speaker_attribution_under_continuity" in (rep.get("violations") or [])
+    assert em.get("interaction_continuity_enforced") is not True
+    assert em.get("interaction_continuity_speaker_binding_bridge", {}).get("applied") is True
+
+
+def test_apply_interaction_continuity_step_enforces_when_bridge_failure_is_unrepairable():
+    unrecoverable = 'South road." Stranger waits. "Old Millstone.'
+    out, resolution = _interaction_continuity_gate_payload(unrecoverable)
+
+    feg._apply_interaction_continuity_emission_step(
+        out,
+        text=unrecoverable,
+        resolution_for_contracts=resolution,
+        eff_resolution=None,
+        session=None,
+        validate_only=False,
+        strict_social_path=False,
+    )
+
+    em = out["metadata"]["emission_debug"]
+    assert em.get("interaction_continuity_enforced") is True
+    assert em.get("interaction_continuity_repair", {}).get("applied") is not True
+    assert em.get("interaction_continuity_speaker_binding_bridge", {}).get("applied") is True
+
+
+def test_block_d_validate_only_attach_never_calls_repair_interaction_continuity(monkeypatch):
+    def boom(*_a, **_k):
+        raise AssertionError("repair_interaction_continuity must not run on validate_only attach paths")
+
+    monkeypatch.setattr(feg, "repair_interaction_continuity", boom)
+    out = {
+        "player_facing_text": "The scene holds.",
+        "_final_emission_meta": {},
+        "metadata": {},
+        "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
+    }
+    resolution = {"metadata": {"emission_debug": {}}}
+    feg._attach_interaction_continuity_validation(
+        out,
+        resolution_for_contracts=resolution,
+        eff_resolution=None,
+        session=None,
+    )
+    assert out["player_facing_text"] == "The scene holds."
+
+
+def test_apply_final_emission_gate_validate_only_ic_never_calls_repair_interaction_continuity(monkeypatch):
+    """Orchestration path attaches IC validation with validate_only=True; repair helper stays cold."""
+
+    def boom(*_a, **_k):
+        raise AssertionError("repair_interaction_continuity must not run on live gate validate-only IC paths")
+
+    monkeypatch.setattr(feg, "repair_interaction_continuity", boom)
+    gm = {
+        "player_facing_text": "Short.",
+        "tags": [],
+        "metadata": {},
+        "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
+    }
+    apply_final_emission_gate(
+        gm,
+        resolution={"kind": "observe", "prompt": "Hi."},
+        session=None,
+        scene_id="s1",
+        scene={},
+        world={},
+    )
+
+
+def test_block_d_strict_social_continuity_hard_fallback_applies_sealed_line(monkeypatch):
+    """When repair cannot fix strong continuity failure under strict-social, sealed fallback is applied."""
+    ic = _strong_runner_interaction_continuity()
+    out = {
+        "player_facing_text": "You can't go there.",
+        "metadata": {},
+        "response_policy": {"interaction_continuity": ic},
+    }
+    resolution = {
+        "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
+        "metadata": {"emission_debug": {}},
+    }
+
+    monkeypatch.setattr(
+        feg,
+        "repair_interaction_continuity",
+        lambda *_a, **_k: {"applied": False, "repaired_text": "unused"},
+    )
+    txt, extra, strict_fb = feg._apply_interaction_continuity_emission_step(
+        out,
+        text="You can't go there.",
+        resolution_for_contracts=resolution,
+        eff_resolution=resolution,
+        session={"turn_counter": "1"},
+        validate_only=False,
+        strict_social_path=True,
+        strict_fallback_resolution=resolution,
+    )
+    assert strict_fb is True
+    assert extra == []
+    assert '"' in txt
+    em = out["metadata"]["emission_debug"]
+    assert em.get("interaction_continuity_enforced") is True
 
 
 def test_output_exhibits_stripped_uncued_interruption_with_labeled_anchor():

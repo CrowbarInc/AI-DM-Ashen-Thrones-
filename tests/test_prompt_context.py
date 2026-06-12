@@ -2,10 +2,9 @@
 
 Direct prompt-contract semantics live here, including the canonical prompt-facing
 public homes for shipped helpers such as ``build_social_response_structure_contract()``
-and ``peek_response_type_contract_from_resolution()``. Downstream gate, emission,
-social-adjacent, guard, and transcript suites should consume shipped/exported
-behavior rather than re-own helper semantics; they may keep smoke/regression
-coverage, but should not read as the primary semantic owner for prompt contracts.
+and ``peek_response_type_contract_from_resolution()``. Gate-layer social-response
+structure enforcement semantics (repair, skip, FEM merge) are owned here; downstream
+gate suites keep ordering and cross-layer routing only.
 """
 from __future__ import annotations
 
@@ -60,6 +59,13 @@ from game.social import (
 from game.referent_tracking import validate_referent_tracking_artifact
 from tests.helpers.objective7_referent_fixtures import REFERENT_TRACKING_COMPACT_KEYS
 from game.world import upsert_world_npc
+
+import game.final_emission_gate as feg
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_text import _normalize_text
+from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.strict_social_harness import runner_strict_bundle
 
 
 import pytest
@@ -3385,3 +3391,198 @@ def test_non_reintroduced_stale_thread_can_rank_out(mock_re):
     by_turn = {s["source_turn"]: s for s in sel if isinstance(s.get("source_turn"), int)}
     assert by_turn[10]["score"] < by_turn[99]["score"]
     assert sel[-1]["source_turn"] == 10
+
+
+# --- Gate-layer social response structure ownership ---
+
+
+def _monoblob_dialogue_quote() -> str:
+    core = " ".join(f"w{i}" for i in range(110))
+    return f'Tavern Runner says "{core}."'
+
+
+def _secondary_social_response_structure_contract(
+    required_response_type: str,
+    **overrides,
+):
+    contract = {
+        "enabled": required_response_type == "dialogue",
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": required_response_type == "dialogue",
+        "discourage_expository_monologue": required_response_type == "dialogue",
+        "require_natural_cadence": required_response_type == "dialogue",
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2 if required_response_type == "dialogue" else None,
+        "max_dialogue_paragraphs_before_break": 2 if required_response_type == "dialogue" else None,
+        "prefer_single_speaker_turn": required_response_type == "dialogue",
+        "forbid_bulleted_or_list_like_dialogue": required_response_type == "dialogue",
+        "required_response_type": required_response_type,
+        "debug_reason": (
+            "response_type_contract_requires_dialogue"
+            if required_response_type == "dialogue"
+            else f"response_type_not_dialogue:{required_response_type}"
+        ),
+        "debug_inputs": {},
+    }
+    contract.update(overrides)
+    return contract
+
+
+def _dialogue_response_policy_with_social_structure(**srs_overrides):
+    rtc = response_type_contract("dialogue")
+    srs = _secondary_social_response_structure_contract("dialogue")
+    srs.update(srs_overrides)
+    return {"response_type_contract": rtc, "social_response_structure": srs}
+
+
+@pytest.mark.unit
+def test_non_strict_social_failed_repair_adds_unsatisfied_after_repair_reason(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    bad = _monoblob_dialogue_quote()
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {"player_facing_text": bad, "tags": [], "response_policy": pol},
+        resolution={"kind": "observe", "prompt": "What does the runner say?"},
+        session=None,
+        scene_id="checkpoint",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("social_response_structure_passed") is False
+    assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
+    assert meta.get("social_response_structure_repair_applied") is False
+    assert _normalize_text(bad) == _normalize_text(str(out.get("player_facing_text") or ""))
+
+
+@pytest.mark.unit
+def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reason(monkeypatch):
+    session, world, sid, resolution = runner_strict_bundle()
+    stub_details = {
+        "used_internal_fallback": False,
+        "final_emitted_source": "test_stub",
+        "rejection_reasons": [],
+        "deterministic_attempted": False,
+        "deterministic_passed": False,
+        "fallback_pool": "none",
+        "fallback_kind": "none",
+        "route_illegal_intercepted": False,
+    }
+    bad = _monoblob_dialogue_quote()
+
+    def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
+        return bad, dict(stub_details)
+
+    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {"player_facing_text": bad, "tags": [], "response_policy": pol},
+        resolution=resolution,
+        session=session,
+        scene_id=sid,
+        world=world,
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    txt = out.get("player_facing_text") or ""
+    assert "w0" in txt and "w50" in txt
+    assert meta.get("social_response_structure_passed") is False
+    assert meta.get("social_response_structure_repair_passed") is False
+    ins = meta.get("social_response_structure_inspect")
+    assert isinstance(ins, dict) and ins.get("failed") is True
+    assert "final_emission_gate_replaced" not in (out.get("tags") or [])
+    assert "social_response_structure_unsatisfied_after_repair" not in (meta.get("rejection_reasons_sample") or [])
+
+
+@pytest.mark.unit
+def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pol = _dialogue_response_policy_with_social_structure()
+    bullet = '- "East gate is two hundred feet south," he says.\n- "Patrols chart that lane nightly."'
+    out = apply_final_emission_gate(
+        {"player_facing_text": bullet, "tags": [], "response_policy": pol},
+        resolution={"kind": "question", "prompt": "Where is the east gate?"},
+        session=None,
+        scene_id="gate_yard",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("social_response_structure_repair_applied") is False
+    assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
+    assert meta.get("social_response_structure_passed") is False
+    out_txt = out.get("player_facing_text") or ""
+    assert "east gate" in out_txt.lower() and "patrols" in out_txt.lower()
+    assert any(ln.lstrip().startswith("-") for ln in out_txt.splitlines() if ln.strip())
+
+
+@pytest.mark.unit
+def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": 'Watchman says "East road bends past the mill."',
+            "tags": [],
+            "response_policy": pol,
+        },
+        resolution={"kind": "question", "prompt": "Which way?"},
+        session=None,
+        scene_id="lane",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    for key in (
+        "social_response_structure_checked",
+        "social_response_structure_applicable",
+        "social_response_structure_passed",
+        "social_response_structure_failure_reasons",
+        "social_response_structure_repair_applied",
+        "social_response_structure_repair_changed_text",
+        "social_response_structure_repair_passed",
+        "social_response_structure_repair_mode",
+        "social_response_structure_skip_reason",
+        "social_response_structure_inspect",
+    ):
+        assert key in meta
+    assert meta.get("social_response_structure_checked") is True
+    assert meta.get("social_response_structure_applicable") is True
+    assert meta.get("social_response_structure_passed") is True
+    assert meta.get("social_response_structure_repair_applied") is False
+
+
+@pytest.mark.unit
+def test_social_response_structure_skip_path_records_skip_reason_on_answer_completeness_failed():
+    rtc = response_type_contract("dialogue")
+    srs = _secondary_social_response_structure_contract("dialogue")
+    gm = {"response_policy": {"response_type_contract": rtc, "social_response_structure": srs}}
+    raw = '- "East gate is south," he says.\n- "Patrols watch it nightly."'
+    text, meta, extra = feg._apply_social_response_structure_layer(
+        raw,
+        gm_output=gm,
+        strict_social_details=None,
+        response_type_debug={"response_type_candidate_ok": True},
+        answer_completeness_meta={"answer_completeness_failed": True},
+        strict_social_path=False,
+    )
+    assert text == raw
+    assert extra == []
+    assert meta.get("social_response_structure_skip_reason") == "answer_completeness_failed"
+    assert meta.get("social_response_structure_checked") is False
+
+
+@pytest.mark.unit
+def test_action_outcome_turn_social_response_structure_not_applicable(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    rtc = response_type_contract("action_outcome")
+    srs = _secondary_social_response_structure_contract("action_outcome")
+    raw = "You lift the bar; it groans, and the side door eases open a finger's width."
+    out = apply_final_emission_gate(
+        {"player_facing_text": raw, "tags": [], "response_policy": {"response_type_contract": rtc, "social_response_structure": srs}},
+        resolution={"kind": "interact", "prompt": "I try the side door."},
+        session=None,
+        scene_id="alley",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("social_response_structure_applicable") is False
+    assert meta.get("social_response_structure_failure_reasons") == []

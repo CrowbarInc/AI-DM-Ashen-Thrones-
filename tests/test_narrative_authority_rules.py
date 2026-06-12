@@ -1,13 +1,15 @@
 """Direct unit tests for ``game.narrative_authority`` (Block 1) and focused gate helpers.
 
 Aligned to Block 3: shipped full contracts only for validation; ``prompt_debug`` mirrors are
-diagnostics-only (covered in ``test_final_emission_gate.py``).
+diagnostics-only. Gate-order NA pins remain in ``tests/test_final_emission_gate.py`` (BH-3).
 """
 from __future__ import annotations
 
 import pytest
 
 import game.final_emission_gate as feg
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.narrative_authority import (
     build_narrative_authority_contract,
     validate_narrative_authority,
@@ -508,3 +510,197 @@ def test_na_repair_then_scene_anchor_still_matches_location():
     assert ssa_meta.get("scene_state_anchor_passed") is True
     assert "location" in (ssa_meta.get("scene_state_anchor_matched_kinds") or [])
     assert "salt pier" in text2.lower()
+
+# ---------------------------------------------------------------------------
+# BH-3: contract resolution, skip paths, and cross-layer coexistence
+# (extracted from tests/test_final_emission_gate.py)
+# ---------------------------------------------------------------------------
+
+def test_resolve_narrative_authority_full_contract_from_response_policy():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    full = feg._resolve_narrative_authority_contract(gm)
+    assert full is na
+    assert feg._is_shipped_full_narrative_authority_contract(full) is True
+
+
+def test_resolve_narrative_authority_slim_prompt_debug_is_not_full_contract():
+    slim = {"enabled": True, "authoritative_outcome_available": False}
+    gm = {"prompt_debug": {"narrative_authority": slim}}
+    assert feg._is_shipped_full_narrative_authority_contract(slim) is False
+    assert feg._resolve_narrative_authority_contract(gm) is None
+
+
+def test_resolve_narrative_authority_full_contract_from_narration_payload():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"narration_payload": {"narrative_authority": na}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_prompt_payload():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"prompt_payload": {"narrative_authority": na}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_trace_response_policy():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"trace": {"response_policy": {"narrative_authority": na}}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_resolve_narrative_authority_full_contract_from_narration_payload_mirror_key():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"_narration_payload": {"response_policy": {"narrative_authority": na}}}
+    assert feg._resolve_narrative_authority_contract(gm) is na
+
+
+def test_skip_narrative_authority_when_forbid_unjustified_is_false():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {
+        "response_policy": {
+            "forbid_unjustified_narrative_authority": False,
+            "narrative_authority": na,
+        }
+    }
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_rt_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "narrative_authority_policy_disabled"
+    assert meta["narrative_authority_checked"] is False
+    assert text == "The lock clicks open."
+
+
+def test_skip_narrative_authority_when_contract_enabled_false():
+    res = {"kind": "observe", "prompt": "I listen."}
+    base = _na_contract(resolution=res)
+    na = {**base, "enabled": False}
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_rt_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "contract_disabled"
+    assert meta["narrative_authority_checked"] is False
+
+
+def test_skip_narrative_authority_when_response_type_candidate_not_ok():
+    res = {"kind": "observe", "prompt": "I listen."}
+    na = _na_contract(resolution=res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_rt_debug(candidate_ok=False),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "response_type_contract_failed"
+    assert meta["narrative_authority_checked"] is False
+
+
+def test_skip_narrative_authority_only_slim_prompt_debug_no_validation():
+    res = {"kind": "observe", "prompt": "I look."}
+    slim = {"enabled": True, "authoritative_outcome_available": False}
+    gm = {"prompt_debug": {"narrative_authority": slim}, "response_policy": {}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "The lock clicks open.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_rt_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] == "no_full_contract"
+    assert meta["narrative_authority_checked"] is False
+    assert text == "The lock clicks open."
+
+
+def test_apply_na_with_full_contract_validates_normally():
+    res = {"kind": "observe", "prompt": "I look at the moss."}
+    na = _na_contract(resolution=res)
+    gm = {"response_policy": {"narrative_authority": na}}
+    text, meta, _ = feg._apply_narrative_authority_layer(
+        "Rain brightens the moss; nothing is decided yet.",
+        gm_output=gm,
+        resolution=res,
+        strict_social_details=None,
+        response_type_debug=_rt_debug(),
+        answer_completeness_meta={},
+        session={},
+        scene_id="s",
+    )
+    assert meta["narrative_authority_skip_reason"] is None
+    assert meta["narrative_authority_checked"] is True
+    assert meta["narrative_authority_failed"] is False
+    assert text == "Rain brightens the moss; nothing is decided yet."
+
+
+def test_anti_railroading_coexists_with_narrative_authority_and_tone():
+    na = build_narrative_authority_contract(
+        resolution={"kind": "observe", "prompt": "I look."},
+        narration_visibility={},
+        scene_state_anchor_contract=None,
+        speaker_selection_contract=None,
+        session_view=None,
+    )
+    ctr = {
+        "enabled": True,
+        "scene_id": "hall",
+        "base_tone": "neutral",
+        "max_allowed_tone": "tense",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": True,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+        "debug_inputs": {"scene_id": "hall"},
+        "debug_flags": {},
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "The only real lead is the cellar door.",
+            "tags": [],
+            "response_policy": {"narrative_authority": na, "tone_escalation": ctr},
+        },
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="hall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("narrative_authority_checked") is True
+    assert meta.get("tone_escalation_checked") is True
+    assert meta.get("anti_railroading_failed") is True
+    assert meta.get("anti_railroading_repaired") is False
+    assert meta.get("final_route") == "replaced"
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert "narrative_authority_checked" in em
+    assert "tone_escalation_checked" in em
+    assert em.get("anti_railroading", {}).get("validation", {}).get("checked") is True

@@ -1,7 +1,14 @@
-"""Unit tests for ``game.player_facing_narration_purity``."""
+"""Unit tests for ``game.player_facing_narration_purity`` and gate-layer integration (BH-5).
+
+Gate-order purity/ASP pins remain in ``tests/test_final_emission_gate.py``."""
 from __future__ import annotations
 
 import pytest
+
+import game.final_emission_gate as feg
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.emission_smoke_assertions import response_type_contract
 
 from game.player_facing_narration_purity import (
     build_player_facing_narration_purity_contract,
@@ -190,3 +197,232 @@ def test_minimal_repair_keeps_prose_after_header_on_one_line():
     assert dbg.get("still_failing") is False
     assert "Consequence" not in fixed
     assert "torchlight" in fixed.lower()
+
+# ---------------------------------------------------------------------------
+# BH-5: extracted from tests/test_final_emission_gate.py
+# ---------------------------------------------------------------------------
+
+def test_resolve_player_facing_narration_purity_contract_from_response_policy():
+    c = _contract()
+    gm = {"response_policy": {"player_facing_narration_purity": c}}
+    got, src = feg._resolve_player_facing_narration_purity_contract(gm)
+    assert got is c
+    assert src == "response_policy"
+
+
+def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Rain hammers the slate roof; torchlight shivers in the gutter below.",
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I look around the street."},
+        session={},
+        scene_id="market_lane",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is False
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "Rain" in (out.get("player_facing_text") or "")
+
+
+def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": (
+                "You emerge into the lower ward—smoke, shouted names, the harbor's brine on the wind."
+            ),
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={
+            "kind": "travel",
+            "prompt": "I take the postern into the ward.",
+            "resolved_transition": True,
+        },
+        session={},
+        scene_id="lower_ward",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "emerge" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    text = (
+        'The sergeant does not raise her voice. "Move toward the gate, now," she says, '
+        "and the line stiffens as if pulled by a single wire."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": text,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I watch the line."},
+        session={},
+        scene_id="gate_yard",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is False
+    assert "gate" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    text = (
+        "You thumb the latch; it gives with a dry snap. "
+        "Patrol whistles tighten two streets over, a thin urgent sound against the rain."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": text,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("action_outcome")},
+        },
+        resolution={"kind": "interact", "prompt": "I try the latch on the side door."},
+        session={},
+        scene_id="alley_door",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("answer_shape_primacy_failed") is False
+    assert "latch" in (out.get("player_facing_text") or "").lower()
+
+
+def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I glance up the street."},
+        session={},
+        scene_id="arch_lane",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("player_facing_narration_purity_repaired") is False
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_purity_repairs_coaching_language(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "You weigh what you just tried near the checkpoint; rain drums on the slate roof."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I listen at the checkpoint."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_purity_repairs_ui_label_leak(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "Take the exit labeled North and you smell cold river air beyond the arch."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I scan for a way out."},
+        session={},
+        scene_id="river_arch",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = (
+        "The ward's tension mounts; confrontation feels inevitable. "
+        "You hear boots on wet cobbles to your left, uneven and hurried."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "I listen for movement."},
+        session={},
+        scene_id="lower_ward",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("answer_shape_primacy_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = "The next beat is yours. You emerge onto the quay, ropes creaking, gulls wheeling overhead."
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "travel", "prompt": "I head down to the quay.", "resolved_transition": True},
+        session={},
+        scene_id="stone_quay",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    raw = (
+        "Unrest makes factions bold and the crown brittle. "
+        "Invasion rumors outrun truth, and politics turns markets into maps."
+    )
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": raw,
+            "tags": [],
+            "player_facing_narration_purity_contract": _contract(),
+            "response_policy": {"response_type_contract": response_type_contract("neutral_narration")},
+        },
+        resolution={"kind": "observe", "prompt": "What do I see on the street?"},
+        session={},
+        scene_id="market_square",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("answer_shape_primacy_failed") is True
+    assert meta.get("final_route") == "replaced"

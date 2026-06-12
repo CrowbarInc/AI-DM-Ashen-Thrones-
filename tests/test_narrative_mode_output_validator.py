@@ -1,15 +1,24 @@
-"""C4 — deterministic ``validate_narrative_mode_output`` (per-mode positive/negative)."""
+"""C4 — deterministic ``validate_narrative_mode_output`` and gate-layer NMO ownership.
+
+Unit tests cover per-mode validation semantics. Gate-integration tests cover FEM
+projection, skip reasons, and replace routing through ``apply_final_emission_gate``
+without owning strict-social or opening-specific orchestration (those stay in
+their respective gate/opening suites).
+"""
 
 from __future__ import annotations
 
 import pytest
 
+from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
     default_narrative_mode_output_layer_meta,
     merge_narrative_mode_output_into_final_emission_meta,
+    read_final_emission_meta_dict,
 )
 from game.narrative_mode_contract import (
+    build_narrative_mode_contract,
     build_narrative_mode_emission_trace,
     validate_narrative_mode_output,
 )
@@ -245,3 +254,97 @@ def test_build_narrative_mode_emission_trace_and_fem_merge() -> None:
             assert k in fem
     d = default_narrative_mode_output_layer_meta()
     assert set(d.keys()) == NARRATIVE_MODE_OUTPUT_FEM_KEYS
+
+
+# --- Gate-layer integration (NMO ownership) ---
+
+
+def _narrative_mode_plan_payload(contract: dict) -> dict:
+    return {"prompt_context": {"narrative_plan": {"narrative_mode_contract": contract}}}
+
+
+def test_narrative_mode_output_layer_runs_when_plan_contract_shipped() -> None:
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
+    text = (
+        "You still hold the sergeant's gaze; he nods once toward the east lane without breaking stride."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], **_narrative_mode_plan_payload(nmc)},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("narrative_mode_output_checked") is True
+    assert fem.get("narrative_mode_output_passed") is True
+    assert fem.get("narrative_mode_output_mode") == nmc["mode"] == "continuation"
+    assert fem.get("narrative_mode_contract_mode") == "continuation"
+    assert fem.get("narrative_mode_output_skip_reason") is None
+
+
+def test_narrative_mode_output_failure_reasons_in_fem_and_replace_route() -> None:
+    nmc = build_narrative_mode_contract(ctir=minimal_ctir_continuation())
+    bad = "You wake to a new day. The market unfolds around you as if nothing before it mattered."
+    out = apply_final_emission_gate(
+        {"player_facing_text": bad, "tags": [], **_narrative_mode_plan_payload(nmc)},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="lane_scene",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("narrative_mode_output_checked") is True
+    assert fem.get("narrative_mode_output_passed") is False
+    assert "nmo:continuation:fresh_opening_reset_shape" in (fem.get("narrative_mode_output_failure_reasons") or [])
+    assert fem.get("final_route") == "replaced"
+
+
+def test_narrative_mode_output_skip_absent_contract() -> None:
+    out = apply_final_emission_gate(
+        {"player_facing_text": "The lane holds.", "tags": []},
+        resolution={"kind": "observe", "prompt": "I look."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("narrative_mode_output_checked") is False
+    assert fem.get("narrative_mode_output_skip_reason") == "narrative_mode_contract_absent"
+
+
+def test_narrative_mode_output_skip_disabled_contract() -> None:
+    nmc = build_narrative_mode_contract(enabled=False)
+    out = apply_final_emission_gate(
+        {"player_facing_text": "You wake to a new day.", "tags": [], **_narrative_mode_plan_payload(nmc)},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("narrative_mode_output_checked") is False
+    assert fem.get("narrative_mode_output_skip_reason") == "narrative_mode_contract_disabled"
+
+
+def test_narrative_mode_output_skip_invalid_contract_shape() -> None:
+    bad = {
+        "version": 1,
+        "enabled": True,
+        "mode": "continuation",
+        "mode_family": "continuation",
+        "source_signals": [],
+        "prompt_obligations": {},
+        "forbidden_moves": [],
+        "debug": {"derivation_codes": []},
+    }
+    out = apply_final_emission_gate(
+        {"player_facing_text": "The lane holds.", "tags": [], **_narrative_mode_plan_payload(bad)},
+        resolution={"kind": "observe", "prompt": "I wait."},
+        session={},
+        scene_id="s",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("narrative_mode_output_checked") is False
+    assert str(fem.get("narrative_mode_output_skip_reason") or "").startswith("narrative_mode_contract_invalid:")

@@ -1,8 +1,16 @@
-"""Unit tests for ``game.context_separation`` (context separation contract + validator)."""
+"""Context Separation contract, validator, and gate-layer ownership coverage.
+
+Unit tests cover ``game.context_separation`` directly. Gate-integration tests cover
+pass/repair/fail/replace semantics through ``apply_final_emission_gate`` without
+owning gate ordering (that stays in ``tests/test_final_emission_gate.py``).
+"""
 from __future__ import annotations
 
 import pytest
 
+import game.final_emission_gate as feg
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.context_separation import (
     build_context_separation_contract,
     context_separation_repair_hints,
@@ -166,3 +174,152 @@ def test_invalid_contract_soft_pass():
     assert out["checked"] is False
     assert out["passed"] is True
     assert "invalid_contract" in out["failure_reasons"]
+
+
+# --- Gate-layer integration (Context Separation ownership) ---
+
+
+def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        'She names a price flatly. "Two coppers," she says. '
+        "The ward's tense tonight—patrols everywhere—but bread is still bread."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+    assert (read_final_emission_meta_dict(out) or {}).get("final_route") == "accept_candidate"
+
+
+def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Where is the exit?"
+    cs = build_context_separation_contract(
+        player_text=pt,
+        scene_summary="A raid tears through the lower ward; panic and smoke choke the alleys.",
+        resolution={"kind": "travel"},
+    )
+    text = (
+        "A guardsman points past a splintered door. "
+        "The crackdown is still rolling house to house; you move or you are moved."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "travel", "prompt": pt},
+        session=None,
+        scene_id="ward_raid",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+
+
+def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Is it safe to linger here with the patrols?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
+    text = (
+        "He doesn't laugh. 'Safe is a small word for a big war,' he says. "
+        "Unrest has the factions eyeing each other; tonight, nowhere feels clean."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "social_probe", "prompt": pt},
+        session=None,
+        scene_id="street",
+        world={},
+    )
+    em = (out.get("metadata") or {}).get("emission_debug") or {}
+    assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
+
+
+def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "The war along the border has everyone on edge, and coin means nothing next to survival. "
+        'She still says, "Two coppers," flat as slate.'
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("context_separation_repaired") is False
+    assert meta.get("final_route") == "replaced"
+    assert "context_separation_unsatisfied_at_boundary_no_lead_drop" in (meta.get("rejection_reasons_sample") or [])
+
+
+def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What does the loaf cost today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "The war along the border has everyone on edge, and coin means nothing next to survival. "
+        "Factions trade rumors faster than grain, and the capital's politics swallow small questions whole."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What is the price today?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "It is impossible to say with the unrest what the price is; "
+        "any answer is swallowed by the instability of the war."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("final_route") == "replaced"
+
+
+def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "What is your name?"
+    cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
+    text = (
+        "The border war reshapes every oath. "
+        "Unrest makes factions bold and the crown brittle. "
+        "Invasion rumors outrun truth, and politics turns markets into maps. "
+        "Empire scouts watch the passes, and the realm tears at its seams."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "social_probe", "prompt": pt},
+        session=None,
+        scene_id="scene",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("context_separation_failed") is True
+    assert "pressure_overweighting" in (meta.get("context_separation_failure_reasons") or [])

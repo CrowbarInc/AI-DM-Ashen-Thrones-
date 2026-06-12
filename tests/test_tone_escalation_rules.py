@@ -4,9 +4,11 @@ from __future__ import annotations
 import pytest
 
 import game.final_emission_gate as feg
+from game.context_separation import build_context_separation_contract
 from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.tone_escalation import build_tone_escalation_contract, validate_tone_escalation
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer, response_type_contract
 
 pytestmark = pytest.mark.unit
 
@@ -218,3 +220,131 @@ def test_apply_final_emission_gate_runs_tone_escalation_before_narrative_authori
         world={},
     )
     assert order.index("tone") < order.index("narrative_authority")
+
+
+# --- Gate-layer tone escalation ownership ---
+
+
+def _secondary_social_response_structure_contract(
+    required_response_type: str,
+    **overrides,
+):
+    contract = {
+        "enabled": required_response_type == "dialogue",
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": required_response_type == "dialogue",
+        "discourage_expository_monologue": required_response_type == "dialogue",
+        "require_natural_cadence": required_response_type == "dialogue",
+        "allow_brief_action_beats": True,
+        "allow_brief_refusal_or_uncertainty": True,
+        "max_contiguous_expository_lines": 2 if required_response_type == "dialogue" else None,
+        "max_dialogue_paragraphs_before_break": 2 if required_response_type == "dialogue" else None,
+        "prefer_single_speaker_turn": required_response_type == "dialogue",
+        "forbid_bulleted_or_list_like_dialogue": required_response_type == "dialogue",
+        "required_response_type": required_response_type,
+        "debug_reason": (
+            "response_type_contract_requires_dialogue"
+            if required_response_type == "dialogue"
+            else f"response_type_not_dialogue:{required_response_type}"
+        ),
+        "debug_inputs": {},
+    }
+    contract.update(overrides)
+    return contract
+
+
+def _dialogue_response_policy_with_social_structure(**srs_overrides):
+    rtc = response_type_contract("dialogue")
+    srs = _secondary_social_response_structure_contract("dialogue")
+    srs.update(srs_overrides)
+    return {"response_type_contract": rtc, "social_response_structure": srs}
+
+
+def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer_overshoot() -> None:
+    """When pre-repair text violates shipped tone policy, legacy meta records the overshoot."""
+    ctr = {
+        "enabled": True,
+        "scene_id": "hall",
+        "base_tone": "neutral",
+        "max_allowed_tone": "guarded",
+        "allow_guarded_refusal": True,
+        "allow_verbal_pressure": False,
+        "allow_explicit_threat": False,
+        "allow_physical_hostility": False,
+        "allow_combat_initiation": False,
+        "justification_flags": {},
+        "justification_reasons": [],
+        "debug_inputs": {"scene_id": "hall"},
+        "debug_flags": {},
+    }
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": "Out of nowhere, chaos erupts through the hall.",
+            "tags": [],
+            "response_policy": {"tone_escalation": ctr},
+        },
+        resolution={"kind": "observe", "prompt": "I listen."},
+        session={},
+        scene_id="hall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("non_hostile_escalation_blocked") is True
+    assert meta.get("tone_escalation_violation_before_repair") is True
+
+
+def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    pt = "Good morning. A loaf, please."
+    cs = build_context_separation_contract(
+        player_text=pt,
+        resolution={"kind": "barter"},
+        tone_escalation_contract={"allow_verbal_pressure": False, "allow_explicit_threat": False},
+    )
+    text = (
+        "The city is on edge tonight, so back off and drop it—this is not the time for questions."
+    )
+    out = apply_final_emission_gate(
+        {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
+        resolution={"kind": "barter", "prompt": pt},
+        session=None,
+        scene_id="market_stall",
+        world={},
+    )
+    meta = read_final_emission_meta_dict(out) or {}
+    assert meta.get("context_separation_failed") is True
+    assert "ambient_pressure_forced_tone_shift" in (meta.get("context_separation_failure_reasons") or [])
+
+
+def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypatch):
+    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    order: list[str] = []
+    orig_srs = feg._apply_social_response_structure_layer
+    orig_te = feg._apply_tone_escalation_layer
+
+    def srs(*args, **kwargs):
+        order.append("social_response_structure")
+        return orig_srs(*args, **kwargs)
+
+    def te(*args, **kwargs):
+        order.append("tone_escalation")
+        return orig_te(*args, **kwargs)
+
+    monkeypatch.setattr(feg, "_apply_social_response_structure_layer", srs)
+    monkeypatch.setattr(feg, "_apply_tone_escalation_layer", te)
+    pol = _dialogue_response_policy_with_social_structure()
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": 'Clerk says "East ledger is closed until dawn."',
+            "tags": [],
+            "response_policy": pol,
+        },
+        resolution={"kind": "question", "prompt": "When does the east ledger open?"},
+        session=None,
+        scene_id="hall",
+        world={},
+    )
+    assert order.index("social_response_structure") < order.index("tone_escalation")
+    meta = read_final_emission_meta_dict(out) or {}
+    assert "tone_escalation_checked" in meta
+    assert meta.get("candidate_validation_passed") is True

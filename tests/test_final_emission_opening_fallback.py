@@ -2,57 +2,71 @@
 
 This module owns prepared-payload selection, sealed fail-closed metadata,
 adapter-level opening ownership fields, attach-then-helper fixture semantics,
-and response-type helper bypass behavior for ``game.final_emission_opening_fallback``.
-The gate delegation test at the end is the only intended gate-integration pin
-here; final output, FEM propagation, and gate ordering remain gate-suite work.
+response-type helper bypass behavior for ``game.final_emission_opening_fallback``,
+and full-gate opening fallback integration (BH-1). Gate-order pin for upstream
+attach-before-composer remains in ``tests/test_final_emission_gate.py`` (Block L).
 """
 
 from __future__ import annotations
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Mapping
 
 import pytest
 
+import game.final_emission_gate as feg
 import game.final_emission_gate as final_emission_gate
 import game.final_emission_opening_fallback as opening_fallback
-from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 import game.opening_deterministic_fallback as opening_deterministic_fallback
-from game.defaults import default_scene
+from game.defaults import default_scene, default_session, default_world
 from game.diegetic_fallback_narration import fallback_template_metadata
+from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    opening_fallback_owner_bucket_from_meta,
+    read_final_emission_meta_dict,
 )
-from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD, UPSTREAM_PREPARED_EMISSION
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
+from game.interaction_context import rebuild_active_scene_entities
+from game.narrative_mode_contract import build_narrative_mode_contract
 from game.opening_deterministic_fallback import (
     OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     deterministic_opening_fallback_text_and_meta,
+    deterministic_opening_fallback_text_and_meta as _deterministic_opening_under_test,
+)
+from game.realization_authority import FALLBACK_FAMILIES
+from game.realization_provenance import (
+    GATE_TERMINAL_REPAIR,
+    LEGACY_DIEGETIC_FALLBACK,
+    REALIZATION_FALLBACK_FAMILY_FIELD,
+    UPSTREAM_PREPARED_EMISSION,
 )
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_upstream_prepared_opening_fallback_payload,
 )
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     OPENING_FAILED_CLOSED_REPAIR_KIND,
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_FAMILY,
     OPENING_SUCCESS_REPAIR_KIND,
     OPENING_SUCCESS_SOURCE,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
+    assert_opening_fallback_source,
     opening_gm_output,
     opening_owner_bucket_projection_fields,
     opening_upstream_composition_meta_slice,
+    opening_validation_context,
+    successful_opening_fem_meta,
 )
 from tests.helpers.opening_fallback_gate_harness import (
     opening_gate_attach_then_enforce_response_type_contract,
     opening_gate_attach_then_opening_scene_safe_fallback_selection,
 )
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 pytestmark = pytest.mark.unit
@@ -750,3 +764,519 @@ def test_gate_opening_selection_wrapper_delegates_to_adapter(monkeypatch: pytest
     assert final_emission_gate._opening_scene_safe_fallback_selection(gm_output) is sentinel
     assert captured["gm_output"] is gm_output
     assert captured["meta_factory"] is final_emission_gate._first_mention_composition_meta
+
+# === Full-gate opening integration (relocated from test_final_emission_gate.py, BH-1) ===
+# Gate-order pin remains in gate suite: test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_before_deterministic_opening_composer
+
+
+def _ssa_contract(**overrides):
+    base = {
+        "enabled": True,
+        "required_any_of": ["location", "actor", "player_action"],
+        "minimum_anchor_hits": 1,
+        "scene_id": "frontier_gate",
+        "scene_location_label": None,
+        "location_tokens": [],
+        "actor_tokens": [],
+        "player_action_tokens": [],
+        "preferred_repair_order": ["actor", "player_action", "location"],
+        "debug_reason": "test",
+        "debug_sources": {},
+    }
+    base.update(overrides)
+    return base
+
+
+def _rich_scene_opening_candidate() -> str:
+    return (
+        "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap "
+        "above the muddy approach. You stand in the churned mud before the gate as refugees press "
+        "shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. "
+        "A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the "
+        "notice board waits beside the arch. The queue inches forward in fits, wagon wheels grinding "
+        "through black ruts while wet canvas slaps against overloaded carts and the smell of damp wool, "
+        "smoke, and sour road dust clings to everyone close enough to breathe on you. Somewhere ahead, "
+        "a guard captain's voice cuts through the mutter of the crowd, sharp enough to make shoulders "
+        "hunch and conversations die for a heartbeat before the pressure of bodies closes in again. "
+        "You can read the notice board, press the guards, approach the tavern runner, or watch the "
+        "silent figure in the crush."
+    )
+
+def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_composition():
+    session = default_session()
+    world = default_world()
+    sid = "frontier_gate"
+    session["active_scene_id"] = sid
+    session["scene_state"]["active_scene_id"] = sid
+    session["turn_counter"] = 0
+    session["visited_scene_ids"] = [sid]
+    scene = default_scene(sid)
+    scene["scene"]["location"] = "Frontier Gate"
+    scene["scene"]["summary"] = "A rain-soaked checkpoint holds a nervous crowd at the gate."
+    scene["scene"]["visible_facts"] = [
+        "Several patrons exchange furtive glances.",
+        "A notice board lists a missing patrol.",
+        "Rain darkens the flagstones around the checkpoint.",
+    ]
+    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
+    scene["scene_state"] = dict(session["scene_state"])
+
+    out = apply_final_emission_gate(
+        {
+            "player_facing_text": (
+                "Emergent Lord Aldric Several patrons exchange furtive glances. "
+                "The rain holds; beside it, a notice board lists a missing patrol."
+            ),
+            "tags": ["forced_retry_fallback", "upstream_api_fast_fallback"],
+            "scene_state_anchor_contract": _ssa_contract(
+                scene_id=sid,
+                scene_location_label="Frontier Gate",
+                location_tokens=["frontier gate", "gate", "checkpoint"],
+                actor_tokens=["emergent lord aldric"],
+            ),
+        },
+        resolution={"kind": "observe", "prompt": "Begin."},
+        session=session,
+        scene_id=sid,
+        scene=scene,
+        world=world,
+    )
+
+    text = str(out.get("player_facing_text") or "")
+    low = text.lower()
+    meta = read_final_emission_meta_dict(out) or {}
+    assert "emergent lord aldric several" in low
+    assert "holds; beside it" in low
+    assert meta.get("fast_fallback_neutral_composition_malformed_detected") is True
+    assert meta.get("fast_fallback_neutral_composition_repaired") is False
+    assert meta.get("scene_state_anchor_passed") is True
+
+def test_opening_validator_rejects_investigation_continuation_language():
+    failures = feg.validate_opening_output("Nearby crates appear disturbed.", opening_validation_context())
+
+    assert "continuation_or_investigation_language" in failures
+    assert "invalid_sentence_structure" in failures
+
+def test_opening_validator_rejects_fragment_sentence():
+    failures = feg.validate_opening_output("At the Cinderwatch Gate District, rain and refugees.", opening_validation_context())
+
+    assert "invalid_sentence_structure" in failures
+
+def test_opening_validator_rejects_opening_without_actionable_hook():
+    failures = feg.validate_opening_output(
+        "Cinderwatch Gate District. Rain spatters soot-dark stone while refugees and wagons clog the muddy approach.",
+        opening_validation_context(),
+    )
+
+    assert "missing_hook" in failures
+
+def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Block C9: full-gate path cannot turn malformed opening payloads into unknown/compat ownership."""
+    gm_output = opening_gm_output()
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = {
+        "prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    }
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    def _skip_upstream_repair(out: dict[str, Any] | None, *, resolution: dict[str, Any] | None) -> None:
+        return None
+
+    monkeypatch.setattr(feg, "maybe_attach_upstream_prepared_opening_fallback_payload", _skip_upstream_repair)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = final_emission_meta_from_output(out)
+    # Sealed-gate opening failure: malformed upstream stub must not emit prepared prose.
+    assert fem.get("opening_fallback_failed_closed") is True
+    assert fem.get("opening_fallback_upstream_payload_unusable") is True
+    assert fem.get("response_type_repair_kind") == OPENING_FAILED_CLOSED_REPAIR_KIND
+    assert fem.get("opening_fallback_authorship_source") is None
+    assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
+    assert out["player_facing_text"] != EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert EXPECTED_FRONTIER_GATE_OPENING_FALLBACK not in str(out.get("player_facing_text") or "")
+    # N4 terminal replacement after sealed opening path (cf. empty curated facts sibling).
+    assert fem["final_route"] == "replaced"
+    assert fem["final_emitted_source"] == "acceptance_quality_global_scene_fallback"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert out["player_facing_text"] == "For a breath, the scene holds while voices shift around you."
+
+def test_scene_opening_accepted_candidate_promotes_over_short_stale_player_text(monkeypatch):
+    short = "You stand at Cinderwatch's eastern gate in the rain. Guards hold the choke."
+    rich = _rich_scene_opening_candidate()
+    orig_enforce = feg._enforce_response_type_contract
+
+    def _select_rich_candidate(candidate_text, **kwargs):
+        assert candidate_text == short
+        return orig_enforce(rich, **kwargs)
+
+    def _late_stale_rewrite(out, *, text, **kwargs):
+        return short, [], False
+
+    monkeypatch.setattr(feg, "_enforce_response_type_contract", _select_rich_candidate)
+    monkeypatch.setattr(feg, "_apply_interaction_continuity_emission_step", _late_stale_rewrite)
+
+    gm_output = opening_gm_output()
+    gm_output["player_facing_text"] = short
+    gm_output["tags"] = []
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    emitted = str(out.get("player_facing_text") or "")
+    emission_debug = ((out.get("metadata") or {}).get("emission_debug") or {})
+    fem = read_final_emission_meta_dict(out) or {}
+
+    assert emitted == rich
+    assert emitted != short
+    assert emission_debug.get("scene_opening_candidate_len") == len(rich)
+    assert emission_debug.get("scene_opening_emitted_len") == len(rich)
+    assert emission_debug.get("scene_opening_candidate_emitted_match") is True
+    assert emission_debug.get("scene_opening_accepted_candidate_promoted") is True
+    assert emission_debug.get("response_type_candidate_preview") == emission_debug.get("response_type_emitted_preview")
+    assert fem.get("response_type_candidate_preview") == fem.get("response_type_emitted_preview")
+
+def test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_compatibility_local() -> None:
+    gm_output = opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = final_emission_meta_from_output(out)
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert_final_emission_meta_contains(
+        fem,
+        **successful_opening_fem_meta(
+            response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+            opening_fallback_context_source="opening_curated_facts",
+        ),
+    )
+    family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
+    assert family in FALLBACK_FAMILIES
+    assert family == UPSTREAM_PREPARED_EMISSION
+    assert family != LEGACY_DIEGETIC_FALLBACK
+    assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert_opening_fallback_source(
+        fem,
+        final_emitted_source=OPENING_SUCCESS_SOURCE,
+        authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    )
+
+def test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emission(monkeypatch) -> None:
+    gm_output = opening_gm_output()
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    def _should_not_run_gate_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_gate_local_deterministic_opening)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    pay = out.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    assert isinstance(pay, dict)
+    assert pay["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    fem = final_emission_meta_from_output(out)
+    assert_final_emission_meta_contains(fem, **successful_opening_fem_meta())
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
+    assert_opening_fallback_source(
+        fem,
+        final_emitted_source=OPENING_SUCCESS_SOURCE,
+        authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        forbid_compat_local_authorship=True,
+    )
+
+def test_block_n_opening_attach_build_failure_fails_closed_preserves_block_m_telemetry(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Block N: attach build failure on full gate entry fails closed; Block M telemetry preserved; no compat compose."""
+    import game.upstream_response_repairs as urr
+
+    gm_output = opening_gm_output()
+    gm_output.pop(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY, None)
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    def boom(_mapping: object) -> dict[str, object]:
+        raise RuntimeError("simulated upstream attach build failure")
+
+    monkeypatch.setattr(urr, "build_upstream_prepared_opening_fallback_payload", boom)
+
+    calls: list[str] = []
+    real_det = _deterministic_opening_under_test
+
+    def wrapped_det(out: Mapping[str, Any] | None) -> tuple[str, dict[str, Any]]:
+        calls.append("deterministic")
+        return real_det(out)
+
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", wrapped_det)
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("opening_upstream_prepare_attach_build_failed") is True
+    assert fem.get("opening_upstream_prepare_attach_failure_exc_type") == "RuntimeError"
+    assert fem.get("opening_upstream_prepare_attach_no_usable_payload_after_attempt") is True
+    # Response-type path emits the sealed marker; downstream visibility/N4 may replace with global stock (cf. Block H full gate).
+    assert out["player_facing_text"] == "For a breath, the scene holds while voices shift around you."
+    assert fem.get("opening_fallback_failed_closed") is True
+    assert fem.get("opening_fallback_compatibility_local_disabled") is True
+    assert fem.get("blocked_repair_kind") == "opening_upstream_prepare_attach_failed"
+    assert fem.get("opening_fallback_authorship_source") is None
+    assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
+    assert not calls
+
+def test_block_m_successful_upstream_attach_has_no_attach_failure_telemetry() -> None:
+    gm_output = opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("opening_upstream_prepare_attach_build_failed") is False
+    assert fem.get("opening_upstream_prepare_attach_no_usable_payload_after_attempt") is False
+    assert fem.get("opening_upstream_prepare_attach_failure_exc_type") in (None, "")
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
+
+def test_fail_closed_sealed_gate_empty_curated_facts_skips_upstream_opening_payload() -> None:
+    gm_output = opening_gm_output()
+    gm_output["opening_curated_facts"] = []
+    gm_output["opening_selector_selected_facts"] = []
+    md = gm_output.setdefault("metadata", {})
+    em = md.setdefault("emission_debug", {})
+    em["opening_curated_facts_present"] = False
+    em["opening_curated_facts_count"] = 0
+    em["opening_selector_selected_facts"] = []
+    em["opening_curated_facts"] = []
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    assert UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in out
+    assert out["player_facing_text"] == "For a breath, the scene holds while voices shift around you."
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem["final_route"] == "replaced"
+    assert fem["final_emitted_source"] == "acceptance_quality_global_scene_fallback"
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == GATE_TERMINAL_REPAIR
+    assert fem["response_type_repair_kind"] == "opening_deterministic_fallback_failed_closed"
+    assert fem.get("opening_fallback_authorship_source") is None
+    assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert fem.get("opening_fallback_compatibility_local_disabled") is True
+    assert fem.get("opening_fallback_missing_upstream_prepared_payload") is True
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
+
+def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(monkeypatch) -> None:
+    gm_output = opening_gm_output()
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
+
+    def _should_not_run_local_deterministic_opening(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("gate-local deterministic opening must not run when upstream payload is present")
+
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _should_not_run_local_deterministic_opening)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert_final_emission_meta_contains(
+        fem,
+        **successful_opening_fem_meta(
+            response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+            opening_fallback_context_source="opening_curated_facts",
+        ),
+    )
+    assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
+
+def test_final_gate_mirrors_authorship_from_upstream_payload_not_route_inference() -> None:
+    gm_output = opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm_output)
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
+    _repaired, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert dbg.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+
+def test_final_gate_does_not_infer_authorship_when_upstream_composition_lacks_field() -> None:
+    gm_output = opening_gm_output()
+    payload = build_upstream_prepared_opening_fallback_payload(gm_output)
+    composition = dict(payload["opening_fallback_composition_meta"])
+    composition.pop("opening_fallback_authorship_source", None)
+    payload["opening_fallback_composition_meta"] = composition
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
+    _repaired, dbg = feg._enforce_response_type_contract(
+        "Nearby crates appear disturbed.",
+        gm_output=gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert dbg.get("opening_recovered_via_fallback") is True
+    assert dbg.get("opening_fallback_authorship_source") is None
+
+def test_final_gate_valid_opening_candidate_has_no_fallback_provenance() -> None:
+    candidate = (
+        "You stand in the churned mud before Cinderwatch's eastern gate as rain spatters soot-dark stone. "
+        "Refugees press shoulder to shoulder around the wagon line while guards hold the choke. "
+        "You can read the notice board or approach the guards."
+    )
+    gm_output = opening_gm_output()
+    gm_output["player_facing_text"] = candidate
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert out["player_facing_text"] == candidate
+    assert fem["final_emitted_source"] == "generated_candidate"
+    assert fem.get("fallback_family_used") is None
+    assert fem.get(REALIZATION_FALLBACK_FAMILY_FIELD) is None
+    assert isinstance(out.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY), dict)
+    assert fem.get("opening_fallback_authorship_source") is None
+
+def test_canonical_missing_curated_facts_upstream_prepared_payload_still_wins(monkeypatch) -> None:
+    gm_output = opening_gm_output()
+    gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm_output)
+    gm_output.pop("opening_curated_facts", None)
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    def _boom(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("compatibility-local deterministic opening must not run when upstream snapshot is attached")
+
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _boom)
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
+    assert fem.get("opening_fallback_missing_curated_facts") is True
+    assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
+
+def test_fail_closed_sealed_gate_missing_curated_facts_records_fem() -> None:
+    gm_output = opening_gm_output()
+    gm_output.pop("opening_curated_facts", None)
+    gm_output["player_facing_text"] = "Nearby crates appear disturbed."
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+
+    fem = read_final_emission_meta_dict(out) or {}
+    assert fem.get("opening_fallback_missing_curated_facts") is True
+    assert fem.get("blocked_repair_kind") == "opening_missing_curated_facts"
+    assert fem.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
+
+def test_narrative_mode_output_opening_validation_runs_for_scene_opening_response_type() -> None:
+    nmc = build_narrative_mode_contract(narration_obligations={"is_opening_scene": True})
+    gm_output = opening_gm_output()
+    gm_output["prompt_context"]["narrative_plan"]["narrative_mode_contract"] = nmc
+    gm_output["player_facing_text"] = (
+        "Cinderwatch Gate District gathers rain, refugees, wagons, guards, and torchlight "
+        "around the eastern gate. You can read the notice board or approach the guards."
+    )
+    gm_output["tags"] = []
+
+    out = apply_final_emission_gate(
+        gm_output,
+        resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+        session={},
+        scene_id="frontier_gate",
+        world={},
+    )
+    fem = read_final_emission_meta_dict(out) or {}
+
+    assert fem.get("response_type_required") == "scene_opening"
+    assert fem.get("narrative_mode_output_checked") is True
+    assert fem.get("narrative_mode_output_mode") == "opening"
+    assert fem.get("narrative_mode_contract_mode") == "opening"
+
