@@ -8,10 +8,22 @@ from __future__ import annotations
 from typing import Any
 
 from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
     global_fallback_source_drift_row,
+    observed_global_replacement_row,
+    observed_opening_authorship_compat_row,
+    observed_opening_basis_row,
+    observed_opening_fallback_row,
+    observed_opening_projection_missing_row,
+    observed_post_gate_mutation_row,
+    observed_sanitizer_empty_fallback_row,
+    observed_sanitizer_leakage_dashboard_row,
+    observed_sanitizer_legacy_rewrite_row,
+    observed_sealed_replacement_row,
+    observed_speaker_mismatch_observed_row,
+    observed_upstream_prepared_emission_row,
+    observed_visibility_replacement_row,
     post_gate_mutation_drift_row,
     projection_unavailable_drift_row,
     replay_drift_row,
@@ -21,16 +33,22 @@ from tests.helpers.failure_classification_sync import (
     speaker_mismatch_drift_row,
 )
 from tests.helpers.failure_dashboard_report import build_classified_dashboard_row, record_protected_replay_assertion_failure
-from tests.helpers.opening_fallback_evidence import successful_opening_observed_fields
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+)
+from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
 
 SYNTHETIC_PROTECTED_BRIDGE_SCENARIO_ID = "synthetic_protected_bridge"
 SYNTHETIC_PROTECTED_BRIDGE_TEST_NODE_ID = "tests/test_golden_replay.py::synthetic_protected_bridge"
 
+_DASHBOARD_PROFILE = "dashboard_probe"
+
 CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
     (
         "wrong_speaker",
-        _observed(selected_speaker_id="guard"),
+        observed_speaker_mismatch_observed_row(profile=_DASHBOARD_PROFILE),
         speaker_mismatch_drift_row(),
         {
             "category": "speaker",
@@ -42,7 +60,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "forced_fallback_source",
-        _observed(final_emitted_source="global_scene_fallback", fallback_family="gate_terminal_repair"),
+        observed_global_replacement_row(profile=_DASHBOARD_PROFILE),
         global_fallback_source_drift_row(),
         {
             "category": "fallback",
@@ -59,7 +77,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     # source symptoms remain final-gate-owned.
     (
         "opening_fallback_owner_bucket",
-        _observed(**successful_opening_observed_fields(include_owner_bucket=True)),
+        observed_opening_fallback_row(owner_bucket=True, profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "opening_fallback_owner_bucket",
             expected="sealed-gate",
@@ -77,15 +95,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "opening_fallback_authorship_source",
-        _observed(
-            opening_recovered_via_fallback=True,
-            opening_fallback_authorship_source="compatibility_local_opening_deterministic",
-            fallback_family="scene_opening",
-        ),
+        observed_opening_authorship_compat_row(profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "opening_fallback_authorship_source",
-            expected="upstream_prepared_opening_fallback",
-            actual="compatibility_local_opening_deterministic",
+            expected=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+            actual=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
         ),
         {
             "category": "fallback",
@@ -98,10 +112,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "opening_fallback_basis",
-        _observed(
-            opening_recovered_via_fallback=True,
-            fallback_family="scene_opening",
-        ),
+        observed_opening_basis_row(profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "opening_final_fallback_basis",
             expected=["journal seed"],
@@ -118,10 +129,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "opening_fallback_projection_missing",
-        _observed(
-            unavailable=["opening_fallback_owner_bucket"],
-            raw_signal_presence={"opening_fallback_owner_bucket": True},
-        ),
+        observed_opening_projection_missing_row(profile=_DASHBOARD_PROFILE),
         projection_unavailable_drift_row(
             "opening_fallback_owner_bucket",
             expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
@@ -139,11 +147,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     # dashboard/triage projection locks, not sealed helper prose ownership.
     (
         "sealed_fallback_owner_bucket",
-        _observed(
-            final_emitted_source="global_scene_fallback",
-            fallback_family="gate_terminal_repair",
-            sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
-        ),
+        observed_sealed_replacement_row(profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "sealed_fallback_owner_bucket",
             expected="strict-social-sealed",
@@ -161,13 +165,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "visibility_fallback_owner_bucket",
-        _observed(
-            final_emitted_source="global_scene_fallback",
-            visibility_fallback_owner_bucket="sealed-gate",
-            visibility_replacement_applied=True,
-            visibility_fallback_pool="global_scene_narrative",
-            visibility_fallback_kind="narrative_safe_fallback",
-        ),
+        observed_visibility_replacement_row(profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "visibility_fallback_owner_bucket",
             expected="strict-social-visibility",
@@ -187,16 +185,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "sanitizer_leakage",
-        _observed(
-            sanitizer_mode="strip_only",
-            sanitizer_event_count=1,
-            sanitizer_changed_count=0,
-            sanitizer_lineage_mode="strip_only",
-            sanitizer_lineage_changed_count=1,
-            sanitizer_lineage_dropped_count=1,
-            sanitizer_lineage_empty_fallback_used=False,
-            sanitizer_lineage_legacy_rewrite_active=False,
-        ),
+        observed_sanitizer_leakage_dashboard_row(),
         scaffold_leakage_drift_row(),
         {
             "category": "sanitizer",
@@ -212,23 +201,18 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "sanitizer_empty_fallback",
-        _observed(
-            sanitizer_mode="strip_only",
-            sanitizer_empty_fallback_used=True,
-            sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-            sanitizer_empty_fallback_owner="output_sanitizer",
-            sanitizer_lineage_mode="strip_only",
-            sanitizer_lineage_changed_count=1,
-            sanitizer_lineage_dropped_count=1,
-            sanitizer_lineage_empty_fallback_used=True,
-            sanitizer_lineage_legacy_rewrite_active=False,
+        observed_sanitizer_empty_fallback_row(
+            profile=_DASHBOARD_PROFILE,
             final_emission_mutation_lineage=[
                 "pre_gate_sanitizer",
                 "sanitizer_empty_fallback",
                 "finalize_packaging",
             ],
-            upstream_prepared_emission_used=False,
-            upstream_prepared_emission_valid=False,
+            sanitizer_lineage_mode="strip_only",
+            sanitizer_lineage_changed_count=1,
+            sanitizer_lineage_dropped_count=1,
+            sanitizer_lineage_empty_fallback_used=True,
+            sanitizer_lineage_legacy_rewrite_active=False,
         ),
         replay_drift_row(
             "sanitizer_empty_fallback_used",
@@ -286,13 +270,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "legacy_sanitizer_rewrite_diagnostic",
-        _observed(
-            sanitizer_lineage_mode="legacy_sentence_rewrite",
-            sanitizer_lineage_changed_count=1,
-            sanitizer_lineage_dropped_count=0,
-            sanitizer_lineage_empty_fallback_used=False,
-            sanitizer_lineage_legacy_rewrite_active=True,
-        ),
+        observed_sanitizer_legacy_rewrite_row(profile=_DASHBOARD_PROFILE),
         scaffold_leakage_drift_row(reason="legacy sentence rewrite diagnostic evidence"),
         {
             "category": "sanitizer",
@@ -306,11 +284,9 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "response_type_repair_unexpected",
-        _observed(
-            response_type_repair_used=True,
+        observed_upstream_prepared_emission_row(
+            profile=_DASHBOARD_PROFILE,
             response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
             upstream_prepared_emission_source="prepared_action_fallback_text",
             final_emission_mutation_lineage=[
                 "response_type_repair",
@@ -337,12 +313,11 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "prepared_emission_rejected",
-        _observed(
-            response_type_repair_used=True,
+        observed_upstream_prepared_emission_row(
+            profile=_DASHBOARD_PROFILE,
             response_type_repair_kind="answer_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_source="prepared_answer_fallback_text",
+            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_reject_reason="missing_answer_specificity",
         ),
         replay_drift_row(
@@ -405,9 +380,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "post_gate_unknown_mutation",
-        _observed(
-            post_gate_mutation_detected=True,
-        ),
+        observed_post_gate_mutation_row(profile=_DASHBOARD_PROFILE, final_emission_mutation_lineage=None),
         post_gate_mutation_drift_row(),
         {
             "category": "emission",
@@ -422,8 +395,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "post_gate_route_illegal_strip_reduced",
-        _observed(
-            post_gate_mutation_detected=True,
+        observed_post_gate_mutation_row(
+            profile=_DASHBOARD_PROFILE,
             final_emission_mutation_lineage=["finalize_route_illegal_strip", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
@@ -440,8 +413,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "post_gate_sanitizer_empty_reduced",
-        _observed(
-            post_gate_mutation_detected=True,
+        observed_post_gate_mutation_row(
+            profile=_DASHBOARD_PROFILE,
             final_emission_mutation_lineage=["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
@@ -458,8 +431,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
     ),
     (
         "post_gate_response_type_reduced",
-        _observed(
-            post_gate_mutation_detected=True,
+        observed_post_gate_mutation_row(
+            profile=_DASHBOARD_PROFILE,
             final_emission_mutation_lineage=["response_type_repair", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
@@ -475,6 +448,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         },
     ),
 )
+
 
 def classified_rows() -> list[dict[str, Any]]:
     """Build dashboard rows for all controlled failure probe cases."""

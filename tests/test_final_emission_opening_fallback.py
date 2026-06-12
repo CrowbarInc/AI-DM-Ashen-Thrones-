@@ -9,6 +9,7 @@ here; final output, FEM propagation, and gate ordering remain gate-suite work.
 
 from __future__ import annotations
 
+import json
 from typing import Any, Dict
 
 import pytest
@@ -37,13 +38,20 @@ from game.upstream_response_repairs import (
 from tests.helpers.emission_smoke_assertions import response_type_contract
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    OPENING_FAILED_CLOSED_REPAIR_KIND,
+    OPENING_FALLBACK_FAMILY,
+    OPENING_SUCCESS_REPAIR_KIND,
     OPENING_SUCCESS_SOURCE,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
     opening_gm_output,
+    opening_owner_bucket_projection_fields,
     opening_upstream_composition_meta_slice,
 )
-from tests.helpers.opening_fallback_gate_harness import opening_gate_attach_then_enforce_response_type_contract
+from tests.helpers.opening_fallback_gate_harness import (
+    opening_gate_attach_then_enforce_response_type_contract,
+    opening_gate_attach_then_opening_scene_safe_fallback_selection,
+)
 from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
@@ -77,14 +85,7 @@ def _select(gm_output: Dict[str, Any]) -> VisibilitySelectedFallback:
 def _assert_owner_bucket(meta: Dict[str, Any], *, repair_kind: str, expected: str) -> None:
     assert_fallback_owner_bucket(
         expected,
-        from_fields={
-            "final_emitted_source": OPENING_SUCCESS_SOURCE,
-            "opening_recovered_via_fallback": True,
-            "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
-            "response_type_repair_kind": repair_kind,
-            "fallback_family": meta.get("fallback_family_used"),
-            "fallback_temporal_frame": meta.get("fallback_temporal_frame"),
-        },
+        from_fields=opening_owner_bucket_projection_fields(meta, repair_kind=repair_kind),
     )
 
 
@@ -99,10 +100,10 @@ def test_opening_scene_safe_fallback_selection_returns_canonical_dataclass_and_m
         )
         assert isinstance(selected, VisibilitySelectedFallback)
         assert selected.fallback_pool == "scene_opening_deterministic"
-        assert selected.fallback_kind == "opening_deterministic_fallback"
-        assert selected.final_emitted_source == "opening_deterministic_fallback"
+        assert selected.fallback_kind == OPENING_SUCCESS_SOURCE
+        assert selected.final_emitted_source == OPENING_SUCCESS_SOURCE
         assert selected.fallback_strategy == "opening_scene_safe_fallback"
-        assert selected.fallback_candidate_source == "opening_deterministic_fallback"
+        assert selected.fallback_candidate_source == OPENING_SUCCESS_SOURCE
         meta = dict(selected.composition_meta)
         if gm_output is prepared_gm:
             assert selected.text == PREPARED_TEXT
@@ -132,10 +133,10 @@ def test_adapter_selects_usable_upstream_prepared_payload_unchanged() -> None:
         selected.fallback_candidate_source,
     ) == (
         "scene_opening_deterministic",
-        "opening_deterministic_fallback",
-        "opening_deterministic_fallback",
+        OPENING_SUCCESS_SOURCE,
+        OPENING_SUCCESS_SOURCE,
         "opening_scene_safe_fallback",
-        "opening_deterministic_fallback",
+        OPENING_SUCCESS_SOURCE,
     )
     meta = dict(selected.composition_meta)
     assert meta == payload["opening_fallback_composition_meta"]
@@ -170,14 +171,14 @@ def test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_sh
     selected = _select({"opening_curated_facts": ["Rain needles the stones at the gate."]})
 
     assert selected.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-    assert selected.fallback_kind == "opening_deterministic_fallback"
+    assert selected.fallback_kind == OPENING_SUCCESS_SOURCE
     meta = dict(selected.composition_meta)
     assert meta["opening_fallback_failed_closed"] is True
     assert meta["opening_fallback_missing_upstream_prepared_payload"] is True
     assert meta["opening_fallback_missing_curated_facts"] is False
     assert meta["opening_fallback_basis_count"] == 1
     assert meta["opening_fallback_authorship_source"] is None
-    assert meta["fallback_family_used"] == "scene_opening"
+    assert meta["fallback_family_used"] == OPENING_FALLBACK_FAMILY
     assert meta["fallback_temporal_frame"] == "first_impression"
     _assert_owner_bucket(
         meta,
@@ -331,8 +332,8 @@ def test_canonical_opening_failure_recovers_via_upstream_prepared_payload_when_p
     )
 
     assert text == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
-    assert dbg.get("fallback_family_used") == "scene_opening"
+    assert dbg.get("response_type_repair_kind") == OPENING_SUCCESS_REPAIR_KIND
+    assert dbg.get("fallback_family_used") == OPENING_FALLBACK_FAMILY
     family = dbg[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert family == UPSTREAM_PREPARED_EMISSION
     assert_final_emission_meta_contains(
@@ -368,7 +369,7 @@ def test_gate_opening_failure_text_only_stub_fails_closed_without_rebuild(monkey
 
     assert calls == []
     assert text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
-    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback_failed_closed"
+    assert dbg.get("response_type_repair_kind") == OPENING_FAILED_CLOSED_REPAIR_KIND
     assert_final_emission_meta_contains(dbg, opening_fallback_authorship_source=None)
     assert dbg.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=dbg)
@@ -531,10 +532,10 @@ def test_opening_failure_fallback_classification_excludes_observe_family() -> No
     meta = fallback_template_metadata(repair_kind)
     observe_meta = fallback_template_metadata("observe_perception_fallback")
     assert text
-    assert meta == {"fallback_family": "scene_opening", "temporal_frame": "first_impression"}
+    assert meta == {"fallback_family": OPENING_FALLBACK_FAMILY, "temporal_frame": "first_impression"}
     assert meta.get("fallback_family") != observe_meta.get("fallback_family")
     assert meta.get("temporal_frame") not in {"reinspection", "continuation"}
-    assert dbg.get("fallback_family_used") == "scene_opening"
+    assert dbg.get("fallback_family_used") == OPENING_FALLBACK_FAMILY
     assert dbg.get("fallback_temporal_frame") == "first_impression"
 
 
@@ -552,8 +553,8 @@ def test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe()
     )
 
     low = selected.text.lower()
-    assert selected.fallback_kind == "opening_deterministic_fallback"
-    assert selected.composition_meta.get("fallback_family_used") == "scene_opening"
+    assert selected.fallback_kind == OPENING_SUCCESS_SOURCE
+    assert selected.composition_meta.get("fallback_family_used") == OPENING_FALLBACK_FAMILY
     assert selected.composition_meta.get("fallback_temporal_frame") == "first_impression"
     assert "look again" not in low
     assert "still" not in low
@@ -637,7 +638,7 @@ def test_failed_scene_opening_never_emits_generic_the_scene_fallback() -> None:
         active_interlocutor="",
     )
 
-    assert dbg.get("response_type_repair_kind") == "opening_deterministic_fallback"
+    assert dbg.get("response_type_repair_kind") == OPENING_SUCCESS_REPAIR_KIND
     assert "the scene" not in text.lower()
     assert "before you is immediately before you" not in text.lower()
     assert "the scene is immediately before you" not in text.lower()
@@ -690,6 +691,36 @@ def test_frontier_gate_opening_fallback_uses_top_level_curated_facts() -> None:
     assert dbg.get("opening_fallback_context_source") == "opening_curated_facts"
     assert dbg.get("opening_fallback_failed_closed") is False
     assert "immediately before you" not in text.lower()
+
+
+def test_block_ai_scene_opening_rt_selector_does_not_mutate_inputs() -> None:
+    """Relocated from gate (BG-2): scene-opening RT accept-path selector must not mutate debug dict."""
+    rd: dict[str, Any] = {
+        "response_type_required": "scene_opening",
+        "response_type_candidate_ok": True,
+        "response_type_repair_used": False,
+        "scene_opening_candidate_contract_passed": True,
+    }
+    snap = json.dumps(rd, sort_keys=True)
+    final_emission_gate._scene_opening_rt_contract_accept_path_promotes_candidate(rd)
+    assert json.dumps(rd, sort_keys=True) == snap
+
+
+def test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_compatibility_local(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Relocated from gate (BG-2): upstream-prepared opening snapshot blocks compatibility-local compose."""
+    gm = opening_gm_output()
+    gm[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = build_upstream_prepared_opening_fallback_payload(gm)
+
+    def _compat_must_not_run(*_a: Any, **_k: Any) -> tuple[str, dict]:
+        raise AssertionError("compatibility-local opening composer must not run when upstream snapshot is attached")
+
+    monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _compat_must_not_run)
+    selected = opening_gate_attach_then_opening_scene_safe_fallback_selection(gm)
+    composition_meta = selected.composition_meta or {}
+    assert composition_meta["opening_fallback_authorship_source"] == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
 def test_gate_opening_selection_wrapper_delegates_to_adapter(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -13,6 +13,7 @@ from typing import Any
 
 import pytest
 
+import game.final_emission_gate as feg
 from game.final_emission_gate import apply_strict_social_emergency_fallback_patch
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_BUCKETS,
@@ -177,6 +178,33 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
     assert callable(providers.global_provider)
     assert gm["player_facing_text"] == "x"
     assert gm["tags"] == []
+
+
+def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Relocated from gate (BG-2): gate-owned terminal selector must not mutate gm_output on opening branch."""
+    monkeypatch.setattr(feg, "_passive_scene_pressure_fallback_candidates", lambda **_: [])
+    monkeypatch.setattr(feg, "_should_use_neutral_nonprogress_fallback_instead_of_global_stock", lambda *_: False)
+    gm = copy.deepcopy(opening_gm_output())
+    snap = copy.deepcopy(gm)
+    resolution = {"kind": "scene_opening", "prompt": "Start the campaign."}
+    feg._select_non_strict_replace_path_terminal_sealed_fallback_selection(
+        gm,
+        session={},
+        scene=None,
+        world={},
+        sid="frontier_gate",
+        resolution=resolution,
+        eff_resolution=None,
+        active_interlocutor="",
+        strict_social_suppressed_non_social_turn=False,
+        res_kind="scene_opening",
+        response_type_required="scene_opening",
+        suppress_intro_replace=False,
+        interaction_mode="",
+    )
+    assert gm == snap
 
 
 def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None:
@@ -508,6 +536,7 @@ def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None
         "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
         "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
         "test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks",
+        "test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch",
         "test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts",
         "test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output",
         "test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only",

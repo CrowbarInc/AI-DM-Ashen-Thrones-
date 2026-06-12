@@ -9,6 +9,8 @@ from tests.helpers.golden_replay import (
     PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS,
     PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES,
     assert_golden_turn_observation,
+    frontier_gate_branch_replay_fixture,
+    validate_scenario_spine_fixture_dict,
     protected_route_expectation,
     protected_social_directed_question_expectation,
     protected_social_structural_base,
@@ -20,6 +22,16 @@ from tests.helpers.golden_replay import (
     protected_unavailable_expectation,
     render_golden_replay_markdown_report,
 )
+
+
+def test_frontier_gate_branch_replay_fixture_loads_validated_branch() -> None:
+    fixture = frontier_gate_branch_replay_fixture("branch_social_inquiry")
+    assert validate_scenario_spine_fixture_dict(fixture["spine"]) == []
+    assert fixture["source_path"] == "data/validation/scenario_spines/frontier_gate_long_session.json"
+    assert fixture["branch_id"] == "branch_social_inquiry"
+    assert len(fixture["player_prompts"]) == 25
+    assert fixture["turn_ids"][0] == "inv_01"
+    assert fixture["turn_ids"][-1] == "inv_25"
 
 
 def test_protected_route_expectation_defaults_to_social_route_labels() -> None:

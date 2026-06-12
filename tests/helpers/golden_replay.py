@@ -28,6 +28,7 @@ from tests.helpers.replay_drift_taxonomy import (
 from tests.helpers.golden_replay_projection import (
     MISSING as _MISSING,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+    SEALED_REPLACEMENT_SUBKINDS,
     _echo_overlap_band,
     final_text_has_scaffold_leakage,
     golden_text_hash,
@@ -187,6 +188,33 @@ FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE: dict[str, Any] = {
         "unavailable_with_fallback_count": 1,
         "fallback_selected_without_family_count": 1,
     },
+}
+
+FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE: dict[str, Any] = {
+    "event_kind_equals": {"fallback_selected": 7},
+    "event_kind_max": {"mutation": 14, "speaker_repair": 1},
+    "mutation_kind_max": {
+        "fallback_mutation": 7,
+        "final_emission_mutation": 4,
+        "response_type_repair_mutation": 2,
+        "speaker_repair_mutation": 1,
+    },
+    "allowed_recurring_keys": {
+        "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+        "mutation:gate:game.final_emission_gate:fallback_mutation",
+        "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
+        "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+        "mutation:gate:game.final_emission_gate:final_emission_mutation",
+        "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
+        "gate_outcome:gate:game.final_emission_gate:prepared_repair",
+        "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
+    }
+    | {
+        f"fallback_selected:gate:game.final_emission_gate:{subkind}"
+        for subkind in SEALED_REPLACEMENT_SUBKINDS
+    },
+    "max_recurring_event_count": 25,
 }
 
 
@@ -384,38 +412,63 @@ def protected_social_vocative_canonical_entry_expectation(
 def protected_social_supplemental_structural_expectation(
     *,
     require_present: tuple[str, ...] | list[str] = (),
+    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
     include_trace_route: bool = False,
 ) -> dict[str, Any]:
     """Supplemental protected fragment for optional projected social fields."""
     return protected_structural_expectation(
         require_present=require_present,
-        allow_unavailable=("fallback_family",),
+        allow_unavailable=allow_unavailable,
         include_route_kind=False,
         include_trace_route=include_trace_route,
         no_scaffold=False,
     )
 
 
+def load_scenario_spine_fixture_json(path: Path | str) -> dict[str, Any]:
+    """Read one scenario-spine JSON fixture from the repo."""
+    fixture_path = Path(path)
+    if not fixture_path.is_absolute():
+        fixture_path = REPO_ROOT / fixture_path
+    return json.loads(fixture_path.read_text(encoding="utf-8"))
+
+
+def validate_scenario_spine_fixture_dict(raw: Mapping[str, Any]) -> list[str]:
+    """Validate a scenario-spine fixture dict through the canonical schema helpers."""
+    from game.scenario_spine import scenario_spine_from_dict, validate_scenario_spine_definition
+
+    return validate_scenario_spine_definition(scenario_spine_from_dict(dict(raw)))
+
+
 def load_frontier_gate_long_session_spine() -> dict[str, Any]:
     """Load the authoritative Frontier Gate long-session replay fixture."""
-    return json.loads(FRONTIER_GATE_LONG_SESSION_PATH.read_text(encoding="utf-8"))
+    return load_scenario_spine_fixture_json(FRONTIER_GATE_LONG_SESSION_PATH)
 
 
-def _frontier_gate_branch(branch_id: str) -> Mapping[str, Any]:
-    raw = load_frontier_gate_long_session_spine()
-    return next(b for b in raw["branches"] if b["branch_id"] == branch_id)
+def frontier_gate_branch_replay_fixture(
+    branch_id: str,
+    *,
+    max_turns: int | None = None,
+) -> dict[str, Any]:
+    """Load Frontier Gate spine JSON and extract one branch for golden replay."""
+    spine = load_frontier_gate_long_session_spine()
+    branch = next(b for b in spine["branches"] if b["branch_id"] == branch_id)
+    turns_slice = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
+    return {
+        "spine": spine,
+        "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+        "branch_id": branch_id,
+        "player_prompts": [str(turn["player_prompt"]) for turn in turns_slice],
+        "turn_ids": [str(turn["turn_id"]) for turn in turns_slice],
+    }
 
 
 def frontier_gate_branch_prompts(branch_id: str, max_turns: int | None = None) -> list[str]:
-    branch = _frontier_gate_branch(branch_id)
-    turns = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
-    return [str(turn["player_prompt"]) for turn in turns]
+    return frontier_gate_branch_replay_fixture(branch_id, max_turns=max_turns)["player_prompts"]
 
 
 def frontier_gate_branch_turn_ids(branch_id: str, max_turns: int | None = None) -> list[str]:
-    branch = _frontier_gate_branch(branch_id)
-    turns = branch["turns"] if max_turns is None else branch["turns"][:max_turns]
-    return [str(turn["turn_id"]) for turn in turns]
+    return frontier_gate_branch_replay_fixture(branch_id, max_turns=max_turns)["turn_ids"]
 
 
 def _format_expected_failure(

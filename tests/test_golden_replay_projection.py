@@ -11,7 +11,10 @@ from tests.helpers.golden_replay_fixtures import (
     observed_turn_from_gate_output,
     project_synthetic_turn,
 )
-from tests.helpers.opening_fallback_evidence import opening_dual_family_fem_meta
+from tests.helpers.opening_fallback_evidence import (
+    OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    opening_dual_family_fem_meta,
+)
 from tests.helpers.golden_replay_projection import (
     REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS,
     dual_fallback_family_replay_precedence_surface,
@@ -209,7 +212,7 @@ def test_ak5_every_protected_path_is_projected_or_marked_unavailable():
             fallback_family_used="social",
             realization_fallback_family="upstream_prepared_emission",
             opening_recovered_via_fallback=False,
-            opening_fallback_authorship_source="upstream_prepared_opening_fallback",
+            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
             sealed_fallback_owner_bucket="unknown-none",
             visibility_fallback_owner_bucket="unknown-none",
         ),

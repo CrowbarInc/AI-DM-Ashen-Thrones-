@@ -707,6 +707,56 @@ def protected_observation_manifest_section_is_current(manifest_text: str) -> boo
     return current is not None and current == expected
 
 
+def protected_observation_manifest_registry_parity_errors(
+    manifest_text: str,
+) -> list[str]:
+    """Return parity drift messages when manifest docs diverge from the protected observation registry."""
+    errors: list[str] = []
+
+    if extract_protected_observation_manifest_section(manifest_text) is None:
+        errors.append(
+            "missing generated manifest section markers "
+            f"{PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN!r} / "
+            f"{PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END!r}"
+        )
+        return errors
+
+    if not protected_observation_manifest_section_is_current(manifest_text):
+        errors.append(
+            "generated manifest section is stale; "
+            "run: python tools/refresh_protected_replay_manifest.py --write"
+        )
+
+    manifest_rows = dict(protected_observation_manifest_field_rows())
+    registry_paths = protected_observation_field_paths()
+    manifest_paths = tuple(manifest_rows)
+
+    if manifest_paths != registry_paths:
+        extra = sorted(set(manifest_paths) - set(registry_paths))
+        missing = sorted(set(registry_paths) - set(manifest_paths))
+        if extra:
+            errors.append(f"manifest has paths not in registry: {extra!r}")
+        if missing:
+            errors.append(f"manifest missing registry paths: {missing!r}")
+
+    for field in protected_observation_field_registry():
+        registry_bucket = field.drift_bucket
+        drift_bucket = protected_observation_drift_bucket(field.path)
+        if drift_bucket != registry_bucket:
+            errors.append(
+                f"protected_observation_drift_bucket({field.path!r})={drift_bucket!r} "
+                f"but registry declares {registry_bucket!r}"
+            )
+        manifest_bucket = manifest_rows.get(field.path)
+        if manifest_bucket is not None and manifest_bucket != registry_bucket:
+            errors.append(
+                f"manifest drift bucket for {field.path!r} is {manifest_bucket!r}, "
+                f"registry declares {registry_bucket!r}"
+            )
+
+    return errors
+
+
 def protected_observation_drift_bucket(path: str) -> str:
     """Map a protected observation field path to its drift bucket."""
     bucket = _DRIFT_BUCKET_BY_PATH.get(path)

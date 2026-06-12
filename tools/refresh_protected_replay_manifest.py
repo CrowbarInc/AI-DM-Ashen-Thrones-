@@ -18,10 +18,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tests.helpers.golden_replay_projection import (  # noqa: E402
+    PROTECTED_OBSERVATION_FIELDS,
     PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN,
     PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END,
     extract_protected_observation_manifest_section,
+    protected_observation_drift_bucket,
     protected_observation_field_paths,
+    protected_observation_field_registry,
+    protected_observation_manifest_registry_parity_errors,
     protected_observation_manifest_section_is_current,
     protected_observation_manifest_field_rows,
     render_protected_observation_manifest_section,
@@ -34,8 +38,11 @@ INSERT_BEFORE_HEADING = "## Cycle S Drift Policy Addendum"
 
 
 def _registry_fields_by_path() -> dict[str, str]:
-    """Return registry path -> drift bucket (delegates to ``PROTECTED_OBSERVATION_FIELDS``)."""
-    return {path: bucket for path, bucket in protected_observation_manifest_field_rows()}
+    """Return registry path -> drift bucket via canonical registry accessors."""
+    return {
+        path: protected_observation_drift_bucket(path)
+        for path in protected_observation_field_paths()
+    }
 
 
 def render_generated_section() -> str:
@@ -59,12 +66,25 @@ def _validate_registry_invariants() -> str | None:
 
         duplicates = sorted(path for path, count in Counter(paths).items() if count > 1)
         return f"Protected observation registry has duplicate paths: {duplicates!r}"
+    if len(protected_observation_field_registry()) != len(PROTECTED_OBSERVATION_FIELDS):
+        return (
+            "protected_observation_field_registry() must mirror PROTECTED_OBSERVATION_FIELDS: "
+            f"registry={len(protected_observation_field_registry())!r} "
+            f"fields={len(PROTECTED_OBSERVATION_FIELDS)!r}"
+        )
     rows = protected_observation_manifest_field_rows()
     if len(rows) != len(paths):
         return (
             "Protected observation manifest rows disagree with registry path count: "
             f"rows={len(rows)!r} paths={len(paths)!r}"
         )
+    for field in protected_observation_field_registry():
+        bucket = protected_observation_drift_bucket(field.path)
+        if bucket != field.drift_bucket:
+            return (
+                f"protected_observation_drift_bucket({field.path!r})={bucket!r} "
+                f"but registry declares {field.drift_bucket!r}"
+            )
     return None
 
 
@@ -99,6 +119,11 @@ def refresh_manifest(*, write: bool) -> int:
         return 1
 
     manifest = MANIFEST_PATH.read_text(encoding="utf-8")
+    parity_errors = protected_observation_manifest_registry_parity_errors(manifest)
+    if parity_errors and not write:
+        print("\n".join(parity_errors), file=sys.stderr)
+        return 1
+
     expected = render_generated_section()
     current = extract_generated_section(manifest)
 

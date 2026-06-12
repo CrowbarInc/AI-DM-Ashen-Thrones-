@@ -234,61 +234,6 @@ def test_summarize_owner_drift_buckets_empty_input() -> None:
     assert sum(counts.values()) == 0
 
 
-def test_render_protected_replay_failure_report_includes_owner_drift_bucket() -> None:
-    from tests.helpers.failure_dashboard_report import render_protected_replay_failure_report
-    from tests.helpers.replay_observed_row_fixtures import observed_failure_row
-
-    observed = observed_failure_row(selected_speaker_id="guard")
-    rows = classify_replay_failure(
-        scenario_id="report_probe",
-        turn_index=0,
-        observed_turn=observed,
-        drift_rows=[
-            {
-                "field_path": "selected_speaker_id",
-                "expected": "runner",
-                "actual": "guard",
-                "reason": "equals mismatch",
-                "drift_bucket": "structural_drift",
-                "replay_tags": ["structural_drift"],
-            }
-        ],
-    )
-    enriched = dict(rows[0])
-    enriched["test_node_id"] = "tests/test_golden_replay.py::probe"
-    enriched["failed_invariant"] = "selected_speaker_id: equals mismatch"
-
-    report = render_protected_replay_failure_report([enriched], generated_at="2026-06-06T00:00:00Z")
-    assert "| Owner Drift Bucket |" in report
-    assert "speaker_drift" in report
-    assert "## Owner Drift Breakdown" in report
-
-
-def test_render_rerun_scorecard_includes_owner_drift_summary() -> None:
-    from tests.helpers.failure_dashboard_report import render_rerun_drift_scorecard_markdown
-
-    scorecard = compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "A."}],
-        [{"selected_speaker_id": "guard", "route_kind": "dialogue", "final_text": "A."}],
-    )
-    markdown = render_rerun_drift_scorecard_markdown(scorecard, generated_at="2026-06-06T00:00:00Z")
-    assert "## Owner Drift Summary" in markdown
-    assert "| `speaker_drift` | `1` |" in markdown
-    assert scorecard["report_only"] is True
-
-
-def test_render_rerun_scorecard_empty_owner_drift_summary() -> None:
-    from tests.helpers.failure_dashboard_report import render_rerun_drift_scorecard_markdown
-
-    scorecard = compare_golden_replay_reruns(
-        [{"selected_speaker_id": "runner", "final_text": "Stable."}],
-        [{"selected_speaker_id": "runner", "final_text": "Stable."}],
-    )
-    markdown = render_rerun_drift_scorecard_markdown(scorecard)
-    assert "## Owner Drift Summary" in markdown
-    assert "No owner drift classifications." in markdown
-
-
 def test_compare_golden_replay_reruns_identical_runs_have_zero_deltas():
     turns = [
         synthetic_rerun_turn(turn_index=0, turn_id="t01"),

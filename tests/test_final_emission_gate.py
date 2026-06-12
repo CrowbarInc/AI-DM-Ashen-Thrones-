@@ -74,12 +74,18 @@ from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_AUTHORSHIP_
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    OPENING_FAILED_CLOSED_REPAIR_KIND,
+    OPENING_FALLBACK_FAMILY,
+    OPENING_SUCCESS_REPAIR_KIND,
+    OPENING_SUCCESS_SOURCE,
     assert_fallback_owner_bucket,
     assert_final_emission_meta_contains,
     assert_opening_fallback_source,
     assert_sealed_fallback_owner_bucket,
+    fail_closed_opening_fem_meta,
     opening_gm_output,
     opening_validation_context,
+    successful_opening_fem_meta,
 )
 from tests.helpers.strict_social_harness import (
     run_strict_social_motive_overclaim_gate_case,
@@ -2761,8 +2767,7 @@ def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_g
     fem = final_emission_meta_from_output(out)
     assert_final_emission_meta_contains(
         fem,
-        response_type_repair_kind="opening_deterministic_fallback_failed_closed",
-        opening_fallback_authorship_source=None,
+        **fail_closed_opening_fem_meta(opening_fallback_authorship_source=None),
     )
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fem)
@@ -2843,11 +2848,10 @@ def test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_comp
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert_final_emission_meta_contains(
         fem,
-        final_emitted_source="opening_deterministic_fallback",
-        fallback_family_used="scene_opening",
-        response_type_repair_kind="opening_deterministic_fallback",
-        opening_fallback_context_source="opening_curated_facts",
-        opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        **successful_opening_fem_meta(
+            response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+            opening_fallback_context_source="opening_curated_facts",
+        ),
     )
     family = fem[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert family in FALLBACK_FAMILIES
@@ -2856,7 +2860,7 @@ def test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_comp
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert_opening_fallback_source(
         fem,
-        final_emitted_source="opening_deterministic_fallback",
+        final_emitted_source=OPENING_SUCCESS_SOURCE,
         authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
         owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     )
@@ -2885,15 +2889,11 @@ def test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emi
     assert pay["prepared_opening_fallback_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
     fem = final_emission_meta_from_output(out)
-    assert_final_emission_meta_contains(
-        fem,
-        final_emitted_source="opening_deterministic_fallback",
-        fallback_family_used="scene_opening",
-    )
+    assert_final_emission_meta_contains(fem, **successful_opening_fem_meta())
     assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
     assert_opening_fallback_source(
         fem,
-        final_emitted_source="opening_deterministic_fallback",
+        final_emitted_source=OPENING_SUCCESS_SOURCE,
         authorship_source=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
         owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         forbid_compat_local_authorship=True,
@@ -3059,11 +3059,14 @@ def test_canonical_final_gate_prefers_upstream_prepared_payload_when_present(mon
 
     fem = read_final_emission_meta_dict(out) or {}
     assert out["player_facing_text"] == EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
-    assert fem["final_emitted_source"] == "opening_deterministic_fallback"
-    assert fem["fallback_family_used"] == "scene_opening"
+    assert_final_emission_meta_contains(
+        fem,
+        **successful_opening_fem_meta(
+            response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+            opening_fallback_context_source="opening_curated_facts",
+        ),
+    )
     assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
-    assert fem["response_type_repair_kind"] == "opening_deterministic_fallback"
-    assert fem["opening_fallback_context_source"] == "opening_curated_facts"
     assert fem.get("opening_fallback_authorship_source") == OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert fem.get("opening_fallback_authorship_source") != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
     assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=fem)
@@ -3616,11 +3619,12 @@ def test_block_m4_replacement_final_source_ownership_is_locked() -> None:
 
 
 def test_block_ai_block_ag_selector_order_snapshots_remain_entrypoints() -> None:
-    """Regression anchor: Block AG gate-orchestration snapshots must stay importable.
+    """Regression anchor: Block AG / BG-2 gate-orchestration snapshots must stay importable.
 
-    Pure visibility/sealed helper importability and tuple round-trips live in
-    tests/test_final_emission_visibility_fallback.py and
-    tests/test_final_emission_sealed_fallback.py (see their entrypoint anchors).
+    Pure visibility/sealed helper importability, tuple round-trips, and defensive-copy
+    locks live in tests/test_final_emission_visibility_fallback.py,
+    tests/test_final_emission_sealed_fallback.py, and opening RT/upstream-prepared pins in
+    tests/test_final_emission_opening_fallback.py (see owner entrypoint anchors).
     """
     mod = sys.modules[__name__]
     for name in (

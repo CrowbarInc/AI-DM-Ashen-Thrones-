@@ -1713,8 +1713,8 @@ def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
     assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
 
 
-def test_ba1_protected_replay_manifest_registry_parity() -> None:
-    """Cycle BA-1: manifest generated section is derived only from PROTECTED_OBSERVATION_FIELDS."""
+def test_bg1_protected_replay_manifest_registry_parity() -> None:
+    """Cycle BG-1: manifest generation stays registry-backed and parity-checked."""
     import importlib.util
 
     import tests.helpers.golden_replay_projection as acceptance_projection
@@ -1729,14 +1729,30 @@ def test_ba1_protected_replay_manifest_registry_parity() -> None:
     spec.loader.exec_module(refresh_mod)
 
     manifest_text = refresh_mod.MANIFEST_PATH.read_text(encoding="utf-8")
+    assert acceptance_projection.protected_observation_manifest_registry_parity_errors(
+        manifest_text
+    ) == []
     assert acceptance_projection.protected_observation_manifest_section_is_current(manifest_text)
     assert refresh_mod.manifest_section_is_current(manifest_text)
 
     registry_paths = {
+        field.path for field in acceptance_projection.protected_observation_field_registry()
+    }
+    assert registry_paths == set(acceptance_projection.protected_observation_field_paths())
+    assert tuple(
+        path for path, _bucket in acceptance_projection.protected_observation_manifest_field_rows()
+    ) == acceptance_projection.protected_observation_field_paths()
+
+    registry_buckets = {
         field.path: field.drift_bucket
         for field in acceptance_projection.protected_observation_field_registry()
     }
-    assert refresh_mod._registry_fields_by_path() == registry_paths
+    assert refresh_mod._registry_fields_by_path() == {
+        path: acceptance_projection.protected_observation_drift_bucket(path)
+        for path in acceptance_projection.protected_observation_field_paths()
+    }
+    for path, bucket in registry_buckets.items():
+        assert acceptance_projection.protected_observation_drift_bucket(path) == bucket
 
 
 def test_ao5_runtime_and_acceptance_projection_modules_remain_separate() -> None:

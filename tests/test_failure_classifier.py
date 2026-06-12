@@ -27,10 +27,16 @@ from tests.helpers.failure_classification_sync import (
     observed_global_replacement_row,
     observed_legacy_opening_fallback_row,
     observed_opening_fallback_row,
+    observed_opening_projection_missing_row,
+    observed_post_gate_mutation_row,
+    observed_response_type_repair_row,
     observed_sanitizer_empty_fallback_row,
+    observed_sanitizer_legacy_rewrite_row,
     observed_sanitizer_row,
     observed_sealed_replacement_row,
     observed_social_fallback_row,
+    observed_speaker_mismatch_observed_row,
+    observed_upstream_prepared_emission_row,
     observed_visibility_replacement_row,
     opening_recovered_drift_row,
     post_gate_mutation_drift_row,
@@ -96,7 +102,7 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
     [
         (
             "wrong speaker",
-            _observed(selected_speaker_id="guard"),
+            observed_speaker_mismatch_observed_row(),
             speaker_mismatch_drift_row(),
             ("speaker", "speaker", "critical", "game/speaker_contract_enforcement.py"),
         ),
@@ -157,7 +163,7 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
         ),
         (
             "response-type repair",
-            _observed(response_type_repair_used=True, response_type_repair_kind="dialogue_shape"),
+            observed_response_type_repair_row("dialogue_shape"),
             response_type_repair_drift_row(),
             ("emission", "emission", "medium", "game/final_emission_gate.py"),
         ),
@@ -425,10 +431,7 @@ def test_failure_classifier_routes_opening_projection_omission_to_golden_replay(
     row = classify_replay_probe_row(
         scenario_id="opening_projection_missing",
         turn_index=0,
-        observed_turn=_observed(
-            unavailable=["opening_fallback_owner_bucket"],
-            raw_signal_presence={"opening_fallback_owner_bucket": True},
-        ),
+        observed_turn=observed_opening_projection_missing_row(),
         drift_row=projection_unavailable_drift_row(
             "opening_fallback_owner_bucket",
             expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
@@ -607,31 +610,31 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
     [
         (
             "answer upstream prepared repair sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
+            observed_response_type_repair_row("answer_upstream_prepared_repair"),
             response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "answer_upstream_prepared_repair", None),
         ),
         (
             "action outcome upstream prepared repair sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="action_outcome_upstream_prepared_repair"),
+            observed_response_type_repair_row("action_outcome_upstream_prepared_repair"),
             response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "action_outcome_upstream_prepared_repair", None),
         ),
         (
             "strict social dialogue repair sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="strict_social_dialogue_repair"),
+            observed_response_type_repair_row("strict_social_dialogue_repair"),
             response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "strict_social_dialogue_repair", None),
         ),
         (
             "dialogue minimal repair sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="dialogue_minimal_repair"),
+            observed_response_type_repair_row("dialogue_minimal_repair"),
             response_type_repair_drift_row(),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "dialogue_minimal_repair", None),
         ),
         (
             "legacy thin answer backward-compatible sublayer",
-            _observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+            observed_response_type_repair_row("thin_answer"),
             response_type_repair_drift_row(reason="legacy backward-compatible fixture"),
             ("emission", "emission", "validator", "medium", "game/final_emission_gate.py", "response_type", "thin_answer", None),
         ),
@@ -652,7 +655,7 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
         ),
         (
             "post-gate mutation unknown",
-            _observed(post_gate_mutation_detected=True),
+            observed_post_gate_mutation_row(),
             post_gate_mutation_drift_row(),
             ("emission", "emission", "validator", "high", "game/final_emission_gate.py", "emission.post_gate_mutation_unknown", None, None),
         ),
@@ -720,10 +723,7 @@ def test_failure_classifier_reduces_post_gate_unknown_from_final_emission_lineag
     row = classify_replay_failure(
         scenario_id="post_gate_lineage_reduction",
         turn_index=0,
-        observed_turn=_observed(
-            post_gate_mutation_detected=True,
-            final_emission_mutation_lineage=lineage,
-        ),
+        observed_turn=observed_post_gate_mutation_row(final_emission_mutation_lineage=lineage),
         drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
@@ -737,7 +737,7 @@ def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_
     row = classify_replay_failure(
         scenario_id="post_gate_no_lineage_unknown",
         turn_index=0,
-        observed_turn=_observed(post_gate_mutation_detected=True, final_emission_mutation_lineage=None),
+        observed_turn=observed_post_gate_mutation_row(final_emission_mutation_lineage=None),
         drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
@@ -756,13 +756,9 @@ def test_failure_classifier_maps_valid_prepared_answer_action_repairs_to_upstrea
     row = classify_replay_failure(
         scenario_id=case,
         turn_index=0,
-        observed_turn=_observed(
-            response_type_repair_used=True,
+        observed_turn=observed_upstream_prepared_emission_row(
             response_type_repair_kind=repair_kind,
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
             upstream_prepared_emission_source=source_field,
-            upstream_prepared_emission_reject_reason=None,
         ),
         drift_rows=[response_type_repair_drift_row()],
     )[0]
@@ -783,12 +779,10 @@ def test_failure_classifier_preserves_rejected_prepared_emission_reason():
     row = classify_replay_probe_row(
         scenario_id="malformed_prepared_owner",
         turn_index=0,
-        observed_turn=_observed(
-            response_type_repair_used=True,
+        observed_turn=observed_upstream_prepared_emission_row(
             response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_source="prepared_action_fallback_text",
+            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_reject_reason="missing_concrete_action_outcome",
         ),
         drift_row=replay_drift_row(
@@ -807,12 +801,11 @@ def test_failure_classifier_preserves_rejected_prepared_emission_reason():
 
 def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
+        observed_turn=observed_upstream_prepared_emission_row(
             response_type_repair_used=False,
             response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_source="upstream_prepared_emission.prepared_action_fallback_text",
+            upstream_prepared_emission_valid=False,
             upstream_prepared_emission_reject_reason="action_outcome_missing_result",
         ),
         drift_rows=[
@@ -898,7 +891,7 @@ def test_failure_classifier_keeps_dialogue_repairs_separate_from_prepared_emissi
     row = classify_replay_failure(
         scenario_id=f"{repair_kind}_separate",
         turn_index=0,
-        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind=repair_kind),
+        observed_turn=observed_response_type_repair_row(repair_kind),
         drift_rows=[response_type_repair_drift_row()],
     )[0]
 
@@ -941,7 +934,7 @@ def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy
     row = classify_replay_failure(
         scenario_id="legacy_no_prepared_telemetry",
         turn_index=0,
-        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="answer_upstream_prepared_repair"),
+        observed_turn=observed_response_type_repair_row("answer_upstream_prepared_repair"),
         drift_rows=[response_type_repair_drift_row()],
     )[0]
 
@@ -954,11 +947,8 @@ def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy
 
 def test_failure_dashboard_evidence_column_compacts_precision_fields():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
-            response_type_repair_used=True,
+        observed_turn=observed_upstream_prepared_emission_row(
             response_type_repair_kind="action_outcome_upstream_prepared_repair",
-            upstream_prepared_emission_used=True,
-            upstream_prepared_emission_valid=True,
             upstream_prepared_emission_source="prepared_action_fallback_text",
             final_emission_mutation_lineage=[
                 "pre_gate_sanitizer",
@@ -1001,7 +991,7 @@ def test_failure_dashboard_evidence_column_compacts_precision_fields():
 
 def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_compatible_label():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(response_type_repair_used=True, response_type_repair_kind="thin_answer"),
+        observed_turn=observed_response_type_repair_row("thin_answer"),
         drift_rows=[response_type_repair_drift_row(reason="legacy backward-compatible fixture")],
         scenario_id="legacy_thin_answer_probe",
         turn_index=1,
@@ -1020,13 +1010,7 @@ def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_com
 
 def test_failure_classifier_legacy_sanitizer_rewrite_is_diagnostic_output_sanitizer_evidence():
     rows = build_failure_dashboard_rows(
-        observed_turn=_observed(
-            sanitizer_lineage_mode="legacy_sentence_rewrite",
-            sanitizer_lineage_changed_count=1,
-            sanitizer_lineage_dropped_count=0,
-            sanitizer_lineage_empty_fallback_used=False,
-            sanitizer_lineage_legacy_rewrite_active=True,
-        ),
+        observed_turn=observed_sanitizer_legacy_rewrite_row(),
         drift_rows=[scaffold_leakage_drift_row(reason="legacy sentence rewrite diagnostic evidence")],
         scenario_id="legacy_sanitizer_rewrite_probe",
         turn_index=2,

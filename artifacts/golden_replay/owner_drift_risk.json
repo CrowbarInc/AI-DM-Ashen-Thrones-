@@ -1,69 +1,13 @@
 {
   "advisory_only": true,
-  "recommended_investigation_order": [
-    {
-      "item": "selected_speaker_id",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
+  "recommended_investigation_order": [],
   "report_only": true,
   "risk_by_level": {
     "high": [],
     "low": [],
-    "medium": [
-      {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "selected_speaker_id",
-        "item_kind": "field",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
-      },
-      {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "speaker_drift",
-        "item_kind": "owner",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
-      }
-    ]
+    "medium": []
   },
-  "risk_signals": [
-    {
-      "category": "",
-      "field_path": "selected_speaker_id",
-      "field_source": "protected",
-      "item": "selected_speaker_id",
-      "item_kind": "field",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
-    },
-    {
-      "category": "",
-      "field_path": "selected_speaker_id",
-      "field_source": "protected",
-      "item": "speaker_drift",
-      "item_kind": "owner",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
-    }
-  ],
+  "risk_signals": [],
   "schema_version": 1,
   "stability_ownership": {
     "advisory_only": true,
@@ -210,20 +154,8 @@
     ],
     "stability_trend_signals": []
   },
-  "top_risk_fields": [
-    {
-      "item": "selected_speaker_id",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
+  "top_risk_fields": [],
   "top_risk_investigation_targets": [],
-  "top_risk_owners": [
-    {
-      "item": "speaker_drift",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "total_signals": 2
+  "top_risk_owners": [],
+  "total_signals": 0
 }

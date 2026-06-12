@@ -45,6 +45,7 @@ from tests.helpers.failure_classification_sync import (
     failure_classification_typeddict_field_sets,
     known_failure_categories,
     known_owner_buckets,
+    observed_speaker_mismatch_observed_row,
     speaker_mismatch_drift_row,
 )
 from tests.helpers.failure_dashboard_report import (
@@ -176,16 +177,11 @@ def test_sync_helper_reports_investigation_target_drift():
 
 def _valid_sample_row() -> dict[str, Any]:
     return build_classified_dashboard_row(
-        observed_turn={
-            "scenario_id": "contract_sample",
-            "turn_index": 0,
-            "route_kind": "dialogue",
-            "selected_speaker_id": "guard",
-            "final_emitted_source": "generated_candidate",
-            "fallback_family": None,
-            "unavailable": [],
-            "trace": {"canonical_entry": {"target_actor_id": "runner"}},
-        },
+        observed_turn=observed_speaker_mismatch_observed_row(
+            profile="dashboard_probe",
+            scenario_id="contract_sample",
+            turn_index=0,
+        ),
         drift_row=speaker_mismatch_drift_row(),
         scenario_id="contract_sample",
         turn_index=0,

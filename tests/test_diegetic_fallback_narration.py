@@ -1,10 +1,15 @@
 """Caller-boundary provenance tests for legacy diegetic fallback renderers."""
 from __future__ import annotations
 
+import inspect
+
 import pytest
 
+import game.final_emission_gate as feg
 from game.diegetic_fallback_narration import (
+    NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE,
     fallback_template_metadata,
+    npc_pursuit_neutral_nonprogress_fallback_line,
     render_observe_perception_fallback_line,
 )
 from game.realization_authority import FALLBACK_FAMILIES
@@ -44,6 +49,14 @@ def _watch_post_env() -> dict:
 
 def _assert_known_family(value: str) -> None:
     assert value in FALLBACK_FAMILIES
+
+
+def test_npc_pursuit_neutral_nonprogress_prose_is_owned_by_diegetic_module() -> None:
+    """Relocated from gate (BG-2): neutral-nonprogress stock prose lives in diegetic_fallback, not gate source."""
+    expected = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
+    assert NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE == expected
+    assert npc_pursuit_neutral_nonprogress_fallback_line() == expected
+    assert expected not in inspect.getsource(feg)
 
 
 def test_direct_diegetic_renderer_returns_text_without_forcing_provenance_metadata() -> None:

@@ -225,3 +225,19 @@ def opening_upstream_composition_meta_slice(**overrides: Any) -> dict[str, Any]:
     }
     evidence.update(overrides)
     return evidence
+
+
+def opening_owner_bucket_projection_fields(
+    meta: Mapping[str, Any],
+    *,
+    repair_kind: str,
+) -> dict[str, Any]:
+    """Return field bundle for ``opening_fallback_owner_bucket_from_fields`` projection locks."""
+    return {
+        "final_emitted_source": OPENING_SUCCESS_SOURCE,
+        "opening_recovered_via_fallback": True,
+        "opening_fallback_authorship_source": meta.get("opening_fallback_authorship_source"),
+        "response_type_repair_kind": repair_kind,
+        "fallback_family": meta.get("fallback_family_used"),
+        "fallback_temporal_frame": meta.get("fallback_temporal_frame"),
+    }

@@ -1,13 +1,6 @@
 {
   "advisory_only": true,
-  "field_drift_trends": {
-    "selected_speaker_id": {
-      "current": 1,
-      "delta": 1,
-      "direction": "up",
-      "previous": 0
-    }
-  },
+  "field_drift_trends": {},
   "owner_bucket_trend_summary": [
     {
       "bucket": "emission_drift",
@@ -75,10 +68,10 @@
     },
     {
       "bucket": "speaker_drift",
-      "current": 1,
-      "delta": 1,
-      "delta_label": "+1",
-      "direction": "up",
+      "current": 0,
+      "delta": 0,
+      "delta_label": "0",
+      "direction": "stable",
       "previous": 0
     }
   ],
@@ -132,13 +125,13 @@
       "previous": 0
     },
     "speaker_drift": {
-      "current": 1,
-      "delta": 1,
-      "direction": "up",
+      "current": 0,
+      "delta": 0,
+      "direction": "stable",
       "previous": 0
     }
   },
   "report_only": true,
   "schema_version": 1,
-  "scorecard_runs_compared": 1
+  "scorecard_runs_compared": 0
 }

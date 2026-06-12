@@ -1423,6 +1423,40 @@ def test_build_fem_runtime_lineage_events_sealed_unknown_replacement_is_conserva
     )
 
 
+def test_build_fem_runtime_lineage_events_projects_neutral_speaker_grounding_bridge() -> None:
+    events = build_fem_runtime_lineage_events(
+        {
+            "final_route": "replaced",
+            "final_emitted_source": "neutral_reply_speaker_grounding_bridge",
+            "response_type_repair_used": False,
+        }
+    )
+    fallback = _lineage_event(events, "fallback_selected")
+    assert_runtime_lineage_event_matches(
+        fallback,
+        expected_runtime_fallback_lineage_event(
+            fallback_kind=SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+            owner="game.final_emission_gate",
+            fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+            fallback_content_owner=SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        ),
+    )
+
+
+def test_acceptance_projection_runtime_lineage_delegates_to_fem_builder_when_bundle_absent() -> None:
+    from tests.helpers.golden_replay_fixtures import project_synthetic_turn
+    from tests.helpers.opening_fallback_evidence import successful_opening_fem_meta
+
+    fem_meta = successful_opening_fem_meta()
+    observed = project_synthetic_turn(
+        scenario_id="fem_lineage_projection",
+        gm_text="The road opens.",
+        fem_meta=fem_meta,
+    )
+    expected_events = build_fem_runtime_lineage_events(fem_meta)
+    assert observed["runtime_lineage_events"] == expected_events[:16]
+
+
 def test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs() -> None:
     for reason, expected_kind in (
         ("continuity_locked_speaker_repair", "local_rebind"),

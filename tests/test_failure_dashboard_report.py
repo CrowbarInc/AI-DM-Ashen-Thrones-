@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
+from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.failure_dashboard_report import (
     clear_recorded_failure_dashboard_rows,
     clear_recorded_protected_replay_failures,
@@ -12,6 +13,7 @@ from tests.helpers.failure_dashboard_report import (
     record_rerun_drift_scorecard,
     recorded_rerun_drift_scorecards,
     render_bug_recurrence_history_markdown,
+    render_protected_replay_failure_report,
     render_rerun_drift_scorecard_markdown,
     write_bug_recurrence_history_artifacts,
     write_protected_replay_failure_report_if_present,
@@ -24,7 +26,11 @@ from tests.helpers.golden_replay_api import (
     render_long_session_replay_summary_markdown,
 )
 from tests.helpers.failure_dashboard_fixtures import record_selected_speaker_protected_failure
-from tests.helpers.replay_observed_row_fixtures import protected_speaker_failure_turn, synthetic_rerun_turn
+from tests.helpers.replay_observed_row_fixtures import (
+    observed_failure_row,
+    protected_speaker_failure_turn,
+    synthetic_rerun_turn,
+)
 
 
 def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) -> None:
@@ -308,6 +314,54 @@ def test_rerun_drift_scorecard_recording_does_not_change_failure_dashboard_behav
     finally:
         clear_recorded_rerun_drift_scorecards()
         clear_recorded_protected_replay_failures()
+
+
+def test_render_protected_replay_failure_report_includes_owner_drift_bucket() -> None:
+    observed = observed_failure_row(selected_speaker_id="guard")
+    rows = classify_replay_failure(
+        scenario_id="report_probe",
+        turn_index=0,
+        observed_turn=observed,
+        drift_rows=[
+            {
+                "field_path": "selected_speaker_id",
+                "expected": "runner",
+                "actual": "guard",
+                "reason": "equals mismatch",
+                "drift_bucket": "structural_drift",
+                "replay_tags": ["structural_drift"],
+            }
+        ],
+    )
+    enriched = dict(rows[0])
+    enriched["test_node_id"] = "tests/test_failure_dashboard_report.py::probe"
+    enriched["failed_invariant"] = "selected_speaker_id: equals mismatch"
+
+    report = render_protected_replay_failure_report([enriched], generated_at="2026-06-06T00:00:00Z")
+    assert "| Owner Drift Bucket |" in report
+    assert "speaker_drift" in report
+    assert "## Owner Drift Breakdown" in report
+
+
+def test_render_rerun_scorecard_includes_owner_drift_summary() -> None:
+    scorecard = compare_golden_replay_reruns(
+        [{"selected_speaker_id": "runner", "route_kind": "dialogue", "final_text": "A."}],
+        [{"selected_speaker_id": "guard", "route_kind": "dialogue", "final_text": "A."}],
+    )
+    markdown = render_rerun_drift_scorecard_markdown(scorecard, generated_at="2026-06-06T00:00:00Z")
+    assert "## Owner Drift Summary" in markdown
+    assert "| `speaker_drift` | `1` |" in markdown
+    assert scorecard["report_only"] is True
+
+
+def test_render_rerun_scorecard_empty_owner_drift_summary() -> None:
+    scorecard = compare_golden_replay_reruns(
+        [{"selected_speaker_id": "runner", "final_text": "Stable."}],
+        [{"selected_speaker_id": "runner", "final_text": "Stable."}],
+    )
+    markdown = render_rerun_drift_scorecard_markdown(scorecard)
+    assert "## Owner Drift Summary" in markdown
+    assert "No owner drift classifications." in markdown
 
 
 def _recurrence_classification_row(**overrides: object) -> dict[str, object]:

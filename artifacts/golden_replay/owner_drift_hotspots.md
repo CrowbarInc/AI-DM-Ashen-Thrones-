@@ -2,7 +2,8 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-06-06T00:00:00Z`
+- Generated at: `2026-05-30T00:00:00Z`
+- Command: `pytest synthetic`
 - Total classifications: `0`
 
 ## Top Drift Fields

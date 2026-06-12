@@ -45,60 +45,141 @@ from tests.helpers.golden_replay_projection import (
 )
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_FAMILY,
     fail_closed_opening_observed_fields,
     successful_opening_observed_fields,
 )
-from tests.helpers.replay_observed_row_fixtures import observed_failure_row
+from tests.helpers.replay_observed_row_fixtures import (
+    SyntheticObservedRowProfile,
+    observed_dashboard_probe_row,
+    observed_failure_row,
+)
 
 
-def observed_opening_fallback_row(*, owner_bucket: bool = False, **overrides: Any) -> dict[str, Any]:
+def _observed_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **fields: Any,
+) -> dict[str, Any]:
+    if profile == "dashboard_probe":
+        return observed_dashboard_probe_row(**fields)
+    return observed_failure_row(**fields)
+
+
+def observed_opening_fallback_row(
+    *,
+    owner_bucket: bool = False,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for canonical successful opening fallback."""
-    return observed_failure_row(**successful_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides))
-
-
-def observed_fail_closed_opening_fallback_row(*, owner_bucket: bool = False, **overrides: Any) -> dict[str, Any]:
-    """Return observed-row evidence for sealed/fail-closed opening fallback."""
-    return observed_failure_row(**fail_closed_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides))
-
-
-def observed_legacy_opening_fallback_row(**overrides: Any) -> dict[str, Any]:
-    """Return observed-row evidence for legacy compatibility-local opening fallback."""
-    return observed_failure_row(
-        **successful_opening_observed_fields(
-            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-            **overrides,
-        )
+    return _observed_row(
+        profile=profile,
+        **successful_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides),
     )
 
 
-def observed_global_replacement_row(**overrides: Any) -> dict[str, Any]:
+def observed_fail_closed_opening_fallback_row(
+    *,
+    owner_bucket: bool = False,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for sealed/fail-closed opening fallback."""
+    return _observed_row(
+        profile=profile,
+        **fail_closed_opening_observed_fields(include_owner_bucket=owner_bucket, **overrides),
+    )
+
+
+def observed_legacy_opening_fallback_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for legacy compatibility-local opening fallback."""
+    return _observed_row(
+        profile=profile,
+        **successful_opening_observed_fields(
+            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+            **overrides,
+        ),
+    )
+
+
+def observed_opening_authorship_compat_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return minimal observed-row evidence for compatibility-local opening authorship probes."""
+    fields = {
+        "opening_recovered_via_fallback": True,
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+        "fallback_family": OPENING_FALLBACK_FAMILY,
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_opening_basis_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return minimal observed-row evidence for opening basis divergence probes."""
+    fields = {
+        "opening_recovered_via_fallback": True,
+        "fallback_family": OPENING_FALLBACK_FAMILY,
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_global_replacement_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for global/gate terminal replacement."""
     fields = {
         "final_emitted_source": "global_scene_fallback",
         "fallback_family": "gate_terminal_repair",
     }
     fields.update(overrides)
-    return observed_failure_row(**fields)
+    return _observed_row(profile=profile, **fields)
 
 
-def observed_social_fallback_row(**overrides: Any) -> dict[str, Any]:
+def observed_social_fallback_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for strict-social fallback replacement probes."""
     fields = {
         "strict_social_active": True,
         "final_emitted_source": "strict_social_visibility_minimal",
     }
     fields.update(overrides)
-    return observed_failure_row(**fields)
+    return _observed_row(profile=profile, **fields)
 
 
-def observed_sealed_replacement_row(**overrides: Any) -> dict[str, Any]:
+def observed_sealed_replacement_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for sealed/global replacement owner-bucket checks."""
     fields = {"sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE}
     fields.update(overrides)
-    return observed_global_replacement_row(**fields)
+    return observed_global_replacement_row(profile=profile, **fields)
 
 
-def observed_visibility_replacement_row(**overrides: Any) -> dict[str, Any]:
+def observed_visibility_replacement_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for visibility replacement owner-bucket checks."""
     fields = {
         "final_emitted_source": "global_scene_fallback",
@@ -108,10 +189,14 @@ def observed_visibility_replacement_row(**overrides: Any) -> dict[str, Any]:
         "visibility_fallback_kind": "narrative_safe_fallback",
     }
     fields.update(overrides)
-    return observed_failure_row(**fields)
+    return _observed_row(profile=profile, **fields)
 
 
-def observed_sanitizer_row(**overrides: Any) -> dict[str, Any]:
+def observed_sanitizer_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for sanitizer-classified failure probes."""
     fields = {
         "sanitizer_mode": "strip_only",
@@ -120,10 +205,14 @@ def observed_sanitizer_row(**overrides: Any) -> dict[str, Any]:
         "sanitizer_rewrite_used": True,
     }
     fields.update(overrides)
-    return observed_failure_row(**fields)
+    return _observed_row(profile=profile, **fields)
 
 
-def observed_sanitizer_empty_fallback_row(**overrides: Any) -> dict[str, Any]:
+def observed_sanitizer_empty_fallback_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
     """Return observed-row evidence for sanitizer empty-fallback ownership probes."""
     fields = {
         "sanitizer_mode": "strip_only",
@@ -134,7 +223,122 @@ def observed_sanitizer_empty_fallback_row(**overrides: Any) -> dict[str, Any]:
         "upstream_prepared_emission_valid": False,
     }
     fields.update(overrides)
-    return observed_failure_row(**fields)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_sanitizer_leakage_dashboard_row(
+    *,
+    profile: SyntheticObservedRowProfile = "dashboard_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return dashboard-shaped sanitizer leakage probe with lineage metadata present."""
+    fields = {
+        "sanitizer_mode": "strip_only",
+        "sanitizer_event_count": 1,
+        "sanitizer_changed_count": 0,
+        "sanitizer_lineage_mode": "strip_only",
+        "sanitizer_lineage_changed_count": 1,
+        "sanitizer_lineage_dropped_count": 1,
+        "sanitizer_lineage_empty_fallback_used": False,
+        "sanitizer_lineage_legacy_rewrite_active": False,
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_sanitizer_legacy_rewrite_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for legacy sanitizer rewrite diagnostic probes."""
+    fields = {
+        "sanitizer_lineage_mode": "legacy_sentence_rewrite",
+        "sanitizer_lineage_changed_count": 1,
+        "sanitizer_lineage_dropped_count": 0,
+        "sanitizer_lineage_empty_fallback_used": False,
+        "sanitizer_lineage_legacy_rewrite_active": True,
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_response_type_repair_row(
+    repair_kind: str,
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for response-type repair classifier probes."""
+    fields = {
+        "response_type_repair_used": True,
+        "response_type_repair_kind": repair_kind,
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_upstream_prepared_emission_row(
+    *,
+    response_type_repair_kind: str,
+    upstream_prepared_emission_source: str,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    response_type_repair_used: bool = True,
+    upstream_prepared_emission_used: bool = True,
+    upstream_prepared_emission_valid: bool = True,
+    upstream_prepared_emission_reject_reason: str | None = None,
+    final_emission_mutation_lineage: list[str] | None = None,
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for upstream-prepared emission classifier probes."""
+    fields: dict[str, Any] = {
+        "response_type_repair_used": response_type_repair_used,
+        "response_type_repair_kind": response_type_repair_kind,
+        "upstream_prepared_emission_used": upstream_prepared_emission_used,
+        "upstream_prepared_emission_valid": upstream_prepared_emission_valid,
+        "upstream_prepared_emission_source": upstream_prepared_emission_source,
+    }
+    if upstream_prepared_emission_reject_reason is not None:
+        fields["upstream_prepared_emission_reject_reason"] = upstream_prepared_emission_reject_reason
+    if final_emission_mutation_lineage is not None:
+        fields["final_emission_mutation_lineage"] = final_emission_mutation_lineage
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_post_gate_mutation_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for post-gate mutation classifier/dashboard probes."""
+    fields: dict[str, Any] = {"post_gate_mutation_detected": True}
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_opening_projection_missing_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for opening owner-bucket projection omission probes."""
+    fields = {
+        "unavailable": ["opening_fallback_owner_bucket"],
+        "raw_signal_presence": {"opening_fallback_owner_bucket": True},
+    }
+    fields.update(overrides)
+    return _observed_row(profile=profile, **fields)
+
+
+def observed_speaker_mismatch_observed_row(
+    *,
+    profile: SyntheticObservedRowProfile = "classifier_probe",
+    selected_speaker_id: str = "guard",
+    **overrides: Any,
+) -> dict[str, Any]:
+    """Return observed-row evidence for selected-speaker mismatch classifier probes."""
+    return _observed_row(profile=profile, selected_speaker_id=selected_speaker_id, **overrides)
 
 
 def replay_drift_row(

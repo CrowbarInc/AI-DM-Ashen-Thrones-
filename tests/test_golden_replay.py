@@ -5,12 +5,10 @@ import pytest
 
 from game import storage
 from game.api import chat
-from tests.helpers.golden_replay_projection import (
-    SEALED_REPLACEMENT_SUBKINDS,
-    read_fem_meta_from_gate_output,
-)
+from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    OPENING_FALLBACK_FAMILY,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
 )
 from game.scenario_spine import (
@@ -23,7 +21,7 @@ from game.scenario_spine import (
 from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
 from game.models import ChatRequest
 from tests.helpers.golden_replay import (
-    FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
+    FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
     FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
     FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
     FRONTIER_GATE_RESUME_STABILITY_PROFILE,
@@ -37,17 +35,13 @@ from tests.helpers.golden_replay import (
     assert_protected_golden_turn_observation,
     evaluate_golden_replay_continuity_drift,
     format_golden_replay_debug,
-    frontier_gate_branch_prompts,
-    frontier_gate_branch_turn_ids,
-    load_frontier_gate_long_session_spine,
-    protected_no_scaffold_expectation,
+    frontier_gate_branch_replay_fixture,
     protected_social_directed_question_expectation,
     protected_social_structural_base,
     protected_social_supplemental_structural_expectation,
     protected_social_trace_target_expectation,
     protected_social_vocative_canonical_entry_expectation,
     protected_structural_expectation,
-    protected_unavailable_expectation,
     render_long_session_replay_summary_markdown,
     run_golden_replay,
     summarize_long_session_replay_observations,
@@ -426,15 +420,15 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
     if "final_emitted_source" not in turn.get("unavailable", []):
         assert_protected_golden_turn_observation(
             turn,
-            {
-                **protected_unavailable_expectation(
+            protected_social_supplemental_structural_expectation(
+                require_present=("final_emitted_source",),
+                allow_unavailable=(
                     "fallback_family",
                     "selected_speaker_id",
                     "trace.canonical_entry",
                     "trace.social_contract_trace",
                 ),
-                "require_present": ["final_emitted_source"],
-            },
+            ),
             scenario_id="sanitizer_scaffold_leakage",
             debug_context=format_golden_replay_debug(result),
         )
@@ -464,24 +458,29 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
 
     assert_protected_golden_turn_observation(
         turn,
-        {
-            "require_present": ["final_text", "final_emitted_source", "fallback_family", "opening_fallback_owner_bucket"],
-            "equals": successful_opening_observed_fields(
+        protected_structural_expectation(
+            require_present=(
+                "final_text",
+                "final_emitted_source",
+                "fallback_family",
+                "opening_fallback_owner_bucket",
+            ),
+            equals=successful_opening_observed_fields(
                 include_owner_bucket=True,
                 response_type_required="scene_opening",
                 response_type_repair_used=True,
             ),
-            "not_equals": {
+            not_equals={
                 "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
             },
-            **protected_no_scaffold_expectation(),
-        },
+            include_route_kind=False,
+        ),
         scenario_id="opening_fallback_path",
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
     )
     assert turn["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert turn["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert meta.get("fallback_family_used") == "scene_opening"
+    assert meta.get("fallback_family_used") == OPENING_FALLBACK_FAMILY
     assert meta.get("realization_fallback_family") == "upstream_prepared_emission"
     assert meta.get("realization_fallback_family") != "legacy_diegetic_fallback"
     assert meta.get("fallback_family_used") != meta.get("realization_fallback_family")
@@ -537,9 +536,10 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
 
 
 def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability(tmp_path, monkeypatch):
-    turns = frontier_gate_branch_prompts("branch_social_inquiry")
-    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry")
-    spine = load_frontier_gate_long_session_spine()
+    fixture = frontier_gate_branch_replay_fixture("branch_social_inquiry")
+    turns = fixture["player_prompts"]
+    turn_ids = fixture["turn_ids"]
+    spine = fixture["spine"]
     assert len(turns) == 25
 
     gpt_call_count = 0
@@ -564,20 +564,20 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
         monkeypatch=monkeypatch,
         setup_fn=seed_frontier_gate_world,
         starting_scene_id="frontier_gate",
-        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-        branch_id="branch_social_inquiry",
+        source_path=fixture["source_path"],
+        branch_id=fixture["branch_id"],
         turn_ids=turn_ids,
     )
 
     observed_turns = result["turns"]
-    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
-    assert observed_turns[0]["branch_id"] == "branch_social_inquiry"
+    assert observed_turns[0]["source_path"] == fixture["source_path"]
+    assert observed_turns[0]["branch_id"] == fixture["branch_id"]
     assert observed_turns[0]["turn_id"] == "inv_01"
     assert observed_turns[-1]["turn_id"] == "inv_25"
     summary = summarize_long_session_replay_observations(observed_turns)
     continuity_bridge = evaluate_golden_replay_continuity_drift(
         spine=spine,
-        branch_id="branch_social_inquiry",
+        branch_id=fixture["branch_id"],
         turns=observed_turns,
         turn_ids=turn_ids,
     )
@@ -594,8 +594,8 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
             ),
         ]
     )
-    assert f"source_path: {FRONTIER_GATE_LONG_SESSION_SOURCE_PATH!r}" in debug_context
-    assert "branch_id: 'branch_social_inquiry'" in debug_context
+    assert f"source_path: {fixture['source_path']!r}" in debug_context
+    assert f"branch_id: {fixture['branch_id']!r}" in debug_context
     assert "turn_id: 'inv_01'" in debug_context
 
     assert_golden_replay_profile_bundle(
@@ -613,9 +613,10 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability
 def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_supporting(tmp_path, monkeypatch):
     # Supporting checkpoint probe: this uses a real on-disk snapshot restore at
     # the 12/13 boundary, but keeps the protected lock on the uninterrupted run.
-    turns = frontier_gate_branch_prompts("branch_social_inquiry")
-    turn_ids = frontier_gate_branch_turn_ids("branch_social_inquiry")
-    spine = load_frontier_gate_long_session_spine()
+    fixture = frontier_gate_branch_replay_fixture("branch_social_inquiry")
+    turns = fixture["player_prompts"]
+    turn_ids = fixture["turn_ids"]
+    spine = fixture["spine"]
     split_at = 12
     assert len(turns) == 25
     assert turn_ids[split_at - 1] == "inv_12"
@@ -660,8 +661,8 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
                 snap=snap,
                 payload=payload,
                 replay_identity={
-                    "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-                    "branch_id": "branch_social_inquiry",
+                    "source_path": fixture["source_path"],
+                    "branch_id": fixture["branch_id"],
                     "turn_id": turn_ids[i],
                 },
             )
@@ -683,8 +684,8 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
                 snap=snap,
                 payload=payload,
                 replay_identity={
-                    "source_path": FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-                    "branch_id": "branch_social_inquiry",
+                    "source_path": fixture["source_path"],
+                    "branch_id": fixture["branch_id"],
                     "turn_id": turn_ids[i],
                 },
             )
@@ -702,7 +703,7 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     post_summary = summarize_long_session_replay_observations(post_resume_turns)
     continuity_bridge = evaluate_golden_replay_continuity_drift(
         spine=spine,
-        branch_id="branch_social_inquiry",
+        branch_id=fixture["branch_id"],
         turns=observed_turns,
         turn_ids=turn_ids,
     )
@@ -742,8 +743,8 @@ def test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_s
     assert [turn.get("turn_id") for turn in observed_turns] == turn_ids, debug_context
     assert observed_turns[split_at - 1]["turn_id"] == "inv_12", debug_context
     assert observed_turns[split_at]["turn_id"] == "inv_13", debug_context
-    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
-    assert observed_turns[0]["branch_id"] == "branch_social_inquiry"
+    assert observed_turns[0]["source_path"] == fixture["source_path"]
+    assert observed_turns[0]["branch_id"] == fixture["branch_id"]
     assert observed_turns[-1]["turn_id"] == "inv_25"
 
     assert pre_summary["turn_count"] == split_at, debug_context
@@ -769,9 +770,10 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
     # action/visibility paths and currently emits more fallback lineage than the
     # protected social-inquiry baseline. Keep it supporting until it gets another
     # clean run after future fallback-family or action-routing changes.
-    turns = frontier_gate_branch_prompts("branch_direct_intrusion")
-    turn_ids = frontier_gate_branch_turn_ids("branch_direct_intrusion")
-    spine = load_frontier_gate_long_session_spine()
+    fixture = frontier_gate_branch_replay_fixture("branch_direct_intrusion")
+    turns = fixture["player_prompts"]
+    turn_ids = fixture["turn_ids"]
+    spine = fixture["spine"]
     assert len(turns) == 25
 
     gpt_call_count = 0
@@ -796,20 +798,20 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         monkeypatch=monkeypatch,
         setup_fn=seed_frontier_gate_world,
         starting_scene_id="frontier_gate",
-        source_path=FRONTIER_GATE_LONG_SESSION_SOURCE_PATH,
-        branch_id="branch_direct_intrusion",
+        source_path=fixture["source_path"],
+        branch_id=fixture["branch_id"],
         turn_ids=turn_ids,
     )
 
     observed_turns = result["turns"]
-    assert observed_turns[0]["source_path"] == FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
-    assert observed_turns[0]["branch_id"] == "branch_direct_intrusion"
+    assert observed_turns[0]["source_path"] == fixture["source_path"]
+    assert observed_turns[0]["branch_id"] == fixture["branch_id"]
     assert observed_turns[0]["turn_id"] == "act_01"
     assert observed_turns[-1]["turn_id"] == "act_25"
     summary = summarize_long_session_replay_observations(observed_turns)
     continuity_bridge = evaluate_golden_replay_continuity_drift(
         spine=spine,
-        branch_id="branch_direct_intrusion",
+        branch_id=fixture["branch_id"],
         turns=observed_turns,
         turn_ids=turn_ids,
     )
@@ -826,8 +828,8 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
             ),
         ]
     )
-    assert f"source_path: {FRONTIER_GATE_LONG_SESSION_SOURCE_PATH!r}" in debug_context
-    assert "branch_id: 'branch_direct_intrusion'" in debug_context
+    assert f"source_path: {fixture['source_path']!r}" in debug_context
+    assert f"branch_id: {fixture['branch_id']!r}" in debug_context
     assert "turn_id: 'act_01'" in debug_context
 
     direct_intrusion_stability_profile = {
@@ -869,33 +871,6 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
     }, debug_context
     assert int(fallback_frequency.get(NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY) or 0) <= 4, debug_context
     assert int(fallback_frequency.get("gate_terminal_repair") or 0) <= 3, debug_context
-    allowed_recurring_keys = {
-        "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
-        "mutation:gate:game.final_emission_gate:fallback_mutation",
-        "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
-        "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
-        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-        "mutation:gate:game.final_emission_gate:final_emission_mutation",
-        "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
-        "gate_outcome:gate:game.final_emission_gate:prepared_repair",
-        "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
-    } | {
-        f"fallback_selected:gate:game.final_emission_gate:{subkind}"
-        for subkind in SEALED_REPLACEMENT_SUBKINDS
-    }
-    direct_intrusion_lineage_profile = {
-        "event_kind_equals": {"fallback_selected": 7},
-        "event_kind_max": {"mutation": 14, "speaker_repair": 1},
-        "mutation_kind_max": {
-            "fallback_mutation": 7,
-            "final_emission_mutation": 4,
-            "response_type_repair_mutation": 2,
-            "speaker_repair_mutation": 1,
-        },
-        "allowed_recurring_keys": allowed_recurring_keys,
-        "max_recurring_event_count": 25,
-    }
-
     direct_intrusion_fallback_escalation_profile = {
         "equals": {
             "fallback_total_count": 7,
@@ -932,7 +907,7 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
         summary=summary,
         continuity_eval=continuity_eval,
         stability_expected=direct_intrusion_stability_profile,
-        lineage_expected=direct_intrusion_lineage_profile,
+        lineage_expected=FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
         fallback_escalation_expected=direct_intrusion_fallback_escalation_profile,
         debug_context=debug_context,
     )
