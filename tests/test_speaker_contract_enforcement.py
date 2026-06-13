@@ -10,8 +10,10 @@ import pytest
 import game.final_emission_gate as feg
 import game.final_emission_visibility_fallback as visibility_fallback
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
-from game.final_emission_gate import apply_final_emission_gate
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    response_type_contract,
+)
 from tests.helpers.strict_social_harness import (
     run_strict_social_motive_overclaim_gate_case,
     runner_strict_bundle,
@@ -26,6 +28,11 @@ from game.speaker_contract_enforcement import (
 from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _base_contract(**overrides):
@@ -807,7 +814,7 @@ def test_strict_social_long_quoted_line_retains_speaker_and_dialogue_payload(mon
     monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": bad, "tags": [], "response_policy": pol},
         resolution=resolution,
         session=session,

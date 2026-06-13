@@ -1,16 +1,14 @@
 """Anti-Railroading contract, validator, and gate-layer ownership coverage.
 
 Unit tests cover ``game.anti_railroading`` directly. Gate-integration tests cover
-pass/fail/repair/replace semantics through ``apply_final_emission_gate`` without
-owning gate ordering (that stays in ``tests/test_final_emission_gate.py``).
+pass/fail/repair/replace semantics through the downstream emission facade without
+owning gate ordering.
 """
 from __future__ import annotations
 
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.anti_railroading import (
     ALLOWED_LEAD_ROLES,
     FORBIDDEN_LEAD_ROLES,
@@ -18,8 +16,17 @@ from game.anti_railroading import (
     build_anti_railroading_contract,
     validate_anti_railroading,
 )
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+)
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _contract(**kwargs):
@@ -253,7 +260,7 @@ def test_anti_railroading_gate_passes_clean_leads_and_constraints():
         "The bridge is out. The alley and the roofline are still open.",
         "If you want an immediate answer, confronting the priest publicly is one option.",
     ):
-        out = apply_final_emission_gate(
+        out = _apply_gate(
             {"player_facing_text": raw, "tags": [], "anti_railroading_contract": _ar_contract()},
             resolution={"kind": "observe", "prompt": "I look around."},
             session={},
@@ -261,21 +268,21 @@ def test_anti_railroading_gate_passes_clean_leads_and_constraints():
             world={},
         )
         assert out.get("player_facing_text") == raw
-        meta = read_final_emission_meta_dict(out) or {}
+        meta = final_emission_meta_from_output(out) or {}
         assert meta.get("anti_railroading_repaired") is False
         em = (out.get("metadata") or {}).get("emission_debug") or {}
         assert em.get("anti_railroading", {}).get("validation", {}).get("passed") is True
 
 
 def test_anti_railroading_gate_repairs_forced_pathing():
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": "You head straight to the archive.", "tags": []},
         resolution={"kind": "observe", "prompt": "I look."},
         session={},
         scene_id="s",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert meta.get("final_route") == "replaced"
     assert meta.get("anti_railroading_failed") is True
@@ -291,14 +298,14 @@ def test_anti_railroading_gate_repairs_exclusive_and_meta_hooks():
         "It's obvious now that you must follow the priest.",
         "Everything points to Greywake, so you go there.",
     ):
-        out = apply_final_emission_gate(
+        out = _apply_gate(
             {"player_facing_text": raw, "tags": []},
             resolution={"kind": "observe", "prompt": "I listen."},
             session={},
             scene_id="s",
             world={},
         )
-        meta = read_final_emission_meta_dict(out) or {}
+        meta = final_emission_meta_from_output(out) or {}
         assert meta.get("anti_railroading_failed") is True, raw
         assert meta.get("anti_railroading_repaired") is False, raw
         assert meta.get("final_route") == "replaced", raw
@@ -308,7 +315,7 @@ def test_anti_railroading_resolved_transition_allows_arrival_language():
     res = {"kind": "travel", "resolved_transition": True, "prompt": "I enter the ward."}
     c = _ar_contract(resolution=res)
     raw = "You step through the arch into the lower ward, noise washing over you."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
         resolution=res,
         session={},
@@ -316,14 +323,14 @@ def test_anti_railroading_resolved_transition_allows_arrival_language():
         world={},
     )
     assert out.get("player_facing_text") == raw
-    assert (read_final_emission_meta_dict(out) or {}).get("anti_railroading_repaired") is False
+    assert (final_emission_meta_from_output(out) or {}).get("anti_railroading_repaired") is False
 
 
 def test_anti_railroading_commitment_echo_allowed_when_player_committed():
     pt = "I'll head to the archives and check the register."
     c = _ar_contract(player_text=pt)
     raw = "You head toward the archives, letting the crowd carry you a block at a time."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
         resolution={"kind": "observe", "prompt": pt},
         session={"scene_runtime": {"test_scene": {"last_player_action_text": pt}}},
@@ -335,7 +342,7 @@ def test_anti_railroading_commitment_echo_allowed_when_player_committed():
 
 def test_anti_railroading_quoted_dialogue_not_spuriously_flagged():
     raw = 'The clerk mutters, "You head straight to the archive." Then the door clicks.'
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": raw, "tags": []},
         resolution={"kind": "observe", "prompt": "I listen."},
         session={},
@@ -343,13 +350,13 @@ def test_anti_railroading_quoted_dialogue_not_spuriously_flagged():
         world={},
     )
     assert '"' in (out.get("player_facing_text") or "")
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("anti_railroading_repaired") is False
 
 
 def test_anti_railroading_prompt_context_contract_resolution():
     c = _ar_contract()
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "You head straight to the pier.",
             "tags": [],
@@ -360,7 +367,7 @@ def test_anti_railroading_prompt_context_contract_resolution():
         scene_id="pier",
         world={},
     )
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("anti_railroading_failed") is True
     assert fem.get("anti_railroading_repaired") is False
     assert fem.get("anti_railroading_contract_resolution_source") == "shipped"
@@ -372,13 +379,13 @@ def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     c = _ar_contract(prompt_leads=[{"id": "h1", "title": "Harbor warehouse"}])
     raw = "The Harbor warehouse lead isn't optional; you're going there now."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": raw, "tags": [], "anti_railroading_contract": c},
         resolution={"kind": "observe", "prompt": "I look."},
         session={},
         scene_id="s",
         world={},
     )
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("anti_railroading_failed") is True
     assert fem.get("final_route") == "replaced"

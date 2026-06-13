@@ -8,15 +8,22 @@ from __future__ import annotations
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.narrative_authority import (
     build_narrative_authority_contract,
     validate_narrative_authority,
 )
 from game.social_exchange_emission import merged_player_prompt_for_gate
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+)
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _na_contract(
@@ -683,7 +690,7 @@ def test_anti_railroading_coexists_with_narrative_authority_and_tone():
         "debug_inputs": {"scene_id": "hall"},
         "debug_flags": {},
     }
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "The only real lead is the cellar door.",
             "tags": [],
@@ -694,7 +701,7 @@ def test_anti_railroading_coexists_with_narrative_authority_and_tone():
         scene_id="hall",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("narrative_authority_checked") is True
     assert meta.get("tone_escalation_checked") is True
     assert meta.get("anti_railroading_failed") is True

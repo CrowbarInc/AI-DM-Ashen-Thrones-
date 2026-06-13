@@ -196,6 +196,95 @@ _BE6_SCAFFOLD_PHRASE_LAYER_OWNERS: Final[Mapping[str, str]] = {
     "http_smoke_facade": _DOWNSTREAM_SMOKE_FACADE,
     "replay_scaffold_projection": _BD6_GOLDEN_REPLAY_FACADE,
 }
+_BJ4_SMOKE_FACADE_ALLOWED_GATE_BRIDGES: Final[frozenset[str]] = frozenset(
+    {
+        "apply_final_emission_gate_consumer",
+        "enforce_response_type_contract_layer",
+        "final_emission_meta_from_output",
+        "read_turn_debug_notes",
+    }
+)
+_BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES: Final[frozenset[str]] = frozenset(
+    {
+        "apply_answer_completeness_layer",
+        "apply_response_delta_layer",
+        "assert_no_boundary_reorder_repair",
+        "assert_response_delta_boundary_validate_only",
+        "inspect_response_delta_failure",
+        "skip_answer_completeness_layer",
+        "skip_response_delta_layer",
+        "strict_social_answer_pressure_rd_contract_active",
+        "validate_answer_completeness",
+        "validate_response_delta",
+    }
+)
+_BJ4_SMOKE_FACADE_FORBIDDEN_PUBLIC_NAME_FRAGMENTS: Final[Mapping[str, str]] = {
+    "gate_legality": "full gate legality matrices belong to tests/test_final_emission_gate.py",
+    "legality_matrix": "legality matrices belong to owner suites",
+    "route_enum": "route enum tables belong to route/gate owner suites",
+    "route_table": "route tables belong to route/gate owner suites",
+    "sanitizer_legality": "sanitizer phrase legality belongs to tests/test_output_sanitizer.py",
+    "sanitizer_phrase": "sanitizer phrase legality belongs to tests/test_output_sanitizer.py",
+    "repair_matrix": "AC/RD repair semantics belong to owner suites",
+    "repair_semantic": "AC/RD repair semantics belong to owner suites",
+}
+
+# Cycle BI-8: golden replay is a consumer/bridge, not a subsystem legality owner.
+_BI8_GOLDEN_REPLAY_TARGETS: Final[tuple[str, ...]] = (
+    "tests/test_golden_replay.py",
+    "tests/helpers/golden_replay.py",
+    "tests/helpers/golden_replay_api.py",
+)
+_BI8_GOLDEN_REPLAY_OWNED_EXPORTS: Final[frozenset[str]] = frozenset(
+    {
+        "run_golden_replay",
+        "assert_golden_turn_observation",
+        "assert_protected_golden_turn_observation",
+        "assert_golden_replay_profile_bundle",
+        "format_golden_replay_debug",
+        "observed_turn_from_payload",
+        "protected_social_speaker_observation_expectation",
+        "protected_structural_expectation",
+        "render_long_session_replay_summary_markdown",
+        "summarize_long_session_replay_observations",
+    }
+)
+_BI8_GOLDEN_REPLAY_FORBIDDEN_EXPORTS: Final[frozenset[str]] = frozenset(
+    {
+        "protected_no_scaffold_expectation",
+        "protected_route_expectation",
+        "protected_source_expectation",
+        "protected_unavailable_expectation",
+        "protected_social_structural_base",
+        "protected_social_directed_question_expectation",
+        "protected_social_trace_target_expectation",
+        "protected_social_vocative_canonical_entry_expectation",
+        "protected_social_supplemental_structural_expectation",
+    }
+)
+_BI8_GOLDEN_REPLAY_FORBIDDEN_SOURCE_FRAGMENTS: Final[Mapping[str, str]] = {
+    "PROTECTED_SOCIAL_RESOLUTION_KINDS": "route enum legality",
+    "PROTECTED_SOCIAL_ROUTE_KINDS": "route enum legality",
+    "PROTECTED_DIALOGUE_TRACE_ROUTES": "route enum legality",
+    "PROTECTED_VOCATIVE_CANONICAL_ENTRY": "speaker/vocative legality",
+    "protected_social_structural_base": "speaker legality",
+    "protected_social_directed_question_expectation": "speaker legality",
+    "protected_social_trace_target_expectation": "speaker legality",
+    "protected_social_vocative_canonical_entry_expectation": "speaker/vocative legality",
+    "protected_social_supplemental_structural_expectation": "speaker/route legality",
+    "successful_opening_observed_fields": "opening/fallback owner-bucket semantics",
+    "OPENING_FALLBACK_OWNER_": "opening/fallback owner-bucket semantics",
+    "OPENING_FALLBACK_AUTHORSHIP": "opening fallback authorship semantics",
+    "FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE": "stability threshold meaning",
+    "FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE": "lineage threshold meaning",
+    "FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE": "fallback escalation threshold meaning",
+    "FRONTIER_GATE_RESUME_STABILITY_PROFILE": "stability threshold meaning",
+    "FRONTIER_GATE_RESUME_LINEAGE_PROFILE": "lineage threshold meaning",
+    "FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE": "fallback escalation threshold meaning",
+    "FRONTIER_GATE_DIRECT_INTRUSION_STABILITY_PROFILE": "stability threshold meaning",
+    "FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE": "lineage threshold meaning",
+    "FRONTIER_GATE_DIRECT_INTRUSION_FALLBACK_ESCALATION_PROFILE": "fallback escalation threshold meaning",
+}
 _BD6_OPENING_FACADE: Final[str] = "tests/helpers/opening_fallback_evidence.py"
 _BD6_FORBIDDEN_FEM_READ_SYMBOLS: Final[frozenset[str]] = frozenset(
     {
@@ -619,6 +708,20 @@ def _collect_import_module_paths(source: str) -> set[str]:
         elif isinstance(node, ast.ImportFrom) and node.module:
             out.add(node.module)
     return out
+
+
+def _module_all_exports(source: str) -> frozenset[str]:
+    tree = ast.parse(source)
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(isinstance(target, ast.Name) and target.id == "__all__" for target in node.targets):
+            continue
+        value = ast.literal_eval(node.value)
+        assert isinstance(value, tuple), "__all__ must be a literal tuple"
+        assert all(isinstance(item, str) for item in value), "__all__ entries must be strings"
+        return frozenset(value)
+    raise AssertionError("module must define literal __all__")
 
 
 def _import_matches_forbidden_prefix(module: str, prefix: str) -> bool:
@@ -1713,6 +1816,53 @@ def test_ad3_golden_replay_is_gauntlet_neighbor_not_gate_direct_owner() -> None:
     assert golden not in frozenset(p.replace("\\", "/") for p in gate.downstream_consumer_suites)
 
 
+def test_bi8_golden_replay_ownership_boundary_is_locked() -> None:
+    """Cycle BI-8: replay remains an orchestration/observation bridge, not a subsystem owner."""
+    target_sources = {
+        rel_path: (_REPO_ROOT / rel_path).read_text(encoding="utf-8")
+        for rel_path in _BI8_GOLDEN_REPLAY_TARGETS
+    }
+    combined_docs = "\n".join(target_sources.values()).lower()
+    for phrase in (
+        "replay orchestration",
+        "observation consumption",
+        "protected assertion bridge diagnostics",
+        "long-session",
+        "speaker legality",
+        "route enum legality",
+        "final emission gate orchestration",
+        "opening/fallback owner-bucket semantics",
+        "sanitizer phrase legality",
+        "dashboard/classifier",
+        "stability/taxonomy threshold",
+    ):
+        assert phrase in combined_docs, f"BI-8 golden replay ownership note missing {phrase!r}"
+
+    api_exports = _module_all_exports(target_sources["tests/helpers/golden_replay_api.py"])
+    assert _BI8_GOLDEN_REPLAY_OWNED_EXPORTS <= api_exports
+    forbidden_exports = _BI8_GOLDEN_REPLAY_FORBIDDEN_EXPORTS & api_exports
+    assert not forbidden_exports, (
+        "golden replay API must not export subsystem legality helper presets: "
+        f"{sorted(forbidden_exports)!r}"
+    )
+
+    helper_api_source = "\n".join(
+        (
+            target_sources["tests/helpers/golden_replay.py"],
+            target_sources["tests/helpers/golden_replay_api.py"],
+        )
+    )
+    helper_api_forbidden = {
+        fragment: reason
+        for fragment, reason in _BI8_GOLDEN_REPLAY_FORBIDDEN_SOURCE_FRAGMENTS.items()
+        if fragment in helper_api_source
+    }
+    assert not helper_api_forbidden, (
+        "golden replay helper/API must not re-own subsystem legality details: "
+        f"{helper_api_forbidden!r}"
+    )
+
+
 def test_bg1_protected_replay_manifest_registry_parity() -> None:
     """Cycle BG-1: manifest generation stays registry-backed and parity-checked."""
     import importlib.util
@@ -1817,6 +1967,71 @@ def test_al4_legality_owners_and_smoke_facade_locked() -> None:
     assert route_owner.is_file(), (
         "dialogue route legality owner must remain tests/test_dialogue_routing_lock.py"
     )
+
+
+def test_bj4_emission_smoke_facade_stays_weak_consumer_bridge() -> None:
+    """Cycle BJ-4: emission_smoke_assertions remains smoke/bridge, not a hidden legality owner."""
+    facade_path = (_REPO_ROOT / _DOWNSTREAM_SMOKE_FACADE).resolve()
+    source = facade_path.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+
+    public_functions = {
+        node.name
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and not node.name.startswith("_")
+    }
+    for expected_bridge in (
+        _BJ4_SMOKE_FACADE_ALLOWED_GATE_BRIDGES
+        | _BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES
+    ):
+        assert expected_bridge in public_functions
+
+    public_names = set(public_functions)
+    public_table_lengths: dict[str, int] = {}
+    for node in tree.body:
+        target_name: str | None = None
+        value: ast.AST | None = None
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            target_name = node.targets[0].id
+            value = node.value
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            target_name = node.target.id
+            value = node.value
+        if not target_name or target_name.startswith("_"):
+            continue
+        public_names.add(target_name)
+        if target_name.isupper() and isinstance(value, (ast.Tuple, ast.List, ast.Set, ast.Dict)):
+            public_table_lengths[target_name] = len(value.keys if isinstance(value, ast.Dict) else value.elts)
+
+    forbidden_public_names = {
+        name: reason
+        for name in public_names
+        for fragment, reason in _BJ4_SMOKE_FACADE_FORBIDDEN_PUBLIC_NAME_FRAGMENTS.items()
+        if fragment in name.lower()
+    }
+    assert not forbidden_public_names, (
+        "emission_smoke_assertions.py must not grow public legality-owner helpers/constants: "
+        f"{forbidden_public_names!r}"
+    )
+
+    oversized_public_tables = {
+        name: size
+        for name, size in public_table_lengths.items()
+        if size > 8
+    }
+    assert not oversized_public_tables, (
+        "emission_smoke_assertions.py must not grow large public phrase/route/repair tables; "
+        f"move legality matrices to owner suites: {oversized_public_tables!r}"
+    )
+
+    low = source.lower()
+    assert "ownership note" in low
+    assert "weak downstream smoke/consumer bridges" in low
+    assert "must not become the owner" in low
+    assert "full gate legality matrices" in low
+    assert "route enum tables" in low
+    assert "sanitizer phrase legality" in low
+    assert "ac/rd repair semantics" in low
 
 
 def test_be6_scaffold_phrase_triple_layer_split_locked() -> None:

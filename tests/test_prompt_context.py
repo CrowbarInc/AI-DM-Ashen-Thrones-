@@ -61,16 +61,23 @@ from tests.helpers.objective7_referent_fixtures import REFERENT_TRACKING_COMPACT
 from game.world import upsert_world_npc
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.final_emission_text import _normalize_text
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+    response_type_contract,
+)
 from tests.helpers.strict_social_harness import runner_strict_bundle
 
 
 import pytest
 
 pytestmark = pytest.mark.integration
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _minimal_lead_row_keys() -> frozenset[str]:
@@ -3441,14 +3448,14 @@ def test_non_strict_social_failed_repair_adds_unsatisfied_after_repair_reason(mo
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     bad = _monoblob_dialogue_quote()
     pol = _dialogue_response_policy_with_social_structure()
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": bad, "tags": [], "response_policy": pol},
         resolution={"kind": "observe", "prompt": "What does the runner say?"},
         session=None,
         scene_id="checkpoint",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("social_response_structure_passed") is False
     assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
     assert meta.get("social_response_structure_repair_applied") is False
@@ -3476,14 +3483,14 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
     monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": bad, "tags": [], "response_policy": pol},
         resolution=resolution,
         session=session,
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     txt = out.get("player_facing_text") or ""
     assert "w0" in txt and "w50" in txt
     assert meta.get("social_response_structure_passed") is False
@@ -3499,14 +3506,14 @@ def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypat
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     bullet = '- "East gate is two hundred feet south," he says.\n- "Patrols chart that lane nightly."'
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": bullet, "tags": [], "response_policy": pol},
         resolution={"kind": "question", "prompt": "Where is the east gate?"},
         session=None,
         scene_id="gate_yard",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("social_response_structure_repair_applied") is False
     assert meta.get("social_response_structure_boundary_semantic_repair_disabled") is True
     assert meta.get("social_response_structure_passed") is False
@@ -3519,7 +3526,7 @@ def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypat
 def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": 'Watchman says "East road bends past the mill."',
             "tags": [],
@@ -3530,7 +3537,7 @@ def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatc
         scene_id="lane",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     for key in (
         "social_response_structure_checked",
         "social_response_structure_applicable",
@@ -3576,13 +3583,13 @@ def test_action_outcome_turn_social_response_structure_not_applicable(monkeypatc
     rtc = response_type_contract("action_outcome")
     srs = _secondary_social_response_structure_contract("action_outcome")
     raw = "You lift the bar; it groans, and the side door eases open a finger's width."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": raw, "tags": [], "response_policy": {"response_type_contract": rtc, "social_response_structure": srs}},
         resolution={"kind": "interact", "prompt": "I try the side door."},
         session=None,
         scene_id="alley",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("social_response_structure_applicable") is False
     assert meta.get("social_response_structure_failure_reasons") == []

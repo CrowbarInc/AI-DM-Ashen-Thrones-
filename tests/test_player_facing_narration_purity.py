@@ -6,9 +6,11 @@ from __future__ import annotations
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+    response_type_contract,
+)
 
 from game.player_facing_narration_purity import (
     build_player_facing_narration_purity_contract,
@@ -18,6 +20,11 @@ from game.player_facing_narration_purity import (
 )
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _contract(**kwargs):
@@ -212,7 +219,7 @@ def test_resolve_player_facing_narration_purity_contract_from_response_policy():
 
 def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "Rain hammers the slate roof; torchlight shivers in the gutter below.",
             "tags": [],
@@ -224,7 +231,7 @@ def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
         scene_id="market_lane",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is False
     assert meta.get("answer_shape_primacy_failed") is False
     assert "Rain" in (out.get("player_facing_text") or "")
@@ -232,7 +239,7 @@ def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
 
 def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": (
                 "You emerge into the lower ward—smoke, shouted names, the harbor's brine on the wind."
@@ -250,7 +257,7 @@ def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
         scene_id="lower_ward",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("answer_shape_primacy_failed") is False
     assert "emerge" in (out.get("player_facing_text") or "").lower()
 
@@ -261,7 +268,7 @@ def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
         'The sergeant does not raise her voice. "Move toward the gate, now," she says, '
         "and the line stiffens as if pulled by a single wire."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": text,
             "tags": [],
@@ -273,7 +280,7 @@ def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
         scene_id="gate_yard",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is False
     assert "gate" in (out.get("player_facing_text") or "").lower()
 
@@ -284,7 +291,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
         "You thumb the latch; it gives with a dry snap. "
         "Patrol whistles tighten two streets over, a thin urgent sound against the rain."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": text,
             "tags": [],
@@ -296,7 +303,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
         scene_id="alley_door",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("answer_shape_primacy_failed") is False
     assert "latch" in (out.get("player_facing_text") or "").lower()
 
@@ -304,7 +311,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
 def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -316,7 +323,7 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
         scene_id="arch_lane",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is True
     assert meta.get("player_facing_narration_purity_repaired") is False
     assert meta.get("final_route") == "replaced"
@@ -325,7 +332,7 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
 def test_gate_purity_repairs_coaching_language(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "You weigh what you just tried near the checkpoint; rain drums on the slate roof."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -337,7 +344,7 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
         scene_id="frontier_gate",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -345,7 +352,7 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
 def test_gate_purity_repairs_ui_label_leak(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Take the exit labeled North and you smell cold river air beyond the arch."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -357,7 +364,7 @@ def test_gate_purity_repairs_ui_label_leak(monkeypatch):
         scene_id="river_arch",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -368,7 +375,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
         "The ward's tension mounts; confrontation feels inevitable. "
         "You hear boots on wet cobbles to your left, uneven and hurried."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -380,7 +387,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
         scene_id="lower_ward",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("answer_shape_primacy_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -388,7 +395,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
 def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
     monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "The next beat is yours. You emerge onto the quay, ropes creaking, gulls wheeling overhead."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -400,7 +407,7 @@ def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
         scene_id="stone_quay",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("player_facing_narration_purity_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -411,7 +418,7 @@ def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
         "Unrest makes factions bold and the crown brittle. "
         "Invasion rumors outrun truth, and politics turns markets into maps."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -423,6 +430,6 @@ def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
         scene_id="market_square",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("answer_shape_primacy_failed") is True
     assert meta.get("final_route") == "replaced"

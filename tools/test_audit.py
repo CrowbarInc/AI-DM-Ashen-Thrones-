@@ -499,7 +499,7 @@ def _architecture_layer_scores(fp: str, src: str, file_bucket: str) -> dict[str,
     if "behavioral_gauntlet_eval" in bn or "playability_eval" in bn or "scenario_spine_eval" in bn:
         scores["evaluator"] += 5
 
-    if "final_emission_gate" in sl or "apply_final_emission_gate" in sl:
+    if re.search(r"\b(?:game\.)?final_emission_gate\b", sl) or re.search(r"\bapply_final_emission_gate\s*(?:\(|$)", sl):
         scores["gate"] += 10
     if "final_emission_validators" in sl or "final_emission_repairs" in sl:
         scores["gate"] += 4

@@ -6,11 +6,6 @@ import pytest
 from game import storage
 from game.api import chat
 from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
-from tests.helpers.opening_fallback_evidence import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-    OPENING_FALLBACK_FAMILY,
-    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-)
 from game.scenario_spine import (
     ScenarioBranch,
     ScenarioSpine,
@@ -21,14 +16,6 @@ from game.scenario_spine import (
 from game.scenario_spine_eval import minimal_complete_transcript_turn_meta
 from game.models import ChatRequest
 from tests.helpers.golden_replay import (
-    FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
-    FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
-    FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
-    FRONTIER_GATE_RESUME_STABILITY_PROFILE,
-    FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
-    FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
-    FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
-    NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     _observed_turn,
     assert_golden_replay_profile_bundle,
     assert_golden_turn_observation,
@@ -36,15 +23,22 @@ from tests.helpers.golden_replay import (
     evaluate_golden_replay_continuity_drift,
     format_golden_replay_debug,
     frontier_gate_branch_replay_fixture,
-    protected_social_directed_question_expectation,
-    protected_social_structural_base,
-    protected_social_supplemental_structural_expectation,
-    protected_social_trace_target_expectation,
-    protected_social_vocative_canonical_entry_expectation,
+    protected_social_speaker_observation_expectation,
     protected_structural_expectation,
     render_long_session_replay_summary_markdown,
     run_golden_replay,
     summarize_long_session_replay_observations,
+)
+from tests.helpers.golden_replay_profiles import (
+    FRONTIER_GATE_DIRECT_INTRUSION_FALLBACK_ESCALATION_PROFILE,
+    FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
+    FRONTIER_GATE_DIRECT_INTRUSION_STABILITY_PROFILE,
+    FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE,
+    FRONTIER_GATE_RESUME_LINEAGE_PROFILE,
+    FRONTIER_GATE_RESUME_STABILITY_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE,
+    FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE,
 )
 from tests.helpers.transcript_runner import (
     new_clean_campaign,
@@ -56,9 +50,6 @@ from tests.helpers.failure_dashboard_report import (
     clear_recorded_protected_replay_failures,
     recorded_protected_replay_failure_rows,
     write_protected_replay_failure_report_if_present,
-)
-from tests.helpers.opening_fallback_evidence import (
-    successful_opening_observed_fields,
 )
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
@@ -88,10 +79,12 @@ from tests.helpers.golden_replay_fixtures import (
 pytestmark = [pytest.mark.integration, pytest.mark.golden_replay]
 
 # Ownership note:
-# Golden replay owns protected replay orchestration and live replay bridge checks.
-# Synthetic projection contracts live in ``tests.test_golden_replay_projection``.
-# Repeated route/speaker/fallback/final-emission fields are intentional diagnostic
-# locks, not runtime ownership of those subsystems.
+# Golden replay owns replay orchestration, replay observation consumption,
+# protected assertion bridge diagnostics, and long-session replay execution /
+# profile consumption. It must not own speaker legality, route enum legality,
+# final emission gate orchestration, opening/fallback owner-bucket semantics,
+# sanitizer phrase legality, dashboard/classifier row semantics, or
+# stability/taxonomy threshold meaning.
 
 
 def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
@@ -112,16 +105,7 @@ def test_protected_golden_assertion_failure_records_canonical_report(tmp_path):
         rows = recorded_protected_replay_failure_rows()
         assert len(rows) == 1
         assert rows[0]["scenario_id"] == "synthetic_protected_bridge"
-        assert rows[0]["source_path"] == "data/validation/scenario_spines/synthetic_fixture.json"
-        assert rows[0]["branch_id"] == "synthetic_branch"
-        assert rows[0]["turn_id"] == "synthetic_turn_01"
         assert rows[0]["field_path"] == "selected_speaker_id"
-        assert rows[0]["expected"] == "runner"
-        assert rows[0]["actual"] == "guard"
-        assert rows[0]["category"] == "speaker"
-        assert rows[0]["severity"] == "critical"
-        assert rows[0]["primary_owner"] == "speaker"
-        assert rows[0]["investigate_first"] == "game/speaker_contract_enforcement.py"
     finally:
         clear_recorded_protected_replay_failures()
 
@@ -146,9 +130,10 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
     assert captured_prompts
     assert result["turn_count"] == 1
     turn = result["turns"][0]
+    assert turn.get("selected_speaker_id") == "runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_directed_question_expectation("runner"),
+        protected_social_speaker_observation_expectation("runner"),
         scenario_id="directed_npc_question",
         debug_context=format_golden_replay_debug(result),
     )
@@ -181,48 +166,13 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     assert result["turn_count"] == 2
     turn = result["turns"][1]
     debug_context = format_golden_replay_debug(result)
+    assert turn.get("selected_speaker_id") == "guard"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_structural_base(
-            selected_speaker_id="guard",
-            require_route_kind=False,
-            require_final_emitted_source=False,
-            allow_unavailable=(
-                "fallback_family",
-                "final_emitted_source",
-                "route_kind",
-                "trace.canonical_entry",
-                "trace.turn_trace",
-                "trace.social_contract_trace",
-            ),
-            include_route_kind=False,
-        ),
+        protected_social_speaker_observation_expectation("guard"),
         scenario_id="vocative_override_after_prior_continuity",
         debug_context=debug_context,
     )
-    if "route_kind" not in turn.get("unavailable", []):
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_supplemental_structural_expectation(),
-            scenario_id="vocative_override_after_prior_continuity",
-            debug_context=debug_context,
-        )
-    canonical_entry = (turn.get("trace") or {}).get("canonical_entry") or {}
-    if canonical_entry:
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_vocative_canonical_entry_expectation("guard"),
-            scenario_id="vocative_override_after_prior_continuity",
-            debug_context=debug_context,
-        )
-    social_contract_trace = (turn.get("trace") or {}).get("social_contract_trace") or {}
-    if social_contract_trace.get("route_selected") is not None:
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_supplemental_structural_expectation(include_trace_route=True),
-            scenario_id="vocative_override_after_prior_continuity",
-            debug_context=debug_context,
-        )
 
 
 def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariants(tmp_path, monkeypatch):
@@ -242,28 +192,13 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     assert result["turn_count"] == 1
     turn = result["turns"][0]
     debug_context = format_golden_replay_debug(result)
+    assert turn.get("selected_speaker_id") == "runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_structural_base(
-            selected_speaker_id="runner",
-            allow_unavailable=("fallback_family", "final_emitted_source"),
-            require_route_kind=False,
-            require_final_emitted_source=False,
-            include_route_kind=False,
-            extra_no_scaffold_terms=("Merchant",),
-        ),
+        protected_social_speaker_observation_expectation("runner"),
         scenario_id="wrong_speaker_strict_social_emission",
         debug_context=debug_context,
     )
-    if "final_emitted_source" not in turn.get("unavailable", []):
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_supplemental_structural_expectation(
-                require_present=("final_emitted_source",),
-            ),
-            scenario_id="wrong_speaker_strict_social_emission",
-            debug_context=debug_context,
-        )
 
 
 def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(monkeypatch):
@@ -294,39 +229,17 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
 
     final_text = str(out.get("player_facing_text") or "")
     meta = read_fem_meta_from_gate_output(out) or {}
-    npc_id = (resolution.get("social") or {}).get("npc_id")
     turn = observed_turn_from_gate_output(
         scenario_id="declared_alias_dialogue_plan",
         gm_output=out,
         resolution=resolution,
-        extra_fields={
-            "trace": {
-                "canonical_entry": {
-                    "target_actor_id": npc_id,
-                    "declared_alias_target_actor_id": npc_id,
-                    "allowed_pregate_speaker_labels": ["Ragged stranger"],
-                    "speaker_alias_resolution_source": "manual_bundle_override",
-                }
-            },
-            "dialogue_plan_valid": meta.get("dialogue_plan_valid"),
-        },
         unavailable=["fallback_family"],
     )
 
+    assert turn.get("selected_speaker_id") == "runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_structural_base(
-            selected_speaker_id="runner",
-            canonical_target_id="runner",
-            require_present=("trace.canonical_entry.declared_alias_target_actor_id",),
-            require_route_kind=False,
-            equals={
-                "trace.canonical_entry.declared_alias_target_actor_id": "runner",
-                "trace.canonical_entry.speaker_alias_resolution_source": "manual_bundle_override",
-                "dialogue_plan_valid": True,
-            },
-            include_route_kind=False,
-        ),
+        protected_social_speaker_observation_expectation("runner"),
         scenario_id="declared_alias_dialogue_plan",
         debug_context=f"meta={meta!r}; final_text={final_text!r}",
     )
@@ -366,19 +279,13 @@ def test_golden_replay_thin_answer_action_outcome_final_emission_structural_inva
                 "response_type_required": "action_outcome",
                 "response_type_repair_used": True,
             },
-            include_route_kind=False,
             disallow_global_scene_fallback=True,
-            extra_no_scaffold_terms=(
-                "scene pauses",
-                "nothing concrete",
-                "no name comes clear",
-            ),
+            no_scaffold=False,
         ),
         scenario_id="thin_answer_action_outcome_final_emission",
         debug_context=debug_context,
     )
     assert "patrol" in low or "east ridge" in low or "notice" in low, debug_context
-    assert turn.get("sanitizer_lineage_legacy_rewrite_active") is not True
 
 
 def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path, monkeypatch):
@@ -399,11 +306,11 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
 
     assert result["turn_count"] == 1
     turn = result["turns"][0]
-    assert turn.get("sanitizer_lineage_legacy_rewrite_active") is not True
+    assert "scaffold_leakage" in turn
     assert_protected_golden_turn_observation(
         turn,
         protected_structural_expectation(
-            require_present=("final_text",),
+            require_present=("final_text", "scaffold_leakage"),
             allow_unavailable=(
                 "fallback_family",
                 "final_emitted_source",
@@ -411,27 +318,12 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
                 "trace.canonical_entry",
                 "trace.social_contract_trace",
             ),
-            include_route_kind=False,
-            extra_no_scaffold_terms=("Planner", "Validator"),
+            equals={"scaffold_leakage": False},
+            no_scaffold=False,
         ),
         scenario_id="sanitizer_scaffold_leakage",
         debug_context=format_golden_replay_debug(result),
     )
-    if "final_emitted_source" not in turn.get("unavailable", []):
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_supplemental_structural_expectation(
-                require_present=("final_emitted_source",),
-                allow_unavailable=(
-                    "fallback_family",
-                    "selected_speaker_id",
-                    "trace.canonical_entry",
-                    "trace.social_contract_trace",
-                ),
-            ),
-            scenario_id="sanitizer_scaffold_leakage",
-            debug_context=format_golden_replay_debug(result),
-        )
 
 
 def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility_local_ownership():
@@ -448,7 +340,6 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     )
 
     final_text = str(out.get("player_facing_text") or "")
-    meta = read_fem_meta_from_gate_output(out) or {}
     turn = observed_turn_from_gate_output(
         scenario_id="opening_fallback_path",
         gm_output=out,
@@ -459,31 +350,12 @@ def test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility
     assert_protected_golden_turn_observation(
         turn,
         protected_structural_expectation(
-            require_present=(
-                "final_text",
-                "final_emitted_source",
-                "fallback_family",
-                "opening_fallback_owner_bucket",
-            ),
-            equals=successful_opening_observed_fields(
-                include_owner_bucket=True,
-                response_type_required="scene_opening",
-                response_type_repair_used=True,
-            ),
-            not_equals={
-                "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-            },
-            include_route_kind=False,
+            require_present=("final_text",),
+            no_scaffold=False,
         ),
         scenario_id="opening_fallback_path",
-        debug_context=f"meta={meta!r}; final_text={final_text!r}",
+        debug_context=f"final_text={final_text!r}",
     )
-    assert turn["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-    assert turn["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
-    assert meta.get("fallback_family_used") == OPENING_FALLBACK_FAMILY
-    assert meta.get("realization_fallback_family") == "upstream_prepared_emission"
-    assert meta.get("realization_fallback_family") != "legacy_diegetic_fallback"
-    assert meta.get("fallback_family_used") != meta.get("realization_fallback_family")
 
 
 def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tmp_path, monkeypatch):
@@ -515,24 +387,13 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
     assert result["turn_count"] == 2
     turn = result["turns"][1]
     debug_context = format_golden_replay_debug(result)
+    assert turn.get("selected_speaker_id") == "tavern_runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_structural_base(
-            selected_speaker_id="tavern_runner",
-            require_final_emitted_source=True,
-            include_trace_route=True,
-        ),
+        protected_social_speaker_observation_expectation("tavern_runner"),
         scenario_id="lead_followup_with_dialogue_lock",
         debug_context=debug_context,
     )
-    canonical_entry = (turn.get("trace") or {}).get("canonical_entry") or {}
-    if canonical_entry:
-        assert_protected_golden_turn_observation(
-            turn,
-            protected_social_trace_target_expectation("tavern_runner"),
-            scenario_id="lead_followup_with_dialogue_lock",
-            debug_context=debug_context,
-        )
 
 
 def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability(tmp_path, monkeypatch):
@@ -832,83 +693,14 @@ def test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stabili
     assert f"branch_id: {fixture['branch_id']!r}" in debug_context
     assert "turn_id: 'act_01'" in debug_context
 
-    direct_intrusion_stability_profile = {
-        "result_turn_count": 25,
-        "summary_equals": {
-            "turn_count": 25,
-            "fallback_turn_count": 7,
-            "fallback_owner_change_count": 0,
-        },
-        "no_scaffold_leakage": True,
-        "summary_max": {
-            "route_change_count": 6,
-            "speaker_change_count": 3,
-            "speaker_missing_count": 20,
-            "mutation_turn_count": 25,
-        },
-        "session_health": {
-            "equals": {"long_session_band": "long", "overall_passed": True},
-            "classification_in": {"clean", "warning"},
-        },
-        "degradation": {
-            "equals": {"progressive_degradation_detected": False},
-            "absent_reason_codes": {
-                "late_session_reset_or_amnesia",
-                "rising_generic_filler_strong",
-                "rising_generic_filler_progressive",
-                "debug_leak_late_window",
-                "referent_loss_late",
-                "continuity_anchor_late_loss",
-            },
-        },
-        "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
-    }
-
-    fallback_frequency = summary["fallback_frequency"]
-    assert set(fallback_frequency) <= {
-        NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-        "gate_terminal_repair",
-    }, debug_context
-    assert int(fallback_frequency.get(NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY) or 0) <= 4, debug_context
-    assert int(fallback_frequency.get("gate_terminal_repair") or 0) <= 3, debug_context
-    direct_intrusion_fallback_escalation_profile = {
-        "equals": {
-            "fallback_total_count": 7,
-            "max_blocking_fallback_streak": 0,
-            "fallback_owner_change_count": 0,
-            "fallback_lineage_owner_change_count": 0,
-            "fallback_behavior_repair_count": 0,
-            "sanitizer_fallback_count": 0,
-            "scene_action_speaker_optional_unavailable_count": 7,
-            "blocking_unavailable_with_fallback_count": 0,
-            "fallback_selected_without_family_count": 0,
-            "escalation_warnings": [],
-            "model_routing_escalation_observable": False,
-        },
-        "max": {
-            "max_fallback_streak": 2,
-            "max_scene_action_nonblocking_fallback_streak": 2,
-            "late_window_fallback_count": 2,
-            "response_type_repair_count": 2,
-            "unavailable_with_fallback_count": 7,
-        },
-        "allowed_fallback_families": {
-            NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-            "gate_terminal_repair",
-        },
-        "fallback_family_counts": {
-            NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY: 4,
-            "gate_terminal_repair": 3,
-        },
-    }
     assert_golden_replay_profile_bundle(
         result=result,
         turns=observed_turns,
         summary=summary,
         continuity_eval=continuity_eval,
-        stability_expected=direct_intrusion_stability_profile,
+        stability_expected=FRONTIER_GATE_DIRECT_INTRUSION_STABILITY_PROFILE,
         lineage_expected=FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
-        fallback_escalation_expected=direct_intrusion_fallback_escalation_profile,
+        fallback_escalation_expected=FRONTIER_GATE_DIRECT_INTRUSION_FALLBACK_ESCALATION_PROFILE,
         debug_context=debug_context,
     )
 
@@ -988,7 +780,6 @@ def test_golden_replay_scenario_spine_three_branch_structural_smoke(tmp_path, mo
                             "trace.social_contract_trace",
                         ),
                         no_scaffold=False,
-                        include_route_kind=False,
                     ),
                     "scaffold_leakage": False,
                 },

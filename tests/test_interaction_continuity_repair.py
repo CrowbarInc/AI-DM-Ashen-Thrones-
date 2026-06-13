@@ -15,17 +15,21 @@ from __future__ import annotations
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
     assert_continuity_validation_failed_without_repair,
     assert_final_route_not_replaced_smoke,
     assert_final_route_present_smoke,
+    final_emission_meta_from_output,
 )
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _strong_contract(*, anchor: str = "npc_melka") -> dict:
@@ -164,7 +168,7 @@ def test_attach_interaction_continuity_validation_populates_debug_and_final_meta
     assert out["player_facing_text"] == "The scene holds."
     icv = out["metadata"]["emission_debug"]["interaction_continuity_validation"]
     _assert_interaction_continuity_validation_shape(icv)
-    assert read_final_emission_meta_dict(out)["interaction_continuity_validation"] is icv
+    assert final_emission_meta_from_output(out)["interaction_continuity_validation"] is icv
     assert resolution["metadata"]["emission_debug"]["interaction_continuity_validation"] is icv
 
 
@@ -266,7 +270,7 @@ def test_apply_final_emission_gate_validate_only_ic_never_calls_repair_interacti
         "metadata": {},
         "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
     }
-    apply_final_emission_gate(
+    _apply_gate(
         gm,
         resolution={"kind": "observe", "prompt": "Hi."},
         session=None,

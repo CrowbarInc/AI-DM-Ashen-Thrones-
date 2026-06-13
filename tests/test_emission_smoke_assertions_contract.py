@@ -18,6 +18,8 @@ from tests.helpers.emission_smoke_assertions import (
     assert_global_visibility_stock_absent,
     assert_no_advisory_prose,
     assert_procedural_adjudication_smoke,
+    enforce_response_type_contract_layer,
+    response_type_contract,
 )
 
 pytestmark = pytest.mark.unit
@@ -50,3 +52,26 @@ def test_emission_smoke_helpers_accept_repair_evidence_from_tags_or_debug():
         {"debug_notes": "retry_fallback:unresolved_question"},
         debug_notes_reader=lambda payload: str(payload.get("debug_notes") or ""),
     )
+
+
+def test_response_type_enforcement_bridge_returns_consumer_shape() -> None:
+    text, debug = enforce_response_type_contract_layer(
+        "Only mist between the torches.",
+        gm_output={
+            "response_policy": {"response_type_contract": response_type_contract("answer")},
+            "upstream_prepared_emission": {},
+        },
+        resolution={"kind": "observe", "prompt": "What do I see?"},
+        session={},
+        scene_id="yard",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+
+    assert isinstance(text, str)
+    assert isinstance(debug, dict)
+    assert debug.get("response_type_required") == "answer"
+    assert "response_type_candidate_ok" in debug
+    assert "response_type_repair_kind" in debug

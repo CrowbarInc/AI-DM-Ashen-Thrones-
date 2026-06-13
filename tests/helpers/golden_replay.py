@@ -3,6 +3,11 @@
 This module is intentionally test-only.  It projects existing transcript
 snapshots and chat payloads into a stable, assertion-friendly shape without
 changing runtime behavior or creating a second storage/test harness.
+
+Ownership boundary: golden replay owns replay orchestration, observation
+consumption, protected assertion bridge diagnostics, and long-session profile
+consumption. Detailed speaker, route, final-emission, fallback, sanitizer,
+dashboard/classifier, stability, and taxonomy legality belongs to owner suites.
 """
 from __future__ import annotations
 
@@ -28,7 +33,6 @@ from tests.helpers.replay_drift_taxonomy import (
 from tests.helpers.golden_replay_projection import (
     MISSING as _MISSING,
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
-    SEALED_REPLACEMENT_SUBKINDS,
     _echo_overlap_band,
     final_text_has_scaffold_leakage,
     golden_text_hash,
@@ -57,168 +61,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 FRONTIER_GATE_LONG_SESSION_SOURCE_PATH = "data/validation/scenario_spines/frontier_gate_long_session.json"
 FRONTIER_GATE_LONG_SESSION_PATH = REPO_ROOT / FRONTIER_GATE_LONG_SESSION_SOURCE_PATH
 PROTECTED_NO_SCAFFOLD_TERMS = ("planner", "router", "validator", "adjudication", "scaffold")
-PROTECTED_SOCIAL_RESOLUTION_KINDS = ("question", "social", "social_exchange", "dialogue")
-PROTECTED_SOCIAL_ROUTE_KINDS = ("social", "question", "social_engine", "dialogue")
-PROTECTED_DIALOGUE_TRACE_ROUTES = ("social", "dialogue")
-PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
-PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES = ("spoken_vocative", "vocative")
-PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS = (
-    "spoken_vocative_address",
-    "spoken_vocative_resolved_to_addressable_actor",
-    "explicit_spoken_vocative_overrode_continuity",
-    "spoken_vocative_overrode_continuity",
-)
-
-# Frontier Gate social-inquiry 25-turn protected acceptance thresholds (Cycle BC5).
-# The full 25-turn branch crosses the evaluator's long-session band; the prior
-# protected 20-turn slice was still classified as standard.
-FRONTIER_GATE_SOCIAL_INQUIRY_STABILITY_PROFILE: dict[str, Any] = {
-    "result_turn_count": 25,
-    "summary_equals": {"turn_count": 25},
-    "no_scaffold_leakage": True,
-    "summary_max": {
-        "speaker_change_count": 2,
-        "speaker_missing_count": 2,
-        "fallback_turn_count": 1,
-        "fallback_owner_change_count": 1,
-        "route_change_count": 2,
-    },
-    "min_resolved_routes": 12,
-    "session_health": {
-        "equals": {"long_session_band": "long", "overall_passed": True},
-        "classification_in": {"clean", "warning"},
-    },
-    "degradation": {
-        "equals": {"progressive_degradation_detected": False},
-        "absent_reason_codes": {
-            "late_session_reset_or_amnesia",
-            "rising_generic_filler_strong",
-            "rising_generic_filler_progressive",
-            "debug_leak_late_window",
-            "referent_loss_late",
-            "continuity_anchor_late_loss",
-        },
-    },
-    "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
-}
-
-FRONTIER_GATE_SOCIAL_INQUIRY_LINEAGE_PROFILE: dict[str, Any] = {
-    "fallback_frequency_total_max": 1,
-    "event_kind_max": {"fallback_selected": 1, "mutation": 25},
-    "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
-    "allowed_recurring_keys": {
-        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-        "mutation:gate:game.final_emission_gate:final_emission_mutation",
-    },
-    "max_recurring_event_count": 25,
-}
-
-FRONTIER_GATE_SOCIAL_INQUIRY_FALLBACK_ESCALATION_PROFILE: dict[str, Any] = {
-    "equals": {
-        "late_window_fallback_count": 0,
-        "fallback_owner_change_count": 0,
-        "fallback_lineage_owner_change_count": 0,
-        "fallback_behavior_repair_count": 0,
-        "sanitizer_fallback_count": 0,
-        "escalation_warnings": [],
-        "model_routing_escalation_observable": False,
-    },
-    "max": {
-        "fallback_total_count": 1,
-        "max_fallback_streak": 1,
-        "response_type_repair_count": 1,
-        "unavailable_with_fallback_count": 1,
-        "fallback_selected_without_family_count": 1,
-    },
-}
-
-FRONTIER_GATE_RESUME_STABILITY_PROFILE: dict[str, Any] = {
-    "result_turn_count": 25,
-    "summary_equals": {"turn_count": 25},
-    "no_scaffold_leakage": True,
-    "summary_max": {
-        "speaker_change_count": 2,
-        "speaker_missing_count": 2,
-        "fallback_turn_count": 1,
-        "fallback_owner_change_count": 1,
-        "route_change_count": 2,
-    },
-    "session_health": {
-        "equals": {"long_session_band": "long", "overall_passed": True},
-        "classification_in": {"clean", "warning"},
-    },
-    "degradation": {
-        "equals": {"progressive_degradation_detected": False},
-        "absent_reason_codes": {
-            "late_session_reset_or_amnesia",
-            "rising_generic_filler_strong",
-            "rising_generic_filler_progressive",
-            "debug_leak_late_window",
-            "referent_loss_late",
-            "continuity_anchor_late_loss",
-        },
-    },
-    "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
-}
-
-FRONTIER_GATE_RESUME_LINEAGE_PROFILE: dict[str, Any] = {
-    "event_kind_max": {"fallback_selected": 1, "mutation": 25},
-    "mutation_kind_max": {"fallback_mutation": 1, "final_emission_mutation": 25},
-    "allowed_recurring_keys": {
-        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-        "mutation:gate:game.final_emission_gate:final_emission_mutation",
-    },
-    "max_recurring_event_count": 25,
-}
-
-FRONTIER_GATE_RESUME_FALLBACK_ESCALATION_PROFILE: dict[str, Any] = {
-    "equals": {
-        "late_window_fallback_count": 0,
-        "fallback_owner_change_count": 0,
-        "fallback_lineage_owner_change_count": 0,
-        "fallback_behavior_repair_count": 0,
-        "sanitizer_fallback_count": 0,
-        "escalation_warnings": [],
-        "model_routing_escalation_observable": False,
-    },
-    "max": {
-        "fallback_total_count": 1,
-        "max_fallback_streak": 1,
-        "response_type_repair_count": 1,
-        "unavailable_with_fallback_count": 1,
-        "fallback_selected_without_family_count": 1,
-    },
-}
-
-FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE: dict[str, Any] = {
-    "event_kind_equals": {"fallback_selected": 7},
-    "event_kind_max": {"mutation": 14, "speaker_repair": 1},
-    "mutation_kind_max": {
-        "fallback_mutation": 7,
-        "final_emission_mutation": 4,
-        "response_type_repair_mutation": 2,
-        "speaker_repair_mutation": 1,
-    },
-    "allowed_recurring_keys": {
-        "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
-        "mutation:gate:game.final_emission_gate:fallback_mutation",
-        "fallback_selected:gate:game.final_emission_gate:sealed_or_global_replacement",
-        "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
-        "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
-        "mutation:gate:game.final_emission_gate:final_emission_mutation",
-        "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
-        "gate_outcome:gate:game.final_emission_gate:prepared_repair",
-        "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
-    }
-    | {
-        f"fallback_selected:gate:game.final_emission_gate:{subkind}"
-        for subkind in SEALED_REPLACEMENT_SUBKINDS
-    },
-    "max_recurring_event_count": 25,
-}
+_PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE = "global_scene_fallback"
 
 
-def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
+def _protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> dict[str, Any]:
     """Protected replay fragment for the shared player-facing scaffold leak lock."""
     return {
         "text_must_not_include": [*extra_terms, *PROTECTED_NO_SCAFFOLD_TERMS],
@@ -226,33 +72,16 @@ def protected_no_scaffold_expectation(*, extra_terms: tuple[str, ...] = ()) -> d
     }
 
 
-def protected_unavailable_expectation(*field_paths: str) -> dict[str, Any]:
+def _protected_unavailable_expectation(*field_paths: str) -> dict[str, Any]:
     """Protected replay fragment for explicitly optional projected observation fields."""
     return {"allow_unavailable": list(field_paths)}
 
 
-def protected_route_expectation(
-    *,
-    include_resolution_kind: bool = False,
-    include_route_kind: bool = True,
-    include_trace_route: bool = False,
-) -> dict[str, Any]:
-    """Protected replay fragment for social/dialogue route-shape observations."""
-    one_of: dict[str, list[str]] = {}
-    if include_resolution_kind:
-        one_of["resolution_kind"] = list(PROTECTED_SOCIAL_RESOLUTION_KINDS)
-    if include_route_kind:
-        one_of["route_kind"] = list(PROTECTED_SOCIAL_ROUTE_KINDS)
-    if include_trace_route:
-        one_of["trace.social_contract_trace.route_selected"] = list(PROTECTED_DIALOGUE_TRACE_ROUTES)
-    return {"one_of": one_of}
-
-
-def protected_source_expectation(*, disallow_global_scene_fallback: bool = True) -> dict[str, Any]:
+def _protected_source_expectation(*, disallow_global_scene_fallback: bool = True) -> dict[str, Any]:
     """Protected replay fragment for final source locks."""
     if not disallow_global_scene_fallback:
         return {}
-    return {"not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE}}
+    return {"not_equals": {"final_emitted_source": _PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE}}
 
 
 def protected_structural_expectation(
@@ -262,9 +91,6 @@ def protected_structural_expectation(
     equals: Mapping[str, Any] | None = None,
     one_of: Mapping[str, Any] | None = None,
     not_equals: Mapping[str, Any] | None = None,
-    include_resolution_kind: bool = False,
-    include_route_kind: bool = True,
-    include_trace_route: bool = False,
     disallow_global_scene_fallback: bool = False,
     no_scaffold: bool = True,
     extra_no_scaffold_terms: tuple[str, ...] = (),
@@ -276,23 +102,16 @@ def protected_structural_expectation(
         out["require_present"] = list(require_present)
 
     if allow_unavailable:
-        out.update(protected_unavailable_expectation(*allow_unavailable))
+        out.update(_protected_unavailable_expectation(*allow_unavailable))
 
     if equals:
         out["equals"] = dict(equals)
 
-    route_fragment = protected_route_expectation(
-        include_resolution_kind=include_resolution_kind,
-        include_route_kind=include_route_kind,
-        include_trace_route=include_trace_route,
-    )
-    route_one_of = route_fragment.get("one_of") if isinstance(route_fragment.get("one_of"), Mapping) else {}
     custom_one_of = dict(one_of) if one_of else {}
-    merged_one_of = {**route_one_of, **custom_one_of}
-    if merged_one_of:
-        out["one_of"] = merged_one_of
+    if custom_one_of:
+        out["one_of"] = custom_one_of
 
-    source_fragment = protected_source_expectation(
+    source_fragment = _protected_source_expectation(
         disallow_global_scene_fallback=disallow_global_scene_fallback,
     )
     source_not_equals = source_fragment.get("not_equals") if isinstance(source_fragment.get("not_equals"), Mapping) else {}
@@ -302,125 +121,29 @@ def protected_structural_expectation(
         out["not_equals"] = merged_not_equals
 
     if no_scaffold:
-        out.update(protected_no_scaffold_expectation(extra_terms=extra_no_scaffold_terms))
+        out.update(_protected_no_scaffold_expectation(extra_terms=extra_no_scaffold_terms))
 
     return out
 
 
-def protected_social_structural_base(
-    *,
-    selected_speaker_id: str,
-    canonical_target_id: str | None = None,
-    require_present: tuple[str, ...] | list[str] = (),
-    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
-    equals: Mapping[str, Any] | None = None,
-    one_of: Mapping[str, Any] | None = None,
-    not_equals: Mapping[str, Any] | None = None,
-    require_resolution_kind: bool = False,
-    require_route_kind: bool = False,
-    require_final_emitted_source: bool = False,
-    require_trace_target: bool = False,
-    require_trace_route: bool = False,
-    include_resolution_kind: bool = False,
-    include_route_kind: bool = True,
-    include_trace_route: bool = False,
-    disallow_global_scene_fallback: bool = False,
-    extra_no_scaffold_terms: tuple[str, ...] = (),
-) -> dict[str, Any]:
-    """Compose common protected social/dialogue structural expectation fragments."""
-    required = ["final_text"]
-    if require_resolution_kind:
-        required.append("resolution_kind")
-    if require_route_kind:
-        required.append("route_kind")
-    required.extend(["selected_speaker_id", *list(require_present)])
-    if require_final_emitted_source:
-        required.append("final_emitted_source")
-    if require_trace_target:
-        required.append("trace.canonical_entry.target_actor_id")
-    if require_trace_route:
-        required.append("trace.social_contract_trace.route_selected")
-
-    expected_equals: dict[str, Any] = {"selected_speaker_id": selected_speaker_id}
-    if canonical_target_id is not None:
-        expected_equals["trace.canonical_entry.target_actor_id"] = canonical_target_id
-    if equals:
-        expected_equals.update(equals)
-
-    return protected_structural_expectation(
-        require_present=tuple(required),
-        allow_unavailable=allow_unavailable,
-        equals=expected_equals,
-        one_of=one_of,
-        not_equals=not_equals,
-        include_resolution_kind=include_resolution_kind,
-        include_route_kind=include_route_kind,
-        include_trace_route=include_trace_route,
-        disallow_global_scene_fallback=disallow_global_scene_fallback,
-        extra_no_scaffold_terms=extra_no_scaffold_terms,
-    )
-
-
-def protected_social_directed_question_expectation(
+def protected_social_speaker_observation_expectation(
     selected_speaker_id: str,
     *,
-    canonical_target_id: str | None = None,
+    allow_unavailable: tuple[str, ...] | list[str] = (
+        "fallback_family",
+        "final_emitted_source",
+        "resolution_kind",
+        "route_kind",
+        "trace.canonical_entry",
+        "trace.turn_trace",
+        "trace.social_contract_trace",
+    ),
 ) -> dict[str, Any]:
-    """Preset protected social lock for directed NPC question E2E scenarios."""
-    return protected_social_structural_base(
-        selected_speaker_id=selected_speaker_id,
-        canonical_target_id=canonical_target_id or selected_speaker_id,
-        require_resolution_kind=True,
-        require_final_emitted_source=True,
-        require_trace_target=True,
-        require_trace_route=True,
-        include_resolution_kind=True,
-        include_trace_route=True,
-        disallow_global_scene_fallback=True,
-    )
-
-
-def protected_social_trace_target_expectation(
-    canonical_target_id: str,
-    *,
-    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
-    one_of: Mapping[str, Any] | None = None,
-) -> dict[str, Any]:
-    """Supplemental protected fragment when ``trace.canonical_entry`` is present."""
+    """Protected replay fragment for consuming speaker identity without owning social routing detail."""
     return protected_structural_expectation(
+        require_present=("final_text", "selected_speaker_id"),
         allow_unavailable=allow_unavailable,
-        equals={"trace.canonical_entry.target_actor_id": canonical_target_id},
-        one_of=one_of,
-        include_route_kind=False,
-        no_scaffold=False,
-    )
-
-
-def protected_social_vocative_canonical_entry_expectation(
-    canonical_target_id: str,
-) -> dict[str, Any]:
-    """Supplemental protected fragment for vocative canonical-entry shape locks."""
-    return protected_social_trace_target_expectation(
-        canonical_target_id,
-        one_of={
-            "trace.canonical_entry.target_source": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES),
-            "trace.canonical_entry.reason": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS),
-        },
-    )
-
-
-def protected_social_supplemental_structural_expectation(
-    *,
-    require_present: tuple[str, ...] | list[str] = (),
-    allow_unavailable: tuple[str, ...] | list[str] = ("fallback_family",),
-    include_trace_route: bool = False,
-) -> dict[str, Any]:
-    """Supplemental protected fragment for optional projected social fields."""
-    return protected_structural_expectation(
-        require_present=require_present,
-        allow_unavailable=allow_unavailable,
-        include_route_kind=False,
-        include_trace_route=include_trace_route,
+        equals={"selected_speaker_id": selected_speaker_id},
         no_scaffold=False,
     )
 

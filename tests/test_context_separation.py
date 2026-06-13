@@ -1,23 +1,30 @@
 """Context Separation contract, validator, and gate-layer ownership coverage.
 
 Unit tests cover ``game.context_separation`` directly. Gate-integration tests cover
-pass/repair/fail/replace semantics through ``apply_final_emission_gate`` without
-owning gate ordering (that stays in ``tests/test_final_emission_gate.py``).
+pass/repair/fail/replace semantics through the downstream emission facade without
+owning gate ordering.
 """
 from __future__ import annotations
 
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.context_separation import (
     build_context_separation_contract,
     context_separation_repair_hints,
     validate_context_separation,
 )
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+)
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _contract(**kwargs):
@@ -187,7 +194,7 @@ def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeyp
         'She names a price flatly. "Two coppers," she says. '
         "The ward's tense tonight—patrols everywhere—but bread is still bread."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "barter", "prompt": pt},
         session=None,
@@ -196,7 +203,7 @@ def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeyp
     )
     em = (out.get("metadata") or {}).get("emission_debug") or {}
     assert em.get("context_separation", {}).get("validation", {}).get("passed") is True
-    assert (read_final_emission_meta_dict(out) or {}).get("final_route") == "accept_candidate"
+    assert (final_emission_meta_from_output(out) or {}).get("final_route") == "accept_candidate"
 
 
 def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
@@ -211,7 +218,7 @@ def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
         "A guardsman points past a splintered door. "
         "The crackdown is still rolling house to house; you move or you are moved."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "travel", "prompt": pt},
         session=None,
@@ -230,7 +237,7 @@ def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
         "He doesn't laugh. 'Safe is a small word for a big war,' he says. "
         "Unrest has the factions eyeing each other; tonight, nowhere feels clean."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "social_probe", "prompt": pt},
         session=None,
@@ -249,14 +256,14 @@ def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
         "The war along the border has everyone on edge, and coin means nothing next to survival. "
         'She still says, "Two coppers," flat as slate.'
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "barter", "prompt": pt},
         session=None,
         scene_id="market_stall",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("context_separation_failed") is True
     assert meta.get("context_separation_repaired") is False
     assert meta.get("final_route") == "replaced"
@@ -271,14 +278,14 @@ def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(mon
         "The war along the border has everyone on edge, and coin means nothing next to survival. "
         "Factions trade rumors faster than grain, and the capital's politics swallow small questions whole."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "barter", "prompt": pt},
         session=None,
         scene_id="market_stall",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("context_separation_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -291,14 +298,14 @@ def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
         "It is impossible to say with the unrest what the price is; "
         "any answer is swallowed by the instability of the war."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "barter", "prompt": pt},
         session=None,
         scene_id="market_stall",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("context_separation_failed") is True
     assert meta.get("final_route") == "replaced"
 
@@ -313,13 +320,13 @@ def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
         "Invasion rumors outrun truth, and politics turns markets into maps. "
         "Empire scouts watch the passes, and the realm tears at its seams."
     )
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {"player_facing_text": text, "tags": [], "context_separation_contract": cs},
         resolution={"kind": "social_probe", "prompt": pt},
         session=None,
         scene_id="scene",
         world={},
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("context_separation_failed") is True
     assert "pressure_overweighting" in (meta.get("context_separation_failure_reasons") or [])

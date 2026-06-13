@@ -12,9 +12,6 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
@@ -32,7 +29,17 @@ from game.response_policy_contracts import (
     response_type_contract_requires_dialogue,
 )
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    enforce_response_type_contract_layer,
+    final_emission_meta_from_output,
+    response_type_contract,
+)
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 pytestmark = pytest.mark.unit
 
@@ -139,7 +146,7 @@ def _assert_known_realization_family(value: str) -> None:
 
 
 def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without_prepared_text():
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = enforce_response_type_contract_layer(
         "Only mist between the torches.",
         gm_output={
             "response_policy": {"response_type_contract": response_type_contract("answer")},
@@ -159,7 +166,7 @@ def test_enforce_response_type_contract_marks_upstream_absent_for_answer_without
 
 
 def test_final_gate_upstream_prepared_emission_branch_records_upstream_family() -> None:
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "Mist gathers without answering.",
             "tags": [],
@@ -175,7 +182,7 @@ def test_final_gate_upstream_prepared_emission_branch_records_upstream_family() 
         world={},
     )
 
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert out["player_facing_text"] == "Yes. The east gate is open until dusk."
     assert fem["final_route"] == "accept_candidate"
     assert fem["final_emitted_source"] == "answer_upstream_prepared_repair"
@@ -213,7 +220,7 @@ def test_enforce_response_type_contract_rejects_malformed_prepared_answer_action
 ) -> None:
     candidate = "Only mist between the torches."
 
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = enforce_response_type_contract_layer(
         candidate,
         gm_output={
             "response_policy": {"response_type_contract": response_type_contract(required)},
@@ -254,7 +261,7 @@ def test_enforce_response_type_contract_absent_prepared_answer_action_keeps_cand
 ) -> None:
     candidate = "Only mist between the torches."
 
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = enforce_response_type_contract_layer(
         candidate,
         gm_output={
             "response_policy": {"response_type_contract": response_type_contract(required)},

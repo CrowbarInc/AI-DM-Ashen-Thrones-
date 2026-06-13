@@ -10,12 +10,19 @@ import pytest
 
 import game.final_emission_gate as feg
 import game.scene_state_anchoring as ssa
-from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.scene_state_anchoring import validate_scene_state_anchoring
+from tests.helpers.emission_smoke_assertions import (
+    apply_final_emission_gate_consumer,
+    final_emission_meta_from_output,
+)
 from tests.helpers.strict_social_harness import runner_strict_bundle
 
 pytestmark = pytest.mark.unit
+
+
+def _apply_gate(*args, **kwargs):
+    out, _ = apply_final_emission_gate_consumer(*args, **kwargs)
+    return out
 
 
 def _contract(**kwargs):
@@ -110,7 +117,7 @@ def test_scene_state_anchor_pass_path_flags_and_matched_kinds():
         location_tokens=["granite", "slate"],
     )
     raw = "Granite steps wear smooth under the slate roof."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -122,7 +129,7 @@ def test_scene_state_anchor_pass_path_flags_and_matched_kinds():
         world={},
     )
     assert out.get("player_facing_text") == raw
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("scene_state_anchor_checked") is True
     assert meta.get("scene_state_anchor_passed") is True
     assert meta.get("scene_state_anchor_failed") is False
@@ -295,7 +302,7 @@ def test_validate_scene_state_anchoring_invoked_once_without_boundary_repair(mon
 
     monkeypatch.setattr(feg, "validate_scene_state_anchoring", tracking_validate)
     contract = _ssa_contract(location_tokens=["beacon"])
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "Fog rolls in.",
             "tags": [],
@@ -307,7 +314,7 @@ def test_validate_scene_state_anchoring_invoked_once_without_boundary_repair(mon
         world={},
     )
     assert calls == ["Fog rolls in."]
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("scene_state_anchor_failed") is True
     assert fem.get("scene_state_anchor_repaired") is False
 
@@ -317,7 +324,7 @@ def test_gate_never_invokes_build_scene_state_anchor_contract(monkeypatch):
         raise AssertionError("build_scene_state_anchor_contract must not be called from final emission gate")
 
     monkeypatch.setattr(ssa, "build_scene_state_anchor_contract", boom)
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "Stable air, cold iron.",
             "tags": [],
@@ -351,7 +358,7 @@ def test_contract_resolution_from_gm_output_nested_paths(attach_key, attach_payl
         gm["scene_state_anchor_contract"] = attach_payload
     else:
         gm[attach_key] = attach_payload
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         gm,
         resolution={"kind": "observe", "prompt": "I steady myself."},
         session={},
@@ -359,7 +366,7 @@ def test_contract_resolution_from_gm_output_nested_paths(attach_key, attach_payl
         world={},
     )
     assert feg._resolve_scene_state_anchor_contract(out) is not None
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("scene_state_anchor_checked") is True
     assert fem.get("scene_state_anchor_failed") is True
     assert (out.get("player_facing_text") or "").strip() == "Wind rises."
@@ -384,7 +391,7 @@ def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(m
     monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
 
     contract = _ssa_contract(actor_tokens=["tavern runner"])
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": 'Tavern Runner says, "East lanes."',
             "tags": [],
@@ -395,14 +402,14 @@ def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(m
         scene_id=sid,
         world=world,
     )
-    meta = read_final_emission_meta_dict(out) or {}
+    meta = final_emission_meta_from_output(out) or {}
     assert meta.get("scene_state_anchor_repaired") is False
     assert meta.get("scene_state_anchor_passed") is True
 
 
 def test_floating_narration_silence_line_records_anchor_failure_without_boundary_repair():
     raw = "The silence stretches for a moment."
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": raw,
             "tags": [],
@@ -417,7 +424,7 @@ def test_floating_narration_silence_line_records_anchor_failure_without_boundary
         world={},
     )
     assert out.get("player_facing_text") == raw
-    fem = read_final_emission_meta_dict(out) or {}
+    fem = final_emission_meta_from_output(out) or {}
     assert fem.get("scene_state_anchor_failed") is True
     assert fem.get("scene_state_anchor_repaired") is False
 
@@ -429,7 +436,7 @@ def test_contract_actor_only_player_action_only_location_only():
         ({"location_tokens": ["granary"], "scene_location_label": "Old Granary"}, "location"),
     ):
         c = _ssa_contract(**tokens)
-        out = apply_final_emission_gate(
+        out = _apply_gate(
             {
                 "player_facing_text": "Dust motes drift.",
                 "tags": [],
@@ -440,13 +447,13 @@ def test_contract_actor_only_player_action_only_location_only():
             scene_id="granary_scene",
             world={},
         )
-        meta = read_final_emission_meta_dict(out) or {}
+        meta = final_emission_meta_from_output(out) or {}
         assert meta.get("scene_state_anchor_failed") is True
         assert meta.get("scene_state_anchor_passed") is False
 
 
 def test_scene_transition_prefers_location_when_no_actor_tokens():
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "The road bends without a name.",
             "tags": [],
@@ -462,7 +469,7 @@ def test_scene_transition_prefers_location_when_no_actor_tokens():
         scene_id="crossroads",
         world={},
     )
-    m = read_final_emission_meta_dict(out) or {}
+    m = final_emission_meta_from_output(out) or {}
     assert m.get("scene_state_anchor_failed") is True
     assert m.get("scene_state_anchor_repaired") is False
 
@@ -490,7 +497,7 @@ def test_repaired_output_excludes_hidden_bucket_strings():
         "gm_only_hidden_facts": ["SECRET_CULT_LEADER_NAME_XYZ"],
         "metadata": {"emission_debug": {"scene_state_anchor": {"counts": {"location": 1, "actor": 0, "player_action": 0}}}},
     }
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         gm_out,
         resolution={"kind": "observe", "prompt": "I listen."},
         session={},
@@ -501,7 +508,7 @@ def test_repaired_output_excludes_hidden_bucket_strings():
 
 
 def test_short_npc_line_grounded_by_actor_token_passes_without_rewrite():
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": 'Kara says, "No."',
             "tags": [],
@@ -513,13 +520,13 @@ def test_short_npc_line_grounded_by_actor_token_passes_without_rewrite():
         world={},
     )
     assert "Kara" in (out.get("player_facing_text") or "")
-    m = read_final_emission_meta_dict(out) or {}
+    m = final_emission_meta_from_output(out) or {}
     assert m.get("scene_state_anchor_repaired") is False
     assert m.get("scene_state_anchor_passed") is True
 
 
 def test_observational_follow_up_grounded_by_player_action_token():
-    out = apply_final_emission_gate(
+    out = _apply_gate(
         {
             "player_facing_text": "You study the latch; rust flakes away.",
             "tags": [],
@@ -533,14 +540,14 @@ def test_observational_follow_up_grounded_by_player_action_token():
         scene_id="storeroom",
         world={},
     )
-    m = read_final_emission_meta_dict(out) or {}
+    m = final_emission_meta_from_output(out) or {}
     assert m.get("scene_state_anchor_passed") is True
     assert "player_action" in (m.get("scene_state_anchor_matched_kinds") or [])
 
 
 def test_strict_and_non_strict_repair_sync_metadata():
     contract = _ssa_contract(location_tokens=["pier"])
-    non_strict = apply_final_emission_gate(
+    non_strict = _apply_gate(
         {
             "player_facing_text": "Fog.",
             "tags": [],
@@ -551,7 +558,7 @@ def test_strict_and_non_strict_repair_sync_metadata():
         scene_id="pier",
         world={},
     )
-    ns = read_final_emission_meta_dict(non_strict) or {}
+    ns = final_emission_meta_from_output(non_strict) or {}
     em_ns = (non_strict.get("metadata") or {}).get("emission_debug") or {}
     assert ns.get("scene_state_anchor_failed") is True
     assert ns.get("scene_state_anchor_repaired") is False

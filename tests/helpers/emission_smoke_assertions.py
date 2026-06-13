@@ -55,6 +55,10 @@ Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick refere
 Normal full-emission consumer execution delegates through ``game.final_emission_runtime``.
 Private layer seams below delegate to their narrower validator/repair owners while
 keeping this downstream facade stable.
+
+Ownership note: this facade provides weak downstream smoke/consumer bridges. It
+must not become the owner of full gate legality matrices, route enum tables,
+sanitizer phrase legality, or AC/RD repair semantics.
 """
 from __future__ import annotations
 
@@ -66,6 +70,8 @@ from game.final_emission_meta import read_debug_notes_from_turn_payload, read_fi
 _MISSING = object()
 
 
+# Core smoke helpers
+
 def response_type_contract(required: str) -> dict:
     """Minimal response-type contract scaffold for downstream smoke and integration tests."""
     return {
@@ -73,6 +79,8 @@ def response_type_contract(required: str) -> dict:
         "action_must_preserve_agency": required == "action_outcome",
     }
 
+
+# FEM/read-side consumer bridge
 
 def final_emission_meta_from_output(gm_output: Mapping[str, Any]) -> dict[str, Any]:
     """Read normalized FEM from a gate output dict (downstream wiring smoke)."""
@@ -86,6 +94,8 @@ def read_turn_debug_notes(payload: Mapping[str, Any]) -> str:
 
 STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH = "game.final_emission_gate.strict_social_emission_will_apply"
 
+
+# Final emission gate consumer bridge
 
 def apply_final_emission_gate_consumer(
     gm_output: Mapping[str, Any],
@@ -110,6 +120,8 @@ def apply_final_emission_gate_consumer(
     return out, final_emission_meta_from_output(out)
 
 
+# AC/RD owner-adjacent repair bridges
+
 def validate_answer_completeness(text: str, contract: Mapping[str, Any], *, resolution: Mapping[str, Any] | None = None) -> dict[str, Any]:
     """Consumer-owned answer-completeness validator seam (delegates to validator owner)."""
     from game.final_emission_validators import validate_answer_completeness as _fn
@@ -127,6 +139,13 @@ def apply_answer_completeness_layer(*args: Any, **kwargs: Any) -> tuple[str, dic
 def apply_response_delta_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
     """Consumer-owned response-delta layer seam (delegates to repair owner)."""
     from game.final_emission_repairs import _apply_response_delta_layer as _fn
+
+    return _fn(*args, **kwargs)
+
+
+def enforce_response_type_contract_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
+    """Consumer-owned response-type enforcement seam (delegates to gate implementation)."""
+    from game.final_emission_gate import _enforce_response_type_contract as _fn
 
     return _fn(*args, **kwargs)
 
@@ -160,6 +179,8 @@ def inspect_response_delta_failure(result: Mapping[str, Any]) -> dict[str, Any]:
 
     return _fn(dict(result))
 
+
+# Core smoke helpers
 
 _DEFAULT_REPAIR_TAG_MARKERS: tuple[str, ...] = (
     "final_emission_gate_replaced",
@@ -229,6 +250,8 @@ def _assert_phrases_absent(text: str, phrases: Sequence[str], *, label: str) -> 
         assert phrase not in low, f"{label}: unexpected player-facing phrase {phrase!r}"
 
 
+# HTTP fixture compatibility helpers
+
 def gm_response_stub(
     text: str,
     *,
@@ -247,6 +270,8 @@ def gm_response_stub(
         "debug_notes": debug_notes,
     }
 
+
+# Core smoke helpers
 
 def _coerce_player_text(data_or_text: Any) -> str:
     if isinstance(data_or_text, str):
@@ -398,11 +423,15 @@ def assert_response_type_meta(
 _DIALOGUE_LOCK_SOCIAL_KINDS: tuple[str, ...] = ("question", "social_probe")
 
 
+# Core smoke helpers
+
 def assert_http_chat_response_smoke(data: Mapping[str, Any]) -> str:
     """HTTP smoke: ``/api/chat`` returned ok with non-empty player-facing text."""
     assert data.get("ok") is True, "expected chat response ok=True"
     return assert_player_text_present(data)
 
+
+# Route smoke helpers
 
 def assert_dialogue_lock_social_route_smoke(
     resolution: Mapping[str, Any],
@@ -457,6 +486,8 @@ def assert_response_type_contract_surfaces(
         )
 
 
+# Social/open-call smoke helpers
+
 def assert_social_grounding_smoke(
     social: Mapping[str, Any],
     *,
@@ -488,6 +519,8 @@ def assert_continuity_validation_failed_without_repair(emission_debug: Mapping[s
     repair = emission_debug.get("interaction_continuity_repair") or {}
     assert repair.get("applied") is not True
 
+
+# Social/open-call smoke helpers
 
 def assert_open_social_solicitation_route(
     entry: Mapping[str, Any],
@@ -530,6 +563,8 @@ def assert_open_call_no_unresolved_retry_smoke(retry_failures: Sequence[Any]) ->
     )
 
 
+# Route smoke helpers
+
 def assert_final_route_present_smoke(meta: Mapping[str, Any]) -> None:
     """Smoke: ``final_route`` is present on FEM (wiring only)."""
     route = meta.get("final_route")
@@ -564,6 +599,8 @@ def assert_no_boundary_reorder_repair(meta: Mapping[str, Any], reason: str) -> N
     sample = meta.get("rejection_reasons_sample") or []
     assert reason in sample
 
+
+# AC/RD owner-adjacent repair bridges
 
 def assert_response_delta_boundary_validate_only(
     out: str,

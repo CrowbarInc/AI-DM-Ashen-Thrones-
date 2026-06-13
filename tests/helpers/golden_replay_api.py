@@ -3,6 +3,10 @@
 The implementation still lives in ``tests.helpers.golden_replay``. This facade
 keeps downstream tests and report helpers from importing the broad harness
 module directly.
+
+Export only replay orchestration, observation consumption, protected assertion
+bridge diagnostics, and long-session profile consumption helpers. Subsystem
+legality remains in the owner suites documented by ``tests.test_ownership_registry``.
 """
 from __future__ import annotations
 
@@ -12,6 +16,7 @@ from tests.helpers.golden_replay import (
     NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
     _observed_turn,
     assert_fallback_escalation_profile,
+    assert_golden_replay_profile_bundle,
     assert_golden_turn_observation,
     assert_long_session_stability_profile,
     assert_protected_golden_turn_observation,
@@ -22,16 +27,8 @@ from tests.helpers.golden_replay import (
     compare_golden_replay_reruns,
     expected_runtime_fallback_lineage_event,
     format_golden_replay_debug,
-    protected_no_scaffold_expectation,
-    protected_route_expectation,
-    protected_social_directed_question_expectation,
-    protected_social_structural_base,
-    protected_social_supplemental_structural_expectation,
-    protected_social_trace_target_expectation,
-    protected_social_vocative_canonical_entry_expectation,
-    protected_source_expectation,
+    protected_social_speaker_observation_expectation,
     protected_structural_expectation,
-    protected_unavailable_expectation,
     render_golden_replay_markdown_report,
     render_long_session_replay_summary_markdown,
     run_golden_replay,
@@ -56,9 +53,11 @@ def observed_turn_from_payload(
         replay_identity=replay_identity,
     )
 
+
 __all__ = (
     "NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY",
     "assert_fallback_escalation_profile",
+    "assert_golden_replay_profile_bundle",
     "assert_golden_turn_observation",
     "assert_long_session_stability_profile",
     "assert_protected_golden_turn_observation",
@@ -70,16 +69,8 @@ __all__ = (
     "expected_runtime_fallback_lineage_event",
     "format_golden_replay_debug",
     "observed_turn_from_payload",
-    "protected_no_scaffold_expectation",
-    "protected_route_expectation",
-    "protected_social_directed_question_expectation",
-    "protected_social_structural_base",
-    "protected_social_supplemental_structural_expectation",
-    "protected_social_trace_target_expectation",
-    "protected_social_vocative_canonical_entry_expectation",
-    "protected_source_expectation",
+    "protected_social_speaker_observation_expectation",
     "protected_structural_expectation",
-    "protected_unavailable_expectation",
     "render_golden_replay_markdown_report",
     "render_long_session_replay_summary_markdown",
     "run_golden_replay",

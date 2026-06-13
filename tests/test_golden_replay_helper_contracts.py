@@ -1,25 +1,12 @@
 from __future__ import annotations
 
 from tests.helpers.golden_replay import (
-    PROTECTED_DIALOGUE_TRACE_ROUTES,
-    PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE,
     PROTECTED_NO_SCAFFOLD_TERMS,
-    PROTECTED_SOCIAL_RESOLUTION_KINDS,
-    PROTECTED_SOCIAL_ROUTE_KINDS,
-    PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS,
-    PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES,
     assert_golden_turn_observation,
     frontier_gate_branch_replay_fixture,
     validate_scenario_spine_fixture_dict,
-    protected_route_expectation,
-    protected_social_directed_question_expectation,
-    protected_social_structural_base,
-    protected_social_supplemental_structural_expectation,
-    protected_social_trace_target_expectation,
-    protected_social_vocative_canonical_entry_expectation,
-    protected_source_expectation,
+    protected_social_speaker_observation_expectation,
     protected_structural_expectation,
-    protected_unavailable_expectation,
     render_golden_replay_markdown_report,
 )
 
@@ -34,190 +21,71 @@ def test_frontier_gate_branch_replay_fixture_loads_validated_branch() -> None:
     assert fixture["turn_ids"][-1] == "inv_25"
 
 
-def test_protected_route_expectation_defaults_to_social_route_labels() -> None:
-    assert protected_route_expectation() == {
-        "one_of": {"route_kind": list(PROTECTED_SOCIAL_ROUTE_KINDS)}
-    }
-
-
-def test_protected_route_expectation_can_include_resolution_and_trace_labels() -> None:
-    assert protected_route_expectation(
-        include_resolution_kind=True,
-        include_route_kind=False,
-        include_trace_route=True,
-    ) == {
-        "one_of": {
-            "resolution_kind": list(PROTECTED_SOCIAL_RESOLUTION_KINDS),
-            "trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES),
-        }
-    }
-
-
-def test_protected_source_expectation_disallows_global_scene_fallback_when_requested() -> None:
-    assert protected_source_expectation() == {
-        "not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE}
-    }
-    assert protected_source_expectation(disallow_global_scene_fallback=False) == {}
-
-
-def test_protected_structural_expectation_merges_route_source_and_scaffold_fragments() -> None:
+def test_protected_structural_expectation_merges_consumer_fields_and_scaffold_fragment() -> None:
     assert protected_structural_expectation(
         require_present=("final_text", "final_emitted_source"),
         allow_unavailable=("fallback_family",),
         equals={"response_type_required": "dialogue_response"},
-        one_of={"trace.canonical_entry.target_source": ["spoken_vocative", "vocative"]},
-        include_resolution_kind=True,
-        include_trace_route=True,
-        disallow_global_scene_fallback=True,
+        one_of={"response_type_required": ["dialogue_response", "action_outcome"]},
+        not_equals={"final_emitted_source": "global_scene_fallback"},
         extra_no_scaffold_terms=("Merchant",),
     ) == {
         "require_present": ["final_text", "final_emitted_source"],
         "allow_unavailable": ["fallback_family"],
         "equals": {"response_type_required": "dialogue_response"},
-        "one_of": {
-            "resolution_kind": list(PROTECTED_SOCIAL_RESOLUTION_KINDS),
-            "route_kind": list(PROTECTED_SOCIAL_ROUTE_KINDS),
-            "trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES),
-            "trace.canonical_entry.target_source": ["spoken_vocative", "vocative"],
-        },
-        "not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE},
+        "one_of": {"response_type_required": ["dialogue_response", "action_outcome"]},
+        "not_equals": {"final_emitted_source": "global_scene_fallback"},
         "text_must_not_include": ["Merchant", *PROTECTED_NO_SCAFFOLD_TERMS],
         "scaffold_leakage": False,
     }
 
 
-def test_protected_structural_expectation_can_emit_only_unavailable_equals_and_trace_route() -> None:
+def test_protected_structural_expectation_can_emit_only_unavailable_and_equals() -> None:
     assert protected_structural_expectation(
         allow_unavailable=("fallback_family",),
-        equals={"trace.canonical_entry.target_actor_id": "guard"},
-        include_route_kind=False,
-        include_trace_route=True,
+        equals={"selected_speaker_id": "guard"},
         no_scaffold=False,
     ) == {
         "allow_unavailable": ["fallback_family"],
-        "equals": {"trace.canonical_entry.target_actor_id": "guard"},
-        "one_of": {"trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES)},
+        "equals": {"selected_speaker_id": "guard"},
     }
 
 
-def test_protected_social_directed_question_expectation_matches_full_social_lock() -> None:
-    assert protected_social_directed_question_expectation("runner") == protected_social_structural_base(
-        selected_speaker_id="runner",
-        canonical_target_id="runner",
-        require_resolution_kind=True,
-        require_final_emitted_source=True,
-        require_trace_target=True,
-        require_trace_route=True,
-        include_resolution_kind=True,
-        include_trace_route=True,
-        disallow_global_scene_fallback=True,
-    )
-
-
-def test_protected_social_trace_target_expectation_locks_canonical_actor() -> None:
-    assert protected_social_trace_target_expectation("guard") == {
-        "allow_unavailable": ["fallback_family"],
-        "equals": {"trace.canonical_entry.target_actor_id": "guard"},
-    }
-
-
-def test_protected_social_vocative_canonical_entry_expectation_uses_shared_enums() -> None:
-    assert protected_social_vocative_canonical_entry_expectation("guard") == {
-        "allow_unavailable": ["fallback_family"],
-        "equals": {"trace.canonical_entry.target_actor_id": "guard"},
-        "one_of": {
-            "trace.canonical_entry.target_source": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_TARGET_SOURCES),
-            "trace.canonical_entry.reason": list(PROTECTED_VOCATIVE_CANONICAL_ENTRY_REASONS),
-        },
-    }
-
-
-def test_protected_social_supplemental_structural_expectation_supports_optional_fields() -> None:
-    assert protected_social_supplemental_structural_expectation() == {
-        "allow_unavailable": ["fallback_family"],
-    }
-    assert protected_social_supplemental_structural_expectation(
-        require_present=("final_emitted_source",),
-        include_trace_route=True,
-    ) == {
-        "allow_unavailable": ["fallback_family"],
-        "require_present": ["final_emitted_source"],
-        "one_of": {"trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES)},
-    }
-
-
-def test_protected_social_structural_base_locks_speaker_target_route_and_final_source() -> None:
-    assert protected_social_structural_base(
-        selected_speaker_id="runner",
-        canonical_target_id="runner",
-        require_resolution_kind=True,
-        require_final_emitted_source=True,
-        require_trace_target=True,
-        require_trace_route=True,
-        include_resolution_kind=True,
-        include_trace_route=True,
-        disallow_global_scene_fallback=True,
-    ) == {
-        "require_present": [
-            "final_text",
-            "resolution_kind",
-            "selected_speaker_id",
+def test_protected_social_speaker_observation_expectation_is_a_thin_consumer_lock() -> None:
+    assert protected_social_speaker_observation_expectation("runner") == {
+        "require_present": ["final_text", "selected_speaker_id"],
+        "allow_unavailable": [
+            "fallback_family",
             "final_emitted_source",
-            "trace.canonical_entry.target_actor_id",
-            "trace.social_contract_trace.route_selected",
+            "resolution_kind",
+            "route_kind",
+            "trace.canonical_entry",
+            "trace.turn_trace",
+            "trace.social_contract_trace",
         ],
-        "allow_unavailable": ["fallback_family"],
-        "equals": {
-            "selected_speaker_id": "runner",
-            "trace.canonical_entry.target_actor_id": "runner",
-        },
-        "one_of": {
-            "resolution_kind": list(PROTECTED_SOCIAL_RESOLUTION_KINDS),
-            "route_kind": list(PROTECTED_SOCIAL_ROUTE_KINDS),
-            "trace.social_contract_trace.route_selected": list(PROTECTED_DIALOGUE_TRACE_ROUTES),
-        },
-        "not_equals": {"final_emitted_source": PROTECTED_GLOBAL_SCENE_FALLBACK_SOURCE},
-        "text_must_not_include": list(PROTECTED_NO_SCAFFOLD_TERMS),
-        "scaffold_leakage": False,
+        "equals": {"selected_speaker_id": "runner"},
     }
 
 
-def test_protected_social_structural_base_preserves_custom_speaker_alias_fields() -> None:
-    assert protected_social_structural_base(
-        selected_speaker_id="runner",
-        canonical_target_id="runner",
-        require_present=("trace.canonical_entry.declared_alias_target_actor_id",),
-        require_route_kind=False,
-        equals={
-            "trace.canonical_entry.declared_alias_target_actor_id": "runner",
-            "trace.canonical_entry.speaker_alias_resolution_source": "manual_bundle_override",
-            "dialogue_plan_valid": True,
-        },
-        include_route_kind=False,
+def test_protected_social_speaker_observation_expectation_allows_custom_optional_fields() -> None:
+    assert protected_social_speaker_observation_expectation(
+        "runner",
+        allow_unavailable=("fallback_family",),
     ) == {
-        "require_present": [
-            "final_text",
-            "selected_speaker_id",
-            "trace.canonical_entry.declared_alias_target_actor_id",
-        ],
+        "require_present": ["final_text", "selected_speaker_id"],
         "allow_unavailable": ["fallback_family"],
-        "equals": {
-            "selected_speaker_id": "runner",
-            "trace.canonical_entry.target_actor_id": "runner",
-            "trace.canonical_entry.declared_alias_target_actor_id": "runner",
-            "trace.canonical_entry.speaker_alias_resolution_source": "manual_bundle_override",
-            "dialogue_plan_valid": True,
-        },
-        "text_must_not_include": list(PROTECTED_NO_SCAFFOLD_TERMS),
-        "scaffold_leakage": False,
+        "equals": {"selected_speaker_id": "runner"},
     }
 
 
-def test_protected_unavailable_expectation_preserves_field_order() -> None:
-    assert protected_unavailable_expectation(
-        "fallback_family",
-        "trace.canonical_entry",
-        "trace.social_contract_trace",
+def test_protected_structural_expectation_preserves_unavailable_field_order() -> None:
+    assert protected_structural_expectation(
+        allow_unavailable=(
+            "fallback_family",
+            "trace.canonical_entry",
+            "trace.social_contract_trace",
+        ),
+        no_scaffold=False,
     ) == {
         "allow_unavailable": [
             "fallback_family",

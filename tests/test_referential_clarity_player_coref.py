@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import game.final_emission_gate as feg
-from game.final_emission_meta import read_final_emission_meta_dict
 from game.final_emission_text import _normalize_text
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from tests.helpers.objective7_referent_fixtures import (
@@ -151,7 +150,7 @@ def test_referent_clarity_pre_finalize_merges_fem_and_tracks_input_source():
         "_final_emission_meta": {"final_route": "accept_candidate", "tone_escalation": {"lane": "stub"}},
     }
     feg._apply_referent_clarity_pre_finalize(out, pre_gate_text="They halt.")
-    fem = read_final_emission_meta_dict(out)
+    fem = final_emission_meta_from_output(out)
     assert fem["referent_validation_input_source"] == "full_artifact"
     assert fem["referent_validation_ran"] is True
     assert fem["referent_repair_applied"] is False
