@@ -9,7 +9,8 @@ import pytest
 # Import :mod:`game.gm` before :mod:`game.gm_retry` (partial-init ordering).
 from game.gm import build_retry_prompt_for_failure as _gm_retry_import_order_anchor  # noqa: F401
 
-import game.final_emission_gate as feg
+import game.final_emission_finalize as emission_finalize
+import game.final_emission_tone_escalation as tone_escalation
 from game.fallback_provenance_debug import METADATA_KEY as FB_PROV_KEY, attach_upstream_fast_fallback_provenance
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
@@ -37,14 +38,14 @@ def _usable_tone() -> Dict[str, Any]:
 def test_gate_exit_records_observability_before_cache_pop(monkeypatch: pytest.MonkeyPatch) -> None:
     """A: downstream gate observability runs before the packet cache is cleared."""
     exit_cache_visible: list[bool] = []
-    orig = feg.record_stage_snapshot
+    orig = emission_finalize.record_stage_snapshot
 
     def _wrap(out: Dict[str, Any], stage: str, **kwargs: Any) -> None:
         if stage == "final_emission_gate_exit":
             exit_cache_visible.append("_gate_turn_packet_cache" in out)
         return orig(out, stage, **kwargs)
 
-    monkeypatch.setattr(feg, "record_stage_snapshot", _wrap)
+    monkeypatch.setattr(emission_finalize, "record_stage_snapshot", _wrap)
 
     pkt = build_turn_packet(
         scene_id="scene_investigate",
@@ -86,7 +87,7 @@ def test_gate_and_retry_consumers_prefer_packet_when_mirror_conflicts() -> None:
         "metadata": {TURN_PACKET_METADATA_KEY: pkt},
         "response_policy": {"tone_escalation": weak_mirror_te},
     }
-    te_gate = feg._resolve_tone_escalation_contract(gm_gate)
+    te_gate = tone_escalation.resolve_tone_escalation_contract(gm_gate)
     assert te_gate is not None
     assert te_gate.get("allow_explicit_threat") is True
 
@@ -101,7 +102,7 @@ def test_gate_and_retry_consumers_prefer_packet_when_mirror_conflicts() -> None:
     assert te_retry.get("allow_explicit_threat") is True
 
     gm_no_packet: Dict[str, Any] = {"response_policy": {"tone_escalation": _usable_tone()}}
-    assert feg._resolve_tone_escalation_contract(gm_no_packet) is not None
+    assert tone_escalation.resolve_tone_escalation_contract(gm_no_packet) is not None
     assert gm_retry_mod._resolve_retry_tone_escalation_contract(gm_no_packet, gm_no_packet["response_policy"]) is not None
 
 

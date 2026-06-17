@@ -90,6 +90,7 @@ def test_is_helpers_match_membership() -> None:
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GATE_PATH = REPO_ROOT / "game" / "final_emission_gate.py"
+GENERIC_EXIT_PATH = REPO_ROOT / "game" / "final_emission_generic_exit.py"
 REPAIRS_PATH = REPO_ROOT / "game" / "final_emission_repairs.py"
 
 _ASSERT_MUTATION_KIND_RE = re.compile(
@@ -99,17 +100,23 @@ _ASSERT_MUTATION_KIND_RE = re.compile(
 
 def _mutation_kinds_used_in_sources() -> list[str]:
     kinds: list[str] = []
-    for path in (GATE_PATH, REPAIRS_PATH):
+    for path in (GENERIC_EXIT_PATH, REPAIRS_PATH):
         src = path.read_text(encoding="utf-8")
         kinds.extend(_ASSERT_MUTATION_KIND_RE.findall(src))
     # stable dedupe
     return list(dict.fromkeys(kinds))
 
 
-def test_final_emission_gate_imports_assert_final_emission_mutation_allowed() -> None:
+def test_final_emission_generic_exit_imports_assert_final_emission_mutation_allowed() -> None:
+    generic_exit_src = GENERIC_EXIT_PATH.read_text(encoding="utf-8")
+    assert "from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed" in generic_exit_src
+    assert "assert_final_emission_mutation_allowed(" in generic_exit_src
+
+
+def test_final_emission_gate_no_longer_reexports_assert_final_emission_mutation_allowed() -> None:
     gate_src = GATE_PATH.read_text(encoding="utf-8")
-    assert "from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed" in gate_src
-    assert "assert_final_emission_mutation_allowed(" in gate_src
+    assert "from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed" not in gate_src
+    assert "assert_final_emission_mutation_allowed(" not in gate_src
 
 
 def test_final_emission_repairs_imports_assert_for_subtractive_strips() -> None:
@@ -119,7 +126,7 @@ def test_final_emission_repairs_imports_assert_for_subtractive_strips() -> None:
 
 def test_assert_sites_never_use_semantic_disallowed_kinds() -> None:
     kinds = _mutation_kinds_used_in_sources()
-    assert kinds, "expected assert_final_emission_mutation_allowed(...) call sites in gate/repairs"
+    assert kinds, "expected assert_final_emission_mutation_allowed(...) call sites in generic_exit/repairs"
     for kind in kinds:
         assert kind not in SEMANTIC_DISALLOWED, (
             f"mutation kind {kind!r} is SEMANTIC_DISALLOWED and must not be passed to "

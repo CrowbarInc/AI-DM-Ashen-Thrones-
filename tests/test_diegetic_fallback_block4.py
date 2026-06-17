@@ -7,7 +7,7 @@ from game.diegetic_fallback_narration import (
     render_scene_momentum_diegetic_append,
     render_travel_arrival_fallback_line,
 )
-from game.final_emission_gate import _global_narrative_fallback_stock_line
+from game.final_emission_text import _global_narrative_fallback_stock_line
 from game.gm import enforce_scene_momentum
 from game.gm_retry import _nonsocial_forced_retry_progress_line, force_terminal_retry_fallback
 from game.player_facing_narration_purity import (

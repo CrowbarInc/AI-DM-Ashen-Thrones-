@@ -7,7 +7,14 @@ import pytest
 from game import ctir
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.narration_plan_bundle import SESSION_NARRATION_PLAN_BUNDLE_KEY
-from game.dialogue_social_plan import validate_dialogue_social_plan
+from game.dialogue_social_plan import (
+    dialogue_bearing_signals,
+    enforce_dialogue_plan_invariant_on_strict_social,
+    extract_attributed_speaker_labels,
+    is_bare_speech_attribution_shell_line,
+    strip_dialogue_from_text,
+    validate_dialogue_social_plan,
+)
 from game.prompt_context import build_narration_context
 from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
 
@@ -298,4 +305,45 @@ def test_missing_dialogue_social_plan_on_ctir_social_turn_records_seam_audit() -
     assert audit.get("dialogue_social_plan_contract_blocked") is True
     assert audit.get("dialogue_social_plan_present") is False
     assert audit.get("dialogue_social_plan_failure_codes")
+
+
+def test_bj30_strip_dialogue_from_text_removes_quoted_payload() -> None:
+    stripped = strip_dialogue_from_text('Tavern Runner says, "East road."')
+    assert '"' not in stripped
+    assert "East road" not in stripped
+
+
+def test_bj30_is_bare_speech_attribution_shell_line() -> None:
+    assert is_bare_speech_attribution_shell_line("Tavern Runner says") is True
+    assert is_bare_speech_attribution_shell_line('Runner mutters, "East."') is False
+    assert is_bare_speech_attribution_shell_line("Rain falls hard on the square.") is False
+
+
+def test_bj30_dialogue_bearing_signals_extracts_attributed_speakers() -> None:
+    sig = dialogue_bearing_signals('Tavern Runner says, "East road."')
+    assert sig.get("dialogue_present") is True
+    assert "Tavern Runner" in extract_attributed_speaker_labels('Tavern Runner says, "East road."')
+
+
+def test_bj30_enforce_dialogue_plan_invariant_inactive_passthrough() -> None:
+    text = 'Tavern Runner says, "East road."'
+    out, trace = enforce_dialogue_plan_invariant_on_strict_social(
+        text,
+        resolution=None,
+        eff_resolution=None,
+        strict_social_active=False,
+        response_type_required=None,
+    )
+    assert out == text
+    assert trace.get("dialogue_plan_checked") is False
+
+
+def test_bj59_dialogue_plan_helpers_not_exposed_on_gate_module() -> None:
+    """BJ-59: strict-social dialogue helpers no longer exposed on final_emission_gate."""
+    import game.final_emission_gate as feg
+
+    assert not hasattr(feg, "_enforce_dialogue_plan_invariant_on_strict_social")
+    assert not hasattr(feg, "_strip_dialogue_from_text")
+    assert not hasattr(feg, "_strict_social_line_matches_terminal_emission_pool")
+    assert not hasattr(feg, "_is_bare_speech_attribution_shell_line")
 

@@ -9,7 +9,7 @@ from typing import Any
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_strict_social_stack as strict_social_stack
 from game.defaults import default_session, default_world
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narrative_authority import build_narrative_authority_contract
@@ -87,7 +87,7 @@ def run_strict_social_motive_overclaim_gate_case(monkeypatch: pytest.MonkeyPatch
     def fake_build(_candidate_text, *, resolution, tags, session, scene_id, world):
         return bad, dict(stub_details)
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
 
     out, meta = apply_final_emission_gate_consumer(
         {

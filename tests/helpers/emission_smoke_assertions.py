@@ -92,7 +92,7 @@ def read_turn_debug_notes(payload: Mapping[str, Any]) -> str:
     return read_debug_notes_from_turn_payload(payload)
 
 
-STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH = "game.final_emission_gate.strict_social_emission_will_apply"
+STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH = "game.social_exchange_emission.strict_social_emission_will_apply"
 
 
 # Final emission gate consumer bridge
@@ -144,8 +144,8 @@ def apply_response_delta_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str
 
 
 def enforce_response_type_contract_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
-    """Consumer-owned response-type enforcement seam (delegates to gate implementation)."""
-    from game.final_emission_gate import _enforce_response_type_contract as _fn
+    """Consumer-owned response-type enforcement seam (delegates to response_type owner)."""
+    from game.final_emission_response_type import enforce_response_type_contract as _fn
 
     return _fn(*args, **kwargs)
 

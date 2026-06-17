@@ -245,7 +245,7 @@ def test_npc_target_lead_not_resolved_on_social_fail_closed():
 
 def test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: False,
     )
     session: dict = {}

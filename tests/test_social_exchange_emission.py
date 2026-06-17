@@ -19,17 +19,18 @@ Block C: ``question_resolution_rule_check`` / first-sentence social legality (in
 rather than duplicated in ``tests/test_prompt_and_guard.py``."""
 from __future__ import annotations
 
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
+import game.final_emission_strict_social_stack as strict_social_stack
 
 from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_session, default_world
 from game.gm import apply_deterministic_retry_fallback, sanitize_player_facing_text
-from game.final_emission_gate import (
-    apply_final_emission_gate,
-    enforce_emitted_speaker_with_contract,
+from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_validators import (
     inspect_answer_completeness_failure,
     validate_answer_completeness,
 )
+from game.speaker_contract_enforcement import enforce_emitted_speaker_with_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
@@ -1398,8 +1399,8 @@ def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatc
             dict(stub_details),
         )
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = apply_final_emission_gate(
         {
             "player_facing_text": "stub",

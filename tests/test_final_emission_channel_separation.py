@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.final_emission_meta import read_final_emission_meta_dict
 
-from game.final_emission_gate import _finalize_emission_output
+from game.final_emission_finalize import finalize_emission_output
 from game.final_emission_meta import (
     package_emission_channel_sidecar,
     read_debug_notes_from_turn_payload,
@@ -32,7 +32,7 @@ def test_finalize_emission_output_splits_public_and_debug_lanes() -> None:
         "internal_plan": {"p": 2},
         "debug_notes": "dbg",
     }
-    out = _finalize_emission_output(
+    out = finalize_emission_output(
         dict(mixed),
         pre_gate_text="The guard nods.",
         fast_path=True,

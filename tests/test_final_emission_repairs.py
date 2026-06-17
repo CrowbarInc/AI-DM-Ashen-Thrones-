@@ -417,3 +417,43 @@ def test_fallback_behavior_layer_does_not_synthesize_without_contract_from_force
     assert meta.get("fallback_behavior_checked") is False
     assert meta.get("fallback_behavior_skip_reason") == "no_contract"
     assert extra == []
+
+
+def test_bj38_merge_fallback_behavior_into_emission_debug_nested_shape() -> None:
+    out: dict = {"metadata": {}}
+    gate_meta = {
+        "fallback_behavior_contract_present": True,
+        "fallback_behavior_checked": True,
+        "fallback_behavior_failed": False,
+        "fallback_behavior_uncertainty_active": True,
+        "fallback_behavior_failure_reasons": [],
+        "fallback_behavior_repair_mode": "none",
+        "fallback_behavior_skip_reason": "uncertainty_inactive",
+    }
+    fer.merge_fallback_behavior_into_emission_debug(out, None, None, gate_meta=gate_meta)
+    em = out["metadata"]["emission_debug"]
+    assert em["fallback_behavior"]["validation"]["contract_present"] is True
+    assert em["fallback_behavior"]["validation"]["passed"] is True
+    assert em["fallback_behavior"]["skip_reason"] == "uncertainty_inactive"
+    assert em["fallback_behavior_checked"] is True
+    assert em["fallback_behavior_skip_reason"] == "uncertainty_inactive"
+
+
+def test_bj38_merge_conversational_memory_inspection_into_emission_debug() -> None:
+    out: dict = {
+        "metadata": {},
+        "conversational_memory_window": {"window_size": 4},
+        "selected_conversational_memory": [{"id": "m1"}],
+        "prompt_debug": {"conversational_memory": {"selected": 1}},
+    }
+    fer.merge_conversational_memory_inspection_into_emission_debug(out, None, None)
+    em = out["metadata"]["emission_debug"]
+    assert em["conversational_memory_window"] == {"window_size": 4}
+    assert em["selected_conversational_memory"] == [{"id": "m1"}]
+    assert em["conversational_memory"] == {"selected": 1}
+
+
+def test_bj38_merge_conversational_memory_inspection_noop_when_absent() -> None:
+    out: dict = {"metadata": {"emission_debug": {"existing": True}}}
+    fer.merge_conversational_memory_inspection_into_emission_debug(out, None, None)
+    assert out["metadata"]["emission_debug"] == {"existing": True}

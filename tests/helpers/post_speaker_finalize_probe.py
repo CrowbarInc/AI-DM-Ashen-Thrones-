@@ -4,22 +4,26 @@ Wraps Gate layer callables to record whether normalized ``player_facing_text`` c
 invocation. Order matches the strict-social accept trunk in ``apply_final_emission_gate`` (post
 ``enforce_emitted_speaker_with_contract`` / sync), then late-stack seams through finalize.
 
-Also probes **inline** ``_strip_dialogue_from_text`` calls **after** speaker enforcement (dialogue-plan
+Also probes **inline** ``strip_dialogue_from_text`` calls **after** speaker enforcement (dialogue-plan
 subtractive strip following fast-fallback neutral composition), which are not a named layer function.
 
 Does not change production behavior beyond monkeypatched wrappers delegating to originals.
 
-**Retained private ``feg._*`` seams (AS6):** layer wrappers in
-:func:`install_post_speaker_text_probes` and :func:`chain_enforce_phase_marker` must patch gate-module
-symbols because divergence inventory is defined over the strict-social accept trunk's private layer
-callables. Replacing with ``apply_final_emission_gate_consumer`` would collapse observability.
+**BJ-123 owner seams:** layer wrappers in :func:`install_post_speaker_text_probes` and
+:func:`chain_enforce_phase_marker` patch strict-social stack, terminal pipeline, and finalize
+owner symbols — not removed ``feg._*`` re-exports.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Protocol
 
-import game.final_emission_gate as feg
+import game.dialogue_social_plan as dialogue_social_plan
+import game.final_emission_finalize as emission_finalize
+import game.final_emission_repairs as emission_repairs
+import game.final_emission_strict_social_stack as strict_social_stack
+import game.final_emission_terminal_pipeline as terminal_pipeline
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_text import _normalize_text
 
 
@@ -72,14 +76,14 @@ def _track(events: List[LayerTextDelta], layer_id: str, tin: str, tout: str) -> 
 def chain_enforce_phase_marker(monkeypatch: Any, phase: PostSpeakerPhase) -> None:
     """Wrap ``enforce_emitted_speaker_with_contract`` so ``phase.after_enforce`` is True after it returns."""
 
-    cur = feg.enforce_emitted_speaker_with_contract
+    cur = strict_social_stack.enforce_emitted_speaker_with_contract
 
     def _marked(text: str, **kwargs: Any) -> Any:
         r = cur(text, **kwargs)
         phase.after_enforce = True  # type: ignore[misc]
         return r
 
-    monkeypatch.setattr(feg, "enforce_emitted_speaker_with_contract", _marked)
+    monkeypatch.setattr(strict_social_stack, "enforce_emitted_speaker_with_contract", _marked)
 
 
 def install_post_speaker_text_probes(
@@ -91,7 +95,7 @@ def install_post_speaker_text_probes(
     """Install wrappers on ``game.final_emission_gate`` symbols; append one record per invocation.
 
     Pass *phase* (+ :func:`chain_enforce_phase_marker`) so ``answer_exposition_plan`` can be split into
-    pre- vs post-speaker ids and ``_strip_dialogue_from_text`` can record dialogue-plan subtractive strip.
+    pre- vs post-speaker ids and ``strip_dialogue_from_text`` can record dialogue-plan subtractive strip.
     """
 
     def wrap_tuple(layer_id: str, orig: Callable[..., Any]) -> Callable[..., Any]:
@@ -188,52 +192,96 @@ def install_post_speaker_text_probes(
 
             return w
 
-        monkeypatch.setattr(feg, "_strip_dialogue_from_text", wrap_strip(feg._strip_dialogue_from_text))
+        monkeypatch.setattr(
+            dialogue_social_plan,
+            "strip_dialogue_from_text",
+            wrap_strip(dialogue_social_plan.strip_dialogue_from_text),
+        )
 
-    monkeypatch.setattr(feg, "_apply_anti_railroading_layer", wrap_tuple("anti_railroading", feg._apply_anti_railroading_layer))
     monkeypatch.setattr(
-        feg, "_apply_context_separation_layer", wrap_tuple("context_separation", feg._apply_context_separation_layer)
+        strict_social_stack,
+        "apply_anti_railroading_layer",
+        wrap_tuple("anti_railroading", strict_social_stack.apply_anti_railroading_layer),
     )
     monkeypatch.setattr(
-        feg,
-        "_apply_player_facing_narration_purity_layer",
-        wrap_tuple("narration_purity", feg._apply_player_facing_narration_purity_layer),
+        strict_social_stack,
+        "apply_context_separation_layer",
+        wrap_tuple("context_separation", strict_social_stack.apply_context_separation_layer),
     )
     monkeypatch.setattr(
-        feg, "_apply_answer_shape_primacy_layer", wrap_tuple("answer_shape_primacy", feg._apply_answer_shape_primacy_layer)
+        strict_social_stack,
+        "apply_player_facing_narration_purity_layer",
+        wrap_tuple("narration_purity", strict_social_stack.apply_player_facing_narration_purity_layer),
     )
     monkeypatch.setattr(
-        feg, "_apply_scene_state_anchor_layer", wrap_tuple("scene_state_anchor", feg._apply_scene_state_anchor_layer)
+        strict_social_stack,
+        "apply_answer_shape_primacy_layer",
+        wrap_tuple("answer_shape_primacy", strict_social_stack.apply_answer_shape_primacy_layer),
     )
     monkeypatch.setattr(
-        feg,
-        "_apply_fast_fallback_neutral_composition_layer",
-        wrap_tuple("fast_fallback_neutral_composition", feg._apply_fast_fallback_neutral_composition_layer),
+        strict_social_stack,
+        "apply_scene_state_anchor_layer",
+        wrap_tuple("scene_state_anchor", strict_social_stack.apply_scene_state_anchor_layer),
+    )
+    monkeypatch.setattr(
+        strict_social_stack,
+        "apply_fast_fallback_neutral_composition_layer",
+        wrap_tuple(
+            "fast_fallback_neutral_composition",
+            strict_social_stack.apply_fast_fallback_neutral_composition_layer,
+        ),
     )
 
-    monkeypatch.setattr(feg, "_apply_answer_exposition_plan_layer", wrap_answer_exposition(feg._apply_answer_exposition_plan_layer))
+    monkeypatch.setattr(
+        emission_repairs,
+        "_apply_answer_exposition_plan_layer",
+        wrap_answer_exposition(emission_repairs._apply_answer_exposition_plan_layer),
+    )
 
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", wrap_visibility(feg._apply_visibility_enforcement))
     monkeypatch.setattr(
-        feg, "_apply_interaction_continuity_emission_step", wrap_ic_step(feg._apply_interaction_continuity_emission_step)
+        terminal_pipeline,
+        "apply_visibility_enforcement",
+        wrap_visibility(terminal_pipeline.apply_visibility_enforcement),
     )
     monkeypatch.setattr(
-        feg, "_apply_fallback_behavior_layer", wrap_tuple("fallback_behavior", feg._apply_fallback_behavior_layer)
+        terminal_pipeline,
+        "apply_interaction_continuity_emission_step",
+        wrap_ic_step(terminal_pipeline.apply_interaction_continuity_emission_step),
     )
     monkeypatch.setattr(
-        feg, "_apply_referent_clarity_pre_finalize", wrap_out_mutate("referent_clarity_pre_finalize", feg._apply_referent_clarity_pre_finalize)
+        terminal_pipeline,
+        "_apply_fallback_behavior_layer",
+        wrap_tuple("fallback_behavior", terminal_pipeline._apply_fallback_behavior_layer),
     )
     monkeypatch.setattr(
-        feg,
-        "_apply_acceptance_quality_n4_floor_seam",
-        wrap_out_mutate("acceptance_quality_n4", feg._apply_acceptance_quality_n4_floor_seam),
+        terminal_pipeline,
+        "_apply_referent_clarity_pre_finalize",
+        wrap_out_mutate(
+            "referent_clarity_pre_finalize",
+            terminal_pipeline._apply_referent_clarity_pre_finalize,
+        ),
     )
     monkeypatch.setattr(
-        feg,
-        "_attach_interaction_continuity_validation",
-        wrap_out_mutate("attach_interaction_continuity_validation", feg._attach_interaction_continuity_validation),
+        terminal_pipeline,
+        "apply_acceptance_quality_n4_floor_seam",
+        wrap_out_mutate(
+            "acceptance_quality_n4",
+            terminal_pipeline.apply_acceptance_quality_n4_floor_seam,
+        ),
     )
-    monkeypatch.setattr(feg, "_finalize_emission_output", wrap_finalize(feg._finalize_emission_output))
+    monkeypatch.setattr(
+        terminal_pipeline,
+        "attach_interaction_continuity_validation",
+        wrap_out_mutate(
+            "attach_interaction_continuity_validation",
+            terminal_pipeline.attach_interaction_continuity_validation,
+        ),
+    )
+    monkeypatch.setattr(
+        emission_finalize,
+        "finalize_emission_output",
+        wrap_finalize(emission_finalize.finalize_emission_output),
+    )
 
 
 def first_normalized_divergence(events: List[LayerTextDelta]) -> str | None:

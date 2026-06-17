@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_gate import (
+from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_response_delta_layer,
     _skip_answer_completeness_layer,
@@ -213,7 +213,7 @@ def test_transcript_missing_patrol_turn4_applies_layers_and_cashout(monkeypatch)
     raw_before_cashout = gm_layers["player_facing_text"]
 
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     session = {
@@ -246,7 +246,7 @@ def test_transcript_missing_patrol_turn4_applies_layers_and_cashout(monkeypatch)
 
 def test_cash_out_minimum_actionable_lead_enforced_appends_bounded_line(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -294,7 +294,7 @@ def test_cash_out_minimum_actionable_lead_enforced_appends_bounded_line(monkeypa
 
 def test_cash_out_authoritative_promoted_ids_without_mal(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -334,7 +334,7 @@ def test_cash_out_authoritative_promoted_ids_without_mal(monkeypatch):
 
 def test_cash_out_skips_when_emitted_token_overlap_covers_refinement(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -373,7 +373,7 @@ def test_cash_out_skips_when_emitted_token_overlap_covers_refinement(monkeypatch
 
 def test_cash_out_irrelevant_promoted_lead_no_append(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -411,7 +411,7 @@ def test_cash_out_irrelevant_promoted_lead_no_append(monkeypatch):
 
 def test_cash_out_discoverable_clue_requires_topic_overlap(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -462,7 +462,7 @@ def test_cash_out_discoverable_clue_requires_topic_overlap(monkeypatch):
 def test_cash_out_clue_id_matches_promoted_list_without_title_overlap(monkeypatch):
     """Promotion picked via resolution clue_id still cashes out (tight id match path)."""
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -501,7 +501,7 @@ def test_cash_out_clue_id_matches_promoted_list_without_title_overlap(monkeypatc
 
 def test_cash_out_uses_session_last_turn_response_policy_when_gm_lacks_policy(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     rd = {
@@ -544,7 +544,7 @@ def test_cash_out_uses_session_last_turn_response_policy_when_gm_lacks_policy(mo
 
 def test_non_answer_seeking_social_turn_does_not_cash_out_despite_promoted_lead(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     resolution = {
@@ -578,7 +578,7 @@ def test_non_answer_seeking_social_turn_does_not_cash_out_despite_promoted_lead(
 
 def test_answer_pressure_without_promoted_or_enforced_leaves_text_unchanged(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {
@@ -602,7 +602,7 @@ def test_answer_pressure_without_promoted_or_enforced_leaves_text_unchanged(monk
 
 def test_non_social_scene_skips_cash_out(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: False,
     )
     ac = {
@@ -689,7 +689,7 @@ def test_block2_ac_and_rd_skip_bypass_together_under_bridge_answer_pressure():
 def test_ac_rd_layers_pass_clean_when_cash_out_skipped(monkeypatch):
     """Validators still run; no repair trail when emitted already satisfies contracts."""
     monkeypatch.setattr(
-        "game.final_emission_gate.strict_social_emission_will_apply",
+        "game.social_exchange_emission.strict_social_emission_will_apply",
         lambda *a, **k: True,
     )
     ac = {

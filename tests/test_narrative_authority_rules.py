@@ -7,7 +7,15 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+from game.final_emission_narrative_authority import (
+    apply_narrative_authority_layer,
+    is_shipped_full_narrative_authority_contract,
+    merge_narrative_authority_into_emission_debug,
+    repair_narrative_authority_narrow,
+    resolve_narrative_authority_contract,
+)
+from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
+from game.final_emission_text import _normalize_text
 from game.narrative_authority import (
     build_narrative_authority_contract,
     validate_narrative_authority,
@@ -189,7 +197,7 @@ def test_validate_narrative_authority_already_valid_examples():
 
 
 # ---------------------------------------------------------------------------
-# Gate layer: repair ladder & ordering (uses real ``_apply_narrative_authority_layer``)
+# Gate layer: repair ladder & ordering (uses real ``apply_narrative_authority_layer`` owner entrypoint)
 # ---------------------------------------------------------------------------
 
 
@@ -198,7 +206,7 @@ def test_apply_na_layer_repairs_unresolved_outcome_with_uncertainty_replace():
     res = {"kind": "observe", "prompt": "I look at the lock."}
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
-    text, meta, extra = feg._apply_narrative_authority_layer(
+    text, meta, extra = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -221,7 +229,7 @@ def test_apply_na_layer_lockpick_roll_append_may_fail_revalidation():
     res = {"kind": "interact", "prompt": "I pick the lock."}
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
-    text, meta, extra = feg._apply_narrative_authority_layer(
+    text, meta, extra = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -243,7 +251,7 @@ def test_apply_na_layer_repairs_invented_hidden_fact():
     res = {"kind": "observe", "prompt": "I examine the papers."}
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
-    text, meta, extra = feg._apply_narrative_authority_layer(
+    text, meta, extra = apply_narrative_authority_layer(
         "The ledger was planted.",
         gm_output=gm,
         resolution=res,
@@ -263,7 +271,7 @@ def test_apply_na_layer_repairs_invented_intent_with_observable_cues():
     res = {"kind": "question", "prompt": "What is he thinking?"}
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
-    text, meta, extra = feg._apply_narrative_authority_layer(
+    text, meta, extra = apply_narrative_authority_layer(
         "He plans to stall you until help arrives.",
         gm_output=gm,
         resolution=res,
@@ -298,14 +306,16 @@ def test_strict_vs_non_strict_post_repair_failure_extra_reason():
                 },
             }
 
-        monkeypatch.setattr(feg, "validate_narrative_authority", fake_validate)
+        import game.final_emission_narrative_authority as na_layer
+
+        monkeypatch.setattr(na_layer, "validate_narrative_authority", fake_validate)
 
         res = {"kind": "observe", "prompt": "I try the door."}
         na = _na_contract(resolution=res)
         gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
         original = "The lock snaps open."
 
-        t_strict, m_strict, e_strict = feg._apply_narrative_authority_layer(
+        t_strict, m_strict, e_strict = apply_narrative_authority_layer(
             original,
             gm_output=gm,
             resolution=res,
@@ -319,7 +329,7 @@ def test_strict_vs_non_strict_post_repair_failure_extra_reason():
         assert m_strict["narrative_authority_failed"] is True
         assert e_strict == []
 
-        t_loose, m_loose, e_loose = feg._apply_narrative_authority_layer(
+        t_loose, m_loose, e_loose = apply_narrative_authority_layer(
             original,
             gm_output=gm,
             resolution=res,
@@ -359,7 +369,7 @@ def test_merge_na_emission_debug_mirror_aligned_and_mismatch():
         "prompt_debug": {"narrative_authority": slim_aligned},
         "metadata": {},
     }
-    feg._merge_narrative_authority_into_emission_debug(
+    merge_narrative_authority_into_emission_debug(
         out_aligned, res, res, gate_meta=gate_meta, gm_output=out_aligned
     )
     em = (out_aligned["metadata"].get("emission_debug") or {}).get("narrative_authority") or {}
@@ -372,7 +382,7 @@ def test_merge_na_emission_debug_mirror_aligned_and_mismatch():
         "prompt_debug": {"narrative_authority": slim_mismatch},
         "metadata": {},
     }
-    feg._merge_narrative_authority_into_emission_debug(
+    merge_narrative_authority_into_emission_debug(
         out_mis, res, res, gate_meta=gate_meta, gm_output=out_mis
     )
     em2 = (out_mis["metadata"].get("emission_debug") or {}).get("narrative_authority") or {}
@@ -383,7 +393,7 @@ def test_merge_na_emission_debug_mirror_only_slim_skips_validation_but_merges_pr
     """Slim ``prompt_debug`` is not a shipped contract; merge can still record mirror presence."""
     res = {"kind": "observe", "prompt": "I look."}
     slim = {"enabled": True, "authoritative_outcome_available": False}
-    assert feg._is_shipped_full_narrative_authority_contract(slim) is False
+    assert is_shipped_full_narrative_authority_contract(slim) is False
 
     gm = {
         "player_facing_text": "Hello.",
@@ -391,7 +401,7 @@ def test_merge_na_emission_debug_mirror_only_slim_skips_validation_but_merges_pr
         "response_policy": {},
         "metadata": {},
     }
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "Hello.",
         gm_output=gm,
         resolution=res,
@@ -403,7 +413,7 @@ def test_merge_na_emission_debug_mirror_only_slim_skips_validation_but_merges_pr
     )
     assert meta["narrative_authority_skip_reason"] == "no_full_contract"
 
-    feg._merge_narrative_authority_into_emission_debug(
+    merge_narrative_authority_into_emission_debug(
         gm, res, res, gate_meta=meta, gm_output=gm
     )
     em = (gm["metadata"].get("emission_debug") or {}).get("narrative_authority") or {}
@@ -420,7 +430,7 @@ def test_na_repair_preserves_answer_first_clause():
     na = _na_contract(resolution=res)
     gm = {"player_facing_text": "x", "response_policy": {"narrative_authority": na}}
     raw = 'They fled east toward the old mill. The ledger was planted.'
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         raw,
         gm_output=gm,
         resolution=res,
@@ -436,7 +446,7 @@ def test_na_repair_preserves_answer_first_clause():
 
 
 def test_na_after_response_delta_preserves_net_new_clause():
-    from game.final_emission_gate import _apply_response_delta_layer
+    from game.final_emission_repairs import _apply_response_delta_layer
 
     rd = {
         "enabled": True,
@@ -466,7 +476,7 @@ def test_na_after_response_delta_preserves_net_new_clause():
         answer_completeness_meta={"answer_completeness_failed": False},
         strict_social_path=False,
     )
-    text_na, meta, _ = feg._apply_narrative_authority_layer(
+    text_na, meta, _ = apply_narrative_authority_layer(
         text_rd,
         gm_output=gm,
         resolution=res,
@@ -498,7 +508,7 @@ def test_na_repair_then_scene_anchor_still_matches_location():
         "scene_state_anchor_contract": sac,
     }
     raw = "At the salt pier, gulls wheel overhead. The ledger was planted."
-    text, _, _ = feg._apply_narrative_authority_layer(
+    text, _, _ = apply_narrative_authority_layer(
         raw,
         gm_output=gm,
         resolution=res,
@@ -508,8 +518,8 @@ def test_na_repair_then_scene_anchor_still_matches_location():
         session={},
         scene_id="pier",
     )
-    text2, ssa_meta = feg._apply_scene_state_anchor_layer(
-        feg._normalize_text(text),
+    text2, ssa_meta = apply_scene_state_anchor_layer(
+        _normalize_text(text),
         gm_output=gm,
         strict_social_details=None,
         response_type_debug=_rt_debug(),
@@ -527,44 +537,44 @@ def test_resolve_narrative_authority_full_contract_from_response_policy():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"response_policy": {"narrative_authority": na}}
-    full = feg._resolve_narrative_authority_contract(gm)
+    full = resolve_narrative_authority_contract(gm)
     assert full is na
-    assert feg._is_shipped_full_narrative_authority_contract(full) is True
+    assert is_shipped_full_narrative_authority_contract(full) is True
 
 
 def test_resolve_narrative_authority_slim_prompt_debug_is_not_full_contract():
     slim = {"enabled": True, "authoritative_outcome_available": False}
     gm = {"prompt_debug": {"narrative_authority": slim}}
-    assert feg._is_shipped_full_narrative_authority_contract(slim) is False
-    assert feg._resolve_narrative_authority_contract(gm) is None
+    assert is_shipped_full_narrative_authority_contract(slim) is False
+    assert resolve_narrative_authority_contract(gm) is None
 
 
 def test_resolve_narrative_authority_full_contract_from_narration_payload():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"narration_payload": {"narrative_authority": na}}
-    assert feg._resolve_narrative_authority_contract(gm) is na
+    assert resolve_narrative_authority_contract(gm) is na
 
 
 def test_resolve_narrative_authority_full_contract_from_prompt_payload():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"prompt_payload": {"narrative_authority": na}}
-    assert feg._resolve_narrative_authority_contract(gm) is na
+    assert resolve_narrative_authority_contract(gm) is na
 
 
 def test_resolve_narrative_authority_full_contract_from_trace_response_policy():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"trace": {"response_policy": {"narrative_authority": na}}}
-    assert feg._resolve_narrative_authority_contract(gm) is na
+    assert resolve_narrative_authority_contract(gm) is na
 
 
 def test_resolve_narrative_authority_full_contract_from_narration_payload_mirror_key():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"_narration_payload": {"response_policy": {"narrative_authority": na}}}
-    assert feg._resolve_narrative_authority_contract(gm) is na
+    assert resolve_narrative_authority_contract(gm) is na
 
 
 def test_skip_narrative_authority_when_forbid_unjustified_is_false():
@@ -576,7 +586,7 @@ def test_skip_narrative_authority_when_forbid_unjustified_is_false():
             "narrative_authority": na,
         }
     }
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -596,7 +606,7 @@ def test_skip_narrative_authority_when_contract_enabled_false():
     base = _na_contract(resolution=res)
     na = {**base, "enabled": False}
     gm = {"response_policy": {"narrative_authority": na}}
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -614,7 +624,7 @@ def test_skip_narrative_authority_when_response_type_candidate_not_ok():
     res = {"kind": "observe", "prompt": "I listen."}
     na = _na_contract(resolution=res)
     gm = {"response_policy": {"narrative_authority": na}}
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -632,7 +642,7 @@ def test_skip_narrative_authority_only_slim_prompt_debug_no_validation():
     res = {"kind": "observe", "prompt": "I look."}
     slim = {"enabled": True, "authoritative_outcome_available": False}
     gm = {"prompt_debug": {"narrative_authority": slim}, "response_policy": {}}
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "The lock clicks open.",
         gm_output=gm,
         resolution=res,
@@ -651,7 +661,7 @@ def test_apply_na_with_full_contract_validates_normally():
     res = {"kind": "observe", "prompt": "I look at the moss."}
     na = _na_contract(resolution=res)
     gm = {"response_policy": {"narrative_authority": na}}
-    text, meta, _ = feg._apply_narrative_authority_layer(
+    text, meta, _ = apply_narrative_authority_layer(
         "Rain brightens the moss; nothing is decided yet.",
         gm_output=gm,
         resolution=res,
@@ -711,3 +721,23 @@ def test_anti_railroading_coexists_with_narrative_authority_and_tone():
     assert "narrative_authority_checked" in em
     assert "tone_escalation_checked" in em
     assert em.get("anti_railroading", {}).get("validation", {}).get("checked") is True
+
+
+def test_bj32_repair_narrative_authority_narrow_softens_invented_outcome() -> None:
+    res = {"kind": "observe", "prompt": "I try the lock."}
+    na = _na_contract(resolution=res)
+    validation = validate_narrative_authority(
+        "You pick the lock and the door swings open.",
+        na,
+        resolution=res,
+        player_text=res["prompt"],
+    )
+    repaired, mode = repair_narrative_authority_narrow(
+        "You pick the lock and the door swings open.",
+        validation,
+        resolution=res,
+        player_text=res["prompt"],
+    )
+    assert repaired is not None
+    assert mode
+    assert "swings open" not in str(repaired).lower()

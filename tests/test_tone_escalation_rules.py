@@ -3,10 +3,15 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
-from game.context_separation import build_context_separation_contract
+import game.final_emission_non_strict_stack as non_strict_stack
+import game.final_emission_terminal_pipeline as terminal_pipeline
+from game.final_emission_meta import default_response_type_debug
 from game.final_emission_gate import apply_final_emission_gate
 from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_tone_escalation import (
+    apply_tone_escalation_layer,
+    flag_non_hostile_escalation_from_writer_pregate,
+)
 from game.tone_escalation import build_tone_escalation_contract, validate_tone_escalation
 from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer, response_type_contract
 
@@ -164,13 +169,13 @@ def test_tone_layer_preserves_justified_explicit_threat() -> None:
         allow_explicit_threat=True,
     )
     original = "The sergeant leans in. One more step and you will be sorry."
-    text, meta, reasons = feg._apply_tone_escalation_layer(
+    text, meta, reasons = apply_tone_escalation_layer(
         original,
         gm_output={"response_policy": {"tone_escalation": ctr}},
         resolution={"kind": "observe", "prompt": "I wait."},
         session={},
         scene_id="gate",
-        response_type_debug=feg._default_response_type_debug(None, None),
+        response_type_debug=default_response_type_debug(None, None),
     )
     assert not reasons
     assert meta.get("tone_escalation_repaired") is not True
@@ -180,8 +185,8 @@ def test_tone_layer_preserves_justified_explicit_threat() -> None:
 
 def test_pregate_audit_flags_writer_overshoot() -> None:
     """Legacy audit: overshoot vs strict fallback contract sets non_hostile_escalation_blocked."""
-    dbg = feg._default_response_type_debug(None, None)
-    feg._flag_non_hostile_escalation_from_writer_pregate(
+    dbg = default_response_type_debug(None, None)
+    flag_non_hostile_escalation_from_writer_pregate(
         "He says you will regret this.",
         gm_output={},
         resolution={"kind": "observe", "prompt": "I watch."},
@@ -193,8 +198,8 @@ def test_pregate_audit_flags_writer_overshoot() -> None:
 
 def test_apply_final_emission_gate_runs_tone_escalation_before_narrative_authority(monkeypatch: pytest.MonkeyPatch) -> None:
     order: list[str] = []
-    orig_te = feg._apply_tone_escalation_layer
-    orig_na = feg._apply_narrative_authority_layer
+    orig_te = non_strict_stack.apply_tone_escalation_layer
+    orig_na = non_strict_stack.apply_narrative_authority_layer
 
     def te(*args, **kwargs):
         order.append("tone")
@@ -204,8 +209,8 @@ def test_apply_final_emission_gate_runs_tone_escalation_before_narrative_authori
         order.append("narrative_authority")
         return orig_na(*args, **kwargs)
 
-    monkeypatch.setattr(feg, "_apply_tone_escalation_layer", te)
-    monkeypatch.setattr(feg, "_apply_narrative_authority_layer", na)
+    monkeypatch.setattr(non_strict_stack, "apply_tone_escalation_layer", te)
+    monkeypatch.setattr(non_strict_stack, "apply_narrative_authority_layer", na)
 
     ctr = _shipped_tone_contract()
     apply_final_emission_gate(
@@ -294,7 +299,7 @@ def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer
 
 
 def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Good morning. A loaf, please."
     cs = build_context_separation_contract(
         player_text=pt,
@@ -317,10 +322,10 @@ def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkey
 
 
 def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     order: list[str] = []
-    orig_srs = feg._apply_social_response_structure_layer
-    orig_te = feg._apply_tone_escalation_layer
+    orig_srs = non_strict_stack._apply_social_response_structure_layer
+    orig_te = non_strict_stack.apply_tone_escalation_layer
 
     def srs(*args, **kwargs):
         order.append("social_response_structure")
@@ -330,8 +335,8 @@ def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypat
         order.append("tone_escalation")
         return orig_te(*args, **kwargs)
 
-    monkeypatch.setattr(feg, "_apply_social_response_structure_layer", srs)
-    monkeypatch.setattr(feg, "_apply_tone_escalation_layer", te)
+    monkeypatch.setattr(non_strict_stack, "_apply_social_response_structure_layer", srs)
+    monkeypatch.setattr(non_strict_stack, "apply_tone_escalation_layer", te)
     pol = _dialogue_response_policy_with_social_structure()
     out = apply_final_emission_gate(
         {
@@ -348,3 +353,21 @@ def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypat
     meta = read_final_emission_meta_dict(out) or {}
     assert "tone_escalation_checked" in meta
     assert meta.get("candidate_validation_passed") is True
+
+
+def test_bj31_repair_tone_escalation_narrow_softens_explicit_threat() -> None:
+    from game.final_emission_tone_escalation import repair_tone_escalation_narrow
+
+    ctr = _shipped_tone_contract()
+    validation = validate_tone_escalation(
+        "One more word and you will regret it.",
+        contract=ctr,
+    )
+    repaired, mode = repair_tone_escalation_narrow(
+        "One more word and you will regret it.",
+        contract=ctr,
+        validation=validation,
+    )
+    assert repaired is not None
+    assert mode
+    assert "regret" not in str(repaired).lower()

@@ -1,6 +1,7 @@
 """Context Separation contract, validator, and gate-layer ownership coverage.
 
-Unit tests cover ``game.context_separation`` directly. Gate-integration tests cover
+Unit tests cover ``game.context_separation`` directly. Gate-layer helpers live on
+``game.final_emission_context_separation``. Gate-integration tests cover
 pass/repair/fail/replace semantics through the downstream emission facade without
 owning gate ordering.
 """
@@ -8,11 +9,15 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.context_separation import (
     build_context_separation_contract,
     context_separation_repair_hints,
     validate_context_separation,
+)
+from game.final_emission_context_separation import (
+    apply_context_separation_layer,
+    resolve_context_separation_contract,
 )
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
@@ -187,7 +192,7 @@ def test_invalid_contract_soft_pass():
 
 
 def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -207,7 +212,7 @@ def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeyp
 
 
 def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Where is the exit?"
     cs = build_context_separation_contract(
         player_text=pt,
@@ -230,7 +235,7 @@ def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
 
 
 def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Is it safe to linger here with the patrols?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
     text = (
@@ -249,7 +254,7 @@ def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
 
 
 def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -271,7 +276,7 @@ def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
 
 
 def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -291,7 +296,7 @@ def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(mon
 
 
 def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What is the price today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -311,7 +316,7 @@ def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
 
 
 def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What is your name?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
     text = (
@@ -330,3 +335,40 @@ def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
     meta = final_emission_meta_from_output(out) or {}
     assert meta.get("context_separation_failed") is True
     assert "pressure_overweighting" in (meta.get("context_separation_failure_reasons") or [])
+
+
+def test_bj34_resolve_context_separation_contract_from_direct_field() -> None:
+    c = _contract(player_text="What does the loaf cost today?", resolution={"kind": "barter"})
+    gm = {"context_separation_contract": c}
+    got, src = resolve_context_separation_contract(gm)
+    assert got is c
+    assert src == "context_separation_contract"
+
+
+def test_bj34_apply_context_separation_layer_boundary_no_lead_drop_on_failure() -> None:
+    pt = "What does the loaf cost today?"
+    c = _contract(player_text=pt, resolution={"kind": "barter"})
+    text = (
+        "The war along the border has everyone on edge, and coin means nothing next to survival. "
+        "Factions trade rumors faster than grain, and the capital's politics swallow small questions whole."
+    )
+    out_text, meta, extra = apply_context_separation_layer(
+        text,
+        gm_output={"context_separation_contract": c},
+        resolution={"kind": "barter", "prompt": pt},
+        session={},
+        scene_id="market_stall",
+        response_type_debug={
+            "response_type_required": None,
+            "response_type_contract_source": None,
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "response_type_repair_kind": None,
+            "response_type_rejection_reasons": [],
+        },
+        strict_social_details=None,
+    )
+    assert out_text == text
+    assert meta.get("context_separation_failed") is True
+    assert meta.get("context_separation_repaired") is False
+    assert "context_separation_unsatisfied_at_boundary_no_lead_drop" in extra

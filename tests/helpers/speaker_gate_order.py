@@ -8,7 +8,7 @@ from game.final_emission_text import _normalize_text
 
 # Strict-social trunk milestone ids (align with ``apply_final_emission_gate`` ordering).
 PHASE_BUILD_SOCIAL = "build_final_strict_social_response"
-PHASE_RESPONSE_TYPE = "_enforce_response_type_contract"
+PHASE_RESPONSE_TYPE = "enforce_response_type_contract"
 PHASE_NARRATIVE_AUTHENTICITY = "_apply_narrative_authenticity_layer"
 PHASE_TONE_ESCALATION = "_apply_tone_escalation_layer"
 PHASE_NARRATIVE_AUTHORITY = "_apply_narrative_authority_layer"

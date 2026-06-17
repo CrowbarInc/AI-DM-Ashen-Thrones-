@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.final_emission_text import _normalize_text
 from game.narrative_authenticity import build_narrative_authenticity_contract
 from tests.helpers.boundary_semantic_repair_fixtures import (
@@ -38,7 +38,8 @@ def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = No
 
 def test_list_like_dialogue_stays_list_like(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     pol = dialogue_policy_with_social_structure()
@@ -95,7 +96,8 @@ def test_weak_response_delta_candidate_not_rewritten_at_boundary():
 
 def test_multi_speaker_format_not_collapsed(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     pol = dialogue_policy_with_social_structure()
@@ -117,7 +119,8 @@ def test_multi_speaker_format_not_collapsed(monkeypatch):
 
 def test_awkward_but_legal_narration_not_polished(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     awkward = "The rain; the gate; the lamps—all of it sits wrong, heavy, not quite matching how still the yard is."
@@ -136,7 +139,8 @@ def test_awkward_but_legal_narration_not_polished(monkeypatch):
 
 def test_awkward_legalistic_narration_not_semantically_rewritten(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     legalish = (
@@ -158,7 +162,8 @@ def test_awkward_legalistic_narration_not_semantically_rewritten(monkeypatch):
 
 def test_n4_hard_illegal_still_sealed_fallback(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
@@ -178,7 +183,8 @@ def test_n4_hard_illegal_still_sealed_fallback(monkeypatch):
 
 def test_referent_ambiguity_not_rewritten_when_semantic_repair_disabled(monkeypatch):
     monkeypatch.setattr(
-        "game.final_emission_gate._apply_visibility_enforcement",
+        terminal_pipeline,
+        "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
     art = minimal_full_referent_artifact(referential_ambiguity_class="none", ambiguity_risk=5)
@@ -195,7 +201,7 @@ def test_referent_ambiguity_not_rewritten_when_semantic_repair_disabled(monkeypa
             )
         },
     }
-    feg._apply_referent_clarity_pre_finalize(out, pre_gate_text=text)
+    terminal_pipeline._apply_referent_clarity_pre_finalize(out, pre_gate_text=text)
     assert _normalize_text(str(out.get("player_facing_text") or "")) == before
     fem = final_emission_meta_from_output(out)
     assert fem.get("referent_repair_applied") is False

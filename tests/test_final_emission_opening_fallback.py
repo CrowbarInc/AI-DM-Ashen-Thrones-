@@ -3,8 +3,10 @@
 This module owns prepared-payload selection, sealed fail-closed metadata,
 adapter-level opening ownership fields, attach-then-helper fixture semantics,
 response-type helper bypass behavior for ``game.final_emission_opening_fallback``,
-and full-gate opening fallback integration (BH-1). Gate-order pin for upstream
-attach-before-composer remains in ``tests/test_final_emission_gate.py`` (Block L).
+opening mode detection / visible-anchor candidate text for
+``game.final_emission_opening_mode``, and full-gate opening fallback integration
+(BH-1). Gate-order pin for upstream attach-before-composer remains in
+``tests/test_final_emission_gate.py`` (Block L).
 """
 
 from __future__ import annotations
@@ -14,9 +16,11 @@ from typing import Any, Dict, Mapping
 
 import pytest
 
-import game.final_emission_gate as feg
-import game.final_emission_gate as final_emission_gate
+import game.final_emission_non_strict_stack as non_strict_stack
+import game.final_emission_response_type as response_type
 import game.final_emission_opening_fallback as opening_fallback
+import game.final_emission_opening_mode as opening_mode
+import game.final_emission_validators as opening_validators
 import game.opening_deterministic_fallback as opening_deterministic_fallback
 from game.defaults import default_scene, default_session, default_world
 from game.diegetic_fallback_narration import fallback_template_metadata
@@ -27,6 +31,7 @@ from game.final_emission_meta import (
     read_final_emission_meta_dict,
 )
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.interaction_context import rebuild_active_scene_entities
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.opening_deterministic_fallback import (
@@ -369,7 +374,7 @@ def test_gate_opening_failure_text_only_stub_fails_closed_without_rebuild(monkey
         return deterministic_opening_fallback_text_and_meta(*a, **k)
 
     monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", _counting_local_deterministic_opening)
-    text, dbg = final_emission_gate._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -554,7 +559,7 @@ def test_opening_failure_fallback_classification_excludes_observe_family() -> No
 
 
 def test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe() -> None:
-    selected = final_emission_gate._standard_visibility_safe_fallback(
+    selected = visibility_fallback.standard_visibility_safe_fallback(
         gm_output=opening_gm_output(),
         session={},
         scene={"scene": opening_gm_output()["prompt_context"]["scene"]["public"]},
@@ -707,6 +712,69 @@ def test_frontier_gate_opening_fallback_uses_top_level_curated_facts() -> None:
     assert "immediately before you" not in text.lower()
 
 
+def test_scene_opening_rt_contract_accept_path_promotes_candidate_true_case() -> None:
+    rd: dict[str, Any] = {
+        "response_type_required": "scene_opening",
+        "response_type_candidate_ok": True,
+        "response_type_repair_used": False,
+        "scene_opening_candidate_contract_passed": True,
+    }
+    assert opening_fallback.scene_opening_rt_contract_accept_path_promotes_candidate(rd) is True
+
+
+@pytest.mark.parametrize(
+    "response_type_debug",
+    [
+        {
+            "response_type_required": "dialogue",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "scene_opening_candidate_contract_passed": True,
+        },
+        {
+            "response_type_required": "scene_opening",
+            "response_type_candidate_ok": False,
+            "response_type_repair_used": False,
+            "scene_opening_candidate_contract_passed": True,
+        },
+        {
+            "response_type_required": "scene_opening",
+            "response_type_repair_used": False,
+            "scene_opening_candidate_contract_passed": True,
+        },
+        {
+            "response_type_required": "scene_opening",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": True,
+            "scene_opening_candidate_contract_passed": True,
+        },
+        {
+            "response_type_required": "scene_opening",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "scene_opening_candidate_contract_passed": False,
+        },
+        {
+            "response_type_required": "scene_opening",
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+        },
+    ],
+    ids=[
+        "required_not_scene_opening",
+        "candidate_ok_false",
+        "candidate_ok_missing",
+        "repair_used_true",
+        "scene_opening_contract_passed_false",
+        "scene_opening_contract_passed_missing",
+    ],
+)
+def test_scene_opening_rt_contract_accept_path_promotes_candidate_false_cases(
+    response_type_debug: dict[str, Any],
+) -> None:
+    assert opening_fallback.scene_opening_rt_contract_accept_path_promotes_candidate(response_type_debug) is False
+
+
 def test_block_ai_scene_opening_rt_selector_does_not_mutate_inputs() -> None:
     """Relocated from gate (BG-2): scene-opening RT accept-path selector must not mutate debug dict."""
     rd: dict[str, Any] = {
@@ -716,7 +784,7 @@ def test_block_ai_scene_opening_rt_selector_does_not_mutate_inputs() -> None:
         "scene_opening_candidate_contract_passed": True,
     }
     snap = json.dumps(rd, sort_keys=True)
-    final_emission_gate._scene_opening_rt_contract_accept_path_promotes_candidate(rd)
+    opening_fallback.scene_opening_rt_contract_accept_path_promotes_candidate(rd)
     assert json.dumps(rd, sort_keys=True) == snap
 
 
@@ -737,33 +805,57 @@ def test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_comp
     assert composition_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 
-def test_gate_opening_selection_wrapper_delegates_to_adapter(monkeypatch: pytest.MonkeyPatch) -> None:
-    sentinel = VisibilitySelectedFallback(
-        text="text",
-        fallback_pool="pool",
-        fallback_kind="kind",
-        final_emitted_source="emitted",
-        fallback_strategy="strategy",
-        fallback_candidate_source="candidate",
-        composition_meta={"meta": True},
+def test_visibility_selected_fallback_candidate_builds_dataclass() -> None:
+    selected = opening_fallback.opening_scene_safe_fallback_selection(
+        {"opening_curated_facts": ["Rain needles the stones at the gate."]},
+        fail_closed_composition_meta_factory=_fail_closed_composition_meta,
     )
-    captured: Dict[str, Any] = {}
+    from game.final_emission_visibility_fallback import visibility_selected_fallback_candidate
 
-    def fake_adapter(
-        gm_output: Dict[str, Any],
-        *,
-        fail_closed_composition_meta_factory: Any,
-    ) -> VisibilitySelectedFallback:
-        captured["gm_output"] = gm_output
-        captured["meta_factory"] = fail_closed_composition_meta_factory
-        return sentinel
+    built = visibility_selected_fallback_candidate(
+        selected.text,
+        selected.fallback_pool,
+        selected.fallback_kind,
+        selected.final_emitted_source,
+        selected.fallback_strategy,
+        selected.fallback_candidate_source,
+        selected.composition_meta,
+    )
+    assert built == selected
 
-    monkeypatch.setattr(final_emission_gate, "_opening_scene_safe_fallback_selection_from_adapter", fake_adapter)
-    gm_output = {"opening_curated_facts": []}
 
-    assert final_emission_gate._opening_scene_safe_fallback_selection(gm_output) is sentinel
-    assert captured["gm_output"] is gm_output
-    assert captured["meta_factory"] is final_emission_gate._first_mention_composition_meta
+def test_opening_sealed_fallback_selection_projects_visibility_selection() -> None:
+    gm_output = {"opening_curated_facts": ["Rain needles the stones at the gate."]}
+    visibility = opening_fallback.opening_scene_safe_fallback_selection(
+        gm_output,
+        fail_closed_composition_meta_factory=_fail_closed_composition_meta,
+    )
+    sealed = opening_fallback.opening_sealed_fallback_selection(
+        gm_output,
+        fail_closed_composition_meta_factory=_fail_closed_composition_meta,
+    )
+    assert sealed.text == visibility.text
+    assert sealed.fallback_pool == visibility.fallback_pool
+    assert sealed.fallback_kind == visibility.fallback_kind
+    assert sealed.final_emitted_source == visibility.final_emitted_source
+    assert sealed.composition_meta == visibility.composition_meta
+
+
+def test_make_opening_sealed_fallback_provider_binds_composition_meta_factory() -> None:
+    captured: dict[str, Any] = {}
+
+    def meta_factory() -> dict[str, Any]:
+        captured["ran"] = True
+        return _fail_closed_composition_meta()
+
+    provider = opening_fallback.make_opening_sealed_fallback_provider(
+        fail_closed_composition_meta_factory=meta_factory,
+    )
+    gm_output = {"opening_curated_facts": ["Rain needles the stones at the gate."]}
+    sealed = provider(gm_output)
+    assert captured.get("ran") is True
+    assert sealed.text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+
 
 # === Full-gate opening integration (relocated from test_final_emission_gate.py, BH-1) ===
 # Gate-order pin remains in gate suite: test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_before_deterministic_opening_composer
@@ -852,18 +944,18 @@ def test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_compo
     assert meta.get("scene_state_anchor_passed") is True
 
 def test_opening_validator_rejects_investigation_continuation_language():
-    failures = feg.validate_opening_output("Nearby crates appear disturbed.", opening_validation_context())
+    failures = opening_validators.validate_opening_output("Nearby crates appear disturbed.", opening_validation_context())
 
     assert "continuation_or_investigation_language" in failures
     assert "invalid_sentence_structure" in failures
 
 def test_opening_validator_rejects_fragment_sentence():
-    failures = feg.validate_opening_output("At the Cinderwatch Gate District, rain and refugees.", opening_validation_context())
+    failures = opening_validators.validate_opening_output("At the Cinderwatch Gate District, rain and refugees.", opening_validation_context())
 
     assert "invalid_sentence_structure" in failures
 
 def test_opening_validator_rejects_opening_without_actionable_hook():
-    failures = feg.validate_opening_output(
+    failures = opening_validators.validate_opening_output(
         "Cinderwatch Gate District. Rain spatters soot-dark stone while refugees and wagons clog the muddy approach.",
         opening_validation_context(),
     )
@@ -881,10 +973,12 @@ def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_g
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
+    import game.final_emission_gate_context as gate_context
+
     def _skip_upstream_repair(out: dict[str, Any] | None, *, resolution: dict[str, Any] | None) -> None:
         return None
 
-    monkeypatch.setattr(feg, "maybe_attach_upstream_prepared_opening_fallback_payload", _skip_upstream_repair)
+    monkeypatch.setattr(gate_context, "maybe_attach_upstream_prepared_opening_fallback_payload", _skip_upstream_repair)
     out = apply_final_emission_gate(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -912,7 +1006,7 @@ def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_g
 def test_scene_opening_accepted_candidate_promotes_over_short_stale_player_text(monkeypatch):
     short = "You stand at Cinderwatch's eastern gate in the rain. Guards hold the choke."
     rich = _rich_scene_opening_candidate()
-    orig_enforce = feg._enforce_response_type_contract
+    orig_enforce = response_type.enforce_response_type_contract
 
     def _select_rich_candidate(candidate_text, **kwargs):
         assert candidate_text == short
@@ -921,8 +1015,8 @@ def test_scene_opening_accepted_candidate_promotes_over_short_stale_player_text(
     def _late_stale_rewrite(out, *, text, **kwargs):
         return short, [], False
 
-    monkeypatch.setattr(feg, "_enforce_response_type_contract", _select_rich_candidate)
-    monkeypatch.setattr(feg, "_apply_interaction_continuity_emission_step", _late_stale_rewrite)
+    monkeypatch.setattr(response_type, "enforce_response_type_contract", _select_rich_candidate)
+    monkeypatch.setattr(non_strict_stack, "apply_interaction_continuity_emission_step", _late_stale_rewrite)
 
     gm_output = opening_gm_output()
     gm_output["player_facing_text"] = short
@@ -1149,7 +1243,7 @@ def test_final_gate_mirrors_authorship_from_upstream_payload_not_route_inference
     gm_output = opening_gm_output()
     payload = build_upstream_prepared_opening_fallback_payload(gm_output)
     gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
-    _repaired, dbg = feg._enforce_response_type_contract(
+    _repaired, dbg = response_type.enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -1170,7 +1264,7 @@ def test_final_gate_does_not_infer_authorship_when_upstream_composition_lacks_fi
     composition.pop("opening_fallback_authorship_source", None)
     payload["opening_fallback_composition_meta"] = composition
     gm_output[UPSTREAM_PREPARED_OPENING_FALLBACK_KEY] = payload
-    _repaired, dbg = feg._enforce_response_type_contract(
+    _repaired, dbg = response_type.enforce_response_type_contract(
         "Nearby crates appear disturbed.",
         gm_output=gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
@@ -1279,4 +1373,74 @@ def test_narrative_mode_output_opening_validation_runs_for_scene_opening_respons
     assert fem.get("narrative_mode_output_checked") is True
     assert fem.get("narrative_mode_output_mode") == "opening"
     assert fem.get("narrative_mode_contract_mode") == "opening"
+
+
+def test_opening_mode_active_for_turn_resolution_kind() -> None:
+    assert opening_mode._opening_mode_active_for_turn(None, {"kind": "scene_opening"}) is True
+    assert opening_mode._opening_mode_active_for_turn({}, {"kind": "dialogue"}) is False
+
+
+def test_opening_mode_active_for_turn_narrative_mode_contract() -> None:
+    gm_output = {
+        "prompt_context": {
+            "narrative_plan": {
+                "narrative_mode_contract": {"mode": "opening"},
+            },
+        },
+    }
+    assert opening_mode._opening_mode_active_for_turn(gm_output, None) is True
+
+
+def test_opening_mode_active_for_turn_narration_obligations() -> None:
+    gm_output = {
+        "prompt_context": {
+            "narration_obligations": {"is_opening_scene": True},
+        },
+    }
+    assert opening_mode._opening_mode_active_for_turn(gm_output, None) is True
+
+    gm_output_renderer = {
+        "prompt_context": {
+            "renderer_inputs": {
+                "narration_obligations": {"is_opening_scene": True},
+            },
+        },
+    }
+    assert opening_mode._opening_mode_active_for_turn(gm_output_renderer, None) is True
+
+
+def test_opening_mode_active_for_turn_inactive() -> None:
+    assert opening_mode._opening_mode_active_for_turn(None, None) is False
+    assert opening_mode._opening_mode_active_for_turn({}, {}) is False
+
+
+def test_opening_visible_anchor_fallback_text_builds_from_shipped_anchors() -> None:
+    gm_output = {
+        "prompt_context": {
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Frontier Gate"]},
+                "allowable_entity_references": [{"descriptor": "Captain Aldric"}],
+                "active_pressures": {"interaction_pressure": "reply_expected"},
+            },
+        },
+    }
+    text = opening_mode._opening_visible_anchor_fallback_text(gm_output)
+    assert text == "Frontier Gate. Captain Aldric is here. A reply is expected."
+
+
+def test_opening_visible_anchor_fallback_text_prefers_scene_opening_location() -> None:
+    gm_output = {
+        "prompt_context": {
+            "narrative_plan": {
+                "scene_opening": {"location_anchors": ["Opening Loc"]},
+                "scene_anchors": {"location_anchors": ["Scene Loc"]},
+            },
+        },
+    }
+    assert opening_mode._opening_visible_anchor_fallback_text(gm_output) == "Opening Loc."
+
+
+def test_opening_visible_anchor_fallback_text_empty_without_prompt_context() -> None:
+    assert opening_mode._opening_visible_anchor_fallback_text(None) == ""
+    assert opening_mode._opening_visible_anchor_fallback_text({}) == ""
 

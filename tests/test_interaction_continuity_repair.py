@@ -1,4 +1,4 @@
-"""Interaction Continuity repair and gate-step ownership coverage.
+"""Interaction Continuity repair and emission-step ownership coverage.
 
 This suite owns IC validation attachment, emission-step bridge/repair/enforcement
 semantics, validate-only repair isolation, and strict-social continuity fallback.
@@ -14,8 +14,13 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
-from game.interaction_continuity import repair_interaction_continuity, validate_interaction_continuity
+import game.interaction_continuity as ic
+from game.interaction_continuity import (
+    apply_interaction_continuity_emission_step,
+    attach_interaction_continuity_validation,
+    repair_interaction_continuity,
+    validate_interaction_continuity,
+)
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
     assert_continuity_validation_failed_without_repair,
@@ -158,7 +163,7 @@ def test_attach_interaction_continuity_validation_populates_debug_and_final_meta
     }
     resolution = {"metadata": {"emission_debug": {}}}
 
-    feg._attach_interaction_continuity_validation(
+    attach_interaction_continuity_validation(
         out,
         resolution_for_contracts=resolution,
         eff_resolution=None,
@@ -172,10 +177,41 @@ def test_attach_interaction_continuity_validation_populates_debug_and_final_meta
     assert resolution["metadata"]["emission_debug"]["interaction_continuity_validation"] is icv
 
 
+def test_attach_interaction_continuity_validation_wires_validate_only_emission_step(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Attach path delegates validate-only emission step inside interaction_continuity owner (BJ-51)."""
+    calls: list[str] = []
+
+    def _step_stub(out: dict, *, text: str, validate_only: bool, strict_social_path: bool, **_kwargs: object):
+        calls.append(f"step:validate_only={validate_only}:strict={strict_social_path}")
+        return text, [], False
+
+    monkeypatch.setattr(
+        "game.interaction_continuity.apply_interaction_continuity_emission_step",
+        _step_stub,
+    )
+    out = {
+        "player_facing_text": "The scene holds.",
+        "_final_emission_meta": {},
+        "metadata": {},
+        "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
+    }
+
+    attach_interaction_continuity_validation(
+        out,
+        resolution_for_contracts={"metadata": {"emission_debug": {}}},
+        eff_resolution=None,
+        session=None,
+    )
+
+    assert calls == ["step:validate_only=True:strict=False"]
+
+
 def test_apply_interaction_continuity_step_records_bridge_metadata_when_bridge_fires():
     out, resolution = _interaction_continuity_gate_payload(_IC_BRIDGE_LIVE_MALFORMED)
 
-    feg._apply_interaction_continuity_emission_step(
+    apply_interaction_continuity_emission_step(
         out,
         text=_IC_BRIDGE_LIVE_MALFORMED,
         resolution_for_contracts=resolution,
@@ -195,7 +231,7 @@ def test_apply_interaction_continuity_step_records_bridge_metadata_when_bridge_f
 def test_apply_interaction_continuity_step_repairs_malformed_bridge_case_before_enforcement():
     out, resolution = _interaction_continuity_gate_payload(_IC_BRIDGE_LIVE_MALFORMED)
 
-    feg._apply_interaction_continuity_emission_step(
+    apply_interaction_continuity_emission_step(
         out,
         text=_IC_BRIDGE_LIVE_MALFORMED,
         resolution_for_contracts=resolution,
@@ -220,7 +256,7 @@ def test_apply_interaction_continuity_step_enforces_when_bridge_failure_is_unrep
     unrecoverable = 'South road." Stranger waits. "Old Millstone.'
     out, resolution = _interaction_continuity_gate_payload(unrecoverable)
 
-    feg._apply_interaction_continuity_emission_step(
+    apply_interaction_continuity_emission_step(
         out,
         text=unrecoverable,
         resolution_for_contracts=resolution,
@@ -240,7 +276,7 @@ def test_block_d_validate_only_attach_never_calls_repair_interaction_continuity(
     def boom(*_a, **_k):
         raise AssertionError("repair_interaction_continuity must not run on validate_only attach paths")
 
-    monkeypatch.setattr(feg, "repair_interaction_continuity", boom)
+    monkeypatch.setattr(ic, "repair_interaction_continuity", boom)
     out = {
         "player_facing_text": "The scene holds.",
         "_final_emission_meta": {},
@@ -248,7 +284,7 @@ def test_block_d_validate_only_attach_never_calls_repair_interaction_continuity(
         "response_policy": {"interaction_continuity": _strong_interaction_continuity_contract()},
     }
     resolution = {"metadata": {"emission_debug": {}}}
-    feg._attach_interaction_continuity_validation(
+    attach_interaction_continuity_validation(
         out,
         resolution_for_contracts=resolution,
         eff_resolution=None,
@@ -263,7 +299,7 @@ def test_apply_final_emission_gate_validate_only_ic_never_calls_repair_interacti
     def boom(*_a, **_k):
         raise AssertionError("repair_interaction_continuity must not run on live gate validate-only IC paths")
 
-    monkeypatch.setattr(feg, "repair_interaction_continuity", boom)
+    monkeypatch.setattr(ic, "repair_interaction_continuity", boom)
     gm = {
         "player_facing_text": "Short.",
         "tags": [],
@@ -282,11 +318,11 @@ def test_apply_final_emission_gate_validate_only_ic_never_calls_repair_interacti
 
 def test_block_d_strict_social_continuity_hard_fallback_applies_sealed_line(monkeypatch):
     """When repair cannot fix strong continuity failure under strict-social, sealed fallback is applied."""
-    ic = _strong_runner_interaction_continuity()
+    ic_contract = _strong_runner_interaction_continuity()
     out = {
         "player_facing_text": "You can't go there.",
         "metadata": {},
-        "response_policy": {"interaction_continuity": ic},
+        "response_policy": {"interaction_continuity": ic_contract},
     }
     resolution = {
         "social": {"npc_id": "tavern_runner", "npc_name": "Tavern Runner"},
@@ -294,11 +330,11 @@ def test_block_d_strict_social_continuity_hard_fallback_applies_sealed_line(monk
     }
 
     monkeypatch.setattr(
-        feg,
+        ic,
         "repair_interaction_continuity",
         lambda *_a, **_k: {"applied": False, "repaired_text": "unused"},
     )
-    txt, extra, strict_fb = feg._apply_interaction_continuity_emission_step(
+    txt, extra, strict_fb = apply_interaction_continuity_emission_step(
         out,
         text="You can't go there.",
         resolution_for_contracts=resolution,

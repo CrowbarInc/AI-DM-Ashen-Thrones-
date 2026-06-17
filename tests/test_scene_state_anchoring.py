@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_scene_state_anchor as scene_state_anchor_owner
+import game.final_emission_strict_social_stack as strict_social_stack
 import game.scene_state_anchoring as ssa
+from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
 from game.scene_state_anchoring import validate_scene_state_anchoring
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
@@ -140,7 +142,7 @@ def test_scene_state_anchor_pass_path_flags_and_matched_kinds():
 
 def test_scene_state_anchor_actor_rebind_repair_metadata():
     contract = _ssa_contract(actor_tokens=["mara the smith"])
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "The hammer rings once.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -156,7 +158,7 @@ def test_scene_state_anchor_action_rebind_repair_metadata():
         actor_tokens=[],
         player_action_tokens=["north gate", "question"],
     )
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "The guards exchange a look.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -171,7 +173,7 @@ def test_scene_state_anchor_location_rebind_repair_metadata():
         scene_location_label="Stone Quay",
         location_tokens=["quay", "stone"],
     )
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "Gulls wheel overhead.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -187,12 +189,12 @@ def test_scene_state_anchor_narrator_neutral_only_when_location_rebind_unavailab
     def no_location_opening(*args, **kwargs):
         return None, None
 
-    monkeypatch.setattr(feg, "_repair_location_opening", no_location_opening)
+    monkeypatch.setattr(scene_state_anchor_owner, "_repair_location_opening", no_location_opening)
     contract = _ssa_contract(
         scene_location_label="Ash Harbor",
         location_tokens=["harbor"],
     )
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "Salt stings the air.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -211,7 +213,7 @@ def test_scene_state_anchor_unrecoverable_preserves_text_and_records_failure():
         scene_location_label=None,
     )
     raw = "Untethered prose with no hooks."
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         raw,
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -230,7 +232,7 @@ def test_scene_state_anchor_fast_fallback_neutral_prefers_location_rebind_over_a
         location_tokens=["frontier gate", "gate"],
         actor_tokens=["emergent lord aldric"],
     )
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "Several patrons exchange furtive glances.",
         gm_output={
             "scene_state_anchor_contract": contract,
@@ -241,51 +243,6 @@ def test_scene_state_anchor_fast_fallback_neutral_prefers_location_rebind_over_a
     assert text == "Several patrons exchange furtive glances."
     assert meta.get("scene_state_anchor_failed") is True
     assert meta.get("scene_state_anchor_repaired") is False
-
-
-def test_ssa_layer_skip_reasons_direct():
-    assert feg._skip_scene_state_anchor_layer(
-        "x",
-        None,
-        strict_social_details=None,
-    ) == "missing_contract"
-
-    assert feg._skip_scene_state_anchor_layer(
-        "x",
-        _ssa_contract(enabled=False),
-        strict_social_details=None,
-    ) == "contract_disabled"
-
-    assert feg._skip_scene_state_anchor_layer(
-        "",
-        _ssa_contract(),
-        strict_social_details=None,
-    ) == "empty_text"
-
-    assert feg._skip_scene_state_anchor_layer(
-        None,
-        _ssa_contract(),
-        strict_social_details=None,
-    ) == "non_string_text"
-
-    assert feg._skip_scene_state_anchor_layer(
-        "x",
-        _ssa_contract(),
-        strict_social_details={"used_internal_fallback": True},
-    ) == "strict_social_authoritative_internal_fallback"
-
-    assert feg._skip_scene_state_anchor_layer(
-        "x",
-        _ssa_contract(),
-        strict_social_details={"final_emitted_source": "neutral_reply_speaker_grounding_bridge"},
-    ) == "strict_social_structured_or_bridge_source"
-
-    assert feg._skip_scene_state_anchor_layer(
-        "x",
-        _ssa_contract(),
-        strict_social_details=None,
-        response_type_debug={"response_type_candidate_ok": False},
-    ) == "response_type_contract_failed"
 
 
 def test_validate_scene_state_anchoring_invoked_once_without_boundary_repair(monkeypatch):
@@ -300,7 +257,7 @@ def test_validate_scene_state_anchoring_invoked_once_without_boundary_repair(mon
             "failure_reasons": ["no_anchor_match"],
         }
 
-    monkeypatch.setattr(feg, "validate_scene_state_anchoring", tracking_validate)
+    monkeypatch.setattr(scene_state_anchor_owner, "validate_scene_state_anchoring", tracking_validate)
     contract = _ssa_contract(location_tokens=["beacon"])
     out = _apply_gate(
         {
@@ -365,7 +322,7 @@ def test_contract_resolution_from_gm_output_nested_paths(attach_key, attach_payl
         scene_id="rope_bridge",
         world={},
     )
-    assert feg._resolve_scene_state_anchor_contract(out) is not None
+    assert scene_state_anchor_owner._resolve_scene_state_anchor_contract(out) is not None
     fem = final_emission_meta_from_output(out) or {}
     assert fem.get("scene_state_anchor_checked") is True
     assert fem.get("scene_state_anchor_failed") is True
@@ -388,7 +345,7 @@ def test_strict_social_npc_line_with_actor_token_passes_without_anchor_rewrite(m
     def fake_build(candidate_text, *, resolution, tags, session, scene_id, world):
         return 'Tavern Runner says, "East lanes."', dict(stub_details)
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
 
     contract = _ssa_contract(actor_tokens=["tavern runner"])
     out = _apply_gate(
@@ -480,7 +437,7 @@ def test_scene_location_label_used_when_location_tokens_sparse():
         location_tokens=["salt"],
         scene_location_label="Salt Docks",
     )
-    text, meta = feg._apply_scene_state_anchor_layer(
+    text, meta = apply_scene_state_anchor_layer(
         "Ropes creak.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
@@ -564,13 +521,13 @@ def test_strict_and_non_strict_repair_sync_metadata():
     assert ns.get("scene_state_anchor_repaired") is False
     assert em_ns.get("scene_state_anchor_failed") is True
 
-    text, layer_meta = feg._apply_scene_state_anchor_layer(
+    text, layer_meta = apply_scene_state_anchor_layer(
         "Fog.",
         gm_output={"scene_state_anchor_contract": contract},
         strict_social_details=None,
     )
     merged = {}
-    feg._merge_scene_state_anchor_meta(merged, layer_meta)
+    scene_state_anchor_owner._merge_scene_state_anchor_meta(merged, layer_meta)
     assert merged.get("scene_state_anchor_failed") is True
     assert merged.get("scene_state_anchor_repaired") is False
     assert text == "Fog."

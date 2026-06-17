@@ -252,7 +252,7 @@ def apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
         return False
     assert_final_emission_mutation_allowed(
         "preserve_candidate_text",
-        source="gate._apply_upstream_fallback_pregate_containment",
+        source="game.fallback_provenance_debug.apply_upstream_fallback_pregate_containment",
     )
     out["player_facing_text"] = snap
     md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
@@ -285,7 +285,7 @@ def finalize_upstream_fallback_overwrite_containment(
         return False
     assert_final_emission_mutation_allowed(
         "sanitize_html_to_text",
-        source="gate._finalize_upstream_fallback_overwrite_containment",
+        source="game.fallback_provenance_debug.finalize_upstream_fallback_overwrite_containment",
     )
     snap_san = _sanitize_output_text(snap)
     if fingerprint_player_facing(snap_san) == original_fp:
@@ -296,7 +296,7 @@ def finalize_upstream_fallback_overwrite_containment(
         chosen = snap_san
     assert_final_emission_mutation_allowed(
         "preserve_candidate_text",
-        source="gate._finalize_upstream_fallback_overwrite_containment",
+        source="game.fallback_provenance_debug.finalize_upstream_fallback_overwrite_containment",
     )
     out["player_facing_text"] = chosen
     gate_norm = _normalize_text(chosen)

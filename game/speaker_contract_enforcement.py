@@ -1,9 +1,9 @@
-"""Speaker selection contract: validation, repair, metadata, and sync helpers.
+"""Speaker selection contract: validation, repair, metadata, sync, and enforcement orchestration.
 
-Live strict-social orchestration (when enforcement runs, and relative to other gate layers)
-remains in :mod:`game.final_emission_gate` (:func:`~game.final_emission_gate.apply_final_emission_gate`).
-This module owns the speaker-contract implementation surface consumed by that orchestrator;
-emitted text signature parsing lives in :mod:`game.emitted_speaker_signature`.
+:func:`enforce_emitted_speaker_with_contract` is the owner entrypoint for strict-social
+speaker-contract enforcement. :mod:`game.final_emission_gate` keeps a thin delegator for
+monkeypatch/integration callers and re-exports the public API surface.
+Emitted text signature parsing lives in :mod:`game.emitted_speaker_signature`.
 """
 from __future__ import annotations
 
@@ -534,3 +534,56 @@ def _merge_speaker_enforcement_into_outputs(
         eme = eff_resolution["metadata"].setdefault("emission_debug", {})
         if isinstance(eme, dict):
             eme["speaker_contract_enforcement"] = enforcement_payload
+
+
+def enforce_emitted_speaker_with_contract(
+    text: str,
+    *,
+    gm_output: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+) -> tuple[str, Dict[str, Any]]:
+    """Validate *text* against stored contract; repair if needed. Mutates *eff_resolution* social on repair paths."""
+    trace = gm_output.get("trace") if isinstance(gm_output.get("trace"), dict) else None
+    md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else None
+    contract = get_speaker_selection_contract(
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+        metadata=md,
+        trace=trace,
+    )
+    val = validate_emitted_speaker_against_contract(
+        text,
+        contract,
+        resolution=eff_resolution if isinstance(eff_resolution, dict) else resolution,
+    )
+    payload: Dict[str, Any] = {
+        "contract_present": not (
+            isinstance(contract.get("debug"), dict) and contract["debug"].get("contract_missing")
+        ),
+        "validation": val,
+    }
+
+    if val.get("ok") is True:
+        payload["final_reason_code"] = val.get("reason_code")
+        _merge_speaker_enforcement_into_outputs(gm_output, resolution, eff_resolution, enforcement_payload=payload)
+        return text, payload
+
+    repaired, final_rc, rdbg = _apply_speaker_contract_repairs(
+        text,
+        val,
+        contract=contract,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        scene_id=scene_id,
+        world=world,
+    )
+    payload["repair"] = rdbg
+    payload["final_reason_code"] = final_rc
+    payload["post_validation"] = validate_emitted_speaker_against_contract(
+        repaired,
+        contract,
+        resolution=eff_resolution if isinstance(eff_resolution, dict) else resolution,
+    )
+    _merge_speaker_enforcement_into_outputs(gm_output, resolution, eff_resolution, enforcement_payload=payload)
+    return repaired, payload

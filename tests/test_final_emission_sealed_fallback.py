@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 
 import game.final_emission_gate as feg
-from game.final_emission_gate import apply_strict_social_emergency_fallback_patch
+from game.final_emission_terminal_pipeline import apply_strict_social_emergency_fallback_patch
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
@@ -22,7 +22,11 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
 )
+import game.final_emission_passive_scene_pressure as passive_scene_pressure
+import game.final_emission_scene_emit_integrity as scene_emit_integrity
 import game.final_emission_sealed_fallback as sealed_fallback
+import game.final_emission_visibility_fallback as visibility_fallback
+import game.social_exchange_emission as social_exchange_emission
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
@@ -59,10 +63,12 @@ def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None
         "SealedFallbackSelection",
         "build_non_strict_sealed_fallback_providers",
         "stamp_sealed_fallback_realization_family",
+        "stamp_non_strict_sealed_replacement_realization_family",
         "prepare_sealed_replacement_route_meta",
         "finalize_n4_sealed_replace_fem_route_meta",
         "select_acceptance_quality_n4_sealed_fallback_line",
         "select_non_strict_replace_path_terminal_sealed_fallback_branch",
+        "select_non_strict_replace_path_terminal_sealed_fallback_selection",
         "assemble_non_strict_sealed_fallback_selection",
     ):
         assert callable(getattr(sealed_fallback, name, None)), name
@@ -133,8 +139,20 @@ def test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple() -> No
     assert selection.composition_meta == {"first_mention_composition_used": False}
 
 
-def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks() -> None:
+def test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_modules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     gm = {"player_facing_text": "x", "tags": []}
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "minimal_social_emergency_fallback_line",
+        lambda _res: "owner social line",
+    )
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "_npc_display_name_for_emission",
+        lambda _w, _sid, _npc: "Aldric",
+    )
     providers = sealed_fallback.build_non_strict_sealed_fallback_providers(
         gm,
         session={},
@@ -153,24 +171,9 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
             "opening_source",
             None,
         ),
-        passive_scene_pressure_fallback_candidates=lambda **_: [],
-        should_use_neutral_nonprogress_fallback_instead_of_global_stock=lambda *_: False,
-        scene_emit_integrity_global_fallback_selection=lambda *a, **k: VisibilitySelectedFallback(
-            text="global",
-            fallback_pool="global_pool",
-            fallback_kind="global_kind",
-            final_emitted_source="global_source",
-            fallback_strategy="standard_safe_fallback",
-            fallback_candidate_source="global_scene_fallback",
-            composition_meta=None,
-        ),
-        minimal_social_emergency_fallback_line=lambda _res: "injected social line",
-        npc_display_name_for_emission=lambda _w, _sid, _npc: "Aldric",
-        npc_pursuit_neutral_nonprogress_fallback_line=lambda: "neutral",
-        local_exchange_continuation_fallback_line=lambda **_: "continuation",
     )
     selection = providers.social_interlocutor_provider()
-    assert selection.text == "injected social line"
+    assert selection.text == "owner social line"
     assert selection.fallback_pool == "social_active_interlocutor_minimal"
     assert selection.final_emitted_source == "social_interlocutor_minimal_fallback"
     assert callable(providers.passive_candidates_provider)
@@ -183,13 +186,17 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_
 def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Relocated from gate (BG-2): gate-owned terminal selector must not mutate gm_output on opening branch."""
-    monkeypatch.setattr(feg, "_passive_scene_pressure_fallback_candidates", lambda **_: [])
-    monkeypatch.setattr(feg, "_should_use_neutral_nonprogress_fallback_instead_of_global_stock", lambda *_: False)
+    """Terminal selector owner entrypoint must not mutate gm_output on opening branch."""
+    monkeypatch.setattr(passive_scene_pressure, "_passive_scene_pressure_fallback_candidates", lambda **_: [])
+    monkeypatch.setattr(
+        visibility_fallback,
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+        lambda *_: False,
+    )
     gm = copy.deepcopy(opening_gm_output())
     snap = copy.deepcopy(gm)
     resolution = {"kind": "scene_opening", "prompt": "Start the campaign."}
-    feg._select_non_strict_replace_path_terminal_sealed_fallback_selection(
+    sealed_fallback.select_non_strict_replace_path_terminal_sealed_fallback_selection(
         gm,
         session={},
         scene=None,
@@ -203,11 +210,33 @@ def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_op
         response_type_required="scene_opening",
         suppress_intro_replace=False,
         interaction_mode="",
+        opening_sealed_fallback_provider=lambda _gm: sealed_fallback.SealedFallbackSelection(
+            "opening text",
+            "opening_scene_safe_fallback",
+            "opening_deterministic_fallback",
+            "opening_deterministic_fallback",
+            None,
+        ),
     )
     assert gm == snap
 
 
-def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None:
+def test_bj60_generic_replace_exit_calls_sealed_fallback_selector_directly() -> None:
+    """BJ-60: generic replace exit calls sealed_fallback owner; gate retains no selector wrapper."""
+    import inspect
+
+    import game.final_emission_gate as feg
+    import game.final_emission_generic_exit as ge
+
+    assert not hasattr(feg, "_select_non_strict_replace_path_terminal_sealed_fallback_selection")
+    src = inspect.getsource(ge.run_generic_replace_exit)
+    assert "select_non_strict_replace_path_terminal_sealed_fallback_selection" in src
+    assert "_select_non_strict_replace_path_terminal_sealed_fallback_selection" not in src
+
+
+def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     eff: dict[str, Any] = {
         "kind": "question",
         "social": {"npc_id": "n1", "grounded_speaker_id": "n1", "social_intent_class": "social_exchange"},
@@ -215,6 +244,11 @@ def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None
     session: dict[str, Any] = {"active_scene_id": "yard"}
     eff0 = copy.deepcopy(eff)
     session0 = copy.deepcopy(session)
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "minimal_social_emergency_fallback_line",
+        lambda _resolution: "strict-social line",
+    )
     sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
         strict_social_path=True,
         eff_resolution=eff,
@@ -225,9 +259,27 @@ def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None
         world=None,
         res_kind="question",
         response_type_required="dialogue",
-        minimal_social_fallback_builder=lambda _resolution: "strict-social line",
-        global_fallback_selection_builder=lambda *_args, **_kwargs: VisibilitySelectedFallback(
-            text="global line",
+    )
+    assert eff == eff0
+    assert session == session0
+
+
+def test_block_ai_extracted_n4_selector_uses_owner_modules_only(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "minimal_social_emergency_fallback_line",
+        lambda _resolution: calls.append("minimal") or "strict-social owner line",
+    )
+    monkeypatch.setattr(
+        scene_emit_integrity,
+        "_scene_emit_integrity_global_fallback_selection",
+        lambda *_args, **_kwargs: calls.append("global")
+        or VisibilitySelectedFallback(
+            text="global owner line",
             fallback_pool="global_scene_narrative",
             fallback_kind="narrative_safe_fallback",
             final_emitted_source="global_scene_fallback",
@@ -236,8 +288,39 @@ def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts() -> None
             composition_meta=None,
         ),
     )
-    assert eff == eff0
-    assert session == session0
+
+    assert (
+        sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
+            strict_social_path=True,
+            eff_resolution={"kind": "question"},
+            scene=None,
+            scene_id="yard",
+            resolution=None,
+            session=None,
+            world=None,
+            res_kind="question",
+            response_type_required="dialogue",
+        )
+        == "strict-social owner line"
+    )
+    assert calls == ["minimal"]
+
+    calls.clear()
+    assert (
+        sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
+            strict_social_path=False,
+            eff_resolution=None,
+            scene={},
+            scene_id="yard",
+            resolution={},
+            session={},
+            world={},
+            res_kind="observe",
+            response_type_required="narration",
+        )
+        == "global owner line"
+    )
+    assert calls == ["global"]
 
 
 def test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output() -> None:
@@ -294,9 +377,9 @@ def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_wit
     def _forbidden_minimal(*_a: Any, **_k: Any) -> str:
         raise AssertionError("patch helper must not invoke minimal_social_emergency_fallback_line")
 
-    import game.final_emission_gate as feg
+    import game.social_exchange_emission as social_exchange_emission
 
-    monkeypatch.setattr(feg, "minimal_social_emergency_fallback_line", _forbidden_minimal)
+    monkeypatch.setattr(social_exchange_emission, "minimal_social_emergency_fallback_line", _forbidden_minimal)
     out = {
         "player_facing_text": "Bad candidate.",
         "tags": ["existing"],
@@ -324,63 +407,6 @@ def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_wit
     assert fem["final_emitted_source"] == "minimal_social_emergency_fallback"
     assert fem[REALIZATION_FALLBACK_FAMILY_FIELD] == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
     assert fem["post_gate_mutation_detected"] is True
-
-
-def test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only() -> None:
-    calls: list[str] = []
-
-    def _minimal(_resolution: dict[str, Any] | None) -> str:
-        calls.append("minimal")
-        return "strict-social injected line"
-
-    def _global(*_args: Any, **_kwargs: Any) -> VisibilitySelectedFallback:
-        calls.append("global")
-        return VisibilitySelectedFallback(
-            text="global injected line",
-            fallback_pool="global_scene_narrative",
-            fallback_kind="narrative_safe_fallback",
-            final_emitted_source="global_scene_fallback",
-            fallback_strategy="standard_safe_fallback",
-            fallback_candidate_source="global_scene_fallback",
-            composition_meta=None,
-        )
-
-    assert (
-        sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
-            strict_social_path=True,
-            eff_resolution={"kind": "question"},
-            scene=None,
-            scene_id="yard",
-            resolution=None,
-            session=None,
-            world=None,
-            res_kind="question",
-            response_type_required="dialogue",
-            minimal_social_fallback_builder=_minimal,
-            global_fallback_selection_builder=_global,
-        )
-        == "strict-social injected line"
-    )
-    assert calls == ["minimal"]
-
-    calls.clear()
-    assert (
-        sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line(
-            strict_social_path=False,
-            eff_resolution=None,
-            scene={},
-            scene_id="yard",
-            resolution={},
-            session={},
-            world={},
-            res_kind="observe",
-            response_type_required="narration",
-            minimal_social_fallback_builder=_minimal,
-            global_fallback_selection_builder=_global,
-        )
-        == "global injected line"
-    )
-    assert calls == ["global"]
 
 
 def test_block_ai_extracted_non_strict_branch_selector_preserves_order() -> None:
@@ -521,7 +547,6 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines()
         "_select_non_strict_replace_path_terminal_sealed_fallback_selection",
         "_standard_visibility_safe_fallback",
         "_opening_scene_safe_fallback_selection",
-        "minimal_social_emergency_fallback_line(",
         "global_scene_fallback(",
         "Nothing confirms progress toward that lead",
     ):
@@ -535,11 +560,12 @@ def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None
         "test_block_ai_sealed_fallback_metadata_module_exports_helpers_only",
         "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
         "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
-        "test_build_non_strict_sealed_fallback_providers_social_branch_uses_injected_callbacks",
+        "test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_modules",
         "test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch",
+        "test_bj60_generic_replace_exit_calls_sealed_fallback_selector_directly",
         "test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts",
         "test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output",
-        "test_block_ai_extracted_n4_selector_uses_injected_prose_owners_only",
+        "test_block_ai_extracted_n4_selector_uses_owner_modules_only",
         "test_block_ai_extracted_non_strict_branch_selector_preserves_order",
         "test_block_ai_non_strict_assembler_selects_each_injected_candidate_branch",
         "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines",

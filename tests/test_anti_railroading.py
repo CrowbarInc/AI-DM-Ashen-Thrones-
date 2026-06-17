@@ -8,13 +8,18 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.anti_railroading import (
     ALLOWED_LEAD_ROLES,
     FORBIDDEN_LEAD_ROLES,
     anti_railroading_repair_hints,
     build_anti_railroading_contract,
     validate_anti_railroading,
+)
+from game.final_emission_anti_railroading import (
+    apply_anti_railroading_layer,
+    repair_anti_railroading_narrow,
+    resolve_anti_railroading_contract,
 )
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
@@ -376,7 +381,7 @@ def test_anti_railroading_prompt_context_contract_resolution():
 
 def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
     """Surfaced-lead mandatory framing fails AR validation and triggers non-social replace."""
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     c = _ar_contract(prompt_leads=[{"id": "h1", "title": "Harbor warehouse"}])
     raw = "The Harbor warehouse lead isn't optional; you're going there now."
     out = _apply_gate(
@@ -389,3 +394,48 @@ def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
     fem = final_emission_meta_from_output(out) or {}
     assert fem.get("anti_railroading_failed") is True
     assert fem.get("final_route") == "replaced"
+
+
+def test_bj33_repair_anti_railroading_narrow_softens_forced_direction() -> None:
+    c = _ar_contract()
+    validation = validate_anti_railroading("You head straight to the archive.", c)
+    repaired, mode = repair_anti_railroading_narrow(
+        "You head straight to the archive.",
+        validation,
+        contract=c,
+        player_text="Where next?",
+        resolution={"kind": "observe", "prompt": "Where next?"},
+    )
+    assert repaired is not None
+    assert mode
+    assert "head straight" not in str(repaired).lower()
+
+
+def test_bj33_resolve_anti_railroading_contract_from_direct_field() -> None:
+    c = _ar_contract()
+    gm = {"anti_railroading_contract": c}
+    assert resolve_anti_railroading_contract(gm) is c
+
+
+def test_bj33_apply_anti_railroading_layer_boundary_no_rewrite_on_failure() -> None:
+    c = _ar_contract()
+    text, meta, extra = apply_anti_railroading_layer(
+        "You decide to follow the priest.",
+        gm_output={"anti_railroading_contract": c},
+        resolution={"kind": "observe", "prompt": "I look around."},
+        session={},
+        scene_id="s",
+        response_type_debug={
+            "response_type_required": None,
+            "response_type_contract_source": None,
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "response_type_repair_kind": None,
+            "response_type_rejection_reasons": [],
+        },
+        strict_social_details=None,
+    )
+    assert text == "You decide to follow the priest."
+    assert meta.get("anti_railroading_failed") is True
+    assert meta.get("anti_railroading_repaired") is False
+    assert "anti_railroading_unsatisfied_at_boundary_no_rewrite" in extra

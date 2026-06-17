@@ -8,7 +8,8 @@ import copy
 
 import pytest
 
-from game.final_emission_gate import apply_final_emission_gate, enforce_emitted_speaker_with_contract
+from game.final_emission_gate import apply_final_emission_gate
+from game.speaker_contract_enforcement import enforce_emitted_speaker_with_contract
 from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,

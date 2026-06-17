@@ -6,7 +6,7 @@ Pure checks only — no ``apply_*`` / merge orchestration. Callers:
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, Sequence
 
 from game.final_emission_text import (
     _ACTION_STOPWORDS,
@@ -327,6 +327,137 @@ def candidate_satisfies_scene_opening_contract(text: str) -> tuple[bool, List[st
     if clean.endswith("?"):
         return False, ["scene_opening_is_question"]
     return True, []
+
+
+_OPENING_FORBIDDEN_PATTERNS: tuple[str, ...] = (
+    "appear disturbed",
+    "appears disturbed",
+    "upon closer inspection",
+    "you notice something has been",
+    "recently",
+    "again",
+    "still",
+    "as before",
+)
+
+
+# Opening validation is FINAL BOUNDARY ONLY.
+# Do not add narrative-quality shaping here.
+# Upstream systems (planning / realization) must provide richness.
+_OPENING_ACTION_VERBS: tuple[str, ...] = (
+    "approach",
+    "ask",
+    "check",
+    "choose",
+    "cross",
+    "enter",
+    "examine",
+    "follow",
+    "inspect",
+    "move",
+    "press",
+    "question",
+    "read",
+    "speak",
+    "start",
+    "watch",
+)
+
+
+def _opening_text_has_location_anchor(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    for raw in context.get("location_anchors") or []:
+        anchor = str(raw or "").strip().lower()
+        if anchor and (anchor in low or any(tok in low for tok in re.findall(r"[a-z]{4,}", anchor))):
+            return True
+    return bool(
+        re.search(
+            r"\b(?:gate|district|market|lane|road|square|checkpoint|yard|bridge|dock|pier|tavern|hall|ward|quay|tower|street|milestone)\b",
+            low,
+        )
+    )
+
+
+def _opening_text_has_activity(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    if re.search(r"\b(?:crowd|guards?|refugees?|wagons?|traffic|rain|voices?|shouts?|presses?|watches?|waits?|moves?|clogs?|gathers?|lingers?|banners?|notice board)\b", low):
+        return True
+    return any(
+        str(fact or "").strip().lower() in low
+        for fact in (context.get("visible_facts") or [])[:4]
+        if len(str(fact or "").strip()) >= 24
+    )
+
+
+def _opening_text_has_actionable_hook(text: str, context: Mapping[str, Any]) -> bool:
+    low = text.lower()
+    if re.search(r"\b(?:you can|you may|you could|choose|pick one|where do you|what do you|your next move|start by)\b", low):
+        return True
+    for label in context.get("actionable_labels") or []:
+        if str(label or "").strip().lower() in low:
+            return True
+    imperative = r"(?:^|[.!?]\s+)(?:" + "|".join(re.escape(v).capitalize() for v in _OPENING_ACTION_VERBS) + r")\b"
+    if re.search(imperative, text):
+        return True
+    return False
+
+
+def _opening_text_is_fragment(text: str) -> bool:
+    clean = _normalize_text(text).strip()
+    if not clean:
+        return True
+    if clean[-1] not in ".!?\"'":
+        return True
+    words = re.findall(r"[A-Za-z']+", clean)
+    if len(words) < 14:
+        return True
+    first = words[0].lower() if words else ""
+    if first in {"nearby", "beneath", "under", "beside", "around", "within"} and len(words) < 22:
+        return True
+    finite = re.search(
+        r"\b(?:is|are|was|were|has|have|had|does|do|did|can|could|may|might|must|will|would|press|clog|watch|wait|stand|shout|hang|lists|offers|holds|moves|gathers|lingers|spatters)\b",
+        clean,
+        re.IGNORECASE,
+    )
+    return finite is None
+
+
+def validate_opening_output(text: str, context: Mapping[str, Any] | None) -> List[str]:
+    failures: List[str] = []
+    ctx = context if isinstance(context, Mapping) else {}
+    clean = _normalize_text(text).strip()
+    low = clean.lower()
+    if not _opening_text_has_location_anchor(clean, ctx):
+        failures.append("missing_location_anchor")
+    if not _opening_text_has_activity(clean, ctx):
+        failures.append("missing_activity")
+    if not _opening_text_has_actionable_hook(clean, ctx):
+        failures.append("missing_hook")
+    if any(needle in low for needle in _OPENING_FORBIDDEN_PATTERNS):
+        failures.append("continuation_or_investigation_language")
+    if _opening_text_is_fragment(clean):
+        failures.append("invalid_sentence_structure")
+    return list(dict.fromkeys(failures))
+
+
+def is_valid_opening(text: str, curated_facts: Sequence[Any]) -> bool:
+    """Lightweight preservation gate for GPT-authored scene openings."""
+    clean = _normalize_text(text).strip()
+    if not clean:
+        return False
+    if len(clean) < 40:
+        return False
+
+    low = clean.lower()
+    matches = 0
+    for fact in curated_facts or []:
+        fact_text = str(fact or "").strip()
+        if not fact_text:
+            continue
+        tokens = [tok.strip(".,;:!?()[]{}\"'").lower() for tok in fact_text.split()]
+        if any(token and token in low for token in tokens):
+            matches += 1
+    return matches >= 2
 
 
 def _default_response_type_debug(contract: Dict[str, Any] | None, source: str | None) -> Dict[str, Any]:

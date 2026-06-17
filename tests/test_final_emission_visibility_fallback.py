@@ -1,8 +1,9 @@
 """Pure owner tests for ``game.final_emission_visibility_fallback``.
 
 This suite owns pure visibility fallback helper behavior: route, payload, metadata,
-annotation, owner-bucket, dispatch, defensive-copy, and logging-payload shaping.
-It does not own visibility legality semantics or gate orchestration.
+annotation, owner-bucket, dispatch, defensive-copy, logging-payload shaping, and
+``standard_visibility_safe_fallback`` candidate assembly/routing. It does not own
+visibility legality semantics or gate orchestration.
 """
 from __future__ import annotations
 
@@ -352,10 +353,15 @@ def test_build_visibility_default_metadata_payload_collects_initial_stamp_kwargs
     assert "fallback_owner_bucket" not in payload.stamp_kwargs()
 
 
-def test_build_visibility_first_mention_default_metadata_payload_collects_ordered_meta_updates() -> None:
-    payload = visibility_fallback.build_visibility_first_mention_default_metadata_payload(
-        default_first_mention_composition_layers=["default_layer"],
+def test_build_visibility_first_mention_default_metadata_payload_collects_ordered_meta_updates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: ["default_layer"],
     )
+    payload = visibility_fallback.build_visibility_first_mention_default_metadata_payload()
 
     assert payload == visibility_fallback.VisibilityFirstMentionDefaultMetadataPayload(
         first_mention_validation_passed=None,
@@ -385,7 +391,14 @@ def test_build_visibility_first_mention_default_metadata_payload_collects_ordere
     ]
 
 
-def test_build_visibility_pre_route_metadata_context_groups_default_payloads() -> None:
+def test_build_visibility_pre_route_metadata_context_groups_default_payloads(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: ["default_layer"],
+    )
     observation = visibility_fallback.VisibilityValidationObservation(
         validation_passed=False,
         violation_kinds=["unseen_entity_reference"],
@@ -396,7 +409,6 @@ def test_build_visibility_pre_route_metadata_context_groups_default_payloads() -
 
     context = visibility_fallback.build_visibility_pre_route_metadata_context(
         observation=observation,
-        default_first_mention_composition_layers=["default_layer"],
     )
 
     assert context == visibility_fallback.VisibilityPreRouteMetadataContext(
@@ -438,7 +450,14 @@ def test_build_visibility_pre_route_metadata_context_groups_default_payloads() -
     assert context.visibility_defaults.stamp_kwargs()["replacement_applied"] is False
 
 
-def test_build_visibility_enforcement_stage_context_groups_pre_route_objects() -> None:
+def test_build_visibility_enforcement_stage_context_groups_pre_route_objects(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: ["default_layer"],
+    )
     validation_result = {
         "ok": False,
         "violations": [
@@ -455,7 +474,6 @@ def test_build_visibility_enforcement_stage_context_groups_pre_route_objects() -
     context = visibility_fallback.build_visibility_enforcement_stage_context(
         candidate_text="Lord Aldric watches the gate.",
         validation_result=validation_result,
-        default_first_mention_composition_layers=["default_layer"],
         tag_list_gate=["known_fact_guard"],
         dbg_gate="recent_dialogue_continuity",
     )
@@ -753,6 +771,40 @@ def test_build_visibility_hard_replacement_plan_collects_side_effect_inputs() ->
     }
 
 
+def test_first_mention_composition_meta_default_shape() -> None:
+    meta = visibility_fallback.first_mention_composition_meta()
+    assert meta == {
+        "first_mention_composition_used": False,
+        "first_mention_composition_layers": {"environment": None, "motion": None, "entities": []},
+    }
+
+
+def test_first_mention_composition_meta_returns_fresh_mutable_containers() -> None:
+    first = visibility_fallback.first_mention_composition_meta()
+    second = visibility_fallback.first_mention_composition_meta()
+    first_layers = first["first_mention_composition_layers"]
+    second_layers = second["first_mention_composition_layers"]
+    assert first_layers == second_layers
+    assert first_layers is not second_layers
+    first_layers["entities"].append("npc_a")
+    assert second_layers["entities"] == []
+
+
+def test_first_mention_composition_meta_populates_optional_layers() -> None:
+    meta = visibility_fallback.first_mention_composition_meta(
+        used=True,
+        environment="Rain on stone.",
+        motion="Crowds press the gate.",
+        entities=["  tavern_runner  ", "", 42, "guard_captain"],
+    )
+    assert meta["first_mention_composition_used"] is True
+    assert meta["first_mention_composition_layers"] == {
+        "environment": "Rain on stone.",
+        "motion": "Crowds press the gate.",
+        "entities": ["tavern_runner", "guard_captain"],
+    }
+
+
 def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
     composition_meta = {
         "first_mention_composition_used": True,
@@ -783,6 +835,29 @@ def test_visibility_selected_fallback_round_trips_legacy_tuple() -> None:
     assert visibility_fallback.VisibilitySelectedFallback.from_legacy_tuple(legacy) == selected
 
 
+def test_visibility_selected_fallback_candidate_matches_direct_dataclass() -> None:
+    composition_meta = {"first_mention_composition_used": False}
+    direct = visibility_fallback.VisibilitySelectedFallback(
+        text="Selected fallback text.",
+        fallback_pool="global_scene_narrative",
+        fallback_kind="narrative_safe_fallback",
+        final_emitted_source="global_scene_fallback",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="global_scene_fallback",
+        composition_meta=composition_meta,
+    )
+    built = visibility_fallback.visibility_selected_fallback_candidate(
+        direct.text,
+        direct.fallback_pool,
+        direct.fallback_kind,
+        direct.final_emitted_source,
+        direct.fallback_strategy,
+        direct.fallback_candidate_source,
+        direct.composition_meta,
+    )
+    assert built == direct
+
+
 def test_block_ai_route_visibility_selector_does_not_mutate_inputs() -> None:
     """Relocated from gate::test_block_ai_route_visibility_and_opening_rt_selectors_do_not_mutate_inputs (visibility portion)."""
     tags = ["a", "b"]
@@ -808,7 +883,7 @@ def test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass(
     from tests.helpers.opening_fallback_evidence import opening_gm_output
 
     gm = opening_gm_output()
-    selected = feg._standard_visibility_safe_fallback(
+    selected = visibility_fallback.standard_visibility_safe_fallback(
         gm_output=gm,
         session={},
         scene={"scene": gm["prompt_context"]["scene"]["public"]},
@@ -824,100 +899,190 @@ def test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass(
     assert round_tripped == selected
 
 
-def test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass() -> None:
-    """Gate global integrity selection returns the canonical visibility dataclass wire."""
+def test_standard_visibility_safe_fallback_resolves_routing_deps_from_owner_modules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import game.final_emission_passive_scene_pressure as passive_scene_pressure
+
+    monkeypatch.setattr(
+        passive_scene_pressure,
+        "_passive_scene_pressure_fallback_candidates",
+        lambda **_: [
+            visibility_fallback.VisibilitySelectedFallback(
+                text="owner passive line",
+                fallback_pool="passive_pool",
+                fallback_kind="passive_kind",
+                final_emitted_source="passive_source",
+                fallback_strategy="standard_safe_fallback",
+                fallback_candidate_source="passive_source",
+                composition_meta=None,
+            )
+        ],
+    )
+    selected = visibility_fallback.standard_visibility_safe_fallback(
+        gm_output={"player_facing_text": "x", "tags": []},
+        session={},
+        scene={"scene": {}},
+        world={},
+        scene_id="yard",
+        eff_resolution={"kind": "observe"},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+    assert selected.text == "owner passive line"
+
+
+def test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Default appliers run visibility → first-mention → referential-clarity without gate injection (BJ-50)."""
+    order: list[str] = []
+    out = {
+        "player_facing_text": "Torchlight holds on wet cobbles near the east lane.",
+        "tags": [],
+    }
+
+    def _track(name: str, fn):
+        def _wrapped(*args: Any, **kwargs: Any) -> dict[str, Any]:
+            order.append(name)
+            return fn(*args, **kwargs)
+
+        return _wrapped
+
+    monkeypatch.setattr(
+        visibility_fallback,
+        "apply_first_mention_enforcement",
+        _track("first_mention", visibility_fallback.apply_first_mention_enforcement),
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "apply_referential_clarity_enforcement",
+        _track("referential", visibility_fallback.apply_referential_clarity_enforcement),
+    )
+
+    visibility_fallback.apply_visibility_enforcement(
+        out,
+        session={},
+        scene={"scene": {}},
+        world={},
+        scene_id="lane_scene",
+        eff_resolution={"kind": "narrate"},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+    )
+
+    assert order == ["first_mention", "referential"]
+
+
+def test_apply_visibility_enforcement_delegates_first_mention_follow_up_to_injected_applier() -> None:
+    calls: list[str] = []
+    out = {
+        "player_facing_text": "Torchlight holds on wet cobbles near the east lane.",
+        "tags": [],
+    }
+
+    def _first_mention_applier(gm: dict[str, Any], **_kwargs: Any) -> dict[str, Any]:
+        calls.append("first_mention")
+        return gm
+
+    result = visibility_fallback.apply_visibility_enforcement(
+        out,
+        session={},
+        scene={"scene": {}},
+        world={},
+        scene_id="lane_scene",
+        eff_resolution={"kind": "narrate"},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+        first_mention_enforcement_applier=_first_mention_applier,
+    )
+    assert calls == ["first_mention"]
+    assert result is out
+    meta = out.get("_final_emission_meta")
+    assert isinstance(meta, dict)
+    assert "first_mention_validation_passed" in meta
+
+
+def test_terminal_pipeline_calls_visibility_owner_directly() -> None:
+    """BJ-73: terminal pipeline calls visibility_fallback owner; gate wrapper removed."""
+    import inspect
+
+    import game.final_emission_gate as feg
+    import game.final_emission_terminal_pipeline as tp
+
+    tp_src = inspect.getsource(tp.run_gate_terminal_enforcement_pipeline)
+    assert "apply_visibility_enforcement(" in tp_src
+    assert "feg._apply_visibility_enforcement" not in tp_src
+    assert not hasattr(feg, "_apply_visibility_enforcement")
+
+
+def test_bj73_visibility_owner_entrypoint_locked() -> None:
+    """BJ-73: visibility enforcement gate delegator removed; owner entrypoint only."""
     import game.final_emission_gate as feg
 
-    scene = {"scene": {"id": "yard", "visible_facts": ["A guard watches the gate."]}}
-    selection_kwargs = {
-        "authoritative_resolution": None,
-        "session": None,
-        "world": None,
-        "res_kind": "observe",
-        "response_type_required": "narration",
+    assert not hasattr(feg, "_apply_visibility_enforcement")
+    assert not hasattr(feg, "_standard_visibility_safe_fallback")
+    assert not hasattr(feg, "_apply_first_mention_enforcement")
+    assert not hasattr(feg, "_apply_referential_clarity_enforcement")
+    assert callable(getattr(visibility_fallback, "apply_visibility_enforcement", None))
+    assert callable(getattr(visibility_fallback, "apply_first_mention_enforcement", None))
+    assert callable(getattr(visibility_fallback, "apply_referential_clarity_enforcement", None))
+
+
+def test_apply_first_mention_enforcement_delegates_referential_clarity_follow_up() -> None:
+    calls: list[str] = []
+    out = {
+        "player_facing_text": "Torchlight holds on wet cobbles near the east lane.",
+        "tags": [],
+        "_final_emission_meta": {},
     }
-    selected = feg._scene_emit_integrity_global_fallback_selection(scene, "yard", **selection_kwargs)
-    assert isinstance(selected, visibility_fallback.VisibilitySelectedFallback)
-    assert selected.final_emitted_source == "global_scene_fallback"
-    assert selected.fallback_pool == "global_scene_narrative"
-    assert selected.fallback_kind == "narrative_safe_fallback"
-    assert selected.fallback_strategy == "standard_safe_fallback"
-    assert selected.fallback_candidate_source == "global_scene_fallback"
-    assert selected.text
+
+    def _referential_applier(gm: dict[str, Any], **_kwargs: Any) -> dict[str, Any]:
+        calls.append("referential")
+        return gm
+
+    result = visibility_fallback.apply_first_mention_enforcement(
+        out,
+        session={},
+        scene={"scene": {}},
+        world={},
+        scene_id="lane_scene",
+        eff_resolution={"kind": "narrate"},
+        active_interlocutor="",
+        strict_social_active=False,
+        strict_social_suppressed_non_social_turn=False,
+        referential_clarity_enforcement_applier=_referential_applier,
+    )
+    assert calls == ["referential"]
+    assert result is out
+    assert out["_final_emission_meta"]["first_mention_validation_passed"] is True
 
 
-def test_passive_scene_pressure_candidates_return_canonical_dataclass() -> None:
-    """Gate passive-pressure selection returns canonical visibility dataclass candidates."""
-    import game.final_emission_gate as feg
-    from game.defaults import default_session, default_world
-    from game.storage import get_scene_runtime
+def test_should_use_neutral_nonprogress_fallback_instead_of_global_stock() -> None:
+    from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 
-    session = default_session()
-    sid = "scene_investigate"
-    rt = get_scene_runtime(session, sid)
-    rt["last_player_action_passive"] = True
-    rt["passive_action_streak"] = 1
-    rt["recent_contextual_leads"] = [
-        {
-            "key": "tattered-man-by-the-shuttered-well",
-            "kind": "visible_suspicious_figure",
-            "subject": "the tattered man",
-            "position": "by the shuttered well",
-            "named": False,
-            "positioned": True,
-            "mentions": 2,
-            "last_turn": 1,
-        }
-    ]
-    scene = {"scene": {"id": sid, "location": "square", "visible_facts": []}}
-    kwargs = {"session": session, "scene": scene, "scene_id": sid}
-    selected = feg._passive_scene_pressure_fallback_candidates(**kwargs)
-    assert selected
-    assert all(isinstance(candidate, visibility_fallback.VisibilitySelectedFallback) for candidate in selected)
-    assert selected[0].final_emitted_source == "passive_scene_pressure_fallback"
-    assert selected[0].fallback_pool == "passive_scene_pressure"
-    assert selected[0].fallback_strategy == "passive_scene_pressure_fallback"
-    assert "passive_scene_pressure:lead_figure" == selected[0].fallback_candidate_source
-
-
-def test_grounded_scene_intro_fallback_candidates_return_canonical_dataclass() -> None:
-    import game.final_emission_gate as feg
-
-    from game.defaults import default_scene, default_session, default_world
-    from game.interaction_context import rebuild_active_scene_entities
-
-    session = default_session()
-    world = default_world()
-    scene = default_scene("frontier_gate")
-    scene["scene"]["visible_facts"] = ["A brazier throws orange sparks over the checkpoint."]
-    sid = "frontier_gate"
-    session["active_scene_id"] = sid
-    session["scene_state"]["active_scene_id"] = sid
-    rebuild_active_scene_entities(session, world, sid, scene_envelope=scene)
-    scene["scene_state"] = dict(session["scene_state"])
-    kwargs = {
-        "session": session,
-        "scene": scene,
-        "world": world,
-        "active_interlocutor": "guard_captain",
+    session = {
+        NPC_PURSUIT_CONTACT_SESSION_KEY: {
+            "commitment_source": "explicit_player_pursuit",
+            "target_npc_id": "town_crier",
+        },
     }
-    selected = feg._grounded_scene_intro_fallback_candidates(**kwargs)
-    assert selected
-    assert all(isinstance(candidate, visibility_fallback.VisibilitySelectedFallback) for candidate in selected)
-    dedup_keys = {
-        (
-            candidate.text,
-            candidate.fallback_pool,
-            candidate.fallback_kind,
-            candidate.final_emitted_source,
-            candidate.fallback_strategy,
-            candidate.fallback_candidate_source,
-        )
-        for candidate in selected
+    resolution = {
+        "kind": "question",
+        "social": {"offscene_target": True},
     }
-    assert len(dedup_keys) == len(selected)
-    assert any(candidate.fallback_pool == "visible_scene_composed_intro" for candidate in selected)
-    assert any(candidate.final_emitted_source == "visible_fact_scene_intro" for candidate in selected)
+    assert visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, resolution) is True
+
+    grounded = {
+        "kind": "question",
+        "social": {"grounded_speaker_id": "town_crier"},
+    }
+    assert visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, grounded) is False
+
+    assert visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(None, resolution) is False
 
 
 def test_build_visibility_first_mention_metadata_payload_collects_composition_values() -> None:
@@ -926,7 +1091,6 @@ def test_build_visibility_first_mention_metadata_payload_collects_composition_va
             "first_mention_composition_used": True,
             "first_mention_composition_layers": ["opening", "entity_intro"],
         },
-        default_first_mention_composition_layers=["default"],
     )
 
     assert payload == visibility_fallback.VisibilityFirstMentionMetadataPayload(
@@ -939,10 +1103,16 @@ def test_build_visibility_first_mention_metadata_payload_collects_composition_va
     }
 
 
-def test_build_visibility_first_mention_metadata_payload_defaults_when_composition_empty() -> None:
+def test_build_visibility_first_mention_metadata_payload_defaults_when_composition_empty(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: ["default"],
+    )
     payload = visibility_fallback.build_visibility_first_mention_metadata_payload(
         composition_meta={},
-        default_first_mention_composition_layers=["default"],
     )
 
     assert payload.meta_updates() == {
@@ -969,7 +1139,6 @@ def test_build_first_mention_selected_fallback_metadata_payload_collects_replace
     payload = visibility_fallback.build_first_mention_selected_fallback_metadata_payload(
         selected_fallback,
         opening_scene_first_mention_preference_used=True,
-        default_first_mention_composition_layers={"environment": None, "motion": None, "entities": []},
     )
 
     assert payload == visibility_fallback.FirstMentionSelectedFallbackMetadataPayload(
@@ -993,8 +1162,15 @@ def test_build_first_mention_selected_fallback_metadata_payload_collects_replace
     assert payload.meta_updates()["first_mention_composition_layers"] is layers
 
 
-def test_build_first_mention_selected_fallback_metadata_payload_uses_default_layers() -> None:
+def test_build_first_mention_selected_fallback_metadata_payload_uses_default_layers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     default_layers = {"environment": None, "motion": None, "entities": []}
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: default_layers,
+    )
     selected_fallback = visibility_fallback.VisibilitySelectedFallback(
         text="Selected fallback text.",
         fallback_pool="global_scene_narrative",
@@ -1008,7 +1184,6 @@ def test_build_first_mention_selected_fallback_metadata_payload_uses_default_lay
     payload = visibility_fallback.build_first_mention_selected_fallback_metadata_payload(
         selected_fallback,
         opening_scene_first_mention_preference_used=False,
-        default_first_mention_composition_layers=default_layers,
     )
 
     assert payload.meta_updates() == {
@@ -1039,7 +1214,6 @@ def test_build_referential_clarity_selected_fallback_metadata_payload_collects_r
 
     payload = visibility_fallback.build_referential_clarity_selected_fallback_metadata_payload(
         selected_fallback,
-        default_first_mention_composition_layers={"environment": None, "motion": None, "entities": []},
     )
 
     assert payload == visibility_fallback.ReferentialClaritySelectedFallbackMetadataPayload(
@@ -1057,8 +1231,15 @@ def test_build_referential_clarity_selected_fallback_metadata_payload_collects_r
     assert payload.meta_updates()["first_mention_composition_layers"] is layers
 
 
-def test_build_referential_clarity_selected_fallback_metadata_payload_uses_default_layers() -> None:
+def test_build_referential_clarity_selected_fallback_metadata_payload_uses_default_layers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     default_layers = {"environment": None, "motion": None, "entities": []}
+    monkeypatch.setattr(
+        visibility_fallback,
+        "default_first_mention_composition_layers",
+        lambda: default_layers,
+    )
     selected_fallback = visibility_fallback.VisibilitySelectedFallback(
         text="Selected fallback text.",
         fallback_pool="global_scene_narrative",
@@ -1071,7 +1252,6 @@ def test_build_referential_clarity_selected_fallback_metadata_payload_uses_defau
 
     payload = visibility_fallback.build_referential_clarity_selected_fallback_metadata_payload(
         selected_fallback,
-        default_first_mention_composition_layers=default_layers,
     )
 
     assert payload.meta_updates() == {
@@ -1315,7 +1495,6 @@ def test_build_visibility_hard_replacement_context_groups_existing_payloads() ->
         observation=observation,
         route="sealed_hard_replace",
         selected_fallback=selected_fallback,
-        default_first_mention_composition_layers=["default"],
         strict_social_active=False,
         active_interlocutor="",
     )
@@ -1560,8 +1739,8 @@ def test_block_ai_visibility_fallback_helper_entrypoints_remain_importable() -> 
         "test_visibility_selected_fallback_round_trips_legacy_tuple",
         "test_block_ai_route_visibility_selector_does_not_mutate_inputs",
         "test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass",
-        "test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass",
-        "test_passive_scene_pressure_candidates_return_canonical_dataclass",
-        "test_grounded_scene_intro_fallback_candidates_return_canonical_dataclass",
+        "test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential",
+        "test_terminal_pipeline_calls_visibility_owner_directly",
+        "test_bj73_visibility_owner_entrypoint_locked",
     ):
         assert callable(getattr(mod, name, None)), name

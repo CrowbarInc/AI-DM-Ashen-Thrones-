@@ -21,7 +21,9 @@ from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_non_strict_stack as non_strict_stack
+import game.final_emission_strict_social_stack as strict_social_stack
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -139,8 +141,8 @@ def test_gate_skips_fallback_behavior_when_uncertainty_inactive() -> None:
 
 def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(monkeypatch: pytest.MonkeyPatch) -> None:
     order: list[str] = []
-    orig_ic = feg._apply_interaction_continuity_emission_step
-    orig_fb = feg._apply_fallback_behavior_layer
+    orig_ic = non_strict_stack.apply_interaction_continuity_emission_step
+    orig_fb = non_strict_stack._apply_fallback_behavior_layer
 
     def wrap_ic(*args, **kwargs):
         order.append("interaction_continuity")
@@ -150,8 +152,8 @@ def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(mon
         order.append("fallback_behavior")
         return orig_fb(*args, **kwargs)
 
-    monkeypatch.setattr(feg, "_apply_interaction_continuity_emission_step", wrap_ic)
-    monkeypatch.setattr(feg, "_apply_fallback_behavior_layer", wrap_fb)
+    monkeypatch.setattr(non_strict_stack, "apply_interaction_continuity_emission_step", wrap_ic)
+    monkeypatch.setattr(non_strict_stack, "_apply_fallback_behavior_layer", wrap_fb)
 
     apply_final_emission_gate(
         {
@@ -172,8 +174,8 @@ def test_gate_runs_fallback_behavior_after_interaction_continuity_non_strict(mon
 def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch: pytest.MonkeyPatch) -> None:
     session, world, sid, resolution = _strict_social_bundle()
     order: list[str] = []
-    orig_ic = feg._apply_interaction_continuity_emission_step
-    orig_fb = feg._apply_fallback_behavior_layer
+    orig_ic = terminal_pipeline.apply_interaction_continuity_emission_step
+    orig_fb = terminal_pipeline._apply_fallback_behavior_layer
 
     def wrap_ic(*args, **kwargs):
         order.append("interaction_continuity")
@@ -183,8 +185,8 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
         order.append("fallback_behavior")
         return orig_fb(*args, **kwargs)
 
-    monkeypatch.setattr(feg, "_apply_interaction_continuity_emission_step", wrap_ic)
-    monkeypatch.setattr(feg, "_apply_fallback_behavior_layer", wrap_fb)
+    monkeypatch.setattr(terminal_pipeline, "apply_interaction_continuity_emission_step", wrap_ic)
+    monkeypatch.setattr(terminal_pipeline, "_apply_fallback_behavior_layer", wrap_fb)
 
     stub_details = {
         "used_internal_fallback": False,
@@ -204,7 +206,7 @@ def test_gate_runs_fallback_behavior_after_strict_social_continuity(monkeypatch:
             dict(stub_details),
         )
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
 
     out = apply_final_emission_gate(
         {
@@ -331,11 +333,11 @@ def test_gate_rewrites_open_call_move_plays_out_meta_leak_into_diegetic_partial(
 
 def test_finalize_emission_output_preserves_duplicate_subject_without_micro_smooth() -> None:
     """Packaging finalize must not merge consecutive short sentences for cadence (removed helper)."""
-    from game.final_emission_gate import _finalize_emission_output
+    from game.final_emission_finalize import finalize_emission_output
 
     pre = "Tavern Runner nods once. Tavern Runner does not answer at once."
     out: dict = {"player_facing_text": pre, "tags": []}
-    _finalize_emission_output(out, pre_gate_text=pre)
+    finalize_emission_output(out, pre_gate_text=pre)
     text = str(out.get("player_facing_text") or "")
     meta = final_emission_meta_from_output(out) or {}
     assert text.count("Tavern Runner") == 2

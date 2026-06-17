@@ -19,7 +19,7 @@ import copy
 from dataclasses import dataclass, replace
 from typing import Any, Callable, Dict, Iterator, Mapping, Optional
 
-import game.final_emission_gate as feg
+import game.final_emission_strict_social_stack as strict_social_stack
 import game.speaker_contract_enforcement as sce
 
 from tests.helpers.gate_equivalence_monkeypatch import (
@@ -59,8 +59,7 @@ def run_isolated_enforce_mirror(
     contract_loader: Optional[Callable[..., Dict[str, Any]]] = None,
 ) -> tuple[str, Dict[str, Any]]:
     """Mirror :func:`~game.final_emission_gate.enforce_emitted_speaker_with_contract` without FEM merge."""
-    # Default to gate namespace so monkeypatches on ``feg.get_speaker_selection_contract`` apply.
-    loader = contract_loader or feg.get_speaker_selection_contract
+    loader = contract_loader or sce.get_speaker_selection_contract
     trace = gm_output.get("trace") if isinstance(gm_output.get("trace"), dict) else None
     md = gm_output.get("metadata") if isinstance(gm_output.get("metadata"), dict) else None
     contract = loader(
@@ -68,7 +67,7 @@ def run_isolated_enforce_mirror(
         metadata=md,
         trace=trace,
     )
-    val = feg.validate_emitted_speaker_against_contract(
+    val = sce.validate_emitted_speaker_against_contract(
         text,
         contract,
         resolution=eff_resolution if isinstance(eff_resolution, dict) else resolution,
@@ -94,7 +93,7 @@ def run_isolated_enforce_mirror(
     )
     payload["repair"] = rdbg
     payload["final_reason_code"] = final_rc
-    payload["post_validation"] = feg.validate_emitted_speaker_against_contract(
+    payload["post_validation"] = sce.validate_emitted_speaker_against_contract(
         repaired,
         contract,
         resolution=eff_resolution if isinstance(eff_resolution, dict) else resolution,
@@ -224,7 +223,7 @@ class ShadowEnforceCapture:
 def install_dual_run_enforce(monkeypatch, holder: ShadowEnforceCapture) -> None:
     """Wrap ``enforce_emitted_speaker_with_contract``: snapshot pre-merge state, then dual-run compare."""
 
-    orig = feg.enforce_emitted_speaker_with_contract
+    orig = strict_social_stack.enforce_emitted_speaker_with_contract
 
     def wrapped(text: str, **kwargs: Any) -> tuple[str, Dict[str, Any]]:
         gm_snap = copy.deepcopy(kwargs["gm_output"])
@@ -252,4 +251,4 @@ def install_dual_run_enforce(monkeypatch, holder: ShadowEnforceCapture) -> None:
         )
         return gate_text, gate_payload
 
-    monkeypatch.setattr(feg, "enforce_emitted_speaker_with_contract", wrapped)
+    monkeypatch.setattr(strict_social_stack, "enforce_emitted_speaker_with_contract", wrapped)

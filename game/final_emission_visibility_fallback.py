@@ -1,10 +1,13 @@
-"""Visibility fallback routing helpers. This module must not author fallback prose or write final output."""
+"""Visibility fallback routing helpers. Terminal pipeline calls
+:func:`apply_visibility_enforcement` directly. This module must not author fallback prose
+or write final output.
+"""
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping
+from collections.abc import Callable, Mapping, MutableMapping
 from dataclasses import dataclass
 import re
-from typing import Any, Literal, Sequence
+from typing import Any, Dict, List, Literal, Sequence
 
 from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
@@ -14,6 +17,15 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
 )
+from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
+from game.final_emission_text import _normalize_text
+from game.interaction_context import inspect as inspect_interaction_context
+from game.narration_visibility import (
+    validate_player_facing_first_mentions,
+    validate_player_facing_referential_clarity,
+    validate_player_facing_visibility,
+)
+from game.social import SOCIAL_KINDS
 
 _CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile("[\\\"\u201c\u201d'\u2018\u2019]"),
@@ -186,6 +198,50 @@ class VisibilitySelectedFallback:
             self.fallback_candidate_source,
             self.composition_meta,
         )
+
+
+def default_first_mention_composition_layers() -> Dict[str, Any]:
+    return {"environment": None, "motion": None, "entities": []}
+
+
+def first_mention_composition_meta(
+    *,
+    used: bool = False,
+    environment: str | None = None,
+    motion: str | None = None,
+    entities: List[str] | None = None,
+) -> Dict[str, Any]:
+    layers = default_first_mention_composition_layers()
+    if environment:
+        layers["environment"] = environment
+    if motion:
+        layers["motion"] = motion
+    if isinstance(entities, list):
+        layers["entities"] = [str(entity).strip() for entity in entities if isinstance(entity, str) and str(entity).strip()]
+    return {
+        "first_mention_composition_used": used,
+        "first_mention_composition_layers": layers,
+    }
+
+
+def visibility_selected_fallback_candidate(
+    fallback_text: str,
+    fallback_pool: str,
+    fallback_kind: str,
+    final_emitted_source: str,
+    fallback_strategy: str,
+    fallback_candidate_source: str,
+    composition_meta: Mapping[str, Any],
+) -> VisibilitySelectedFallback:
+    return VisibilitySelectedFallback(
+        text=fallback_text,
+        fallback_pool=fallback_pool,
+        fallback_kind=fallback_kind,
+        final_emitted_source=final_emitted_source,
+        fallback_strategy=fallback_strategy,
+        fallback_candidate_source=fallback_candidate_source,
+        composition_meta=composition_meta,
+    )
 
 
 @dataclass(frozen=True)
@@ -462,10 +518,7 @@ def build_visibility_default_metadata_payload(
     )
 
 
-def build_visibility_first_mention_default_metadata_payload(
-    *,
-    default_first_mention_composition_layers: Any,
-) -> VisibilityFirstMentionDefaultMetadataPayload:
+def build_visibility_first_mention_default_metadata_payload() -> VisibilityFirstMentionDefaultMetadataPayload:
     return VisibilityFirstMentionDefaultMetadataPayload(
         first_mention_validation_passed=None,
         first_mention_replacement_applied=False,
@@ -477,19 +530,16 @@ def build_visibility_first_mention_default_metadata_payload(
         first_mention_fallback_candidate_source=None,
         opening_scene_first_mention_preference_used=False,
         first_mention_composition_used=False,
-        first_mention_composition_layers=default_first_mention_composition_layers,
+        first_mention_composition_layers=default_first_mention_composition_layers(),
     )
 
 
 def build_visibility_pre_route_metadata_context(
     *,
     observation: VisibilityValidationObservation,
-    default_first_mention_composition_layers: Any,
 ) -> VisibilityPreRouteMetadataContext:
     return VisibilityPreRouteMetadataContext(
-        first_mention_defaults=build_visibility_first_mention_default_metadata_payload(
-            default_first_mention_composition_layers=default_first_mention_composition_layers,
-        ),
+        first_mention_defaults=build_visibility_first_mention_default_metadata_payload(),
         visibility_defaults=build_visibility_default_metadata_payload(observation),
     )
 
@@ -515,7 +565,6 @@ def build_visibility_enforcement_stage_context(
     *,
     candidate_text: str,
     validation_result: Mapping[str, Any] | None,
-    default_first_mention_composition_layers: Any,
     tag_list_gate: Sequence[str],
     dbg_gate: str,
 ) -> VisibilityEnforcementStageContext:
@@ -525,7 +574,6 @@ def build_visibility_enforcement_stage_context(
     )
     pre_route_metadata = build_visibility_pre_route_metadata_context(
         observation=pre_route_validation.observation,
-        default_first_mention_composition_layers=default_first_mention_composition_layers,
     )
     route_decision_inputs = build_visibility_route_decision_inputs(
         tag_list_gate=tag_list_gate,
@@ -655,13 +703,13 @@ def build_visibility_hard_replacement_plan(
 def build_visibility_first_mention_metadata_payload(
     *,
     composition_meta: Mapping[str, Any],
-    default_first_mention_composition_layers: Any,
 ) -> VisibilityFirstMentionMetadataPayload:
+    default_layers = default_first_mention_composition_layers()
     return VisibilityFirstMentionMetadataPayload(
         first_mention_composition_used=bool(composition_meta.get("first_mention_composition_used")),
         first_mention_composition_layers=composition_meta.get(
             "first_mention_composition_layers",
-            default_first_mention_composition_layers,
+            default_layers,
         ),
     )
 
@@ -670,9 +718,9 @@ def build_first_mention_selected_fallback_metadata_payload(
     selected_fallback: VisibilitySelectedFallback,
     *,
     opening_scene_first_mention_preference_used: bool,
-    default_first_mention_composition_layers: Any,
 ) -> FirstMentionSelectedFallbackMetadataPayload:
     composition_meta = selected_fallback.composition_meta
+    default_layers = default_first_mention_composition_layers()
     return FirstMentionSelectedFallbackMetadataPayload(
         first_mention_validation_passed=False,
         first_mention_replacement_applied=True,
@@ -682,24 +730,23 @@ def build_first_mention_selected_fallback_metadata_payload(
         first_mention_composition_used=bool(composition_meta.get("first_mention_composition_used")),
         first_mention_composition_layers=composition_meta.get(
             "first_mention_composition_layers",
-            default_first_mention_composition_layers,
+            default_layers,
         ),
     )
 
 
 def build_referential_clarity_selected_fallback_metadata_payload(
     selected_fallback: VisibilitySelectedFallback,
-    *,
-    default_first_mention_composition_layers: Any,
 ) -> ReferentialClaritySelectedFallbackMetadataPayload:
     composition_meta = selected_fallback.composition_meta
+    default_layers = default_first_mention_composition_layers()
     return ReferentialClaritySelectedFallbackMetadataPayload(
         referential_clarity_validation_passed=False,
         referential_clarity_replacement_applied=True,
         first_mention_composition_used=bool(composition_meta.get("first_mention_composition_used")),
         first_mention_composition_layers=composition_meta.get(
             "first_mention_composition_layers",
-            default_first_mention_composition_layers,
+            default_layers,
         ),
     )
 
@@ -770,7 +817,6 @@ def build_visibility_hard_replacement_context(
         "sealed_hard_replace",
     ],
     selected_fallback: VisibilitySelectedFallback,
-    default_first_mention_composition_layers: Any,
     strict_social_active: bool,
     active_interlocutor: str,
 ) -> VisibilityHardReplacementContext:
@@ -790,7 +836,6 @@ def build_visibility_hard_replacement_context(
     )
     first_mention_payload = build_visibility_first_mention_metadata_payload(
         composition_meta=selected_fallback.composition_meta,
-        default_first_mention_composition_layers=default_first_mention_composition_layers,
     )
     logging_payload = build_visibility_hard_replacement_logging_payload(
         strict_social_active=strict_social_active,
@@ -942,3 +987,802 @@ def stamp_visibility_fallback_metadata(
             fallback_kind=fallback_kind or "",
             final_emitted_source=final_emitted_source or "",
         )
+
+
+def _should_use_neutral_nonprogress_fallback_instead_of_global_stock(
+    session: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+) -> bool:
+    """True when parser-built NPC-target pursuit lacks grounded contact (avoid global stock fallback)."""
+    if not isinstance(session, dict):
+        return False
+    ctx = session.get(NPC_PURSUIT_CONTACT_SESSION_KEY)
+    if not isinstance(ctx, dict):
+        return False
+    if str(ctx.get("commitment_source") or "").strip() != "explicit_player_pursuit":
+        return False
+    if not isinstance(eff_resolution, dict):
+        return False
+    rk = str(eff_resolution.get("kind") or "").strip().lower()
+    if rk not in SOCIAL_KINDS:
+        return False
+    target = str(ctx.get("target_npc_id") or "").strip()
+    if not target:
+        return False
+    soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}
+    if soc.get("offscene_target"):
+        return True
+    gs = str(soc.get("grounded_speaker_id") or "").strip()
+    if gs and gs == target:
+        return False
+    if soc.get("target_resolved") is True and str(soc.get("npc_id") or "").strip() == target:
+        return False
+    return True
+
+
+def standard_visibility_safe_fallback(
+    *,
+    gm_output: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    enforce_first_mentions: bool = False,
+    enforce_referential_clarity: bool = False,
+    prefer_grounded_scene_intro: bool = False,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+) -> VisibilitySelectedFallback:
+    """Assemble and validate visibility-safe fallback candidates in canonical gate order."""
+    from game.anti_reset_emission_guard import (
+        anti_reset_suppresses_intro_style_fallbacks,
+        local_exchange_continuation_fallback_line,
+        should_replace_candidate_intro_fallback,
+    )
+    from game.diegetic_fallback_narration import npc_pursuit_neutral_nonprogress_fallback_line
+    from game.final_emission_first_mention_composition import _grounded_scene_intro_fallback_candidates
+    from game.final_emission_opening_fallback import opening_scene_safe_fallback_selection
+    from game.final_emission_opening_mode import _opening_mode_active_for_turn
+    from game.final_emission_passive_scene_pressure import (
+        _passive_scene_pressure_due_for_fallback,
+        _passive_scene_pressure_fallback_candidates,
+    )
+    from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
+    from game.final_emission_scene_facts import _augment_scene_with_runtime_visible_leads
+    from game.social_exchange_emission import (
+        _npc_display_name_for_emission,
+        minimal_social_emergency_fallback_line,
+    )
+
+    if _opening_mode_active_for_turn(gm_output, eff_resolution):
+        return opening_scene_safe_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=first_mention_composition_meta,
+        )
+
+    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
+    mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
+    validation_scene = _augment_scene_with_runtime_visible_leads(
+        scene,
+        session=session if isinstance(session, dict) else None,
+        scene_id=scene_id,
+    )
+    suppress_intro = anti_reset_suppresses_intro_style_fallbacks(
+        session,
+        validation_scene if isinstance(validation_scene, dict) else scene,
+        world,
+        scene_id,
+        eff_resolution,
+    )
+    auth_res = (
+        emit_integrity_authoritative_resolution
+        if isinstance(emit_integrity_authoritative_resolution, dict)
+        else (eff_resolution if isinstance(eff_resolution, dict) else None)
+    )
+    rk_emit = str(emit_integrity_res_kind or "").strip().lower()
+    if not rk_emit and isinstance(eff_resolution, dict):
+        rk_emit = str(eff_resolution.get("kind") or "").strip().lower()
+    rt_emit = str(emit_integrity_response_type_required or "").strip()
+    fallback_candidates: List[VisibilitySelectedFallback] = []
+
+    if strict_social_active and isinstance(eff_resolution, dict):
+        social_fallback = minimal_social_emergency_fallback_line(eff_resolution)
+        fallback_candidates.append(
+            visibility_selected_fallback_candidate(
+                social_fallback,
+                "strict_social_visibility_minimal",
+                "visibility_minimal_social_fallback",
+                "minimal_social_emergency_fallback",
+                "standard_safe_fallback",
+                "minimal_social_emergency_fallback",
+                first_mention_composition_meta(),
+            )
+        )
+    else:
+        fallback_candidates.extend(
+            _passive_scene_pressure_fallback_candidates(
+                session=session if isinstance(session, dict) else None,
+                scene=scene,
+                scene_id=scene_id,
+            )
+        )
+        if prefer_grounded_scene_intro and not suppress_intro:
+            fallback_candidates.extend(
+                _grounded_scene_intro_fallback_candidates(
+                    session=session,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene,
+                    world=world,
+                    active_interlocutor=active_interlocutor,
+                )
+            )
+
+    sid = str(scene_id or "").strip()
+    if (
+        active_interlocutor
+        and mode == "social"
+        and isinstance(world, dict)
+        and not strict_social_suppressed_non_social_turn
+        and not strict_social_active
+    ):
+        mini_res: Dict[str, Any] = {
+            "kind": "question",
+            "social": {
+                "npc_id": active_interlocutor,
+                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
+                "social_intent_class": "social_exchange",
+            },
+        }
+        fallback_candidates.append(
+            visibility_selected_fallback_candidate(
+                minimal_social_emergency_fallback_line(mini_res),
+                "social_active_interlocutor_minimal",
+                "social_interlocutor_fallback",
+                "social_interlocutor_minimal_fallback",
+                "standard_safe_fallback",
+                "social_interlocutor_minimal_fallback",
+                first_mention_composition_meta(),
+            )
+        )
+
+    if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
+        fallback_candidates.append(
+            visibility_selected_fallback_candidate(
+                npc_pursuit_neutral_nonprogress_fallback_line(),
+                "npc_pursuit_fail_closed_neutral",
+                "npc_pursuit_neutral_nonprogress",
+                "npc_pursuit_neutral_fallback",
+                "standard_safe_fallback",
+                "npc_pursuit_neutral_fallback",
+                first_mention_composition_meta(),
+            )
+        )
+    elif not strict_social_active and not _passive_scene_pressure_due_for_fallback(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=scene_id,
+    ):
+        if suppress_intro:
+            fallback_candidates.append(
+                visibility_selected_fallback_candidate(
+                    local_exchange_continuation_fallback_line(
+                        session=session if isinstance(session, dict) else None,
+                        world=world if isinstance(world, dict) else None,
+                        scene_id=scene_id,
+                        resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+                    ),
+                    "anti_reset_local_continuation",
+                    "anti_reset_continuation_fallback",
+                    "anti_reset_local_continuation_fallback",
+                    "standard_safe_fallback",
+                    "anti_reset_local_continuation_fallback",
+                    first_mention_composition_meta(),
+                )
+            )
+        else:
+            fallback_candidates.append(
+                _scene_emit_integrity_global_fallback_selection(
+                    scene if isinstance(scene, dict) else None,
+                    sid,
+                    authoritative_resolution=auth_res,
+                    session=session if isinstance(session, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                    res_kind=rk_emit,
+                    response_type_required=rt_emit,
+                )
+            )
+
+    for selected in fallback_candidates:
+        fallback_text = selected.text
+        final_emitted_source = selected.final_emitted_source
+        if not _normalize_text(fallback_text):
+            continue
+        if suppress_intro and should_replace_candidate_intro_fallback(
+            fallback_text,
+            scene_envelope=validation_scene if isinstance(validation_scene, dict) else scene,
+            emitter_source=final_emitted_source,
+            suppress_intro=True,
+        ):
+            continue
+        validation = validate_player_facing_visibility(
+            fallback_text,
+            session=session if isinstance(session, dict) else None,
+            scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+        )
+        if validation.get("ok") is True:
+            if enforce_first_mentions:
+                first_mention_validation = validate_player_facing_first_mentions(
+                    fallback_text,
+                    session=session if isinstance(session, dict) else None,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                )
+                if first_mention_validation.get("ok") is not True:
+                    continue
+            if enforce_referential_clarity:
+                referential_clarity_validation = validate_player_facing_referential_clarity(
+                    fallback_text,
+                    session=session if isinstance(session, dict) else None,
+                    scene=validation_scene if isinstance(validation_scene, dict) else scene if isinstance(scene, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                )
+                if referential_clarity_validation.get("ok") is not True:
+                    continue
+            return selected
+
+    if strict_social_active and isinstance(eff_resolution, dict):
+        return visibility_selected_fallback_candidate(
+            minimal_social_emergency_fallback_line(eff_resolution),
+            "strict_social_visibility_minimal",
+            "visibility_minimal_social_fallback",
+            "minimal_social_emergency_fallback",
+            "standard_safe_fallback",
+            "minimal_social_emergency_fallback",
+            first_mention_composition_meta(),
+        )
+
+    passive_candidates = _passive_scene_pressure_fallback_candidates(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=scene_id,
+    )
+    if passive_candidates:
+        return passive_candidates[0]
+
+    if suppress_intro:
+        return visibility_selected_fallback_candidate(
+            local_exchange_continuation_fallback_line(
+                session=session if isinstance(session, dict) else None,
+                world=world if isinstance(world, dict) else None,
+                scene_id=scene_id,
+                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            ),
+            "anti_reset_local_continuation",
+            "anti_reset_continuation_fallback",
+            "anti_reset_local_continuation_fallback",
+            "standard_safe_fallback",
+            "anti_reset_local_continuation_fallback",
+            first_mention_composition_meta(),
+        )
+    return _scene_emit_integrity_global_fallback_selection(
+        scene if isinstance(scene, dict) else None,
+        sid,
+        authoritative_resolution=auth_res,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=rk_emit,
+        response_type_required=rt_emit,
+    )
+
+
+def apply_visibility_enforcement(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+    first_mention_enforcement_applier: Callable[..., Dict[str, Any]] | None = None,
+) -> Dict[str, Any]:
+    """Visibility enforcement orchestration owner; first-mention follow-up defaults in-module."""
+    if first_mention_enforcement_applier is None:
+        first_mention_enforcement_applier = apply_first_mention_enforcement
+    from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+    from game.final_emission_meta import ensure_final_emission_meta_dict
+    from game.final_emission_referential_clarity import _apply_default_referential_clarity_meta
+    from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
+    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+
+    candidate_text = _normalize_text(out.get("player_facing_text"))
+    validation = validate_player_facing_visibility(
+        candidate_text,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    meta = ensure_final_emission_meta_dict(out)
+    tag_list_gate = [str(t) for t in (out.get("tags") or []) if isinstance(t, str)]
+    dbg_gate = str(out.get("debug_notes") or "")
+    visibility_stage_context = build_visibility_enforcement_stage_context(
+        candidate_text=candidate_text,
+        validation_result=validation,
+        tag_list_gate=tag_list_gate,
+        dbg_gate=dbg_gate,
+    )
+    candidate_text = visibility_stage_context.pre_route_validation.candidate_text
+    visibility_observation = visibility_stage_context.pre_route_validation.observation
+    visibility_pre_route_metadata_context = visibility_stage_context.pre_route_metadata
+    for key, value in visibility_pre_route_metadata_context.first_mention_defaults.meta_updates().items():
+        meta[key] = value
+    _apply_default_referential_clarity_meta(meta, passed=None)
+    stamp_visibility_fallback_metadata(
+        meta,
+        **visibility_pre_route_metadata_context.visibility_defaults.stamp_kwargs(),
+    )
+
+    first_mention_kwargs = {
+        "session": session,
+        "scene": scene,
+        "world": world,
+        "scene_id": scene_id,
+        "eff_resolution": eff_resolution,
+        "active_interlocutor": active_interlocutor,
+        "strict_social_active": strict_social_active,
+        "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+        "grounded_speaker_first_mention_exemption_entity_id": grounded_speaker_first_mention_exemption_entity_id,
+        "emit_integrity_authoritative_resolution": emit_integrity_authoritative_resolution,
+        "emit_integrity_res_kind": emit_integrity_res_kind,
+        "emit_integrity_response_type_required": emit_integrity_response_type_required,
+    }
+
+    if visibility_observation.validation_passed:
+        return first_mention_enforcement_applier(out, **first_mention_kwargs)
+
+    visibility_route_decision_inputs = visibility_stage_context.route_decision_inputs
+    route = route_visibility_enforcement_after_failed_validation(
+        tag_list_gate=visibility_route_decision_inputs.tag_list_gate,
+        dbg_gate=visibility_route_decision_inputs.dbg_gate,
+        violation_kinds=visibility_route_decision_inputs.violation_kinds,
+        checked_entities=visibility_route_decision_inputs.checked_entities,
+        checked_facts=visibility_route_decision_inputs.checked_facts,
+        candidate_text=visibility_route_decision_inputs.candidate_text,
+    )
+    visibility_route_dispatch_context = build_visibility_route_dispatch_context(
+        observation=visibility_observation,
+        route=route,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        emit_integrity_response_type_required=emit_integrity_response_type_required,
+        response_type_required_meta=meta.get("response_type_required"),
+    )
+    if visibility_route_dispatch_context.route == "continuity_lead_exemption":
+        non_replacement_context = visibility_route_dispatch_context.non_replacement_context
+        assert non_replacement_context is not None
+        stamp_visibility_fallback_metadata(
+            meta,
+            **non_replacement_context.route_metadata_outcome.stamp_kwargs(),
+        )
+        return first_mention_enforcement_applier(out, **first_mention_kwargs)
+
+    if visibility_route_dispatch_context.route == "concrete_interaction_no_hard_replace":
+        non_replacement_context = visibility_route_dispatch_context.non_replacement_context
+        assert non_replacement_context is not None
+        stamp_visibility_fallback_metadata(
+            meta,
+            **non_replacement_context.route_metadata_outcome.stamp_kwargs(),
+        )
+        return out
+
+    visibility_selection_inputs = visibility_route_dispatch_context.selection_inputs
+    assert visibility_selection_inputs is not None
+    visibility_selected_fallback = standard_visibility_safe_fallback(
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=visibility_selection_inputs.strict_social_route,
+        strict_social_suppressed_non_social_turn=visibility_selection_inputs.strict_social_suppressed_non_social_turn,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=visibility_selection_inputs.emit_integrity_response_type_required,
+    )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_visibility_enforcement",
+    )
+    visibility_hard_replacement_context = build_visibility_hard_replacement_context(
+        observation=visibility_observation,
+        route=route,
+        selected_fallback=visibility_selected_fallback,
+        strict_social_active=strict_social_active,
+        active_interlocutor=active_interlocutor,
+    )
+    visibility_hard_replacement_plan = visibility_hard_replacement_context.replacement_plan
+    out["player_facing_text"] = visibility_hard_replacement_plan.fallback_text
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = _dedupe_preserve_order(
+        [str(t) for t in tags if isinstance(t, str)] + visibility_hard_replacement_plan.annotations.tags_to_add
+    )
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (dbg + " | " if dbg else "") + visibility_hard_replacement_plan.annotations.debug_notes_to_add
+
+    prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=visibility_hard_replacement_plan.final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=None,
+    )
+    stamp_visibility_fallback_metadata(meta, **visibility_hard_replacement_plan.route_metadata_outcome.stamp_kwargs())
+    first_mention_metadata_payload = visibility_hard_replacement_context.first_mention_payload
+    for key, value in first_mention_metadata_payload.meta_updates().items():
+        meta[key] = value
+
+    visibility_logging_payload = visibility_hard_replacement_context.logging_payload
+    log_final_emission_decision(visibility_logging_payload.decision_payload())
+    log_final_emission_trace(visibility_logging_payload.trace_payload(meta))
+    return out
+
+
+def apply_first_mention_enforcement(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+    referential_clarity_enforcement_applier: Callable[..., Dict[str, Any]] | None = None,
+) -> Dict[str, Any]:
+    """First-mention enforcement orchestration owner; referential-clarity follow-up defaults in-module."""
+    if referential_clarity_enforcement_applier is None:
+        referential_clarity_enforcement_applier = apply_referential_clarity_enforcement
+    from game.anti_reset_emission_guard import (
+        _opening_scene_preference_active,
+        anti_reset_suppresses_intro_style_fallbacks,
+    )
+    from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+    from game.final_emission_referential_clarity import _apply_default_referential_clarity_meta
+    from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
+    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+
+    candidate_text = _normalize_text(out.get("player_facing_text"))
+    validation = validate_player_facing_first_mentions(
+        candidate_text,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
+    )
+    meta = out.get("_final_emission_meta") if isinstance(out.get("_final_emission_meta"), dict) else {}
+    violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
+    checked_entities = validation.get("checked_entities") if isinstance(validation.get("checked_entities"), list) else []
+    violation_kinds = _dedupe_preserve_order(
+        [str(v.get("kind") or "") for v in violations if isinstance(v, dict) and str(v.get("kind") or "").strip()]
+    )
+    leading_pronoun_detected = bool(validation.get("leading_pronoun_detected"))
+    first_explicit_entity_offset = validation.get("first_explicit_entity_offset")
+    if not isinstance(first_explicit_entity_offset, int):
+        first_explicit_entity_offset = None
+
+    meta["first_mention_validation_passed"] = validation.get("ok") is True
+    meta["first_mention_replacement_applied"] = False
+    meta["first_mention_violation_kinds"] = violation_kinds
+    meta["first_mention_checked_entities"] = checked_entities
+    meta["first_mention_leading_pronoun_detected"] = leading_pronoun_detected
+    meta["first_mention_first_explicit_entity_offset"] = first_explicit_entity_offset
+    meta["first_mention_fallback_strategy"] = None
+    meta["first_mention_fallback_candidate_source"] = None
+    meta["opening_scene_first_mention_preference_used"] = False
+    meta["first_mention_composition_used"] = False
+    meta["first_mention_composition_layers"] = default_first_mention_composition_layers()
+    meta["first_mention_strict_social_grounded_speaker_exemption_entity_id"] = (
+        grounded_speaker_first_mention_exemption_entity_id
+    )
+    _apply_default_referential_clarity_meta(meta, passed=None)
+
+    referential_clarity_kwargs = {
+        "session": session,
+        "scene": scene,
+        "world": world,
+        "scene_id": scene_id,
+        "eff_resolution": eff_resolution,
+        "active_interlocutor": active_interlocutor,
+        "strict_social_active": strict_social_active,
+        "strict_social_suppressed_non_social_turn": strict_social_suppressed_non_social_turn,
+        "grounded_speaker_first_mention_exemption_entity_id": grounded_speaker_first_mention_exemption_entity_id,
+        "emit_integrity_authoritative_resolution": emit_integrity_authoritative_resolution,
+        "emit_integrity_res_kind": emit_integrity_res_kind,
+        "emit_integrity_response_type_required": emit_integrity_response_type_required,
+    }
+
+    if validation.get("ok") is True:
+        return referential_clarity_enforcement_applier(out, **referential_clarity_kwargs)
+
+    if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
+        meta["first_mention_validation_passed"] = None
+        return out
+
+    opening_scene_preference_used = _opening_scene_preference_active(session)
+    suppress_intro = anti_reset_suppresses_intro_style_fallbacks(
+        session,
+        scene,
+        world,
+        scene_id,
+        eff_resolution,
+    )
+    prefer_grounded_scene_intro = not suppress_intro
+
+    first_mention_selected_fallback = standard_visibility_safe_fallback(
+        gm_output=out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=True,
+        enforce_referential_clarity=True,
+        prefer_grounded_scene_intro=prefer_grounded_scene_intro,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=str(
+            emit_integrity_response_type_required or meta.get("response_type_required") or ""
+        ),
+    )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_first_mention_enforcement",
+    )
+    out["player_facing_text"] = first_mention_selected_fallback.text
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = _dedupe_preserve_order(
+        [str(t) for t in tags if isinstance(t, str)]
+        + ["final_emission_gate_replaced", "first_mention_enforcement_replaced"]
+        + [f"first_mention_violation:{kind}" for kind in violation_kinds]
+    )
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (
+        (dbg + " | " if dbg else "")
+        + "final_emission_gate:first_mention_replaced:"
+        + ",".join(violation_kinds[:8])
+    )
+
+    prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=first_mention_selected_fallback.final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=first_mention_selected_fallback.composition_meta,
+    )
+    first_mention_selected_fallback_metadata_payload = build_first_mention_selected_fallback_metadata_payload(
+        first_mention_selected_fallback,
+        opening_scene_first_mention_preference_used=opening_scene_preference_used,
+    )
+    for key, value in first_mention_selected_fallback_metadata_payload.meta_updates().items():
+        meta[key] = value
+
+    first_mention_replacement_logging_payload = build_first_mention_replacement_logging_payload(
+        first_mention_selected_fallback,
+        strict_social_active=strict_social_active,
+        violation_kinds=violation_kinds,
+        active_interlocutor=active_interlocutor,
+    )
+    log_final_emission_decision(
+        first_mention_replacement_logging_payload.decision_payload()
+    )
+    log_final_emission_trace({**meta, "stage": "final_emission_gate_first_mention_replace"})
+    return referential_clarity_enforcement_applier(out, **referential_clarity_kwargs)
+
+
+def apply_referential_clarity_enforcement(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    grounded_speaker_first_mention_exemption_entity_id: str | None = None,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+) -> Dict[str, Any]:
+    """Referential-clarity enforcement orchestration owner."""
+    from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+    from game.final_emission_meta import ensure_final_emission_meta_dict
+    from game.final_emission_referential_clarity import (
+        _build_referential_clarity_violation_sample,
+        _referential_clarity_violations_have_multi_entity_candidates,
+        _referential_clarity_violations_only_dialogue_attribution_they,
+        _try_strict_social_local_pronoun_substitution_repair,
+    )
+    from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
+    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+
+    candidate_text = _normalize_text(out.get("player_facing_text"))
+    validation = validate_player_facing_referential_clarity(
+        candidate_text,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    meta = ensure_final_emission_meta_dict(out)
+    violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
+    checked_entities = validation.get("checked_entities") if isinstance(validation.get("checked_entities"), list) else []
+    violation_kinds = _dedupe_preserve_order(
+        [str(v.get("kind") or "") for v in violations if isinstance(v, dict) and str(v.get("kind") or "").strip()]
+    )
+    meta["referential_clarity_validation_passed"] = validation.get("ok") is True
+    meta["referential_clarity_replacement_applied"] = False
+    meta["referential_clarity_violation_kinds"] = violation_kinds
+    meta["referential_clarity_checked_entities"] = checked_entities
+    meta["referential_clarity_violation_sample"] = _build_referential_clarity_violation_sample(violations)
+    meta["referential_clarity_local_substitution_attempted"] = False
+    meta["referential_clarity_local_substitution_applied"] = False
+    meta["referential_clarity_local_substitution_token"] = None
+    meta["referential_clarity_local_substitution_replacement"] = None
+    meta["referential_clarity_fallback_avoided"] = False
+    meta["referential_clarity_fallback_after_failed_local_repair"] = False
+
+    if validation.get("ok") is True:
+        return out
+
+    if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
+        if not violations:
+            meta["referential_clarity_validation_passed"] = None
+            return out
+        if not _referential_clarity_violations_have_multi_entity_candidates(violations) and (
+            _referential_clarity_violations_only_dialogue_attribution_they(violations)
+        ):
+            meta["referential_clarity_validation_passed"] = True
+            meta["referential_clarity_replacement_applied"] = False
+            meta["referential_clarity_violation_kinds"] = []
+            meta["referential_clarity_violation_sample"] = []
+            return out
+
+    response_type_req = str(meta.get("response_type_required") or "").strip().lower()
+    if (
+        strict_social_active
+        and response_type_req == "dialogue"
+        and not strict_social_suppressed_non_social_turn
+    ):
+        repaired, subst_dbg = _try_strict_social_local_pronoun_substitution_repair(
+            candidate_text,
+            violations=[v for v in violations if isinstance(v, dict)],
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=scene_id,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            active_interlocutor=active_interlocutor,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
+        )
+        for k, val in subst_dbg.items():
+            meta[k] = val
+        if repaired is not None:
+            out["player_facing_text"] = repaired
+            meta["referential_clarity_validation_passed"] = True
+            meta["referential_clarity_replacement_applied"] = False
+            meta["referential_clarity_violation_kinds"] = []
+            meta["referential_clarity_violation_sample"] = []
+            tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+            out["tags"] = _dedupe_preserve_order(
+                [str(t) for t in tags if isinstance(t, str)] + ["referential_clarity_local_substitution"]
+            )
+            gate_out_text = _normalize_text(out.get("player_facing_text"))
+            meta["post_gate_mutation_detected"] = bool(meta.get("post_gate_mutation_detected")) or (
+                candidate_text != gate_out_text
+            )
+            meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+            log_final_emission_decision(
+                {
+                    "stage": "final_emission_gate_referential_clarity",
+                    "social_route": strict_social_active,
+                    "candidate_ok": True,
+                    "rejection_reasons": [],
+                    "fallback_pool": "referential_clarity_local_substitution",
+                    "fallback_kind": "none",
+                    "active_interlocutor": active_interlocutor or None,
+                }
+            )
+            log_final_emission_trace(
+                {**meta, "stage": "final_emission_gate_referential_clarity_local_substitution"}
+            )
+            return out
+
+    referential_clarity_selected_fallback = standard_visibility_safe_fallback(
+        gm_output=out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=True,
+        enforce_referential_clarity=True,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=str(
+            emit_integrity_response_type_required or meta.get("response_type_required") or ""
+        ),
+    )
+    assert_final_emission_mutation_allowed(
+        "hard_replace_illegal_output_with_sealed_fallback",
+        source="gate._apply_referential_clarity_enforcement",
+    )
+    out["player_facing_text"] = referential_clarity_selected_fallback.text
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    out["tags"] = _dedupe_preserve_order(
+        [str(t) for t in tags if isinstance(t, str)]
+        + ["final_emission_gate_replaced", "referential_clarity_enforcement_replaced"]
+        + [f"referential_clarity_violation:{kind}" for kind in violation_kinds]
+    )
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (
+        (dbg + " | " if dbg else "")
+        + "final_emission_gate:referential_clarity_replaced:"
+        + ",".join(violation_kinds[:8])
+    )
+
+    prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text=candidate_text,
+        final_emitted_source=referential_clarity_selected_fallback.final_emitted_source,
+        strict_social_route=strict_social_active,
+        composition_meta=referential_clarity_selected_fallback.composition_meta,
+    )
+    referential_clarity_selected_fallback_metadata_payload = build_referential_clarity_selected_fallback_metadata_payload(
+        referential_clarity_selected_fallback,
+    )
+    for key, value in referential_clarity_selected_fallback_metadata_payload.meta_updates().items():
+        meta[key] = value
+
+    referential_clarity_replacement_logging_payload = build_referential_clarity_replacement_logging_payload(
+        referential_clarity_selected_fallback,
+        strict_social_active=strict_social_active,
+        violation_kinds=violation_kinds,
+        active_interlocutor=active_interlocutor,
+        referential_clarity_fallback_after_failed_local_repair=bool(
+            meta.get("referential_clarity_fallback_after_failed_local_repair")
+        ),
+    )
+    log_final_emission_decision(
+        referential_clarity_replacement_logging_payload.decision_payload()
+    )
+    log_final_emission_trace({**meta, "stage": "final_emission_gate_referential_clarity_replace"})
+    return out
+

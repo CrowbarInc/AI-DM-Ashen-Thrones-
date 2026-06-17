@@ -27,6 +27,7 @@ from game import ctir
 from game.ctir_runtime import SESSION_CTIR_STAMP_KEY, attach_ctir, detach_ctir
 from game.defaults import default_session, default_world
 import game.final_emission_gate as feg_module
+import game.final_emission_strict_social_stack as strict_social_stack
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_plan_bundle import attach_narration_plan_bundle, get_attached_narration_plan_bundle
 from game.narrative_mode_contract import build_narrative_mode_contract
@@ -354,7 +355,7 @@ def test_c4_strict_social_nmo_terminal_fallback_metadata_and_reassessment(monkey
             "route_illegal_intercepted": False,
         }
 
-    monkeypatch.setattr(feg_module, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
     out, _ = apply_final_emission_gate_consumer(
         _gm_with_shipped_plan(text="stub", contract=nmc),
         resolution=resolution,

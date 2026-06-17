@@ -23,10 +23,10 @@ def test_block_r_gate_reexports_speaker_enforcement_api():
     assert feg.validate_emitted_speaker_against_contract is sce.validate_emitted_speaker_against_contract
     assert sce.detect_emitted_speaker_signature is ess.detect_emitted_speaker_signature
     assert feg.detect_emitted_speaker_signature is sce.detect_emitted_speaker_signature
-    assert feg._sync_eff_social_to_resolution is sce._sync_eff_social_to_resolution
+    assert not hasattr(feg, "_sync_eff_social_to_resolution")
     assert feg.SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES is SPEAKER_CONTRACT_ENFORCEMENT_REASON_CODES
-    assert hasattr(feg, "enforce_emitted_speaker_with_contract")
-    assert not hasattr(sce, "enforce_emitted_speaker_with_contract")
+    assert not hasattr(feg, "enforce_emitted_speaker_with_contract")
+    assert hasattr(sce, "enforce_emitted_speaker_with_contract")
 
 
 def test_block_r_speaker_enforcement_reason_codes_taxonomy_stable():
@@ -70,27 +70,32 @@ def test_block_r_validate_emitted_speaker_contract_missing_helper_snapshot():
 def test_block_r_strict_social_trunk_layer_order_unchanged():
     """Tone → narrative authority → speaker enforcement → sync → anti-railroading (strict-social trunk)."""
     repo_root = Path(__file__).resolve().parents[1]
-    src = (repo_root / "game" / "final_emission_gate.py").read_text(encoding="utf-8")
+    src = (repo_root / "game" / "final_emission_strict_social_stack.py").read_text(encoding="utf-8")
     m = re.search(
-        r"text, te_layer_meta, _ = _apply_tone_escalation_layer\("
+        r"text, te_layer_meta, _ = apply_tone_escalation_layer\("
         r"[\s\S]*?"
-        r"text, na_layer_meta, _ = _apply_narrative_authority_layer\("
+        r"text, na_layer_meta, _ = apply_narrative_authority_layer\("
         r"[\s\S]*?"
         r"text, _speaker_contract_payload = enforce_emitted_speaker_with_contract\("
         r"[\s\S]*?"
         r"_sync_eff_social_to_resolution\("
         r"[\s\S]*?"
-        r"text, ar_layer_meta, _ = _apply_anti_railroading_layer\(",
+        r"text, ar_layer_meta, _ = apply_anti_railroading_layer\(",
         src,
     )
-    assert m is not None, "strict-social trunk ordering fragment missing from final_emission_gate.py"
+    assert m is not None, "strict-social trunk ordering fragment missing from final_emission_strict_social_stack.py"
 
 
-def test_block_r_speaker_contract_module_has_single_sync_definition_gate_defines_enforce():
+def test_block_r_speaker_contract_module_owns_enforce_gate_delegator_removed():
     repo_root = Path(__file__).resolve().parents[1]
     gate_src = (repo_root / "game" / "final_emission_gate.py").read_text(encoding="utf-8").splitlines()
+    ss_src = (repo_root / "game" / "final_emission_strict_social_stack.py").read_text(encoding="utf-8").splitlines()
     sce_src = (repo_root / "game" / "speaker_contract_enforcement.py").read_text(encoding="utf-8").splitlines()
     defs_enf_gate = [i for i, ln in enumerate(gate_src, start=1) if ln.startswith("def enforce_emitted_speaker_with_contract")]
+    defs_enf_sce = [i for i, ln in enumerate(sce_src, start=1) if ln.startswith("def enforce_emitted_speaker_with_contract")]
     defs_sync = [i for i, ln in enumerate(sce_src, start=1) if ln.startswith("def _sync_eff_social_to_resolution")]
-    assert len(defs_enf_gate) == 1
+    assert len(defs_enf_gate) == 0
+    assert len(defs_enf_sce) == 1
     assert len(defs_sync) == 1
+    assert "enforce_emitted_speaker_with_contract(" in "\n".join(ss_src)
+    assert "feg.enforce_emitted_speaker_with_contract" not in "\n".join(ss_src)

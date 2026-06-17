@@ -5,7 +5,8 @@ from tests.helpers.emission_smoke_assertions import final_emission_meta_from_out
 
 import pytest
 
-import game.final_emission_gate as _feg
+import game.final_emission_gate_context as gate_context
+import game.social_exchange_emission as social_exchange_emission
 from game.anti_reset_emission_guard import (
     anti_reset_suppresses_intro_style_fallbacks,
     resolution_allows_scene_intro_framing,
@@ -70,7 +71,9 @@ def test_mid_scene_strict_social_first_mention_no_scene_summary_replay():
 
 def test_non_social_replace_uses_anti_reset_not_global_anchor(monkeypatch: pytest.MonkeyPatch):
     """A/D) Forced final replacement stays exchange-local when intro suppression is active."""
-    monkeypatch.setattr(_feg, "strict_social_emission_will_apply", lambda *a, **k: False)
+    _force_non_strict = lambda *a, **k: False
+    monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply", _force_non_strict)
+    monkeypatch.setattr(gate_context, "strict_social_emission_will_apply", _force_non_strict)
 
     session = default_session()
     session["turn_counter"] = 4

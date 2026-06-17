@@ -9,7 +9,7 @@ import re
 import pytest
 from fastapi.testclient import TestClient
 
-import game.final_emission_gate as feg
+import game.final_emission_finalize as emission_finalize
 from game import storage
 from game.api import app
 from game.defaults import default_campaign, default_character, default_world
@@ -393,11 +393,11 @@ def test_final_emission_fast_path_skips_optional_smoothing():
         },
     }
 
-    assert feg._final_emission_fast_path_eligible(out) is True
-    finalized = feg._finalize_emission_output(
+    assert emission_finalize.final_emission_fast_path_eligible(out) is True
+    finalized = emission_finalize.finalize_emission_output(
         dict(out),
         pre_gate_text=out["player_facing_text"],
-        fast_path=feg._final_emission_fast_path_eligible(out),
+        fast_path=emission_finalize.final_emission_fast_path_eligible(out),
     )
     meta = final_emission_meta_from_output(finalized)
     assert meta.get("final_emission_fast_path_used") is True

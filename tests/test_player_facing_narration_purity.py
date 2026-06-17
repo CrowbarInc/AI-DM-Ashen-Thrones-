@@ -1,11 +1,17 @@
 """Unit tests for ``game.player_facing_narration_purity`` and gate-layer integration (BH-5).
 
-Gate-order purity/ASP pins remain in ``tests/test_final_emission_gate.py``."""
+Gate-layer helpers live on ``game.final_emission_player_facing_narration_purity``.
+ASP gate-layer helpers live on ``game.final_emission_answer_shape_primacy`` (see
+``tests/test_answer_shape_primacy.py``). Gate-order purity/ASP pins remain in ``tests/test_final_emission_gate.py``."""
 from __future__ import annotations
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
+from game.final_emission_player_facing_narration_purity import (
+    apply_player_facing_narration_purity_layer,
+    resolve_player_facing_narration_purity_contract,
+)
 from tests.helpers.emission_smoke_assertions import (
     apply_final_emission_gate_consumer,
     final_emission_meta_from_output,
@@ -212,13 +218,34 @@ def test_minimal_repair_keeps_prose_after_header_on_one_line():
 def test_resolve_player_facing_narration_purity_contract_from_response_policy():
     c = _contract()
     gm = {"response_policy": {"player_facing_narration_purity": c}}
-    got, src = feg._resolve_player_facing_narration_purity_contract(gm)
+    got, src = resolve_player_facing_narration_purity_contract(gm)
     assert got is c
     assert src == "response_policy"
 
 
+def test_bj35_apply_player_facing_narration_purity_layer_boundary_no_minimal_repair_on_failure():
+    raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
+    text, meta, extra = apply_player_facing_narration_purity_layer(
+        raw,
+        gm_output={"player_facing_narration_purity_contract": _contract()},
+        resolution={"kind": "observe", "prompt": "I look around."},
+        response_type_debug={
+            "response_type_required": "neutral_narration",
+            "response_type_contract_source": None,
+            "response_type_candidate_ok": True,
+            "response_type_repair_used": False,
+            "response_type_repair_kind": None,
+            "response_type_rejection_reasons": [],
+        },
+    )
+    assert text == raw
+    assert meta.get("player_facing_narration_purity_failed") is True
+    assert meta.get("player_facing_narration_purity_repaired") is False
+    assert "player_facing_narration_purity_unsatisfied_at_boundary_no_minimal_repair" in extra
+
+
 def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = _apply_gate(
         {
             "player_facing_text": "Rain hammers the slate roof; torchlight shivers in the gutter below.",
@@ -238,7 +265,7 @@ def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
 
 
 def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = _apply_gate(
         {
             "player_facing_text": (
@@ -263,7 +290,7 @@ def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
 
 
 def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     text = (
         'The sergeant does not raise her voice. "Move toward the gate, now," she says, '
         "and the line stiffens as if pulled by a single wire."
@@ -286,7 +313,7 @@ def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
 
 
 def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     text = (
         "You thumb the latch; it gives with a dry snap. "
         "Patrol whistles tighten two streets over, a thin urgent sound against the rain."
@@ -309,7 +336,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
 
 
 def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
     out = _apply_gate(
         {
@@ -330,7 +357,7 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
 
 
 def test_gate_purity_repairs_coaching_language(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "You weigh what you just tried near the checkpoint; rain drums on the slate roof."
     out = _apply_gate(
         {
@@ -350,7 +377,7 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
 
 
 def test_gate_purity_repairs_ui_label_leak(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Take the exit labeled North and you smell cold river air beyond the arch."
     out = _apply_gate(
         {
@@ -370,7 +397,7 @@ def test_gate_purity_repairs_ui_label_leak(monkeypatch):
 
 
 def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = (
         "The ward's tension mounts; confrontation feels inevitable. "
         "You hear boots on wet cobbles to your left, uneven and hurried."
@@ -393,7 +420,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
 
 
 def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "The next beat is yours. You emerge onto the quay, ropes creaking, gulls wheeling overhead."
     out = _apply_gate(
         {
@@ -413,7 +440,7 @@ def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
 
 
 def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = (
         "Unrest makes factions bold and the crown brittle. "
         "Invasion rumors outrun truth, and politics turns markets into maps."

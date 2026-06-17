@@ -9,7 +9,10 @@ import json
 
 import pytest
 
-import game.final_emission_gate as feg
+import game.final_emission_finalize as emission_finalize
+import game.final_emission_response_type as response_type
+import game.final_emission_strict_social_stack as strict_social_stack
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.final_emission_meta import default_response_type_debug
 from game.final_emission_validators import _default_response_type_debug as _validators_default_response_type_debug
 from game.final_emission_text import _normalize_text
@@ -32,7 +35,7 @@ pytestmark = pytest.mark.unit
 
 @pytest.fixture
 def _noop_visibility(monkeypatch):
-    monkeypatch.setattr(feg, "_apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
 
 
 def _rtc(required: str) -> dict:
@@ -203,7 +206,7 @@ def test_gate_thin_action_outcome_uses_upstream_prepared_marker_not_boundary_syn
 
 def test_enforce_response_type_marks_upstream_absent_without_inventing_answer_line():
     """When prepared answer text is missing, debug records absence; candidate text is not silently 'completed'."""
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "Only mist between the torches.",
         gm_output={
             "response_policy": {"response_type_contract": _rtc("answer")},
@@ -253,7 +256,7 @@ def test_gate_preserves_duplicate_speaker_subject_lines_no_quote_merge_for_caden
 
 
 def test_enforce_response_type_upstream_attribution_override():
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "Fog.",
         gm_output={
             "response_policy": {"response_type_contract": _rtc("answer")},
@@ -296,7 +299,7 @@ def test_response_type_debug_default_keys_match_meta_validators_modules():
 
 def test_enforce_response_type_rejects_malformed_upstream_answer_without_boundary_synthesis():
     """Non-empty prepared text that fails the answer contract is not adopted; gate does not mint a substitute."""
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "Only mist between the torches.",
         gm_output={
             "response_policy": {"response_type_contract": _rtc("answer")},
@@ -320,7 +323,7 @@ def test_enforce_response_type_rejects_malformed_upstream_answer_without_boundar
 
 def test_enforce_response_type_rejects_malformed_upstream_action_without_boundary_synthesis():
     """Quoted NPC-only prepared action text fails action_outcome contract; gate keeps candidate text."""
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "You pry the chest lid, but nothing gives yet.",
         gm_output={
             "response_policy": {"response_type_contract": _rtc("action_outcome")},
@@ -359,7 +362,7 @@ def test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback(mo
             "route_illegal_intercepted": False,
         }
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
     out, meta = apply_final_emission_gate_consumer(
         {
             "player_facing_text": "placeholder",
@@ -380,7 +383,7 @@ def test_route_illegal_visibility_stock_strip_is_packaging_only_preserves_lead()
     raw = (
         "Lead sentence alpha. Second sentence beta. For a breath, the scene stays still."
     )
-    stripped = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    stripped = emission_finalize.strip_appended_route_illegal_contamination_sentences(raw)
     assert stripped.startswith("Lead sentence alpha.")
     assert "beta" in stripped
     assert "scene stays still" not in stripped.lower()
@@ -438,7 +441,7 @@ def test_enforce_dialogue_contract_minimal_repair_delegates_to_social_module_not
         "social": {"npc_id": "rook", "npc_name": "Rook", "social_intent_class": "social_exchange"},
     }
     expected = minimal_social_emergency_fallback_line(resolution)
-    text, dbg = feg._enforce_response_type_contract(
+    text, dbg = response_type.enforce_response_type_contract(
         "The sky is grey and still.",
         gm_output={
             "response_policy": {"response_type_contract": _rtc("dialogue")},

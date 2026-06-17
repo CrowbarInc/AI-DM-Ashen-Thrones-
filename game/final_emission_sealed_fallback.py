@@ -15,6 +15,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
     refresh_final_emission_mutation_lineage,
 )
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.final_emission_text import _normalize_text
 from game.realization_provenance import (
@@ -111,25 +112,23 @@ def build_non_strict_sealed_fallback_providers(
     res_kind: str,
     response_type_required: str,
     opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection],
-    passive_scene_pressure_fallback_candidates: Callable[..., list[VisibilitySelectedFallback]],
-    should_use_neutral_nonprogress_fallback_instead_of_global_stock: Callable[[Any, Any], bool],
-    scene_emit_integrity_global_fallback_selection: Callable[..., VisibilitySelectedFallback],
-    minimal_social_emergency_fallback_line: Callable[[Dict[str, Any] | None], str],
-    npc_display_name_for_emission: Callable[[Any, str, str], str],
-    npc_pursuit_neutral_nonprogress_fallback_line: Callable[[], str],
-    local_exchange_continuation_fallback_line: Callable[..., str],
 ) -> NonStrictSealedFallbackProviders:
-    """Assemble sealed fallback branch providers; prose comes from injected gate-owned builders."""
+    """Assemble sealed fallback branch providers; opening prose uses the injected or default provider."""
 
     def _opening_provider() -> SealedFallbackSelection:
         return opening_sealed_fallback_provider(out)
 
     def _social_interlocutor_provider() -> SealedFallbackSelection:
+        from game.social_exchange_emission import (
+            _npc_display_name_for_emission,
+            minimal_social_emergency_fallback_line,
+        )
+
         mini_res: Dict[str, Any] = {
             "kind": "question",
             "social": {
                 "npc_id": active_interlocutor,
-                "npc_name": npc_display_name_for_emission(world, sid, active_interlocutor),
+                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
                 "social_intent_class": "social_exchange",
             },
         }
@@ -140,7 +139,9 @@ def build_non_strict_sealed_fallback_providers(
         return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
 
     def _passive_candidates_provider() -> list[SealedFallbackSelection]:
-        passive_candidates = passive_scene_pressure_fallback_candidates(
+        from game.final_emission_passive_scene_pressure import _passive_scene_pressure_fallback_candidates
+
+        passive_candidates = _passive_scene_pressure_fallback_candidates(
             session=session if isinstance(session, dict) else None,
             scene=scene,
             scene_id=sid,
@@ -150,9 +151,13 @@ def build_non_strict_sealed_fallback_providers(
         ]
 
     def _use_neutral_nonprogress_provider() -> bool:
-        return should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution)
+        return visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(
+            session, eff_resolution
+        )
 
     def _neutral_nonprogress_provider() -> SealedFallbackSelection:
+        from game.diegetic_fallback_narration import npc_pursuit_neutral_nonprogress_fallback_line
+
         fallback_pool = "npc_pursuit_fail_closed_neutral"
         fallback_text = npc_pursuit_neutral_nonprogress_fallback_line()
         fallback_kind = "npc_pursuit_neutral_nonprogress"
@@ -160,6 +165,8 @@ def build_non_strict_sealed_fallback_providers(
         return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
 
     def _anti_reset_provider() -> SealedFallbackSelection:
+        from game.anti_reset_emission_guard import local_exchange_continuation_fallback_line
+
         fallback_pool = "anti_reset_local_continuation"
         fallback_text = local_exchange_continuation_fallback_line(
             session=session if isinstance(session, dict) else None,
@@ -172,7 +179,9 @@ def build_non_strict_sealed_fallback_providers(
         return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
 
     def _global_provider() -> SealedFallbackSelection:
-        selected = scene_emit_integrity_global_fallback_selection(
+        from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
+
+        selected = _scene_emit_integrity_global_fallback_selection(
             scene if isinstance(scene, dict) else None,
             sid,
             authoritative_resolution=resolution if isinstance(resolution, dict) else None,
@@ -191,6 +200,76 @@ def build_non_strict_sealed_fallback_providers(
         neutral_nonprogress_provider=_neutral_nonprogress_provider,
         anti_reset_provider=_anti_reset_provider,
         global_provider=_global_provider,
+    )
+
+
+def _default_opening_sealed_fallback_provider() -> Callable[[Dict[str, Any]], SealedFallbackSelection]:
+    from game.final_emission_opening_fallback import make_opening_sealed_fallback_provider
+    from game.final_emission_visibility_fallback import first_mention_composition_meta
+
+    return make_opening_sealed_fallback_provider(
+        fail_closed_composition_meta_factory=first_mention_composition_meta,
+    )
+
+
+def select_non_strict_replace_path_terminal_sealed_fallback_selection(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    sid: str,
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_suppressed_non_social_turn: bool,
+    res_kind: str,
+    response_type_required: str,
+    suppress_intro_replace: bool,
+    interaction_mode: str,
+    opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection] | None = None,
+) -> SealedFallbackSelection:
+    """Select the non-strict sealed fallback; opening prose uses the default opening provider when omitted."""
+    from game.final_emission_opening_mode import _opening_mode_active_for_turn
+
+    opening_provider = (
+        opening_sealed_fallback_provider
+        if opening_sealed_fallback_provider is not None
+        else _default_opening_sealed_fallback_provider()
+    )
+
+    mode = str(interaction_mode or "").strip().lower()
+    opening_mode_active = _opening_mode_active_for_turn(out, resolution if isinstance(resolution, dict) else None)
+    has_active_social_interlocutor = bool(
+        active_interlocutor
+        and mode == "social"
+        and isinstance(world, dict)
+        and not strict_social_suppressed_non_social_turn
+    )
+    providers = build_non_strict_sealed_fallback_providers(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        sid=sid,
+        resolution=resolution,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
+        opening_sealed_fallback_provider=opening_provider,
+    )
+    return assemble_non_strict_sealed_fallback_selection(
+        opening_mode_active=opening_mode_active,
+        has_active_social_interlocutor=has_active_social_interlocutor,
+        passive_candidates_provider=providers.passive_candidates_provider,
+        use_neutral_nonprogress_provider=providers.use_neutral_nonprogress_provider,
+        suppress_intro_replace=suppress_intro_replace,
+        opening_provider=providers.opening_provider,
+        social_interlocutor_provider=providers.social_interlocutor_provider,
+        neutral_nonprogress_provider=providers.neutral_nonprogress_provider,
+        anti_reset_provider=providers.anti_reset_provider,
+        global_provider=providers.global_provider,
     )
 
 
@@ -288,13 +367,17 @@ def select_acceptance_quality_n4_sealed_fallback_line(
     world: dict[str, Any] | None,
     res_kind: str,
     response_type_required: str,
-    minimal_social_fallback_builder: Callable[[dict[str, Any] | None], str],
-    global_fallback_selection_builder: Callable[..., VisibilitySelectedFallback],
 ) -> str:
-    """Select the N4 sealed fallback line via injected prose owners; this helper must not author prose."""
+    """Select the N4 sealed fallback line via owner modules; this helper must not author prose."""
     if strict_social_path:
-        return minimal_social_fallback_builder(eff_resolution if isinstance(eff_resolution, dict) else None)
-    return global_fallback_selection_builder(
+        from game.social_exchange_emission import minimal_social_emergency_fallback_line
+
+        return minimal_social_emergency_fallback_line(
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+        )
+    from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
+
+    return _scene_emit_integrity_global_fallback_selection(
         scene if isinstance(scene, dict) else None,
         str(scene_id or "").strip(),
         authoritative_resolution=resolution if isinstance(resolution, dict) else None,

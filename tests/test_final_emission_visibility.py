@@ -11,14 +11,16 @@ from copy import deepcopy
 import pytest
 
 import game.api_turn_support as api_turn_support
+import game.final_emission_finalize as emission_finalize
 import game.final_emission_gate as feg
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
-from game.interaction_context import rebuild_active_scene_entities, set_social_target
-from game.final_emission_gate import (
+from game.final_emission_text import (
     _decompress_overpacked_sentences,
+    _normalize_text,
     _repair_fragmentary_participial_splits,
 )
+from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import (
     validate_player_facing_first_mentions,
     validate_player_facing_referential_clarity,
@@ -986,23 +988,23 @@ def test_strip_appended_global_visibility_stock_multi_sentence_trailing():
         "The clerk taps the ledger. "
         "For a breath, the scene holds while voices shift around you."
     )
-    stripped = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    stripped = emission_finalize.strip_appended_route_illegal_contamination_sentences(raw)
     assert stripped == "The clerk taps the ledger."
 
 
 def test_strip_appended_global_visibility_stock_alt_sentence_variant():
     raw = "Fog hugs the river tents. For a breath, the scene stays still."
-    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == "Fog hugs the river tents."
+    assert emission_finalize.strip_appended_route_illegal_contamination_sentences(raw) == "Fog hugs the river tents."
 
 
 def test_strip_placeholder_stock_single_sentence_output_unchanged():
     solo = "For a breath, the scene stays still."
-    assert feg._strip_appended_route_illegal_contamination_sentences(solo) == solo
+    assert emission_finalize.strip_appended_route_illegal_contamination_sentences(solo) == solo
 
 
 def test_strip_preserves_dialogue_sentence_containing_for_a_breath_stock_phrase():
     text = 'The runner shrugs. "For a breath, the scene stays still," she adds with a smirk.'
-    assert feg._strip_appended_route_illegal_contamination_sentences(text) == text
+    assert emission_finalize.strip_appended_route_illegal_contamination_sentences(text) == text
 
 
 def test_strip_preserves_interruption_setup_strips_only_trailing_stock_sentence():
@@ -1010,14 +1012,14 @@ def test_strip_preserves_interruption_setup_strips_only_trailing_stock_sentence(
         "The clerk starts to answer, but a shout from the square cuts across the room. "
         "For a breath, the scene holds while voices shift around you."
     )
-    out = feg._strip_appended_route_illegal_contamination_sentences(intr)
+    out = emission_finalize.strip_appended_route_illegal_contamination_sentences(intr)
     assert "shout from the square" in out.lower()
     assert "voices shift around you" not in out.lower()
 
 
 def test_strip_preserves_paragraph_break_when_stripping_within_second_block():
     raw = "First block line.\n\nSecond block body. For a breath, the scene stays still."
-    got = feg._strip_appended_route_illegal_contamination_sentences(raw)
+    got = emission_finalize.strip_appended_route_illegal_contamination_sentences(raw)
     assert "\n\n" in got
     assert "First block line." in got
     assert "Second block body." in got
@@ -1029,7 +1031,7 @@ def test_strip_does_not_remove_unrelated_multi_sentence_atmosphere():
         "Mist threads between the tents. "
         "Somewhere a dog barks once, and the sound thins in damp air."
     )
-    assert feg._strip_appended_route_illegal_contamination_sentences(raw) == raw
+    assert emission_finalize.strip_appended_route_illegal_contamination_sentences(raw) == raw
 
 
 def test_finalize_emission_output_post_containment_reseals_appended_stock(monkeypatch):
@@ -1049,9 +1051,13 @@ def test_finalize_emission_output_post_containment_reseals_appended_stock(monkey
         o["player_facing_text"] = selector
         return False
 
-    monkeypatch.setattr(feg, "_finalize_upstream_fallback_overwrite_containment", _simulate_containment_revert)
-    pre = feg._normalize_text(selector)
-    finalized = feg._finalize_emission_output(out, pre_gate_text=pre, fast_path=True)
+    monkeypatch.setattr(
+        emission_finalize,
+        "finalize_upstream_fallback_overwrite_containment",
+        _simulate_containment_revert,
+    )
+    pre = _normalize_text(selector)
+    finalized = emission_finalize.finalize_emission_output(out, pre_gate_text=pre, fast_path=True)
     pft = (finalized.get("player_facing_text") or "").lower()
     assert "rain drums" in pft
     assert "scene stays still" not in pft

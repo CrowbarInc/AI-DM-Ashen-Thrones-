@@ -45,7 +45,9 @@ from typing import Any, Callable, Mapping
 
 import pytest
 
-import game.final_emission_gate as _feg
+import game.final_emission_gate_context as gate_context
+import game.final_emission_terminal_pipeline as terminal_pipeline
+import game.social_exchange_emission as social_exchange_emission
 from game.interaction_routing import choose_interaction_route
 from game.defaults import default_scene, default_session, default_world
 from game.intent_parser import parse_freeform_to_action
@@ -183,6 +185,17 @@ def maybe_patch_storage_tmp(scenario: NarrationTranscriptScenario, tmp_path: Any
         _patch_storage(tmp_path, monkeypatch)
 
 
+def patch_strict_social_emission_will_apply(
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    will_apply: bool,
+) -> None:
+    """Patch owner + gate-context import binding for strict-social route decision."""
+    stub = lambda *a, **k: will_apply
+    monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply", stub)
+    monkeypatch.setattr(gate_context, "strict_social_emission_will_apply", stub)
+
+
 def patch_final_emission_helpers(
     monkeypatch: pytest.MonkeyPatch,
     *,
@@ -192,7 +205,7 @@ def patch_final_emission_helpers(
     """Optional stability hooks (same spirit as ``test_anti_railroading_transcript_regressions``)."""
     hook = visibility_hook or (lambda out, **kwargs: out)
     if patch_visibility:
-        monkeypatch.setattr(_feg, "_apply_visibility_enforcement", hook)
+        monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", hook)
 
 
 def assert_narration_transcript_outcome(gm_out: Mapping[str, Any], assertions: NarrationTranscriptAssertions) -> None:
@@ -715,7 +728,7 @@ def test_integration_embedded_direct_address_keeps_dialogue_and_binds_tavern_run
 @pytest.mark.emission
 def test_gate_integration_anti_reset_no_opener_on_forced_non_social_replace(monkeypatch: pytest.MonkeyPatch) -> None:
     """Established mid-scene exchange + forced replace: local continuation, no stock scene-opener replay."""
-    monkeypatch.setattr(_feg, "strict_social_emission_will_apply", lambda *a, **k: False)
+    patch_strict_social_emission_will_apply(monkeypatch, will_apply=False)
     session = default_session()
     session["turn_counter"] = 4
     session["interaction_context"] = {
@@ -1516,7 +1529,7 @@ def test_transcript_mixed_regression_table(
         assert entry.get("should_route_social") is True
         assert entry.get("target_actor_id") == "tavern_runner"
     elif runner_kind == "gate_anti_reset_obj20":
-        monkeypatch.setattr(_feg, "strict_social_emission_will_apply", lambda *a, **k: False)
+        patch_strict_social_emission_will_apply(monkeypatch, will_apply=False)
         run_gate_level_case(scenario, monkeypatch, tmp_path=tmp_path)
     elif runner_kind == "gate_bounded_partial_obj20":
         out = _run_object20_bounded_gate_case(scenario, monkeypatch, with_answer_contract=True)

@@ -3,7 +3,8 @@
 Ownership:
 - ``game.fallback_provenance_debug`` owns canonical upstream fast-fallback provenance
   packaging (fingerprints, selector snapshots, FEM ``fallback_provenance_trace``).
-- ``game.final_emission_gate`` owns containment at gate/finalize boundaries.
+- ``game.final_emission_finalize`` owns finalize packaging at the finalize boundary.
+- ``game.final_emission_gate`` owns containment at gate entry and delegates finalize packaging.
 - This file owns overwrite containment and gate-exit-vs-selector protection.
 
 Failures here should point first to final-emission containment unless the
@@ -23,7 +24,6 @@ from game.fallback_provenance_debug import (
     attach_upstream_fast_fallback_provenance,
 )
 from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
-import game.final_emission_gate as feg
 
 
 def _fallback_gm(selector_text: str) -> dict:
@@ -79,14 +79,9 @@ def test_upstream_fast_fallback_pregate_overwrite_contained():
     assert trace.get("gate_exit_vs_selector_match") is True
 
 
-def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pytest.MonkeyPatch):
+def test_upstream_fast_fallback_in_finalize_overwrite_contained():
+    """Finalize is packaging-only (C2); upstream fast-fallback text survives without semantic repair hooks."""
     gm = _fallback_gm("Rain drums steady on the slate roof above.")
-    orig_decomp = feg._decompress_overpacked_sentences
-
-    def _inject(t: str) -> str:
-        return str(t) + " INJECT_BAD_FINALIZE_SEGMENT"
-
-    monkeypatch.setattr(feg, "_decompress_overpacked_sentences", _inject)
     out, _ = apply_final_emission_gate_consumer(
         gm,
         resolution={"kind": "observe", "prompt": "I listen to the rain."},
@@ -94,8 +89,6 @@ def test_upstream_fast_fallback_in_finalize_overwrite_contained(monkeypatch: pyt
         scene_id="test_scene",
         world={},
     )
-    monkeypatch.setattr(feg, "_decompress_overpacked_sentences", orig_decomp)
-    assert "INJECT_BAD_FINALIZE_SEGMENT" not in (out.get("player_facing_text") or "")
     assert "Rain drums" in (out.get("player_facing_text") or "")
     prov = (out.get("metadata") or {}).get("fallback_provenance") or {}
     assert prov.get("gate_exit_vs_selector_match") is True

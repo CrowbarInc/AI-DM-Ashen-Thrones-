@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import game.final_emission_gate as feg
+import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.final_emission_text import _normalize_text
 from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
 from tests.helpers.objective7_referent_fixtures import (
@@ -149,7 +149,7 @@ def test_referent_clarity_pre_finalize_merges_fem_and_tracks_input_source():
         },
         "_final_emission_meta": {"final_route": "accept_candidate", "tone_escalation": {"lane": "stub"}},
     }
-    feg._apply_referent_clarity_pre_finalize(out, pre_gate_text="They halt.")
+    terminal_pipeline._apply_referent_clarity_pre_finalize(out, pre_gate_text="They halt.")
     fem = final_emission_meta_from_output(out)
     assert fem["referent_validation_input_source"] == "full_artifact"
     assert fem["referent_validation_ran"] is True
@@ -164,8 +164,17 @@ def test_referent_clarity_pre_finalize_merges_fem_and_tracks_input_source():
 
 
 def test_referent_clarity_pre_finalize_four_gate_exit_paths_all_use_same_hook():
-    """Documentation-by-test: referent pre-finalize is invoked from each finalize branch."""
+    """Documentation-by-test: referent pre-finalize runs via terminal pipeline on each finalize branch."""
     import inspect
 
-    src = inspect.getsource(feg.apply_final_emission_gate)
-    assert src.count("_apply_referent_clarity_pre_finalize") == 4
+    import game.final_emission_generic_exit as generic_exit
+    import game.final_emission_strict_social_stack as strict_social_stack
+
+    tp_src = inspect.getsource(terminal_pipeline.run_gate_terminal_enforcement_pipeline)
+    assert tp_src.count("_apply_referent_clarity_pre_finalize") == 1
+    exit_src = (
+        inspect.getsource(generic_exit.run_generic_accept_exit)
+        + inspect.getsource(generic_exit.run_generic_replace_exit)
+        + inspect.getsource(strict_social_stack.run_strict_social_composition_trunk)
+    )
+    assert exit_src.count("run_gate_terminal_enforcement_pipeline") == 4

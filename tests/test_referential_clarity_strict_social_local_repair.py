@@ -7,7 +7,8 @@ import re
 
 import pytest
 
-import game.final_emission_gate as final_emission_gate
+import game.final_emission_referential_clarity as referential_clarity
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.defaults import default_scene, default_session, default_world
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import validate_player_facing_referential_clarity
@@ -156,7 +157,7 @@ def test_multi_entity_ambiguous_pronoun_does_not_apply_local_repair():
     )
     assert val.get("ok") is False
     violations = [v for v in (val.get("violations") or []) if isinstance(v, dict)]
-    repaired, dbg = final_emission_gate._try_strict_social_local_pronoun_substitution_repair(
+    repaired, dbg = referential_clarity._try_strict_social_local_pronoun_substitution_repair(
         candidate,
         violations=violations,
         session=session,
@@ -271,7 +272,7 @@ def test_strict_social_second_pass_referential_fail_falls_back_without_chaining(
             }
         },
     }
-    orig = final_emission_gate.validate_player_facing_referential_clarity
+    orig = visibility_fallback.validate_player_facing_referential_clarity
     calls: list[str] = []
 
     def wrapped_validate(text: str, **kwargs):
@@ -294,7 +295,7 @@ def test_strict_social_second_pass_referential_fail_falls_back_without_chaining(
         return orig(text, **kwargs)
 
     monkeypatch.setattr(
-        final_emission_gate,
+        visibility_fallback,
         "validate_player_facing_referential_clarity",
         wrapped_validate,
     )

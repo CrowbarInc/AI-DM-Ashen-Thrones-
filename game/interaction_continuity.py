@@ -1,9 +1,13 @@
-"""Interaction continuity contract, validation, and minimal deterministic repair.
+"""Interaction continuity contract, validation, minimal deterministic repair, and gate emission orchestration.
 
 Reads authoritative interaction and scene state from :mod:`game.interaction_context` and
 :mod:`game.storage` when *building* contracts. ``validate_interaction_continuity`` and
 ``repair_interaction_continuity`` are pure checks/repairs on candidate text plus resolved
 contract / validator payloads (repair must not re-read session state).
+
+:func:`apply_interaction_continuity_emission_step` and :func:`attach_interaction_continuity_validation`
+own validate-only attach, repair-branch orchestration, and attach→validate-only wiring consumed by
+:mod:`game.final_emission_gate` (minimal ``_*`` delegators preserve monkeypatch surfaces).
 """
 from __future__ import annotations
 
@@ -18,6 +22,10 @@ from game.interaction_context import (
     inspect,
 )
 from game.storage import get_scene_state
+from game.response_policy_contracts import (
+    _resolve_response_type_contract,
+    resolve_interaction_continuity_contract,
+)
 
 CONTINUITY_STRENGTH_VALUES = frozenset({"none", "soft", "strong"})
 
@@ -1080,3 +1088,567 @@ def repair_interaction_continuity(
         "notes": notes,
         "strategy_notes": _strategy_notes_for_repair(notes) if notes else [],
     }
+
+
+def _merge_interaction_continuity_validation_into_outputs(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    validation_payload: Dict[str, Any],
+) -> None:
+    """Metadata-only: attach continuity validator output (no gating, no text mutation)."""
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        em = md_out.setdefault("emission_debug", {})
+        if isinstance(em, dict):
+            em["interaction_continuity_validation"] = validation_payload
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            emr = md_r.setdefault("emission_debug", {})
+            if isinstance(emr, dict):
+                emr["interaction_continuity_validation"] = validation_payload
+
+    if (
+        eff_resolution is not None
+        and eff_resolution is not resolution
+        and isinstance(eff_resolution.get("metadata"), dict)
+    ):
+        eme = eff_resolution["metadata"].setdefault("emission_debug", {})
+        if isinstance(eme, dict):
+            eme["interaction_continuity_validation"] = validation_payload
+
+    fem = out.get("_final_emission_meta")
+    if isinstance(fem, dict):
+        fem["interaction_continuity_validation"] = validation_payload
+
+
+def _merge_interaction_continuity_repair_into_outputs(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    repair_payload: Dict[str, Any],
+) -> None:
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        em = md_out.setdefault("emission_debug", {})
+        if isinstance(em, dict):
+            em["interaction_continuity_repair"] = repair_payload
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            emr = md_r.setdefault("emission_debug", {})
+            if isinstance(emr, dict):
+                emr["interaction_continuity_repair"] = repair_payload
+
+    if (
+        eff_resolution is not None
+        and eff_resolution is not resolution
+        and isinstance(eff_resolution.get("metadata"), dict)
+    ):
+        eme = eff_resolution["metadata"].setdefault("emission_debug", {})
+        if isinstance(eme, dict):
+            eme["interaction_continuity_repair"] = repair_payload
+
+    fem = out.get("_final_emission_meta")
+    if isinstance(fem, dict):
+        fem["interaction_continuity_repair"] = repair_payload
+
+
+def _merge_interaction_continuity_enforced_into_outputs(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    enforced: bool,
+) -> None:
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        em = md_out.setdefault("emission_debug", {})
+        if isinstance(em, dict):
+            em["interaction_continuity_enforced"] = enforced
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            emr = md_r.setdefault("emission_debug", {})
+            if isinstance(emr, dict):
+                emr["interaction_continuity_enforced"] = enforced
+
+    if (
+        eff_resolution is not None
+        and eff_resolution is not resolution
+        and isinstance(eff_resolution.get("metadata"), dict)
+    ):
+        eme = eff_resolution["metadata"].setdefault("emission_debug", {})
+        if isinstance(eme, dict):
+            eme["interaction_continuity_enforced"] = enforced
+
+    fem = out.get("_final_emission_meta")
+    if isinstance(fem, dict):
+        fem["interaction_continuity_enforced"] = enforced
+
+
+def _merge_interaction_continuity_speaker_bridge_into_outputs(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    bridge_payload: Dict[str, Any],
+) -> None:
+    md_out = out.setdefault("metadata", {})
+    if isinstance(md_out, dict):
+        em = md_out.setdefault("emission_debug", {})
+        if isinstance(em, dict):
+            em["interaction_continuity_speaker_binding_bridge"] = bridge_payload
+
+    if isinstance(resolution, dict):
+        md_r = resolution.setdefault("metadata", {})
+        if isinstance(md_r, dict):
+            emr = md_r.setdefault("emission_debug", {})
+            if isinstance(emr, dict):
+                emr["interaction_continuity_speaker_binding_bridge"] = bridge_payload
+
+    if (
+        eff_resolution is not None
+        and eff_resolution is not resolution
+        and isinstance(eff_resolution.get("metadata"), dict)
+    ):
+        eme = eff_resolution["metadata"].setdefault("emission_debug", {})
+        if isinstance(eme, dict):
+            eme["interaction_continuity_speaker_binding_bridge"] = bridge_payload
+
+    fem = out.get("_final_emission_meta")
+    if isinstance(fem, dict):
+        fem["interaction_continuity_speaker_binding_bridge"] = bridge_payload
+
+
+def _ic_build_validation_payload(
+    out: Dict[str, Any],
+    final_text: str,
+    *,
+    resolution_for_contracts: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any], Dict[str, Any] | None]:
+    ic_contract, _src = resolve_interaction_continuity_contract(
+        out, resolution=resolution_for_contracts, session=session
+    )
+    rtc, _rtc_src = _resolve_response_type_contract(
+        out, resolution=resolution_for_contracts, session=session
+    )
+    nested_ssc = None
+    if isinstance(ic_contract, dict):
+        ssc = ic_contract.get("speaker_selection_contract")
+        if isinstance(ssc, dict):
+            nested_ssc = ssc
+    payload = validate_interaction_continuity(
+        final_text,
+        interaction_continuity_contract=ic_contract,
+        speaker_selection_contract=nested_ssc,
+        response_type_contract=rtc,
+    )
+    return payload, ic_contract
+
+
+def _ssc_continuity_locked_or_single_speaker_constrained(ssc: Any) -> bool:
+    if not isinstance(ssc, dict):
+        return False
+    if bool(ssc.get("continuity_locked")):
+        return True
+    if ssc.get("speaker_switch_allowed") is False:
+        return True
+    allowed = ssc.get("allowed_speaker_ids")
+    if isinstance(allowed, list) and len(allowed) == 1:
+        return True
+    return False
+
+
+def _speaker_enforcement_outcome_for_bridge(
+    speaker_contract_enforcement: Dict[str, Any] | None,
+) -> tuple[bool | None, str, Dict[str, Any]]:
+    """Prefer post_validation when present (speaker layer already ran). Returns (ok, reason_code, signature)."""
+    if not isinstance(speaker_contract_enforcement, dict):
+        return None, "", {}
+
+    def _sig_from(val: Any) -> Dict[str, Any]:
+        if not isinstance(val, dict):
+            return {}
+        det = val.get("details")
+        if not isinstance(det, dict):
+            return {}
+        s = det.get("signature")
+        return s if isinstance(s, dict) else {}
+
+    pv = speaker_contract_enforcement.get("post_validation")
+    v = speaker_contract_enforcement.get("validation")
+    if isinstance(pv, dict):
+        return bool(pv.get("ok")), str(pv.get("reason_code") or ""), _sig_from(pv)
+    if isinstance(v, dict):
+        return bool(v.get("ok")), str(v.get("reason_code") or ""), _sig_from(v)
+    return None, "", {}
+
+
+def _canonical_speaker_display_from_ic_contract(ic_contract: Dict[str, Any] | None) -> str:
+    if not isinstance(ic_contract, dict):
+        return ""
+    ssc = ic_contract.get("speaker_selection_contract")
+    if isinstance(ssc, dict):
+        name = str(ssc.get("primary_speaker_name") or "").strip()
+        if name:
+            return name
+    return ""
+
+
+def _looks_like_malformed_explicit_speaker_attribution(
+    text: str | None,
+    speaker_contract_enforcement: Dict[str, Any] | None,
+) -> bool:
+    """Narrow, deterministic cues for corrupted explicit attribution (fallback dialogue family)."""
+    if not isinstance(text, str):
+        return False
+    t = text.strip()
+    if not t:
+        return False
+
+    if re.search(r'\."\s+[A-Z]', t):
+        return True
+
+    if t[0].isalpha() and t[0].islower() and ('"' in t or "\u201c" in t or "\u201d" in t):
+        return True
+
+    dq = t.count('"')
+    if dq % 2 == 1 and dq >= 1 and (re.search(r'[.!?]\s*"', t) or re.search(r'"\s*[A-Za-z]', t)):
+        return True
+
+    _ok, _rc, sig = _speaker_enforcement_outcome_for_bridge(speaker_contract_enforcement)
+    lab = str(sig.get("speaker_label") or "").strip()
+    if lab and ('"' in lab or ".\" " in lab or '.\"' in lab):
+        return True
+    sname = str(sig.get("speaker_name") or "").strip()
+    if sname and ('"' in sname or ".\"" in sname):
+        return True
+
+    cn = ""
+    if isinstance(speaker_contract_enforcement, dict):
+        pv = speaker_contract_enforcement.get("post_validation")
+        v = speaker_contract_enforcement.get("validation")
+        cand = pv if isinstance(pv, dict) else v
+        if isinstance(cand, dict):
+            cn = str(cand.get("canonical_speaker_name") or "").strip()
+    if (
+        cn
+        and bool(sig.get("is_explicitly_attributed"))
+        and sname
+        and sname.lower() != cn.lower()
+        and (("." in sname) or ('"' in sname) or len(sname.split()) >= 4)
+    ):
+        return True
+
+    return False
+
+
+def _interaction_continuity_should_fail_from_speaker_binding(
+    *,
+    interaction_continuity_contract: Dict[str, Any] | None,
+    interaction_continuity_validation: Dict[str, Any] | None,
+    speaker_contract_enforcement: Dict[str, Any] | None,
+    text: str,
+) -> Dict[str, Any]:
+    debug: Dict[str, Any] = {"malformed_attribution_detected": False}
+    base: Dict[str, Any] = {
+        "should_fail": False,
+        "failure_reason": None,
+        "synthetic_violation": None,
+        "extra_violations": [],
+        "debug": debug,
+    }
+
+    contract = interaction_continuity_contract if isinstance(interaction_continuity_contract, dict) else None
+    if not contract or not contract.get("enabled"):
+        debug["skipped"] = "contract_disabled"
+        base["debug"] = debug
+        return base
+    if str(contract.get("continuity_strength") or "").strip().lower() != "strong":
+        debug["skipped"] = "not_strong_continuity"
+        base["debug"] = debug
+        return base
+    anchored = str(contract.get("anchored_interlocutor_id") or "").strip()
+    if not anchored:
+        debug["skipped"] = "no_anchor"
+        base["debug"] = debug
+        return base
+
+    ssc = contract.get("speaker_selection_contract")
+    if not _ssc_continuity_locked_or_single_speaker_constrained(ssc):
+        debug["skipped"] = "speaker_contract_not_continuity_locked_or_single_speaker"
+        base["debug"] = debug
+        return base
+
+    sp_ok, reason_code, _sig = _speaker_enforcement_outcome_for_bridge(speaker_contract_enforcement)
+    if sp_ok is None:
+        debug["skipped"] = "no_speaker_contract_enforcement"
+        base["debug"] = debug
+        return base
+    if sp_ok is True:
+        debug["skipped"] = "speaker_contract_ok"
+        base["debug"] = debug
+        return base
+    from game.speaker_contract_enforcement import SPEAKER_REASON_SPEAKER_BINDING_MISMATCH
+
+    if reason_code != SPEAKER_REASON_SPEAKER_BINDING_MISMATCH:
+        debug["skipped"] = "speaker_reason_not_binding_mismatch"
+        debug["speaker_reason_code"] = reason_code
+        base["debug"] = debug
+        return base
+
+    if not _looks_like_malformed_explicit_speaker_attribution(text, speaker_contract_enforcement):
+        debug["skipped"] = "malformed_attribution_heuristic_negative"
+        debug["speaker_reason_code"] = reason_code
+        base["debug"] = debug
+        return base
+
+    debug["malformed_attribution_detected"] = True
+    debug["speaker_reason_code"] = reason_code
+
+    extra: List[str] = []
+    cn = _canonical_speaker_display_from_ic_contract(contract)
+    if cn and cn.lower() not in str(text).lower():
+        extra.append("anchored_interlocutor_dropped")
+
+    base.update(
+        {
+            "should_fail": True,
+            "failure_reason": "speaker_binding_mismatch_under_strong_continuity",
+            "synthetic_violation": "malformed_speaker_attribution_under_continuity",
+            "extra_violations": extra,
+            "debug": debug,
+        }
+    )
+    return base
+
+
+def _augment_ic_validation_with_speaker_bridge(
+    payload: Dict[str, Any],
+    bridge_result: Dict[str, Any],
+) -> Dict[str, Any]:
+    out = dict(payload)
+    viol = list(out.get("violations") or [])
+    sv = bridge_result.get("synthetic_violation")
+    if isinstance(sv, str) and sv and sv not in viol:
+        viol.append(sv)
+    for x in bridge_result.get("extra_violations") or []:
+        if isinstance(x, str) and x and x not in viol:
+            viol.append(x)
+    out["violations"] = viol
+    out["ok"] = False
+    dbg = dict(out.get("debug") or {})
+    rp = list(dbg.get("reason_path") or [])
+    if "speaker_binding_bridge" not in rp:
+        rp.append("speaker_binding_bridge")
+    dbg["reason_path"] = rp
+    br_dbg = bridge_result.get("debug")
+    if isinstance(br_dbg, dict) and br_dbg.get("speaker_reason_code"):
+        dbg["speaker_binding_reason_code"] = br_dbg.get("speaker_reason_code")
+    out["debug"] = dbg
+    return out
+
+
+def _maybe_apply_speaker_binding_bridge_to_payload(
+    out: Dict[str, Any],
+    norm: str,
+    payload: Dict[str, Any],
+    ic_contract: Dict[str, Any] | None,
+    *,
+    resolution_for_contracts: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    apply_bridge: bool,
+) -> tuple[Dict[str, Any], Dict[str, Any] | None]:
+    if not apply_bridge:
+        return payload, None
+    md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+    em = md.get("emission_debug") if isinstance(md.get("emission_debug"), dict) else {}
+    enc = em.get("speaker_contract_enforcement")
+    enc_d = enc if isinstance(enc, dict) else None
+    br = _interaction_continuity_should_fail_from_speaker_binding(
+        interaction_continuity_contract=ic_contract,
+        interaction_continuity_validation=payload,
+        speaker_contract_enforcement=enc_d,
+        text=norm,
+    )
+    if not br.get("should_fail"):
+        return payload, None
+    aug = _augment_ic_validation_with_speaker_bridge(payload, br)
+    meta = {
+        "applied": True,
+        "failure_reason": br.get("failure_reason"),
+        "synthetic_violation": br.get("synthetic_violation"),
+        "speaker_reason_code": (br.get("debug") or {}).get("speaker_reason_code"),
+        "malformed_attribution_detected": bool((br.get("debug") or {}).get("malformed_attribution_detected")),
+    }
+    _merge_interaction_continuity_speaker_bridge_into_outputs(
+        out,
+        resolution_for_contracts,
+        eff_resolution,
+        bridge_payload=meta,
+    )
+    return aug, br
+
+
+def apply_interaction_continuity_emission_step(
+    out: Dict[str, Any],
+    *,
+    text: str,
+    resolution_for_contracts: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    validate_only: bool,
+    strict_social_path: bool,
+    strict_fallback_resolution: Dict[str, Any] | None = None,
+    apply_speaker_binding_bridge: bool = True,
+) -> tuple[str, List[str], bool]:
+    """Validate; optionally repair and enforce. Returns (text, extra_reasons, strict_continuity_fallback)."""
+    from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+    from game.social_exchange_emission import minimal_social_emergency_fallback_line
+
+    norm = _normalize_text(text)
+    payload, ic_contract = _ic_build_validation_payload(
+        out,
+        norm,
+        resolution_for_contracts=resolution_for_contracts,
+        session=session,
+    )
+    payload, _bridge_used = _maybe_apply_speaker_binding_bridge_to_payload(
+        out,
+        norm,
+        payload,
+        ic_contract,
+        resolution_for_contracts=resolution_for_contracts,
+        eff_resolution=eff_resolution,
+        apply_bridge=apply_speaker_binding_bridge,
+    )
+    _merge_interaction_continuity_validation_into_outputs(
+        out,
+        resolution_for_contracts,
+        eff_resolution,
+        validation_payload=payload,
+    )
+
+    if validate_only:
+        return norm, [], False
+
+    if not isinstance(payload, dict) or not payload.get("enabled") or payload.get("ok") is True:
+        return norm, [], False
+
+    ic_variation = ""
+    if isinstance(session, dict):
+        ic_variation = str(session.get("turn_counter") or "").strip()
+    repair_result = repair_interaction_continuity(
+        norm,
+        validation=payload,
+        interaction_continuity_contract=ic_contract,
+        variation_salt=ic_variation,
+    )
+    pre_violations = list(payload.get("violations") or [])
+
+    if repair_result.get("applied") is True:
+        repaired = _normalize_text(str(repair_result.get("repaired_text") or norm))
+        strat = list(repair_result.get("strategy_notes") or [])
+        if (payload.get("debug") or {}).get("speaker_binding_reason_code"):
+            bn = "speaker binding mismatch converted into continuity failure"
+            if bn not in strat:
+                strat = [bn] + strat
+        _merge_interaction_continuity_repair_into_outputs(
+            out,
+            resolution_for_contracts,
+            eff_resolution,
+            repair_payload={
+                "applied": True,
+                "repair_type": repair_result.get("repair_type"),
+                "violations": pre_violations,
+                "strategy_notes": strat,
+            },
+        )
+        payload2, _ = _ic_build_validation_payload(
+            out,
+            repaired,
+            resolution_for_contracts=resolution_for_contracts,
+            session=session,
+        )
+        payload2, _ = _maybe_apply_speaker_binding_bridge_to_payload(
+            out,
+            repaired,
+            payload2,
+            ic_contract,
+            resolution_for_contracts=resolution_for_contracts,
+            eff_resolution=eff_resolution,
+            apply_bridge=False,
+        )
+        _merge_interaction_continuity_validation_into_outputs(
+            out,
+            resolution_for_contracts,
+            eff_resolution,
+            validation_payload=payload2,
+        )
+        return repaired, [], False
+
+    strength = str(payload.get("continuity_strength") or "none").strip().lower()
+    if strength == "soft":
+        return norm, [], False
+
+    _merge_interaction_continuity_enforced_into_outputs(
+        out,
+        resolution_for_contracts,
+        eff_resolution,
+        enforced=True,
+    )
+    if strict_social_path and isinstance(strict_fallback_resolution, dict):
+        fb = minimal_social_emergency_fallback_line(strict_fallback_resolution)
+        assert_final_emission_mutation_allowed(
+            "interaction_continuity_strict_social_fallback",
+            source="gate._apply_interaction_continuity_emission_step.strict_social_hard_fallback",
+        )
+        return _normalize_text(fb), [], True
+    return norm, ["interaction_continuity_enforced"], False
+
+
+def attach_interaction_continuity_validation(
+    out: Dict[str, Any],
+    *,
+    resolution_for_contracts: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    preserve_existing_validation: bool = False,
+) -> None:
+    from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+    from game.final_emission_meta import ensure_final_emission_meta_dict
+
+    if preserve_existing_validation:
+        md_out = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
+        em = md_out.get("emission_debug") if isinstance(md_out.get("emission_debug"), dict) else {}
+        icv = em.get("interaction_continuity_validation")
+        if isinstance(icv, dict):
+            fem = ensure_final_emission_meta_dict(out)
+            fem["interaction_continuity_validation"] = icv
+        assert_final_emission_mutation_allowed(
+            "interaction_continuity_validation_attach",
+            source="gate._attach_interaction_continuity_validation.preserve_existing",
+        )
+        return
+    final_text = _normalize_text(out.get("player_facing_text"))
+    apply_interaction_continuity_emission_step(
+        out,
+        text=final_text,
+        resolution_for_contracts=resolution_for_contracts,
+        eff_resolution=eff_resolution,
+        session=session,
+        validate_only=True,
+        strict_social_path=False,
+    )
+    assert_final_emission_mutation_allowed(
+        "interaction_continuity_validation_attach",
+        source="gate._attach_interaction_continuity_validation.validate_only",
+    )

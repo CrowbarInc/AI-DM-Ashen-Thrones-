@@ -9,8 +9,12 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-import game.final_emission_gate as feg
-from game.final_emission_visibility_fallback import VisibilitySelectedFallback
+import game.final_emission_response_type as response_type
+from game.final_emission_opening_fallback import opening_scene_safe_fallback_selection
+from game.final_emission_visibility_fallback import (
+    VisibilitySelectedFallback,
+    first_mention_composition_meta,
+)
 from game.upstream_response_repairs import maybe_attach_upstream_prepared_opening_fallback_payload
 
 _DEFAULT_OPENING_HARNESS_RESOLUTION: dict[str, Any] = {"kind": "scene_opening", "prompt": "Start the campaign."}
@@ -21,10 +25,13 @@ def opening_gate_attach_then_opening_scene_safe_fallback_selection(
     *,
     resolution: Mapping[str, Any] | None = None,
 ) -> VisibilitySelectedFallback:
-    """Run upstream attach then ``_opening_scene_safe_fallback_selection`` (Block O). Mutates *gm_output*."""
+    """Run upstream attach then opening scene safe fallback selection (Block O). Mutates *gm_output*."""
     resolved = dict(resolution) if isinstance(resolution, Mapping) else dict(_DEFAULT_OPENING_HARNESS_RESOLUTION)
     maybe_attach_upstream_prepared_opening_fallback_payload(gm_output, resolution=resolved)
-    return feg._opening_scene_safe_fallback_selection(gm_output)
+    return opening_scene_safe_fallback_selection(
+        gm_output,
+        fail_closed_composition_meta_factory=first_mention_composition_meta,
+    )
 
 
 def opening_gate_attach_then_enforce_response_type_contract(
@@ -39,10 +46,10 @@ def opening_gate_attach_then_enforce_response_type_contract(
     strict_social_suppressed_non_social_turn: bool = False,
     active_interlocutor: str = "",
 ) -> tuple[str, dict[str, Any]]:
-    """Run upstream attach then ``_enforce_response_type_contract``. Mutates *gm_output* in place."""
+    """Run upstream attach then ``enforce_response_type_contract``. Mutates *gm_output* in place."""
     resolved = dict(resolution) if isinstance(resolution, Mapping) else dict(_DEFAULT_OPENING_HARNESS_RESOLUTION)
     maybe_attach_upstream_prepared_opening_fallback_payload(gm_output, resolution=resolved)
-    return feg._enforce_response_type_contract(
+    return response_type.enforce_response_type_contract(
         candidate_text,
         gm_output=gm_output,
         resolution=resolved,

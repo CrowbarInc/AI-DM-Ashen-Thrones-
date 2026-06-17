@@ -5,13 +5,21 @@
 - ``install_strict_social_trunk_phase_trackers`` — wraps private layer callables to prove strict-social
   trunk **ordering** (Block S).
 - Consumers of ``post_speaker_finalize_probe.install_post_speaker_text_probes`` — post-speaker
-  **divergence inventory** requires wrapping ``feg._apply_*`` / ``feg._strip_dialogue_from_text`` symbols.
+  **divergence inventory** wraps canonical stack / terminal-pipeline owner symbols (BJ-123).
+
+**Allowed ``feg.*`` patch seams (BJ-123):**
+
+- ``get_speaker_selection_contract`` — live compatibility re-export; patch both ``feg`` and ``sce``.
+- ``apply_final_emission_gate`` — orchestration entry for direct calls (not a monkeypatch target).
 
 **Public gate entry points used by helpers:**
 
-- ``apply_final_emission_gate``, ``enforce_emitted_speaker_with_contract`` — tests call directly.
-- ``get_speaker_selection_contract``, ``build_final_strict_social_response`` — patched on the gate
-  module namespace because gate imports them for orchestration.
+- ``apply_final_emission_gate`` — tests call directly.
+- ``get_speaker_selection_contract`` — patched on the gate module namespace when tests still
+  resolve it through ``feg``; also patched on ``game.speaker_contract_enforcement`` when enforcement
+  runs through the owner entrypoint.
+- ``build_final_strict_social_response`` — patched on ``game.final_emission_strict_social_stack``
+  (canonical owner seam after BJ-116/BJ-120).
 """
 from __future__ import annotations
 
@@ -19,6 +27,10 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 import game.final_emission_gate as feg
+import game.final_emission_repairs as emission_repairs
+import game.final_emission_response_type as response_type
+import game.final_emission_strict_social_stack as strict_social_stack
+import game.speaker_contract_enforcement as sce
 
 from tests.helpers.speaker_gate_order import (
     PHASE_ANTI_RAILROADING,
@@ -33,7 +45,9 @@ from tests.helpers.speaker_gate_order import (
 
 
 def patch_get_speaker_selection_contract(monkeypatch: Any, contract: Mapping[str, Any]) -> None:
-    monkeypatch.setattr(feg, "get_speaker_selection_contract", lambda *a, **kw: dict(contract))
+    loader = lambda *a, **kw: dict(contract)
+    monkeypatch.setattr(feg, "get_speaker_selection_contract", loader)
+    monkeypatch.setattr(sce, "get_speaker_selection_contract", loader)
 
 
 def patch_build_final_strict_social_response(
@@ -57,7 +71,7 @@ def patch_build_final_strict_social_response(
         details = strict_social_details() if callable(strict_social_details) else strict_social_details
         return line, dict(details)
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
 
 
 def _wrap_phase(orig: Callable[..., Any], order: list[str], phase: str) -> Callable[..., Any]:
@@ -90,23 +104,35 @@ def install_strict_social_trunk_phase_trackers(
         details = strict_social_details() if callable(strict_social_details) else strict_social_details
         return 'Tavern Runner says, "Order chain."', dict(details)
 
-    orig_rt = feg._enforce_response_type_contract
-    orig_nat = feg._apply_narrative_authenticity_layer
-    orig_te = feg._apply_tone_escalation_layer
-    orig_na = feg._apply_narrative_authority_layer
-    orig_sp = feg.enforce_emitted_speaker_with_contract
-    orig_ar = feg._apply_anti_railroading_layer
-    orig_ssa = feg._apply_scene_state_anchor_layer
+    orig_rt = response_type.enforce_response_type_contract
+    orig_nat = emission_repairs._apply_narrative_authenticity_layer
+    orig_te = strict_social_stack.apply_tone_escalation_layer
+    orig_na = strict_social_stack.apply_narrative_authority_layer
+    orig_sp = strict_social_stack.enforce_emitted_speaker_with_contract
+    orig_ar = strict_social_stack.apply_anti_railroading_layer
+    orig_ssa = strict_social_stack.apply_scene_state_anchor_layer
 
-    monkeypatch.setattr(feg, "build_final_strict_social_response", fake_build)
-    monkeypatch.setattr(feg, "_enforce_response_type_contract", _wrap_phase(orig_rt, order, PHASE_RESPONSE_TYPE))
+    monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
+    monkeypatch.setattr(response_type, "enforce_response_type_contract", _wrap_phase(orig_rt, order, PHASE_RESPONSE_TYPE))
     monkeypatch.setattr(
-        feg, "_apply_narrative_authenticity_layer", _wrap_phase(orig_nat, order, PHASE_NARRATIVE_AUTHENTICITY)
+        emission_repairs,
+        "_apply_narrative_authenticity_layer",
+        _wrap_phase(orig_nat, order, PHASE_NARRATIVE_AUTHENTICITY),
     )
-    monkeypatch.setattr(feg, "_apply_tone_escalation_layer", _wrap_phase(orig_te, order, PHASE_TONE_ESCALATION))
     monkeypatch.setattr(
-        feg, "_apply_narrative_authority_layer", _wrap_phase(orig_na, order, PHASE_NARRATIVE_AUTHORITY)
+        strict_social_stack, "apply_tone_escalation_layer", _wrap_phase(orig_te, order, PHASE_TONE_ESCALATION)
     )
-    monkeypatch.setattr(feg, "enforce_emitted_speaker_with_contract", _wrap_phase(orig_sp, order, PHASE_SPEAKER))
-    monkeypatch.setattr(feg, "_apply_anti_railroading_layer", _wrap_phase(orig_ar, order, PHASE_ANTI_RAILROADING))
-    monkeypatch.setattr(feg, "_apply_scene_state_anchor_layer", _wrap_phase(orig_ssa, order, PHASE_SCENE_STATE_ANCHOR))
+    monkeypatch.setattr(
+        strict_social_stack,
+        "apply_narrative_authority_layer",
+        _wrap_phase(orig_na, order, PHASE_NARRATIVE_AUTHORITY),
+    )
+    monkeypatch.setattr(
+        strict_social_stack, "enforce_emitted_speaker_with_contract", _wrap_phase(orig_sp, order, PHASE_SPEAKER)
+    )
+    monkeypatch.setattr(
+        strict_social_stack, "apply_anti_railroading_layer", _wrap_phase(orig_ar, order, PHASE_ANTI_RAILROADING)
+    )
+    monkeypatch.setattr(
+        strict_social_stack, "apply_scene_state_anchor_layer", _wrap_phase(orig_ssa, order, PHASE_SCENE_STATE_ANCHOR)
+    )

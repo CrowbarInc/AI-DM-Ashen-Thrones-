@@ -9,8 +9,11 @@ Objective C1-D:
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Mapping
 from typing import Any, Dict, List, Optional, Sequence, Tuple
+
+from game.final_emission_text import _normalize_text
 
 
 DIALOGUE_SOCIAL_PLAN_VERSION = 1
@@ -536,4 +539,246 @@ def pregate_attributed_label_matches_dialogue_social_plan(
             if _as_str(item).strip().lower() == ll:
                 return True
     return False
+
+
+# --- Strict-social dialogue plan enforcement (BJ-30 owner) ---
+
+_DIALOGUE_QUOTE_RE = re.compile(r'["“”][^"”]{2,}["“”]')
+_DIALOGUE_SPEECH_VERB_RE = re.compile(
+    r"\b(?:says|said|replies|replied|answers|answered|asks|asked|mutters|muttered|whispers|whispered|snaps|snapped|spits|spat|grunts|grunted)\b",
+    re.IGNORECASE,
+)
+_DIALOGUE_NAME_COLON_RE = re.compile(r"(?:^|\n)\s*([A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2})\s*:\s*['\"“”]")
+_DIALOGUE_SPEAKER_ATTR_RE = re.compile(
+    r"\b([A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2})\s+(?:says|replies|answers|asks|mutters|whispers|snaps|spits|grunts)\b",
+    re.IGNORECASE,
+)
+_DIALOGUE_SOCIAL_GLUE_RE = re.compile(
+    r"\b(?:nods?|shrugs?|sighs?|hesitates?|pauses?|leans in|leans closer|glances|looks at you|meets your eyes)\b",
+    re.IGNORECASE,
+)
+_BARE_SPEECH_ATTRIBUTION_SHELL_RE = re.compile(
+    r"^\s*(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,4}\s+)?"
+    r"(?:says|replies|answers|mutters|asks|whispers|adds|continues)\s*\.?\s*$",
+    re.IGNORECASE,
+)
+
+
+def dialogue_plan_trace_defaults() -> Dict[str, Any]:
+    return {
+        "dialogue_plan_checked": False,
+        "dialogue_plan_required": False,
+        "dialogue_plan_present": False,
+        "dialogue_plan_valid": False,
+        "dialogue_plan_failure_reasons": [],
+        "dialogue_plan_repair_mode": None,
+        "dialogue_plan_subtractive_strip_deferred": False,
+    }
+
+
+def extract_attributed_speaker_labels(text: str) -> List[str]:
+    raw = str(text or "")
+    labels: List[str] = []
+    for m in _DIALOGUE_NAME_COLON_RE.finditer(raw):
+        lab = str(m.group(1) or "").strip()
+        if lab and lab not in labels:
+            labels.append(lab)
+    for m in _DIALOGUE_SPEAKER_ATTR_RE.finditer(raw):
+        lab = str(m.group(1) or "").strip()
+        if lab and lab not in labels:
+            labels.append(lab)
+    return labels[:8]
+
+
+def dialogue_bearing_signals(text: str) -> Dict[str, Any]:
+    t = str(text or "")
+    low = t.lower()
+    has_quotes = bool(_DIALOGUE_QUOTE_RE.search(t))
+    has_speech_verb = bool(_DIALOGUE_SPEECH_VERB_RE.search(t))
+    has_name_colon = bool(_DIALOGUE_NAME_COLON_RE.search(t))
+    has_speaker_attr = bool(_DIALOGUE_SPEAKER_ATTR_RE.search(t))
+    has_social_glue = bool(_DIALOGUE_SOCIAL_GLUE_RE.search(low))
+    dialogue_present = bool(has_quotes or has_speech_verb or has_name_colon or has_speaker_attr)
+    glue_present = bool(has_social_glue and (has_speaker_attr or has_name_colon or has_speech_verb))
+    return {
+        "dialogue_present": dialogue_present,
+        "glue_present": glue_present,
+        "has_quotes": has_quotes,
+        "has_speech_verb": has_speech_verb,
+        "has_name_colon": has_name_colon,
+        "has_speaker_attr": has_speaker_attr,
+        "attributed_speakers": extract_attributed_speaker_labels(t),
+    }
+
+
+def get_dialogue_social_plan_from_emission_debug(
+    resolution: Mapping[str, Any] | None,
+    eff_resolution: Mapping[str, Any] | None,
+) -> Mapping[str, Any] | None:
+    for res in (eff_resolution, resolution):
+        md = res.get("metadata") if isinstance(res, Mapping) and isinstance(res.get("metadata"), Mapping) else None
+        em = md.get("emission_debug") if isinstance(md, Mapping) and isinstance(md.get("emission_debug"), Mapping) else None
+        dsp = em.get("dialogue_social_plan") if isinstance(em, Mapping) else None
+        if isinstance(dsp, Mapping):
+            return dsp
+    return None
+
+
+def strip_dialogue_from_text(text: str) -> str:
+    raw = str(text or "")
+    stripped = _DIALOGUE_QUOTE_RE.sub("", raw)
+    stripped = re.sub(
+        r"(?:^|\n)\s*[A-Z][a-zA-Z]{1,24}(?:\s+[A-Z][a-zA-Z]{1,24}){0,2}\s*:\s*",
+        "\n",
+        stripped,
+    )
+    stripped = re.sub(r"\s+", " ", stripped).strip()
+    return _normalize_text(stripped)
+
+
+def is_the_lowercase_role_mutters_comma_shell(text: str) -> bool:
+    """Strip tail like ``The tavern runner mutters,`` after quote removal (comma breaks bare-shell RE)."""
+    t = _normalize_text(str(text or "")).strip()
+    if '"' in t or "'" in t or "\u201c" in t or "\u201d" in t:
+        return False
+    return bool(
+        re.match(
+            r"(?i)^the\s+[a-z][\w'-]*(?:\s+[a-z][\w'-]*){0,4}\s+mutters\s*,\s*$",
+            t,
+        )
+    )
+
+
+def strict_social_line_matches_terminal_emission_pool(text: str, resolution: Mapping[str, Any] | None) -> bool:
+    """True when emitted text equals a deterministic strict-social terminal/minimal emergency line."""
+    from game.social_exchange_emission import (
+        _text_is_strict_social_minimal_emergency_fallback,
+        strict_social_ownership_terminal_fallback,
+    )
+
+    if not isinstance(resolution, dict):
+        return False
+    t = _normalize_text(str(text or "")).strip()
+    if not t:
+        return False
+    if _text_is_strict_social_minimal_emergency_fallback(text, resolution):
+        return True
+    return _normalize_text(strict_social_ownership_terminal_fallback(resolution)).strip() == t
+
+
+def is_bare_speech_attribution_shell_line(text: str) -> bool:
+    """True when subtractive dialogue strip left only a speech-verb tail with no quoted/spoken payload."""
+    t = _normalize_text(str(text or "")).strip()
+    if not t:
+        return True
+    if '"' in t or "'" in t or "\u201c" in t or "\u201d" in t:
+        return False
+    return bool(_BARE_SPEECH_ATTRIBUTION_SHELL_RE.match(t))
+
+
+def enforce_dialogue_plan_invariant_on_strict_social(
+    text: str,
+    *,
+    resolution: Mapping[str, Any] | None,
+    eff_resolution: Mapping[str, Any] | None,
+    strict_social_active: bool,
+    response_type_required: str | None,
+) -> tuple[str, Dict[str, Any]]:
+    trace = dialogue_plan_trace_defaults()
+    if not strict_social_active:
+        return text, trace
+
+    sig = dialogue_bearing_signals(text)
+    dialogue_present = bool(sig.get("dialogue_present")) or bool(sig.get("glue_present"))
+    npc_reply_expected = False
+    if isinstance(eff_resolution, Mapping):
+        soc = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), Mapping) else {}
+        npc_reply_expected = bool(soc.get("npc_reply_expected"))
+
+    required = bool(dialogue_present or npc_reply_expected or (str(response_type_required or "").strip().lower() == "dialogue"))
+    trace["dialogue_plan_checked"] = True
+    trace["dialogue_plan_required"] = required
+    if not required:
+        return text, trace
+
+    dsp = get_dialogue_social_plan_from_emission_debug(resolution, eff_resolution)
+    trace["dialogue_plan_present"] = bool(isinstance(dsp, Mapping))
+    failure_reasons: List[str] = []
+    if not isinstance(dsp, Mapping):
+        failure_reasons.append("missing_dialogue_social_plan")
+    else:
+        if dsp.get("applies") is not True:
+            failure_reasons.append("dialogue_social_plan_applies_false")
+        if not str(dsp.get("speaker_id") or "").strip():
+            failure_reasons.append("missing_required:speaker_id")
+        if not str(dsp.get("dialogue_intent") or "").strip():
+            failure_reasons.append("missing_required:dialogue_intent")
+        ok, errs = validate_dialogue_social_plan(dsp, strict=False)
+        if not ok:
+            failure_reasons.extend([f"plan_invalid:{e}" for e in (errs or [])[:12]])
+
+        attributed = [str(x).strip() for x in (sig.get("attributed_speakers") or []) if str(x).strip()]
+        if attributed:
+            for lab in attributed:
+                if pregate_attributed_label_matches_dialogue_social_plan(lab, dsp):
+                    continue
+                if str(dsp.get("speaker_id") or "").strip() or str(dsp.get("speaker_name") or "").strip():
+                    failure_reasons.append(f"attributed_speaker_mismatch:{lab}")
+                    break
+
+    failure_reasons = list(dict.fromkeys([str(r) for r in failure_reasons if str(r).strip()]))
+    trace["dialogue_plan_failure_reasons"] = failure_reasons
+    trace["dialogue_plan_valid"] = not bool(failure_reasons)
+
+    if trace["dialogue_plan_valid"]:
+        return text, trace
+
+    repaired = strip_dialogue_from_text(text)
+    trace["dialogue_plan_repair_mode"] = "subtractive_strip_dialogue"
+    if not repaired.strip():
+        sig0 = dialogue_bearing_signals(text)
+        if bool(sig0.get("has_quotes")):
+            # Quote-only or quote-stripping erased the only diegetic payload; keep the candidate for strict-social
+            # writers / referential substitution rather than collapsing to ambient stall text.
+            trace["dialogue_plan_repair_mode"] = "defer_empty_strip_preserving_quote_only_candidate"
+            trace["dialogue_plan_subtractive_strip_deferred"] = True
+            return text, trace
+        trace["dialogue_plan_repair_mode"] = "fail_closed_no_dialogue"
+        return "The moment passes without an answer.", trace
+    if is_bare_speech_attribution_shell_line(repaired):
+        # Stripping quoted speech would erase the only playable NPC line; defer to strict-social writer/fallbacks.
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    if (
+        isinstance(eff_resolution, Mapping)
+        and str((eff_resolution.get("social") or {}).get("social_intent_class") or "").strip().lower()
+        == "social_exchange"
+        and '"' in str(text or "")
+        and '"' not in str(repaired or "")
+        and is_the_lowercase_role_mutters_comma_shell(str(repaired or ""))
+    ):
+        # ``The tavern runner mutters,`` tails lose the comma-attribution case for bare-shell detection;
+        # preserve the clipped quoted line for strict-social restoration.
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    # Subtractive strip removed quoted speech but left a pronoun-led beat tail (e.g. ``she insists``);
+    # that tail is not an attributable ``<Name> says`` shell. Preserve the original for strict-social
+    # writers / referential local repair. Do not defer for ``<NPC> says,`` shells: those are the
+    # dialogue-plan fail-closed shape handled by returning ``repaired``.
+    rep_tail = str(repaired or "").lstrip()
+    if (
+        isinstance(eff_resolution, Mapping)
+        and str((eff_resolution.get("social") or {}).get("social_intent_class") or "").strip().lower()
+        == "social_exchange"
+        and bool((eff_resolution.get("social") or {}).get("npc_reply_expected"))
+        and '"' in str(text or "")
+        and '"' not in str(repaired or "")
+        and bool(re.match(r"(?i)(?:they|he|she)\b", rep_tail))
+    ):
+        trace["dialogue_plan_repair_mode"] = "defer_strip_preserving_dialogue_candidate"
+        trace["dialogue_plan_subtractive_strip_deferred"] = True
+        return text, trace
+    return repaired, trace
 

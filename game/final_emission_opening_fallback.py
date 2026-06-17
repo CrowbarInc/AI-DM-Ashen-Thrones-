@@ -21,6 +21,7 @@ from game.opening_deterministic_fallback import (
     OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
+from game.final_emission_sealed_fallback import SealedFallbackSelection
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
@@ -287,6 +288,18 @@ def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
     return out
 
 
+def scene_opening_rt_contract_accept_path_promotes_candidate(
+    response_type_debug: Mapping[str, Any],
+) -> bool:
+    """True when scene-opening response-type path accepts the writer candidate without RT repair (selector only)."""
+    return (
+        str(response_type_debug.get("response_type_required") or "").strip().lower() == "scene_opening"
+        and response_type_debug.get("response_type_candidate_ok") is True
+        and response_type_debug.get("response_type_repair_used") is False
+        and response_type_debug.get("scene_opening_candidate_contract_passed") is True
+    )
+
+
 def select_opening_fallback_for_response_type_contract(
     gm_output: Mapping[str, Any] | None,
 ) -> tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]:
@@ -375,3 +388,32 @@ def opening_scene_safe_fallback_selection(
         fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
         composition_meta=meta,
     )
+
+
+def opening_sealed_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> SealedFallbackSelection:
+    """Project opening hard-replace selection into sealed selection for terminal replace paths."""
+    return SealedFallbackSelection.from_visibility_selection(
+        opening_scene_safe_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+        )
+    )
+
+
+def make_opening_sealed_fallback_provider(
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> Callable[[Dict[str, Any]], SealedFallbackSelection]:
+    """Bind fail-closed composition meta for sealed non-strict opening provider injection."""
+
+    def provider(gm_output: Dict[str, Any]) -> SealedFallbackSelection:
+        return opening_sealed_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+        )
+
+    return provider
