@@ -5,7 +5,7 @@ import pytest
 
 from game import storage
 from game.api import chat
-from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
+from game.final_emission_meta import read_final_emission_meta_dict
 from game.scenario_spine import (
     ScenarioBranch,
     ScenarioSpine,
@@ -228,7 +228,7 @@ def test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants(m
     )
 
     final_text = str(out.get("player_facing_text") or "")
-    meta = read_fem_meta_from_gate_output(out) or {}
+    meta = read_final_emission_meta_dict(out) or {}
     turn = observed_turn_from_gate_output(
         scenario_id="declared_alias_dialogue_plan",
         gm_output=out,

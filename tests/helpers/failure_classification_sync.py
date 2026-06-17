@@ -41,7 +41,6 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_drift_bucket,
     protected_observation_field_paths,
     protected_observation_field_registry,
-    project_turn_observation,
 )
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
@@ -482,19 +481,9 @@ def classifier_evidence_field_paths() -> frozenset[str]:
     return frozenset(CLASSIFIER_EVIDENCE_FIELDS)
 
 
-def protected_replay_observation_field_paths() -> tuple[str, ...]:
-    """Return protected golden replay observation field paths via the sync facade."""
-    return protected_observation_field_paths()
-
-
 def protected_replay_classifier_evidence_field_paths() -> frozenset[str]:
     """Return protected classifier evidence paths derived from protected replay projection."""
     return protected_classifier_evidence_field_paths()
-
-
-def project_replay_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
-    """Project a replay-shaped turn payload through the acceptance projection adapter."""
-    return project_turn_observation(turn_payload)
 
 
 def failure_dashboard_evidence_manifest() -> tuple[tuple[str, str], ...]:

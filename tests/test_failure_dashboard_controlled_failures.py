@@ -12,8 +12,10 @@ from tests.helpers.failure_classification_sync import (
     dashboard_evidence_manifest_misalignments,
     known_failure_categories,
     known_owner_buckets,
-    project_replay_turn_observation,
-    protected_replay_observation_field_paths,
+)
+from tests.helpers.golden_replay_projection import (
+    project_turn_observation,
+    protected_observation_field_paths,
 )
 from tests.helpers.failure_dashboard_report import (
     FAILURE_DASHBOARD_EVIDENCE_LABELS as DASHBOARD_EVIDENCE_LABELS,
@@ -55,7 +57,7 @@ _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS = frozenset(
 
 
 def test_dashboard_report_module_exports_projection_and_taxonomy_surfaces():
-    assert REPLAY_PROTECTED_FIELD_PATHS == protected_replay_observation_field_paths()
+    assert REPLAY_PROTECTED_FIELD_PATHS == protected_observation_field_paths()
     assert KNOWN_FAILURE_CATEGORIES == known_failure_categories()
     assert_contract_classifier_alignment()
 
@@ -170,7 +172,7 @@ def test_controlled_failure_probe_owner_buckets_use_sync_taxonomy():
 
 
 def test_controlled_failure_probe_field_paths_use_projection_surface():
-    protected = set(protected_replay_observation_field_paths())
+    protected = set(protected_observation_field_paths())
     for _case_id, _observed, drift_row, _expected in CONTROLLED_FAILURE_CASES:
         field_path = str(drift_row["field_path"])
         assert field_path in protected or field_path in _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS
@@ -178,7 +180,7 @@ def test_controlled_failure_probe_field_paths_use_projection_surface():
 
 def test_controlled_wrong_speaker_projection_matches_hand_observed_shape():
     observed = _observed(selected_speaker_id="guard")
-    projected = project_replay_turn_observation(
+    projected = project_turn_observation(
         {
             "scenario_id": "controlled_probe",
             "snap": {

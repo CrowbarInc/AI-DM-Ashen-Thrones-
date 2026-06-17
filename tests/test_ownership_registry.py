@@ -288,7 +288,6 @@ _BI8_GOLDEN_REPLAY_FORBIDDEN_SOURCE_FRAGMENTS: Final[Mapping[str, str]] = {
 _BD6_OPENING_FACADE: Final[str] = "tests/helpers/opening_fallback_evidence.py"
 _BD6_FORBIDDEN_FEM_READ_SYMBOLS: Final[frozenset[str]] = frozenset(
     {
-        "read_final_emission_meta_dict",
         "read_final_emission_meta_from_turn_payload",
         "read_emission_debug_lane_from_turn_payload",
     },
@@ -353,6 +352,7 @@ _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/test_validation_layer_audit_smoke.py": "Audit fixture strings embed gate-import examples",
     "tests/test_test_audit_tool.py": "Inventory audit fixture strings embed gate-import examples",
     "tests/test_realization_layer_audit.py": "Realization audit fixture strings embed gate-import examples",
+    "tests/test_run_scenario_spine_validation.py": "Scenario-spine validation; canonical FEM/lineage read for opening attribution diagnostics (BL1)",
     "tests/test_ownership_registry.py": "Governance module; AO5 runtime vs acceptance boundary check imports replay projection",
 }
 
@@ -798,13 +798,13 @@ def _bd6_facade_replacement(module: str, symbol: str) -> str:
     if module == "game.final_emission_meta" and symbol in _BD6_FORBIDDEN_FEM_READ_SYMBOLS:
         return (
             f"{_BD6_SMOKE_FACADE}::final_emission_meta_from_output "
-            f"(integration/smoke) or {_BD6_GOLDEN_REPLAY_FACADE}::read_fem_meta_from_gate_output "
-            f"(golden/replay observation)"
+            f"(integration/smoke) or game.final_emission_meta.read_final_emission_meta_dict "
+            f"(gate-output FEM read)"
         )
     if module == "game.final_emission_replay_projection":
         return (
-            f"{_BD6_GOLDEN_REPLAY_FACADE} "
-            f"(e.g. build_runtime_lineage_events_from_fem, SEALED_REPLACEMENT_SUBKINDS)"
+            f"game.final_emission_replay_projection "
+            f"(e.g. build_fem_runtime_lineage_events, SEALED_REPLACEMENT_SUBKINDS)"
         )
     if _bd6_is_forbidden_owner_bucket_symbol(module, symbol):
         if symbol.startswith("OPENING_FALLBACK_OWNER_"):
@@ -1752,20 +1752,20 @@ def test_bd6_gate_dependency_compression_guard_detects_synthetic_violation() -> 
     """BD-6: guard flags representative compressed imports with facade guidance."""
     synthetic = (
         "from game.final_emission_gate import apply_final_emission_gate\n"
-        "from game.final_emission_meta import read_final_emission_meta_dict, OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED\n"
+        "from game.final_emission_meta import read_final_emission_meta_from_turn_payload, OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED\n"
         "import game.final_emission_replay_projection as replay\n"
     )
     rel = "tests/test_synthetic_bd6_violation.py"
     violations = collect_gate_dependency_compression_guard_violations(rel, synthetic)
     joined = "\n".join(violations)
     assert any("apply_final_emission_gate" in v for v in violations)
-    assert any("read_final_emission_meta_dict" in v for v in violations)
+    assert any("read_final_emission_meta_from_turn_payload" in v for v in violations)
     assert any("OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED" in v for v in violations)
     assert any("final_emission_replay_projection" in v for v in violations)
     assert "apply_final_emission_gate_consumer" in joined
     assert "final_emission_meta_from_output" in joined
     assert "opening_fallback_evidence" in joined
-    assert "golden_replay_projection" in joined
+    assert "build_fem_runtime_lineage_events" in joined
 
 
 def test_bd6_gate_dependency_compression_guard_non_owners_avoid_compressed_gate_imports() -> None:
@@ -1901,7 +1901,6 @@ def test_bg1_protected_replay_manifest_registry_parity() -> None:
         manifest_text
     ) == []
     assert acceptance_projection.protected_observation_manifest_section_is_current(manifest_text)
-    assert refresh_mod.manifest_section_is_current(manifest_text)
 
     registry_paths = {
         field.path for field in acceptance_projection.protected_observation_field_registry()
@@ -1915,7 +1914,8 @@ def test_bg1_protected_replay_manifest_registry_parity() -> None:
         field.path: field.drift_bucket
         for field in acceptance_projection.protected_observation_field_registry()
     }
-    assert refresh_mod._registry_fields_by_path() == {
+    manifest_buckets = dict(acceptance_projection.protected_observation_manifest_field_rows())
+    assert manifest_buckets == {
         path: acceptance_projection.protected_observation_drift_bucket(path)
         for path in acceptance_projection.protected_observation_field_paths()
     }

@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import Any, Literal
 
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
+from tests.helpers.golden_replay_projection import observed_projection_schema_defaults
 
 SyntheticObservedRowProfile = Literal["classifier_probe", "dashboard_probe"]
 
@@ -24,43 +25,37 @@ _DASHBOARD_PROBE_DEFAULTS: dict[str, Any] = {
     "normalized_signal_presence": {},
 }
 
+_CLASSIFIER_PROBE_OVERLAY: dict[str, Any] = {
+    "scenario_id": "probe",
+    "turn_index": 0,
+    "final_text": "The runner answers.",
+    "final_text_hash": "hash123",
+    "route_kind": "dialogue",
+    "selected_speaker_id": "runner",
+    "final_emitted_source": "generated_candidate",
+    "response_type_required": "dialogue_response",
+    "response_type_repair_used": False,
+    "post_gate_mutation_detected": False,
+    "strict_social_active": False,
+    "speaker_contract_enforcement_reason": None,
+    "fallback_behavior_repaired": False,
+    "fallback_behavior_repair_kind": None,
+    "sanitizer_mode": None,
+    "sanitizer_event_count": None,
+    "sanitizer_changed_count": None,
+    "sanitizer_rewrite_used": None,
+    "trace": {
+        "canonical_entry": {"target_actor_id": "runner"},
+        "social_contract_trace": {"route_selected": "dialogue"},
+    },
+}
+
 
 def _base_synthetic_observed_replay_row() -> dict[str, Any]:
     """Return the shared observed-row baseline before profile defaults/overrides."""
-    return {
-        "scenario_id": "probe",
-        "turn_index": 0,
-        "final_text": "The runner answers.",
-        "final_text_hash": "hash123",
-        "route_kind": "dialogue",
-        "selected_speaker_id": "runner",
-        "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
-        "fallback_temporal_frame": None,
-        "opening_fallback_owner_bucket": None,
-        "sealed_fallback_owner_bucket": None,
-        "visibility_fallback_owner_bucket": None,
-        "visibility_replacement_applied": None,
-        "visibility_fallback_pool": None,
-        "visibility_fallback_kind": None,
-        "response_type_required": "dialogue_response",
-        "response_type_repair_used": False,
-        "response_type_repair_kind": None,
-        "post_gate_mutation_detected": False,
-        "strict_social_active": False,
-        "speaker_contract_enforcement_reason": None,
-        "fallback_behavior_repaired": False,
-        "fallback_behavior_repair_kind": None,
-        "sanitizer_mode": None,
-        "sanitizer_event_count": None,
-        "sanitizer_changed_count": None,
-        "sanitizer_rewrite_used": None,
-        "unavailable": [],
-        "trace": {
-            "canonical_entry": {"target_actor_id": "runner"},
-            "social_contract_trace": {"route_selected": "dialogue"},
-        },
-    }
+    row = observed_projection_schema_defaults()
+    row.update(_CLASSIFIER_PROBE_OVERLAY)
+    return row
 
 
 def synthetic_observed_replay_row(
@@ -139,6 +134,7 @@ def protected_speaker_failure_turn(
 ) -> dict[str, Any]:
     """Canonical protected replay speaker-failure observed turn for dashboard reports."""
     row: dict[str, Any] = {
+        **observed_projection_schema_defaults(),
         "turn_index": 0,
         "source_path": "data/validation/scenario_spines/synthetic_fixture.json",
         "branch_id": "synthetic_branch",
@@ -147,9 +143,7 @@ def protected_speaker_failure_turn(
         "route_kind": "dialogue",
         "selected_speaker_id": "guard",
         "final_emitted_source": "generated_candidate",
-        "fallback_family": None,
         "scaffold_leakage": False,
-        "unavailable": [],
         "runtime_lineage_events": [
             make_runtime_lineage_event(
                 event_kind="gate_outcome",

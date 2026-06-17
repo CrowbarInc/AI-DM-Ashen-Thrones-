@@ -19,8 +19,8 @@ from tests.helpers.failure_classification_sync import (
     failure_dashboard_evidence_row_keys,
     failure_dashboard_row_shape_errors,
     known_failure_categories,
-    protected_replay_observation_field_paths,
 )
+from tests.helpers.golden_replay_projection import protected_observation_field_paths
 from tests.helpers.runtime_lineage_reporting import (
     build_runtime_lineage_summary,
     runtime_lineage_markdown_lines as _runtime_lineage_markdown_lines,
@@ -51,7 +51,7 @@ from tests.helpers.replay_drift_reports import (
 
 # Cycle T3: dashboard reporting consumes projection/sync surfaces instead of
 # re-enumerating protected replay field paths or failure categories inline.
-REPLAY_PROTECTED_FIELD_PATHS = protected_replay_observation_field_paths()
+REPLAY_PROTECTED_FIELD_PATHS = protected_observation_field_paths()
 KNOWN_FAILURE_CATEGORIES = known_failure_categories()
 FAILURE_DASHBOARD_EVIDENCE_MANIFEST = failure_dashboard_evidence_manifest()
 FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS = failure_dashboard_evidence_row_keys()

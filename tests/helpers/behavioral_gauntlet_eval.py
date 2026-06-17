@@ -13,7 +13,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from game.dead_turn_report_visibility import build_dead_turn_run_report
 from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
-from tests.helpers.golden_replay_projection import read_fem_meta_from_gate_output
+from game.final_emission_meta import read_final_emission_meta_dict
 
 SCHEMA_VERSION = "behavioral_gauntlet_eval.v2"
 MAX_EVIDENCE_TURNS = 5
@@ -492,7 +492,7 @@ def _gm_output_slice_from_row(raw: Mapping[str, Any]) -> Mapping[str, Any] | Non
     go = raw.get("gm_output")
     if isinstance(go, Mapping):
         return go
-    fem = read_fem_meta_from_gate_output(raw)
+    fem = read_final_emission_meta_dict(raw)
     if isinstance(fem, Mapping) and isinstance(fem.get("dead_turn"), Mapping):
         return {"_final_emission_meta": fem}
     return None

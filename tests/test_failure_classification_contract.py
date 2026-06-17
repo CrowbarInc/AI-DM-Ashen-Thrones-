@@ -110,6 +110,10 @@ def test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract():
 
 def test_ao4_synthetic_observed_row_factory_is_single_authority():
     from tests.helpers.failure_classification_sync import observed_failure_row
+    from tests.helpers.golden_replay_projection import (
+        protected_observation_default_row,
+        protected_observation_flat_field_paths,
+    )
     from tests.helpers.replay_observed_row_fixtures import (
         observed_dashboard_probe_row,
         synthetic_observed_replay_row,
@@ -126,6 +130,12 @@ def test_ao4_synthetic_observed_row_factory_is_single_authority():
     assert dashboard_row["final_text_hash"] == "probehash"
     assert dashboard_row["raw_signal_presence"] == {}
     assert dashboard_row["normalized_signal_presence"] == {}
+
+    flat_protected = set(protected_observation_flat_field_paths())
+    assert flat_protected <= set(classifier_row)
+    assert flat_protected == set(protected_observation_default_row())
+    assert classifier_row["scaffold_leakage"] is False
+    assert classifier_row["route_kind"] == "dialogue"
 
 
 def test_failure_classification_row_contract_helper_matches_contract_constants():

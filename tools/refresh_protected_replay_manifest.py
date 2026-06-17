@@ -26,7 +26,6 @@ from tests.helpers.golden_replay_projection import (  # noqa: E402
     protected_observation_field_paths,
     protected_observation_field_registry,
     protected_observation_manifest_registry_parity_errors,
-    protected_observation_manifest_section_is_current,
     protected_observation_manifest_field_rows,
     render_protected_observation_manifest_section,
 )
@@ -35,28 +34,6 @@ MANIFEST_PATH = ROOT / "docs" / "testing" / "protected_replay_manifest.md"
 BEGIN_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN
 END_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END
 INSERT_BEFORE_HEADING = "## Cycle S Drift Policy Addendum"
-
-
-def _registry_fields_by_path() -> dict[str, str]:
-    """Return registry path -> drift bucket via canonical registry accessors."""
-    return {
-        path: protected_observation_drift_bucket(path)
-        for path in protected_observation_field_paths()
-    }
-
-
-def render_generated_section() -> str:
-    """Return the bounded manifest section for protected observation field paths."""
-    return render_protected_observation_manifest_section()
-
-
-def extract_generated_section(manifest_text: str) -> str | None:
-    return extract_protected_observation_manifest_section(manifest_text)
-
-
-def manifest_section_is_current(manifest_text: str | None = None) -> bool:
-    text = manifest_text if manifest_text is not None else MANIFEST_PATH.read_text(encoding="utf-8")
-    return protected_observation_manifest_section_is_current(text)
 
 
 def _validate_registry_invariants() -> str | None:
@@ -124,8 +101,8 @@ def refresh_manifest(*, write: bool) -> int:
         print("\n".join(parity_errors), file=sys.stderr)
         return 1
 
-    expected = render_generated_section()
-    current = extract_generated_section(manifest)
+    expected = render_protected_observation_manifest_section()
+    current = extract_protected_observation_manifest_section(manifest)
 
     if current == expected:
         if write:

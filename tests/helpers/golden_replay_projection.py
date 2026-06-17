@@ -85,22 +85,6 @@ REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS: tuple[str, ...] = (
 MISSING = object()
 
 
-def read_fem_meta_from_gate_output(gm_output: Mapping[str, Any]) -> dict[str, Any]:
-    """Read raw FEM from post-gate ``gm_output`` (golden-replay / spine lineage diagnostics)."""
-    from game.final_emission_meta import read_final_emission_meta_dict
-
-    return read_final_emission_meta_dict(gm_output) or {}
-
-
-def build_runtime_lineage_events_from_fem(fem: Mapping[str, Any] | None) -> list[dict[str, Any]]:
-    """Project runtime lineage events from post-gate FEM (golden-replay / spine observation).
-
-    Delegates to :mod:`game.final_emission_replay_projection`; runtime lineage ownership
-    stays in the game module (Cycle BD-4 downstream read compression).
-    """
-    return build_fem_runtime_lineage_events(fem)
-
-
 @dataclass(frozen=True)
 class ProtectedObservationField:
     path: str
@@ -614,6 +598,40 @@ def protected_observation_field_paths() -> tuple[str, ...]:
     return tuple(sorted({field.path for field in PROTECTED_OBSERVATION_FIELDS}))
 
 
+def protected_observation_flat_field_paths() -> tuple[str, ...]:
+    """Return sorted flat (non-dotted) protected observation registry paths."""
+    return tuple(path for path in protected_observation_field_paths() if "." not in path)
+
+
+def _neutral_default_for_flat_protected_path(path: str) -> Any:
+    if path == "scaffold_leakage":
+        return False
+    if path == "final_text":
+        return ""
+    return None
+
+
+def protected_observation_default_row() -> dict[str, Any]:
+    """Neutral defaults for every flat protected observation registry path."""
+    return {
+        path: _neutral_default_for_flat_protected_path(path)
+        for path in protected_observation_flat_field_paths()
+    }
+
+
+def observed_projection_schema_defaults() -> dict[str, Any]:
+    """Schema-aligned defaults for synthetic observed replay rows."""
+    return {
+        **protected_observation_default_row(),
+        "trace": {
+            "canonical_entry": {},
+            "turn_trace": {},
+            "social_contract_trace": {},
+        },
+        "unavailable": [],
+    }
+
+
 PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN = "<!-- BEGIN GENERATED: protected_field_paths -->"
 PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_END = "<!-- END GENERATED: protected_field_paths -->"
 
@@ -767,11 +785,6 @@ def protected_observation_drift_bucket(path: str) -> str:
     if str(path).startswith("semantic."):
         return "semantic_drift"
     return "structural_drift"
-
-
-def protected_field_paths() -> tuple[str, ...]:
-    """Return dotted field paths under protected golden replay observation locks."""
-    return protected_observation_field_paths()
 
 
 def protected_classifier_evidence_excluded_paths() -> frozenset[str]:
@@ -1184,65 +1197,23 @@ def _raw_presence_for_protected_spec(
     return None
 
 
-def _build_raw_signal_presence(
-    *,
-    fem: Mapping[str, Any],
-    route_kind: Any,
-    selected_speaker_id: Any,
-    payload: Mapping[str, Any],
-    trace: Mapping[str, Any],
-    canonical_entry: Mapping[str, Any],
-    turn_trace: Mapping[str, Any],
-    social_contract_trace: Mapping[str, Any],
-) -> dict[str, bool]:
-    presence: dict[str, bool] = {}
-    for spec in _PROTECTED_EXTRACTION_SPECS.values():
-        value = _raw_presence_for_protected_spec(
-            spec,
-            fem=fem,
-            route_kind=route_kind,
-            selected_speaker_id=selected_speaker_id,
-            payload=payload,
-            trace=trace,
-            canonical_entry=canonical_entry,
-            turn_trace=turn_trace,
-            social_contract_trace=social_contract_trace,
-        )
-        if value is not None:
-            presence[_raw_presence_key_for_spec(spec)] = value
-    for presence_key, container_key in _TRACE_CONTAINER_RAW_PRESENCE:
-        container = {
-            "canonical_entry": canonical_entry,
-            "turn_trace": turn_trace,
-            "social_contract_trace": social_contract_trace,
-        }[container_key]
-        presence[presence_key] = bool(container)
-    for supporting in _SUPPORTING_RAW_PRESENCE_SPECS:
-        presence[supporting.key] = _fem_has_any_key(fem, supporting.fem_source_keys)
-    return presence
-
-
-def _build_normalized_signal_presence(
+def _normalized_presence_for_protected_spec(
+    spec: _ProtectedExtractionSpec,
     *,
     fem_normalized: Mapping[str, Any],
-    raw_signal_presence: Mapping[str, bool],
-) -> dict[str, bool]:
-    normalized: dict[str, bool] = {}
-    for spec in _PROTECTED_EXTRACTION_SPECS.values():
-        if not spec.normalized_presence:
-            continue
-        if spec.raw_presence == "fem_dual_family":
-            normalized[spec.path] = _fem_dual_fallback_family_present(fem_normalized)
-        elif spec.raw_presence == "fem_key":
-            keys = spec.fem_source_keys or (spec.path,)
-            normalized[spec.path] = _fem_has_any_key(fem_normalized, keys)
-    for supporting in _SUPPORTING_RAW_PRESENCE_SPECS:
-        if supporting.key in raw_signal_presence:
-            normalized[supporting.key] = _fem_has_any_key(fem_normalized, supporting.fem_source_keys)
-    return normalized
+) -> bool | None:
+    """Return normalized presence bool for a protected spec, or None when not tracked."""
+    if not spec.normalized_presence:
+        return None
+    if spec.raw_presence == "fem_dual_family":
+        return _fem_dual_fallback_family_present(fem_normalized)
+    if spec.raw_presence == "fem_key":
+        keys = spec.fem_source_keys or (spec.path,)
+        return _fem_has_any_key(fem_normalized, keys)
+    return None
 
 
-def _build_missing_source_by_field(
+def _missing_source_by_field_from_presence(
     raw_signal_presence: Mapping[str, bool],
     normalized_signal_presence: Mapping[str, bool],
 ) -> dict[str, str]:
@@ -1257,21 +1228,199 @@ def _build_missing_source_by_field(
     return missing_source_by_field
 
 
-def _compute_unavailable_paths(observed: Mapping[str, Any]) -> list[str]:
+def _unavailable_paths_for_projection(
+    *,
+    protected_flat: Mapping[str, Any],
+    trace_observed: Mapping[str, Any],
+) -> list[str]:
     unavailable: list[str] = []
     for spec in _PROTECTED_EXTRACTION_SPECS.values():
         if not spec.unavailable_key:
             continue
         key = spec.unavailable_key
-        if observed.get(key) is None:
+        if protected_flat.get(key) is None:
             unavailable.append(key)
-    trace = observed.get("trace") if isinstance(observed.get("trace"), Mapping) else {}
+    trace = trace_observed if isinstance(trace_observed, Mapping) else {}
     for unavailable_key in _TRACE_CONTAINER_UNAVAILABLE_KEYS:
         container_name = unavailable_key.removeprefix("trace.")
         container = trace.get(container_name) if isinstance(trace, Mapping) else None
         if not container:
             unavailable.append(unavailable_key)
     return sorted(set(unavailable))
+
+
+@dataclass(frozen=True)
+class _ProjectionStatus:
+    """Registry-informed presence outputs for one projected observed turn."""
+
+    raw_signal_presence: dict[str, bool]
+    normalized_signal_presence: dict[str, bool]
+    missing_source_by_field: dict[str, str]
+    unavailable: list[str]
+
+
+def _build_projection_status(
+    *,
+    fem: Mapping[str, Any],
+    fem_normalized: Mapping[str, Any],
+    route_kind: Any,
+    selected_speaker_id: Any,
+    payload: Mapping[str, Any],
+    trace: Mapping[str, Any],
+    canonical_entry: Mapping[str, Any],
+    turn_trace: Mapping[str, Any],
+    social_contract_trace: Mapping[str, Any],
+    protected_flat: Mapping[str, Any],
+    trace_observed: Mapping[str, Any],
+) -> _ProjectionStatus:
+    """Build raw/normalized presence, missing-source routing, and unavailable in one pass."""
+    raw_signal_presence: dict[str, bool] = {}
+    normalized_signal_presence: dict[str, bool] = {}
+    trace_containers = {
+        "canonical_entry": canonical_entry,
+        "turn_trace": turn_trace,
+        "social_contract_trace": social_contract_trace,
+    }
+
+    for spec in _PROTECTED_EXTRACTION_SPECS.values():
+        raw_value = _raw_presence_for_protected_spec(
+            spec,
+            fem=fem,
+            route_kind=route_kind,
+            selected_speaker_id=selected_speaker_id,
+            payload=payload,
+            trace=trace,
+            canonical_entry=canonical_entry,
+            turn_trace=turn_trace,
+            social_contract_trace=social_contract_trace,
+        )
+        if raw_value is not None:
+            raw_signal_presence[_raw_presence_key_for_spec(spec)] = raw_value
+
+        normalized_value = _normalized_presence_for_protected_spec(spec, fem_normalized=fem_normalized)
+        if normalized_value is not None:
+            normalized_signal_presence[spec.path] = normalized_value
+
+    for presence_key, container_key in _TRACE_CONTAINER_RAW_PRESENCE:
+        raw_signal_presence[presence_key] = bool(trace_containers[container_key])
+
+    for supporting in _SUPPORTING_RAW_PRESENCE_SPECS:
+        raw_signal_presence[supporting.key] = _fem_has_any_key(fem, supporting.fem_source_keys)
+        if supporting.key in raw_signal_presence:
+            normalized_signal_presence[supporting.key] = _fem_has_any_key(
+                fem_normalized,
+                supporting.fem_source_keys,
+            )
+
+    missing_source_by_field = _missing_source_by_field_from_presence(
+        raw_signal_presence,
+        normalized_signal_presence,
+    )
+    unavailable = _unavailable_paths_for_projection(
+        protected_flat=protected_flat,
+        trace_observed=trace_observed,
+    )
+    return _ProjectionStatus(
+        raw_signal_presence=raw_signal_presence,
+        normalized_signal_presence=normalized_signal_presence,
+        missing_source_by_field=missing_source_by_field,
+        unavailable=unavailable,
+    )
+
+
+# Flat protected paths projected by :func:`_project_flat_protected_observed_fields`.
+_HANDLED_FLAT_PROTECTED_SOURCES: frozenset[str] = frozenset(
+    {
+        "resolution",
+        "route",
+        "speaker",
+        "fem_flat",
+        "sanitizer_trace",
+        "sanitizer_lineage",
+        "sanitizer_lineage_legacy",
+        "fem_opening_bucket",
+        "fallback_family",
+        "final_text",
+        "scaffold",
+    }
+)
+
+# Dotted protected paths nested under ``observed["trace"]`` (not flat keys).
+_TRACE_NEST_PROTECTED_SOURCES: frozenset[str] = frozenset({"trace_leaf"})
+
+
+def _validate_protected_projection_sources() -> None:
+    for path, spec in _PROTECTED_EXTRACTION_SPECS.items():
+        if spec.source in _HANDLED_FLAT_PROTECTED_SOURCES:
+            if "." in path:
+                raise AssertionError(
+                    f"flat protected projection source {spec.source!r} must not use dotted path {path!r}"
+                )
+            continue
+        if spec.source in _TRACE_NEST_PROTECTED_SOURCES:
+            if not spec.trace_container:
+                raise AssertionError(
+                    f"trace_leaf protected path {path!r} must declare trace_container"
+                )
+            continue
+        raise AssertionError(
+            f"protected extraction source {spec.source!r} for {path!r} is not handled by "
+            "flat projection or trace nest"
+        )
+
+
+_validate_protected_projection_sources()
+
+
+def protected_observation_extraction_source_by_path() -> dict[str, str]:
+    """Return ``path → extraction source`` from the protected extraction registry."""
+    return {path: spec.source for path, spec in _PROTECTED_EXTRACTION_SPECS.items()}
+
+
+def _project_flat_protected_observed_fields(
+    *,
+    resolution: Mapping[str, Any],
+    route_kind: Any,
+    selected_speaker_id: Any,
+    fem: Mapping[str, Any],
+    fem_flat: Mapping[str, Any],
+    sanitizer_trace_flat: Mapping[str, Any],
+    sanitizer_lineage_flat: Mapping[str, Any],
+    fallback_family: Any,
+    final_text: str,
+) -> dict[str, Any]:
+    """Project registry-backed flat protected observation keys into one dict."""
+    fem_shaped = _observed_fem_flat_values(fem_flat)
+    out: dict[str, Any] = {}
+    for path, spec in _PROTECTED_EXTRACTION_SPECS.items():
+        if "." in path:
+            continue
+        if spec.source == "resolution":
+            out[path] = resolution.get("kind")
+        elif spec.source == "route":
+            out[path] = route_kind
+        elif spec.source == "speaker":
+            out[path] = selected_speaker_id
+        elif spec.source == "fem_flat":
+            out[path] = fem_shaped.get(path)
+        elif spec.source == "sanitizer_trace":
+            out[path] = sanitizer_trace_flat.get(path)
+        elif spec.source in ("sanitizer_lineage", "sanitizer_lineage_legacy"):
+            out[path] = sanitizer_lineage_flat.get(path)
+        elif spec.source == "fem_opening_bucket":
+            out[path] = opening_fallback_owner_bucket_from_meta(fem)
+        elif spec.source == "fallback_family":
+            out[path] = fallback_family
+        elif spec.source == "final_text":
+            out[path] = final_text
+        elif spec.source == "scaffold":
+            out[path] = final_text_has_scaffold_leakage(final_text)
+        else:
+            raise AssertionError(
+                f"unhandled flat protected extraction source {spec.source!r} for {path!r}"
+            )
+    return out
+
 
 def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     """Project chat payload + snapshot into a golden replay observation dict.
@@ -1344,21 +1493,40 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     sanitizer_changed_count, sanitizer_dropped_count = _sanitizer_debug_change_counts(sanitizer_debug)
     sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
     sanitizer_trace_flat = _extract_sanitizer_trace_flat_observed_fields(sanitizer_trace)
-    sanitizer_empty_fallback_used = sanitizer_trace_flat["sanitizer_empty_fallback_used"]
     sanitizer_lineage_flat = _extract_sanitizer_lineage_observed_fields(
         sanitizer_trace,
         lineage_context={
             "sanitizer_mode": sanitizer_mode,
             "sanitizer_changed_count": sanitizer_changed_count,
             "sanitizer_dropped_count": sanitizer_dropped_count,
-            "sanitizer_empty_fallback_used": sanitizer_empty_fallback_used,
+            "sanitizer_empty_fallback_used": sanitizer_trace_flat.get("sanitizer_empty_fallback_used"),
         },
     )
     interaction_continuity_validation = _find_nested_mapping(payload, "interaction_continuity_validation")
 
     final_text = str(snap.get("gm_text") or "")
-    raw_signal_presence = _build_raw_signal_presence(
+    protected_flat = _project_flat_protected_observed_fields(
+        resolution=resolution,
+        route_kind=route_kind,
+        selected_speaker_id=selected_speaker_id,
         fem=fem,
+        fem_flat=fem_flat,
+        sanitizer_trace_flat=sanitizer_trace_flat,
+        sanitizer_lineage_flat=sanitizer_lineage_flat,
+        fallback_family=fallback_family,
+        final_text=final_text,
+    )
+    trace_observed = {
+        "canonical_entry_path": trace.get("canonical_entry_path"),
+        "canonical_entry_reason": trace.get("canonical_entry_reason"),
+        "canonical_entry_target_actor_id": trace.get("canonical_entry_target_actor_id"),
+        "canonical_entry": dict(canonical_entry),
+        "turn_trace": dict(turn_trace),
+        "social_contract_trace": dict(social_contract_trace),
+    }
+    projection_status = _build_projection_status(
+        fem=fem,
+        fem_normalized=fem_normalized,
         route_kind=route_kind,
         selected_speaker_id=selected_speaker_id,
         payload=payload,
@@ -1366,25 +1534,15 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         canonical_entry=canonical_entry,
         turn_trace=turn_trace,
         social_contract_trace=social_contract_trace,
-    )
-    normalized_signal_presence = _build_normalized_signal_presence(
-        fem_normalized=fem_normalized,
-        raw_signal_presence=raw_signal_presence,
-    )
-    missing_source_by_field = _build_missing_source_by_field(
-        raw_signal_presence,
-        normalized_signal_presence,
+        protected_flat=protected_flat,
+        trace_observed=trace_observed,
     )
     observed = {
         "scenario_id": scenario_id,
         "turn_index": snap.get("turn_index"),
         "player_text": snap.get("player_text"),
-        "final_text": final_text,
-        "resolution_kind": resolution.get("kind"),
-        "route_kind": route_kind,
-        "selected_speaker_id": selected_speaker_id,
         "selected_speaker_source": selected_speaker_source,
-        **_observed_fem_flat_values(fem_flat),
+        **protected_flat,
         "response_delta_checked": response_delta_checked,
         "response_delta_failed": response_delta_failed,
         "response_delta_repaired": response_delta_repaired,
@@ -1405,27 +1563,13 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         "sanitizer_event_count": sanitizer_event_count,
         "sanitizer_changed_count": sanitizer_changed_count,
         "sanitizer_rewrite_used": sanitizer_rewrite_used,
-        **sanitizer_trace_flat,
-        **sanitizer_lineage_flat,
-        "sanitizer_leak_terms": ["scaffold_leakage"] if final_text_has_scaffold_leakage(final_text) else [],
-        "opening_recovered_via_fallback": fem_flat.get("opening_recovered_via_fallback"),
-        "opening_fallback_authorship_source": fem_flat.get("opening_fallback_authorship_source"),
-        "opening_fallback_owner_bucket": opening_fallback_owner_bucket_from_meta(fem),
-        "fallback_family": fallback_family,
-        "scaffold_leakage": final_text_has_scaffold_leakage(final_text),
+        "sanitizer_leak_terms": ["scaffold_leakage"] if protected_flat.get("scaffold_leakage") else [],
         "final_text_hash": golden_text_hash(final_text),
-        "trace": {
-            "canonical_entry_path": trace.get("canonical_entry_path"),
-            "canonical_entry_reason": trace.get("canonical_entry_reason"),
-            "canonical_entry_target_actor_id": trace.get("canonical_entry_target_actor_id"),
-            "canonical_entry": dict(canonical_entry),
-            "turn_trace": dict(turn_trace),
-            "social_contract_trace": dict(social_contract_trace),
-        },
+        "trace": trace_observed,
         "snapshot_summary": compact_snapshot_summary(snap),
-        "raw_signal_presence": raw_signal_presence,
-        "normalized_signal_presence": normalized_signal_presence,
-        "missing_source_by_field": missing_source_by_field,
+        "raw_signal_presence": projection_status.raw_signal_presence,
+        "normalized_signal_presence": projection_status.normalized_signal_presence,
+        "missing_source_by_field": projection_status.missing_source_by_field,
         "fem_raw_keys": sorted(str(k) for k in fem.keys()),
         "fem_normalized_keys": sorted(str(k) for k in fem_normalized.keys()),
         "emission_debug_lane_keys": sorted(str(k) for k in emission_debug_lane.keys()),
@@ -1437,5 +1581,5 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
             value = replay_identity_map.get(key)
             if value is not None and str(value).strip():
                 observed[key] = str(value)
-    observed["unavailable"] = _compute_unavailable_paths(observed)
+    observed["unavailable"] = projection_status.unavailable
     return observed
