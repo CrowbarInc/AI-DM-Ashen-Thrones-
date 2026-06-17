@@ -4,7 +4,8 @@ Shared accept/replace exit tail owned here. Exit stacks call
 :func:`run_gate_terminal_enforcement_pipeline` directly. Visibility enforcement is
 owned by :mod:`game.final_emission_visibility_fallback` and called directly here.
 N4 floor seam is owned by :mod:`game.final_emission_acceptance_quality` and called directly here.
-Layer entrypoints that tests patch on ``feg`` are resolved at call time through the gate module.
+Layer entrypoints resolve through their extracted owner modules (Cycle BJ); BN2 removed
+the stale lazy ``feg`` namespace — no live monkeypatch seams remain in this file.
 """
 from __future__ import annotations
 
@@ -53,12 +54,6 @@ GateTerminalEnforcementProfile = Literal[
     "generic_accept",
     "generic_replace",
 ]
-
-
-def _gate_module():
-    import game.final_emission_gate as feg
-
-    return feg
 
 
 def _patch_fem_text_fingerprint(out: Dict[str, Any], *, pre_gate_text: str) -> None:
@@ -211,7 +206,6 @@ def run_gate_terminal_enforcement_pipeline(
     accepted_scene_opening_text: str | None = None,
 ) -> Dict[str, Any]:
     """Late gate enforcement tail shared by accept/replace exit paths (Cycle AN6)."""
-    feg = _gate_module()
     sid = str(scene_id or "").strip()
     eff_res = eff_resolution if isinstance(eff_resolution, dict) else None
     auth_res = resolution if isinstance(resolution, dict) else None

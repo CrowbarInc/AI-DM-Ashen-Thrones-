@@ -1,7 +1,8 @@
 """Generic (non–strict-social) pre-fork layer stack for final emission gate.
 
 Owned here; :func:`apply_final_emission_gate` calls this entrypoint directly.
-Layer entrypoints that tests patch on ``feg`` are resolved at call time through the gate module.
+Layer entrypoints resolve through their extracted owner modules (Cycle BJ); BN2 removed
+the stale lazy ``feg`` namespace — no live monkeypatch seams remain in this file.
 """
 from __future__ import annotations
 
@@ -63,12 +64,6 @@ from game.final_emission_scene_emit_integrity import (
     _compute_scene_emit_integrity_assessment,
 )
 from game.final_emission_text import _normalize_text
-
-
-def _gate_module():
-    import game.final_emission_gate as feg
-
-    return feg
 
 
 _CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
@@ -149,7 +144,6 @@ def run_non_strict_layer_stack(
     ffnc_layer_meta: Dict[str, Any],
 ) -> NonStrictLayerStackResult:
     """Generic trunk layer ordering before accept/replace fork; mutates ``out`` and ``reasons`` in place."""
-    feg = _gate_module()
     sid = str(scene_id or "").strip()
     auth_res = resolution if isinstance(resolution, dict) else None
     eff_res = eff_resolution if isinstance(eff_resolution, dict) else None

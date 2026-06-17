@@ -1016,7 +1016,10 @@ def test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_befor
         seq.append("deterministic_opening_fallback")
         return real_det(out)
 
-    monkeypatch.setattr(gate_context, "maybe_attach_upstream_prepared_opening_fallback_payload", wrapped_maybe)
+    monkeypatch.setattr(
+        "game.final_emission_gate_preflight_upstream.maybe_attach_upstream_prepared_opening_fallback_payload",
+        wrapped_maybe,
+    )
     monkeypatch.setattr(opening_deterministic_fallback, "deterministic_opening_fallback_text_and_meta", wrapped_det)
 
     apply_final_emission_gate(
@@ -2438,10 +2441,11 @@ def test_bj51_gate_interaction_continuity_public_reexports_locked() -> None:
 
 
 def test_bj52_fallback_provenance_gate_wrappers_removed() -> None:
-    """BJ-52: upstream fallback provenance containment wrappers removed; owners call fallback_provenance_debug directly."""
+    """BJ-52/BN4: upstream fallback provenance wrappers removed; pregate containment routes via telemetry helper."""
     import game.fallback_provenance_debug as fpd
     import game.final_emission_finalize as fin
     import game.final_emission_gate_context as gc
+    import game.final_emission_gate_preflight_telemetry as gpft
 
     assert not hasattr(feg, "_upstream_fallback_canonical_provenance")
     assert not hasattr(feg, "_apply_upstream_fallback_pregate_containment")
@@ -2449,7 +2453,8 @@ def test_bj52_fallback_provenance_gate_wrappers_removed() -> None:
     assert callable(getattr(fpd, "upstream_fallback_canonical_provenance", None))
     assert callable(getattr(fpd, "apply_upstream_fallback_pregate_containment", None))
     assert callable(getattr(fpd, "finalize_upstream_fallback_overwrite_containment", None))
-    assert callable(getattr(gc, "apply_upstream_fallback_pregate_containment", None))
+    assert not hasattr(gc, "apply_upstream_fallback_pregate_containment")
+    assert callable(getattr(gpft, "apply_gate_preflight_telemetry_and_containment", None))
     assert callable(getattr(fin, "finalize_upstream_fallback_overwrite_containment", None))
 
 

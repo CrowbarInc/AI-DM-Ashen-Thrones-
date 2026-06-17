@@ -973,12 +973,16 @@ def test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_g
     gm_output["player_facing_text"] = "Nearby crates appear disturbed."
     gm_output["tags"] = []
 
-    import game.final_emission_gate_context as gate_context
+    import game.final_emission_gate_preflight_upstream as gate_preflight_upstream
 
     def _skip_upstream_repair(out: dict[str, Any] | None, *, resolution: dict[str, Any] | None) -> None:
         return None
 
-    monkeypatch.setattr(gate_context, "maybe_attach_upstream_prepared_opening_fallback_payload", _skip_upstream_repair)
+    monkeypatch.setattr(
+        gate_preflight_upstream,
+        "maybe_attach_upstream_prepared_opening_fallback_payload",
+        _skip_upstream_repair,
+    )
     out = apply_final_emission_gate(
         gm_output,
         resolution={"kind": "scene_opening", "prompt": "Start the campaign."},

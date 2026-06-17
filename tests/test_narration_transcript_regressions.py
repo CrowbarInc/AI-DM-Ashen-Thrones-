@@ -45,7 +45,7 @@ from typing import Any, Callable, Mapping
 
 import pytest
 
-import game.final_emission_gate_context as gate_context
+import game.final_emission_gate_preflight_strict_social as gate_preflight_strict_social
 import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.social_exchange_emission as social_exchange_emission
 from game.interaction_routing import choose_interaction_route
@@ -190,10 +190,10 @@ def patch_strict_social_emission_will_apply(
     *,
     will_apply: bool,
 ) -> None:
-    """Patch owner + gate-context import binding for strict-social route decision."""
+    """Patch owner + strict-social preflight import binding for strict-social route decision."""
     stub = lambda *a, **k: will_apply
     monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply", stub)
-    monkeypatch.setattr(gate_context, "strict_social_emission_will_apply", stub)
+    monkeypatch.setattr(gate_preflight_strict_social, "strict_social_emission_will_apply", stub)
 
 
 def patch_final_emission_helpers(
