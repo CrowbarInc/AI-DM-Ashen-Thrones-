@@ -22,7 +22,8 @@ Design notes (read before extending):
   legality suites. Replay/golden projection helpers stay separate
   (``tests/helpers/golden_replay_projection.py``, ``tests/helpers/opening_fallback_evidence.py``).
 - **Smoke suites**: survival / wiring / one-phrase hygiene checks; not full legality matrices.
-- **Gauntlet / replay neighbors** (e.g. ``tests/test_golden_replay.py``): intentional
+- **Gauntlet / replay neighbors** (e.g. ``tests/test_golden_replay.py`` redirect stub and
+  ``tests/test_golden_replay_*.py`` focused integration files): intentional
   diagnostic observation and drift projection locks — not runtime gate orchestration owners.
   Classifier/dashboard FEM bucket columns follow the same rule (diagnostic projection, not
   gate ownership).
@@ -77,7 +78,7 @@ these checks.
 
 Cycle AL4 legality-owner quick reference (downstream suites assert wiring/smoke only):
 - Final emission gate orchestration / route tables → ``tests/test_final_emission_gate.py``
-  (``final_emission_gate_orchestration``)
+  (redirect stub; practical coverage in ``tests/test_final_emission_gate_*.py`` owner files)
 - FEM projection / lineage → ``tests/test_final_emission_meta.py`` (``final_emission_meta_projection``)
 - Dialogue route classification table → ``tests/test_dialogue_routing_lock.py`` (pure
   ``choose_interaction_route``; HTTP packaging smoke → ``tests/test_turn_pipeline_shared.py``)
@@ -342,7 +343,12 @@ _BD6_COMPRESSED_OWNER_MODULES: Final[frozenset[str]] = frozenset(
 # Narrow allowlist: primary owners, BD-2–BD-5 KEEP suites, facade delegates, gate monkeypatch helpers,
 # and audit fixture modules that embed gate-import strings intentionally.
 _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST: Final[Mapping[str, str]] = {
-    "tests/test_final_emission_gate.py": "Gate orchestration owner (BD-2/BD-5/BJ-41/BJ-42/BJ-43/BJ-44/BJ-45/BJ-46/BJ-47/BJ-48/BJ-49/BJ-50/BJ-51/BJ-52/BJ-53/BJ-54/BJ-55/BJ-56/BJ-57/BJ-58/BJ-59/BJ-60/BJ-61/BJ-62/BJ-63/BJ-64/BJ-65/BJ-66/BJ-67/BJ-68/BJ-69/BJ-70/BJ-71/BJ-72/BJ-73/BJ-74/BJ-91/BJ-92/BJ-93/BJ-94/BJ-95/BJ-96/BJ-97/BJ-98/BJ-99/BJ-100/BJ-101/BJ-102/BJ-103/BJ-104/BJ-105/BJ-106/BJ-107/BJ-108/BJ-109/BJ-110/BJ-111/BJ-112/BJ-123/BJ-124/BJ-127/BJ-128/BJ-129 KEEP)",
+    "tests/test_final_emission_gate.py": "Gate orchestration redirect stub (BM decomposition; BD-2/BD-5 KEEP)",
+    "tests/test_final_emission_gate_delegator_regression.py": "BJ delegator/re-export regression owner (BM decomposition; BJ-41–BJ-129 KEEP)",
+    "tests/test_final_emission_gate_diagnostics.py": "Gate FEM/debug diagnostics owner (BM decomposition; BD-2 KEEP)",
+    "tests/test_final_emission_gate_n4.py": "N4 acceptance-quality gate placement owner (BM decomposition; BD-2 KEEP)",
+    "tests/test_final_emission_gate_orchestration_order.py": "Gate behavioral layer-order owner (BM decomposition; BD-2 KEEP)",
+    "tests/test_final_emission_gate_selector_snapshots.py": "Gate selector/source snapshot owner (BM decomposition; BD-2 KEEP)",
     "tests/test_final_emission_meta.py": "FEM projection / runtime-lineage owner (BD-3/BD-4/BD-5 KEEP)",
     "tests/test_fallback_behavior_gate.py": "Gate-adjacent behavior owner (BD-2 KEEP)",
     "tests/test_final_emission_boundary_no_semantic_repair.py": "Gate boundary owner; terminal_pipeline visibility noop (BJ-123 KEEP)",
@@ -638,6 +644,11 @@ RESPONSIBILITY_REGISTRY: Final[Mapping[str, ResponsibilityRecord]] = {
         gauntlet_suites=(
             "tests/test_behavioral_gauntlet_smoke.py",
             "tests/test_golden_replay.py",
+            "tests/test_golden_replay_protected_bridge.py",
+            "tests/test_golden_replay_structural_invariants.py",
+            "tests/test_golden_replay_long_session.py",
+            "tests/test_golden_replay_direct_seam.py",
+            "tests/test_golden_replay_scenario_spine.py",
         ),
         smoke_suites=("tests/test_playability_smoke.py",),
     ),

@@ -111,14 +111,14 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - Current state: `governance-aligned; drift-watch`
 - **Concern name:** `final emission gate orchestration`
 - **Runtime owner:** `game/final_emission_gate.py`
-- **Practical primary direct-owner suite:** `tests/test_final_emission_gate.py`
+- **Practical primary direct-owner suite:** `tests/test_final_emission_gate.py` (redirect stub; practical coverage in `tests/test_final_emission_gate_orchestration_order.py`, `tests/test_final_emission_gate_n4.py`, `tests/test_final_emission_gate_diagnostics.py`, `tests/test_final_emission_gate_selector_snapshots.py`, `tests/test_final_emission_gate_delegator_regression.py`)
 - **Secondary downstream suites:** `tests/test_social_exchange_emission.py`, `tests/test_turn_pipeline_shared.py`, `tests/test_stage_diff_telemetry.py`, `tests/test_social_emission_quality.py`, `tests/test_dead_turn_detection.py`, `tests/test_interaction_continuity_speaker_bridge.py`, `tests/test_interaction_continuity_validation.py`, `tests/test_interaction_continuity_repair.py`, plus transcript/regression suites such as `tests/test_narration_transcript_regressions.py`
 - **Compatibility / support residue:** `game/final_emission_meta.py` as metadata packaging / read-side support; retry / observability / pipeline consumers may pass through the gate without owning orchestration order.
 - **Non-owner adjacent modules:** `game/final_emission_repairs.py`, `game/final_emission_meta.py` (not layer-order or orchestration authorities).
 - **Belongs in runtime owner:** final-emission layer ordering, gate-level integration, last-mile finalize flow, calls into validators, repairs, sanitizer, metadata packaging.
 - **Does not belong in runtime owner:** canonical metadata schema ownership, standalone contract-authority logic, telemetry field semantics.
 - **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not mixed gate/meta/telemetry/pipeline parallel ownership.
-- **Test magnet guard (BA-7):** `tests/test_final_emission_gate.py` and other gate-layer direct-owner suites (validators, repairs, visibility, sanitizer, social emission) must not import golden-replay projection, failure-classifier, or dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors own those contracts. Enforced by `tests/test_ownership_registry.py` (`test_ba7_gate_direct_owners_*`).
+- **Test magnet guard (BA-7):** `tests/test_final_emission_gate.py` (redirect stub) and other gate-layer direct-owner suites (validators, repairs, visibility, sanitizer, social emission) must not import golden-replay projection, failure-classifier, or dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors own those contracts. Enforced by `tests/test_ownership_registry.py` (`test_ba7_gate_direct_owners_*`).
 
 ## Final Emission Repairs
 
