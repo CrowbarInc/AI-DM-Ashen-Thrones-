@@ -17,6 +17,7 @@ from typing import Any, Dict
 
 from game.social_exchange_emission import (
     effective_strict_social_resolution_for_emission,
+    select_strict_social_emergency_fallback_line,
     social_fallback_line_for_sanitizer,
     strict_social_emission_will_apply,
 )
@@ -1457,7 +1458,11 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
                 used=True,
                 source="social_fallback_line_for_sanitizer.empty_output",
             )
-            return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
+            return select_strict_social_emergency_fallback_line(
+                context=fb_ctx,
+                source_text=out,
+                surface="sanitizer_empty",
+            )
         prepared = _prepared_upstream_empty_fallback_text(context)
         if prepared:
             _mark_sanitizer_empty_fallback(
@@ -1557,6 +1562,10 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
                 used=True,
                 source="social_fallback_line_for_sanitizer.empty_output",
             )
-            return social_fallback_line_for_sanitizer(fb_ctx, source_text=out)
+            return select_strict_social_emergency_fallback_line(
+                context=fb_ctx,
+                source_text=out,
+                surface="sanitizer_empty",
+            )
         return "For a breath, the scene stays still."
     return rebuilt

@@ -61,7 +61,6 @@ def test_sealed_fallback_owner_bucket_constants_match_canonical_registry() -> No
 def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None:
     for name in (
         "SealedFallbackSelection",
-        "build_non_strict_sealed_fallback_providers",
         "stamp_sealed_fallback_realization_family",
         "stamp_non_strict_sealed_replacement_realization_family",
         "prepare_sealed_replacement_route_meta",
@@ -69,9 +68,15 @@ def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None
         "select_acceptance_quality_n4_sealed_fallback_line",
         "select_non_strict_replace_path_terminal_sealed_fallback_branch",
         "select_non_strict_replace_path_terminal_sealed_fallback_selection",
-        "assemble_non_strict_sealed_fallback_selection",
     ):
         assert callable(getattr(sealed_fallback, name, None)), name
+
+    for retired_name in (
+        "build_non_strict_sealed_fallback_providers",
+        "assemble_non_strict_sealed_fallback_selection",
+        "NonStrictSealedFallbackProviders",
+    ):
+        assert not hasattr(sealed_fallback, retired_name), retired_name
 
     for selector_name in (
         "_select_non_strict_replace_path_terminal_sealed_fallback_selection",
@@ -139,7 +144,7 @@ def test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple() -> No
     assert selection.composition_meta == {"first_mention_composition_used": False}
 
 
-def test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_modules(
+def test_select_non_strict_terminal_sealed_fallback_social_branch_uses_owner_modules(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     gm = {"player_facing_text": "x", "tags": []}
@@ -153,7 +158,12 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_mod
         "_npc_display_name_for_emission",
         lambda _w, _sid, _npc: "Aldric",
     )
-    providers = sealed_fallback.build_non_strict_sealed_fallback_providers(
+    monkeypatch.setattr(
+        passive_scene_pressure,
+        "_passive_scene_pressure_fallback_candidates",
+        lambda **_: [],
+    )
+    selection = sealed_fallback.select_non_strict_replace_path_terminal_sealed_fallback_selection(
         gm,
         session={},
         scene=None,
@@ -162,8 +172,11 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_mod
         resolution=None,
         eff_resolution=None,
         active_interlocutor="npc_a",
+        strict_social_suppressed_non_social_turn=False,
         res_kind="question",
         response_type_required="dialogue",
+        suppress_intro_replace=False,
+        interaction_mode="social",
         opening_sealed_fallback_provider=lambda _gm: sealed_fallback.SealedFallbackSelection(
             "opening",
             "opening_pool",
@@ -172,13 +185,9 @@ def test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_mod
             None,
         ),
     )
-    selection = providers.social_interlocutor_provider()
     assert selection.text == "owner social line"
     assert selection.fallback_pool == "social_active_interlocutor_minimal"
     assert selection.final_emitted_source == "social_interlocutor_minimal_fallback"
-    assert callable(providers.passive_candidates_provider)
-    assert callable(providers.use_neutral_nonprogress_provider)
-    assert callable(providers.global_provider)
     assert gm["player_facing_text"] == "x"
     assert gm["tags"] == []
 
@@ -323,52 +332,42 @@ def test_block_ai_extracted_n4_selector_uses_owner_modules_only(
     assert calls == ["global"]
 
 
-def test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output() -> None:
-    gm = copy.deepcopy(opening_gm_output())
-    snap = copy.deepcopy(gm)
-    sealed_fallback.assemble_non_strict_sealed_fallback_selection(
-        opening_mode_active=True,
-        has_active_social_interlocutor=False,
-        passive_candidates_provider=lambda: [],
-        use_neutral_nonprogress_provider=lambda: False,
-        suppress_intro_replace=False,
-        opening_provider=lambda: sealed_fallback.SealedFallbackSelection(
-            "opening text",
-            "opening_pool",
-            "opening_kind",
-            "opening_source",
-            None,
-        ),
-        social_interlocutor_provider=lambda: sealed_fallback.SealedFallbackSelection(
-            "social",
-            "social_pool",
-            "social_kind",
-            "social_source",
-            None,
-        ),
-        neutral_nonprogress_provider=lambda: sealed_fallback.SealedFallbackSelection(
-            "neutral",
-            "neutral_pool",
-            "neutral_kind",
-            "neutral_source",
-            None,
-        ),
-        anti_reset_provider=lambda: sealed_fallback.SealedFallbackSelection(
-            "anti_reset",
-            "anti_reset_pool",
-            "anti_reset_kind",
-            "anti_reset_source",
-            None,
-        ),
-        global_provider=lambda: sealed_fallback.SealedFallbackSelection(
-            "global",
-            "global_pool",
-            "global_kind",
-            "global_source",
-            None,
-        ),
+def test_block_ai_non_strict_terminal_selector_projects_visibility_terminal_selection(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Sealed terminal selector consumes visibility-owned terminal fallback (BK3/BK4)."""
+    projected = VisibilitySelectedFallback(
+        text="visibility terminal text",
+        fallback_pool="global_scene_narrative",
+        fallback_kind="narrative_safe_fallback",
+        final_emitted_source="global_scene_fallback",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source="global_scene_fallback",
+        composition_meta=None,
     )
-    assert gm == snap
+    monkeypatch.setattr(
+        visibility_fallback,
+        "select_non_strict_terminal_fallback_for_sealed",
+        lambda **_kwargs: projected,
+    )
+    selection = sealed_fallback.select_non_strict_replace_path_terminal_sealed_fallback_selection(
+        {"player_facing_text": "x", "tags": []},
+        session={},
+        scene={},
+        world={},
+        sid="yard",
+        resolution={"kind": "observe"},
+        eff_resolution={"kind": "observe"},
+        active_interlocutor="",
+        strict_social_suppressed_non_social_turn=False,
+        res_kind="observe",
+        response_type_required="narration",
+        suppress_intro_replace=False,
+        interaction_mode="",
+    )
+    assert selection.text == projected.text
+    assert selection.fallback_pool == projected.fallback_pool
+    assert selection.final_emitted_source == projected.final_emitted_source
 
 
 def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_without_selecting(
@@ -442,60 +441,6 @@ def test_block_ai_extracted_non_strict_branch_selector_preserves_order() -> None
     )
 
 
-def test_block_ai_non_strict_assembler_selects_each_injected_candidate_branch() -> None:
-    calls: list[str] = []
-
-    def _selection(name: str) -> sealed_fallback.SealedFallbackSelection:
-        calls.append(name)
-        return sealed_fallback.SealedFallbackSelection(
-            text=f"{name} text",
-            fallback_pool=f"{name}_pool",
-            fallback_kind=f"{name}_kind",
-            final_emitted_source=f"{name}_source",
-            composition_meta=None,
-        )
-
-    def _assemble(**overrides: Any) -> sealed_fallback.SealedFallbackSelection:
-        base: dict[str, Any] = {
-            "opening_mode_active": False,
-            "has_active_social_interlocutor": False,
-            "passive_candidates_provider": lambda: [],
-            "use_neutral_nonprogress_provider": lambda: False,
-            "suppress_intro_replace": False,
-            "opening_provider": lambda: _selection("opening"),
-            "social_interlocutor_provider": lambda: _selection("social"),
-            "neutral_nonprogress_provider": lambda: _selection("neutral"),
-            "anti_reset_provider": lambda: _selection("anti_reset"),
-            "global_provider": lambda: _selection("global"),
-        }
-        base.update(overrides)
-        return sealed_fallback.assemble_non_strict_sealed_fallback_selection(**base)
-
-    assert _assemble(opening_mode_active=True).fallback_pool == "opening_pool"
-    assert calls == ["opening"]
-    calls.clear()
-
-    assert _assemble(has_active_social_interlocutor=True).fallback_pool == "social_pool"
-    assert calls == ["social"]
-    calls.clear()
-
-    passive = sealed_fallback.SealedFallbackSelection("passive text", "passive_pool", "passive_kind", "passive_source")
-    assert _assemble(passive_candidates_provider=lambda: [passive]).fallback_pool == "passive_pool"
-    assert calls == []
-    calls.clear()
-
-    assert _assemble(use_neutral_nonprogress_provider=lambda: True).fallback_pool == "neutral_pool"
-    assert calls == ["neutral"]
-    calls.clear()
-
-    assert _assemble(suppress_intro_replace=True).fallback_pool == "anti_reset_pool"
-    assert calls == ["anti_reset"]
-    calls.clear()
-
-    assert _assemble().fallback_pool == "global_pool"
-    assert calls == ["global"]
-
-
 def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines() -> None:
     """Assembly paths set FEM route/source/stamp from caller-provided ids; they must not pick sealed line text."""
     meta: dict[str, Any] = {}
@@ -540,7 +485,6 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines()
             sealed_fallback.finalize_n4_sealed_replace_fem_route_meta,
             sealed_fallback.select_acceptance_quality_n4_sealed_fallback_line,
             sealed_fallback.select_non_strict_replace_path_terminal_sealed_fallback_branch,
-            sealed_fallback.assemble_non_strict_sealed_fallback_selection,
         )
     )
     for forbidden in (
@@ -560,14 +504,13 @@ def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None
         "test_block_ai_sealed_fallback_metadata_module_exports_helpers_only",
         "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
         "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
-        "test_build_non_strict_sealed_fallback_providers_social_branch_uses_owner_modules",
+        "test_select_non_strict_terminal_sealed_fallback_social_branch_uses_owner_modules",
         "test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch",
+        "test_block_ai_non_strict_terminal_selector_projects_visibility_terminal_selection",
         "test_bj60_generic_replace_exit_calls_sealed_fallback_selector_directly",
         "test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts",
-        "test_block_ai_assemble_non_strict_opening_branch_does_not_mutate_gm_output",
         "test_block_ai_extracted_n4_selector_uses_owner_modules_only",
         "test_block_ai_extracted_non_strict_branch_selector_preserves_order",
-        "test_block_ai_non_strict_assembler_selects_each_injected_candidate_branch",
         "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines",
     ):
         assert callable(getattr(mod, name, None)), name

@@ -5,7 +5,7 @@ This module must not author or select fallback prose.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Literal, Mapping, MutableMapping, NamedTuple, Sequence
+from typing import Any, Callable, Dict, Literal, Mapping, MutableMapping
 
 from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_BUCKETS,
@@ -14,6 +14,7 @@ from game.final_emission_meta import (
     SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
     refresh_final_emission_mutation_lineage,
+    sealed_fallback_owner_bucket_from_fields,
 )
 import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
@@ -89,117 +90,22 @@ class SealedFallbackSelection:
         )
 
 
-class NonStrictSealedFallbackProviders(NamedTuple):
-    passive_candidates_provider: Callable[[], Sequence[SealedFallbackSelection]]
-    use_neutral_nonprogress_provider: Callable[[], bool]
-    opening_provider: Callable[[], SealedFallbackSelection]
-    social_interlocutor_provider: Callable[[], SealedFallbackSelection]
-    neutral_nonprogress_provider: Callable[[], SealedFallbackSelection]
-    anti_reset_provider: Callable[[], SealedFallbackSelection]
-    global_provider: Callable[[], SealedFallbackSelection]
-
-
-def build_non_strict_sealed_fallback_providers(
-    out: Dict[str, Any],
-    *,
-    session: Dict[str, Any] | None,
-    scene: Dict[str, Any] | None,
-    world: Dict[str, Any] | None,
-    sid: str,
-    resolution: Dict[str, Any] | None,
-    eff_resolution: Dict[str, Any] | None,
-    active_interlocutor: str,
-    res_kind: str,
-    response_type_required: str,
+def _opening_visibility_fallback_for_sealed_terminal(
+    gm_output: Dict[str, Any],
     opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection],
-) -> NonStrictSealedFallbackProviders:
-    """Assemble sealed fallback branch providers; opening prose uses the injected or default provider."""
-
-    def _opening_provider() -> SealedFallbackSelection:
-        return opening_sealed_fallback_provider(out)
-
-    def _social_interlocutor_provider() -> SealedFallbackSelection:
-        from game.social_exchange_emission import (
-            _npc_display_name_for_emission,
-            minimal_social_emergency_fallback_line,
-        )
-
-        mini_res: Dict[str, Any] = {
-            "kind": "question",
-            "social": {
-                "npc_id": active_interlocutor,
-                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
-                "social_intent_class": "social_exchange",
-            },
-        }
-        fallback_pool = "social_active_interlocutor_minimal"
-        fallback_text = minimal_social_emergency_fallback_line(mini_res)
-        fallback_kind = "social_interlocutor_fallback"
-        final_emitted_source = "social_interlocutor_minimal_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    def _passive_candidates_provider() -> list[SealedFallbackSelection]:
-        from game.final_emission_passive_scene_pressure import _passive_scene_pressure_fallback_candidates
-
-        passive_candidates = _passive_scene_pressure_fallback_candidates(
-            session=session if isinstance(session, dict) else None,
-            scene=scene,
-            scene_id=sid,
-        )
-        return [
-            SealedFallbackSelection.from_visibility_selection(candidate) for candidate in passive_candidates
-        ]
-
-    def _use_neutral_nonprogress_provider() -> bool:
-        return visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(
-            session, eff_resolution
-        )
-
-    def _neutral_nonprogress_provider() -> SealedFallbackSelection:
-        from game.diegetic_fallback_narration import npc_pursuit_neutral_nonprogress_fallback_line
-
-        fallback_pool = "npc_pursuit_fail_closed_neutral"
-        fallback_text = npc_pursuit_neutral_nonprogress_fallback_line()
-        fallback_kind = "npc_pursuit_neutral_nonprogress"
-        final_emitted_source = "npc_pursuit_neutral_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    def _anti_reset_provider() -> SealedFallbackSelection:
-        from game.anti_reset_emission_guard import local_exchange_continuation_fallback_line
-
-        fallback_pool = "anti_reset_local_continuation"
-        fallback_text = local_exchange_continuation_fallback_line(
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            scene_id=sid,
-            resolution=resolution if isinstance(resolution, dict) else None,
-        )
-        fallback_kind = "anti_reset_continuation_fallback"
-        final_emitted_source = "anti_reset_local_continuation_fallback"
-        return SealedFallbackSelection(fallback_text, fallback_pool, fallback_kind, final_emitted_source, None)
-
-    def _global_provider() -> SealedFallbackSelection:
-        from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
-
-        selected = _scene_emit_integrity_global_fallback_selection(
-            scene if isinstance(scene, dict) else None,
-            sid,
-            authoritative_resolution=resolution if isinstance(resolution, dict) else None,
-            session=session if isinstance(session, dict) else None,
-            world=world if isinstance(world, dict) else None,
-            res_kind=res_kind,
-            response_type_required=response_type_required,
-        )
-        return SealedFallbackSelection.from_visibility_selection(selected)
-
-    return NonStrictSealedFallbackProviders(
-        passive_candidates_provider=_passive_candidates_provider,
-        use_neutral_nonprogress_provider=_use_neutral_nonprogress_provider,
-        opening_provider=_opening_provider,
-        social_interlocutor_provider=_social_interlocutor_provider,
-        neutral_nonprogress_provider=_neutral_nonprogress_provider,
-        anti_reset_provider=_anti_reset_provider,
-        global_provider=_global_provider,
+) -> VisibilitySelectedFallback:
+    """Project injected or default sealed opening selection into visibility shape for BK3 consumption."""
+    sealed_opening = opening_sealed_fallback_provider(gm_output)
+    return visibility_fallback.visibility_selected_fallback_candidate(
+        sealed_opening.text,
+        sealed_opening.fallback_pool,
+        sealed_opening.fallback_kind,
+        sealed_opening.final_emitted_source,
+        "opening_scene_safe_fallback",
+        sealed_opening.final_emitted_source,
+        sealed_opening.composition_meta
+        if isinstance(sealed_opening.composition_meta, Mapping)
+        else visibility_fallback.first_mention_composition_meta(),
     )
 
 
@@ -229,7 +135,7 @@ def select_non_strict_replace_path_terminal_sealed_fallback_selection(
     interaction_mode: str,
     opening_sealed_fallback_provider: Callable[[Dict[str, Any]], SealedFallbackSelection] | None = None,
 ) -> SealedFallbackSelection:
-    """Select the non-strict sealed fallback; opening prose uses the default opening provider when omitted."""
+    """Select the non-strict sealed fallback; consumes visibility-owned terminal candidates (BK3)."""
     from game.final_emission_opening_mode import _opening_mode_active_for_turn
 
     opening_provider = (
@@ -237,40 +143,31 @@ def select_non_strict_replace_path_terminal_sealed_fallback_selection(
         if opening_sealed_fallback_provider is not None
         else _default_opening_sealed_fallback_provider()
     )
-
     mode = str(interaction_mode or "").strip().lower()
     opening_mode_active = _opening_mode_active_for_turn(out, resolution if isinstance(resolution, dict) else None)
-    has_active_social_interlocutor = bool(
-        active_interlocutor
-        and mode == "social"
-        and isinstance(world, dict)
-        and not strict_social_suppressed_non_social_turn
-    )
-    providers = build_non_strict_sealed_fallback_providers(
-        out,
+    if opening_mode_active:
+        return opening_provider(out)
+
+    selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        gm_output=out,
         session=session,
         scene=scene,
         world=world,
-        sid=sid,
+        scene_id=sid,
         resolution=resolution,
         eff_resolution=eff_resolution,
         active_interlocutor=active_interlocutor,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
         res_kind=res_kind,
         response_type_required=response_type_required,
-        opening_sealed_fallback_provider=opening_provider,
-    )
-    return assemble_non_strict_sealed_fallback_selection(
-        opening_mode_active=opening_mode_active,
-        has_active_social_interlocutor=has_active_social_interlocutor,
-        passive_candidates_provider=providers.passive_candidates_provider,
-        use_neutral_nonprogress_provider=providers.use_neutral_nonprogress_provider,
         suppress_intro_replace=suppress_intro_replace,
-        opening_provider=providers.opening_provider,
-        social_interlocutor_provider=providers.social_interlocutor_provider,
-        neutral_nonprogress_provider=providers.neutral_nonprogress_provider,
-        anti_reset_provider=providers.anti_reset_provider,
-        global_provider=providers.global_provider,
+        interaction_mode=mode,
+        opening_visibility_fallback=lambda: _opening_visibility_fallback_for_sealed_terminal(
+            out,
+            opening_provider,
+        ),
     )
+    return SealedFallbackSelection.from_visibility_selection(selected)
 
 
 def non_strict_sealed_replacement_realization_family_token() -> str:
@@ -299,10 +196,12 @@ def stamp_sealed_fallback_realization_family(
     src = str(final_emitted_source or "").strip()
     if strict_social_route and src == "minimal_social_emergency_fallback":
         attach_realization_fallback_family(meta, STRICT_SOCIAL_DETERMINISTIC_FALLBACK)
-        meta["sealed_fallback_owner_bucket"] = SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
     else:
         attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
-        meta["sealed_fallback_owner_bucket"] = SEALED_FALLBACK_OWNER_SEALED_GATE
+    meta["sealed_fallback_owner_bucket"] = sealed_fallback_owner_bucket_from_fields(
+        final_emitted_source=src,
+        strict_social_route=strict_social_route,
+    )
 
 
 def prepare_sealed_replacement_route_meta(
@@ -415,54 +314,3 @@ def select_non_strict_replace_path_terminal_sealed_fallback_branch(
     if suppress_intro_replace:
         return "anti_reset_local_continuation"
     return "scene_emit_integrity_global"
-
-
-def assemble_non_strict_sealed_fallback_selection(
-    *,
-    opening_mode_active: bool,
-    has_active_social_interlocutor: bool,
-    passive_candidates_provider: Callable[[], Sequence[SealedFallbackSelection]],
-    use_neutral_nonprogress_provider: Callable[[], bool],
-    suppress_intro_replace: bool,
-    opening_provider: Callable[[], SealedFallbackSelection],
-    social_interlocutor_provider: Callable[[], SealedFallbackSelection],
-    neutral_nonprogress_provider: Callable[[], SealedFallbackSelection],
-    anti_reset_provider: Callable[[], SealedFallbackSelection],
-    global_provider: Callable[[], SealedFallbackSelection],
-) -> SealedFallbackSelection:
-    """Choose among provided fallback candidates. It must not author fallback prose."""
-    initial_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
-        opening_mode_active=opening_mode_active,
-        has_active_social_interlocutor=has_active_social_interlocutor,
-        passive_candidate_available=False,
-        use_neutral_nonprogress=False,
-        suppress_intro_replace=False,
-    )
-    if initial_branch == "opening_scene_safe_fallback":
-        return opening_provider()
-    if initial_branch == "social_active_interlocutor_minimal":
-        return social_interlocutor_provider()
-
-    passive_candidates = list(passive_candidates_provider() or ())
-    passive_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
-        opening_mode_active=False,
-        has_active_social_interlocutor=False,
-        passive_candidate_available=bool(passive_candidates),
-        use_neutral_nonprogress=False,
-        suppress_intro_replace=False,
-    )
-    if passive_branch == "passive_scene_pressure":
-        return passive_candidates[0]
-
-    final_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
-        opening_mode_active=False,
-        has_active_social_interlocutor=False,
-        passive_candidate_available=False,
-        use_neutral_nonprogress=use_neutral_nonprogress_provider(),
-        suppress_intro_replace=suppress_intro_replace,
-    )
-    if final_branch == "npc_pursuit_neutral_nonprogress":
-        return neutral_nonprogress_provider()
-    if final_branch == "anti_reset_local_continuation":
-        return anti_reset_provider()
-    return global_provider()

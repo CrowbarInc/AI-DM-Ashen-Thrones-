@@ -1,8 +1,9 @@
 """Upstream fast-fallback provenance packaging and overwrite-containment traces.
 
-Despite the historical ``*_debug`` module name, this is the **canonical write-time
-packager** for upstream API fast-fallback provenance. It does not select fallback
-prose, assign owner buckets, or drive gate routing policy.
+**BK6 stable provenance owner.** The historical ``*_debug`` module name is retained for
+import stability; this module is the canonical write-time packager for upstream API
+fast-fallback provenance. It does not select fallback prose, assign owner buckets,
+or drive gate routing policy.
 
 Ownership semantics:
 - **Selection/application**: ``game.api`` (``_fast_fallback_for_upstream_error``)
@@ -10,8 +11,9 @@ Ownership semantics:
   :func:`attach_upstream_fast_fallback_provenance`.
 - **Provenance packaging** (this module): selector-boundary fingerprints,
   ``metadata["fallback_provenance"]`` snapshots, gate-entry/exit drift traces,
-  and FEM ``fallback_provenance_trace`` projection via
+  overwrite containment, and FEM ``fallback_provenance_trace`` projection via
   :func:`record_final_emission_gate_exit`.
+- **Field/ownership registry**: ``game.final_emission_meta`` (BK6).
 - **Content authorship**: not individually stamped on FEM. ``content_fingerprint``
   and ``selector_player_facing_text`` are the authoritative selector-boundary
   evidence; read-side lineage may conservatively attribute content to
@@ -32,37 +34,25 @@ import logging
 from typing import Any, Dict, Optional
 
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+from game.final_emission_meta import (
+    FEM_FALLBACK_PROVENANCE_TRACE_KEY,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    patch_final_emission_meta,
+)
 from game.final_emission_text import _normalize_text, _sanitize_output_text
-from game.final_emission_meta import patch_final_emission_meta
 
 _LOG = logging.getLogger(__name__)
 
-METADATA_KEY = "fallback_provenance"
-FEM_TRACE_KEY = "fallback_provenance_trace"
-
-# Canonical ownership surface for upstream fast-fallback provenance (documentation only).
-UPSTREAM_FAST_FALLBACK_SELECTION_OWNER = "game.api"
-UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER = "game.fallback_provenance_debug"
-# Terminal retry fallback selects prose; specific line provider is not stamped on FEM.
-UPSTREAM_FAST_FALLBACK_CONTENT_OWNER = "game.gm_retry"
-
-# Stable selector-boundary keys written by :func:`attach_upstream_fast_fallback_provenance`.
-FALLBACK_PROVENANCE_SELECTOR_KEYS: frozenset[str] = frozenset(
-    {
-        "source",
-        "stage",
-        "content_fingerprint",
-        "selector_player_facing_text",
-    }
-)
-
-FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
-    {
-        "mutation_before_or_during_gate_entry",
-        "mutation_inside_gate_or_finalize",
-        "mutation_unknown",
-    }
-)
+# Stable import aliases (registry canonical in ``game.final_emission_meta``).
+METADATA_KEY = UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY
+FEM_TRACE_KEY = FEM_FALLBACK_PROVENANCE_TRACE_KEY
+FALLBACK_PROVENANCE_SELECTOR_KEYS = UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS
+FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN = UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN
 
 
 def fingerprint_for_normalized_text(norm: str) -> str:
@@ -325,3 +315,24 @@ def finalize_upstream_fallback_overwrite_containment(
     prov3["overwrite_containment_applied"] = contained_kind
     out["metadata"] = {**md2, METADATA_KEY: prov3}
     return True
+
+
+__all__ = [
+    "METADATA_KEY",
+    "FEM_TRACE_KEY",
+    "FALLBACK_PROVENANCE_SELECTOR_KEYS",
+    "FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN",
+    "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+    "UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER",
+    "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+    "fingerprint_for_normalized_text",
+    "fingerprint_player_facing",
+    "attach_upstream_fast_fallback_provenance",
+    "realign_fallback_provenance_selector_to_current_text",
+    "preserve_fallback_provenance_metadata",
+    "record_final_emission_gate_entry",
+    "record_final_emission_gate_exit",
+    "upstream_fallback_canonical_provenance",
+    "apply_upstream_fallback_pregate_containment",
+    "finalize_upstream_fallback_overwrite_containment",
+]

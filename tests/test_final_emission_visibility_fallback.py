@@ -21,6 +21,7 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+    visibility_fallback_owner_bucket_from_fields,
 )
 import game.final_emission_visibility_fallback as visibility_fallback
 
@@ -41,7 +42,7 @@ def assert_visibility_pool(
         "final_emitted_source": final_emitted_source,
     }
     if owner_bucket is not None:
-        assert visibility_fallback.classify_visibility_fallback_owner_bucket(**kwargs) == owner_bucket
+        assert visibility_fallback_owner_bucket_from_fields(**kwargs) == owner_bucket
 
 def test_visibility_fallback_route_helper_importable_and_callable_from_new_module() -> None:
     fn = visibility_fallback.route_visibility_enforcement_after_failed_validation
@@ -1085,6 +1086,184 @@ def test_should_use_neutral_nonprogress_fallback_instead_of_global_stock() -> No
     assert visibility_fallback._should_use_neutral_nonprogress_fallback_instead_of_global_stock(None, resolution) is False
 
 
+def _visibility_terminal_candidate(name: str) -> visibility_fallback.VisibilitySelectedFallback:
+    return visibility_fallback.VisibilitySelectedFallback(
+        text=f"{name} text",
+        fallback_pool=f"{name}_pool",
+        fallback_kind=f"{name}_kind",
+        final_emitted_source=f"{name}_source",
+        fallback_strategy="standard_safe_fallback",
+        fallback_candidate_source=f"{name}_source",
+        composition_meta=None,
+    )
+
+
+def _visibility_terminal_base_kwargs(**overrides: Any) -> dict[str, Any]:
+    base: dict[str, Any] = {
+        "gm_output": {"player_facing_text": "x", "tags": []},
+        "session": {},
+        "scene": None,
+        "world": {"scenes": {"yard": {}}},
+        "scene_id": "yard",
+        "resolution": {"kind": "observe"},
+        "eff_resolution": {"kind": "observe"},
+        "active_interlocutor": "",
+        "strict_social_suppressed_non_social_turn": False,
+        "res_kind": "observe",
+        "response_type_required": "narration",
+        "suppress_intro_replace": False,
+        "interaction_mode": "",
+        "opening_visibility_fallback": lambda: _visibility_terminal_candidate("opening"),
+    }
+    base.update(overrides)
+    return base
+
+
+def test_select_non_strict_terminal_fallback_for_sealed_selects_each_branch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[str] = []
+
+    def _track(name: str, builder):
+        def _wrapped(**_kwargs: Any) -> visibility_fallback.VisibilitySelectedFallback:
+            calls.append(name)
+            return _visibility_terminal_candidate(name)
+
+        return _wrapped
+
+    monkeypatch.setattr(
+        visibility_fallback,
+        "social_active_interlocutor_visibility_fallback",
+        _track("social", visibility_fallback.social_active_interlocutor_visibility_fallback),
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "passive_scene_pressure_visibility_fallback_candidates",
+        lambda **_: [_visibility_terminal_candidate("passive")],
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "npc_pursuit_neutral_nonprogress_visibility_fallback",
+        _track("neutral", visibility_fallback.npc_pursuit_neutral_nonprogress_visibility_fallback),
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "anti_reset_local_continuation_visibility_fallback",
+        _track("anti_reset", visibility_fallback.anti_reset_local_continuation_visibility_fallback),
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "scene_emit_integrity_global_visibility_fallback",
+        _track("global", visibility_fallback.scene_emit_integrity_global_visibility_fallback),
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+        lambda *_: False,
+    )
+
+    from tests.helpers.opening_fallback_evidence import opening_gm_output
+
+    opening_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs(
+            gm_output=opening_gm_output(),
+            resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+            eff_resolution={"kind": "scene_opening", "prompt": "Start the campaign."},
+            res_kind="scene_opening",
+            response_type_required="scene_opening",
+        )
+    )
+    assert opening_selected.fallback_pool == "opening_pool"
+    assert calls == []
+    calls.clear()
+
+    social_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs(
+            active_interlocutor="npc_a",
+            interaction_mode="social",
+            world={"scenes": {"yard": {"npcs": [{"id": "npc_a"}]}}},
+        )
+    )
+    assert social_selected.fallback_pool == "social_pool"
+    assert calls == ["social"]
+    calls.clear()
+
+    passive_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs()
+    )
+    assert passive_selected.fallback_pool == "passive_pool"
+    assert calls == []
+    calls.clear()
+
+    monkeypatch.setattr(
+        visibility_fallback,
+        "passive_scene_pressure_visibility_fallback_candidates",
+        lambda **_: [],
+    )
+    monkeypatch.setattr(
+        visibility_fallback,
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+        lambda *_: True,
+    )
+    neutral_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs()
+    )
+    assert neutral_selected.fallback_pool == "neutral_pool"
+    assert calls == ["neutral"]
+    calls.clear()
+
+    monkeypatch.setattr(
+        visibility_fallback,
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+        lambda *_: False,
+    )
+    anti_reset_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs(suppress_intro_replace=True)
+    )
+    assert anti_reset_selected.fallback_pool == "anti_reset_pool"
+    assert calls == ["anti_reset"]
+    calls.clear()
+
+    global_selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs()
+    )
+    assert global_selected.fallback_pool == "global_pool"
+    assert calls == ["global"]
+
+
+def test_select_non_strict_terminal_fallback_for_sealed_social_branch_uses_owner_modules(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import game.final_emission_passive_scene_pressure as passive_scene_pressure
+    import game.social_exchange_emission as social_exchange_emission
+
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "minimal_social_emergency_fallback_line",
+        lambda _res: "owner social line",
+    )
+    monkeypatch.setattr(
+        social_exchange_emission,
+        "_npc_display_name_for_emission",
+        lambda _w, _sid, _npc: "Aldric",
+    )
+    monkeypatch.setattr(
+        passive_scene_pressure,
+        "_passive_scene_pressure_fallback_candidates",
+        lambda **_: [],
+    )
+    selected = visibility_fallback.select_non_strict_terminal_fallback_for_sealed(
+        **_visibility_terminal_base_kwargs(
+            active_interlocutor="npc_a",
+            interaction_mode="social",
+            world={"scenes": {"yard": {"npcs": [{"id": "npc_a", "name": "Aldric"}]}}},
+        )
+    )
+    assert selected.text == "owner social line"
+    assert selected.fallback_pool == "social_active_interlocutor_minimal"
+    assert selected.final_emitted_source == "social_interlocutor_minimal_fallback"
+
+
 def test_build_visibility_first_mention_metadata_payload_collects_composition_values() -> None:
     payload = visibility_fallback.build_visibility_first_mention_metadata_payload(
         composition_meta={
@@ -1739,6 +1918,8 @@ def test_block_ai_visibility_fallback_helper_entrypoints_remain_importable() -> 
         "test_visibility_selected_fallback_round_trips_legacy_tuple",
         "test_block_ai_route_visibility_selector_does_not_mutate_inputs",
         "test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass",
+        "test_select_non_strict_terminal_fallback_for_sealed_selects_each_branch",
+        "test_select_non_strict_terminal_fallback_for_sealed_social_branch_uses_owner_modules",
         "test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential",
         "test_terminal_pipeline_calls_visibility_owner_directly",
         "test_bj73_visibility_owner_entrypoint_locked",

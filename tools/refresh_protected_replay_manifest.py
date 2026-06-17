@@ -29,6 +29,7 @@ from tests.helpers.golden_replay_projection import (  # noqa: E402
     protected_observation_manifest_field_rows,
     render_protected_observation_manifest_section,
 )
+from game.final_emission_meta import opening_fallback_metadata_field_registry_parity_errors  # noqa: E402
 
 MANIFEST_PATH = ROOT / "docs" / "testing" / "protected_replay_manifest.md"
 BEGIN_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN
@@ -37,6 +38,9 @@ INSERT_BEFORE_HEADING = "## Cycle S Drift Policy Addendum"
 
 
 def _validate_registry_invariants() -> str | None:
+    opening_meta_errors = opening_fallback_metadata_field_registry_parity_errors()
+    if opening_meta_errors:
+        return "; ".join(opening_meta_errors)
     paths = protected_observation_field_paths()
     if len(paths) != len(set(paths)):
         from collections import Counter

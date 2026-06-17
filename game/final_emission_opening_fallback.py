@@ -23,6 +23,10 @@ from game.opening_deterministic_fallback import (
 )
 from game.final_emission_sealed_fallback import SealedFallbackSelection
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
+from game.final_emission_meta import (
+    OPENING_FALLBACK_RESULT_META_FIELDS,
+    default_opening_fallback_fail_closed_result_meta,
+)
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     is_structurally_usable_upstream_prepared_opening_fallback_payload,
@@ -49,20 +53,7 @@ def build_opening_fallback_result_meta(
     upstream on the success path; selection mirrors it from composition meta.
     """
     if context is None:
-        return {
-            "opening_fallback_context_source": "opening_curated_facts",
-            "opening_fallback_basis_count": 0,
-            "opening_fallback_context_missing": True,
-            "opening_fallback_failed_closed": True,
-            "opening_curated_facts_present": False,
-            "opening_curated_facts_count": 0,
-            "opening_curated_facts_source": "selector",
-            "opening_selector_source_used": "none",
-            "opening_selector_selected_facts": [],
-            "opening_curated_facts": [],
-            "opening_final_fallback_basis": [],
-            "opening_final_basis_matches_selector": True,
-        }
+        return default_opening_fallback_fail_closed_result_meta()
     resolved_facts = (
         facts
         if facts is not None
@@ -90,6 +81,7 @@ def build_opening_fallback_result_meta(
         force_fail_closed_context_source or not resolved_facts
     ):
         meta["opening_fallback_context_source"] = "opening_curated_facts"
+    assert set(meta.keys()) == set(OPENING_FALLBACK_RESULT_META_FIELDS)
     return meta
 
 
@@ -351,15 +343,23 @@ def select_opening_fallback_for_response_type_contract(
     )
 
 
-def opening_scene_safe_fallback_selection(
-    gm_output: Mapping[str, Any] | None,
+def opening_fail_closed_composition_meta_empty() -> Dict[str, Any]:
+    """No extra fail-closed composition layers (response-type contract path)."""
+    return {}
+
+
+OpeningContractSelection = tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]
+
+
+def _visibility_selected_from_opening_contract(
+    fallback_text: str,
+    fallback_meta: Dict[str, Any],
+    stub_patch: Dict[str, Any],
+    upstream_selected: bool,
+    upstream_payload: Dict[str, Any] | None,
     *,
     fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
 ) -> VisibilitySelectedFallback:
-    """Canonical opening hard-replace selection: upstream snapshot or sealed marker."""
-    fallback_text, fallback_meta, stub_patch, upstream_selected, upstream_payload = (
-        select_opening_fallback_for_response_type_contract(gm_output)
-    )
     if upstream_selected and upstream_payload is not None:
         composition_meta = dict(upstream_payload["opening_fallback_composition_meta"])
         composition_meta.update(stub_patch)
@@ -388,6 +388,38 @@ def opening_scene_safe_fallback_selection(
         fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
         composition_meta=meta,
     )
+
+
+def opening_scene_safe_fallback_contract(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> tuple[VisibilitySelectedFallback, OpeningContractSelection]:
+    """Unified opening selector: visibility dataclass plus response-type contract tuple."""
+    contract = select_opening_fallback_for_response_type_contract(gm_output)
+    fallback_text, fallback_meta, stub_patch, upstream_selected, upstream_payload = contract
+    selected = _visibility_selected_from_opening_contract(
+        fallback_text,
+        fallback_meta,
+        stub_patch,
+        upstream_selected,
+        upstream_payload,
+        fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+    )
+    return selected, contract
+
+
+def opening_scene_safe_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> VisibilitySelectedFallback:
+    """Canonical opening hard-replace selection: upstream snapshot or sealed marker."""
+    selected, _contract = opening_scene_safe_fallback_contract(
+        gm_output,
+        fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+    )
+    return selected
 
 
 def opening_sealed_fallback_selection(

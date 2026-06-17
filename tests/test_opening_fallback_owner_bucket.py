@@ -24,6 +24,10 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_OWNER_BUCKETS,
+    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
     final_emission_meta_read_side_surface,
     opening_fallback_owner_bucket_from_fields,
 )
@@ -146,3 +150,51 @@ def test_conflicting_upstream_prepared_and_fail_closed_signals_choose_sealed_gat
             response_type_repair_kind=OPENING_FAILED_CLOSED_REPAIR_KIND,
         ),
     )
+
+
+def test_visibility_fallback_owner_bucket_from_fields_cases() -> None:
+    """Visibility bucket mapping is owned by ``final_emission_meta`` (Cycle BK1/BK2)."""
+    from game.final_emission_meta import visibility_fallback_owner_bucket_from_fields
+
+    cases = (
+        ({"fallback_pool": "scene_opening_deterministic", "fallback_kind": "", "final_emitted_source": ""}, VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY),
+        ({"fallback_pool": "", "fallback_kind": "opening_deterministic_fallback", "final_emitted_source": ""}, VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY),
+        (
+            {"fallback_pool": "strict_social_visibility_minimal", "fallback_kind": "", "final_emitted_source": ""},
+            VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+        ),
+        ({"fallback_pool": "", "fallback_kind": "visibility_minimal_social_fallback", "final_emitted_source": ""}, VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY),
+        ({"fallback_pool": "global", "fallback_kind": "global_scene_fallback", "final_emitted_source": "x"}, VISIBILITY_FALLBACK_OWNER_SEALED_GATE),
+        ({"fallback_pool": "", "fallback_kind": "", "final_emitted_source": ""}, VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE),
+    )
+    for kwargs, expected in cases:
+        assert visibility_fallback_owner_bucket_from_fields(**kwargs) == expected
+
+
+def test_sealed_fallback_owner_bucket_from_fields_cases() -> None:
+    """Sealed bucket mapping is owned by ``final_emission_meta`` (Cycle BK1/BK2)."""
+    from game.final_emission_meta import (
+        SEALED_FALLBACK_OWNER_SEALED_GATE,
+        SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+        sealed_fallback_owner_bucket_from_fields,
+    )
+
+    assert (
+        sealed_fallback_owner_bucket_from_fields(
+            final_emitted_source="acceptance_quality_global_scene_fallback",
+            strict_social_route=False,
+        )
+        == SEALED_FALLBACK_OWNER_SEALED_GATE
+    )
+    assert (
+        sealed_fallback_owner_bucket_from_fields(
+            final_emitted_source="minimal_social_emergency_fallback",
+            strict_social_route=True,
+        )
+        == SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+    )
+
+
+def test_fallback_owner_bucket_registries_cover_all_three_families() -> None:
+    registries = final_emission_meta_read_side_surface()["fallback_owner_bucket_registries"]
+    assert set(registries) == {"opening", "sealed", "visibility"}

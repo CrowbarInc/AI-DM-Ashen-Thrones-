@@ -45,6 +45,11 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
+from game.final_emission_meta import (
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+)
 from game.runtime_lineage_telemetry import (
     RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
     RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
@@ -65,8 +70,6 @@ SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: str = "game.social_exchange_emission"
 SEALED_FALLBACK_SELECTION_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
 SEALED_FALLBACK_MODULE_CONTENT_OWNER: str = "game.final_emission_sealed_fallback"
 SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
-UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: str = "game.api"
-UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: str = "game.gm_retry"
 
 # Short names stamped on sanitizer FEM/trace surfaces → canonical lineage module owners.
 _SANITIZER_TRACE_OWNER_TO_LINEAGE: dict[str, str] = {
@@ -127,7 +130,7 @@ def read_side_lineage_projection_surface() -> dict[str, object]:
         ),
         "upstream_fast_fallback_selection_owner": UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
         "upstream_fast_fallback_content_owner": UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
-        "upstream_fast_fallback_provenance_packager": "game.fallback_provenance_debug",
+        "upstream_fast_fallback_provenance_packager": UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
         "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
         "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
     }

@@ -26,14 +26,11 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    OPENING_FALLBACK_RESULT_META_FIELDS,
     opening_fallback_owner_bucket_from_fields,
     opening_fallback_owner_bucket_from_meta,
 )
 from tests.helpers.emission_smoke_assertions import response_type_contract
 
-# Re-export for tests that lock composition_meta against opening_fallback_meta (AJ2/AJ4).
-OPENING_FALLBACK_RESULT_META_FIELD_NAMES = OPENING_FALLBACK_RESULT_META_FIELDS
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
 # Cycle AP1: retired gate-local composer authorship — test inject vocabulary only.

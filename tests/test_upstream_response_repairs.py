@@ -23,9 +23,9 @@ from game.upstream_response_repairs import (
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
+from game.final_emission_meta import OPENING_FALLBACK_RESULT_META_FIELDS
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
-    OPENING_FALLBACK_RESULT_META_FIELD_NAMES,
     opening_gm_output,
     opening_upstream_composition_meta_slice,
 )
@@ -222,7 +222,7 @@ def test_upstream_prepared_opening_fallback_matches_gate_snapshot_and_family() -
     assert comp["fallback_temporal_frame"] == expected_comp["fallback_temporal_frame"]
     assert comp["opening_fallback_context_source"] == "opening_curated_facts"
     assert comp["opening_fallback_authorship_source"] == expected_comp["opening_fallback_authorship_source"]
-    for key in OPENING_FALLBACK_RESULT_META_FIELD_NAMES:
+    for key in OPENING_FALLBACK_RESULT_META_FIELDS:
         assert comp[key] == meta[key]
 
     fam = payload.get(REALIZATION_FALLBACK_FAMILY_FIELD)

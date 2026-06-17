@@ -17,7 +17,8 @@ from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
     _opening_curated_facts_schema_ok,
     _opening_fallback_classification,
-    select_opening_fallback_for_response_type_contract,
+    opening_fail_closed_composition_meta_empty,
+    opening_scene_safe_fallback_contract,
 )
 from game.final_emission_opening_mode import _opening_mode_active_for_turn
 from game.final_emission_text import (
@@ -370,11 +371,16 @@ def enforce_response_type_contract(
             debug["opening_recovered_via_fallback"] = False
             return current, debug
 
-        # Otherwise, select opening fallback via adapter (upstream snapshot or sealed marker).
-        fallback, fallback_meta, stub_patch, upstream_opening_selected, _ = (
-            select_opening_fallback_for_response_type_contract(
-                gm_output if isinstance(gm_output, dict) else None
-            )
+        # Otherwise, select opening fallback via canonical opening selector (shared with visibility).
+        _, (
+            fallback,
+            fallback_meta,
+            stub_patch,
+            upstream_opening_selected,
+            _,
+        ) = opening_scene_safe_fallback_contract(
+            gm_output if isinstance(gm_output, dict) else None,
+            fail_closed_composition_meta_factory=opening_fail_closed_composition_meta_empty,
         )
         debug.update(stub_patch)
         debug.update(fallback_meta)

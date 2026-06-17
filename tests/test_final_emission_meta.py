@@ -60,6 +60,11 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_PROJECTION_FIELDS,
     OPENING_FALLBACK_RESULT_META_FIELDS,
+    opening_fallback_metadata_field_registry_parity_errors,
+    opening_fallback_metadata_field_registry_surface,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    upstream_fast_fallback_provenance_field_registry_parity_errors,
+    upstream_fast_fallback_provenance_field_registry_surface,
     SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
@@ -679,6 +684,42 @@ def test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes()
     assert target["opening_fallback_context_missing"] is False
     assert target["opening_curated_facts_present"] is True
     assert "opening_fallback_authorship_source" not in target
+
+
+def test_opening_fallback_metadata_field_registry_surface_matches_canonical_constants() -> None:
+    assert opening_fallback_metadata_field_registry_parity_errors() == []
+    surface = opening_fallback_metadata_field_registry_surface()
+    assert tuple(surface["opening_fallback_projection_fields"]) == OPENING_FALLBACK_PROJECTION_FIELDS
+    assert tuple(surface["opening_fallback_result_meta_fields"]) == OPENING_FALLBACK_RESULT_META_FIELDS
+
+
+def test_build_opening_fallback_result_meta_keys_match_registry() -> None:
+    from game.final_emission_opening_fallback import build_opening_fallback_result_meta
+
+    fail_closed = build_opening_fallback_result_meta(context=None)
+    assert set(fail_closed.keys()) == set(OPENING_FALLBACK_RESULT_META_FIELDS)
+
+    context_meta = build_opening_fallback_result_meta(
+        context={
+            "opening_fallback_context_source": "opening_curated_facts",
+            "visible_facts": ["Rain on stone."],
+            "opening_curated_facts_source": "realization",
+            "opening_selector_source_used": "realization",
+            "opening_selector_selected_facts": ["Rain on stone."],
+            "opening_curated_facts": ["Rain on stone."],
+            "opening_final_fallback_basis": ["Rain on stone."],
+            "opening_final_basis_matches_selector": True,
+        }
+    )
+    assert set(context_meta.keys()) == set(OPENING_FALLBACK_RESULT_META_FIELDS)
+
+
+def test_upstream_fast_fallback_provenance_field_registry_surface_matches_canonical_constants() -> None:
+    assert upstream_fast_fallback_provenance_field_registry_parity_errors() == []
+    surface = upstream_fast_fallback_provenance_field_registry_surface()
+    assert surface["provenance_packager"] == UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER
+    assert surface["selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
+    assert surface["content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
 
 
 def test_merge_narrative_mode_output_into_final_emission_meta() -> None:
@@ -1636,7 +1677,7 @@ def test_read_side_lineage_projection_surface_includes_sealed_subkinds_and_split
     assert surface["sealed_fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
     assert surface["upstream_fast_fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
     assert surface["upstream_fast_fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
-    assert surface["upstream_fast_fallback_provenance_packager"] == "game.fallback_provenance_debug"
+    assert surface["upstream_fast_fallback_provenance_packager"] == UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER
     assert surface["sealed_replacement_content_owner_by_subkind"][SEALED_REPLACEMENT_SUBKIND_OPENING] == (
         OPENING_FALLBACK_CONTENT_OWNER
     )

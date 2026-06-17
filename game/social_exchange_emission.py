@@ -26,7 +26,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from typing import Any, Dict, List, MutableMapping, Optional, Tuple
+from typing import Any, Dict, List, Literal, MutableMapping, Optional, Tuple
 
 from game.realization_provenance import (
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
@@ -2246,6 +2246,27 @@ def social_fallback_line_for_sanitizer(
         seed=seed,
     )
     return line
+
+
+StrictSocialEmergencyFallbackSurface = Literal["visibility", "sanitizer_empty"]
+
+
+def select_strict_social_emergency_fallback_line(
+    *,
+    resolution: Dict[str, Any] | None = None,
+    context: Dict[str, Any] | None = None,
+    source_text: str = "",
+    surface: StrictSocialEmergencyFallbackSurface,
+) -> str:
+    """Canonical strict-social emergency fallback line selection across visibility and sanitizer surfaces."""
+    if surface == "visibility":
+        return minimal_social_emergency_fallback_line(resolution)
+    if surface == "sanitizer_empty":
+        return social_fallback_line_for_sanitizer(
+            context if isinstance(context, dict) else {},
+            source_text=source_text,
+        )
+    raise ValueError(f"unknown strict-social emergency fallback surface: {surface!r}")
 
 
 _STALL_OPEN_SOCIAL_FRAGMENT_RE = re.compile(

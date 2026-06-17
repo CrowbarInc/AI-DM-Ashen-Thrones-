@@ -16,6 +16,7 @@ from game.final_emission_meta import (
     VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+    visibility_fallback_owner_bucket_from_fields,
 )
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
 from game.final_emission_text import _normalize_text
@@ -241,6 +242,281 @@ def visibility_selected_fallback_candidate(
         fallback_strategy=fallback_strategy,
         fallback_candidate_source=fallback_candidate_source,
         composition_meta=composition_meta,
+    )
+
+
+def opening_visibility_mode_safe_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+) -> VisibilitySelectedFallback:
+    """Opening-mode visibility path: canonical selector with first-mention fail-closed layers."""
+    from game.final_emission_opening_fallback import opening_scene_safe_fallback_selection
+
+    return opening_scene_safe_fallback_selection(
+        gm_output,
+        fail_closed_composition_meta_factory=first_mention_composition_meta,
+    )
+
+
+def strict_social_visibility_minimal_fallback_candidate(
+    resolution: Dict[str, Any],
+    *,
+    composition_meta: Mapping[str, Any] | None | object = _UNSET,
+) -> VisibilitySelectedFallback:
+    """Canonical strict-social visibility minimal emergency fallback candidate."""
+    from game.social_exchange_emission import select_strict_social_emergency_fallback_line
+
+    meta = (
+        first_mention_composition_meta()
+        if composition_meta is _UNSET
+        else composition_meta
+    )
+    return visibility_selected_fallback_candidate(
+        select_strict_social_emergency_fallback_line(resolution=resolution, surface="visibility"),
+        "strict_social_visibility_minimal",
+        "visibility_minimal_social_fallback",
+        "minimal_social_emergency_fallback",
+        "standard_safe_fallback",
+        "minimal_social_emergency_fallback",
+        meta if isinstance(meta, Mapping) else first_mention_composition_meta(),
+    )
+
+
+def social_active_interlocutor_visibility_fallback(
+    *,
+    world: Dict[str, Any],
+    scene_id: str,
+    active_interlocutor: str,
+    composition_meta: Mapping[str, Any] | None | object = _UNSET,
+) -> VisibilitySelectedFallback:
+    """Canonical social-interlocutor minimal fallback candidate (visibility + sealed terminal)."""
+    from game.social_exchange_emission import (
+        _npc_display_name_for_emission,
+        minimal_social_emergency_fallback_line,
+    )
+
+    sid = str(scene_id or "").strip()
+    mini_res: Dict[str, Any] = {
+        "kind": "question",
+        "social": {
+            "npc_id": active_interlocutor,
+            "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
+            "social_intent_class": "social_exchange",
+        },
+    }
+    meta = (
+        first_mention_composition_meta()
+        if composition_meta is _UNSET
+        else composition_meta
+    )
+    return visibility_selected_fallback_candidate(
+        minimal_social_emergency_fallback_line(mini_res),
+        "social_active_interlocutor_minimal",
+        "social_interlocutor_fallback",
+        "social_interlocutor_minimal_fallback",
+        "standard_safe_fallback",
+        "social_interlocutor_minimal_fallback",
+        meta if isinstance(meta, Mapping) else first_mention_composition_meta(),
+    )
+
+
+def passive_scene_pressure_visibility_fallback_candidates(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> List[VisibilitySelectedFallback]:
+    """Canonical passive-scene-pressure fallback candidates."""
+    from game.final_emission_passive_scene_pressure import _passive_scene_pressure_fallback_candidates
+
+    return list(
+        _passive_scene_pressure_fallback_candidates(
+            session=session if isinstance(session, dict) else None,
+            scene=scene,
+            scene_id=scene_id,
+        )
+    )
+
+
+def npc_pursuit_neutral_nonprogress_visibility_fallback(
+    *,
+    composition_meta: Mapping[str, Any] | None | object = _UNSET,
+) -> VisibilitySelectedFallback:
+    """Canonical NPC-pursuit neutral nonprogress fallback candidate."""
+    from game.diegetic_fallback_narration import npc_pursuit_neutral_nonprogress_fallback_line
+
+    meta = (
+        first_mention_composition_meta()
+        if composition_meta is _UNSET
+        else composition_meta
+    )
+    return visibility_selected_fallback_candidate(
+        npc_pursuit_neutral_nonprogress_fallback_line(),
+        "npc_pursuit_fail_closed_neutral",
+        "npc_pursuit_neutral_nonprogress",
+        "npc_pursuit_neutral_fallback",
+        "standard_safe_fallback",
+        "npc_pursuit_neutral_fallback",
+        meta if isinstance(meta, Mapping) else first_mention_composition_meta(),
+    )
+
+
+def anti_reset_local_continuation_visibility_fallback(
+    *,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+    composition_meta: Mapping[str, Any] | None | object = _UNSET,
+) -> VisibilitySelectedFallback:
+    """Canonical anti-reset local continuation fallback candidate."""
+    from game.anti_reset_emission_guard import local_exchange_continuation_fallback_line
+
+    meta = (
+        first_mention_composition_meta()
+        if composition_meta is _UNSET
+        else composition_meta
+    )
+    return visibility_selected_fallback_candidate(
+        local_exchange_continuation_fallback_line(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=scene_id,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        ),
+        "anti_reset_local_continuation",
+        "anti_reset_continuation_fallback",
+        "anti_reset_local_continuation_fallback",
+        "standard_safe_fallback",
+        "anti_reset_local_continuation_fallback",
+        meta if isinstance(meta, Mapping) else first_mention_composition_meta(),
+    )
+
+
+def scene_emit_integrity_global_visibility_fallback(
+    *,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+    authoritative_resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    res_kind: str,
+    response_type_required: str,
+) -> VisibilitySelectedFallback:
+    """Canonical global scene / scene-emit-integrity fallback candidate."""
+    from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
+
+    return _scene_emit_integrity_global_fallback_selection(
+        scene if isinstance(scene, dict) else None,
+        str(scene_id or "").strip(),
+        authoritative_resolution=authoritative_resolution if isinstance(authoritative_resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
+    )
+
+
+def select_non_strict_terminal_fallback_for_sealed(
+    *,
+    gm_output: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_suppressed_non_social_turn: bool,
+    res_kind: str,
+    response_type_required: str,
+    suppress_intro_replace: bool,
+    interaction_mode: str,
+    opening_visibility_fallback: Callable[[], VisibilitySelectedFallback],
+) -> VisibilitySelectedFallback:
+    """Select non-strict terminal fallback using sealed branch order and visibility-owned candidates.
+
+    Sealed terminal replace paths consume this helper (Cycle BK3) instead of re-assembling
+    overlapping provider graphs locally.
+    """
+    from game.final_emission_opening_mode import _opening_mode_active_for_turn
+    from game.final_emission_sealed_fallback import select_non_strict_replace_path_terminal_sealed_fallback_branch
+    from game.interaction_context import inspect as inspect_interaction_context
+
+    sid = str(scene_id or "").strip()
+    inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
+    mode = str(interaction_mode or (inspected or {}).get("interaction_mode") or "").strip().lower()
+    opening_mode_active = _opening_mode_active_for_turn(
+        gm_output if isinstance(gm_output, dict) else None,
+        resolution if isinstance(resolution, dict) else None,
+    )
+    has_active_social_interlocutor = bool(
+        active_interlocutor
+        and mode == "social"
+        and isinstance(world, dict)
+        and not strict_social_suppressed_non_social_turn
+    )
+
+    initial_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
+        opening_mode_active=opening_mode_active,
+        has_active_social_interlocutor=has_active_social_interlocutor,
+        passive_candidate_available=False,
+        use_neutral_nonprogress=False,
+        suppress_intro_replace=False,
+    )
+    if initial_branch == "opening_scene_safe_fallback":
+        return opening_visibility_fallback()
+    if initial_branch == "social_active_interlocutor_minimal":
+        return social_active_interlocutor_visibility_fallback(
+            world=world if isinstance(world, dict) else {},
+            scene_id=sid,
+            active_interlocutor=active_interlocutor,
+            composition_meta=None,
+        )
+
+    passive_candidates = passive_scene_pressure_visibility_fallback_candidates(
+        session=session if isinstance(session, dict) else None,
+        scene=scene,
+        scene_id=sid,
+    )
+    passive_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
+        opening_mode_active=False,
+        has_active_social_interlocutor=False,
+        passive_candidate_available=bool(passive_candidates),
+        use_neutral_nonprogress=False,
+        suppress_intro_replace=False,
+    )
+    if passive_branch == "passive_scene_pressure":
+        return passive_candidates[0]
+
+    use_neutral_nonprogress = _should_use_neutral_nonprogress_fallback_instead_of_global_stock(
+        session if isinstance(session, dict) else None,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+    )
+    final_branch = select_non_strict_replace_path_terminal_sealed_fallback_branch(
+        opening_mode_active=False,
+        has_active_social_interlocutor=False,
+        passive_candidate_available=False,
+        use_neutral_nonprogress=use_neutral_nonprogress,
+        suppress_intro_replace=suppress_intro_replace,
+    )
+    if final_branch == "npc_pursuit_neutral_nonprogress":
+        return npc_pursuit_neutral_nonprogress_visibility_fallback(composition_meta=None)
+    if final_branch == "anti_reset_local_continuation":
+        return anti_reset_local_continuation_visibility_fallback(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=sid,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            composition_meta=None,
+        )
+    return scene_emit_integrity_global_visibility_fallback(
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+        authoritative_resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        res_kind=res_kind,
+        response_type_required=response_type_required,
     )
 
 
@@ -620,24 +896,6 @@ def route_visibility_enforcement_after_failed_validation(
     return "sealed_hard_replace"
 
 
-def classify_visibility_fallback_owner_bucket(
-    *,
-    fallback_pool: str,
-    fallback_kind: str,
-    final_emitted_source: str,
-) -> str:
-    pool = str(fallback_pool or "").strip()
-    kind = str(fallback_kind or "").strip()
-    source = str(final_emitted_source or "").strip()
-    if not (pool or kind or source):
-        return VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE
-    if pool == "scene_opening_deterministic" or kind == "opening_deterministic_fallback":
-        return VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY
-    if pool == "strict_social_visibility_minimal" or kind == "visibility_minimal_social_fallback":
-        return VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY
-    return VISIBILITY_FALLBACK_OWNER_SEALED_GATE
-
-
 def build_visibility_route_metadata_outcome(
     *,
     observation: VisibilityValidationObservation,
@@ -658,7 +916,7 @@ def build_visibility_route_metadata_outcome(
         )
     if route == "concrete_interaction_no_hard_replace":
         return VisibilityRouteMetadataOutcome(validation_passed=None)
-    fallback_owner_bucket = classify_visibility_fallback_owner_bucket(
+    fallback_owner_bucket = visibility_fallback_owner_bucket_from_fields(
         fallback_pool=fallback_pool or "",
         fallback_kind=fallback_kind or "",
         final_emitted_source=final_emitted_source or "",
@@ -982,7 +1240,7 @@ def stamp_visibility_fallback_metadata(
     if fallback_owner_bucket is not None:
         meta["visibility_fallback_owner_bucket"] = fallback_owner_bucket
     elif fallback_pool is not None or fallback_kind is not None or final_emitted_source is not None:
-        meta["visibility_fallback_owner_bucket"] = classify_visibility_fallback_owner_bucket(
+        meta["visibility_fallback_owner_bucket"] = visibility_fallback_owner_bucket_from_fields(
             fallback_pool=fallback_pool or "",
             fallback_kind=fallback_kind or "",
             final_emitted_source=final_emitted_source or "",
@@ -1041,29 +1299,14 @@ def standard_visibility_safe_fallback(
     """Assemble and validate visibility-safe fallback candidates in canonical gate order."""
     from game.anti_reset_emission_guard import (
         anti_reset_suppresses_intro_style_fallbacks,
-        local_exchange_continuation_fallback_line,
         should_replace_candidate_intro_fallback,
     )
-    from game.diegetic_fallback_narration import npc_pursuit_neutral_nonprogress_fallback_line
     from game.final_emission_first_mention_composition import _grounded_scene_intro_fallback_candidates
-    from game.final_emission_opening_fallback import opening_scene_safe_fallback_selection
     from game.final_emission_opening_mode import _opening_mode_active_for_turn
-    from game.final_emission_passive_scene_pressure import (
-        _passive_scene_pressure_due_for_fallback,
-        _passive_scene_pressure_fallback_candidates,
-    )
-    from game.final_emission_scene_emit_integrity import _scene_emit_integrity_global_fallback_selection
+    from game.final_emission_passive_scene_pressure import _passive_scene_pressure_due_for_fallback
     from game.final_emission_scene_facts import _augment_scene_with_runtime_visible_leads
-    from game.social_exchange_emission import (
-        _npc_display_name_for_emission,
-        minimal_social_emergency_fallback_line,
-    )
-
     if _opening_mode_active_for_turn(gm_output, eff_resolution):
-        return opening_scene_safe_fallback_selection(
-            gm_output,
-            fail_closed_composition_meta_factory=first_mention_composition_meta,
-        )
+        return opening_visibility_mode_safe_fallback_selection(gm_output)
 
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
@@ -1091,21 +1334,12 @@ def standard_visibility_safe_fallback(
     fallback_candidates: List[VisibilitySelectedFallback] = []
 
     if strict_social_active and isinstance(eff_resolution, dict):
-        social_fallback = minimal_social_emergency_fallback_line(eff_resolution)
         fallback_candidates.append(
-            visibility_selected_fallback_candidate(
-                social_fallback,
-                "strict_social_visibility_minimal",
-                "visibility_minimal_social_fallback",
-                "minimal_social_emergency_fallback",
-                "standard_safe_fallback",
-                "minimal_social_emergency_fallback",
-                first_mention_composition_meta(),
-            )
+            strict_social_visibility_minimal_fallback_candidate(eff_resolution)
         )
     else:
         fallback_candidates.extend(
-            _passive_scene_pressure_fallback_candidates(
+            passive_scene_pressure_visibility_fallback_candidates(
                 session=session if isinstance(session, dict) else None,
                 scene=scene,
                 scene_id=scene_id,
@@ -1129,38 +1363,16 @@ def standard_visibility_safe_fallback(
         and not strict_social_suppressed_non_social_turn
         and not strict_social_active
     ):
-        mini_res: Dict[str, Any] = {
-            "kind": "question",
-            "social": {
-                "npc_id": active_interlocutor,
-                "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
-                "social_intent_class": "social_exchange",
-            },
-        }
         fallback_candidates.append(
-            visibility_selected_fallback_candidate(
-                minimal_social_emergency_fallback_line(mini_res),
-                "social_active_interlocutor_minimal",
-                "social_interlocutor_fallback",
-                "social_interlocutor_minimal_fallback",
-                "standard_safe_fallback",
-                "social_interlocutor_minimal_fallback",
-                first_mention_composition_meta(),
+            social_active_interlocutor_visibility_fallback(
+                world=world,
+                scene_id=sid,
+                active_interlocutor=active_interlocutor,
             )
         )
 
     if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
-        fallback_candidates.append(
-            visibility_selected_fallback_candidate(
-                npc_pursuit_neutral_nonprogress_fallback_line(),
-                "npc_pursuit_fail_closed_neutral",
-                "npc_pursuit_neutral_nonprogress",
-                "npc_pursuit_neutral_fallback",
-                "standard_safe_fallback",
-                "npc_pursuit_neutral_fallback",
-                first_mention_composition_meta(),
-            )
-        )
+        fallback_candidates.append(npc_pursuit_neutral_nonprogress_visibility_fallback())
     elif not strict_social_active and not _passive_scene_pressure_due_for_fallback(
         session=session if isinstance(session, dict) else None,
         scene=scene,
@@ -1168,26 +1380,18 @@ def standard_visibility_safe_fallback(
     ):
         if suppress_intro:
             fallback_candidates.append(
-                visibility_selected_fallback_candidate(
-                    local_exchange_continuation_fallback_line(
-                        session=session if isinstance(session, dict) else None,
-                        world=world if isinstance(world, dict) else None,
-                        scene_id=scene_id,
-                        resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-                    ),
-                    "anti_reset_local_continuation",
-                    "anti_reset_continuation_fallback",
-                    "anti_reset_local_continuation_fallback",
-                    "standard_safe_fallback",
-                    "anti_reset_local_continuation_fallback",
-                    first_mention_composition_meta(),
+                anti_reset_local_continuation_visibility_fallback(
+                    session=session if isinstance(session, dict) else None,
+                    world=world if isinstance(world, dict) else None,
+                    scene_id=scene_id,
+                    resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
                 )
             )
         else:
             fallback_candidates.append(
-                _scene_emit_integrity_global_fallback_selection(
-                    scene if isinstance(scene, dict) else None,
-                    sid,
+                scene_emit_integrity_global_visibility_fallback(
+                    scene=scene if isinstance(scene, dict) else None,
+                    scene_id=sid,
                     authoritative_resolution=auth_res,
                     session=session if isinstance(session, dict) else None,
                     world=world if isinstance(world, dict) else None,
@@ -1236,17 +1440,9 @@ def standard_visibility_safe_fallback(
             return selected
 
     if strict_social_active and isinstance(eff_resolution, dict):
-        return visibility_selected_fallback_candidate(
-            minimal_social_emergency_fallback_line(eff_resolution),
-            "strict_social_visibility_minimal",
-            "visibility_minimal_social_fallback",
-            "minimal_social_emergency_fallback",
-            "standard_safe_fallback",
-            "minimal_social_emergency_fallback",
-            first_mention_composition_meta(),
-        )
+        return strict_social_visibility_minimal_fallback_candidate(eff_resolution)
 
-    passive_candidates = _passive_scene_pressure_fallback_candidates(
+    passive_candidates = passive_scene_pressure_visibility_fallback_candidates(
         session=session if isinstance(session, dict) else None,
         scene=scene,
         scene_id=scene_id,
@@ -1255,23 +1451,15 @@ def standard_visibility_safe_fallback(
         return passive_candidates[0]
 
     if suppress_intro:
-        return visibility_selected_fallback_candidate(
-            local_exchange_continuation_fallback_line(
-                session=session if isinstance(session, dict) else None,
-                world=world if isinstance(world, dict) else None,
-                scene_id=scene_id,
-                resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
-            ),
-            "anti_reset_local_continuation",
-            "anti_reset_continuation_fallback",
-            "anti_reset_local_continuation_fallback",
-            "standard_safe_fallback",
-            "anti_reset_local_continuation_fallback",
-            first_mention_composition_meta(),
+        return anti_reset_local_continuation_visibility_fallback(
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=scene_id,
+            resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         )
-    return _scene_emit_integrity_global_fallback_selection(
-        scene if isinstance(scene, dict) else None,
-        sid,
+    return scene_emit_integrity_global_visibility_fallback(
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
         authoritative_resolution=auth_res,
         session=session if isinstance(session, dict) else None,
         world=world if isinstance(world, dict) else None,

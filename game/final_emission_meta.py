@@ -582,9 +582,60 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
 )
 
 # Upstream fast-fallback provenance trace on FEM (read-side observability only).
-# Packaged by ``game.fallback_provenance_debug.record_final_emission_gate_exit``;
-# not owner-bucket assignment, diegetic family, or prose authorship.
+# Packaged by ``game.fallback_provenance_debug.record_final_emission_gate_exit`` (BK6
+# stable provenance owner); not owner-bucket assignment, diegetic family, or prose authorship.
 FEM_FALLBACK_PROVENANCE_TRACE_KEY: str = "fallback_provenance_trace"
+
+# Canonical upstream API fast-fallback provenance field and ownership registry (BK6).
+UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY: str = "fallback_provenance"
+UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: str = "game.api"
+UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER: str = "game.fallback_provenance_debug"
+UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: str = "game.gm_retry"
+
+UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS: frozenset[str] = frozenset(
+    {
+        "source",
+        "stage",
+        "content_fingerprint",
+        "selector_player_facing_text",
+    }
+)
+
+UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN: frozenset[str] = frozenset(
+    {
+        "mutation_before_or_during_gate_entry",
+        "mutation_inside_gate_or_finalize",
+        "mutation_unknown",
+    }
+)
+
+
+def upstream_fast_fallback_provenance_field_registry_surface() -> dict[str, object]:
+    """Diagnostic registry surface for upstream fast-fallback provenance keys (BK6)."""
+    return {
+        "metadata_key": UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY,
+        "fem_trace_key": FEM_FALLBACK_PROVENANCE_TRACE_KEY,
+        "selector_keys": sorted(UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS),
+        "mutation_hints_finalize_contain": sorted(UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN),
+        "selection_owner": UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        "provenance_packager": UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+        "content_owner": UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    }
+
+
+def upstream_fast_fallback_provenance_field_registry_parity_errors() -> list[str]:
+    """Return internal parity errors when upstream fast-fallback provenance registries drift."""
+    errors: list[str] = []
+    surface = upstream_fast_fallback_provenance_field_registry_surface()
+    if surface["metadata_key"] != UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY:
+        errors.append("upstream_fast_fallback_provenance_metadata_key registry surface drift")
+    if surface["fem_trace_key"] != FEM_FALLBACK_PROVENANCE_TRACE_KEY:
+        errors.append("fem_fallback_provenance_trace_key registry surface drift")
+    if frozenset(surface["selector_keys"]) != UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS:
+        errors.append("upstream_fast_fallback_provenance_selector_keys registry surface drift")
+    if frozenset(surface["mutation_hints_finalize_contain"]) != UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN:
+        errors.append("upstream_fast_fallback_mutation_hints_finalize_contain registry surface drift")
+    return errors
 
 # Read-side FEM/replay projection registry for opening fallback telemetry.
 # Write-time result metadata is composed by
@@ -613,12 +664,31 @@ OPENING_FALLBACK_RESULT_META_FIELDS: tuple[str, ...] = tuple(
     key for key in OPENING_FALLBACK_PROJECTION_FIELDS if key != "opening_fallback_authorship_source"
 )
 
-OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS: tuple[str, ...] = (
-    "opening_selector_source_used",
-    "opening_selector_selected_facts",
-    "opening_curated_facts",
-    "opening_final_fallback_basis",
-    "opening_final_basis_matches_selector",
+# Context-extraction mirror keys (subset of result meta populated before composition).
+_OPENING_FALLBACK_CONTEXT_ONLY_RESULT_FIELDS: frozenset[str] = frozenset(
+    {
+        "opening_fallback_failed_closed",
+        "opening_curated_facts_present",
+        "opening_curated_facts_count",
+    }
+)
+OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS: tuple[str, ...] = tuple(
+    key
+    for key in OPENING_FALLBACK_RESULT_META_FIELDS
+    if key not in _OPENING_FALLBACK_CONTEXT_ONLY_RESULT_FIELDS
+)
+
+OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS: tuple[str, ...] = tuple(
+    key
+    for key in OPENING_FALLBACK_PROJECTION_FIELDS
+    if key
+    in {
+        "opening_selector_source_used",
+        "opening_selector_selected_facts",
+        "opening_curated_facts",
+        "opening_final_fallback_basis",
+        "opening_final_basis_matches_selector",
+    }
 )
 
 _OPENING_FALLBACK_BOOL_PROJECTION_FIELDS: frozenset[str] = frozenset(
@@ -636,6 +706,74 @@ _OPENING_FALLBACK_INT_PROJECTION_FIELDS: frozenset[str] = frozenset(
         "opening_curated_facts_count",
     }
 )
+
+
+def default_opening_fallback_context_mirror_values() -> Dict[str, Any]:
+    """Default opening-context mirror values before curated-fact extraction."""
+    return {
+        "opening_fallback_context_source": "none",
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": True,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "none",
+        "opening_selector_selected_facts": [],
+        "opening_curated_facts": [],
+        "opening_final_fallback_basis": [],
+        "opening_final_basis_matches_selector": False,
+    }
+
+
+def default_opening_fallback_fail_closed_result_meta() -> Dict[str, Any]:
+    """Canonical fail-closed write-time result meta (``context is None`` path)."""
+    return {
+        "opening_fallback_context_source": "opening_curated_facts",
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": True,
+        "opening_fallback_failed_closed": True,
+        "opening_curated_facts_present": False,
+        "opening_curated_facts_count": 0,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "none",
+        "opening_selector_selected_facts": [],
+        "opening_curated_facts": [],
+        "opening_final_fallback_basis": [],
+        "opening_final_basis_matches_selector": True,
+    }
+
+
+def opening_fallback_metadata_field_registry_surface() -> dict[str, object]:
+    """Diagnostic registry surface for opening fallback metadata field lists (BK5)."""
+    return {
+        "opening_fallback_projection_fields": list(OPENING_FALLBACK_PROJECTION_FIELDS),
+        "opening_fallback_result_meta_fields": list(OPENING_FALLBACK_RESULT_META_FIELDS),
+        "opening_fallback_context_mirror_fields": list(OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS),
+        "opening_fallback_selector_debug_fields": list(OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS),
+        "opening_fallback_bool_projection_fields": sorted(_OPENING_FALLBACK_BOOL_PROJECTION_FIELDS),
+        "opening_fallback_int_projection_fields": sorted(_OPENING_FALLBACK_INT_PROJECTION_FIELDS),
+    }
+
+
+def opening_fallback_metadata_field_registry_parity_errors() -> list[str]:
+    """Return internal parity errors when derived opening field registries drift."""
+    errors: list[str] = []
+    surface = opening_fallback_metadata_field_registry_surface()
+    if tuple(surface["opening_fallback_projection_fields"]) != OPENING_FALLBACK_PROJECTION_FIELDS:
+        errors.append("opening_fallback_projection_fields registry surface drift")
+    if tuple(surface["opening_fallback_result_meta_fields"]) != OPENING_FALLBACK_RESULT_META_FIELDS:
+        errors.append("opening_fallback_result_meta_fields registry surface drift")
+    if tuple(surface["opening_fallback_context_mirror_fields"]) != OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS:
+        errors.append("opening_fallback_context_mirror_fields registry surface drift")
+    if tuple(surface["opening_fallback_selector_debug_fields"]) != OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS:
+        errors.append("opening_fallback_selector_debug_fields registry surface drift")
+    if set(OPENING_FALLBACK_RESULT_META_FIELDS) != set(default_opening_fallback_fail_closed_result_meta()):
+        errors.append("default_opening_fallback_fail_closed_result_meta keys drift from OPENING_FALLBACK_RESULT_META_FIELDS")
+    if set(OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS) != set(default_opening_fallback_context_mirror_values()):
+        errors.append("default_opening_fallback_context_mirror_values keys drift from OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS")
+    if not set(OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS).issubset(set(OPENING_FALLBACK_PROJECTION_FIELDS)):
+        errors.append("OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS must be subset of OPENING_FALLBACK_PROJECTION_FIELDS")
+    if not set(OPENING_FALLBACK_RESULT_META_FIELDS).issubset(set(OPENING_FALLBACK_PROJECTION_FIELDS)):
+        errors.append("OPENING_FALLBACK_RESULT_META_FIELDS must be subset of OPENING_FALLBACK_PROJECTION_FIELDS")
+    return errors
 
 
 def opening_fallback_projection_fields(
@@ -680,12 +818,12 @@ def apply_opening_fallback_projection_fields(
 
 
 # --- Canonical fallback owner-bucket registry (read-side vocabulary; not policy) ---
-# Single source of bucket string values for opening, sealed, and visibility fallback
-# observability. Assignment/classification lives in:
-# - opening: ``opening_fallback_owner_bucket_from_meta`` / ``_from_fields`` (this module)
-# - sealed: ``game.final_emission_sealed_fallback.stamp_sealed_fallback_realization_family``
-# - visibility: ``game.final_emission_visibility_fallback.classify_visibility_fallback_owner_bucket``
-# Sealed/visibility modules re-export these constants for stable import paths.
+# Single source of bucket string values and read-side classification for opening, sealed,
+# and visibility fallback observability (Cycle BK1).
+# - opening: ``opening_fallback_owner_bucket_from_meta`` / ``_from_fields``
+# - sealed: ``sealed_fallback_owner_bucket_from_fields``
+# - visibility: ``visibility_fallback_owner_bucket_from_fields``
+# Sealed/visibility modules re-export bucket constants for stable import paths.
 
 OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED = "upstream-prepared"
 OPENING_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
@@ -772,6 +910,8 @@ def final_emission_meta_read_side_surface() -> dict[str, object]:
         "internal_state_key": INTERNAL_STATE_KEY,
         "final_emission_mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
         "opening_fallback_owner_buckets": sorted(OPENING_FALLBACK_OWNER_BUCKETS),
+        "opening_fallback_metadata_field_registry": opening_fallback_metadata_field_registry_surface(),
+        "upstream_fast_fallback_provenance_field_registry": upstream_fast_fallback_provenance_field_registry_surface(),
         "sealed_fallback_owner_buckets": sorted(SEALED_FALLBACK_OWNER_BUCKETS),
         "visibility_fallback_owner_buckets": sorted(VISIBILITY_FALLBACK_OWNER_BUCKETS),
         "fallback_owner_bucket_registries": registries,
@@ -906,6 +1046,44 @@ def opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> s
         fallback_family=family if isinstance(family, str) else None,
         fallback_temporal_frame=temporal if isinstance(temporal, str) else None,
     )
+
+
+def visibility_fallback_owner_bucket_from_fields(
+    *,
+    fallback_pool: str = "",
+    fallback_kind: str = "",
+    final_emitted_source: str = "",
+) -> str:
+    """Map visibility fallback pool/kind/source signals to one owner bucket.
+
+    Read-side only: does not select fallback text or drive gate orchestration.
+    """
+    pool = str(fallback_pool or "").strip()
+    kind = str(fallback_kind or "").strip()
+    source = str(final_emitted_source or "").strip()
+    if not (pool or kind or source):
+        return VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE
+    if pool == "scene_opening_deterministic" or kind == "opening_deterministic_fallback":
+        return VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY
+    if pool == "strict_social_visibility_minimal" or kind == "visibility_minimal_social_fallback":
+        return VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY
+    return VISIBILITY_FALLBACK_OWNER_SEALED_GATE
+
+
+def sealed_fallback_owner_bucket_from_fields(
+    *,
+    final_emitted_source: str | None = None,
+    strict_social_route: bool = False,
+) -> str:
+    """Map sealed terminal replace signals to one owner bucket.
+
+    Read-side only: matches ``stamp_sealed_fallback_realization_family`` bucket stamping.
+    """
+    src = str(final_emitted_source or "").strip()
+    if strict_social_route and src == "minimal_social_emergency_fallback":
+        return SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+    return SEALED_FALLBACK_OWNER_SEALED_GATE
+
 
 # Stage-diff is intentionally bounded; it may project a compact NA subset for observability only.
 # This is not a second owner of NA semantics; it is an explicitly-allowed projection surface.
