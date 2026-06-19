@@ -1,0 +1,97 @@
+{
+  "advisory_only": true,
+  "alerts": [],
+  "new_projection_risk": {
+    "forced_retry_fallback": {
+      "observed_on_finalized_fem": 0,
+      "observed_with_projection": 0,
+      "observed_without_projection": 0,
+      "status": "healthy"
+    },
+    "nonsocial_fallback_minimal": {
+      "observed_on_finalized_fem": 0,
+      "observed_with_projection": 0,
+      "observed_without_projection": 0,
+      "status": "healthy"
+    },
+    "provider_failure_without_trace": {
+      "observed_on_finalized_fem": 0,
+      "observed_with_projection": 0,
+      "observed_without_projection": 0,
+      "status": "healthy"
+    },
+    "social_fallback_minimal": {
+      "observed_on_finalized_fem": 0,
+      "observed_with_projection": 0,
+      "observed_without_projection": 0,
+      "status": "healthy"
+    }
+  },
+  "observations": {
+    "forced_retry_fallback": [],
+    "nonsocial_fallback_minimal": [],
+    "provider_failure_without_trace": [],
+    "social_fallback_minimal": []
+  },
+  "observed_count": {
+    "forced_retry_fallback": 0,
+    "nonsocial_fallback_minimal": 0,
+    "provider_failure_without_trace": 0,
+    "social_fallback_minimal": 0
+  },
+  "observed_with_projection": {
+    "forced_retry_fallback": 0,
+    "nonsocial_fallback_minimal": 0,
+    "provider_failure_without_trace": 0,
+    "social_fallback_minimal": 0
+  },
+  "observed_without_projection": {
+    "forced_retry_fallback": 0,
+    "nonsocial_fallback_minimal": 0,
+    "provider_failure_without_trace": 0,
+    "social_fallback_minimal": 0
+  },
+  "scan_scope": {
+    "artifact_file_count": 3799,
+    "audit_reference_artifacts_excluded": [
+      "artifacts/golden_replay/projection_coverage_report.json",
+      "artifacts/golden_replay/projection_drift_watch_report.json",
+      "artifacts/golden_replay/projection_gap_reality_report.json"
+    ],
+    "finalized_fem_instance_count": 107,
+    "parse_error_count": 0,
+    "parse_errors": [],
+    "roots": [
+      "artifacts",
+      "data"
+    ]
+  },
+  "schema_version": 1,
+  "status": "healthy",
+  "watch_shapes": {
+    "forced_retry_fallback": {
+      "bp3_classification": "C. Packaging-only",
+      "expected_status": "absent_from_finalized_fem",
+      "name": "forced_retry_fallback",
+      "rationale": "Observed by BP3 only on outer GM output and pre-final gate stage snapshots."
+    },
+    "nonsocial_fallback_minimal": {
+      "bp3_classification": "C. Packaging-only",
+      "expected_status": "absent_from_finalized_fem",
+      "name": "nonsocial_fallback_minimal",
+      "rationale": "Observed by BP3 only on outer GM/stage packaging for one turn."
+    },
+    "provider_failure_without_trace": {
+      "bp3_classification": "D. Unreachable in scanned corpus",
+      "expected_status": "absent_from_finalized_fem",
+      "name": "provider_failure_without_trace",
+      "rationale": "No finalized provider-failure family was observed without positive provenance trace."
+    },
+    "social_fallback_minimal": {
+      "bp3_classification": "D. Unreachable in scanned corpus",
+      "expected_status": "absent_from_finalized_fem",
+      "name": "social_fallback_minimal",
+      "rationale": "No exact route occurrence was observed in the BP3 repository artifact corpus."
+    }
+  }
+}

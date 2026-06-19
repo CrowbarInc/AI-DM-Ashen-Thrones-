@@ -1,0 +1,34 @@
+{
+  "advisory_only": true,
+  "anomalies": [],
+  "baseline": {},
+  "baseline_snapshot_count": 0,
+  "current_snapshot": null,
+  "recommendations": [
+    "Collect at least 5 prior snapshots before interpreting anomaly signals."
+  ],
+  "schema_version": 1,
+  "severity": "none",
+  "snapshot_count": 0,
+  "stability": "insufficient_history + anomaly detection suppressed",
+  "status": "insufficient_history",
+  "thresholds": {
+    "expected_band_standard_deviations": 2.0,
+    "metric_scale_floors": {
+      "dimension_count": 1.0,
+      "fallback_event_count": 1.0,
+      "fallback_trigger_rate": 0.02,
+      "fallback_turn_count": 1.0,
+      "route_trigger_rate": 0.02
+    },
+    "minimum_history_snapshots": 5,
+    "rolling_window_prior_snapshots": 10,
+    "severity_standardized_distance": {
+      "critical": ">= 5",
+      "info": ">= 2 and < 3",
+      "warning": ">= 4 and < 5",
+      "watch": ">= 3 and < 4"
+    }
+  },
+  "trend_classification": "insufficient_history"
+}

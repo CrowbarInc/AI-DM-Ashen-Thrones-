@@ -1,0 +1,74 @@
+{
+  "advisory_only": true,
+  "as_of_timestamp": "2026-06-19T00:00:00Z",
+  "confidence": {
+    "average_observation_depth": 0.0,
+    "factors": {
+      "history_length_points": 0,
+      "observation_depth_points": 0,
+      "sustained_evidence_points": 0
+    },
+    "history_length_snapshots": 0,
+    "level": "low",
+    "maximum_score": 6,
+    "score": 0,
+    "sustained_improvement_count": 0,
+    "sustained_improvement_rate": 0.0,
+    "thresholds": {
+      "high": "5-6 points",
+      "history_length": "1 point at >=3 snapshots; 2 at >=5",
+      "low": "0-2 points",
+      "medium": "3-4 points",
+      "observation_depth": "1 point at average >=3; 2 at >=5",
+      "sustained_evidence": "1 point for any sustained result; 2 when >=50% of completed work is sustained"
+    }
+  },
+  "contributor_impact": {
+    "fallback_kinds": [],
+    "families": [],
+    "owners": [],
+    "routes": []
+  },
+  "effectiveness_distribution": {
+    "improved": 0,
+    "regressed": 0,
+    "resolved": 0,
+    "unchanged": 0
+  },
+  "engineering_yield": {
+    "regression_rate": 0.0,
+    "risk_points_removed": 0,
+    "risk_points_removed_per_completed_remediation": 0.0,
+    "successful_outcome_rate": 0.0,
+    "sustained_improvements": 0
+  },
+  "governance_findings": {
+    "insufficient_observations": [],
+    "lacking_closure_evidence": [],
+    "long_running_remediations": [],
+    "stale_remediations": []
+  },
+  "portfolio_status": {
+    "abandoned_remediations": 0,
+    "active_remediations": 0,
+    "completed_remediations": 0,
+    "total_remediations": 0
+  },
+  "recommendations": [
+    "Register and observe remediation outcomes before interpreting portfolio benefit."
+  ],
+  "risk_reduction": {
+    "average_risk_reduction": 0.0,
+    "cumulative_risk_reduction": 0,
+    "largest_reductions": [],
+    "median_risk_reduction": 0.0,
+    "smallest_reductions": []
+  },
+  "schema_version": 1,
+  "status": "empty_portfolio",
+  "thresholds": {
+    "long_running_after_days": 90,
+    "minimum_observation_count": 3,
+    "stale_after_days": 30
+  }
+}

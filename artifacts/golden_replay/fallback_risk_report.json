@@ -1,0 +1,60 @@
+{
+  "advisory_only": true,
+  "highest_risk_contributor": null,
+  "ranked_hotspots": {
+    "all": [],
+    "fallback_kinds": [],
+    "families": [],
+    "owners": [],
+    "routes": []
+  },
+  "recommendations": [
+    "Collect fallback-incidence history before interpreting structural risk."
+  ],
+  "risk_model": {
+    "anomaly_participation_points_each": 5.0,
+    "anomaly_severity_points": {
+      "critical": 20.0,
+      "info": 4.0,
+      "none": 0.0,
+      "warning": 14.0,
+      "watch": 8.0
+    },
+    "classification_thresholds": {
+      "critical": "80 to 100",
+      "elevated": "40 to <60",
+      "high": "60 to <80",
+      "low": "10 to <25",
+      "moderate": "25 to <40",
+      "negligible": "0 to <10"
+    },
+    "factor_maximums": {
+      "anomaly_participation": 15.0,
+      "anomaly_severity": 20.0,
+      "frequency_contribution": 20.0,
+      "recurrence_strength": 25.0,
+      "trend_direction": 20.0
+    },
+    "maximum_score": 100.0,
+    "recurrence_points": {
+      "dominant": 25.0,
+      "persistent": 16.0,
+      "recurring": 8.0,
+      "transient": 0.0
+    },
+    "trend_points": {
+      "improving": 0.0,
+      "insufficient_history": 0.0,
+      "stable": 5.0,
+      "worsening": 20.0
+    }
+  },
+  "schema_version": 1,
+  "snapshot_count": 0,
+  "source_status": {
+    "bp5_trend": "insufficient_history",
+    "bp6_anomalies": "insufficient_history",
+    "bp7_recurrence": "no_history"
+  },
+  "status": "no_history"
+}

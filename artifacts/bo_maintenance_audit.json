@@ -1,0 +1,4535 @@
+{
+  "generated_at": "2026-06-17",
+  "total_py_files": 602,
+  "total_loc": 267869,
+  "top_loc": [
+    [
+      6004,
+      "game/interaction_context.py"
+    ],
+    [
+      5534,
+      "game/api.py"
+    ],
+    [
+      4579,
+      "game/gm.py"
+    ],
+    [
+      4518,
+      "tests/test_ownership_registry.py"
+    ],
+    [
+      3881,
+      "game/social_exchange_emission.py"
+    ],
+    [
+      3597,
+      "tests/test_prompt_context.py"
+    ],
+    [
+      3197,
+      "game/narrative_planning.py"
+    ],
+    [
+      3196,
+      "game/leads.py"
+    ],
+    [
+      3067,
+      "game/prompt_context.py"
+    ],
+    [
+      2854,
+      "game/gm_retry.py"
+    ],
+    [
+      2828,
+      "game/social.py"
+    ],
+    [
+      2295,
+      "tests/test_social_exchange_emission.py"
+    ],
+    [
+      2276,
+      "game/planner_ctir_projection.py"
+    ],
+    [
+      2229,
+      "game/final_emission_validators.py"
+    ],
+    [
+      2210,
+      "game/final_emission_meta.py"
+    ],
+    [
+      2075,
+      "game/clues.py"
+    ],
+    [
+      2023,
+      "tools/architecture_audit.py"
+    ],
+    [
+      1995,
+      "tests/helpers/golden_replay.py"
+    ],
+    [
+      1981,
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    [
+      1976,
+      "game/final_emission_visibility_fallback.py"
+    ],
+    [
+      1927,
+      "tests/test_final_emission_visibility_fallback.py"
+    ],
+    [
+      1861,
+      "game/narrative_authenticity.py"
+    ],
+    [
+      1856,
+      "tests/test_prompt_and_guard.py"
+    ],
+    [
+      1796,
+      "game/intent_parser.py"
+    ],
+    [
+      1705,
+      "tests/test_synthetic_smoke.py"
+    ]
+  ],
+  "top_imported": [
+    [
+      "game.gm",
+      153
+    ],
+    [
+      "game.storage",
+      150
+    ],
+    [
+      "game.final_emission_gate",
+      125
+    ],
+    [
+      "game.defaults",
+      98
+    ],
+    [
+      "game",
+      91
+    ],
+    [
+      "game.interaction_context",
+      85
+    ],
+    [
+      "tests.helpers.emission_smoke_assertions",
+      77
+    ],
+    [
+      "game.api",
+      76
+    ],
+    [
+      "game.final_emission_meta",
+      73
+    ],
+    [
+      "game.social_exchange_emission",
+      70
+    ],
+    [
+      "game.final_emission_strict_social_stack",
+      59
+    ],
+    [
+      "game.final_emission_text",
+      52
+    ],
+    [
+      "game.final_emission_repairs",
+      47
+    ],
+    [
+      "game.social",
+      45
+    ],
+    [
+      "game.leads",
+      45
+    ],
+    [
+      "game.final_emission_non_strict_stack",
+      42
+    ],
+    [
+      "game.prompt_context",
+      38
+    ],
+    [
+      "game.final_emission_validators",
+      36
+    ],
+    [
+      "game.final_emission_terminal_pipeline",
+      36
+    ],
+    [
+      "game.ctir_runtime",
+      35
+    ],
+    [
+      "game.exploration",
+      31
+    ],
+    [
+      "game.world",
+      29
+    ],
+    [
+      "game.utils",
+      26
+    ],
+    [
+      "game.realization_provenance",
+      26
+    ],
+    [
+      "game.final_emission_visibility_fallback",
+      25
+    ]
+  ],
+  "top_fanout": [
+    [
+      "tests.test_ownership_registry",
+      56
+    ],
+    [
+      "game.api",
+      48
+    ],
+    [
+      "tests.test_final_emission_gate_delegator_regression",
+      42
+    ],
+    [
+      "game.prompt_context",
+      34
+    ],
+    [
+      "game.final_emission_strict_social_stack",
+      21
+    ],
+    [
+      "tests.test_final_emission_gate_orchestration_order",
+      21
+    ],
+    [
+      "tests.test_final_emission_opening_fallback",
+      20
+    ],
+    [
+      "game.final_emission_non_strict_stack",
+      19
+    ],
+    [
+      "game.final_emission_visibility_fallback",
+      18
+    ],
+    [
+      "game.api_turn_support",
+      17
+    ],
+    [
+      "tests.test_prompt_context",
+      17
+    ],
+    [
+      "game.gm",
+      16
+    ],
+    [
+      "game.gm_retry",
+      15
+    ],
+    [
+      "tests.test_social_exchange_emission",
+      15
+    ],
+    [
+      "tests.test_final_emission_gate_selector_snapshots",
+      14
+    ],
+    [
+      "tests.test_mixed_state_recovery_regressions",
+      14
+    ],
+    [
+      "tests.test_narration_transcript_regressions",
+      14
+    ],
+    [
+      "game.exploration",
+      13
+    ],
+    [
+      "game.final_emission_terminal_pipeline",
+      13
+    ],
+    [
+      "tests.helpers.golden_replay",
+      13
+    ],
+    [
+      "tests.test_c4_narrative_mode_live_pipeline",
+      13
+    ],
+    [
+      "tests.test_final_emission_boundary_convergence",
+      13
+    ],
+    [
+      "tests.test_final_emission_meta",
+      13
+    ],
+    [
+      "game.final_emission_generic_exit",
+      12
+    ],
+    [
+      "game.social_exchange_emission",
+      12
+    ]
+  ],
+  "top_fanin": [
+    [
+      "game.storage",
+      112
+    ],
+    [
+      "game.defaults",
+      94
+    ],
+    [
+      "game",
+      78
+    ],
+    [
+      "game.interaction_context",
+      74
+    ],
+    [
+      "tests.helpers.emission_smoke_assertions",
+      69
+    ],
+    [
+      "game.api",
+      61
+    ],
+    [
+      "game.gm",
+      60
+    ],
+    [
+      "game.final_emission_meta",
+      57
+    ],
+    [
+      "game.social_exchange_emission",
+      53
+    ],
+    [
+      "game.final_emission_text",
+      49
+    ],
+    [
+      "game.leads",
+      43
+    ],
+    [
+      "game.prompt_context",
+      37
+    ],
+    [
+      "game.social",
+      37
+    ],
+    [
+      "game.ctir_runtime",
+      33
+    ],
+    [
+      "game.final_emission_gate",
+      28
+    ],
+    [
+      "game.exploration",
+      27
+    ],
+    [
+      "game.world",
+      27
+    ],
+    [
+      "game.realization_provenance",
+      26
+    ],
+    [
+      "game.utils",
+      26
+    ],
+    [
+      "game.final_emission_terminal_pipeline",
+      24
+    ],
+    [
+      "game.narration_plan_bundle",
+      23
+    ],
+    [
+      "game.scene_actions",
+      22
+    ],
+    [
+      "game.final_emission_repairs",
+      21
+    ],
+    [
+      "game.final_emission_strict_social_stack",
+      21
+    ],
+    [
+      "game.final_emission_validators",
+      21
+    ]
+  ],
+  "over500_count": 141,
+  "over1000_count": 52,
+  "over500": [
+    [
+      6004,
+      "game/interaction_context.py"
+    ],
+    [
+      5534,
+      "game/api.py"
+    ],
+    [
+      4579,
+      "game/gm.py"
+    ],
+    [
+      4518,
+      "tests/test_ownership_registry.py"
+    ],
+    [
+      3881,
+      "game/social_exchange_emission.py"
+    ],
+    [
+      3597,
+      "tests/test_prompt_context.py"
+    ],
+    [
+      3197,
+      "game/narrative_planning.py"
+    ],
+    [
+      3196,
+      "game/leads.py"
+    ],
+    [
+      3067,
+      "game/prompt_context.py"
+    ],
+    [
+      2854,
+      "game/gm_retry.py"
+    ],
+    [
+      2828,
+      "game/social.py"
+    ],
+    [
+      2295,
+      "tests/test_social_exchange_emission.py"
+    ],
+    [
+      2276,
+      "game/planner_ctir_projection.py"
+    ],
+    [
+      2229,
+      "game/final_emission_validators.py"
+    ],
+    [
+      2210,
+      "game/final_emission_meta.py"
+    ],
+    [
+      2075,
+      "game/clues.py"
+    ],
+    [
+      2023,
+      "tools/architecture_audit.py"
+    ],
+    [
+      1995,
+      "tests/helpers/golden_replay.py"
+    ],
+    [
+      1981,
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    [
+      1976,
+      "game/final_emission_visibility_fallback.py"
+    ],
+    [
+      1927,
+      "tests/test_final_emission_visibility_fallback.py"
+    ],
+    [
+      1861,
+      "game/narrative_authenticity.py"
+    ],
+    [
+      1856,
+      "tests/test_prompt_and_guard.py"
+    ],
+    [
+      1796,
+      "game/intent_parser.py"
+    ],
+    [
+      1705,
+      "tests/test_synthetic_smoke.py"
+    ],
+    [
+      1687,
+      "tests/test_final_emission_meta.py"
+    ],
+    [
+      1686,
+      "game/scenario_spine_eval.py"
+    ],
+    [
+      1664,
+      "tools/test_audit.py"
+    ],
+    [
+      1654,
+      "game/interaction_continuity.py"
+    ],
+    [
+      1636,
+      "game/response_policy_enforcement.py"
+    ],
+    [
+      1627,
+      "tests/test_narration_transcript_regressions.py"
+    ],
+    [
+      1597,
+      "tests/helpers/failure_dashboard_report.py"
+    ],
+    [
+      1585,
+      "tests/helpers/golden_replay_projection.py"
+    ],
+    [
+      1571,
+      "game/output_sanitizer.py"
+    ],
+    [
+      1450,
+      "tests/test_final_emission_opening_fallback.py"
+    ],
+    [
+      1388,
+      "game/narration_visibility.py"
+    ],
+    [
+      1373,
+      "tests/test_run_scenario_spine_validation.py"
+    ],
+    [
+      1370,
+      "tests/test_final_emission_gate_delegator_regression.py"
+    ],
+    [
+      1362,
+      "game/content_lint.py"
+    ],
+    [
+      1357,
+      "tools/run_manual_gauntlet.py"
+    ],
+    [
+      1296,
+      "game/referent_tracking.py"
+    ],
+    [
+      1277,
+      "game/final_emission_repairs.py"
+    ],
+    [
+      1253,
+      "tests/helpers/replay_drift_taxonomy.py"
+    ],
+    [
+      1226,
+      "game/storage.py"
+    ],
+    [
+      1224,
+      "tools/run_scenario_spine_validation.py"
+    ],
+    [
+      1224,
+      "tests/test_social_lead_landing.py"
+    ],
+    [
+      1174,
+      "tests/test_failure_classifier.py"
+    ],
+    [
+      1091,
+      "tests/test_final_emission_visibility.py"
+    ],
+    [
+      1073,
+      "game/world_progression.py"
+    ],
+    [
+      1059,
+      "tests/test_transcript_regression.py"
+    ],
+    [
+      1036,
+      "game/exploration.py"
+    ],
+    [
+      1029,
+      "tests/test_api_narration_path_selection.py"
+    ],
+    [
+      956,
+      "game/final_emission_first_mention_composition.py"
+    ],
+    [
+      949,
+      "tests/test_scene_transition_authority.py"
+    ],
+    [
+      929,
+      "game/schema_contracts.py"
+    ],
+    [
+      925,
+      "game/tone_escalation.py"
+    ],
+    [
+      913,
+      "tests/helpers/failure_classifier.py"
+    ],
+    [
+      912,
+      "game/api_turn_support.py"
+    ],
+    [
+      907,
+      "tests/test_social.py"
+    ],
+    [
+      900,
+      "tests/test_answer_completeness_rules.py"
+    ],
+    [
+      875,
+      "tests/helpers/failure_classification_sync.py"
+    ],
+    [
+      868,
+      "tests/test_intent_parser.py"
+    ],
+    [
+      865,
+      "tests/test_scene_destination_binding.py"
+    ],
+    [
+      864,
+      "tests/helpers/gate_thin_boundary_locks.py"
+    ],
+    [
+      858,
+      "tests/test_speaker_contract_enforcement.py"
+    ],
+    [
+      851,
+      "tests/test_mixed_state_recovery_regressions.py"
+    ],
+    [
+      850,
+      "tools/architecture_audit_tests.py"
+    ],
+    [
+      850,
+      "game/narrative_authenticity_eval.py"
+    ],
+    [
+      838,
+      "tests/test_architecture_audit_tool.py"
+    ],
+    [
+      808,
+      "game/ctir.py"
+    ],
+    [
+      805,
+      "tests/test_final_emission_gate_orchestration_order.py"
+    ],
+    [
+      795,
+      "game/narrative_mode_contract.py"
+    ],
+    [
+      786,
+      "tools/architecture_audit_runtime.py"
+    ],
+    [
+      784,
+      "game/dialogue_social_plan.py"
+    ],
+    [
+      771,
+      "tests/test_response_delta_requirement.py"
+    ],
+    [
+      761,
+      "tests/test_strict_social_answer_pressure_cashout.py"
+    ],
+    [
+      761,
+      "tests/test_exploration_resolution.py"
+    ],
+    [
+      760,
+      "tests/test_directed_social_routing.py"
+    ],
+    [
+      747,
+      "tests/test_golden_replay_projection.py"
+    ],
+    [
+      743,
+      "tests/test_narrative_authority_rules.py"
+    ],
+    [
+      732,
+      "tests/test_follow_lead_commitment_wiring.py"
+    ],
+    [
+      729,
+      "tests/helpers/replay_drift_risk.py"
+    ],
+    [
+      727,
+      "tests/test_post_gm_adoption_gateway.py"
+    ],
+    [
+      726,
+      "game/context_separation.py"
+    ],
+    [
+      724,
+      "game/diegetic_fallback_narration.py"
+    ],
+    [
+      720,
+      "tests/test_social_speaker_grounding.py"
+    ],
+    [
+      705,
+      "game/narrative_authority.py"
+    ],
+    [
+      694,
+      "tools/planner_convergence_audit.py"
+    ],
+    [
+      688,
+      "game/scene_destination_binding.py"
+    ],
+    [
+      679,
+      "game/world.py"
+    ],
+    [
+      675,
+      "game/anti_railroading.py"
+    ],
+    [
+      674,
+      "tools/validation_layer_audit.py"
+    ],
+    [
+      667,
+      "game/opening_visible_fact_selection.py"
+    ],
+    [
+      665,
+      "tests/test_response_policy_enforcement_mutation.py"
+    ],
+    [
+      664,
+      "game/final_emission_replay_projection.py"
+    ],
+    [
+      661,
+      "tests/test_world_updates_and_clue_normalization.py"
+    ],
+    [
+      659,
+      "tests/test_prompt_compression.py"
+    ],
+    [
+      652,
+      "game/final_emission_strict_social_stack.py"
+    ],
+    [
+      650,
+      "tests/test_output_sanitizer.py"
+    ],
+    [
+      645,
+      "tests/test_c1_narration_seam_regression.py"
+    ],
+    [
+      643,
+      "tests/test_prompt_context_narrative_modes.py"
+    ],
+    [
+      641,
+      "tests/test_manual_gauntlet_aggregation.py"
+    ],
+    [
+      639,
+      "tests/helpers/n1_scenario_spine_harness.py"
+    ],
+    [
+      637,
+      "tests/test_social_emission_quality.py"
+    ],
+    [
+      637,
+      "tests/test_lead_lifecycle_block3_transcript_regression.py"
+    ],
+    [
+      636,
+      "tests/test_manual_gauntlet_report.py"
+    ],
+    [
+      633,
+      "tools/aggregate_manual_gauntlets.py"
+    ],
+    [
+      627,
+      "game/conversational_memory_window.py"
+    ],
+    [
+      623,
+      "game/affordances.py"
+    ],
+    [
+      620,
+      "tests/helpers/emission_smoke_assertions.py"
+    ],
+    [
+      613,
+      "game/narration_seam_guards.py"
+    ],
+    [
+      606,
+      "game/interaction_routing.py"
+    ],
+    [
+      604,
+      "tools/compare_scenario_spine_reruns.py"
+    ],
+    [
+      603,
+      "tests/test_lead_progression_turn_pipeline_integration.py"
+    ],
+    [
+      600,
+      "game/upstream_response_repairs.py"
+    ],
+    [
+      594,
+      "game/acceptance_quality.py"
+    ],
+    [
+      589,
+      "game/speaker_contract_enforcement.py"
+    ],
+    [
+      587,
+      "tests/test_lead_lifecycle_vertical_slice.py"
+    ],
+    [
+      583,
+      "tests/helpers/behavioral_gauntlet_eval.py"
+    ],
+    [
+      577,
+      "game/playability_eval.py"
+    ],
+    [
+      576,
+      "game/npc_promotion.py"
+    ],
+    [
+      574,
+      "tests/test_social_escalation.py"
+    ],
+    [
+      574,
+      "game/opening_scene_realization.py"
+    ],
+    [
+      571,
+      "tests/test_narrative_authenticity_aer4.py"
+    ],
+    [
+      567,
+      "game/noncombat_resolution.py"
+    ],
+    [
+      565,
+      "tests/test_gm_retry.py"
+    ],
+    [
+      562,
+      "tests/test_runtime_persistence_regression_suite_obj14.py"
+    ],
+    [
+      562,
+      "game/prompt_context_leads.py"
+    ],
+    [
+      559,
+      "tests/test_c4_narrative_mode_live_pipeline.py"
+    ],
+    [
+      558,
+      "game/social_memory.py"
+    ],
+    [
+      556,
+      "tests/test_narrative_planning.py"
+    ],
+    [
+      553,
+      "tests/test_failure_dashboard_report.py"
+    ],
+    [
+      533,
+      "tests/test_scene_state_anchoring.py"
+    ],
+    [
+      526,
+      "tests/test_conversational_memory_window.py"
+    ],
+    [
+      516,
+      "tests/test_final_emission_sealed_fallback.py"
+    ],
+    [
+      516,
+      "game/response_policy_contracts.py"
+    ],
+    [
+      515,
+      "tests/test_content_lint_n2_closure.py"
+    ],
+    [
+      512,
+      "tests/test_test_audit_tool.py"
+    ],
+    [
+      507,
+      "tests/test_final_emission_boundary_convergence.py"
+    ],
+    [
+      504,
+      "game/final_emission_response_type.py"
+    ],
+    [
+      501,
+      "game/behavioral_evaluators/session_cohesion.py"
+    ]
+  ],
+  "over1000": [
+    [
+      6004,
+      "game/interaction_context.py"
+    ],
+    [
+      5534,
+      "game/api.py"
+    ],
+    [
+      4579,
+      "game/gm.py"
+    ],
+    [
+      4518,
+      "tests/test_ownership_registry.py"
+    ],
+    [
+      3881,
+      "game/social_exchange_emission.py"
+    ],
+    [
+      3597,
+      "tests/test_prompt_context.py"
+    ],
+    [
+      3197,
+      "game/narrative_planning.py"
+    ],
+    [
+      3196,
+      "game/leads.py"
+    ],
+    [
+      3067,
+      "game/prompt_context.py"
+    ],
+    [
+      2854,
+      "game/gm_retry.py"
+    ],
+    [
+      2828,
+      "game/social.py"
+    ],
+    [
+      2295,
+      "tests/test_social_exchange_emission.py"
+    ],
+    [
+      2276,
+      "game/planner_ctir_projection.py"
+    ],
+    [
+      2229,
+      "game/final_emission_validators.py"
+    ],
+    [
+      2210,
+      "game/final_emission_meta.py"
+    ],
+    [
+      2075,
+      "game/clues.py"
+    ],
+    [
+      2023,
+      "tools/architecture_audit.py"
+    ],
+    [
+      1995,
+      "tests/helpers/golden_replay.py"
+    ],
+    [
+      1981,
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    [
+      1976,
+      "game/final_emission_visibility_fallback.py"
+    ],
+    [
+      1927,
+      "tests/test_final_emission_visibility_fallback.py"
+    ],
+    [
+      1861,
+      "game/narrative_authenticity.py"
+    ],
+    [
+      1856,
+      "tests/test_prompt_and_guard.py"
+    ],
+    [
+      1796,
+      "game/intent_parser.py"
+    ],
+    [
+      1705,
+      "tests/test_synthetic_smoke.py"
+    ],
+    [
+      1687,
+      "tests/test_final_emission_meta.py"
+    ],
+    [
+      1686,
+      "game/scenario_spine_eval.py"
+    ],
+    [
+      1664,
+      "tools/test_audit.py"
+    ],
+    [
+      1654,
+      "game/interaction_continuity.py"
+    ],
+    [
+      1636,
+      "game/response_policy_enforcement.py"
+    ],
+    [
+      1627,
+      "tests/test_narration_transcript_regressions.py"
+    ],
+    [
+      1597,
+      "tests/helpers/failure_dashboard_report.py"
+    ],
+    [
+      1585,
+      "tests/helpers/golden_replay_projection.py"
+    ],
+    [
+      1571,
+      "game/output_sanitizer.py"
+    ],
+    [
+      1450,
+      "tests/test_final_emission_opening_fallback.py"
+    ],
+    [
+      1388,
+      "game/narration_visibility.py"
+    ],
+    [
+      1373,
+      "tests/test_run_scenario_spine_validation.py"
+    ],
+    [
+      1370,
+      "tests/test_final_emission_gate_delegator_regression.py"
+    ],
+    [
+      1362,
+      "game/content_lint.py"
+    ],
+    [
+      1357,
+      "tools/run_manual_gauntlet.py"
+    ],
+    [
+      1296,
+      "game/referent_tracking.py"
+    ],
+    [
+      1277,
+      "game/final_emission_repairs.py"
+    ],
+    [
+      1253,
+      "tests/helpers/replay_drift_taxonomy.py"
+    ],
+    [
+      1226,
+      "game/storage.py"
+    ],
+    [
+      1224,
+      "tools/run_scenario_spine_validation.py"
+    ],
+    [
+      1224,
+      "tests/test_social_lead_landing.py"
+    ],
+    [
+      1174,
+      "tests/test_failure_classifier.py"
+    ],
+    [
+      1091,
+      "tests/test_final_emission_visibility.py"
+    ],
+    [
+      1073,
+      "game/world_progression.py"
+    ],
+    [
+      1059,
+      "tests/test_transcript_regression.py"
+    ],
+    [
+      1036,
+      "game/exploration.py"
+    ],
+    [
+      1029,
+      "tests/test_api_narration_path_selection.py"
+    ]
+  ],
+  "test_report": {
+    "tests/test_golden_replay.py": {
+      "loc": 26,
+      "test_count": 1,
+      "tests": [
+        "test_golden_replay_decomposed_redirect_stub"
+      ],
+      "helpers": [
+        "tests.test_golden_replay"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_direct_seam.py": {
+      "loc": 105,
+      "test_count": 2,
+      "tests": [
+        "test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants",
+        "test_golden_direct_seam_canonical_opening_fallback_path_has_no_compatibility_local_ownership"
+      ],
+      "helpers": [
+        "tests.helpers.block_stu_equivalence_fixtures",
+        "tests.helpers.dialogue_social_plan",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_fallback_projection.py": {
+      "loc": 457,
+      "test_count": 14,
+      "tests": [
+        "test_golden_projection_projects_canonical_upstream_prepared_opening_owner_bucket",
+        "test_golden_projection_prefers_bundle_runtime_lineage_events_and_empty_when_absent",
+        "test_golden_projection_projects_neutral_speaker_grounding_replacement_family",
+        "test_golden_projection_projects_fail_closed_sealed_gate_opening_owner_bucket",
+        "test_golden_projection_projects_sealed_fallback_owner_bucket",
+        "test_golden_projection_projects_strict_social_sealed_fallback_owner_bucket",
+        "test_golden_projection_projects_visibility_fallback_evidence",
+        "test_golden_projection_projects_valid_upstream_prepared_emission_telemetry",
+        "test_golden_projection_projects_rejected_upstream_prepared_emission_telemetry",
+        "test_golden_projection_projects_absent_upstream_prepared_emission_telemetry",
+        "test_golden_projection_drift_classification_preserves_malformed_prepared_emission_reject_reason",
+        "test_golden_projection_projects_sanitizer_empty_fallback_as_sanitizer_owned",
+        "test_golden_projection_projects_strict_social_sanitizer_fallback_owner_split",
+        "test_long_session_summary_treats_scene_action_fallback_speaker_absence_as_optional"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_projection",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_helper_contracts.py": {
+      "loc": 179,
+      "test_count": 8,
+      "tests": [
+        "test_frontier_gate_branch_replay_fixture_loads_validated_branch",
+        "test_protected_structural_expectation_merges_consumer_fields_and_scaffold_fragment",
+        "test_protected_structural_expectation_can_emit_only_unavailable_and_equals",
+        "test_protected_social_speaker_observation_expectation_is_a_thin_consumer_lock",
+        "test_protected_social_speaker_observation_expectation_allows_custom_optional_fields",
+        "test_protected_structural_expectation_preserves_unavailable_field_order",
+        "test_golden_markdown_report_renderer_is_compact_and_deterministic",
+        "test_golden_expectation_helper_supports_dotted_paths_and_debug_messages"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_long_session.py": {
+      "loc": 353,
+      "test_count": 3,
+      "tests": [
+        "test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability",
+        "test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_supporting",
+        "test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_profiles",
+        "tests.helpers.transcript_runner"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_projection.py": {
+      "loc": 747,
+      "test_count": 25,
+      "tests": [
+        "test_golden_replay_projection_adapter_wires_observed_turn",
+        "test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_used",
+        "test_golden_replay_dual_family_projection_falls_back_to_realization_when_diegetic_absent",
+        "test_golden_replay_dual_family_projection_returns_none_when_both_absent",
+        "test_golden_replay_dual_family_precedence_surface_documents_read_side_rule",
+        "test_golden_replay_dual_family_projection_does_not_rewrite_raw_fem_fields",
+        "test_observed_turn_from_gate_output_projects_direct_seam_fields",
+        "test_protected_replay_manifest_matches_observation_registry",
+        "test_ak5_every_protected_path_is_projected_or_marked_unavailable",
+        "test_ak5_protected_observation_field_paths_are_sorted_unique",
+        "test_ao1_protected_extraction_registry_matches_observation_registry",
+        "test_bl2_every_protected_field_has_registry_or_special_case_handling",
+        "test_bl2_representative_projected_observed_turns_unchanged",
+        "test_bl3_sparse_fixture_presence_pipeline_locked",
+        "test_bl3_rich_fixture_presence_pipeline_locked",
+        "test_bl3_trace_fixture_presence_pipeline_locked",
+        "test_ak5_manifest_generated_section_matches_registry",
+        "test_ak5_synthetic_turn_exercises_fem_backed_protected_fields",
+        "test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields",
+        "test_ak5_complex_projection_contracts_remain_locked",
+        "test_golden_observed_turn_projects_response_delta_metadata",
+        "test_golden_observed_turn_projects_clean_sanitizer_lineage",
+        "test_golden_observed_turn_projects_sanitizer_lineage_from_debug_events",
+        "test_golden_observed_turn_projects_legacy_sanitizer_lineage",
+        "test_bl5_replay_projection_closeout_governance"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_projection",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_protected_bridge.py": {
+      "loc": 42,
+      "test_count": 1,
+      "tests": [
+        "test_protected_golden_assertion_failure_records_canonical_report"
+      ],
+      "helpers": [
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.golden_replay",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_scenario_spine.py": {
+      "loc": 126,
+      "test_count": 1,
+      "tests": [
+        "test_golden_replay_scenario_spine_three_branch_structural_smoke"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_golden_replay_structural_invariants.py": {
+      "loc": 235,
+      "test_count": 6,
+      "tests": [
+        "test_golden_replay_directed_npc_question_structural_invariants",
+        "test_golden_replay_vocative_override_after_prior_continuity_structural_invariants",
+        "test_golden_replay_wrong_speaker_strict_social_emission_structural_invariants",
+        "test_golden_replay_thin_answer_action_outcome_final_emission_structural_invariants",
+        "test_golden_replay_sanitizer_scaffold_leakage_structural_invariants",
+        "test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_bug_class_recurrence.py": {
+      "loc": 205,
+      "test_count": 16,
+      "tests": [
+        "test_same_owner_category_field_produces_same_recurrence_key",
+        "test_different_field_path_produces_different_recurrence_key",
+        "test_missing_owner_bucket_falls_back_to_replay_drift_unclassified",
+        "test_recurrence_rows_preserve_existing_classification_identity",
+        "test_helper_is_report_only_and_advisory_only",
+        "test_repeated_keys_increment_occurrence_count",
+        "test_first_and_last_seen_indexes_are_deterministic",
+        "test_affected_scenarios_are_deduplicated_and_sorted",
+        "test_active_status_is_preserved",
+        "test_empty_input_returns_empty_report_only_advisory_only_history",
+        "test_repeated_recurrence_summary_becomes_active",
+        "test_single_recurrence_summary_becomes_watch",
+        "test_explicit_retired_or_deprecated_input_becomes_retired",
+        "test_missing_status_never_becomes_retired_automatically",
+        "test_recurrence_status_vocabulary_is_bounded",
+        "test_protected_replay_manifest_documents_cycle_ay_recurrence_policy"
+      ],
+      "helpers": [
+        "tests.helpers.replay_bug_recurrence"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_drift_hotspots.py": {
+      "loc": 154,
+      "test_count": 8,
+      "tests": [
+        "test_aggregate_field_drift_counts_empty",
+        "test_aggregate_field_drift_counts_and_investigation_targets",
+        "test_aggregate_owner_bucket_by_field",
+        "test_build_hotspot_rankings_orders_by_count_with_tie_break",
+        "test_render_owner_drift_hotspot_report",
+        "test_render_owner_drift_hotspot_report_shows_field_trends",
+        "test_render_owner_drift_hotspot_report_empty",
+        "test_write_owner_drift_hotspot_artifacts"
+      ],
+      "helpers": [
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_rows",
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.replay_drift_trends"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_drift_longitudinal.py": {
+      "loc": 165,
+      "test_count": 8,
+      "tests": [
+        "test_aggregate_owner_drift_history_empty",
+        "test_aggregate_owner_drift_history_single_scorecard",
+        "test_aggregate_owner_drift_history_multiple_scorecards",
+        "test_build_owner_drift_trend_summary_ranking",
+        "test_render_owner_drift_longitudinal_report",
+        "test_render_owner_drift_longitudinal_report_empty_history",
+        "test_write_owner_drift_longitudinal_artifacts",
+        "test_write_rerun_scorecard_artifacts_appends_longitudinal_summary"
+      ],
+      "helpers": [
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.replay_drift_longitudinal",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_drift_risk.py": {
+      "loc": 436,
+      "test_count": 21,
+      "tests": [
+        "test_score_drift_risk_high_protected_worsening_repeated",
+        "test_score_drift_risk_medium_protected_stable",
+        "test_score_drift_risk_medium_supporting_frequent",
+        "test_score_drift_risk_low_advisory",
+        "test_score_drift_risk_low_improving",
+        "test_classify_field_source_protected_route_kind",
+        "test_build_risk_rankings_orders_high_before_low",
+        "test_render_owner_drift_risk_report",
+        "test_write_owner_drift_risk_artifacts",
+        "test_risk_payload_stability_enrichment_is_additive_only",
+        "test_risk_payload_recurring_fallback_drift_increases_stability_risk",
+        "test_long_session_stability_history_aggregation",
+        "test_stability_trend_rows_worsening",
+        "test_stability_trend_rows_improving",
+        "test_stability_trend_rows_stable",
+        "test_stability_history_risk_enrichment_is_additive_only",
+        "test_build_stability_hotspots",
+        "test_stability_hotspot_priority_ordering",
+        "test_stability_hotspot_rows_projection",
+        "test_stability_hotspot_reporting_empty",
+        "test_stability_hotspot_risk_integration_is_additive"
+      ],
+      "helpers": [
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_drift_taxonomy.py": {
+      "loc": 434,
+      "test_count": 20,
+      "tests": [
+        "test_classify_owner_drift_bucket_covers_canonical_buckets",
+        "test_classify_owner_drift_bucket_lineage_is_rerun_only",
+        "test_classify_rerun_delta_owner_drift_bucket",
+        "test_owner_drift_classifications_from_per_turn_deltas",
+        "test_classify_replay_failure_emits_owner_drift_bucket",
+        "test_classify_replay_failure_preserves_existing_classification_fields",
+        "test_compare_golden_replay_reruns_emits_owner_drift_classifications",
+        "test_compare_golden_replay_reruns_identical_runs_have_empty_owner_drift_classifications",
+        "test_summarize_owner_drift_buckets_counts_classifications",
+        "test_summarize_owner_drift_buckets_empty_input",
+        "test_compare_golden_replay_reruns_identical_runs_have_zero_deltas",
+        "test_compare_golden_replay_reruns_counts_speaker_only_drift",
+        "test_compare_golden_replay_reruns_counts_route_only_drift",
+        "test_compare_golden_replay_reruns_counts_fallback_frequency_drift",
+        "test_compare_golden_replay_reruns_reports_text_fingerprints_without_failing",
+        "test_compare_golden_replay_reruns_handles_missing_optional_metadata",
+        "test_compare_golden_replay_reruns_reports_response_delta_frequency_deltas",
+        "test_stability_classification_rows_from_scorecard_projects_owner_fields",
+        "test_stability_ownership_projection_stable_scorecard_empty",
+        "test_stability_ownership_projection_degraded_scorecard_surfaces_rows"
+      ],
+      "helpers": [
+        "tests.failure_classification_contract",
+        "tests.helpers.failure_classifier",
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_drift_trends.py": {
+      "loc": 109,
+      "test_count": 7,
+      "tests": [
+        "test_compute_owner_drift_trends_empty_history",
+        "test_compute_owner_drift_trends_increasing",
+        "test_compute_owner_drift_trends_stable_single_run",
+        "test_build_owner_bucket_trend_summary_covers_all_buckets",
+        "test_render_owner_drift_trend_report",
+        "test_enrich_hotspots_with_field_trends",
+        "test_write_owner_drift_trend_artifacts"
+      ],
+      "helpers": [
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_rows",
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.replay_drift_trends"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_governance_approval_contract.py": {
+      "loc": 132,
+      "test_count": 12,
+      "tests": [
+        "test_approval_status_vocabulary_is_contract_locked",
+        "test_approval_record_fields_are_contract_locked",
+        "test_is_valid_approval_status_accepts_only_canonical_values",
+        "test_approval_record_shape_errors_accepts_valid_record",
+        "test_approval_record_shape_errors_accepts_optional_notes",
+        "test_approval_record_shape_errors_requires_mapping",
+        "test_approval_record_shape_errors_reports_missing_fields",
+        "test_approval_record_shape_errors_rejects_invalid_status",
+        "test_approval_record_shape_errors_requires_text_fields",
+        "test_approval_record_shape_errors_rejects_non_text_notes",
+        "test_approval_record_shape_errors_rejects_unknown_fields",
+        "test_approval_record_shape_errors_is_deterministic"
+      ],
+      "helpers": [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_approval_contract"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_governance_authority.py": {
+      "loc": 98,
+      "test_count": 6,
+      "tests": [
+        "test_level_1_governance_decision_vocabulary_is_canonical",
+        "test_level_2_registry_records_remain_level_1_contract_valid",
+        "test_level_3_approval_status_vocabulary_is_canonical",
+        "test_level_3_approval_records_remain_shape_valid_for_level_2_references",
+        "test_level_4_traceability_identifier_format_is_canonical",
+        "test_level_4_traceability_identifiers_are_unique_for_registry"
+      ],
+      "helpers": [
+        "tests.replay_governance_approval_contract",
+        "tests.replay_governance_contract",
+        "tests.replay_governance_registry",
+        "tests.replay_governance_traceability_contract"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_governance_contract.py": {
+      "loc": 84,
+      "test_count": 8,
+      "tests": [
+        "test_replay_governance_decision_vocabulary_is_contract_locked",
+        "test_required_governance_record_fields_are_contract_locked",
+        "test_is_valid_governance_decision_accepts_only_canonical_values",
+        "test_governance_record_shape_errors_accepts_valid_record",
+        "test_governance_record_shape_errors_requires_mapping",
+        "test_governance_record_shape_errors_reports_missing_fields",
+        "test_governance_record_shape_errors_rejects_invalid_decision",
+        "test_governance_record_shape_errors_requires_reason_and_source_text"
+      ],
+      "helpers": [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_contract"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_governance_registry.py": {
+      "loc": 81,
+      "test_count": 8,
+      "tests": [
+        "test_replay_governance_registry_records_satisfy_contract",
+        "test_replay_governance_registry_has_no_duplicate_keys",
+        "test_replay_governance_registry_order_is_deterministic",
+        "test_replay_governance_registry_returns_copies",
+        "test_replay_governance_registry_covers_core_decision_examples",
+        "test_governance_records_for_bucket_filters_by_drift_bucket",
+        "test_governance_records_for_owner_bucket_filters_by_owner_bucket",
+        "test_registry_contains_accepted_blocked_and_review_required_decisions"
+      ],
+      "helpers": [
+        "tests.replay_governance_contract",
+        "tests.replay_governance_registry"
+      ],
+      "fixtures": []
+    },
+    "tests/test_replay_governance_traceability_contract.py": {
+      "loc": 159,
+      "test_count": 9,
+      "tests": [
+        "test_decision_reference_format_constants_are_contract_locked",
+        "test_governance_decision_reference_uses_canonical_key_fields",
+        "test_every_registry_record_has_unique_stable_identifier",
+        "test_governance_decision_reference_set_is_deterministic",
+        "test_is_valid_governance_decision_reference_resolves_known_registry_reference",
+        "test_approval_references_unknown_decision_detects_orphan_valid_approval",
+        "test_approval_references_unknown_decision_ignores_invalid_approval_shape",
+        "test_traceability_audit_reports_approved_pending_orphan_and_invalid_records",
+        "test_traceability_audit_empty_input_is_deterministic"
+      ],
+      "helpers": [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_approval_contract",
+        "tests.replay_governance_registry",
+        "tests.replay_governance_traceability_contract"
+      ],
+      "fixtures": []
+    },
+    "tests/test_dialogue_plan_final_emission_gate.py": {
+      "loc": 355,
+      "test_count": 12,
+      "tests": [
+        "test_quoted_npc_line_without_plan_fails_closed",
+        "test_quoted_npc_line_with_valid_plan_passes",
+        "test_missing_speaker_id_fails",
+        "test_missing_dialogue_intent_fails",
+        "test_wrong_attributed_speaker_fails_closed",
+        "test_generic_social_stabilization_line_without_plan_fails",
+        "test_non_dialogue_narration_unaffected_when_not_strict_social",
+        "test_block_z_declared_writer_attribution_label_passes",
+        "test_block_z_declared_allowed_pregate_labels_passes",
+        "test_block_z_alias_labels_without_provenance_plan_invalid",
+        "test_block_z_invalid_provenance_inferred_from_prose_plan_invalid",
+        "test_block_z_unrelated_alias_still_mismatch"
+      ],
+      "helpers": [
+        "tests.helpers.dialogue_social_plan",
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_acceptance_quality.py": {
+      "loc": 118,
+      "test_count": 7,
+      "tests": [
+        "test_resolve_acceptance_quality_contract_disabled_without_narrative_plan",
+        "test_resolve_acceptance_quality_contract_default_on_with_plan_bundle",
+        "test_shipped_acceptance_quality_overrides_from_plan",
+        "test_merge_acceptance_quality_n4_results_into_gate_fem",
+        "test_bj40_apply_acceptance_quality_n4_floor_seam_replace_path_reruns_on_fallback",
+        "test_bj74_acceptance_quality_n4_owner_entrypoint_locked",
+        "test_bj74_acceptance_quality_terminal_pipeline_calls_owner_directly"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_answer_exposition_plan_convergence.py": {
+      "loc": 261,
+      "test_count": 8,
+      "tests": [
+        "test_valid_direct_answer_passes",
+        "test_valid_lore_exposition_passes_when_grounded",
+        "test_missing_plan_fails_when_answer_required",
+        "test_malformed_plan_fails",
+        "test_unsupported_lore_invention_fails",
+        "test_bounded_unknown_converted_to_certainty_fails",
+        "test_safe_reorder_repair_does_not_invent_and_records_mode",
+        "test_metadata_identifies_failure_source"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.repairs_consumer_facade"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_boundary_audit.py": {
+      "loc": 129,
+      "test_count": 6,
+      "tests": [
+        "test_audit_document_exists",
+        "test_audit_document_names_classification_legend",
+        "test_marker_list_is_documented_in_audit",
+        "test_sdk_marker_not_in_gate_or_repairs",
+        "test_semantic_repair_marker_not_in_final_emission_gate",
+        "test_disallowed_tuple_is_superset_for_doc_alignment"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_boundary_contract.py": {
+      "loc": 197,
+      "test_count": 17,
+      "tests": [
+        "test_packaging_kinds_classify_as_packaging_allowed",
+        "test_legality_kinds_classify_as_legality_allowed",
+        "test_semantic_kinds_classify_as_semantic_disallowed",
+        "test_assert_allows_packaging_and_legality",
+        "test_assert_rejects_semantic_disallowed",
+        "test_unknown_kind_classify_raises",
+        "test_unknown_kind_assert_raises",
+        "test_unknown_kind_assert_message_includes_source",
+        "test_is_helpers_match_membership",
+        "test_final_emission_generic_exit_imports_assert_final_emission_mutation_allowed",
+        "test_final_emission_gate_no_longer_reexports_assert_final_emission_mutation_allowed",
+        "test_final_emission_repairs_imports_assert_for_subtractive_strips",
+        "test_assert_sites_never_use_semantic_disallowed_kinds",
+        "test_all_assert_mutation_kinds_are_contract_classified",
+        "test_unknown_mutation_kind_classify_still_fail_closed",
+        "test_subtractive_fallback_strip_kinds_are_packaging_allowed",
+        "test_repair_fallback_behavior_strip_pass_is_subtractive_no_composed_leads"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_boundary_convergence.py": {
+      "loc": 507,
+      "test_count": 21,
+      "tests": [
+        "test_answer_completeness_layer_does_not_reorder_on_failure",
+        "test_response_delta_layer_does_not_reorder_on_failure",
+        "test_repair_fallback_behavior_strip_only_no_template_synthesis",
+        "test_sanitizer_defaults_to_strip_only_drops_scaffold",
+        "test_legacy_rewrite_opt_in_still_rewrites_procedural",
+        "test_gate_thin_answer_uses_upstream_prepared_marker_not_boundary_synthesis",
+        "test_gate_thin_action_outcome_uses_upstream_prepared_marker_not_boundary_synthesis",
+        "test_enforce_response_type_marks_upstream_absent_without_inventing_answer_line",
+        "test_gate_preserves_duplicate_speaker_subject_lines_no_quote_merge_for_cadence",
+        "test_enforce_response_type_upstream_attribution_override",
+        "test_response_type_debug_default_keys_match_meta_validators_modules",
+        "test_enforce_response_type_rejects_malformed_upstream_answer_without_boundary_synthesis",
+        "test_enforce_response_type_rejects_malformed_upstream_action_without_boundary_synthesis",
+        "test_gate_strict_social_dialogue_repair_is_terminal_social_owned_fallback",
+        "test_route_illegal_visibility_stock_strip_is_packaging_only_preserves_lead",
+        "test_strip_only_sanitizer_extracts_player_text_without_scaffold_rewrite",
+        "test_strip_only_sanitizer_strips_internal_prefix_without_template_substitution",
+        "test_gate_valid_answer_passes_unchanged_modulo_packaging_normalization",
+        "test_enforce_dialogue_contract_minimal_repair_delegates_to_social_module_not_gate_composition",
+        "test_gate_upstream_bundle_origin_preserved_separate_from_fem_source_attribution",
+        "test_gate_clean_neutral_narration_near_no_op_pass_through"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.repairs_consumer_facade",
+        "tests.helpers.strict_social_harness"
+      ],
+      "fixtures": [
+        "_noop_visibility"
+      ]
+    },
+    "tests/test_final_emission_boundary_no_semantic_repair.py": {
+      "loc": 251,
+      "test_count": 9,
+      "tests": [
+        "test_list_like_dialogue_stays_list_like",
+        "test_weak_response_delta_candidate_not_rewritten_at_boundary",
+        "test_multi_speaker_format_not_collapsed",
+        "test_awkward_but_legal_narration_not_polished",
+        "test_awkward_legalistic_narration_not_semantically_rewritten",
+        "test_n4_hard_illegal_still_sealed_fallback",
+        "test_referent_ambiguity_not_rewritten_when_semantic_repair_disabled",
+        "test_narrative_authenticity_failure_records_metadata_without_repair",
+        "test_social_response_structure_failure_records_metadata_without_repair"
+      ],
+      "helpers": [
+        "tests.helpers.boundary_semantic_repair_fixtures",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.objective7_referent_fixtures",
+        "tests.helpers.repairs_consumer_facade"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_channel_separation.py": {
+      "loc": 103,
+      "test_count": 5,
+      "tests": [
+        "test_finalize_emission_output_splits_public_and_debug_lanes",
+        "test_package_emission_channel_sidecar_omits_empty",
+        "test_debug_key_classification_covers_fem",
+        "test_read_debug_notes_prefers_gm_output_debug_lane",
+        "test_read_final_emission_meta_prefers_sidecar_over_legacy_top_level"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_debt_retirement.py": {
+      "loc": 160,
+      "test_count": 4,
+      "tests": [
+        "test_contract_constants_are_nonempty",
+        "test_final_emission_modules_forbidden_substring_snapshot",
+        "test_block_b_retired_helper_exact_names_not_reintroduced",
+        "test_final_emission_repairs_semantic_debt_inventory"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_fast_fallback_composition.py": {
+      "loc": 180,
+      "test_count": 8,
+      "tests": [
+        "test_default_fast_fallback_neutral_composition_meta_keys",
+        "test_apply_fast_fallback_neutral_composition_layer_not_applicable_passthrough",
+        "test_apply_fast_fallback_neutral_composition_layer_detects_malformed_without_repair",
+        "test_fast_fallback_neutral_composition_applicable_requires_opening_and_tags",
+        "test_fast_fallback_neutral_composition_failure_reasons_detects_malformed_patterns",
+        "test_build_fast_fallback_opening_scene_template_composes_summary_and_detail",
+        "test_fast_fallback_opening_detail_candidates_skip_bad_join_fragments",
+        "test_bj86_gate_delegator_removed_stacks_call_owner_directly"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_first_mention_composition.py": {
+      "loc": 90,
+      "test_count": 3,
+      "tests": [
+        "test_grounded_scene_intro_fallback_candidates_return_canonical_dataclass",
+        "test_build_composed_scene_intro_populates_composition_layers",
+        "test_rewrite_visible_fact_as_explicit_intro_rewrites_article_subject"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate.py": {
+      "loc": 19,
+      "test_count": 1,
+      "tests": [
+        "test_final_emission_gate_decomposed_redirect_stub"
+      ],
+      "helpers": [
+        "tests.test_final_emission_gate"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate_delegator_regression.py": {
+      "loc": 1370,
+      "test_count": 123,
+      "tests": [
+        "test_bj41_finalize_emission_output_strips_appended_stock_and_packages_sidecar",
+        "test_bj69_terminal_finalize_fast_path_gate_delegators_removed",
+        "test_bj69_exit_stacks_terminal_finalize_fast_path_call_owners_directly",
+        "test_bj71_non_strict_layer_stack_gate_delegator_removed",
+        "test_bj71_apply_final_emission_gate_calls_non_strict_stack_owner_directly",
+        "test_bj70_exit_stack_gate_delegators_removed",
+        "test_bj70_apply_final_emission_gate_calls_exit_stack_owners_directly",
+        "test_bj63_fem_assembly_gate_delegators_collapsed",
+        "test_bj64_opening_rt_accept_path_promotion_gate_alias_removed",
+        "test_bj65_opening_upstream_prepare_observability_merge_gate_alias_removed",
+        "test_bj66_dead_opening_fallback_gate_imports_removed",
+        "test_bj67_stacks_response_type_enforcement_calls_owner_directly",
+        "test_bj68_response_type_enforcement_gate_delegator_removed",
+        "test_bj86_fast_fallback_neutral_composition_layer_gate_delegator_removed",
+        "test_bj86_stacks_call_fast_fallback_composition_owner_directly",
+        "test_bj87_answer_completeness_layer_gate_reexport_removed",
+        "test_bj87_stacks_call_answer_completeness_repairs_owner_directly",
+        "test_bj88_answer_exposition_plan_layer_gate_reexport_removed",
+        "test_bj88_stacks_call_answer_exposition_plan_repairs_owner_directly",
+        "test_bj89_response_delta_layer_gate_reexport_removed",
+        "test_bj89_stacks_call_response_delta_repairs_owner_directly",
+        "test_bj90_social_response_structure_layer_gate_reexport_removed",
+        "test_bj90_stacks_call_social_response_structure_repairs_owner_directly",
+        "test_bj91_narrative_authenticity_layer_gate_reexport_removed",
+        "test_bj91_stacks_call_narrative_authenticity_repairs_owner_directly",
+        "test_bj92_fallback_behavior_layer_gate_reexport_removed",
+        "test_bj92_stacks_call_fallback_behavior_repairs_owner_directly",
+        "test_bj93_fallback_behavior_debug_merge_gate_reexports_removed",
+        "test_bj93_stacks_call_fallback_behavior_debug_merge_repairs_owner_directly",
+        "test_bj94_conversational_memory_inspection_debug_merge_gate_reexport_removed",
+        "test_bj94_stacks_call_conversational_memory_inspection_debug_merge_repairs_owner_directly",
+        "test_bj95_scene_state_anchor_emission_debug_merge_gate_reexport_removed",
+        "test_bj95_stacks_call_scene_state_anchor_emission_debug_merge_owner_directly",
+        "test_bj96_tone_escalation_emission_debug_merge_gate_reexport_removed",
+        "test_bj96_stacks_call_tone_escalation_emission_debug_merge_owner_directly",
+        "test_bj97_narrative_authority_emission_debug_merge_gate_reexport_removed",
+        "test_bj97_stacks_call_narrative_authority_emission_debug_merge_owner_directly",
+        "test_bj98_anti_railroading_emission_debug_merge_gate_reexport_removed",
+        "test_bj98_stacks_call_anti_railroading_emission_debug_merge_owner_directly",
+        "test_bj99_context_separation_emission_debug_merge_gate_reexport_removed",
+        "test_bj99_stacks_call_context_separation_emission_debug_merge_owner_directly",
+        "test_bj100_narration_purity_emission_debug_merge_gate_reexport_removed",
+        "test_bj100_stacks_call_narration_purity_emission_debug_merge_owner_directly",
+        "test_bj101_answer_shape_primacy_emission_debug_merge_gate_reexport_removed",
+        "test_bj101_stacks_call_answer_shape_primacy_emission_debug_merge_owner_directly",
+        "test_bj102_tone_escalation_pregate_flag_gate_reexport_removed",
+        "test_bj102_strict_social_stack_calls_tone_escalation_pregate_flag_owner_directly",
+        "test_bj103_scene_emit_integrity_assessment_gate_reexport_removed",
+        "test_bj103_stacks_call_scene_emit_integrity_assessment_owner_directly",
+        "test_bj104_passive_scene_pressure_due_check_gate_reexport_removed",
+        "test_bj104_non_strict_stack_calls_passive_scene_pressure_due_check_owner_directly",
+        "test_bj105_narrative_mode_output_assessment_gate_reexport_removed",
+        "test_bj105_non_strict_stack_calls_narrative_mode_output_assessment_owner_directly",
+        "test_bj106_response_type_decision_payload_gate_reexport_removed",
+        "test_bj106_callers_use_response_type_decision_payload_owner_directly",
+        "test_bj107_infer_accept_path_final_emitted_source_gate_reexport_removed",
+        "test_bj107_callers_use_infer_accept_path_final_emitted_source_owner_directly",
+        "test_bj108_opening_fallback_projection_gate_reexports_removed",
+        "test_bj108_generic_exit_uses_opening_fallback_projection_owner_directly",
+        "test_bj109_final_emission_meta_key_gate_reexport_removed",
+        "test_bj109_callers_use_final_emission_meta_key_owner_directly",
+        "test_bj110_assert_final_emission_mutation_allowed_gate_reexport_removed",
+        "test_bj110_generic_exit_calls_assert_final_emission_mutation_allowed_owner_directly",
+        "test_bj111_normalize_text_gate_reexport_removed",
+        "test_bj111_callers_use_normalize_text_owner_directly",
+        "test_bj112_normalize_text_preserve_paragraphs_gate_reexport_removed",
+        "test_bj112_strict_social_stack_calls_normalize_text_preserve_paragraphs_owner_directly",
+        "test_bj113_diegetic_classified_fallback_meta_gate_reexport_removed",
+        "test_bj113_generic_exit_calls_diegetic_classified_fallback_meta_owner_directly",
+        "test_bj114_anti_reset_suppresses_intro_style_fallbacks_gate_reexport_removed",
+        "test_bj114_generic_exit_calls_anti_reset_suppresses_intro_style_fallbacks_owner_directly",
+        "test_bj115_log_final_emission_logging_gate_reexports_removed",
+        "test_bj115_stacks_call_log_final_emission_logging_owners_directly",
+        "test_bj116_strict_social_social_exchange_gate_reexports_removed",
+        "test_bj116_strict_social_stack_calls_social_exchange_owners_directly",
+        "test_bj117_telemetry_provenance_gate_reexports_removed",
+        "test_bj117_strict_social_stack_calls_telemetry_provenance_owners_directly",
+        "test_bj118_should_replace_candidate_intro_fallback_gate_reexport_removed",
+        "test_bj119_stage_diff_telemetry_gate_reexports_removed",
+        "test_bj120_harness_patches_canonical_owner_seams",
+        "test_bj121_strict_social_build_patches_use_stack_seam_not_gate",
+        "test_bj122_scene_state_anchoring_tests_use_ssa_owner_bindings_not_gate",
+        "test_bj72_gate_context_initialization_delegator_removed",
+        "test_bj72_apply_final_emission_gate_calls_gate_context_owner_directly",
+        "test_bj51_gate_interaction_continuity_public_reexports_locked",
+        "test_bj52_fallback_provenance_gate_wrappers_removed",
+        "test_bj53_referent_clarity_pre_finalize_gate_wrapper_removed",
+        "test_bj54_narration_constraint_debug_merge_gate_wrapper_removed",
+        "test_bj55_gate_fem_text_fingerprint_helper_removed",
+        "test_bj56_scene_opening_finalize_delegators_removed",
+        "test_bj57_strip_appended_route_illegal_contamination_sentences_gate_wrapper_removed",
+        "test_bj58_contract_resolver_gate_delegators_removed",
+        "test_bj59_dialogue_social_plan_gate_delegators_removed",
+        "test_bj60_sealed_fallback_selector_gate_delegator_removed",
+        "test_bj73_visibility_enforcement_gate_delegator_removed",
+        "test_bj73_terminal_pipeline_calls_visibility_owner_directly",
+        "test_bj74_n4_floor_seam_gate_delegator_removed",
+        "test_bj74_terminal_pipeline_calls_n4_floor_seam_owner_directly",
+        "test_bj75_interaction_continuity_attach_gate_delegator_removed",
+        "test_bj75_terminal_pipeline_calls_ic_attach_owner_directly",
+        "test_bj76_interaction_continuity_emission_step_gate_delegator_removed",
+        "test_bj76_terminal_pipeline_calls_ic_emission_step_owner_directly",
+        "test_bj76_non_strict_stack_calls_ic_emission_step_owner_directly",
+        "test_bj77_speaker_contract_gate_delegator_removed",
+        "test_bj77_strict_social_stack_calls_speaker_enforcement_owner_directly",
+        "test_bj78_sync_eff_social_gate_reexport_removed",
+        "test_bj78_strict_social_stack_calls_sync_owner_directly",
+        "test_bj79_tone_escalation_layer_gate_delegator_removed",
+        "test_bj79_stacks_call_tone_escalation_owner_directly",
+        "test_bj80_narrative_authority_layer_gate_delegator_removed",
+        "test_bj80_stacks_call_narrative_authority_owner_directly",
+        "test_bj81_anti_railroading_layer_gate_delegator_removed",
+        "test_bj81_stacks_call_anti_railroading_owner_directly",
+        "test_bj82_context_separation_layer_gate_delegator_removed",
+        "test_bj82_stacks_call_context_separation_owner_directly",
+        "test_bj83_player_facing_narration_purity_layer_gate_delegator_removed",
+        "test_bj83_stacks_call_narration_purity_owner_directly",
+        "test_bj84_answer_shape_primacy_layer_gate_delegator_removed",
+        "test_bj84_stacks_call_answer_shape_primacy_owner_directly",
+        "test_bj85_scene_state_anchor_layer_gate_delegator_removed",
+        "test_bj85_stacks_call_scene_state_anchor_owner_directly",
+        "test_bj47_merge_gate_layer_metas_into_fem_merge_order_locked",
+        "test_bj129_gate_module_thin_boundary_source_shape_locked"
+      ],
+      "helpers": [
+        "tests.helpers",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.gate_thin_boundary_locks",
+        "tests.helpers.strict_social_harness",
+        "tests.test_scene_state_anchoring",
+        "tests.test_turn_packet_stage_diff_integration"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate_diagnostics.py": {
+      "loc": 172,
+      "test_count": 4,
+      "tests": [
+        "test_final_emission_meta_and_emission_debug_merge_scene_state_anchor",
+        "test_apply_final_emission_gate_tolerates_missing_gm_output_for_narration_constraint_debug",
+        "test_apply_final_emission_gate_surfaces_narration_constraint_debug_in_metadata",
+        "test_final_gate_terminal_repair_branch_records_gate_terminal_family"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.strict_social_harness"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate_n4.py": {
+      "loc": 145,
+      "test_count": 3,
+      "tests": [
+        "test_acceptance_quality_n4_off_when_narrative_plan_absent",
+        "test_acceptance_quality_n4_replace_path_reruns_seam_on_fallback_and_fem_terminal",
+        "test_acceptance_quality_n4_runs_before_interaction_continuity_attachment"
+      ],
+      "helpers": [
+        "tests.helpers.narrative_mode_validator_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate_orchestration_order.py": {
+      "loc": 805,
+      "test_count": 18,
+      "tests": [
+        "test_apply_final_emission_gate_runs_response_type_then_continuity_then_fallback",
+        "test_apply_final_emission_gate_runs_response_delta_before_speaker_enforcement",
+        "test_apply_final_emission_gate_strict_social_contract_missing_skips_tightening",
+        "test_block_f_apply_final_emission_gate_non_strict_never_invokes_enforce_emitted_speaker_with_contract",
+        "test_block_f_apply_final_emission_gate_suppressed_non_social_turn_never_invokes_enforce_emitted_speaker_with_contract",
+        "test_block_f_sync_eff_social_to_resolution_single_call_site_in_final_emission_gate",
+        "test_apply_final_emission_gate_non_strict_path_does_not_attach_speaker_enforcement",
+        "test_apply_final_emission_gate_runs_scene_state_anchor_after_speaker_enforcement",
+        "test_apply_final_emission_gate_scene_state_anchor_location_repair_non_strict",
+        "test_strict_social_preserves_speaker_repair_then_applies_anchor_repair",
+        "test_non_strict_runs_answer_completeness_and_response_delta_before_scene_state_anchor",
+        "test_non_strict_scene_state_anchor_does_not_strip_prior_objective_repairs",
+        "test_non_strict_gate_runs_anti_railroading_after_na_before_scene_state_anchor",
+        "test_apply_final_emission_gate_runs_context_separation_before_scene_state_anchor",
+        "test_block_l_apply_final_emission_gate_scene_opening_maybe_attach_runs_before_deterministic_opening_composer",
+        "test_social_response_structure_layer_runs_after_response_delta_and_before_tone_escalation",
+        "test_response_type_failure_skips_social_response_structure_layer",
+        "test_strict_social_narrative_mode_output_enforcement_terminal_fallback"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_gate_selector_snapshots.py": {
+      "loc": 437,
+      "test_count": 11,
+      "tests": [
+        "test_selector_snapshot_visibility_vs_generic_terminal_distinct_markers",
+        "test_selector_snapshot_n4_replace_vs_generic_terminal_distinct_markers",
+        "test_selector_snapshot_opening_rt_repair_vs_generic_terminal_families",
+        "test_selector_snapshot_strict_social_emergency_vs_gate_terminal_family",
+        "test_selector_snapshot_valid_candidate_bypasses_sealed_branches",
+        "test_sealed_branch_order_accept_path_visibility_before_n4",
+        "test_sealed_branch_order_replace_path_visibility_before_n4",
+        "test_block_m4_final_emitted_source_accept_precedence_ladders_are_locked",
+        "test_block_m4_replacement_final_source_ownership_is_locked",
+        "test_block_ai_block_ag_selector_order_snapshots_remain_entrypoints",
+        "test_final_gate_plain_valid_candidate_has_source_without_fallback_family"
+      ],
+      "helpers": [
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_meta.py": {
+      "loc": 1687,
+      "test_count": 69,
+      "tests": [
+        "test_narration_constraint_small_str_rejects_long_and_whitespace",
+        "test_narration_constraint_reason_codes_respects_limit",
+        "test_build_narration_constraint_debug_visibility_reason_cap",
+        "test_default_narration_constraint_debug_shape",
+        "test_narration_constraint_debug_builder_and_merge_are_null_safe",
+        "test_narration_constraint_debug_excludes_sensitive_and_verbose_inputs",
+        "test_narration_constraint_debug_speaker_fallback_reason_codes_are_stable",
+        "test_narration_constraint_debug_prefers_grounded_speaker_reason_code_over_fallbacks",
+        "test_narration_constraint_debug_missing_speaker_inputs_do_not_emit_noisy_values",
+        "test_merge_narration_constraint_debug_meta_triple_sink_is_null_safe_and_preserves_metadata",
+        "test_stamp_strict_social_deterministic_fallback_family",
+        "test_project_strict_social_replace_realization_family_defaults_missing",
+        "test_stamp_non_strict_sealed_replacement_realization_family",
+        "test_infer_accept_path_final_emitted_source_strict_social_initial",
+        "test_infer_accept_path_final_emitted_source_generic_initial",
+        "test_infer_accept_path_final_emitted_source_later_layers_win_in_order",
+        "test_infer_accept_path_final_emitted_source_srs_requires_passed",
+        "test_infer_accept_path_final_emitted_source_purity_uses_fixed_token",
+        "test_default_layer_meta_has_all_fem_keys",
+        "test_default_narrative_mode_output_layer_meta_covers_registry",
+        "test_evaluator_fem_prefix_registry_includes_acceptance_quality_family",
+        "test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes",
+        "test_opening_fallback_metadata_field_registry_surface_matches_canonical_constants",
+        "test_build_opening_fallback_result_meta_keys_match_registry",
+        "test_upstream_fast_fallback_provenance_field_registry_surface_matches_canonical_constants",
+        "test_merge_narrative_mode_output_into_final_emission_meta",
+        "test_merge_into_final_emission_meta_round_trip",
+        "test_emission_trace_terminal_statuses",
+        "test_resolve_status_checked_failure_pre_repair_is_none",
+        "test_slim_helpers_stable",
+        "test_trace_slice_contract_only",
+        "test_normalize_merged_na_for_eval_fills_none_nested",
+        "test_response_type_debug_defaults_and_fem_merge_are_stable",
+        "test_read_helpers_prefer_sidecar_lane_over_legacy_top_level",
+        "test_read_final_emission_meta_from_turn_payload_supports_api_envelope_and_gm_output_dict",
+        "test_read_emission_debug_lane_reads_sidecar_lane_when_present",
+        "test_normalize_final_emission_meta_for_observability_fills_nested_defaults_deterministically",
+        "test_stage_diff_na_projection_merges_failure_reasons_into_reason_codes",
+        "test_stage_diff_na_projection_is_curated_and_does_not_pass_through_nested_payloads",
+        "test_normalized_observational_bundle_has_stable_top_level_shapes",
+        "test_build_fem_observability_events_bounded_curated_and_stable",
+        "test_build_fem_observability_events_malformed_fem_does_not_crash",
+        "test_assemble_unified_bundle_stage_diff_surface_keys_sorted",
+        "test_assemble_unified_observational_telemetry_bundle_merges_three_sources_without_leakage",
+        "test_assemble_unified_observational_telemetry_bundle_optional_inputs_safe",
+        "test_build_fem_observability_events_no_arbitrary_pass_through_in_data",
+        "test_build_fem_runtime_lineage_events_acceptance_outcomes_do_not_invent_fallbacks",
+        "test_build_fem_runtime_lineage_events_projects_opening_and_fail_closed_fallbacks",
+        "test_build_fem_runtime_lineage_events_projects_strict_social_and_sanitizer_fallbacks",
+        "test_build_fem_runtime_lineage_events_projects_upstream_fast_fallback_split_owners",
+        "test_build_fem_runtime_lineage_events_is_conservative_serializable_and_recurrence_ready",
+        "test_assemble_unified_observational_bundle_exposes_fem_runtime_lineage_sibling_surface",
+        "test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection_split",
+        "test_project_sealed_replacement_subkind_maps_terminal_replace_sources",
+        "test_build_fem_runtime_lineage_events_sealed_branches_remain_distinct_read_side",
+        "test_build_fem_runtime_lineage_events_sealed_opening_subkind_maps_opening_content_owner",
+        "test_build_fem_runtime_lineage_events_sealed_unknown_replacement_is_conservative",
+        "test_build_fem_runtime_lineage_events_projects_neutral_speaker_grounding_bridge",
+        "test_acceptance_projection_runtime_lineage_delegates_to_fem_builder_when_bundle_absent",
+        "test_build_fem_runtime_lineage_events_projects_explicit_speaker_contract_repairs",
+        "test_build_fem_runtime_lineage_events_projects_interaction_continuity_repairs",
+        "test_build_fem_runtime_lineage_events_projects_explicit_mutation_evidence_without_explosion",
+        "test_build_fem_runtime_lineage_events_projects_sanitizer_and_unknown_post_gate_mutation",
+        "test_write_time_mutation_seam_helpers_ensure_and_patch_fem_in_place",
+        "test_normalize_fem_preserves_dual_fallback_family_fields_without_collapse",
+        "test_golden_replay_dual_family_precedence_matches_fem_normalization",
+        "test_final_emission_meta_read_side_surface_exposes_sidecar_lane_constants",
+        "test_runtime_lineage_vocabulary_summary_includes_split_owner_fields",
+        "test_read_side_lineage_projection_surface_includes_sealed_subkinds_and_split_owners"
+      ],
+      "helpers": [
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_projection",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_narrative_mode_output.py": {
+      "loc": 65,
+      "test_count": 4,
+      "tests": [
+        "test_shipped_narrative_mode_contract_reads_prompt_context_plan",
+        "test_narrative_mode_output_legality_assessment_absent_contract_skips",
+        "test_narrative_mode_output_legality_assessment_disabled_contract",
+        "test_merge_narrative_mode_output_trace_into_gate_fem"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_opening_fallback.py": {
+      "loc": 1450,
+      "test_count": 56,
+      "tests": [
+        "test_opening_scene_safe_fallback_selection_returns_canonical_dataclass_and_metadata",
+        "test_adapter_selects_usable_upstream_prepared_payload_unchanged",
+        "test_select_mirrors_authorship_from_upstream_composition_meta",
+        "test_select_does_not_infer_authorship_when_composition_meta_lacks_field",
+        "test_adapter_missing_upstream_payload_fails_closed_with_existing_metadata_shape",
+        "test_adapter_insufficient_curated_facts_fails_closed_with_existing_metadata_shape",
+        "test_adapter_unusable_upstream_stub_preserves_fail_closed_metadata",
+        "test_adapter_does_not_export_prose_authorship_or_payload_packaging",
+        "test_upstream_prepared_opening_payload_if_usable_requires_full_snapshot_shape",
+        "test_fail_closed_empty_curated_facts_skips_local_deterministic_opening_composer_on_enforce_path",
+        "test_opening_scene_safe_fallback_selection_skips_local_composer_when_empty_curated_facts",
+        "test_deterministic_opening_fallback_helper_exact_text_and_meta_snapshot",
+        "test_canonical_opening_failure_recovers_via_upstream_prepared_payload_when_present",
+        "test_gate_opening_failure_text_only_stub_fails_closed_without_rebuild",
+        "test_valid_scene_opening_skips_deterministic_fallback",
+        "test_scene_opening_candidate_not_rejected_for_lacking_action_result_language",
+        "test_scene_opening_fallback_with_opening_seed_facts_emits_seed_facts",
+        "test_scene_opening_fallback_prefers_opening_curated_facts",
+        "test_opening_failure_fallback_classification_excludes_observe_family",
+        "test_opening_visibility_safe_fallback_routes_to_opening_family_not_observe",
+        "test_opening_fallback_ignores_contaminated_public_scene_visible_facts",
+        "test_opening_fallback_never_uses_polluted_narration_visibility_facts",
+        "test_failed_scene_opening_never_emits_generic_the_scene_fallback",
+        "test_frontier_gate_opening_fallback_uses_top_level_curated_facts",
+        "test_scene_opening_rt_contract_accept_path_promotes_candidate_true_case",
+        "test_scene_opening_rt_contract_accept_path_promotes_candidate_false_cases",
+        "test_block_ai_scene_opening_rt_selector_does_not_mutate_inputs",
+        "test_block_ai_opening_upstream_prepared_snapshot_remains_preferred_over_compatibility_local",
+        "test_visibility_selected_fallback_candidate_builds_dataclass",
+        "test_opening_sealed_fallback_selection_projects_visibility_selection",
+        "test_make_opening_sealed_fallback_provider_binds_composition_meta_factory",
+        "test_apply_final_emission_gate_repairs_malformed_opening_fast_fallback_composition",
+        "test_opening_validator_rejects_investigation_continuation_language",
+        "test_opening_validator_rejects_fragment_sentence",
+        "test_opening_validator_rejects_opening_without_actionable_hook",
+        "test_full_gate_malformed_opening_payload_without_upstream_repair_is_sealed_gate",
+        "test_scene_opening_accepted_candidate_promotes_over_short_stale_player_text",
+        "test_canonical_final_gate_opening_fallback_fem_is_upstream_prepared_not_compatibility_local",
+        "test_canonical_final_gate_auto_attaches_upstream_opening_fallback_before_emission",
+        "test_block_n_opening_attach_build_failure_fails_closed_preserves_block_m_telemetry",
+        "test_block_m_successful_upstream_attach_has_no_attach_failure_telemetry",
+        "test_fail_closed_sealed_gate_empty_curated_facts_skips_upstream_opening_payload",
+        "test_canonical_final_gate_prefers_upstream_prepared_payload_when_present",
+        "test_final_gate_mirrors_authorship_from_upstream_payload_not_route_inference",
+        "test_final_gate_does_not_infer_authorship_when_upstream_composition_lacks_field",
+        "test_final_gate_valid_opening_candidate_has_no_fallback_provenance",
+        "test_canonical_missing_curated_facts_upstream_prepared_payload_still_wins",
+        "test_fail_closed_sealed_gate_missing_curated_facts_records_fem",
+        "test_narrative_mode_output_opening_validation_runs_for_scene_opening_response_type",
+        "test_opening_mode_active_for_turn_resolution_kind",
+        "test_opening_mode_active_for_turn_narrative_mode_contract",
+        "test_opening_mode_active_for_turn_narration_obligations",
+        "test_opening_mode_active_for_turn_inactive",
+        "test_opening_visible_anchor_fallback_text_builds_from_shipped_anchors",
+        "test_opening_visible_anchor_fallback_text_prefers_scene_opening_location",
+        "test_opening_visible_anchor_fallback_text_empty_without_prompt_context"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.opening_fallback_gate_harness"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_passive_scene_pressure.py": {
+      "loc": 102,
+      "test_count": 4,
+      "tests": [
+        "test_passive_scene_pressure_candidates_return_canonical_dataclass",
+        "test_passive_scene_pressure_due_for_fallback_requires_passive_signal",
+        "test_passive_scene_pressure_guard_rumor_branch_when_visible_facts_match",
+        "test_passive_scene_pressure_visibility_candidate_stamps_canonical_fields"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_referential_clarity.py": {
+      "loc": 93,
+      "test_count": 4,
+      "tests": [
+        "test_build_referential_clarity_violation_sample_caps_at_three",
+        "test_apply_default_referential_clarity_meta_stamps_null_pass_shape",
+        "test_referential_clarity_violations_only_dialogue_attribution_they_detects_tag",
+        "test_try_strict_social_local_pronoun_substitution_repair_replaces_single_pronoun"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_repairs.py": {
+      "loc": 459,
+      "test_count": 20,
+      "tests": [
+        "test_repair_flattens_list_like_dialogue",
+        "test_repair_collapses_multi_speaker_formatting",
+        "test_removed_semantic_dialogue_helpers_not_exported_from_repairs_module",
+        "test_repair_strips_meta_fallback_voice_while_preserving_grounded_content",
+        "test_repair_removes_fabricated_authority_without_inventing_replacement_facts",
+        "test_repair_downgrades_unsupported_certainty_into_bounded_partial",
+        "test_repair_preserves_known_edge_when_one_exists",
+        "test_repair_adds_unknown_edge_when_contract_requires_it",
+        "test_repair_rewrites_reason_is_still_unclear_into_diegetic_social_partial",
+        "test_repair_rewrites_move_plays_out_line_into_diegetic_open_call_partial",
+        "test_repair_adds_next_lead_when_contract_requires_it_and_grounded_lead_exists",
+        "test_repair_uses_a_single_diegetic_clarifying_question_only_when_partial_cannot_be_preserved",
+        "test_repair_never_emits_more_than_one_brief_clarifying_question_when_capped",
+        "test_fallback_behavior_layer_revalidates_once_after_repair",
+        "test_fallback_behavior_layer_retains_safest_repaired_text_when_revalidation_still_fails",
+        "test_fallback_behavior_layer_leaves_grounded_answers_untouched_when_uncertainty_is_inactive",
+        "test_fallback_behavior_layer_does_not_synthesize_without_contract_from_forceful_tone_alone",
+        "test_bj38_merge_fallback_behavior_into_emission_debug_nested_shape",
+        "test_bj38_merge_conversational_memory_inspection_into_emission_debug",
+        "test_bj38_merge_conversational_memory_inspection_noop_when_absent"
+      ],
+      "helpers": [
+        "tests.helpers.fallback_behavior_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_response_type.py": {
+      "loc": 115,
+      "test_count": 8,
+      "tests": [
+        "test_upstream_prepared_emission_field_source_prefers_attribution",
+        "test_resolve_upstream_prepared_answer_action_repair_answer_present",
+        "test_resolve_upstream_prepared_answer_action_repair_absent_marks_absent",
+        "test_response_type_opening_mode_active_scene_opening_or_shipped_mode",
+        "test_merge_opening_upstream_prepare_attach_observability_into_response_type_debug",
+        "test_bj39_enforce_response_type_contract_applies_upstream_answer_prepared_repair",
+        "test_bj39_enforce_response_type_contract_marks_upstream_absent_for_answer",
+        "test_bj39_gate_delegator_removed"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_scene_emit_integrity.py": {
+      "loc": 95,
+      "test_count": 4,
+      "tests": [
+        "test_scene_emit_integrity_global_fallback_selection_returns_canonical_dataclass",
+        "test_scene_emit_integrity_travelish_context_detects_travel_resolution_kind",
+        "test_scene_emit_integrity_global_fallback_selection_uses_safe_line_on_failure",
+        "test_compute_scene_emit_integrity_assessment_marks_blocked_global_fallback"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_scene_facts.py": {
+      "loc": 94,
+      "test_count": 4,
+      "tests": [
+        "test_scene_visible_facts_normalizes_and_dedupes",
+        "test_augment_scene_with_runtime_visible_leads_appends_lead_facts",
+        "test_augment_scene_with_runtime_visible_leads_skips_opening_preference",
+        "test_augment_scene_with_runtime_visible_leads_returns_original_without_leads"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_scene_integrity.py": {
+      "loc": 181,
+      "test_count": 4,
+      "tests": [
+        "test_blocked_incompatible_scene_transition_blocks_global_scene_fallback",
+        "test_stone_boar_blocked_transition_does_not_emit_old_milestone_roadside_prose",
+        "test_valid_resolved_scene_transition_allows_global_scene_fallback",
+        "test_named_place_unresolved_suppresses_global_fallback"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_scene_state_anchor.py": {
+      "loc": 170,
+      "test_count": 8,
+      "tests": [
+        "test_ssa_layer_skip_reasons_direct",
+        "test_resolve_scene_state_anchor_contract_reads_nested_payloads",
+        "test_repair_location_opening_prefixes_location_when_missing",
+        "test_repair_actor_opening_prefixes_actor_when_missing",
+        "test_merge_scene_state_anchor_meta_copies_layer_fields",
+        "test_bj37_apply_scene_state_anchor_layer_passes_when_anchored",
+        "test_bj37_apply_scene_state_anchor_layer_boundary_no_rewrite_on_failure",
+        "test_bj85_gate_delegator_removed_stacks_call_owner_directly"
+      ],
+      "helpers": [],
+      "fixtures": []
+    },
+    "tests/test_final_emission_sealed_fallback.py": {
+      "loc": 516,
+      "test_count": 15,
+      "tests": [
+        "test_sealed_fallback_owner_bucket_constants_match_canonical_registry",
+        "test_block_ai_sealed_fallback_metadata_module_exports_helpers_only",
+        "test_block_ai_sealed_fallback_selection_round_trips_legacy_tuple",
+        "test_sealed_fallback_from_visibility_selection_matches_manual_field_copy",
+        "test_block_ai_sealed_fallback_selection_round_trips_visibility_tuple",
+        "test_select_non_strict_terminal_sealed_fallback_social_branch_uses_owner_modules",
+        "test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_opening_branch",
+        "test_bj60_generic_replace_exit_calls_sealed_fallback_selector_directly",
+        "test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts",
+        "test_block_ai_extracted_n4_selector_uses_owner_modules_only",
+        "test_block_ai_non_strict_terminal_selector_projects_visibility_terminal_selection",
+        "test_strict_social_emergency_fallback_patch_applies_caller_provided_text_without_selecting",
+        "test_block_ai_extracted_non_strict_branch_selector_preserves_order",
+        "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines",
+        "test_block_ai_sealed_fallback_helper_entrypoints_remain_importable"
+      ],
+      "helpers": [
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_validators.py": {
+      "loc": 313,
+      "test_count": 20,
+      "tests": [
+        "test_social_response_structure_disabled_contract_noops",
+        "test_social_response_structure_non_dialogue_contract_noops",
+        "test_empty_emitted_text_fails_when_applicable",
+        "test_list_like_dialogue_fails_with_expected_reason",
+        "test_multi_speaker_dialogue_fails_with_expected_reason",
+        "test_summary_like_nonspoken_dialogue_fails_with_missing_spoken_shape",
+        "test_conversational_uncertainty_can_still_pass",
+        "test_validate_referent_clarity_full_artifact_detects_lead_pronoun",
+        "test_validate_referent_clarity_prefers_full_artifact_when_compact_diverges",
+        "test_validate_referent_clarity_compact_only_records_observability_without_categories",
+        "test_apply_referent_clarity_replaces_pronoun_with_single_unambiguous_label",
+        "test_apply_referent_clarity_safe_fallback_single_row",
+        "test_apply_referent_clarity_skips_ambiguous_without_safe_label",
+        "test_apply_referent_clarity_never_inserts_forbidden_name",
+        "test_apply_referent_clarity_active_target_pinned_prefers_continuity_label",
+        "test_apply_referent_clarity_compact_only_abstains_repair",
+        "test_apply_referent_clarity_missing_inputs_noop",
+        "test_apply_referent_clarity_replaces_at_most_one_pronoun_token",
+        "test_apply_referent_clarity_abstains_when_disallowed_named_reference_present",
+        "test_apply_referent_clarity_abstains_on_unsupported_target_switch_category"
+      ],
+      "helpers": [
+        "tests.helpers.objective7_referent_fixtures"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_visibility.py": {
+      "loc": 1091,
+      "test_count": 57,
+      "tests": [
+        "test_pipeline_replaces_offscene_known_npc_reference",
+        "test_pipeline_allows_visible_npc_reference",
+        "test_pipeline_allows_active_interlocutor_reference",
+        "test_pipeline_replaces_hidden_fact_assertion",
+        "test_pipeline_replaces_discoverable_but_undiscovered_fact_assertion",
+        "test_pipeline_allows_visible_fact_assertion",
+        "test_pipeline_visibility_metadata_captures_entity_and_fact_matches",
+        "test_pipeline_visibility_enforcement_is_read_only_for_discovery_state",
+        "test_pipeline_replaces_pronoun_before_first_explicit_entity",
+        "test_pipeline_replaces_unearned_familiarity_first_intro",
+        "test_pipeline_replaces_first_mention_missing_grounding",
+        "test_pipeline_allows_grounded_explicit_first_intro",
+        "test_pipeline_allows_grounded_active_interlocutor_intro",
+        "test_pipeline_allows_opening_scene_composition_with_later_grounded_first_entity_mention",
+        "test_pipeline_first_mention_metadata_records_checked_entities",
+        "test_pipeline_visibility_failure_skips_first_mention_but_keeps_default_meta_shape",
+        "test_pipeline_first_mention_fallback_also_satisfies_gate_when_replacement_needed",
+        "test_pipeline_opening_scene_pronoun_failure_prefers_grounded_visible_scene_fallback",
+        "test_pipeline_composed_scene_intro_avoids_repeated_trivial_verbs_when_fact_backed_actions_exist",
+        "test_pipeline_visibility_and_first_mention_metadata_coexist",
+        "test_pipeline_referential_clarity_allows_single_named_referent_followed_by_pronoun",
+        "test_pipeline_referential_clarity_allows_singular_they_for_single_local_person_referent",
+        "test_pipeline_referential_clarity_replaces_same_sentence_ambiguous_pronoun",
+        "test_pipeline_referential_clarity_replaces_next_sentence_ambiguous_pronoun",
+        "test_pipeline_referential_clarity_allows_explicit_reanchor",
+        "test_pipeline_referential_clarity_allows_descriptor_reanchor_when_unique",
+        "test_pipeline_referential_clarity_replaces_ambiguous_descriptor_reanchor",
+        "test_pipeline_referential_clarity_allows_unique_nonperson_pronoun",
+        "test_pipeline_referential_clarity_replaces_ambiguous_nonperson_pronoun",
+        "test_pipeline_referential_clarity_replaces_neuter_pronoun_in_person_only_context",
+        "test_pipeline_referential_clarity_allows_clear_quoted_speaker_tag",
+        "test_pipeline_referential_clarity_replaces_ambiguous_quoted_speaker_tag",
+        "test_pipeline_referential_clarity_replaces_referent_drift_after_new_competitor",
+        "test_pipeline_referential_clarity_replaces_singular_they_with_multiple_active_person_candidates",
+        "test_pipeline_referential_clarity_metadata_shape_always_present_on_pass",
+        "test_validate_player_facing_referential_clarity_records_referent_drift",
+        "test_validate_player_facing_first_mentions_pronoun_before_explicit_entity",
+        "test_validate_player_facing_first_mentions_unearned_familiarity",
+        "test_validate_player_facing_first_mentions_accepts_grounded_intro",
+        "test_validate_player_facing_first_mentions_accepts_opening_scene_sentence_grounded_by_opener_and_action",
+        "test_validate_player_facing_first_mentions_rejects_vague_presence_only_openings",
+        "test_sentence_decompression_splits_semicolon_alternatives",
+        "test_sentence_decompression_splits_long_participial_tail",
+        "test_fragmentary_participial_split_repair_anchors_to_previous_sentence",
+        "test_fragmentary_participial_split_repair_uses_sparse_it_subject_for_hinting",
+        "test_fragmentary_participial_split_repair_preserves_uncertain_suggesting_clause",
+        "test_final_emission_gate_does_not_export_sentence_micro_smooth_helper",
+        "test_finalization_pipeline_metadata_for_micro_smoothing",
+        "test_strip_appended_global_visibility_stock_multi_sentence_trailing",
+        "test_strip_appended_global_visibility_stock_alt_sentence_variant",
+        "test_strip_placeholder_stock_single_sentence_output_unchanged",
+        "test_strip_preserves_dialogue_sentence_containing_for_a_breath_stock_phrase",
+        "test_strip_preserves_interruption_setup_strips_only_trailing_stock_sentence",
+        "test_strip_preserves_paragraph_break_when_stripping_within_second_block",
+        "test_strip_does_not_remove_unrelated_multi_sentence_atmosphere",
+        "test_finalize_emission_output_post_containment_reseals_appended_stock",
+        "test_visibility_safe_fallback_final_emitted_source_snapshot"
+      ],
+      "helpers": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "fixtures": []
+    },
+    "tests/test_final_emission_visibility_fallback.py": {
+      "loc": 1927,
+      "test_count": 59,
+      "tests": [
+        "test_visibility_fallback_route_helper_importable_and_callable_from_new_module",
+        "test_visibility_fallback_route_helper_decisions",
+        "test_visibility_fallback_route_module_contains_no_fallback_prose_literals",
+        "test_visibility_fallback_owner_bucket_classifier",
+        "test_visibility_fallback_owner_bucket_taxonomy_includes_ambiguous_bucket",
+        "test_visibility_fallback_owner_bucket_constants_match_canonical_registry",
+        "test_build_visibility_validation_observation_shapes_pass_result",
+        "test_build_visibility_validation_observation_shapes_failed_result",
+        "test_build_visibility_pre_route_validation_context_wraps_validation_result_and_observation",
+        "test_build_visibility_default_metadata_payload_collects_initial_stamp_kwargs",
+        "test_build_visibility_first_mention_default_metadata_payload_collects_ordered_meta_updates",
+        "test_build_visibility_pre_route_metadata_context_groups_default_payloads",
+        "test_build_visibility_enforcement_stage_context_groups_pre_route_objects",
+        "test_stamp_visibility_fallback_metadata_writes_visibility_fields_only",
+        "test_stamp_visibility_fallback_metadata_can_mark_nonreplacement_routes",
+        "test_build_visibility_route_metadata_outcome_for_hard_replacement",
+        "test_build_visibility_route_metadata_outcome_for_nonreplacement_routes",
+        "test_build_visibility_non_replacement_route_context_for_continuity_lead_exemption",
+        "test_build_visibility_non_replacement_route_context_for_concrete_interaction_no_hard_replace",
+        "test_build_visibility_replacement_annotations_for_hard_replacement",
+        "test_build_visibility_replacement_annotations_caps_debug_violation_list",
+        "test_build_visibility_hard_replacement_plan_collects_side_effect_inputs",
+        "test_first_mention_composition_meta_default_shape",
+        "test_first_mention_composition_meta_returns_fresh_mutable_containers",
+        "test_first_mention_composition_meta_populates_optional_layers",
+        "test_visibility_selected_fallback_round_trips_legacy_tuple",
+        "test_visibility_selected_fallback_candidate_matches_direct_dataclass",
+        "test_block_ai_route_visibility_selector_does_not_mutate_inputs",
+        "test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass",
+        "test_standard_visibility_safe_fallback_resolves_routing_deps_from_owner_modules",
+        "test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential",
+        "test_apply_visibility_enforcement_delegates_first_mention_follow_up_to_injected_applier",
+        "test_terminal_pipeline_calls_visibility_owner_directly",
+        "test_bj73_visibility_owner_entrypoint_locked",
+        "test_apply_first_mention_enforcement_delegates_referential_clarity_follow_up",
+        "test_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+        "test_select_non_strict_terminal_fallback_for_sealed_selects_each_branch",
+        "test_select_non_strict_terminal_fallback_for_sealed_social_branch_uses_owner_modules",
+        "test_build_visibility_first_mention_metadata_payload_collects_composition_values",
+        "test_build_visibility_first_mention_metadata_payload_defaults_when_composition_empty",
+        "test_build_first_mention_selected_fallback_metadata_payload_collects_replacement_fields",
+        "test_build_first_mention_selected_fallback_metadata_payload_uses_default_layers",
+        "test_build_referential_clarity_selected_fallback_metadata_payload_collects_replacement_fields",
+        "test_build_referential_clarity_selected_fallback_metadata_payload_uses_default_layers",
+        "test_build_first_mention_replacement_logging_payload_matches_gate_decision_shape",
+        "test_build_first_mention_replacement_logging_payload_normalizes_empty_interlocutor",
+        "test_build_referential_clarity_replacement_logging_payload_matches_gate_decision_shape",
+        "test_build_referential_clarity_replacement_logging_payload_normalizes_boolean_and_interlocutor",
+        "test_build_visibility_hard_replacement_logging_payload_collects_decision_and_trace_inputs",
+        "test_build_visibility_hard_replacement_logging_payload_caps_reasons_and_normalizes_empty_interlocutor",
+        "test_build_visibility_hard_replacement_context_groups_existing_payloads",
+        "test_visibility_fallback_helper_module_contains_no_fallback_prose_literals",
+        "test_build_visibility_fallback_selection_inputs_collects_hard_replace_context",
+        "test_build_visibility_fallback_selection_inputs_prefers_explicit_response_type_context",
+        "test_build_visibility_route_dispatch_context_for_sealed_hard_replace",
+        "test_build_visibility_route_dispatch_context_for_continuity_lead_exemption",
+        "test_build_visibility_route_dispatch_context_for_concrete_interaction_no_hard_replace",
+        "test_build_visibility_route_decision_inputs_collects_selector_arguments",
+        "test_block_ai_visibility_fallback_helper_entrypoints_remain_importable"
+      ],
+      "helpers": [
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "fixtures": []
+    }
+  },
+  "replay": {
+    "file_count": 41,
+    "loc": 13096,
+    "nodes": [
+      "game",
+      "game.final_emission_replay_projection",
+      "tests.helpers.golden_replay",
+      "tests.helpers.golden_replay_api",
+      "tests.helpers.golden_replay_fixtures",
+      "tests.helpers.golden_replay_profiles",
+      "tests.helpers.golden_replay_projection",
+      "tests.helpers.replay_bug_recurrence",
+      "tests.helpers.replay_drift_hotspots",
+      "tests.helpers.replay_drift_longitudinal",
+      "tests.helpers.replay_drift_reports",
+      "tests.helpers.replay_drift_risk",
+      "tests.helpers.replay_drift_rows",
+      "tests.helpers.replay_drift_taxonomy",
+      "tests.helpers.replay_drift_trends",
+      "tests.helpers.replay_governance_fixtures",
+      "tests.helpers.replay_observed_row_fixtures",
+      "tests.replay_governance_approval_contract",
+      "tests.replay_governance_contract",
+      "tests.replay_governance_registry",
+      "tests.replay_governance_traceability_contract",
+      "tests.test_golden_replay",
+      "tests.test_golden_replay_direct_seam",
+      "tests.test_golden_replay_fallback_projection",
+      "tests.test_golden_replay_helper_contracts",
+      "tests.test_golden_replay_long_session",
+      "tests.test_golden_replay_projection",
+      "tests.test_golden_replay_protected_bridge",
+      "tests.test_golden_replay_scenario_spine",
+      "tests.test_golden_replay_structural_invariants",
+      "tests.test_replay_bug_class_recurrence",
+      "tests.test_replay_drift_hotspots",
+      "tests.test_replay_drift_longitudinal",
+      "tests.test_replay_drift_risk",
+      "tests.test_replay_drift_taxonomy",
+      "tests.test_replay_drift_trends",
+      "tests.test_replay_governance_approval_contract",
+      "tests.test_replay_governance_authority",
+      "tests.test_replay_governance_contract",
+      "tests.test_replay_governance_registry",
+      "tests.test_replay_governance_traceability_contract",
+      "tools.refresh_protected_replay_manifest"
+    ],
+    "edge_count": 93,
+    "edges_sample": [
+      [
+        "tests.helpers.golden_replay",
+        "game"
+      ],
+      [
+        "tests.helpers.golden_replay",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.helpers.golden_replay_fixtures",
+        "game"
+      ],
+      [
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.helpers.golden_replay_profiles",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.helpers.golden_replay_projection",
+        "game.final_emission_replay_projection"
+      ],
+      [
+        "tests.helpers.replay_bug_recurrence",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_rows"
+      ],
+      [
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_drift_longitudinal",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_bug_recurrence"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_hotspots"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_longitudinal"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_risk"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_rows"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_trends"
+      ],
+      [
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_hotspots"
+      ],
+      [
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_rows"
+      ],
+      [
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_trends"
+      ],
+      [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.golden_replay_api"
+      ],
+      [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.golden_replay_api"
+      ],
+      [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.helpers.golden_replay_api"
+      ],
+      [
+        "tests.helpers.replay_drift_trends",
+        "tests.helpers.replay_drift_hotspots"
+      ],
+      [
+        "tests.helpers.replay_drift_trends",
+        "tests.helpers.replay_drift_rows"
+      ],
+      [
+        "tests.helpers.replay_drift_trends",
+        "tests.helpers.replay_drift_taxonomy"
+      ],
+      [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_approval_contract"
+      ],
+      [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_contract"
+      ],
+      [
+        "tests.helpers.replay_observed_row_fixtures",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.replay_governance_registry",
+        "tests.replay_governance_contract"
+      ],
+      [
+        "tests.replay_governance_traceability_contract",
+        "tests.replay_governance_approval_contract"
+      ],
+      [
+        "tests.replay_governance_traceability_contract",
+        "tests.replay_governance_registry"
+      ],
+      [
+        "tests.test_golden_replay",
+        "tests.test_golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_direct_seam",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_direct_seam",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_fallback_projection",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.test_golden_replay_fallback_projection",
+        "tests.helpers.golden_replay_api"
+      ],
+      [
+        "tests.test_golden_replay_fallback_projection",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_helper_contracts",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_long_session",
+        "game"
+      ],
+      [
+        "tests.test_golden_replay_long_session",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_long_session",
+        "tests.helpers.golden_replay_profiles"
+      ],
+      [
+        "tests.test_golden_replay_long_session",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_projection",
+        "tests.helpers.golden_replay_api"
+      ],
+      [
+        "tests.test_golden_replay_projection",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_projection",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.test_golden_replay_projection",
+        "tests.helpers.golden_replay_projection"
+      ],
+      [
+        "tests.test_golden_replay_projection",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_protected_bridge",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_protected_bridge",
+        "tests.helpers.replay_observed_row_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_scenario_spine",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_scenario_spine",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_golden_replay_structural_invariants",
+        "tests.helpers.golden_replay"
+      ],
+      [
+        "tests.test_golden_replay_structural_invariants",
+        "tests.helpers.golden_replay_fixtures"
+      ],
+      [
+        "tests.test_replay_bug_class_recurrence",
+        "tests.helpers.replay_bug_recurrence"
+      ]
+    ],
+    "external_callers": {
+      "game.final_emission_replay_projection": [
+        "game.final_emission_meta",
+        "game.runtime_lineage_telemetry",
+        "game.telemetry_vocab"
+      ],
+      "tests.helpers.golden_replay": [
+        "game",
+        "game.api",
+        "game.defaults",
+        "game.final_emission_meta",
+        "game.models",
+        "game.output_sanitizer",
+        "game.realization_provenance",
+        "game.runtime_lineage_telemetry",
+        "game.scenario_spine",
+        "game.scenario_spine_eval",
+        "tests.debug_trace_utils",
+        "tests.helpers.failure_classifier",
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.runtime_lineage_reporting",
+        "tests.helpers.transcript_runner"
+      ],
+      "tests.helpers.golden_replay_fixtures": [
+        "game",
+        "game.defaults"
+      ],
+      "tests.helpers.golden_replay_projection": [
+        "game.final_emission_meta",
+        "game.output_sanitizer",
+        "game.realization_provenance",
+        "game.runtime_lineage_telemetry",
+        "tests.debug_trace_utils",
+        "tests.helpers.transcript_runner"
+      ],
+      "tests.helpers.replay_drift_risk": [
+        "tests.failure_classification_contract"
+      ],
+      "tests.helpers.replay_drift_taxonomy": [
+        "tests.helpers.failure_classifier"
+      ],
+      "tests.helpers.replay_observed_row_fixtures": [
+        "game.runtime_lineage_telemetry"
+      ],
+      "tests.test_golden_replay": [
+        "game",
+        "game.api",
+        "game.final_emission_meta",
+        "game.models",
+        "game.runtime_lineage_telemetry",
+        "game.scenario_spine",
+        "game.scenario_spine_eval",
+        "tests.helpers.block_stu_equivalence_fixtures",
+        "tests.helpers.dialogue_social_plan",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.failure_dashboard_report",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness",
+        "tests.helpers.transcript_runner"
+      ],
+      "tests.test_golden_replay_direct_seam": [
+        "game.final_emission_meta",
+        "tests.helpers.block_stu_equivalence_fixtures",
+        "tests.helpers.dialogue_social_plan",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "tests.test_golden_replay_fallback_projection": [
+        "game.runtime_lineage_telemetry",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "tests.test_golden_replay_long_session": [
+        "game",
+        "game.api",
+        "game.models",
+        "tests.helpers.transcript_runner"
+      ],
+      "tests.test_golden_replay_projection": [
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "tests.test_golden_replay_protected_bridge": [
+        "tests.helpers.failure_dashboard_report"
+      ],
+      "tests.test_golden_replay_scenario_spine": [
+        "game.scenario_spine",
+        "game.scenario_spine_eval"
+      ],
+      "tests.test_replay_drift_hotspots": [
+        "tests.helpers.failure_dashboard_report"
+      ],
+      "tests.test_replay_drift_longitudinal": [
+        "tests.helpers.failure_dashboard_report"
+      ],
+      "tests.test_replay_drift_risk": [
+        "tests.helpers.failure_dashboard_report"
+      ],
+      "tests.test_replay_drift_taxonomy": [
+        "game.runtime_lineage_telemetry",
+        "tests.failure_classification_contract",
+        "tests.helpers.failure_classifier"
+      ],
+      "tests.test_replay_drift_trends": [
+        "tests.helpers.failure_dashboard_report"
+      ],
+      "tools.refresh_protected_replay_manifest": [
+        "game.final_emission_meta"
+      ]
+    },
+    "internal_callers": {
+      "game.final_emission_replay_projection": [
+        "tests.helpers.golden_replay_projection"
+      ],
+      "tests.helpers.golden_replay": [
+        "tests.helpers.golden_replay_api",
+        "tests.test_golden_replay_direct_seam",
+        "tests.test_golden_replay_helper_contracts",
+        "tests.test_golden_replay_long_session",
+        "tests.test_golden_replay_protected_bridge",
+        "tests.test_golden_replay_scenario_spine",
+        "tests.test_golden_replay_structural_invariants"
+      ],
+      "tests.helpers.golden_replay_api": [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.test_golden_replay_fallback_projection",
+        "tests.test_golden_replay_projection",
+        "tests.test_replay_drift_longitudinal",
+        "tests.test_replay_drift_taxonomy"
+      ],
+      "tests.helpers.golden_replay_fixtures": [
+        "tests.test_golden_replay_direct_seam",
+        "tests.test_golden_replay_fallback_projection",
+        "tests.test_golden_replay_long_session",
+        "tests.test_golden_replay_projection",
+        "tests.test_golden_replay_scenario_spine",
+        "tests.test_golden_replay_structural_invariants"
+      ],
+      "tests.helpers.golden_replay_profiles": [
+        "tests.test_golden_replay_long_session"
+      ],
+      "tests.helpers.golden_replay_projection": [
+        "tests.helpers.golden_replay",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_profiles",
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_observed_row_fixtures",
+        "tests.test_golden_replay_fallback_projection",
+        "tests.test_golden_replay_projection",
+        "tools.refresh_protected_replay_manifest"
+      ],
+      "tests.helpers.replay_bug_recurrence": [
+        "tests.helpers.replay_drift_reports",
+        "tests.test_replay_bug_class_recurrence"
+      ],
+      "tests.helpers.replay_drift_hotspots": [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_trends",
+        "tests.test_replay_drift_hotspots",
+        "tests.test_replay_drift_trends"
+      ],
+      "tests.helpers.replay_drift_longitudinal": [
+        "tests.helpers.replay_drift_reports",
+        "tests.test_replay_drift_longitudinal"
+      ],
+      "tests.helpers.replay_drift_risk": [
+        "tests.helpers.replay_drift_reports",
+        "tests.test_replay_drift_risk"
+      ],
+      "tests.helpers.replay_drift_rows": [
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_trends",
+        "tests.test_replay_drift_hotspots",
+        "tests.test_replay_drift_trends"
+      ],
+      "tests.helpers.replay_drift_taxonomy": [
+        "tests.helpers.golden_replay",
+        "tests.helpers.replay_bug_recurrence",
+        "tests.helpers.replay_drift_hotspots",
+        "tests.helpers.replay_drift_longitudinal",
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_risk",
+        "tests.helpers.replay_drift_trends",
+        "tests.test_replay_drift_hotspots",
+        "tests.test_replay_drift_longitudinal",
+        "tests.test_replay_drift_risk",
+        "tests.test_replay_drift_taxonomy",
+        "tests.test_replay_drift_trends"
+      ],
+      "tests.helpers.replay_drift_trends": [
+        "tests.helpers.replay_drift_reports",
+        "tests.helpers.replay_drift_risk",
+        "tests.test_replay_drift_hotspots",
+        "tests.test_replay_drift_trends"
+      ],
+      "tests.helpers.replay_governance_fixtures": [
+        "tests.test_replay_governance_approval_contract",
+        "tests.test_replay_governance_contract",
+        "tests.test_replay_governance_traceability_contract"
+      ],
+      "tests.helpers.replay_observed_row_fixtures": [
+        "tests.helpers.replay_drift_taxonomy",
+        "tests.test_golden_replay_projection",
+        "tests.test_golden_replay_protected_bridge",
+        "tests.test_replay_drift_taxonomy"
+      ],
+      "tests.replay_governance_approval_contract": [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_traceability_contract",
+        "tests.test_replay_governance_approval_contract",
+        "tests.test_replay_governance_authority",
+        "tests.test_replay_governance_traceability_contract"
+      ],
+      "tests.replay_governance_contract": [
+        "tests.helpers.replay_governance_fixtures",
+        "tests.replay_governance_registry",
+        "tests.test_replay_governance_authority",
+        "tests.test_replay_governance_contract",
+        "tests.test_replay_governance_registry"
+      ],
+      "tests.replay_governance_registry": [
+        "tests.replay_governance_traceability_contract",
+        "tests.test_replay_governance_authority",
+        "tests.test_replay_governance_registry",
+        "tests.test_replay_governance_traceability_contract"
+      ],
+      "tests.replay_governance_traceability_contract": [
+        "tests.test_replay_governance_authority",
+        "tests.test_replay_governance_traceability_contract"
+      ],
+      "tests.test_golden_replay": [
+        "tests.test_golden_replay"
+      ]
+    }
+  },
+  "replay_files": [
+    "game/final_emission_replay_projection.py",
+    "tests/helpers/golden_replay.py",
+    "tests/helpers/golden_replay_api.py",
+    "tests/helpers/golden_replay_fixtures.py",
+    "tests/helpers/golden_replay_profiles.py",
+    "tests/helpers/golden_replay_projection.py",
+    "tests/helpers/replay_bug_recurrence.py",
+    "tests/helpers/replay_drift_hotspots.py",
+    "tests/helpers/replay_drift_longitudinal.py",
+    "tests/helpers/replay_drift_reports.py",
+    "tests/helpers/replay_drift_risk.py",
+    "tests/helpers/replay_drift_rows.py",
+    "tests/helpers/replay_drift_taxonomy.py",
+    "tests/helpers/replay_drift_trends.py",
+    "tests/helpers/replay_governance_fixtures.py",
+    "tests/helpers/replay_observed_row_fixtures.py",
+    "tests/replay_governance_approval_contract.py",
+    "tests/replay_governance_contract.py",
+    "tests/replay_governance_registry.py",
+    "tests/replay_governance_traceability_contract.py",
+    "tests/test_golden_replay.py",
+    "tests/test_golden_replay_direct_seam.py",
+    "tests/test_golden_replay_fallback_projection.py",
+    "tests/test_golden_replay_helper_contracts.py",
+    "tests/test_golden_replay_long_session.py",
+    "tests/test_golden_replay_projection.py",
+    "tests/test_golden_replay_protected_bridge.py",
+    "tests/test_golden_replay_scenario_spine.py",
+    "tests/test_golden_replay_structural_invariants.py",
+    "tests/test_replay_bug_class_recurrence.py",
+    "tests/test_replay_drift_hotspots.py",
+    "tests/test_replay_drift_longitudinal.py",
+    "tests/test_replay_drift_risk.py",
+    "tests/test_replay_drift_taxonomy.py",
+    "tests/test_replay_drift_trends.py",
+    "tests/test_replay_governance_approval_contract.py",
+    "tests/test_replay_governance_authority.py",
+    "tests/test_replay_governance_contract.py",
+    "tests/test_replay_governance_registry.py",
+    "tests/test_replay_governance_traceability_contract.py",
+    "tools/refresh_protected_replay_manifest.py"
+  ],
+  "final_emission": {
+    "file_count": 77,
+    "loc": 32726,
+    "nodes": [
+      "game.final_emission_acceptance_quality",
+      "game.final_emission_answer_shape_primacy",
+      "game.final_emission_anti_railroading",
+      "game.final_emission_boundary_contract",
+      "game.final_emission_context_separation",
+      "game.final_emission_contract",
+      "game.final_emission_fast_fallback_composition",
+      "game.final_emission_fem_assembly",
+      "game.final_emission_finalize",
+      "game.final_emission_first_mention_composition",
+      "game.final_emission_gate",
+      "game.final_emission_gate_context",
+      "game.final_emission_gate_preflight_branch_flags",
+      "game.final_emission_gate_preflight_defaults",
+      "game.final_emission_gate_preflight_interaction",
+      "game.final_emission_gate_preflight_pregate_text",
+      "game.final_emission_gate_preflight_strict_social",
+      "game.final_emission_gate_preflight_telemetry",
+      "game.final_emission_gate_preflight_turn_packet",
+      "game.final_emission_gate_preflight_upstream",
+      "game.final_emission_generic_exit",
+      "game.final_emission_meta",
+      "game.final_emission_narrative_authority",
+      "game.final_emission_narrative_mode_output",
+      "game.final_emission_non_strict_stack",
+      "game.final_emission_opening_fallback",
+      "game.final_emission_opening_mode",
+      "game.final_emission_passive_scene_pressure",
+      "game.final_emission_player_facing_narration_purity",
+      "game.final_emission_referential_clarity",
+      "game.final_emission_repairs",
+      "game.final_emission_replay_projection",
+      "game.final_emission_response_type",
+      "game.final_emission_runtime",
+      "game.final_emission_scene_emit_integrity",
+      "game.final_emission_scene_facts",
+      "game.final_emission_scene_state_anchor",
+      "game.final_emission_sealed_fallback",
+      "game.final_emission_strict_social_stack",
+      "game.final_emission_terminal_pipeline",
+      "game.final_emission_text",
+      "game.final_emission_tone_escalation",
+      "game.final_emission_validators",
+      "game.final_emission_visibility_fallback",
+      "tests.test_dialogue_plan_final_emission_gate",
+      "tests.test_final_emission_acceptance_quality",
+      "tests.test_final_emission_answer_exposition_plan_convergence",
+      "tests.test_final_emission_boundary_audit",
+      "tests.test_final_emission_boundary_contract",
+      "tests.test_final_emission_boundary_convergence",
+      "tests.test_final_emission_boundary_no_semantic_repair",
+      "tests.test_final_emission_channel_separation",
+      "tests.test_final_emission_debt_retirement",
+      "tests.test_final_emission_fast_fallback_composition",
+      "tests.test_final_emission_first_mention_composition",
+      "tests.test_final_emission_gate",
+      "tests.test_final_emission_gate_delegator_regression",
+      "tests.test_final_emission_gate_diagnostics",
+      "tests.test_final_emission_gate_n4",
+      "tests.test_final_emission_gate_orchestration_order",
+      "tests.test_final_emission_gate_selector_snapshots",
+      "tests.test_final_emission_meta",
+      "tests.test_final_emission_narrative_mode_output",
+      "tests.test_final_emission_opening_fallback",
+      "tests.test_final_emission_passive_scene_pressure",
+      "tests.test_final_emission_referential_clarity",
+      "tests.test_final_emission_repairs",
+      "tests.test_final_emission_response_type",
+      "tests.test_final_emission_scene_emit_integrity",
+      "tests.test_final_emission_scene_facts",
+      "tests.test_final_emission_scene_integrity",
+      "tests.test_final_emission_scene_state_anchor",
+      "tests.test_final_emission_sealed_fallback",
+      "tests.test_final_emission_validators",
+      "tests.test_final_emission_visibility",
+      "tests.test_final_emission_visibility_fallback",
+      "tools.final_emission_ownership_audit"
+    ],
+    "edge_count": 332,
+    "edges_sample": [
+      [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_boundary_contract"
+      ],
+      [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_meta"
+      ],
+      [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_sealed_fallback"
+      ],
+      [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_player_facing_narration_purity"
+      ],
+      [
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_validators"
+      ],
+      [
+        "game.final_emission_anti_railroading",
+        "game.final_emission_narrative_authority"
+      ],
+      [
+        "game.final_emission_anti_railroading",
+        "game.final_emission_scene_state_anchor"
+      ],
+      [
+        "game.final_emission_context_separation",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_fast_fallback_composition",
+        "game.final_emission_scene_state_anchor"
+      ],
+      [
+        "game.final_emission_fast_fallback_composition",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_answer_shape_primacy"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_anti_railroading"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_context_separation"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_meta"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_narrative_authority"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_player_facing_narration_purity"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_repairs"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_scene_state_anchor"
+      ],
+      [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_tone_escalation"
+      ],
+      [
+        "game.final_emission_finalize",
+        "game.final_emission_boundary_contract"
+      ],
+      [
+        "game.final_emission_finalize",
+        "game.final_emission_meta"
+      ],
+      [
+        "game.final_emission_finalize",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_finalize",
+        "game.final_emission_validators"
+      ],
+      [
+        "game.final_emission_first_mention_composition",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_first_mention_composition",
+        "game.final_emission_visibility_fallback"
+      ],
+      [
+        "game.final_emission_gate",
+        "game.final_emission_non_strict_stack"
+      ],
+      [
+        "game.final_emission_gate",
+        "game.final_emission_generic_exit"
+      ],
+      [
+        "game.final_emission_gate",
+        "game.final_emission_strict_social_stack"
+      ],
+      [
+        "game.final_emission_gate",
+        "game.final_emission_gate_context"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_branch_flags"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_defaults"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_interaction"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_pregate_text"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_strict_social"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_telemetry"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_turn_packet"
+      ],
+      [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_upstream"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_anti_railroading"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_answer_shape_primacy"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_context_separation"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_fast_fallback_composition"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_meta"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_narrative_authority"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_player_facing_narration_purity"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_repairs"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_response_type"
+      ],
+      [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_tone_escalation"
+      ],
+      [
+        "game.final_emission_gate_preflight_pregate_text",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_gate_preflight_strict_social",
+        "game.final_emission_gate_preflight_upstream"
+      ],
+      [
+        "game.final_emission_gate_preflight_strict_social",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_gate_preflight_telemetry",
+        "game.final_emission_text"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_fem_assembly"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_repairs"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_finalize"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_sealed_fallback"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_terminal_pipeline"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_boundary_contract"
+      ],
+      [
+        "game.final_emission_generic_exit",
+        "game.final_emission_meta"
+      ]
+    ],
+    "external_callers": {
+      "game.final_emission_acceptance_quality": [
+        "game.acceptance_quality"
+      ],
+      "game.final_emission_answer_shape_primacy": [
+        "game.response_policy_contracts",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_anti_railroading": [
+        "game.anti_railroading",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission",
+        "game.turn_packet"
+      ],
+      "game.final_emission_context_separation": [
+        "game.context_separation",
+        "game.narrative_authority",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission",
+        "game.turn_packet"
+      ],
+      "game.final_emission_fast_fallback_composition": [
+        "game.anti_reset_emission_guard"
+      ],
+      "game.final_emission_fem_assembly": [
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_finalize": [
+        "game.fallback_provenance_debug",
+        "game.stage_diff_telemetry",
+        "game.state_channels"
+      ],
+      "game.final_emission_first_mention_composition": [
+        "game.narration_visibility"
+      ],
+      "game.final_emission_gate": [
+        "game.emitted_speaker_signature",
+        "game.fallback_provenance_debug",
+        "game.interaction_context",
+        "game.interaction_continuity",
+        "game.output_sanitizer",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission",
+        "game.speaker_contract_enforcement",
+        "game.stage_diff_telemetry",
+        "game.turn_packet",
+        "game.upstream_response_repairs"
+      ],
+      "game.final_emission_gate_preflight_interaction": [
+        "game.interaction_context"
+      ],
+      "game.final_emission_gate_preflight_strict_social": [
+        "game.output_sanitizer",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_gate_preflight_telemetry": [
+        "game.fallback_provenance_debug",
+        "game.stage_diff_telemetry"
+      ],
+      "game.final_emission_gate_preflight_turn_packet": [
+        "game.response_policy_contracts",
+        "game.turn_packet"
+      ],
+      "game.final_emission_gate_preflight_upstream": [
+        "game.upstream_response_repairs"
+      ],
+      "game.final_emission_generic_exit": [
+        "game.anti_reset_emission_guard",
+        "game.diegetic_fallback_narration",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_meta": [
+        "game.state_channels",
+        "game.telemetry_vocab"
+      ],
+      "game.final_emission_narrative_authority": [
+        "game.narrative_authority",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_narrative_mode_output": [
+        "game.narrative_mode_contract"
+      ],
+      "game.final_emission_non_strict_stack": [
+        "game.fallback_provenance_debug",
+        "game.interaction_continuity"
+      ],
+      "game.final_emission_opening_fallback": [
+        "game.diegetic_fallback_narration",
+        "game.opening_deterministic_fallback",
+        "game.upstream_response_repairs"
+      ],
+      "game.final_emission_passive_scene_pressure": [
+        "game.storage"
+      ],
+      "game.final_emission_player_facing_narration_purity": [
+        "game.player_facing_narration_purity"
+      ],
+      "game.final_emission_referential_clarity": [
+        "game.narration_visibility",
+        "game.prompt_context",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_repairs": [
+        "game.narrative_authenticity",
+        "game.response_policy_contracts",
+        "game.turn_packet"
+      ],
+      "game.final_emission_replay_projection": [
+        "game.runtime_lineage_telemetry",
+        "game.telemetry_vocab"
+      ],
+      "game.final_emission_response_type": [
+        "game.opening_deterministic_fallback",
+        "game.realization_provenance",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission",
+        "game.upstream_response_repairs"
+      ],
+      "game.final_emission_scene_facts": [
+        "game.anti_reset_emission_guard",
+        "game.storage"
+      ],
+      "game.final_emission_scene_state_anchor": [
+        "game.scene_state_anchoring"
+      ],
+      "game.final_emission_sealed_fallback": [
+        "game.realization_provenance",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_strict_social_stack": [
+        "game.dialogue_social_plan",
+        "game.fallback_provenance_debug",
+        "game.social_exchange_emission",
+        "game.speaker_contract_enforcement",
+        "game.stage_diff_telemetry"
+      ],
+      "game.final_emission_terminal_pipeline": [
+        "game.interaction_continuity",
+        "game.narration_visibility",
+        "game.social_exchange_emission",
+        "game.speaker_contract_enforcement"
+      ],
+      "game.final_emission_text": [
+        "game.diegetic_fallback_narration"
+      ],
+      "game.final_emission_tone_escalation": [
+        "game.response_policy_contracts",
+        "game.tone_escalation",
+        "game.turn_packet"
+      ],
+      "game.final_emission_validators": [
+        "game.referent_tracking",
+        "game.response_policy_contracts",
+        "game.social_exchange_emission"
+      ],
+      "game.final_emission_visibility_fallback": [
+        "game.anti_reset_emission_guard",
+        "game.diegetic_fallback_narration",
+        "game.exploration",
+        "game.interaction_context",
+        "game.narration_visibility",
+        "game.social",
+        "game.social_exchange_emission"
+      ],
+      "tests.test_dialogue_plan_final_emission_gate": [
+        "game.defaults",
+        "game.dialogue_social_plan",
+        "game.interaction_context",
+        "game.storage",
+        "tests.helpers.dialogue_social_plan",
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "tests.test_final_emission_acceptance_quality": [
+        "game.acceptance_quality",
+        "game.realization_provenance"
+      ],
+      "tests.test_final_emission_answer_exposition_plan_convergence": [
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.repairs_consumer_facade"
+      ],
+      "tests.test_final_emission_boundary_convergence": [
+        "game.output_sanitizer",
+        "game.social_exchange_emission",
+        "game.upstream_response_repairs",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.repairs_consumer_facade",
+        "tests.helpers.strict_social_harness"
+      ],
+      "tests.test_final_emission_boundary_no_semantic_repair": [
+        "game.narrative_authenticity",
+        "tests.helpers.boundary_semantic_repair_fixtures",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.objective7_referent_fixtures",
+        "tests.helpers.repairs_consumer_facade"
+      ],
+      "tests.test_final_emission_channel_separation": [
+        "game.state_channels"
+      ],
+      "tests.test_final_emission_fast_fallback_composition": [
+        "game.defaults"
+      ],
+      "tests.test_final_emission_first_mention_composition": [
+        "game.defaults",
+        "game.interaction_context"
+      ],
+      "tests.test_final_emission_gate": [
+        "game.acceptance_quality",
+        "game.anti_reset_emission_guard",
+        "game.context_separation",
+        "game.contract_registry",
+        "game.defaults",
+        "game.dialogue_social_plan",
+        "game.diegetic_fallback_narration",
+        "game.fallback_provenance_debug",
+        "game.interaction_context",
+        "game.interaction_continuity",
+        "game.narrative_mode_contract",
+        "game.opening_deterministic_fallback",
+        "game.realization_authority",
+        "game.realization_provenance",
+        "game.social_exchange_emission"
+      ],
+      "tests.test_final_emission_gate_delegator_regression": [
+        "game.anti_reset_emission_guard",
+        "game.dialogue_social_plan",
+        "game.diegetic_fallback_narration",
+        "game.fallback_provenance_debug",
+        "game.interaction_continuity",
+        "game.social_exchange_emission",
+        "game.speaker_contract_enforcement",
+        "game.stage_diff_telemetry",
+        "tests.helpers",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.gate_thin_boundary_locks",
+        "tests.helpers.strict_social_harness",
+        "tests.test_scene_state_anchoring",
+        "tests.test_turn_packet_stage_diff_integration"
+      ],
+      "tests.test_final_emission_gate_diagnostics": [
+        "game.contract_registry",
+        "game.realization_authority",
+        "game.realization_provenance",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.strict_social_harness"
+      ],
+      "tests.test_final_emission_gate_n4": [
+        "game.acceptance_quality",
+        "game.narrative_mode_contract",
+        "game.realization_provenance",
+        "tests.helpers.narrative_mode_validator_fixtures"
+      ],
+      "tests.test_final_emission_gate_orchestration_order": [
+        "game.context_separation",
+        "game.contract_registry",
+        "game.defaults",
+        "game.narrative_mode_contract",
+        "game.opening_deterministic_fallback",
+        "game.realization_authority",
+        "game.realization_provenance",
+        "game.social_exchange_emission",
+        "game.upstream_response_repairs",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.gate_equivalence_monkeypatch",
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "tests.test_final_emission_gate_selector_snapshots": [
+        "game.defaults",
+        "game.interaction_context",
+        "game.narrative_mode_contract",
+        "game.realization_provenance",
+        "tests.helpers.narrative_mode_validator_fixtures",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.strict_social_harness"
+      ],
+      "tests.test_final_emission_meta": [
+        "game.narrative_mode_contract",
+        "game.realization_provenance",
+        "game.runtime_lineage_telemetry",
+        "game.social_exchange_emission",
+        "game.upstream_response_repairs",
+        "tests.helpers.golden_replay_api",
+        "tests.helpers.golden_replay_fixtures",
+        "tests.helpers.golden_replay_projection",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "tests.test_final_emission_narrative_mode_output": [
+        "game.narrative_mode_contract"
+      ],
+      "tests.test_final_emission_opening_fallback": [
+        "game.defaults",
+        "game.diegetic_fallback_narration",
+        "game.interaction_context",
+        "game.narrative_mode_contract",
+        "game.opening_deterministic_fallback",
+        "game.realization_authority",
+        "game.realization_provenance",
+        "game.upstream_response_repairs",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.opening_fallback_evidence",
+        "tests.helpers.opening_fallback_gate_harness"
+      ],
+      "tests.test_final_emission_passive_scene_pressure": [
+        "game.defaults",
+        "game.storage"
+      ],
+      "tests.test_final_emission_repairs": [
+        "tests.helpers.fallback_behavior_fixtures"
+      ],
+      "tests.test_final_emission_response_type": [
+        "game.upstream_response_repairs",
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "tests.test_final_emission_scene_facts": [
+        "game.defaults",
+        "game.storage"
+      ],
+      "tests.test_final_emission_scene_integrity": [
+        "tests.helpers.emission_smoke_assertions"
+      ],
+      "tests.test_final_emission_sealed_fallback": [
+        "game.realization_provenance",
+        "game.social_exchange_emission",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "tests.test_final_emission_validators": [
+        "tests.helpers.objective7_referent_fixtures"
+      ],
+      "tests.test_final_emission_visibility": [
+        "game.api_turn_support",
+        "game.defaults",
+        "game.exploration",
+        "game.interaction_context",
+        "game.narration_visibility",
+        "game.realization_provenance",
+        "game.social_exchange_emission",
+        "game.storage",
+        "tests.helpers.emission_smoke_assertions",
+        "tests.helpers.opening_fallback_evidence"
+      ],
+      "tests.test_final_emission_visibility_fallback": [
+        "game.exploration",
+        "game.social_exchange_emission",
+        "tests.helpers.opening_fallback_evidence"
+      ]
+    },
+    "internal_callers": {
+      "game.final_emission_acceptance_quality": [
+        "game.final_emission_terminal_pipeline",
+        "tests.test_final_emission_acceptance_quality",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_n4"
+      ],
+      "game.final_emission_answer_shape_primacy": [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_anti_railroading": [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_boundary_contract": [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_finalize",
+        "game.final_emission_generic_exit",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_repairs",
+        "game.final_emission_terminal_pipeline",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_boundary_contract",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_context_separation": [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_contract": [
+        "tests.test_final_emission_debt_retirement"
+      ],
+      "game.final_emission_fast_fallback_composition": [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_fast_fallback_composition",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_fem_assembly": [
+        "game.final_emission_generic_exit",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_selector_snapshots"
+      ],
+      "game.final_emission_finalize": [
+        "game.final_emission_generic_exit",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_terminal_pipeline",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_channel_separation",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_visibility"
+      ],
+      "game.final_emission_first_mention_composition": [
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_first_mention_composition"
+      ],
+      "game.final_emission_gate": [
+        "game.final_emission_runtime",
+        "tests.test_final_emission_acceptance_quality",
+        "tests.test_final_emission_boundary_no_semantic_repair",
+        "tests.test_final_emission_fast_fallback_composition",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_diagnostics",
+        "tests.test_final_emission_gate_n4",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_response_type",
+        "tests.test_final_emission_scene_state_anchor",
+        "tests.test_final_emission_sealed_fallback",
+        "tests.test_final_emission_visibility",
+        "tests.test_final_emission_visibility_fallback"
+      ],
+      "game.final_emission_gate_context": [
+        "game.final_emission_gate",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_gate_preflight_branch_flags": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_defaults": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_interaction": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_pregate_text": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_strict_social": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_telemetry": [
+        "game.final_emission_gate_context",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_gate_preflight_turn_packet": [
+        "game.final_emission_gate_context"
+      ],
+      "game.final_emission_gate_preflight_upstream": [
+        "game.final_emission_gate_context",
+        "game.final_emission_gate_preflight_strict_social",
+        "tests.test_final_emission_opening_fallback"
+      ],
+      "game.final_emission_generic_exit": [
+        "game.final_emission_gate",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_sealed_fallback"
+      ],
+      "game.final_emission_meta": [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_fem_assembly",
+        "game.final_emission_finalize",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_generic_exit",
+        "game.final_emission_narrative_mode_output",
+        "game.final_emission_opening_fallback",
+        "game.final_emission_repairs",
+        "game.final_emission_replay_projection",
+        "game.final_emission_response_type",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_terminal_pipeline",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_acceptance_quality",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_channel_separation",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_diagnostics",
+        "tests.test_final_emission_gate_n4",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_meta",
+        "tests.test_final_emission_narrative_mode_output",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_sealed_fallback",
+        "tests.test_final_emission_visibility",
+        "tests.test_final_emission_visibility_fallback"
+      ],
+      "game.final_emission_narrative_authority": [
+        "game.final_emission_anti_railroading",
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_narrative_mode_output": [
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_terminal_pipeline",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_narrative_mode_output"
+      ],
+      "game.final_emission_non_strict_stack": [
+        "game.final_emission_gate",
+        "tests.test_final_emission_fast_fallback_composition",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_scene_state_anchor"
+      ],
+      "game.final_emission_opening_fallback": [
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_response_type",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_meta",
+        "tests.test_final_emission_opening_fallback"
+      ],
+      "game.final_emission_opening_mode": [
+        "game.final_emission_response_type",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_opening_fallback"
+      ],
+      "game.final_emission_passive_scene_pressure": [
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_passive_scene_pressure",
+        "tests.test_final_emission_sealed_fallback",
+        "tests.test_final_emission_visibility_fallback"
+      ],
+      "game.final_emission_player_facing_narration_purity": [
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_referential_clarity": [
+        "game.final_emission_terminal_pipeline",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_referential_clarity"
+      ],
+      "game.final_emission_repairs": [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_generic_exit",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_terminal_pipeline",
+        "tests.test_final_emission_boundary_contract",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_repairs",
+        "tests.test_final_emission_validators"
+      ],
+      "game.final_emission_replay_projection": [
+        "game.final_emission_meta",
+        "tests.test_final_emission_meta"
+      ],
+      "game.final_emission_response_type": [
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_response_type"
+      ],
+      "game.final_emission_scene_emit_integrity": [
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_scene_emit_integrity",
+        "tests.test_final_emission_sealed_fallback"
+      ],
+      "game.final_emission_scene_facts": [
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_scene_facts"
+      ],
+      "game.final_emission_scene_state_anchor": [
+        "game.final_emission_anti_railroading",
+        "game.final_emission_fast_fallback_composition",
+        "game.final_emission_fem_assembly",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_scene_state_anchor"
+      ],
+      "game.final_emission_sealed_fallback": [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_generic_exit",
+        "game.final_emission_opening_fallback",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_meta",
+        "tests.test_final_emission_sealed_fallback"
+      ],
+      "game.final_emission_strict_social_stack": [
+        "game.final_emission_gate",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_fast_fallback_composition",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_diagnostics",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_scene_state_anchor"
+      ],
+      "game.final_emission_terminal_pipeline": [
+        "game.final_emission_generic_exit",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_acceptance_quality",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_boundary_no_semantic_repair",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_gate_n4",
+        "tests.test_final_emission_gate_orchestration_order",
+        "tests.test_final_emission_gate_selector_snapshots",
+        "tests.test_final_emission_sealed_fallback",
+        "tests.test_final_emission_visibility_fallback"
+      ],
+      "game.final_emission_text": [
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_context_separation",
+        "game.final_emission_fast_fallback_composition",
+        "game.final_emission_finalize",
+        "game.final_emission_first_mention_composition",
+        "game.final_emission_gate_preflight_pregate_text",
+        "game.final_emission_gate_preflight_strict_social",
+        "game.final_emission_gate_preflight_telemetry",
+        "game.final_emission_generic_exit",
+        "game.final_emission_narrative_authority",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_opening_mode",
+        "game.final_emission_passive_scene_pressure",
+        "game.final_emission_referential_clarity",
+        "game.final_emission_repairs",
+        "game.final_emission_response_type",
+        "game.final_emission_scene_emit_integrity",
+        "game.final_emission_scene_facts",
+        "game.final_emission_scene_state_anchor",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_terminal_pipeline",
+        "game.final_emission_tone_escalation",
+        "game.final_emission_validators",
+        "game.final_emission_visibility_fallback",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_boundary_no_semantic_repair",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_visibility"
+      ],
+      "game.final_emission_tone_escalation": [
+        "game.final_emission_fem_assembly",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_generic_exit",
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "tests.test_final_emission_gate_delegator_regression"
+      ],
+      "game.final_emission_validators": [
+        "game.final_emission_answer_shape_primacy",
+        "game.final_emission_finalize",
+        "game.final_emission_meta",
+        "game.final_emission_referential_clarity",
+        "game.final_emission_repairs",
+        "game.final_emission_response_type",
+        "tests.test_final_emission_boundary_convergence",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_repairs",
+        "tests.test_final_emission_validators"
+      ],
+      "game.final_emission_visibility_fallback": [
+        "game.final_emission_first_mention_composition",
+        "game.final_emission_opening_fallback",
+        "game.final_emission_passive_scene_pressure",
+        "game.final_emission_scene_emit_integrity",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_terminal_pipeline",
+        "tests.test_final_emission_first_mention_composition",
+        "tests.test_final_emission_gate_delegator_regression",
+        "tests.test_final_emission_opening_fallback",
+        "tests.test_final_emission_passive_scene_pressure",
+        "tests.test_final_emission_scene_emit_integrity",
+        "tests.test_final_emission_sealed_fallback",
+        "tests.test_final_emission_visibility_fallback"
+      ],
+      "tests.test_final_emission_gate": [
+        "tests.test_final_emission_gate"
+      ]
+    }
+  },
+  "fe_files": [
+    "game/final_emission_acceptance_quality.py",
+    "game/final_emission_answer_shape_primacy.py",
+    "game/final_emission_anti_railroading.py",
+    "game/final_emission_boundary_contract.py",
+    "game/final_emission_context_separation.py",
+    "game/final_emission_contract.py",
+    "game/final_emission_fast_fallback_composition.py",
+    "game/final_emission_fem_assembly.py",
+    "game/final_emission_finalize.py",
+    "game/final_emission_first_mention_composition.py",
+    "game/final_emission_gate.py",
+    "game/final_emission_gate_context.py",
+    "game/final_emission_gate_preflight_branch_flags.py",
+    "game/final_emission_gate_preflight_defaults.py",
+    "game/final_emission_gate_preflight_interaction.py",
+    "game/final_emission_gate_preflight_pregate_text.py",
+    "game/final_emission_gate_preflight_strict_social.py",
+    "game/final_emission_gate_preflight_telemetry.py",
+    "game/final_emission_gate_preflight_turn_packet.py",
+    "game/final_emission_gate_preflight_upstream.py",
+    "game/final_emission_generic_exit.py",
+    "game/final_emission_meta.py",
+    "game/final_emission_narrative_authority.py",
+    "game/final_emission_narrative_mode_output.py",
+    "game/final_emission_non_strict_stack.py",
+    "game/final_emission_opening_fallback.py",
+    "game/final_emission_opening_mode.py",
+    "game/final_emission_passive_scene_pressure.py",
+    "game/final_emission_player_facing_narration_purity.py",
+    "game/final_emission_referential_clarity.py",
+    "game/final_emission_repairs.py",
+    "game/final_emission_replay_projection.py",
+    "game/final_emission_response_type.py",
+    "game/final_emission_runtime.py",
+    "game/final_emission_scene_emit_integrity.py",
+    "game/final_emission_scene_facts.py",
+    "game/final_emission_scene_state_anchor.py",
+    "game/final_emission_sealed_fallback.py",
+    "game/final_emission_strict_social_stack.py",
+    "game/final_emission_terminal_pipeline.py",
+    "game/final_emission_text.py",
+    "game/final_emission_tone_escalation.py",
+    "game/final_emission_validators.py",
+    "game/final_emission_visibility_fallback.py",
+    "tests/test_dialogue_plan_final_emission_gate.py",
+    "tests/test_final_emission_acceptance_quality.py",
+    "tests/test_final_emission_answer_exposition_plan_convergence.py",
+    "tests/test_final_emission_boundary_audit.py",
+    "tests/test_final_emission_boundary_contract.py",
+    "tests/test_final_emission_boundary_convergence.py",
+    "tests/test_final_emission_boundary_no_semantic_repair.py",
+    "tests/test_final_emission_channel_separation.py",
+    "tests/test_final_emission_debt_retirement.py",
+    "tests/test_final_emission_fast_fallback_composition.py",
+    "tests/test_final_emission_first_mention_composition.py",
+    "tests/test_final_emission_gate.py",
+    "tests/test_final_emission_gate_delegator_regression.py",
+    "tests/test_final_emission_gate_diagnostics.py",
+    "tests/test_final_emission_gate_n4.py",
+    "tests/test_final_emission_gate_orchestration_order.py",
+    "tests/test_final_emission_gate_selector_snapshots.py",
+    "tests/test_final_emission_meta.py",
+    "tests/test_final_emission_narrative_mode_output.py",
+    "tests/test_final_emission_opening_fallback.py",
+    "tests/test_final_emission_passive_scene_pressure.py",
+    "tests/test_final_emission_referential_clarity.py",
+    "tests/test_final_emission_repairs.py",
+    "tests/test_final_emission_response_type.py",
+    "tests/test_final_emission_scene_emit_integrity.py",
+    "tests/test_final_emission_scene_facts.py",
+    "tests/test_final_emission_scene_integrity.py",
+    "tests/test_final_emission_scene_state_anchor.py",
+    "tests/test_final_emission_sealed_fallback.py",
+    "tests/test_final_emission_validators.py",
+    "tests/test_final_emission_visibility.py",
+    "tests/test_final_emission_visibility_fallback.py",
+    "tools/final_emission_ownership_audit.py"
+  ],
+  "hotspots": [
+    {
+      "file": "game/interaction_context.py",
+      "loc": 6004,
+      "ownership_domain": "game_runtime",
+      "fan_in": 74,
+      "fan_out": 11
+    },
+    {
+      "file": "game/api.py",
+      "loc": 5534,
+      "ownership_domain": "runtime_api",
+      "fan_in": 61,
+      "fan_out": 48
+    },
+    {
+      "file": "game/gm.py",
+      "loc": 4579,
+      "ownership_domain": "game_runtime",
+      "fan_in": 60,
+      "fan_out": 16
+    },
+    {
+      "file": "tests/test_ownership_registry.py",
+      "loc": 4518,
+      "ownership_domain": "tests",
+      "fan_in": 1,
+      "fan_out": 56
+    },
+    {
+      "file": "game/social_exchange_emission.py",
+      "loc": 3881,
+      "ownership_domain": "game_runtime",
+      "fan_in": 53,
+      "fan_out": 12
+    },
+    {
+      "file": "tests/test_prompt_context.py",
+      "loc": 3597,
+      "ownership_domain": "tests",
+      "fan_in": 1,
+      "fan_out": 17
+    },
+    {
+      "file": "game/narrative_planning.py",
+      "loc": 3197,
+      "ownership_domain": "game_runtime",
+      "fan_in": 19,
+      "fan_out": 3
+    },
+    {
+      "file": "game/leads.py",
+      "loc": 3196,
+      "ownership_domain": "game_runtime",
+      "fan_in": 43,
+      "fan_out": 1
+    },
+    {
+      "file": "game/prompt_context.py",
+      "loc": 3067,
+      "ownership_domain": "game_runtime",
+      "fan_in": 37,
+      "fan_out": 34
+    },
+    {
+      "file": "game/gm_retry.py",
+      "loc": 2854,
+      "ownership_domain": "game_runtime",
+      "fan_in": 15,
+      "fan_out": 15
+    },
+    {
+      "file": "game/social.py",
+      "loc": 2828,
+      "ownership_domain": "game_runtime",
+      "fan_in": 37,
+      "fan_out": 9
+    },
+    {
+      "file": "tests/test_social_exchange_emission.py",
+      "loc": 2295,
+      "ownership_domain": "tests",
+      "fan_in": 0,
+      "fan_out": 15
+    },
+    {
+      "file": "game/planner_ctir_projection.py",
+      "loc": 2276,
+      "ownership_domain": "game_runtime",
+      "fan_in": 3,
+      "fan_out": 5
+    },
+    {
+      "file": "game/final_emission_validators.py",
+      "loc": 2229,
+      "ownership_domain": "final_emission",
+      "fan_in": 21,
+      "fan_out": 4
+    },
+    {
+      "file": "game/final_emission_meta.py",
+      "loc": 2210,
+      "ownership_domain": "final_emission",
+      "fan_in": 57,
+      "fan_out": 4
+    },
+    {
+      "file": "game/clues.py",
+      "loc": 2075,
+      "ownership_domain": "game_runtime",
+      "fan_in": 17,
+      "fan_out": 5
+    },
+    {
+      "file": "tools/architecture_audit.py",
+      "loc": 2023,
+      "ownership_domain": "other",
+      "fan_in": 0,
+      "fan_out": 0
+    },
+    {
+      "file": "tests/helpers/golden_replay.py",
+      "loc": 1995,
+      "ownership_domain": "replay",
+      "fan_in": 8,
+      "fan_out": 13
+    },
+    {
+      "file": "tests/test_turn_pipeline_shared.py",
+      "loc": 1981,
+      "ownership_domain": "tests",
+      "fan_in": 0,
+      "fan_out": 6
+    },
+    {
+      "file": "game/final_emission_visibility_fallback.py",
+      "loc": 1976,
+      "ownership_domain": "final_emission",
+      "fan_in": 18,
+      "fan_out": 18
+    },
+    {
+      "file": "tests/test_final_emission_visibility_fallback.py",
+      "loc": 1927,
+      "ownership_domain": "final_emission",
+      "fan_in": 0,
+      "fan_out": 8
+    },
+    {
+      "file": "game/narrative_authenticity.py",
+      "loc": 1861,
+      "ownership_domain": "game_runtime",
+      "fan_in": 7,
+      "fan_out": 5
+    },
+    {
+      "file": "tests/test_prompt_and_guard.py",
+      "loc": 1856,
+      "ownership_domain": "tests",
+      "fan_in": 2,
+      "fan_out": 2
+    },
+    {
+      "file": "game/intent_parser.py",
+      "loc": 1796,
+      "ownership_domain": "game_runtime",
+      "fan_in": 17,
+      "fan_out": 6
+    },
+    {
+      "file": "tests/test_synthetic_smoke.py",
+      "loc": 1705,
+      "ownership_domain": "tests",
+      "fan_in": 0,
+      "fan_out": 6
+    }
+  ],
+  "fan_out_hubs": [
+    [
+      "tests.test_ownership_registry",
+      56
+    ],
+    [
+      "game.api",
+      48
+    ],
+    [
+      "tests.test_final_emission_gate_delegator_regression",
+      42
+    ],
+    [
+      "game.prompt_context",
+      34
+    ],
+    [
+      "game.final_emission_strict_social_stack",
+      21
+    ],
+    [
+      "tests.test_final_emission_gate_orchestration_order",
+      21
+    ],
+    [
+      "tests.test_final_emission_opening_fallback",
+      20
+    ],
+    [
+      "game.final_emission_non_strict_stack",
+      19
+    ],
+    [
+      "game.final_emission_visibility_fallback",
+      18
+    ],
+    [
+      "game.api_turn_support",
+      17
+    ],
+    [
+      "tests.test_prompt_context",
+      17
+    ],
+    [
+      "game.gm",
+      16
+    ],
+    [
+      "game.gm_retry",
+      15
+    ],
+    [
+      "tests.test_social_exchange_emission",
+      15
+    ],
+    [
+      "tests.test_final_emission_gate_selector_snapshots",
+      14
+    ]
+  ],
+  "fan_in_hubs": [
+    [
+      "game.storage",
+      112
+    ],
+    [
+      "game.defaults",
+      94
+    ],
+    [
+      "game",
+      78
+    ],
+    [
+      "game.interaction_context",
+      74
+    ],
+    [
+      "tests.helpers.emission_smoke_assertions",
+      69
+    ],
+    [
+      "game.api",
+      61
+    ],
+    [
+      "game.gm",
+      60
+    ],
+    [
+      "game.final_emission_meta",
+      57
+    ],
+    [
+      "game.social_exchange_emission",
+      53
+    ],
+    [
+      "game.final_emission_text",
+      49
+    ],
+    [
+      "game.leads",
+      43
+    ],
+    [
+      "game.prompt_context",
+      37
+    ],
+    [
+      "game.social",
+      37
+    ],
+    [
+      "game.ctir_runtime",
+      33
+    ],
+    [
+      "game.final_emission_gate",
+      28
+    ]
+  ]
+}

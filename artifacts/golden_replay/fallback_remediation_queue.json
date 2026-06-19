@@ -1,0 +1,29 @@
+{
+  "advisory_only": true,
+  "demotions": [],
+  "promotions": [],
+  "queue": [],
+  "recommendations": [
+    "Collect BP8 risk reports before assigning remediation priority."
+  ],
+  "risk_history_snapshot_count": 0,
+  "schema_version": 1,
+  "stable_entries": [],
+  "status": "empty",
+  "thresholds": {
+    "minimum_recurrence_for_promotion": "recurring",
+    "minimum_risk_observations_for_schedule": 2,
+    "minimum_snapshot_appearances": 2,
+    "prioritize_requires": "persistent recurrence and rolling average >= 60",
+    "priority_score_minimums": {
+      "investigate": 25.0,
+      "monitor": 0.0,
+      "prioritize": 60.0,
+      "schedule": 40.0,
+      "urgent": 80.0
+    },
+    "rolling_window_reports": 5,
+    "score_trend_absolute_delta": 2.0,
+    "urgent_requires": "dominant recurrence, anomaly participation, and rolling average >= 80"
+  }
+}

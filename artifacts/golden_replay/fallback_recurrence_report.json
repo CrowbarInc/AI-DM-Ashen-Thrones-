@@ -1,0 +1,41 @@
+{
+  "advisory_only": true,
+  "anomaly_status": "insufficient_history",
+  "classification_counts": {
+    "dominant": 0,
+    "persistent": 0,
+    "recurring": 0,
+    "transient": 0
+  },
+  "dominant_contributors": [],
+  "entities": {
+    "content_owner": [],
+    "diegetic_family": [],
+    "fallback_kind": [],
+    "owner_bucket": [],
+    "realization_family": [],
+    "route_kind": [],
+    "selection_owner": []
+  },
+  "integrated_signals": [
+    "insufficient_history trend + insufficient_history + no recurrence evidence"
+  ],
+  "recommendations": [
+    "Collect fallback-incidence snapshots before interpreting recurrence."
+  ],
+  "schema_version": 1,
+  "snapshot_count": 0,
+  "status": "no_history",
+  "structural_hotspots": {
+    "fallback_kinds": [],
+    "owners": [],
+    "routes": []
+  },
+  "thresholds": {
+    "dominant_min_appearance_percentage": 0.75,
+    "persistent_min_appearance_percentage": 0.5,
+    "recurring_min_appearances": 2,
+    "transient_max_appearances": 1
+  },
+  "trend_classification": "insufficient_history"
+}
