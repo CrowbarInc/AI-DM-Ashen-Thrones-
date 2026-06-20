@@ -12,7 +12,10 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Dict, List
 
-from game.final_emission_meta import default_response_type_debug as _default_response_type_debug
+from game.final_emission_meta import (
+    default_response_type_debug as _default_response_type_debug,
+    stamp_opening_fallback_owner_bucket,
+)
 from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
     _opening_curated_facts_schema_ok,
@@ -402,6 +405,7 @@ def enforce_response_type_contract(
             debug["opening_specific_repair_used"] = True
             debug["opening_recovered_via_fallback"] = True
             debug["opening_repair_source"] = "deterministic_fallback"
+            stamp_opening_fallback_owner_bucket(debug)
             debug["fallback_family_used"] = classification.get("fallback_family")
             debug["fallback_temporal_frame"] = classification.get("temporal_frame")
             attach_realization_fallback_family(
@@ -418,6 +422,7 @@ def enforce_response_type_contract(
             if fallback_meta.get("opening_fallback_failed_closed")
             else None
         )
+        stamp_opening_fallback_owner_bucket(debug)
         debug["opening_repair_source"] = (
             "fallback_failed_closed"
             if fallback_meta.get("opening_fallback_failed_closed")

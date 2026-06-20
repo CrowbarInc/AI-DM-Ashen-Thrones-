@@ -18,6 +18,11 @@ from game.dialogue_social_plan import (
 import game.final_emission_fem_assembly as fem_assembly
 import game.final_emission_repairs as emission_repairs
 import game.final_emission_response_type as response_type
+from game.final_emission_meta import (
+    PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR,
+    stamp_producer_repair_kind,
+)
+from game.final_emission_sealed_fallback import stamp_sealed_fallback_realization_family
 from game.final_emission_fast_fallback_composition import apply_fast_fallback_neutral_composition_layer
 from game.final_emission_answer_shape_primacy import (
     apply_answer_shape_primacy_layer,
@@ -592,6 +597,12 @@ def run_strict_social_composition_trunk(
         rejection_reasons=rejection_reasons,
         speaker_contract_enforcement_reason=_speaker_contract_payload.get("final_reason_code"),
     )
+    stamp_sealed_fallback_realization_family(
+        out[FINAL_EMISSION_META_KEY],
+        final_emitted_source=final_emitted_source,
+        strict_social_route=strict_social_active,
+    )
+    stamp_producer_repair_kind(out[FINAL_EMISSION_META_KEY], PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR)
     flag_non_hostile_escalation_from_writer_pregate(
         pre_gate_text,
         gm_output=out,

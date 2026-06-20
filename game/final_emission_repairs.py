@@ -18,9 +18,11 @@ import re
 from typing import Any, Dict, List, Tuple
 
 from game.final_emission_meta import (
+    PRODUCER_REPAIR_KIND_FALLBACK_BEHAVIOR_REPAIR,
     build_narrative_authenticity_emission_trace,
     default_narrative_authenticity_layer_meta,
     merge_narrative_authenticity_into_final_emission_meta,
+    stamp_producer_repair_kind,
 )
 from game.final_emission_text import (
     _normalize_terminal_punctuation,
@@ -917,6 +919,8 @@ def repair_fallback_behavior(
         meta["fallback_behavior_clarifying_question_used"] = True
     if _normalize_text(final_text) != _normalize_text(original):
         meta["fallback_behavior_repaired"] = True
+        meta["fallback_behavior_repair_kind"] = PRODUCER_REPAIR_KIND_FALLBACK_BEHAVIOR_REPAIR
+        stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_FALLBACK_BEHAVIOR_REPAIR)
     if modes:
         meta["fallback_behavior_repair_mode"] = "+".join(dict.fromkeys(modes))
     return final_text, meta, []

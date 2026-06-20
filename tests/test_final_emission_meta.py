@@ -1339,8 +1339,8 @@ def test_assemble_unified_observational_bundle_exposes_fem_runtime_lineage_sibli
         }
     )
     events = bundle["fem_runtime_lineage_events"]
-    assert _lineage_event(events, "fallback_selected")["fallback_kind"] == "visibility_or_scene_replacement"
-    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_or_scene_replaced"
+    assert _lineage_event(events, "fallback_selected")["fallback_kind"] == "visibility_hard_replacement"
+    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_hard_replaced"
 
 
 def test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection_split() -> None:
@@ -1358,11 +1358,11 @@ def test_build_fem_runtime_lineage_events_preserves_visibility_sealed_projection
     )
 
     fallback = _lineage_event(events, "fallback_selected")
-    assert fallback["fallback_kind"] == "visibility_or_scene_replacement"
+    assert fallback["fallback_kind"] == "visibility_hard_replacement"
     assert fallback["owner"] == "game.final_emission_gate"
     assert fallback["fallback_authorship_source"] is None
-    assert fallback["fallback_owner_bucket"] is None
-    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_or_scene_replaced"
+    assert fallback["fallback_owner_bucket"] == "sealed-gate"
+    assert _lineage_event(events, "gate_outcome")["gate_path"] == "visibility_hard_replaced"
     assert not any(
         event.get("fallback_kind") in {"scene_opening", "opening_failed_closed", "strict_social_fallback"}
         for event in events

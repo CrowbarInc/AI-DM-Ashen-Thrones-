@@ -85,6 +85,9 @@ def _refresh_output_mutation_lineage(out: Mapping[str, Any] | None) -> None:
     meta = ensure_final_emission_meta_dict(out)
     md = out.get("metadata") if isinstance(out.get("metadata"), Mapping) else {}
     sanitizer_trace = md.get("sanitizer_trace") if isinstance(md.get("sanitizer_trace"), Mapping) else None
+    from game.final_emission_meta import apply_sanitizer_producer_attribution_to_fem
+
+    apply_sanitizer_producer_attribution_to_fem(meta, sanitizer_trace)
     refresh_final_emission_mutation_lineage(meta, sanitizer_trace=sanitizer_trace)
 
 

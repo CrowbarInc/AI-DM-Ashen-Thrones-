@@ -15,6 +15,13 @@ import json
 import re
 from typing import Any, Dict
 
+from game.final_emission_meta import (
+    PRODUCER_REPAIR_KIND_FIELD,
+    PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
+    PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+)
 from game.social_exchange_emission import (
     effective_strict_social_resolution_for_emission,
     select_strict_social_emergency_fallback_line,
@@ -1310,6 +1317,23 @@ def _prepared_upstream_empty_fallback_text(context: Dict[str, Any] | None) -> st
     return ""
 
 
+def _stamp_sanitizer_producer_attribution(
+    context: Dict[str, Any],
+    *,
+    repair_kind: str,
+    owner_bucket: str | None = None,
+) -> None:
+    trace = context.setdefault("sanitizer_trace", {})
+    if not isinstance(trace, dict):
+        return
+    kind = str(repair_kind or "").strip()
+    if kind:
+        trace[PRODUCER_REPAIR_KIND_FIELD] = kind
+    bucket = str(owner_bucket or "").strip()
+    if bucket:
+        trace["sealed_fallback_owner_bucket"] = bucket
+
+
 def _mark_sanitizer_empty_fallback(
     context: Dict[str, Any],
     *,
@@ -1324,6 +1348,12 @@ def _mark_sanitizer_empty_fallback(
     trace["sanitizer_empty_fallback_source"] = source
     trace["sanitizer_empty_fallback_owner"] = owner
     trace["sanitizer_lineage_empty_fallback_used"] = bool(used)
+    if used:
+        _stamp_sanitizer_producer_attribution(
+            context,
+            repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
+            owner_bucket=SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+        )
 
 
 def _mark_sanitizer_strict_social_fallback(
@@ -1339,6 +1369,12 @@ def _mark_sanitizer_strict_social_fallback(
     trace["sanitizer_strict_social_selection_owner"] = "output_sanitizer"
     trace["sanitizer_strict_social_prose_owner"] = "strict_social_emission"
     trace["sanitizer_strict_social_source"] = source
+    if used:
+        _stamp_sanitizer_producer_attribution(
+            context,
+            repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
+            owner_bucket=SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+        )
 
 
 def _sanitizer_must_rewrite_sentence(sentence: str, *, has_previous_kept_sentence: bool) -> bool:
@@ -1477,6 +1513,12 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
         _mark_sanitizer_empty_fallback(context, used=False)
         return ""
 
+    if rebuilt != out:
+        _stamp_sanitizer_producer_attribution(
+            context,
+            repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
+            owner_bucket=SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+        )
     return rebuilt
 
 

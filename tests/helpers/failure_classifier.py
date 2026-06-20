@@ -545,18 +545,71 @@ def _opening_fallback_owner_bucket(observed_turn: Mapping[str, Any], drift_row: 
     observed = observed_turn.get("opening_fallback_owner_bucket")
     if isinstance(observed, str) and observed.strip():
         return observed.strip()
+    lineage_bucket = _preserved_owner_bucket_from_lineage(observed_turn)
+    if lineage_bucket:
+        return lineage_bucket
     if not _opening_fallback_evidence_present(observed_turn, drift_row):
         return None
     mapped = opening_fallback_owner_bucket_from_meta(observed_turn)
     return mapped if isinstance(mapped, str) and mapped.strip() else None
 
 
-def _fallback_split_owner(observed_turn: Mapping[str, Any], owner_field: str) -> str | None:
-    raw_events = observed_turn.get("runtime_lineage_events")
-    events = raw_events if isinstance(raw_events, Sequence) and not isinstance(raw_events, (str, bytes)) else ()
-    for event in events:
-        if not isinstance(event, Mapping):
+def _runtime_lineage_events(observed_turn: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    for key in ("runtime_lineage_events", "fem_runtime_lineage_events"):
+        raw = observed_turn.get(key)
+        if isinstance(raw, Sequence) and not isinstance(raw, (str, bytes)):
+            return [event for event in raw if isinstance(event, Mapping)]
+    return []
+
+
+def _lineage_fallback_selected_event(observed_turn: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    for event in _runtime_lineage_events(observed_turn):
+        if event.get("event_kind") == "fallback_selected":
+            return event
+    return None
+
+
+def _source_family_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
+    event = _lineage_fallback_selected_event(observed_turn)
+    if event is None:
+        return None
+    from game.final_emission_replay_projection import project_source_family_from_fallback_kind
+
+    projected = project_source_family_from_fallback_kind(event.get("fallback_kind"))
+    if projected in ALLOWED_SOURCE_FAMILY_TAGS:
+        return projected
+    return None
+
+
+def _preserved_owner_bucket_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
+    event = _lineage_fallback_selected_event(observed_turn)
+    if event is None:
+        return None
+    bucket = event.get("fallback_owner_bucket")
+    return bucket.strip() if isinstance(bucket, str) and bucket.strip() else None
+
+
+def _repair_kind_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
+    for event in _runtime_lineage_events(observed_turn):
+        if event.get("event_kind") not in {"fallback_selected", "speaker_repair"}:
             continue
+        repair_kind = event.get("repair_kind")
+        if isinstance(repair_kind, str) and repair_kind.strip():
+            return repair_kind.strip()
+    return None
+
+
+def _mutation_classification_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
+    for event in _runtime_lineage_events(observed_turn):
+        if event.get("event_kind") != "mutation":
+            continue
+        mutation_kind = event.get("mutation_kind")
+        if isinstance(mutation_kind, str) and mutation_kind.strip():
+            return mutation_kind.strip()
+    return None
+
+def _fallback_split_owner(observed_turn: Mapping[str, Any], owner_field: str) -> str | None:
+    for event in _runtime_lineage_events(observed_turn):
         if event.get("event_kind") != "fallback_selected":
             continue
         value = event.get(owner_field)
@@ -567,7 +620,11 @@ def _fallback_split_owner(observed_turn: Mapping[str, Any], owner_field: str) ->
 
 
 def _repair_kind(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> str | None:
+    lineage_repair_kind = _repair_kind_from_lineage(observed_turn)
+    if lineage_repair_kind:
+        return lineage_repair_kind
     for value in (
+        observed_turn.get("producer_repair_kind"),
         observed_turn.get("response_type_repair_kind"),
         observed_turn.get("fallback_behavior_repair_kind"),
         observed_turn.get("narrative_authenticity_repair_mode"),
@@ -581,6 +638,9 @@ def _repair_kind(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any])
 def _mutation_source(observed_turn: Mapping[str, Any], emission_sublayer: str | None) -> str | None:
     if emission_sublayer:
         return emission_sublayer
+    lineage_mutation = _mutation_classification_from_lineage(observed_turn)
+    if lineage_mutation:
+        return lineage_mutation
     if observed_turn.get("post_gate_mutation_detected") is True:
         return _post_gate_lineage_mutation_source(observed_turn) or "emission.post_gate_mutation_unknown"
     return None
@@ -852,6 +912,9 @@ def classify_replay_failure(
         field_path = str(drift_row.get("field_path") or "")
         category = classify_failure_category(observed_turn=observed_turn, drift_row=drift_row)
         source_family = _prepared_emission_source_family(observed_turn, _source_family_for(category, field_path))
+        lineage_source_family = _source_family_from_lineage(observed_turn)
+        if lineage_source_family:
+            source_family = lineage_source_family
         replay_tags = _replay_tags(
             category=category,
             field_path=field_path,

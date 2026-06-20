@@ -21,10 +21,13 @@ from game.final_emission_boundary_contract import assert_final_emission_mutation
 from game.final_emission_finalize import reassert_scene_opening_accepted_candidate
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
+    PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR,
     build_narration_constraint_debug,
     ensure_final_emission_meta_dict,
     merge_narration_constraint_debug_meta,
+    stamp_producer_repair_kind,
 )
+from game.final_emission_sealed_fallback import stamp_sealed_fallback_realization_family
 from game.final_emission_narrative_mode_output import (
     _merge_narrative_mode_output_trace_into_gate_fem,
     _narrative_mode_output_legality_assessment,
@@ -89,6 +92,12 @@ def apply_strict_social_emergency_fallback_patch(
         fem["candidate_validation_passed"] = candidate_validation_passed
     fem["final_emitted_source"] = "minimal_social_emergency_fallback"
     stamp_strict_social_deterministic_fallback_family(fem)
+    stamp_sealed_fallback_realization_family(
+        fem,
+        final_emitted_source="minimal_social_emergency_fallback",
+        strict_social_route=True,
+    )
+    stamp_producer_repair_kind(fem, PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR)
     _patch_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
 
 

@@ -92,7 +92,7 @@ def test_single_fallback_turn_computes_turn_and_route_rates() -> None:
 
 def test_multi_event_turn_counts_one_turn_and_all_events() -> None:
     report = REPORT.build_fallback_incidence_report(
-        [_turn(events=[_fallback_event("scene_opening"), _fallback_event("visibility_or_scene_replacement")])]
+        [_turn(events=[_fallback_event("scene_opening"), _fallback_event("visibility_hard_replacement")])]
     )
 
     assert report["eligible_turn_count"] == 1
@@ -100,7 +100,7 @@ def test_multi_event_turn_counts_one_turn_and_all_events() -> None:
     assert report["fallback_event_count"] == 2
     assert report["frequency"]["fallback_kind"] == {
         "scene_opening": 1,
-        "visibility_or_scene_replacement": 1,
+        "visibility_hard_replacement": 1,
     }
 
 

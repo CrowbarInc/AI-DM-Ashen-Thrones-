@@ -109,6 +109,72 @@ SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND: dict[str, str] = {
 }
 _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT: str = "sealed_or_global_replacement"
 
+# BS5: path-specific visibility-scene fallback kinds (replaces collapsed bucket).
+VISIBILITY_HARD_REPLACEMENT: str = "visibility_hard_replacement"
+FIRST_MENTION_HARD_REPLACEMENT: str = "first_mention_hard_replacement"
+REFERENTIAL_CLARITY_HARD_REPLACEMENT: str = "referential_clarity_hard_replacement"
+_LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: str = "visibility_or_scene_replacement"
+
+VISIBILITY_SCENE_FALLBACK_KINDS: frozenset[str] = frozenset(
+    {
+        VISIBILITY_HARD_REPLACEMENT,
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+        _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT,
+    }
+)
+
+# Deterministic fallback_kind → source_family (read-side projection only).
+FALLBACK_KIND_SOURCE_FAMILY_MAP: dict[str, str] = {
+    "scene_opening": "opening_fallback",
+    "opening_failed_closed": "opening_fallback",
+    VISIBILITY_HARD_REPLACEMENT: "final_emission_gate",
+    FIRST_MENTION_HARD_REPLACEMENT: "final_emission_gate",
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT: "final_emission_gate",
+    _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: "final_emission_gate",
+    "response_type_prepared_emission": "upstream_prepared_emission",
+    "strict_social_fallback": "strict_social_emission",
+    "minimal_social_emergency_fallback": "strict_social_emission",
+    "sanitizer_strict_social": "output_sanitizer",
+    "sanitizer_empty_output": "output_sanitizer",
+    "upstream_fast_fallback": "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_OPENING: "opening_fallback",
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: "strict_social_emission",
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN: "final_emission_gate",
+}
+
+FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP: dict[str, str] = {
+    "scene_opening": "fallback_mutation",
+    "opening_failed_closed": "fallback_mutation",
+    VISIBILITY_HARD_REPLACEMENT: "visibility_replacement_mutation",
+    FIRST_MENTION_HARD_REPLACEMENT: "first_mention_replacement_mutation",
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT: "referential_clarity_replacement_mutation",
+    _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: "visibility_replacement_mutation",
+    "response_type_prepared_emission": "response_type_repair_mutation",
+    "strict_social_fallback": "response_type_repair_mutation",
+    "minimal_social_emergency_fallback": "response_type_repair_mutation",
+    "sanitizer_strict_social": "sanitizer_mutation",
+    "sanitizer_empty_output": "sanitizer_mutation",
+}
+
+REPAIR_FLAG_MUTATION_CLASSIFICATION_MAP: dict[str, str] = {
+    "answer_completeness_repaired": "answer_completeness_repair_mutation",
+    "response_delta_repaired": "response_delta_repair_mutation",
+    "social_response_structure_repair_applied": "social_response_structure_repair_mutation",
+    "narrative_authenticity_repaired": "narrative_authenticity_repair_mutation",
+    "tone_escalation_repaired": "tone_escalation_repair_mutation",
+    "anti_railroading_repaired": "anti_railroading_repair_mutation",
+    "context_separation_repaired": "context_separation_repair_mutation",
+    "player_facing_narration_purity_repaired": "player_facing_narration_purity_repair_mutation",
+    "answer_shape_primacy_repaired": "answer_shape_primacy_repair_mutation",
+    "fallback_behavior_repaired": "fallback_behavior_repair_mutation",
+    "narrative_authority_repaired": "narrative_authority_repair_mutation",
+}
+
 
 def read_side_lineage_projection_surface() -> dict[str, object]:
     """Summarize stable read-side projection-owned surfaces (diagnostic only).
@@ -133,7 +199,67 @@ def read_side_lineage_projection_surface() -> dict[str, object]:
         "upstream_fast_fallback_provenance_packager": UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
         "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
         "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
+        "visibility_scene_fallback_kinds": sorted(VISIBILITY_SCENE_FALLBACK_KINDS),
     }
+
+
+def project_source_family_from_fallback_kind(fallback_kind: Any) -> str | None:
+    """Deterministically map a projected fallback kind to a source family tag."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return None
+    if token in FALLBACK_KIND_SOURCE_FAMILY_MAP:
+        return FALLBACK_KIND_SOURCE_FAMILY_MAP[token]
+    if token.startswith("sealed_"):
+        return "final_emission_gate"
+    if token.startswith("sanitizer"):
+        return "output_sanitizer"
+    return None
+
+
+def project_mutation_classification_from_fallback_kind(fallback_kind: Any) -> str | None:
+    """Map a projected fallback kind to a path-specific mutation classification."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return None
+    if token in FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP:
+        return FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP[token]
+    if is_sealed_replacement_lineage_kind(token):
+        return "sealed_replacement_mutation"
+    return None
+
+
+def _fem_preserved_fallback_owner_bucket(fem: Mapping[str, Any], fallback_kind: str) -> str | None:
+    """Preserve owner buckets already stamped on finalized FEM — do not synthesize new values."""
+    if fallback_kind in {"scene_opening", "opening_failed_closed"}:
+        bucket = _opening_fallback_owner_bucket_from_meta(fem)
+        return bucket if bucket else None
+    visibility_bucket = _fem_lineage_source(fem, "visibility_fallback_owner_bucket")
+    if visibility_bucket and (
+        fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS or fallback_kind == VISIBILITY_HARD_REPLACEMENT
+    ):
+        return visibility_bucket
+    sealed_bucket = _fem_lineage_source(fem, "sealed_fallback_owner_bucket")
+    if sealed_bucket and (
+        is_sealed_replacement_lineage_kind(fallback_kind) or fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS
+    ):
+        return sealed_bucket
+    if visibility_bucket and fallback_kind in {
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    }:
+        return visibility_bucket
+    return None
+
+
+def _fem_preserved_repair_kind(fem: Mapping[str, Any]) -> str | None:
+    """Preserve repair kind when already present on finalized FEM."""
+    return _fem_lineage_source(
+        fem,
+        "producer_repair_kind",
+        "response_type_repair_kind",
+        "fallback_behavior_repair_kind",
+    )
 
 
 def _norm_projection_token(value: Any) -> str:
@@ -344,14 +470,26 @@ def _fem_selected_fallback_projection(fem: Mapping[str, Any]) -> tuple[str, str,
     ):
         return ("strict_social_fallback", "strict_social_fallback", "gate", "game.final_emission_gate", final_source)
 
-    if (
-        fem.get("visibility_replacement_applied") is True
-        or fem.get("first_mention_replacement_applied") is True
-        or fem.get("referential_clarity_replacement_applied") is True
-    ):
+    if fem.get("visibility_replacement_applied") is True:
         return (
-            "visibility_or_scene_replacement",
-            "visibility_or_scene_replaced",
+            VISIBILITY_HARD_REPLACEMENT,
+            "visibility_hard_replaced",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if fem.get("first_mention_replacement_applied") is True:
+        return (
+            FIRST_MENTION_HARD_REPLACEMENT,
+            "first_mention_hard_replaced",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if fem.get("referential_clarity_replacement_applied") is True:
+        return (
+            REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+            "referential_clarity_hard_replaced",
             "gate",
             "game.final_emission_gate",
             final_source,
@@ -460,9 +598,10 @@ def _append_fem_mutation_projections(
     """Append bounded mutation projections for explicit finalized evidence only."""
     if fallback is not None:
         fallback_kind, _gate_path, stage, owner, source = fallback
+        mutation_kind = project_mutation_classification_from_fallback_kind(fallback_kind) or "fallback_mutation"
         _append_fem_mutation_event(
             events,
-            mutation_kind="fallback_mutation",
+            mutation_kind=mutation_kind,
             stage=stage,
             owner=owner,
             source=source,
@@ -527,12 +666,30 @@ def _append_fem_mutation_projections(
         "narrative_authority_repaired",
     )
     active_repair_flags = [key for key in repair_flag_keys if fem.get(key) is True]
-    if active_repair_flags:
+    for flag in active_repair_flags:
+        mutation_kind = REPAIR_FLAG_MUTATION_CLASSIFICATION_MAP.get(flag, "repair_only_mutation")
         _append_fem_mutation_event(
             events,
-            mutation_kind="repair_only_mutation",
-            source=active_repair_flags[0],
-            notes=active_repair_flags,
+            mutation_kind=mutation_kind,
+            owner="game.final_emission_gate",
+            source=flag,
+            notes=[flag],
+        )
+
+    if fem.get("referential_clarity_local_substitution_applied") is True:
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="referential_clarity_local_substitution_mutation",
+            owner="game.final_emission_gate",
+            source=_fem_lineage_source(fem, "referential_clarity_local_substitution_token"),
+            notes=[
+                value
+                for value in (
+                    fem.get("referential_clarity_local_substitution_token"),
+                    fem.get("referential_clarity_local_substitution_replacement"),
+                )
+                if isinstance(value, str) and value.strip()
+            ],
         )
 
     tokens = _fem_mutation_lineage_tokens(fem)
@@ -542,7 +699,7 @@ def _append_fem_mutation_projections(
         "opening_fallback_selection": ("fallback_mutation", "gate", "game.final_emission_gate"),
         "sealed_fallback_replacement": ("fallback_mutation", "gate", "game.final_emission_gate"),
         "sanitizer_empty_fallback": ("fallback_mutation", "sanitizer", "game.output_sanitizer"),
-        "fallback_behavior_repair": ("repair_only_mutation", "gate", "game.final_emission_gate"),
+        "fallback_behavior_repair": ("fallback_behavior_repair_mutation", "gate", "game.final_emission_gate"),
         "finalize_html_strip": ("final_emission_mutation", "gate", "game.final_emission_gate"),
         "finalize_route_illegal_strip": ("final_emission_mutation", "gate", "game.final_emission_gate"),
     }
@@ -585,16 +742,14 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
     if fallback is not None:
         fallback_kind, gate_path, stage, owner, source = fallback
         fallback_authorship_source: str | None = None
-        fallback_owner_bucket: str | None = None
+        fallback_owner_bucket = _fem_preserved_fallback_owner_bucket(fem, fallback_kind)
+        preserved_repair_kind = _fem_preserved_repair_kind(fem)
         fallback_selection_owner, fallback_content_owner = _fallback_split_owners_for_kind(
             fem,
             fallback_kind,
         )
         if fallback_kind == "scene_opening":
             fallback_authorship_source = _fem_lineage_source(fem, "opening_fallback_authorship_source")
-            fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
-        elif fallback_kind == "opening_failed_closed":
-            fallback_owner_bucket = _opening_fallback_owner_bucket_from_meta(fem)
         _append_fem_lineage_event(
             events,
             make_runtime_lineage_event(
@@ -607,6 +762,7 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
                 fallback_owner_bucket=fallback_owner_bucket,
                 fallback_selection_owner=fallback_selection_owner,
                 fallback_content_owner=fallback_content_owner,
+                repair_kind=preserved_repair_kind,
             ),
         )
         if gate_path != "unknown":

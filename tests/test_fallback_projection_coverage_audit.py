@@ -37,7 +37,7 @@ def test_projected_catalog_shapes_each_emit_one_fallback_selected_event() -> Non
         "response_type_prepared_emission",
         "minimal_social_emergency_fallback",
         "strict_social_fallback",
-        "visibility_or_scene_replacement",
+        "visibility_hard_replacement",
         "upstream_fast_fallback",
         "sealed_social_interlocutor_fallback",
         "sealed_passive_scene_pressure_fallback",

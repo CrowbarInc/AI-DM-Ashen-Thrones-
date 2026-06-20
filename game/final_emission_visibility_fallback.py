@@ -10,12 +10,18 @@ import re
 from typing import Any, Dict, List, Literal, Sequence
 
 from game.final_emission_meta import (
+    PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT,
+    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT,
+    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION,
+    PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+    stamp_producer_repair_kind,
+    stamp_visibility_fallback_owner_bucket_from_fields,
     visibility_fallback_owner_bucket_from_fields,
 )
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
@@ -1619,6 +1625,13 @@ def apply_visibility_enforcement(
         composition_meta=None,
     )
     stamp_visibility_fallback_metadata(meta, **visibility_hard_replacement_plan.route_metadata_outcome.stamp_kwargs())
+    stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT)
+    stamp_visibility_fallback_owner_bucket_from_fields(
+        meta,
+        fallback_pool=visibility_hard_replacement_plan.route_metadata_outcome.stamp_kwargs().get("fallback_pool"),
+        fallback_kind=visibility_hard_replacement_plan.route_metadata_outcome.stamp_kwargs().get("fallback_kind"),
+        final_emitted_source=visibility_hard_replacement_plan.final_emitted_source,
+    )
     first_mention_metadata_payload = visibility_hard_replacement_context.first_mention_payload
     for key, value in first_mention_metadata_payload.meta_updates().items():
         meta[key] = value
@@ -1776,6 +1789,13 @@ def apply_first_mention_enforcement(
     )
     for key, value in first_mention_selected_fallback_metadata_payload.meta_updates().items():
         meta[key] = value
+    stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT)
+    stamp_visibility_fallback_owner_bucket_from_fields(
+        meta,
+        fallback_pool=first_mention_selected_fallback.fallback_pool,
+        fallback_kind=first_mention_selected_fallback.fallback_kind,
+        final_emitted_source=first_mention_selected_fallback.final_emitted_source,
+    )
 
     first_mention_replacement_logging_payload = build_first_mention_replacement_logging_payload(
         first_mention_selected_fallback,
@@ -1893,6 +1913,8 @@ def apply_referential_clarity_enforcement(
                 candidate_text != gate_out_text
             )
             meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+            stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
+            stamp_visibility_fallback_owner_bucket_from_fields(meta)
             log_final_emission_decision(
                 {
                     "stage": "final_emission_gate_referential_clarity",
@@ -1958,6 +1980,13 @@ def apply_referential_clarity_enforcement(
     )
     for key, value in referential_clarity_selected_fallback_metadata_payload.meta_updates().items():
         meta[key] = value
+    stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT)
+    stamp_visibility_fallback_owner_bucket_from_fields(
+        meta,
+        fallback_pool=referential_clarity_selected_fallback.fallback_pool,
+        fallback_kind=referential_clarity_selected_fallback.fallback_kind,
+        final_emitted_source=referential_clarity_selected_fallback.final_emitted_source,
+    )
 
     referential_clarity_replacement_logging_payload = build_referential_clarity_replacement_logging_payload(
         referential_clarity_selected_fallback,

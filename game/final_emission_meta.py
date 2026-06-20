@@ -1085,6 +1085,97 @@ def sealed_fallback_owner_bucket_from_fields(
     return SEALED_FALLBACK_OWNER_SEALED_GATE
 
 
+# --- BS4 producer attribution stamps (metadata-only; no routing or content changes) ---
+
+PRODUCER_REPAIR_KIND_FIELD: str = "producer_repair_kind"
+
+PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT: str = "visibility_enforcement"
+PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT: str = "first_mention_enforcement"
+PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT: str = "referential_clarity_enforcement"
+PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION: str = "referential_clarity_local_substitution"
+PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT: str = "sanitizer_empty_output"
+PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY: str = "sanitizer_strip_only"
+PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR: str = "strict_social_repair"
+PRODUCER_REPAIR_KIND_FALLBACK_BEHAVIOR_REPAIR: str = "fallback_behavior_repair"
+
+
+def stamp_producer_repair_kind(
+    meta: MutableMapping[str, Any],
+    repair_kind: str,
+    *,
+    overwrite: bool = False,
+) -> None:
+    """Stamp deterministic producer repair kind on FEM metadata without altering routing."""
+    if not isinstance(meta, MutableMapping):
+        return
+    kind = str(repair_kind or "").strip()
+    if not kind:
+        return
+    if not overwrite and str(meta.get(PRODUCER_REPAIR_KIND_FIELD) or "").strip():
+        return
+    meta[PRODUCER_REPAIR_KIND_FIELD] = kind
+
+
+def stamp_opening_fallback_owner_bucket(meta: MutableMapping[str, Any]) -> None:
+    """Stamp opening owner bucket when authorship/repair signals are already on *meta*."""
+    if not isinstance(meta, MutableMapping):
+        return
+    if str(meta.get("opening_fallback_owner_bucket") or "").strip():
+        return
+    bucket = opening_fallback_owner_bucket_from_meta(meta)
+    if bucket:
+        meta["opening_fallback_owner_bucket"] = bucket
+
+
+def stamp_visibility_fallback_owner_bucket_from_fields(
+    meta: MutableMapping[str, Any],
+    *,
+    fallback_pool: str | None = None,
+    fallback_kind: str | None = None,
+    final_emitted_source: str | None = None,
+) -> None:
+    """Stamp visibility owner bucket from already-known fallback selection fields."""
+    if not isinstance(meta, MutableMapping):
+        return
+    if str(meta.get("visibility_fallback_owner_bucket") or "").strip():
+        return
+    pool = str(fallback_pool or meta.get("visibility_fallback_pool") or "").strip()
+    kind = str(fallback_kind or meta.get("visibility_fallback_kind") or "").strip()
+    source = str(final_emitted_source or meta.get("final_emitted_source") or "").strip()
+    bucket = visibility_fallback_owner_bucket_from_fields(
+        fallback_pool=pool,
+        fallback_kind=kind,
+        final_emitted_source=source,
+    )
+    if bucket:
+        meta["visibility_fallback_owner_bucket"] = bucket
+
+
+def apply_sanitizer_producer_attribution_to_fem(
+    meta: MutableMapping[str, Any],
+    sanitizer_trace: Mapping[str, Any] | None,
+) -> None:
+    """Copy sanitizer producer attribution stamps from trace into finalized FEM metadata."""
+    if not isinstance(meta, MutableMapping):
+        return
+    trace = sanitizer_trace if isinstance(sanitizer_trace, Mapping) else {}
+    repair_kind = str(trace.get(PRODUCER_REPAIR_KIND_FIELD) or "").strip()
+    if repair_kind:
+        stamp_producer_repair_kind(meta, repair_kind, overwrite=True)
+    owner_bucket = str(trace.get("sealed_fallback_owner_bucket") or "").strip()
+    if owner_bucket and not str(meta.get("sealed_fallback_owner_bucket") or "").strip():
+        meta["sealed_fallback_owner_bucket"] = owner_bucket
+    for key in (
+        "sanitizer_empty_fallback_used",
+        "sanitizer_lineage_empty_fallback_used",
+        "sanitizer_strict_social_fallback_used",
+        "sanitizer_empty_fallback_source",
+        "sanitizer_strict_social_source",
+    ):
+        if key in trace and meta.get(key) is None:
+            meta[key] = trace.get(key)
+
+
 # Stage-diff is intentionally bounded; it may project a compact NA subset for observability only.
 # This is not a second owner of NA semantics; it is an explicitly-allowed projection surface.
 STAGE_DIFF_ALLOWED_NA_PROJECTION_KEYS: frozenset[str] = frozenset(

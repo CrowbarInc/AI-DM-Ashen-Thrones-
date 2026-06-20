@@ -135,6 +135,22 @@ ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset(
 
 LEGACY_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset({"thin_answer"})
 
+# BS4 — deterministic producer-side repair kinds stamped at replacement origin.
+# Full repair_kind union (runtime + producer + opening + legacy) lives in
+# ``tests.helpers.attribution_contract.ALLOWED_REPAIR_KINDS``.
+ALLOWED_PRODUCER_REPAIR_KINDS: frozenset[str] = frozenset(
+    {
+        "visibility_enforcement",
+        "first_mention_enforcement",
+        "referential_clarity_enforcement",
+        "referential_clarity_local_substitution",
+        "sanitizer_empty_output",
+        "sanitizer_strip_only",
+        "strict_social_repair",
+        "fallback_behavior_repair",
+    }
+)
+
 REQUIRED_CLASSIFICATION_FIELDS: frozenset[str] = frozenset(
     {
         "scenario_id",

@@ -689,8 +689,8 @@ def test_transcript_meta_runtime_lineage_prefers_projected_bundle_and_projects_f
     visibility_summary = _mod.build_runtime_lineage_summary(
         {"visibility": [{"meta": {"runtime_lineage_events": visibility_events}}]}
     )
-    assert visibility_summary["fallback_frequency"] == {"visibility_or_scene_replacement": 1}
-    assert visibility_summary["gate_path_frequency"] == {"visibility_or_scene_replaced": 1}
+    assert visibility_summary["fallback_frequency"] == {"visibility_hard_replacement": 1}
+    assert visibility_summary["gate_path_frequency"] == {"visibility_hard_replaced": 1}
 
     empty = _mod.build_transcript_turn_meta(
         {"ok": True, "gm_output": {"player_facing_text": "ok"}},
