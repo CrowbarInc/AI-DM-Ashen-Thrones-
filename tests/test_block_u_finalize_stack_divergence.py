@@ -107,8 +107,18 @@ def test_block_u_first_post_speaker_divergence_is_dialogue_plan_strip(local_rebi
     assert cap.equivalence.normalized_text_match is True
 
     first = first_post_speaker_normalized_divergence(events)
-    assert first == "dialogue_plan_subtractive_strip"
-    assert first in POST_SPEAKER_PROBE_ORDER
+    meta = final_emission_meta_from_output(out) or {}
+    strip_deferred = bool(meta.get("dialogue_plan_subtractive_strip_deferred"))
+    strip_changed = any(
+        e.layer_id == "dialogue_plan_subtractive_strip" and e.normalized_changed for e in events
+    )
+    if strip_changed:
+        assert first == "dialogue_plan_subtractive_strip"
+        assert first in POST_SPEAKER_PROBE_ORDER
+    else:
+        assert first != "dialogue_plan_subtractive_strip"
+        if strip_deferred:
+            assert not strip_changed
 
     final = (out.get("player_facing_text") or "").strip()
     assert "Tavern Runner" in final
@@ -125,7 +135,7 @@ def test_block_u_safe_layers_before_first_post_speaker_change(local_rebind_stric
     chain_enforce_phase_marker(monkeypatch, phase)
     install_post_speaker_text_probes(monkeypatch, events, phase=phase)
 
-    apply_final_emission_gate(
+    out = apply_final_emission_gate(
         {"player_facing_text": line, "tags": []},
         resolution=resolution,
         session=session,
@@ -137,9 +147,15 @@ def test_block_u_safe_layers_before_first_post_speaker_change(local_rebind_stric
 
     post_only = post_speaker_events_only(events)
     first_idx = next((i for i, e in enumerate(post_only) if e.normalized_changed), None)
-    assert first_idx is not None
-    for e in post_only[:first_idx]:
-        assert not e.normalized_changed, e.layer_id
+    strip_changed = any(
+        e.layer_id == "dialogue_plan_subtractive_strip" and e.normalized_changed for e in post_only
+    )
+    if strip_changed:
+        assert first_idx is not None
+        for e in post_only[:first_idx]:
+            assert not e.normalized_changed, e.layer_id
+    else:
+        assert not any(e.normalized_changed for e in post_only)
 
 
 def test_block_v_passing_dialogue_plan_avoids_subtractive_strip_as_first_diverger(

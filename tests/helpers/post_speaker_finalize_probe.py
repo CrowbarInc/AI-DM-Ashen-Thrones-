@@ -15,10 +15,11 @@ owner symbols — not removed ``feg._*`` re-exports.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Protocol
 
 import game.dialogue_social_plan as dialogue_social_plan
+from game.emitted_speaker_signature import detect_emitted_speaker_signature
 import game.final_emission_finalize as emission_finalize
 import game.final_emission_repairs as emission_repairs
 import game.final_emission_strict_social_stack as strict_social_stack
@@ -27,12 +28,33 @@ import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_text import _normalize_text
 
 
+_MAX_PRESERVED_PROBE_TEXT = 240
+
+
+def _probe_text_hash(text: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+
+
+def _maybe_preserve_probe_text(text: str) -> str | None:
+    if len(text) <= _MAX_PRESERVED_PROBE_TEXT:
+        return text
+    return None
+
+
 @dataclass(frozen=True)
 class LayerTextDelta:
     """Single observed crossing for one wrapped callable."""
 
     layer_id: str
     normalized_changed: bool
+    normalized_input_hash: str = ""
+    normalized_output_hash: str = ""
+    normalized_input_text: str | None = None
+    normalized_output_text: str | None = None
+    input_speaker_signature: dict[str, Any] = field(default_factory=dict)
+    output_speaker_signature: dict[str, Any] = field(default_factory=dict)
 
 
 class PostSpeakerPhase(Protocol):
@@ -69,6 +91,12 @@ def _track(events: List[LayerTextDelta], layer_id: str, tin: str, tout: str) -> 
         LayerTextDelta(
             layer_id=layer_id,
             normalized_changed=tin != tout,
+            normalized_input_hash=_probe_text_hash(tin),
+            normalized_output_hash=_probe_text_hash(tout),
+            normalized_input_text=_maybe_preserve_probe_text(tin),
+            normalized_output_text=_maybe_preserve_probe_text(tout),
+            input_speaker_signature=dict(detect_emitted_speaker_signature(tin)),
+            output_speaker_signature=dict(detect_emitted_speaker_signature(tout)),
         )
     )
 
@@ -313,3 +341,10 @@ def first_post_speaker_normalized_divergence(events: List[LayerTextDelta]) -> st
 def post_speaker_events_only(events: List[LayerTextDelta]) -> List[LayerTextDelta]:
     """Drop strictly pre-speaker instrumentation rows."""
     return [e for e in events if e.layer_id not in PRE_SPEAKER_PROBE_IDS]
+
+
+def post_speaker_strip_probe_changed(events: List[LayerTextDelta]) -> bool:
+    """Return True when inline post-speaker subtractive strip changed normalized text."""
+    return any(
+        e.layer_id == "dialogue_plan_subtractive_strip" and e.normalized_changed for e in events
+    )
