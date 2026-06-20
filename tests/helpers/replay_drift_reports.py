@@ -8,8 +8,14 @@ from __future__ import annotations
 
 from tests.helpers.replay_bug_recurrence import (
     aggregate_recurrence_history,
+    aggregate_recurrence_history_from_event_log,
+    append_recurrence_events,
     build_recurrence_summary,
+    empty_recurrence_event_log,
+    load_recurrence_event_log,
+    normalize_recurrence_event_metadata,
     recurrence_rows,
+    write_recurrence_event_log,
 )
 from tests.helpers.replay_drift_hotspots import (
     build_hotspot_rankings,
@@ -45,6 +51,8 @@ from tests.helpers.replay_drift_trends import (
 __all__ = (
     "aggregate_owner_drift_history",
     "aggregate_recurrence_history",
+    "aggregate_recurrence_history_from_event_log",
+    "append_recurrence_events",
     "build_hotspot_rankings",
     "build_long_session_stability_history",
     "build_owner_drift_trend_summary",
@@ -54,7 +62,10 @@ __all__ = (
     "build_trend_payload",
     "classification_rows_for_analysis",
     "classification_rows_from_scorecards",
+    "empty_recurrence_event_log",
     "enrich_hotspots_with_field_trends",
+    "load_recurrence_event_log",
+    "normalize_recurrence_event_metadata",
     "recurrence_rows",
     "render_owner_drift_hotspot_report",
     "render_owner_drift_longitudinal_report",
@@ -64,4 +75,5 @@ __all__ = (
     "render_stability_trends_markdown_lines",
     "stability_classification_rows_from_scorecard",
     "summarize_owner_drift_buckets",
+    "write_recurrence_event_log",
 )

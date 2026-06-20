@@ -1,0 +1,41 @@
+{
+  "advisory_only": true,
+  "definition": "Append-only protected replay recurrence trajectory snapshots. Snapshot #1 is the longitudinal baseline; trajectory_available becomes true once two or more snapshots exist.",
+  "protected_replay_only": true,
+  "report_only": true,
+  "schema_version": 1,
+  "snapshots": [
+    {
+      "artifact_source": "artifacts/golden_replay/bug_recurrence_history.json",
+      "effectiveness_score": 0.82,
+      "governance_health_score": 55.2,
+      "lifecycle_health_score": 45.0,
+      "maturity_score": 73.0,
+      "operational_readiness_score": 76.4,
+      "portfolio_risk_score": 44.1,
+      "program_effectiveness_score": 41.3,
+      "protected_observation_count": 11,
+      "regression_recurrence_rate": 0.25,
+      "snapshot_index": 1,
+      "stability_score": 75.0,
+      "timestamp": "2026-06-20T12:00:00Z",
+      "unique_recurrence_keys": 4
+    },
+    {
+      "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+      "effectiveness_score": 0.82,
+      "governance_health_score": 55.2,
+      "lifecycle_health_score": 45.0,
+      "maturity_score": 73.0,
+      "operational_readiness_score": 76.4,
+      "portfolio_risk_score": 44.1,
+      "program_effectiveness_score": 41.3,
+      "protected_observation_count": 11,
+      "regression_recurrence_rate": 0.25,
+      "snapshot_index": 2,
+      "stability_score": 75.0,
+      "timestamp": "2026-06-20T20:00:00Z",
+      "unique_recurrence_keys": 4
+    }
+  ]
+}
