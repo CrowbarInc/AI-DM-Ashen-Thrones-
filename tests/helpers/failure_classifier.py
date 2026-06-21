@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
-from game.final_emission_meta import opening_fallback_owner_bucket_from_meta
+from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
 from tests.failure_classification_contract import (
     ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_EMISSION_SUBLAYERS,

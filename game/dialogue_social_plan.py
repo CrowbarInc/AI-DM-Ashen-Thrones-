@@ -13,7 +13,7 @@ import re
 from collections.abc import Mapping
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 DIALOGUE_SOCIAL_PLAN_VERSION = 1
@@ -651,9 +651,9 @@ def is_the_lowercase_role_mutters_comma_shell(text: str) -> bool:
 
 def strict_social_line_matches_terminal_emission_pool(text: str, resolution: Mapping[str, Any] | None) -> bool:
     """True when emitted text equals a deterministic strict-social terminal/minimal emergency line."""
-    from game.social_exchange_emission import (
-        _text_is_strict_social_minimal_emergency_fallback,
+    from game.social_exchange_fallback_catalog import (
         strict_social_ownership_terminal_fallback,
+        text_is_strict_social_minimal_emergency_fallback,
     )
 
     if not isinstance(resolution, dict):
@@ -661,7 +661,7 @@ def strict_social_line_matches_terminal_emission_pool(text: str, resolution: Map
     t = _normalize_text(str(text or "")).strip()
     if not t:
         return False
-    if _text_is_strict_social_minimal_emergency_fallback(text, resolution):
+    if text_is_strict_social_minimal_emergency_fallback(text, resolution):
         return True
     return _normalize_text(strict_social_ownership_terminal_fallback(resolution)).strip() == t
 

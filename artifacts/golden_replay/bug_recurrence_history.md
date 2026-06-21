@@ -1,7 +1,7 @@
 # Bug-Class Recurrence History
 
-- Generated at: `2026-06-20T22:00:00Z`
-- Command: `-c`
+- Generated at: `2026-05-30T00:00:00Z`
+- Command: `pytest synthetic`
 - Report only: `true`
 - Advisory only: `true`
 - Total recurrence keys: `4`
@@ -372,12 +372,12 @@ No watchlist entries recorded.
 ### Target State
 
 - All Dimensions Optimized: `false`
-- Closure Effectiveness Measurable: `true`
-- Effectiveness Confidence Target Met: `true`
-- Forecast Confidence Target Met: `true`
 - Operational Readiness Optimized: `true`
-- Remediation Effectiveness Measurable: `true`
+- Forecast Confidence Target Met: `true`
+- Effectiveness Confidence Target Met: `true`
 - Trajectory Available: `true`
+- Closure Effectiveness Measurable: `true`
+- Remediation Effectiveness Measurable: `true`
 
 ## Recurrence Program Completion
 

@@ -4,7 +4,7 @@ No runtime behavior in production code; tests-only utilities for equivalence pro
 """
 from __future__ import annotations
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 # Strict-social trunk milestone ids (align with ``apply_final_emission_gate`` ordering).
 PHASE_BUILD_SOCIAL = "build_final_strict_social_response"

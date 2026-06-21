@@ -1,0 +1,2975 @@
+{
+  "schema_version": 1,
+  "spine_id": "frontier_gate_long_session",
+  "branch_id": "branch_social_inquiry",
+  "branch_id_requested": "branch_social_inquiry",
+  "turn_count": 5,
+  "turns": [
+    {
+      "turn_index": 0,
+      "turn_id": "inv_01",
+      "player_prompt": "I scan the notice for taxes, curfew, and patrol lines.",
+      "gm_text": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "observe",
+      "meta": {
+        "emission_debug": {
+          "answer_shape_primacy": {
+            "checked": true,
+            "failure_reasons": [],
+            "passed": true
+          },
+          "answer_shape_primacy_checked": true,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_after": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+          "answer_shape_primacy_preview_before": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_skip_reason": null,
+          "anti_railroading": {
+            "assertion_flags": {
+              "exclusive_path_claim": false,
+              "forced_conclusion": false,
+              "forced_direction": false,
+              "lead_plot_gravity": false,
+              "player_decision_override": false
+            },
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "anti_railroading_assertion_flags": {
+            "exclusive_path_claim": false,
+            "forced_conclusion": false,
+            "forced_direction": false,
+            "lead_plot_gravity": false,
+            "player_decision_override": false
+          },
+          "anti_railroading_checked": true,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_ok": true,
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_repaired": false,
+          "anti_railroading_skip_reason": null,
+          "canonical_gm_object_id": 1390197189888,
+          "context_separation": {
+            "assertion_flags": {
+              "ambient_pressure_forced_tone_shift": false,
+              "pressure_answer_substitution": false,
+              "pressure_overweighting": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "topic_hijack_background_pressure": false
+            },
+            "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=276;after_len=276;before_head='As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…';after_head='As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…'",
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "context_separation_assertion_flags": {
+            "ambient_pressure_forced_tone_shift": false,
+            "pressure_answer_substitution": false,
+            "pressure_overweighting": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "topic_hijack_background_pressure": false
+          },
+          "context_separation_checked": true,
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=276;after_len=276;before_head='As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…';after_head='As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…'",
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_ok": true,
+          "context_separation_passed_after_repair": null,
+          "context_separation_repair_hints": [],
+          "context_separation_repair_mode": null,
+          "context_separation_repaired": false,
+          "context_separation_skip_reason": null,
+          "conversational_memory_window": {
+            "active_interaction_target_id": "",
+            "active_scene_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "allow_explicit_reintroduction": true,
+            "anchored_interlocutor_id": "",
+            "deprioritize_stale_inactive_elements": true,
+            "enabled": true,
+            "explicit_reintroduced_entity_ids": [],
+            "explicit_reintroduced_topics": [],
+            "prioritize_active_scene_entities": true,
+            "prioritize_recent_turns": true,
+            "recent_turn_window": 6,
+            "selection_debug": {
+              "callback_marker_hit": null,
+              "matched_entity_ids": [],
+              "matched_grounded_ids": [],
+              "matched_topics": [],
+              "source_of_activity_anchor": "none",
+              "source_of_recentness": "session.turn_counter",
+              "source_of_reintroductions": "player_text+visibility_aliases"
+            },
+            "soft_memory_limit": 12,
+            "stale_after_turns": 18,
+            "window_version": "v1"
+          },
+          "fallback_behavior": {
+            "failure_reasons": [],
+            "repair_mode": "none",
+            "skip_reason": "uncertainty_inactive",
+            "validation": {
+              "checked": false,
+              "contract_present": true,
+              "passed": true,
+              "uncertainty_active": false
+            }
+          },
+          "fallback_behavior_boundary_semantic_synthesis_skipped": false,
+          "fallback_behavior_checked": false,
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_contract": {
+            "allowed_behaviors": {
+              "ask_clarifying_question": false,
+              "hedge_appropriately": false,
+              "provide_partial_information": false
+            },
+            "enabled": true,
+            "prefer_partial_over_question": false,
+            "uncertainty_active": false,
+            "uncertainty_mode": null,
+            "uncertainty_sources": []
+          },
+          "fallback_behavior_contract_present": true,
+          "fallback_behavior_failed": false,
+          "fallback_behavior_failure_reasons": [],
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_repair_mode": "none",
+          "fallback_behavior_repaired": false,
+          "fallback_behavior_skip_reason": "uncertainty_inactive",
+          "fallback_behavior_uncertainty_active": false,
+          "fallback_behavior_unknown_edge_added": false,
+          "final_emission_text_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail...",
+          "gm_output_player_facing_len": 183,
+          "interaction_continuity_validation": {
+            "continuity_strength": "none",
+            "debug": {
+              "cue_labels": [],
+              "reason_path": [
+                "contract_disabled_or_strength_none"
+              ],
+              "speaker_labels_detected": []
+            },
+            "enabled": false,
+            "facts": {
+              "anchor_required": false,
+              "anchored_interlocutor_id": "",
+              "dialogue_presence": false,
+              "explicit_switch_cue_present": false,
+              "multi_speaker_pattern_present": false,
+              "narrator_bridge_present": false,
+              "speaker_switch_detected": false,
+              "thread_drop_detected": false
+            },
+            "ok": true,
+            "violations": [],
+            "warnings": []
+          },
+          "log_payload_text_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail...",
+          "narration_constraint_debug": {
+            "response_type": {
+              "candidate_ok": true,
+              "contract_source": "response_policy",
+              "repair_kind": null,
+              "repair_used": false,
+              "required": "action_outcome",
+              "upstream_prepared_absent": false
+            },
+            "speaker_selection": {
+              "binding_confident": null,
+              "reason_code": "speaker_unresolved",
+              "selection_source": null,
+              "speaker_id": null,
+              "speaker_name": null
+            },
+            "visibility": {
+              "contract_present": true,
+              "decision_mode": "validated",
+              "reason_codes": [],
+              "visible_entity_count": 6,
+              "withheld_fact_count": 4
+            }
+          },
+          "narration_state_consistency_after_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail...",
+          "narration_state_consistency_before_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail...",
+          "narration_state_consistency_changed_text": false,
+          "narrative_authority_assertion_flags": {
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "invented_outcome": false,
+            "overcertain_unresolved_action": false
+          },
+          "narrative_authority_checked": true,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_repaired": false,
+          "narrative_authority_skip_reason": null,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_promoted": false,
+          "player_facing_narration_purity": {
+            "preview_after": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+            "preview_before": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+            "repair_hints": [],
+            "repair_modes": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            },
+            "violation_keys": []
+          },
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_preview_after": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+          "player_facing_narration_purity_preview_before": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missin…",
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_violation_keys": [],
+          "post_final_emission_gate_text_len": 183,
+          "post_narration_state_consistency_text_len": 183,
+          "pre_gate_text_len": 276,
+          "response_payload_text_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail...",
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_failed": false,
+          "scene_state_anchor_failure_reasons": [],
+          "scene_state_anchor_matched_kinds": [
+            "location",
+            "actor",
+            "player_action"
+          ],
+          "scene_state_anchor_passed": true,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_skip_reason": null,
+          "selected_conversational_memory": [],
+          "tone_escalation_checked": true,
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_contract_summary": {
+            "allow_combat_initiation": false,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_verbal_pressure": true,
+            "base_tone": "guarded",
+            "enabled": true,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship"
+            ],
+            "max_allowed_tone": "tense"
+          },
+          "tone_escalation_detected_flags": {
+            "combat_initiation": false,
+            "explicit_threat": false,
+            "guarded": false,
+            "physical_hostility": false,
+            "verbal_pressure": false
+          },
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_matched_tone_level": null,
+          "tone_escalation_ok": true,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_violation_before_repair": false
+        },
+        "final_emission_meta": null,
+        "model_escalated": true,
+        "model_escalation_trigger": "retry_reason:echo_or_repetition",
+        "model_retry_attempt": 2,
+        "model_route_family": "retry_escalation",
+        "model_route_purpose": "retry_escalation",
+        "model_route_reason": "purpose_retry_escalation",
+        "narration_seam": {
+          "bundle_required": true,
+          "continuation": {
+            "allows_nonplan_output": true,
+            "continuation_enforcement_applied": false,
+            "continuation_path_kind": null,
+            "continuation_plan_failure_reason": null,
+            "continuation_plan_verified": false,
+            "continuation_source": "emergency_nonplan",
+            "is_continuation_turn": false,
+            "reason_codes": [
+              "opening_reason:scene_entry",
+              "turn_is_scene_opening"
+            ],
+            "requires_plan_driven_continuation": false
+          },
+          "ctir_backed": true,
+          "emergency_nonplan_output": true,
+          "explicit_nonplan_model_narration": false,
+          "path_kind": "resolved_turn_ctir_force_terminal_fallback",
+          "plan_driven": false,
+          "same_turn_retry_messages_reused": true
+        },
+        "opening_convergence": {
+          "api_error": null,
+          "bundle_present": true,
+          "narration_seam": {
+            "bundle_required": true,
+            "emergency_nonplan_output": true,
+            "path_kind": "resolved_turn_ctir_force_terminal_fallback",
+            "plan_driven": false
+          },
+          "narrative_plan_present": true,
+          "planning_session_interaction": {},
+          "scene_opening": {
+            "active_pressures": {
+              "clock_summaries": [],
+              "context_codes": [],
+              "interaction_pressure": "none",
+              "pending_lead_ids": [],
+              "scene_tension_codes": [],
+              "world_pressure": null
+            },
+            "actor_anchors": [],
+            "derivation_codes": [
+              "opening_reason:scene_entry",
+              "visible_fact:cat:A",
+              "visible_fact:cat:B",
+              "visible_fact:cat:C",
+              "visible_fact:cat:D"
+            ],
+            "location_anchors": [
+              "board",
+              "cinderwatch gate",
+              "cinderwatch gate district",
+              "curfew",
+              "frontier gate",
+              "frontier_gate",
+              "gate district",
+              "lists",
+              "missing",
+              "notice",
+              "patrol",
+              "rules",
+              "taxes",
+              "warning"
+            ],
+            "opening_reason": "scene_entry",
+            "opening_required": true,
+            "prohibited_content_codes": [
+              "no_backstage_plot_briefings",
+              "no_engine_role_label_as_proper_name",
+              "no_hidden_gm_facts_as_immediate_perception",
+              "no_unfounded_faction_control_claims",
+              "no_unintroduced_offscene_npc_names"
+            ],
+            "scene_id": "frontier_gate",
+            "validator": {
+              "issues": [],
+              "ok": true
+            },
+            "visible_fact_anchor_ids": [
+              "vf_slot:0",
+              "vf_slot:1",
+              "vf_slot:2",
+              "vf_slot:3",
+              "vf_slot:4"
+            ],
+            "visible_fact_categories": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          "seam_trace": null
+        },
+        "opening_fallback_owner_bucket": "retry",
+        "planner_convergence": {
+          "ctir_present": true,
+          "ctir_stamp": "1:143ae2ea680:c4e77c01",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:143ae2ea680:c4e77c01",
+          "owner_module": "game.api",
+          "path_label": "action_outcome",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "planner_convergence_report": {
+          "ctir_present": true,
+          "ctir_stamp": "1:143ae2ea680:c4e77c01",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "1:143ae2ea680:c4e77c01",
+          "owner_module": "game.api",
+          "path_label": "action_outcome",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "realization_fallback_family": "retry_terminal_fallback",
+        "response_policy_enforcement_applied": true,
+        "response_type_contract": {
+          "action_must_preserve_agency": true,
+          "allow_escalation": false,
+          "debug_reasons": [
+            "resolved_world_action_requires_action_outcome",
+            "non_hostile_world_action_guard"
+          ],
+          "escalation_block_reason": "non_hostile_world_action_guard",
+          "required_response_type": "action_outcome",
+          "source_route": "exploration",
+          "strict_answer_expected": false,
+          "strict_dialogue_expected": false,
+          "strict_target_id": null
+        },
+        "runtime_lineage_events": [],
+        "scenario_spine": {
+          "artifact_schema_version": 1,
+          "branch_id": "branch_social_inquiry",
+          "max_turns": null,
+          "resume_entry_first_turn": false,
+          "smoke": true,
+          "spine_id": "frontier_gate_long_session",
+          "turn_id": "inv_01",
+          "turn_index": 0
+        },
+        "selected_model": "gpt-4.1-mini",
+        "stage_diff_telemetry": {
+          "snapshots": [
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "3d6a5366414d068ab1e0",
+              "player_facing_preview": "The notice board displays updates about increased taxes, strict curfew regulations, and a warning regarding a patrol cu…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "retry_terminal_fallback_entry",
+              "text_len": 323
+            },
+            {
+              "accepted_via": "forced_fallback",
+              "active_target_id": null,
+              "fallback_kind": "retry_escape_hatch",
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "forced_retry_fallback",
+              "player_facing_fingerprint": "614864c18f80cf5fe4bb",
+              "player_facing_preview": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": true,
+                "targeted_retry_terminal": true
+              },
+              "stage": "retry_terminal_fallback_result",
+              "text_len": 105
+            },
+            {
+              "accepted_via": "forced_fallback",
+              "active_target_id": null,
+              "fallback_kind": "retry_escape_hatch",
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "forced_retry_fallback",
+              "player_facing_fingerprint": "526e35cac0a5bd658369",
+              "player_facing_preview": "As you watch the scene, the notice board lists taxes, curfew rules, and a warning about a missing patrol. Gate serjeant…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": true,
+                "targeted_retry_terminal": true
+              },
+              "stage": "final_emission_gate_entry",
+              "text_len": 276
+            },
+            {
+              "accepted_via": "forced_fallback",
+              "active_target_id": null,
+              "fallback_kind": "retry_escape_hatch",
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "replaced",
+              "narrative_authenticity_status": "pass",
+              "player_facing_fingerprint": "55dd8431ea2b652fe87b",
+              "player_facing_preview": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": true,
+                "targeted_retry_terminal": true
+              },
+              "stage": "final_emission_gate_exit",
+              "text_len": 183
+            }
+          ],
+          "transitions": [
+            {
+              "diff": {
+                "fallback_changed": true,
+                "repair_flags_changed": false,
+                "resolution_kind_changed": false,
+                "retry_flags_changed": true,
+                "route_changed": true,
+                "terminal_retry_activated": true,
+                "text_fingerprint_changed": true
+              },
+              "from": "retry_terminal_fallback_entry",
+              "to": "retry_terminal_fallback_result"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "turn_index": 1,
+      "turn_id": "inv_02",
+      "player_prompt": "I ask a guard who commands the watch tonight.",
+      "gm_text": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "meta": {
+        "emission_debug": {
+          "answer_shape_primacy": {
+            "checked": true,
+            "failure_reasons": [],
+            "passed": true
+          },
+          "answer_shape_primacy_checked": true,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_after": "For a breath, the scene stays still.",
+          "answer_shape_primacy_preview_before": "For a breath, the scene stays still.",
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_skip_reason": null,
+          "anti_railroading": {
+            "assertion_flags": {
+              "exclusive_path_claim": false,
+              "forced_conclusion": false,
+              "forced_direction": false,
+              "lead_plot_gravity": false,
+              "player_decision_override": false
+            },
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "anti_railroading_assertion_flags": {
+            "exclusive_path_claim": false,
+            "forced_conclusion": false,
+            "forced_direction": false,
+            "lead_plot_gravity": false,
+            "player_decision_override": false
+          },
+          "anti_railroading_checked": true,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_ok": true,
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_repaired": false,
+          "anti_railroading_skip_reason": null,
+          "canonical_gm_object_id": 1390198370816,
+          "context_separation": {
+            "assertion_flags": {
+              "ambient_pressure_forced_tone_shift": false,
+              "pressure_answer_substitution": false,
+              "pressure_overweighting": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "topic_hijack_background_pressure": false
+            },
+            "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=36;after_len=36;before_head='For a breath, the scene stays still.';after_head='For a breath, the scene stays still.'",
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "context_separation_assertion_flags": {
+            "ambient_pressure_forced_tone_shift": false,
+            "pressure_answer_substitution": false,
+            "pressure_overweighting": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "topic_hijack_background_pressure": false
+          },
+          "context_separation_checked": true,
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=36;after_len=36;before_head='For a breath, the scene stays still.';after_head='For a breath, the scene stays still.'",
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_ok": true,
+          "context_separation_passed_after_repair": null,
+          "context_separation_repair_hints": [],
+          "context_separation_repair_mode": null,
+          "context_separation_repaired": false,
+          "context_separation_skip_reason": null,
+          "conversational_memory_window": {
+            "active_interaction_target_id": "",
+            "active_scene_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "allow_explicit_reintroduction": true,
+            "anchored_interlocutor_id": "",
+            "deprioritize_stale_inactive_elements": true,
+            "enabled": true,
+            "explicit_reintroduced_entity_ids": [
+              "gate_guard"
+            ],
+            "explicit_reintroduced_topics": [],
+            "prioritize_active_scene_entities": true,
+            "prioritize_recent_turns": true,
+            "recent_turn_window": 6,
+            "selection_debug": {
+              "callback_marker_hit": null,
+              "matched_entity_ids": [
+                "gate_guard"
+              ],
+              "matched_grounded_ids": [],
+              "matched_topics": [],
+              "source_of_activity_anchor": "none",
+              "source_of_recentness": "session.turn_counter",
+              "source_of_reintroductions": "player_text+visibility_aliases"
+            },
+            "soft_memory_limit": 12,
+            "stale_after_turns": 18,
+            "window_version": "v1"
+          },
+          "fallback_behavior": {
+            "failure_reasons": [],
+            "repair_mode": "none",
+            "skip_reason": "uncertainty_inactive",
+            "validation": {
+              "checked": false,
+              "contract_present": true,
+              "passed": true,
+              "uncertainty_active": false
+            }
+          },
+          "fallback_behavior_boundary_semantic_synthesis_skipped": false,
+          "fallback_behavior_checked": false,
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_contract": {
+            "allowed_behaviors": {
+              "ask_clarifying_question": false,
+              "hedge_appropriately": false,
+              "provide_partial_information": false
+            },
+            "enabled": true,
+            "prefer_partial_over_question": false,
+            "uncertainty_active": false,
+            "uncertainty_mode": null,
+            "uncertainty_sources": [
+              "unknown_identity"
+            ]
+          },
+          "fallback_behavior_contract_present": true,
+          "fallback_behavior_failed": false,
+          "fallback_behavior_failure_reasons": [],
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_repair_mode": "none",
+          "fallback_behavior_repaired": false,
+          "fallback_behavior_skip_reason": "uncertainty_inactive",
+          "fallback_behavior_uncertainty_active": false,
+          "fallback_behavior_unknown_edge_added": false,
+          "final_emission_text_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+          "gm_output_player_facing_len": 128,
+          "interaction_continuity_validation": {
+            "continuity_strength": "none",
+            "debug": {
+              "cue_labels": [],
+              "reason_path": [
+                "contract_disabled_or_strength_none"
+              ],
+              "speaker_labels_detected": []
+            },
+            "enabled": false,
+            "facts": {
+              "anchor_required": false,
+              "anchored_interlocutor_id": "",
+              "dialogue_presence": false,
+              "explicit_switch_cue_present": false,
+              "multi_speaker_pattern_present": false,
+              "narrator_bridge_present": false,
+              "speaker_switch_detected": false,
+              "thread_drop_detected": false
+            },
+            "ok": true,
+            "violations": [],
+            "warnings": []
+          },
+          "log_payload_text_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+          "narration_constraint_debug": {
+            "response_type": {
+              "candidate_ok": true,
+              "contract_source": "response_policy",
+              "repair_kind": null,
+              "repair_used": false,
+              "required": "neutral_narration",
+              "upstream_prepared_absent": false
+            },
+            "speaker_selection": {
+              "binding_confident": null,
+              "reason_code": "speaker_unresolved",
+              "selection_source": null,
+              "speaker_id": null,
+              "speaker_name": null
+            },
+            "visibility": {
+              "contract_present": true,
+              "decision_mode": "validated",
+              "reason_codes": [],
+              "visible_entity_count": 6,
+              "withheld_fact_count": 4
+            }
+          },
+          "narration_state_consistency_after_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+          "narration_state_consistency_before_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+          "narration_state_consistency_changed_text": false,
+          "narrative_authority_assertion_flags": {
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "invented_outcome": false,
+            "overcertain_unresolved_action": false
+          },
+          "narrative_authority_checked": true,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_repaired": false,
+          "narrative_authority_skip_reason": null,
+          "opening_curated_facts": null,
+          "opening_final_basis_matches_selector": false,
+          "opening_final_fallback_basis": null,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "opening_selector_selected_facts": null,
+          "opening_selector_source_used": null,
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_promoted": false,
+          "player_facing_narration_purity": {
+            "preview_after": "For a breath, the scene stays still.",
+            "preview_before": "For a breath, the scene stays still.",
+            "repair_hints": [],
+            "repair_modes": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            },
+            "violation_keys": []
+          },
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_preview_after": "For a breath, the scene stays still.",
+          "player_facing_narration_purity_preview_before": "For a breath, the scene stays still.",
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_violation_keys": [],
+          "post_final_emission_gate_text_len": 128,
+          "post_narration_state_consistency_text_len": 128,
+          "pre_gate_text_len": 36,
+          "response_payload_text_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+          "scene_state_anchor_boundary_semantic_repair_disabled": true,
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_failed": true,
+          "scene_state_anchor_failure_reasons": [
+            "no_anchor_match"
+          ],
+          "scene_state_anchor_matched_kinds": [],
+          "scene_state_anchor_passed": false,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_skip_reason": null,
+          "selected_conversational_memory": [
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 103.71428571428571,
+              "source_turn": 1,
+              "text": "P: I scan the notice for taxes, curfew, and patrol lines. | G: The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 1,
+              "text": "notice board [notice_board_notice_board]",
+              "topic_tokens": [
+                "board",
+                "notice"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            }
+          ],
+          "tone_escalation_checked": true,
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_contract_summary": {
+            "allow_combat_initiation": false,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_verbal_pressure": true,
+            "base_tone": "guarded",
+            "enabled": true,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship"
+            ],
+            "max_allowed_tone": "tense"
+          },
+          "tone_escalation_detected_flags": {
+            "combat_initiation": false,
+            "explicit_threat": false,
+            "guarded": false,
+            "physical_hostility": false,
+            "verbal_pressure": false
+          },
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_matched_tone_level": null,
+          "tone_escalation_ok": true,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_violation_before_repair": false
+        },
+        "final_emission_meta": null,
+        "model_escalated": false,
+        "model_escalation_trigger": null,
+        "model_retry_attempt": 0,
+        "model_route_family": "default",
+        "model_route_purpose": "primary_turn",
+        "model_route_reason": "purpose_primary_turn",
+        "narration_seam": {
+          "bundle_required": true,
+          "continuation": {
+            "allows_nonplan_output": false,
+            "continuation_enforcement_applied": true,
+            "continuation_path_kind": "pressure_driven_continuation",
+            "continuation_plan_failure_reason": null,
+            "continuation_plan_verified": true,
+            "continuation_source": "narrative_plan_bundle",
+            "is_continuation_turn": true,
+            "reason_codes": [
+              "opening_reason:none",
+              "ctir_backed_plan_driven",
+              "plan_active_pressures_present"
+            ],
+            "requires_plan_driven_continuation": true
+          },
+          "ctir_backed": true,
+          "emergency_nonplan_output": false,
+          "explicit_nonplan_model_narration": false,
+          "path_kind": "resolved_turn_ctir_bundle",
+          "plan_driven": true,
+          "same_turn_retry_messages_reused": false
+        },
+        "opening_convergence": {
+          "api_error": null,
+          "bundle_present": true,
+          "narration_seam": {
+            "bundle_required": true,
+            "emergency_nonplan_output": false,
+            "path_kind": "resolved_turn_ctir_bundle",
+            "plan_driven": true
+          },
+          "narrative_plan_present": true,
+          "planning_session_interaction": {},
+          "scene_opening": null,
+          "seam_trace": null
+        },
+        "planner_convergence": {
+          "ctir_present": true,
+          "ctir_stamp": "2:143ae45bec0:f92d5301",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "2:143ae45bec0:f92d5301",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "planner_convergence_report": {
+          "ctir_present": true,
+          "ctir_stamp": "2:143ae45bec0:f92d5301",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "2:143ae45bec0:f92d5301",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "response_policy_enforcement_applied": true,
+        "response_type_contract": {
+          "action_must_preserve_agency": false,
+          "allow_escalation": false,
+          "debug_reasons": [
+            "no_stricter_authoritative_contract",
+            "social_question_guard"
+          ],
+          "escalation_block_reason": "social_question_guard",
+          "required_response_type": "neutral_narration",
+          "source_route": "social",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": false,
+          "strict_target_id": null
+        },
+        "runtime_lineage_events": [],
+        "scenario_spine": {
+          "artifact_schema_version": 1,
+          "branch_id": "branch_social_inquiry",
+          "max_turns": null,
+          "resume_entry_first_turn": false,
+          "smoke": true,
+          "spine_id": "frontier_gate_long_session",
+          "turn_id": "inv_02",
+          "turn_index": 1
+        },
+        "selected_model": "gpt-4.1-mini",
+        "stage_diff_telemetry": {
+          "snapshots": [
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "2fe25ad1db968c2fea7a",
+              "player_facing_preview": "For a breath, the scene stays still.",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_entry",
+              "text_len": 36
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "replaced",
+              "narrative_authenticity_reason_codes": [
+                "low_signal_generic_reply"
+              ],
+              "narrative_authenticity_status": "fail",
+              "player_facing_fingerprint": "02388cb02bb7577844ce",
+              "player_facing_preview": "Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_exit",
+              "text_len": 128
+            }
+          ],
+          "transitions": []
+        }
+      }
+    },
+    {
+      "turn_index": 2,
+      "turn_id": "inv_03",
+      "player_prompt": "I greet the tavern runner and ask the loudest rumor.",
+      "gm_text": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "meta": {
+        "emission_debug": {
+          "answer_shape_primacy": {
+            "checked": false,
+            "failure_reasons": [],
+            "passed": true,
+            "skip_reason": "turn_not_in_scope"
+          },
+          "answer_shape_primacy_checked": false,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_after": null,
+          "answer_shape_primacy_preview_before": null,
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_skip_reason": "turn_not_in_scope",
+          "anti_railroading": {
+            "assertion_flags": {
+              "exclusive_path_claim": false,
+              "forced_conclusion": false,
+              "forced_direction": false,
+              "lead_plot_gravity": false,
+              "player_decision_override": false
+            },
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "anti_railroading_assertion_flags": {
+            "exclusive_path_claim": false,
+            "forced_conclusion": false,
+            "forced_direction": false,
+            "lead_plot_gravity": false,
+            "player_decision_override": false
+          },
+          "anti_railroading_checked": true,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_ok": true,
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_repaired": false,
+          "anti_railroading_skip_reason": null,
+          "canonical_gm_object_id": 1390199277632,
+          "context_separation": {
+            "assertion_flags": {
+              "ambient_pressure_forced_tone_shift": false,
+              "pressure_answer_substitution": false,
+              "pressure_overweighting": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "topic_hijack_background_pressure": false
+            },
+            "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=64;after_len=64;before_head='Tavern Runner says, \"No. I cannot answer that from what I know.\"';after_head='Tavern Runner says, \"No. I cannot answer that from what I know.\"'",
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "context_separation_assertion_flags": {
+            "ambient_pressure_forced_tone_shift": false,
+            "pressure_answer_substitution": false,
+            "pressure_overweighting": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "topic_hijack_background_pressure": false
+          },
+          "context_separation_checked": true,
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=64;after_len=64;before_head='Tavern Runner says, \"No. I cannot answer that from what I know.\"';after_head='Tavern Runner says, \"No. I cannot answer that from what I know.\"'",
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_ok": true,
+          "context_separation_passed_after_repair": null,
+          "context_separation_repair_hints": [],
+          "context_separation_repair_mode": null,
+          "context_separation_repaired": false,
+          "context_separation_skip_reason": null,
+          "conversational_memory_window": {
+            "active_interaction_target_id": "tavern_runner",
+            "active_scene_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "allow_explicit_reintroduction": true,
+            "anchored_interlocutor_id": "tavern_runner",
+            "deprioritize_stale_inactive_elements": true,
+            "enabled": true,
+            "explicit_reintroduced_entity_ids": [
+              "tavern_runner"
+            ],
+            "explicit_reintroduced_topics": [],
+            "prioritize_active_scene_entities": true,
+            "prioritize_recent_turns": true,
+            "recent_turn_window": 6,
+            "selection_debug": {
+              "callback_marker_hit": null,
+              "matched_entity_ids": [
+                "tavern_runner"
+              ],
+              "matched_grounded_ids": [
+                {
+                  "id": "tavern_runner",
+                  "via": "anchored_interlocutor_id"
+                },
+                {
+                  "id": "tavern_runner",
+                  "via": "active_interaction_target_id"
+                }
+              ],
+              "matched_topics": [],
+              "source_of_activity_anchor": "active_interaction_target_id",
+              "source_of_recentness": "session.turn_counter",
+              "source_of_reintroductions": "player_text+visibility_aliases"
+            },
+            "soft_memory_limit": 12,
+            "stale_after_turns": 18,
+            "window_version": "v1"
+          },
+          "fallback_behavior": {
+            "failure_reasons": [
+              "missing_allowed_fallback_shape"
+            ],
+            "repair_mode": "remove_fabricated_authority",
+            "validation": {
+              "checked": true,
+              "contract_present": false,
+              "passed": false,
+              "uncertainty_active": true
+            }
+          },
+          "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+          "fallback_behavior_checked": true,
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_contract": {
+            "allowed_behaviors": {
+              "ask_clarifying_question": false,
+              "hedge_appropriately": true,
+              "provide_partial_information": true
+            },
+            "enabled": true,
+            "prefer_partial_over_question": true,
+            "uncertainty_active": true,
+            "uncertainty_mode": "mixed",
+            "uncertainty_sources": [
+              "unknown_motive"
+            ]
+          },
+          "fallback_behavior_contract_present": false,
+          "fallback_behavior_failed": true,
+          "fallback_behavior_failure_reasons": [
+            "missing_allowed_fallback_shape"
+          ],
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_repair_mode": "remove_fabricated_authority",
+          "fallback_behavior_repaired": true,
+          "fallback_behavior_skip_reason": null,
+          "fallback_behavior_uncertainty_active": true,
+          "fallback_behavior_unknown_edge_added": false,
+          "final_emission_text_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+          "gm_output_player_facing_len": 57,
+          "interaction_continuity_validation": {
+            "continuity_strength": "strong",
+            "debug": {
+              "cue_labels": [],
+              "reason_path": [
+                "contract_active",
+                "dialogue_shape_expected"
+              ],
+              "speaker_labels_detected": []
+            },
+            "enabled": true,
+            "facts": {
+              "anchor_required": true,
+              "anchored_interlocutor_id": "tavern_runner",
+              "dialogue_presence": true,
+              "explicit_switch_cue_present": false,
+              "multi_speaker_pattern_present": false,
+              "narrator_bridge_present": false,
+              "speaker_switch_detected": false,
+              "thread_drop_detected": false
+            },
+            "ok": true,
+            "violations": [],
+            "warnings": []
+          },
+          "log_payload_text_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+          "narration_constraint_debug": {
+            "response_type": {
+              "candidate_ok": true,
+              "contract_source": "resolution.authoritative_social",
+              "repair_kind": null,
+              "repair_used": false,
+              "required": "dialogue",
+              "upstream_prepared_absent": false
+            },
+            "speaker_selection": {
+              "binding_confident": true,
+              "reason_code": "canonical_speaker_rewrite",
+              "selection_source": "continuity",
+              "speaker_id": "tavern_runner",
+              "speaker_name": "Tavern Runner"
+            },
+            "visibility": {
+              "contract_present": true,
+              "decision_mode": "validated",
+              "reason_codes": [],
+              "visible_entity_count": 6,
+              "withheld_fact_count": 4
+            }
+          },
+          "narration_state_consistency_after_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+          "narration_state_consistency_before_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+          "narration_state_consistency_changed_text": false,
+          "narrative_authority_assertion_flags": {
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "invented_outcome": false,
+            "overcertain_unresolved_action": false
+          },
+          "narrative_authority_checked": true,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_repaired": false,
+          "narrative_authority_skip_reason": null,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_promoted": false,
+          "player_facing_narration_purity": {
+            "preview_after": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+            "preview_before": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+            "repair_hints": [],
+            "repair_modes": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            },
+            "violation_keys": []
+          },
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_preview_after": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+          "player_facing_narration_purity_preview_before": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_violation_keys": [],
+          "post_final_emission_gate_text_len": 57,
+          "post_narration_state_consistency_text_len": 57,
+          "pre_gate_text_len": 330,
+          "response_payload_text_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_failed": false,
+          "scene_state_anchor_failure_reasons": [],
+          "scene_state_anchor_matched_kinds": [
+            "actor",
+            "player_action"
+          ],
+          "scene_state_anchor_passed": true,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_skip_reason": null,
+          "selected_conversational_memory": [
+            {
+              "entity_ids": [
+                "tavern_runner"
+              ],
+              "kind": "npc_lead_discussion",
+              "score": 256.0,
+              "source_turn": 3,
+              "text": "Lead muddy_footprints_northwest: The runner heard the patrol vanished near muddy footprints northwest of the crates. (explicit)",
+              "topic_tokens": [
+                "footprints",
+                "heard",
+                "muddy",
+                "near",
+                "northwest",
+                "patrol",
+                "runner",
+                "vanished"
+              ],
+              "why_selected": [
+                "recency",
+                "active_scene_entity",
+                "active_interaction_target",
+                "anchored_interlocutor",
+                "explicit_reintroduction"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 103.71428571428571,
+              "source_turn": 2,
+              "text": "P: I ask a guard who commands the watch tonight. | G: Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 89.42857142857143,
+              "source_turn": 1,
+              "text": "P: I scan the notice for taxes, curfew, and patrol lines. | G: The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 2,
+              "text": "Captain Desaen [recent_named_figure_captain_desaen]",
+              "topic_tokens": [
+                "captain",
+                "desaen"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 2,
+              "text": "Captain Desaen [visible_named_figure_captain_desaen]",
+              "topic_tokens": [
+                "captain",
+                "desaen"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 2,
+              "text": "gate serjeant, a stern figure balancing authority and exhaustion, eyes you briefly while managing the crowd [active_event_gate_serjeant_a_stern_figure_balancing_authority_and_exhaustion_eyes_you_briefly_while_managing_the_crowd]",
+              "topic_tokens": [
+                "authority",
+                "balancing",
+                "exhaustion",
+                "eyes",
+                "figure",
+                "gate",
+                "serjeant",
+                "stern"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 71.42857142857143,
+              "source_turn": 1,
+              "text": "notice board [notice_board_notice_board]",
+              "topic_tokens": [
+                "board",
+                "notice"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            }
+          ],
+          "speaker_contract_enforcement": {
+            "contract_present": true,
+            "final_reason_code": "canonical_speaker_rewrite",
+            "post_validation": {
+              "canonical_speaker_id": "tavern_runner",
+              "canonical_speaker_name": "Tavern Runner",
+              "details": {
+                "signature": {
+                  "confidence": "high",
+                  "has_interruption_framing": false,
+                  "is_explicitly_attributed": true,
+                  "is_generic_fallback_label": false,
+                  "speaker_label": "Tavern Runner",
+                  "speaker_name": "Tavern Runner"
+                }
+              },
+              "ok": true,
+              "reason_code": "speaker_contract_match",
+              "repair_mode": "none"
+            },
+            "repair": {
+              "canonical_rewrite_applied": true,
+              "initial_repair_mode": "canonical_rewrite"
+            },
+            "validation": {
+              "canonical_speaker_id": "tavern_runner",
+              "canonical_speaker_name": "Tavern Runner",
+              "details": {
+                "rule": "continuity_locked_explicit_mismatch",
+                "signature": {
+                  "confidence": "high",
+                  "has_interruption_framing": false,
+                  "is_explicitly_attributed": true,
+                  "is_generic_fallback_label": false,
+                  "speaker_label": "the tavern runner",
+                  "speaker_name": "the tavern runner"
+                }
+              },
+              "ok": false,
+              "reason_code": "speaker_binding_mismatch",
+              "repair_mode": "canonical_rewrite"
+            }
+          },
+          "tone_escalation_checked": true,
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_contract_summary": {
+            "allow_combat_initiation": false,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_verbal_pressure": true,
+            "base_tone": "guarded",
+            "enabled": true,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship"
+            ],
+            "max_allowed_tone": "tense"
+          },
+          "tone_escalation_detected_flags": {
+            "combat_initiation": false,
+            "explicit_threat": false,
+            "guarded": false,
+            "physical_hostility": false,
+            "verbal_pressure": false
+          },
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_matched_tone_level": null,
+          "tone_escalation_ok": true,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_violation_before_repair": false
+        },
+        "final_emission_meta": null,
+        "model_escalated": true,
+        "model_escalation_trigger": "strict_social",
+        "model_retry_attempt": 0,
+        "model_route_family": "high_precision",
+        "model_route_purpose": "strict_social",
+        "model_route_reason": "purpose_strict_social",
+        "narration_seam": {
+          "bundle_required": true,
+          "continuation": {
+            "allows_nonplan_output": false,
+            "continuation_enforcement_applied": true,
+            "continuation_path_kind": "pressure_driven_continuation",
+            "continuation_plan_failure_reason": null,
+            "continuation_plan_verified": true,
+            "continuation_source": "narrative_plan_bundle",
+            "is_continuation_turn": true,
+            "reason_codes": [
+              "opening_reason:none",
+              "ctir_backed_plan_driven",
+              "plan_active_pressures_present"
+            ],
+            "requires_plan_driven_continuation": true
+          },
+          "ctir_backed": true,
+          "emergency_nonplan_output": false,
+          "explicit_nonplan_model_narration": false,
+          "path_kind": "resolved_turn_ctir_bundle",
+          "plan_driven": true,
+          "same_turn_retry_messages_reused": false
+        },
+        "opening_convergence": {
+          "api_error": null,
+          "bundle_present": true,
+          "narration_seam": {
+            "bundle_required": true,
+            "emergency_nonplan_output": false,
+            "path_kind": "resolved_turn_ctir_bundle",
+            "plan_driven": true
+          },
+          "narrative_plan_present": true,
+          "planning_session_interaction": {
+            "active_interaction_target_id": "tavern_runner"
+          },
+          "scene_opening": null,
+          "seam_trace": null
+        },
+        "planner_convergence": {
+          "ctir_present": true,
+          "ctir_stamp": "3:143ae4261c0:aeb600df",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "3:143ae4261c0:aeb600df",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "planner_convergence_report": {
+          "ctir_present": true,
+          "ctir_stamp": "3:143ae4261c0:aeb600df",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "3:143ae4261c0:aeb600df",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "response_policy_enforcement_applied": true,
+        "response_type_contract": {
+          "action_must_preserve_agency": false,
+          "allow_escalation": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ],
+          "escalation_block_reason": "social_question_guard",
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "strict_target_id": "tavern_runner"
+        },
+        "runtime_lineage_events": [],
+        "scenario_spine": {
+          "artifact_schema_version": 1,
+          "branch_id": "branch_social_inquiry",
+          "max_turns": null,
+          "resume_entry_first_turn": false,
+          "smoke": true,
+          "spine_id": "frontier_gate_long_session",
+          "turn_id": "inv_03",
+          "turn_index": 2
+        },
+        "selected_model": "gpt-4.1-mini",
+        "stage_diff_telemetry": {
+          "snapshots": [
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "809eecee9671c0e1232b",
+              "player_facing_preview": "\"As far as rumor goes,\" the tavern runner replies, glancing nervously toward the muddy crates, \"the patrol vanished nea…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_entry",
+              "text_len": 330
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "414d8718949d5661be87",
+              "player_facing_preview": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_after_strict_social_composition",
+              "text_len": 64
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "accept_candidate",
+              "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+              "player_facing_fingerprint": "3300da184cdad4c5a0a5",
+              "player_facing_preview": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+              "repair_flags": [
+                "fallback_behavior_repaired"
+              ],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "rumor_turn_active": true,
+              "stage": "final_emission_gate_exit",
+              "text_len": 57
+            }
+          ],
+          "transitions": []
+        }
+      }
+    },
+    {
+      "turn_index": 3,
+      "turn_id": "inv_04",
+      "player_prompt": "I mention the missing patrol and watch their face.",
+      "gm_text": "Tavern Runner grimaces. \"Not something I can say here.\"",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "social_probe",
+      "meta": {
+        "emission_debug": {
+          "answer_shape_primacy": {
+            "checked": false,
+            "failure_reasons": [],
+            "passed": true,
+            "skip_reason": "turn_not_in_scope"
+          },
+          "answer_shape_primacy_checked": false,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_after": null,
+          "answer_shape_primacy_preview_before": null,
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_skip_reason": "turn_not_in_scope",
+          "anti_railroading": {
+            "assertion_flags": {
+              "exclusive_path_claim": false,
+              "forced_conclusion": false,
+              "forced_direction": false,
+              "lead_plot_gravity": false,
+              "player_decision_override": false
+            },
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "anti_railroading_assertion_flags": {
+            "exclusive_path_claim": false,
+            "forced_conclusion": false,
+            "forced_direction": false,
+            "lead_plot_gravity": false,
+            "player_decision_override": false
+          },
+          "anti_railroading_checked": true,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_ok": true,
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_repaired": false,
+          "anti_railroading_skip_reason": null,
+          "canonical_gm_object_id": 1390200222720,
+          "context_separation": {
+            "assertion_flags": {
+              "ambient_pressure_forced_tone_shift": false,
+              "pressure_answer_substitution": false,
+              "pressure_overweighting": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "topic_hijack_background_pressure": false
+            },
+            "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=278;after_len=278;before_head='\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…';after_head='\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…'",
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "context_separation_assertion_flags": {
+            "ambient_pressure_forced_tone_shift": false,
+            "pressure_answer_substitution": false,
+            "pressure_overweighting": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "topic_hijack_background_pressure": false
+          },
+          "context_separation_checked": true,
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=278;after_len=278;before_head='\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…';after_head='\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…'",
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_ok": true,
+          "context_separation_passed_after_repair": null,
+          "context_separation_repair_hints": [],
+          "context_separation_repair_mode": null,
+          "context_separation_repaired": false,
+          "context_separation_skip_reason": null,
+          "conversational_memory_window": {
+            "active_interaction_target_id": "tavern_runner",
+            "active_scene_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "allow_explicit_reintroduction": true,
+            "anchored_interlocutor_id": "tavern_runner",
+            "deprioritize_stale_inactive_elements": true,
+            "enabled": true,
+            "explicit_reintroduced_entity_ids": [
+              "gate_guard"
+            ],
+            "explicit_reintroduced_topics": [],
+            "prioritize_active_scene_entities": true,
+            "prioritize_recent_turns": true,
+            "recent_turn_window": 6,
+            "selection_debug": {
+              "callback_marker_hit": null,
+              "matched_entity_ids": [
+                "gate_guard"
+              ],
+              "matched_grounded_ids": [],
+              "matched_topics": [],
+              "source_of_activity_anchor": "active_interaction_target_id",
+              "source_of_recentness": "session.turn_counter",
+              "source_of_reintroductions": "player_text+visibility_aliases"
+            },
+            "soft_memory_limit": 12,
+            "stale_after_turns": 18,
+            "window_version": "v1"
+          },
+          "fallback_behavior": {
+            "failure_reasons": [],
+            "repair_mode": "none",
+            "skip_reason": "uncertainty_inactive",
+            "validation": {
+              "checked": false,
+              "contract_present": true,
+              "passed": true,
+              "uncertainty_active": false
+            }
+          },
+          "fallback_behavior_boundary_semantic_synthesis_skipped": false,
+          "fallback_behavior_checked": false,
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_contract": {
+            "allowed_behaviors": {
+              "ask_clarifying_question": false,
+              "hedge_appropriately": false,
+              "provide_partial_information": false
+            },
+            "enabled": true,
+            "prefer_partial_over_question": false,
+            "uncertainty_active": false,
+            "uncertainty_mode": null,
+            "uncertainty_sources": []
+          },
+          "fallback_behavior_contract_present": true,
+          "fallback_behavior_failed": false,
+          "fallback_behavior_failure_reasons": [],
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_repair_mode": "none",
+          "fallback_behavior_repaired": false,
+          "fallback_behavior_skip_reason": "uncertainty_inactive",
+          "fallback_behavior_uncertainty_active": false,
+          "fallback_behavior_unknown_edge_added": false,
+          "final_emission_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "gm_output_player_facing_len": 55,
+          "interaction_continuity_validation": {
+            "continuity_strength": "strong",
+            "debug": {
+              "cue_labels": [],
+              "reason_path": [
+                "contract_active",
+                "dialogue_shape_expected"
+              ],
+              "speaker_labels_detected": []
+            },
+            "enabled": true,
+            "facts": {
+              "anchor_required": true,
+              "anchored_interlocutor_id": "tavern_runner",
+              "dialogue_presence": true,
+              "explicit_switch_cue_present": false,
+              "multi_speaker_pattern_present": false,
+              "narrator_bridge_present": false,
+              "speaker_switch_detected": false,
+              "thread_drop_detected": false
+            },
+            "ok": true,
+            "violations": [],
+            "warnings": []
+          },
+          "log_payload_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_constraint_debug": {
+            "response_type": {
+              "candidate_ok": true,
+              "contract_source": "response_policy",
+              "repair_kind": null,
+              "repair_used": false,
+              "required": "dialogue",
+              "upstream_prepared_absent": false
+            },
+            "speaker_selection": {
+              "binding_confident": false,
+              "reason_code": "speaker_contract_match",
+              "selection_source": "continuity",
+              "speaker_id": "tavern_runner",
+              "speaker_name": "Tavern Runner"
+            },
+            "visibility": {
+              "contract_present": true,
+              "decision_mode": "validated",
+              "reason_codes": [],
+              "visible_entity_count": 6,
+              "withheld_fact_count": 4
+            }
+          },
+          "narration_state_consistency_after_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_state_consistency_before_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_state_consistency_changed_text": false,
+          "narrative_authority_assertion_flags": {
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "invented_outcome": false,
+            "overcertain_unresolved_action": false
+          },
+          "narrative_authority_checked": true,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_repaired": false,
+          "narrative_authority_skip_reason": null,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_promoted": false,
+          "player_facing_narration_purity": {
+            "preview_after": "\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…",
+            "preview_before": "\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…",
+            "repair_hints": [],
+            "repair_modes": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            },
+            "violation_keys": []
+          },
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_preview_after": "\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…",
+          "player_facing_narration_purity_preview_before": "\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" t…",
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_violation_keys": [],
+          "post_final_emission_gate_text_len": 55,
+          "post_narration_state_consistency_text_len": 55,
+          "pre_gate_text_len": 397,
+          "response_payload_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_failed": false,
+          "scene_state_anchor_failure_reasons": [],
+          "scene_state_anchor_matched_kinds": [
+            "location",
+            "player_action"
+          ],
+          "scene_state_anchor_passed": true,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_skip_reason": null,
+          "selected_conversational_memory": [
+            {
+              "entity_ids": [
+                "tavern_runner"
+              ],
+              "kind": "npc_lead_discussion",
+              "score": 189.71428571428572,
+              "source_turn": 3,
+              "text": "Lead muddy_footprints_northwest: The runner heard the patrol vanished near muddy footprints northwest of the crates. (explicit)",
+              "topic_tokens": [
+                "footprints",
+                "heard",
+                "muddy",
+                "near",
+                "northwest",
+                "patrol",
+                "runner",
+                "vanished"
+              ],
+              "why_selected": [
+                "recency",
+                "active_scene_entity",
+                "active_interaction_target",
+                "anchored_interlocutor"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 103.71428571428571,
+              "source_turn": 3,
+              "text": "P: I greet the tavern runner and ask the loudest rumor. | G: Tavern Runner says, \"No. I cannot answer that from what.\"",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 89.42857142857143,
+              "source_turn": 2,
+              "text": "P: I ask a guard who commands the watch tonight. | G: Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 3,
+              "text": "\"as far as rumor goes,\" the tavern runner replies, glancing nervously toward the muddy crates, \"the patrol vanished [active_event_as_far_as_rumor_goes_the_tavern_runner_replies_glancing_nervously_toward_the_muddy_crates_the_patrol_vanished_near_some_muddy_footprints_northwest_of_those_crates]",
+              "topic_tokens": [
+                "glancing",
+                "goes",
+                "nervously",
+                "replies",
+                "rumor",
+                "runner",
+                "tavern",
+                "toward"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 3,
+              "text": "Tavern Runner [scene_npc_tavern_runner]",
+              "topic_tokens": [
+                "runner",
+                "tavern"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 75.14285714285714,
+              "source_turn": 1,
+              "text": "P: I scan the notice for taxes, curfew, and patrol lines. | G: The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 71.42857142857143,
+              "source_turn": 2,
+              "text": "Captain Desaen [visible_named_figure_captain_desaen]",
+              "topic_tokens": [
+                "captain",
+                "desaen"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 71.42857142857143,
+              "source_turn": 2,
+              "text": "gate serjeant, a stern figure balancing authority and exhaustion, eyes you briefly while managing the crowd [active_event_gate_serjeant_a_stern_figure_balancing_authority_and_exhaustion_eyes_you_briefly_while_managing_the_crowd]",
+              "topic_tokens": [
+                "authority",
+                "balancing",
+                "exhaustion",
+                "eyes",
+                "figure",
+                "gate",
+                "serjeant",
+                "stern"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            }
+          ],
+          "speaker_contract_enforcement": {
+            "contract_present": true,
+            "final_reason_code": "speaker_contract_match",
+            "validation": {
+              "canonical_speaker_id": "tavern_runner",
+              "canonical_speaker_name": "Tavern Runner",
+              "details": {
+                "signature": {
+                  "confidence": "low",
+                  "has_interruption_framing": false,
+                  "is_explicitly_attributed": false,
+                  "is_generic_fallback_label": false,
+                  "speaker_label": null,
+                  "speaker_name": null
+                }
+              },
+              "ok": true,
+              "reason_code": "speaker_contract_match",
+              "repair_mode": "none"
+            }
+          },
+          "tone_escalation_checked": true,
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_contract_summary": {
+            "allow_combat_initiation": false,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_verbal_pressure": true,
+            "base_tone": "guarded",
+            "enabled": true,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship",
+              "resolution_kind_or_mechanical_payload_is_risky"
+            ],
+            "max_allowed_tone": "tense"
+          },
+          "tone_escalation_detected_flags": {
+            "combat_initiation": false,
+            "explicit_threat": false,
+            "guarded": false,
+            "physical_hostility": false,
+            "verbal_pressure": false
+          },
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_matched_tone_level": null,
+          "tone_escalation_ok": true,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_violation_before_repair": false
+        },
+        "final_emission_meta": null,
+        "model_escalated": true,
+        "model_escalation_trigger": "strict_social",
+        "model_retry_attempt": 0,
+        "model_route_family": "high_precision",
+        "model_route_purpose": "strict_social",
+        "model_route_reason": "purpose_strict_social",
+        "narration_seam": {
+          "bundle_required": true,
+          "continuation": {
+            "allows_nonplan_output": false,
+            "continuation_enforcement_applied": true,
+            "continuation_path_kind": "pressure_driven_continuation",
+            "continuation_plan_failure_reason": null,
+            "continuation_plan_verified": true,
+            "continuation_source": "narrative_plan_bundle",
+            "is_continuation_turn": true,
+            "reason_codes": [
+              "opening_reason:none",
+              "ctir_backed_plan_driven",
+              "plan_active_pressures_present"
+            ],
+            "requires_plan_driven_continuation": true
+          },
+          "ctir_backed": true,
+          "emergency_nonplan_output": false,
+          "explicit_nonplan_model_narration": false,
+          "path_kind": "resolved_turn_ctir_bundle",
+          "plan_driven": true,
+          "same_turn_retry_messages_reused": false
+        },
+        "opening_convergence": {
+          "api_error": null,
+          "bundle_present": true,
+          "narration_seam": {
+            "bundle_required": true,
+            "emergency_nonplan_output": false,
+            "path_kind": "resolved_turn_ctir_bundle",
+            "plan_driven": true
+          },
+          "narrative_plan_present": true,
+          "planning_session_interaction": {
+            "active_interaction_target_id": "tavern_runner",
+            "pending_lead_ids": [
+              "minlead_exit_frontier_gate_old_milestone"
+            ]
+          },
+          "scene_opening": null,
+          "seam_trace": null
+        },
+        "planner_convergence": {
+          "ctir_present": true,
+          "ctir_stamp": "4:143ae4b9ec0:ea4fa3e",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "4:143ae4b9ec0:ea4fa3e",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "planner_convergence_report": {
+          "ctir_present": true,
+          "ctir_stamp": "4:143ae4b9ec0:ea4fa3e",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "4:143ae4b9ec0:ea4fa3e",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "response_policy_enforcement_applied": true,
+        "response_type_contract": {
+          "action_must_preserve_agency": false,
+          "allow_escalation": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ],
+          "escalation_block_reason": "social_question_guard",
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "strict_target_id": "tavern_runner"
+        },
+        "runtime_lineage_events": [],
+        "scenario_spine": {
+          "artifact_schema_version": 1,
+          "branch_id": "branch_social_inquiry",
+          "max_turns": null,
+          "resume_entry_first_turn": false,
+          "smoke": true,
+          "spine_id": "frontier_gate_long_session",
+          "turn_id": "inv_04",
+          "turn_index": 3
+        },
+        "selected_model": "gpt-4.1-mini",
+        "stage_diff_telemetry": {
+          "snapshots": [
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "b422732cddc03587ea21",
+              "player_facing_preview": "The tavern runner glances away quickly, a flicker of unease passing over their face before they offer a guarded shrug. …",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_entry",
+              "text_len": 397
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "72c7d056b3a6950594d6",
+              "player_facing_preview": "\"The patrol? Disappeared without a trace near those muddy footprints northwest of the crates,\" they say quietly. \"Not m…",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_after_strict_social_composition",
+              "text_len": 278
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "replaced",
+              "narrative_authenticity_status": "pass",
+              "player_facing_fingerprint": "419909b46031af41a591",
+              "player_facing_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "rumor_turn_active": true,
+              "stage": "final_emission_gate_exit",
+              "text_len": 55
+            }
+          ],
+          "transitions": []
+        }
+      }
+    },
+    {
+      "turn_index": 4,
+      "turn_id": "inv_05",
+      "player_prompt": "I ask who posted the warning beside the tax lines.",
+      "gm_text": "Tavern Runner grimaces. \"Not something I can say here.\"",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "meta": {
+        "emission_debug": {
+          "answer_shape_primacy": {
+            "checked": false,
+            "failure_reasons": [],
+            "passed": true,
+            "skip_reason": "turn_not_in_scope"
+          },
+          "answer_shape_primacy_checked": false,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_after": null,
+          "answer_shape_primacy_preview_before": null,
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_skip_reason": "turn_not_in_scope",
+          "anti_railroading": {
+            "assertion_flags": {
+              "exclusive_path_claim": false,
+              "forced_conclusion": false,
+              "forced_direction": false,
+              "lead_plot_gravity": false,
+              "player_decision_override": false
+            },
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "anti_railroading_assertion_flags": {
+            "exclusive_path_claim": false,
+            "forced_conclusion": false,
+            "forced_direction": false,
+            "lead_plot_gravity": false,
+            "player_decision_override": false
+          },
+          "anti_railroading_checked": true,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_ok": true,
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_repaired": false,
+          "anti_railroading_skip_reason": null,
+          "canonical_gm_object_id": 1390201645888,
+          "context_separation": {
+            "assertion_flags": {
+              "ambient_pressure_forced_tone_shift": false,
+              "pressure_answer_substitution": false,
+              "pressure_overweighting": false,
+              "scene_focus_displaced_by_world_pressure": false,
+              "topic_hijack_background_pressure": false
+            },
+            "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=328;after_len=328;before_head='\"I can\\'t say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…';after_head='\"I can\\'t say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…'",
+            "failure_reasons": [],
+            "repair_hints": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            }
+          },
+          "context_separation_assertion_flags": {
+            "ambient_pressure_forced_tone_shift": false,
+            "pressure_answer_substitution": false,
+            "pressure_overweighting": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "topic_hijack_background_pressure": false
+          },
+          "context_separation_checked": true,
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=328;after_len=328;before_head='\"I can\\'t say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…';after_head='\"I can\\'t say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…'",
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_ok": true,
+          "context_separation_passed_after_repair": null,
+          "context_separation_repair_hints": [],
+          "context_separation_repair_mode": null,
+          "context_separation_repaired": false,
+          "context_separation_skip_reason": null,
+          "conversational_memory_window": {
+            "active_interaction_target_id": "tavern_runner",
+            "active_scene_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "guard_captain",
+              "refugee",
+              "tavern_runner",
+              "threadbare_watcher"
+            ],
+            "allow_explicit_reintroduction": true,
+            "anchored_interlocutor_id": "tavern_runner",
+            "deprioritize_stale_inactive_elements": true,
+            "enabled": true,
+            "explicit_reintroduced_entity_ids": [],
+            "explicit_reintroduced_topics": [],
+            "prioritize_active_scene_entities": true,
+            "prioritize_recent_turns": true,
+            "recent_turn_window": 6,
+            "selection_debug": {
+              "callback_marker_hit": null,
+              "matched_entity_ids": [],
+              "matched_grounded_ids": [],
+              "matched_topics": [],
+              "source_of_activity_anchor": "active_interaction_target_id",
+              "source_of_recentness": "session.turn_counter",
+              "source_of_reintroductions": "player_text+visibility_aliases"
+            },
+            "soft_memory_limit": 12,
+            "stale_after_turns": 18,
+            "window_version": "v1"
+          },
+          "fallback_behavior": {
+            "failure_reasons": [
+              "missing_allowed_fallback_shape"
+            ],
+            "repair_mode": "none",
+            "validation": {
+              "checked": true,
+              "contract_present": false,
+              "passed": false,
+              "uncertainty_active": true
+            }
+          },
+          "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+          "fallback_behavior_checked": true,
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_contract": {
+            "allowed_behaviors": {
+              "ask_clarifying_question": false,
+              "hedge_appropriately": true,
+              "provide_partial_information": true
+            },
+            "enabled": true,
+            "prefer_partial_over_question": true,
+            "uncertainty_active": true,
+            "uncertainty_mode": "mixed",
+            "uncertainty_sources": [
+              "unknown_identity",
+              "unknown_feasibility"
+            ]
+          },
+          "fallback_behavior_contract_present": false,
+          "fallback_behavior_failed": true,
+          "fallback_behavior_failure_reasons": [
+            "missing_allowed_fallback_shape"
+          ],
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_repair_mode": "none",
+          "fallback_behavior_repaired": false,
+          "fallback_behavior_skip_reason": null,
+          "fallback_behavior_uncertainty_active": true,
+          "fallback_behavior_unknown_edge_added": false,
+          "final_emission_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "gm_output_player_facing_len": 55,
+          "interaction_continuity_validation": {
+            "continuity_strength": "strong",
+            "debug": {
+              "cue_labels": [],
+              "reason_path": [
+                "contract_active",
+                "dialogue_shape_expected"
+              ],
+              "speaker_labels_detected": []
+            },
+            "enabled": true,
+            "facts": {
+              "anchor_required": true,
+              "anchored_interlocutor_id": "tavern_runner",
+              "dialogue_presence": true,
+              "explicit_switch_cue_present": false,
+              "multi_speaker_pattern_present": false,
+              "narrator_bridge_present": false,
+              "speaker_switch_detected": false,
+              "thread_drop_detected": false
+            },
+            "ok": true,
+            "violations": [],
+            "warnings": []
+          },
+          "log_payload_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_constraint_debug": {
+            "response_type": {
+              "candidate_ok": true,
+              "contract_source": "resolution.authoritative_social",
+              "repair_kind": null,
+              "repair_used": false,
+              "required": "dialogue",
+              "upstream_prepared_absent": false
+            },
+            "speaker_selection": {
+              "binding_confident": false,
+              "reason_code": "speaker_contract_match",
+              "selection_source": "continuity",
+              "speaker_id": "tavern_runner",
+              "speaker_name": "Tavern Runner"
+            },
+            "visibility": {
+              "contract_present": true,
+              "decision_mode": "validated",
+              "reason_codes": [],
+              "visible_entity_count": 6,
+              "withheld_fact_count": 4
+            }
+          },
+          "narration_state_consistency_after_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_state_consistency_before_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "narration_state_consistency_changed_text": false,
+          "narrative_authority_assertion_flags": {
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "invented_outcome": false,
+            "overcertain_unresolved_action": false
+          },
+          "narrative_authority_checked": true,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_repaired": false,
+          "narrative_authority_skip_reason": null,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_promoted": false,
+          "player_facing_narration_purity": {
+            "preview_after": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…",
+            "preview_before": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…",
+            "repair_hints": [],
+            "repair_modes": [],
+            "validation": {
+              "checked": true,
+              "passed": true
+            },
+            "violation_keys": []
+          },
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_preview_after": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…",
+          "player_facing_narration_purity_preview_before": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and gua…",
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_violation_keys": [],
+          "post_final_emission_gate_text_len": 55,
+          "post_narration_state_consistency_text_len": 55,
+          "pre_gate_text_len": 328,
+          "response_payload_text_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_failed": false,
+          "scene_state_anchor_failure_reasons": [],
+          "scene_state_anchor_matched_kinds": [
+            "location",
+            "actor",
+            "player_action"
+          ],
+          "scene_state_anchor_passed": true,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_skip_reason": null,
+          "selected_conversational_memory": [
+            {
+              "entity_ids": [
+                "tavern_runner"
+              ],
+              "kind": "npc_lead_discussion",
+              "score": 175.42857142857144,
+              "source_turn": 3,
+              "text": "Lead muddy_footprints_northwest: The runner heard the patrol vanished near muddy footprints northwest of the crates. (explicit)",
+              "topic_tokens": [
+                "footprints",
+                "heard",
+                "muddy",
+                "near",
+                "northwest",
+                "patrol",
+                "runner",
+                "vanished"
+              ],
+              "why_selected": [
+                "recency",
+                "active_scene_entity",
+                "active_interaction_target",
+                "anchored_interlocutor"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 103.71428571428571,
+              "source_turn": 4,
+              "text": "P: I mention the missing patrol and watch their face. | G: Tavern Runner grimaces. \"Not something I can say here.\"",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 89.42857142857143,
+              "source_turn": 3,
+              "text": "P: I greet the tavern runner and ask the loudest rumor. | G: Tavern Runner says, \"No. I cannot answer that from what.\"",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 4,
+              "text": "Captain Desaen [recent_named_figure_captain_desaen]",
+              "topic_tokens": [
+                "captain",
+                "desaen"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 4,
+              "text": "Captain Desaen [visible_named_figure_captain_desaen]",
+              "topic_tokens": [
+                "captain",
+                "desaen"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 4,
+              "text": "Tavern Runner [scene_npc_tavern_runner]",
+              "topic_tokens": [
+                "runner",
+                "tavern"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "contextual_thread",
+              "score": 85.71428571428571,
+              "source_turn": 4,
+              "text": "tavern runner glances away quickly, a flicker of unease passing over their face before they offer a guarded shrug [active_event_tavern_runner_glances_away_quickly_a_flicker_of_unease_passing_over_their_face_before_they_offer_a_guarded_shrug]",
+              "topic_tokens": [
+                "away",
+                "flicker",
+                "glances",
+                "passing",
+                "quickly",
+                "runner",
+                "tavern",
+                "unease"
+              ],
+              "why_selected": [
+                "recency"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 75.14285714285714,
+              "source_turn": 2,
+              "text": "P: I ask a guard who commands the watch tonight. | G: Captain Desaen comes straight to you before the pause can settle. \"Enough watching,\" they say. \"Ask me now, or lose the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            },
+            {
+              "entity_ids": [],
+              "kind": "recent_turn",
+              "score": 60.857142857142854,
+              "source_turn": 1,
+              "text": "P: I scan the notice for taxes, curfew, and patrol lines. | G: The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+              "topic_tokens": [],
+              "why_selected": [
+                "recency",
+                "recent_turn_kind"
+              ]
+            }
+          ],
+          "speaker_contract_enforcement": {
+            "contract_present": true,
+            "final_reason_code": "speaker_contract_match",
+            "validation": {
+              "canonical_speaker_id": "tavern_runner",
+              "canonical_speaker_name": "Tavern Runner",
+              "details": {
+                "signature": {
+                  "confidence": "low",
+                  "has_interruption_framing": false,
+                  "is_explicitly_attributed": false,
+                  "is_generic_fallback_label": false,
+                  "speaker_label": null,
+                  "speaker_name": null
+                }
+              },
+              "ok": true,
+              "reason_code": "speaker_contract_match",
+              "repair_mode": "none"
+            }
+          },
+          "tone_escalation_checked": true,
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_contract_summary": {
+            "allow_combat_initiation": false,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_verbal_pressure": true,
+            "base_tone": "guarded",
+            "enabled": true,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship"
+            ],
+            "max_allowed_tone": "tense"
+          },
+          "tone_escalation_detected_flags": {
+            "combat_initiation": false,
+            "explicit_threat": false,
+            "guarded": true,
+            "physical_hostility": false,
+            "verbal_pressure": false
+          },
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_matched_tone_level": "guarded",
+          "tone_escalation_ok": true,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_violation_before_repair": false
+        },
+        "final_emission_meta": null,
+        "model_escalated": true,
+        "model_escalation_trigger": "strict_social",
+        "model_retry_attempt": 0,
+        "model_route_family": "high_precision",
+        "model_route_purpose": "strict_social",
+        "model_route_reason": "purpose_strict_social",
+        "narration_seam": {
+          "bundle_required": true,
+          "continuation": {
+            "allows_nonplan_output": false,
+            "continuation_enforcement_applied": true,
+            "continuation_path_kind": "pressure_driven_continuation",
+            "continuation_plan_failure_reason": null,
+            "continuation_plan_verified": true,
+            "continuation_source": "narrative_plan_bundle",
+            "is_continuation_turn": true,
+            "reason_codes": [
+              "opening_reason:none",
+              "ctir_backed_plan_driven",
+              "plan_active_pressures_present"
+            ],
+            "requires_plan_driven_continuation": true
+          },
+          "ctir_backed": true,
+          "emergency_nonplan_output": false,
+          "explicit_nonplan_model_narration": false,
+          "path_kind": "resolved_turn_ctir_bundle",
+          "plan_driven": true,
+          "same_turn_retry_messages_reused": false
+        },
+        "opening_convergence": {
+          "api_error": null,
+          "bundle_present": true,
+          "narration_seam": {
+            "bundle_required": true,
+            "emergency_nonplan_output": false,
+            "path_kind": "resolved_turn_ctir_bundle",
+            "plan_driven": true
+          },
+          "narrative_plan_present": true,
+          "planning_session_interaction": {
+            "active_interaction_target_id": "tavern_runner",
+            "pending_lead_ids": [
+              "minlead_exit_frontier_gate_old_milestone"
+            ]
+          },
+          "scene_opening": null,
+          "seam_trace": null
+        },
+        "planner_convergence": {
+          "ctir_present": true,
+          "ctir_stamp": "5:143ae75ba00:4abec81c",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "5:143ae75ba00:4abec81c",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "planner_convergence_report": {
+          "ctir_present": true,
+          "ctir_stamp": "5:143ae75ba00:4abec81c",
+          "emergency_nonplan_allowed": false,
+          "enabled": true,
+          "failure_codes": [],
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "5:143ae75ba00:4abec81c",
+          "owner_module": "game.api",
+          "path_label": "dialogue_social",
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "stamp_matches": true
+        },
+        "response_policy_enforcement_applied": true,
+        "response_type_contract": {
+          "action_must_preserve_agency": false,
+          "allow_escalation": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ],
+          "escalation_block_reason": "social_question_guard",
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "strict_target_id": "tavern_runner"
+        },
+        "runtime_lineage_events": [],
+        "scenario_spine": {
+          "artifact_schema_version": 1,
+          "branch_id": "branch_social_inquiry",
+          "max_turns": null,
+          "resume_entry_first_turn": false,
+          "smoke": true,
+          "spine_id": "frontier_gate_long_session",
+          "turn_id": "inv_05",
+          "turn_index": 4
+        },
+        "selected_model": "gpt-4.1-mini",
+        "stage_diff_telemetry": {
+          "snapshots": [
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "2265db4755ac9a231d3f",
+              "player_facing_preview": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and guarded. \"Looks like it's …",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_entry",
+              "text_len": 328
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": null,
+              "player_facing_fingerprint": "2265db4755ac9a231d3f",
+              "player_facing_preview": "\"I can't say for sure who posted the warning,\" the tavern runner admits, their voice low and guarded. \"Looks like it's …",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_after_strict_social_composition",
+              "text_len": 328
+            },
+            {
+              "accepted_via": null,
+              "active_target_id": null,
+              "fallback_kind": null,
+              "fallback_source": null,
+              "fallback_stage": null,
+              "final_route": "replaced",
+              "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+              "player_facing_fingerprint": "419909b46031af41a591",
+              "player_facing_preview": "Tavern Runner grimaces. \"Not something I can say here.\"",
+              "repair_flags": [],
+              "reply_kind": null,
+              "resolution_kind": null,
+              "response_type": null,
+              "retry_flags": {
+                "retry_exhausted": false,
+                "targeted_retry_terminal": false
+              },
+              "stage": "final_emission_gate_exit",
+              "text_len": 55
+            }
+          ],
+          "transitions": []
+        }
+      }
+    }
+  ]
+}

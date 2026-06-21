@@ -22,10 +22,8 @@ from game.social import (
     resolve_grounded_social_speaker,
     resolve_social_action,
 )
-from game.social_exchange_emission import (
-    build_final_strict_social_response,
-    reconcile_strict_social_resolution_speaker,
-)
+from game.social_exchange_policy import reconcile_strict_social_resolution_speaker
+from game.social_exchange_emission import build_final_strict_social_response
 from game.storage import get_scene_runtime, load_scene
 from tests.helpers.emission_smoke_assertions import assert_social_grounding_smoke
 
@@ -341,7 +339,7 @@ def test_apply_reply_grounding_sets_metadata_when_eligible(frontier_gate_scene_b
 
 
 def test_retry_fallback_gm_regrounds_resolution_social(frontier_gate_scene_bundle):
-    from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm
+    from game.social_exchange_fallback_catalog import apply_social_exchange_retry_fallback_gm
 
     session, world, scene = frontier_gate_scene_bundle
     set_social_target(session, "tavern_runner")

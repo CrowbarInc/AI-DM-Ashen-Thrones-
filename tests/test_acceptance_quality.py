@@ -17,7 +17,7 @@ from game.acceptance_quality import (
     validate_acceptance_quality,
     validate_and_repair_acceptance_quality,
 )
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 pytestmark = pytest.mark.unit
 

@@ -1,0 +1,82 @@
+# BV13B — Consumer Migration
+
+**Date:** 2026-06-21
+**Files migrated:** 51
+**Symbol moves:** 74
+
+| File | Symbol | Old module | New module |
+| --- | --- | --- | --- |
+| `game/acceptance_quality.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/dialogue_social_plan.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/emitted_speaker_signature.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/fallback_provenance_debug.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/fallback_provenance_debug.py` | `_sanitize_output_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_acceptance_quality.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_answer_shape_primacy.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_answer_shape_primacy.py` | `_ACTION_RESULT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_answer_shape_primacy.py` | `_ANSWER_DIRECT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_context_separation.py` | `_normalize_text_preserve_paragraphs` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_fast_fallback_composition.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_fast_fallback_composition.py` | `_global_narrative_fallback_stock_line` | `game.final_emission_text` | `game.final_emission_text` |
+| `game/final_emission_finalize.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_finalize.py` | `_sanitize_output_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_first_mention_composition.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_gate.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_gate_preflight_pregate_text.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_gate_preflight_strict_social.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_gate_preflight_telemetry.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_generic_exit.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_narrative_authority.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_non_strict_stack.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_opening_fallback.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_opening_mode.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_passive_scene_pressure.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_referential_clarity.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_referential_clarity.py` | `_ANSWER_DIRECT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_repairs.py` | `_normalize_terminal_punctuation` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_repairs.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_response_type.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_response_type.py` | `_normalize_text_preserve_paragraphs` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_scene_emit_integrity.py` | `_global_narrative_fallback_stock_line` | `game.final_emission_text` | `game.final_emission_text` |
+| `game/final_emission_scene_facts.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_scene_state_anchor.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_sealed_fallback.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_strict_social_stack.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_strict_social_stack.py` | `_normalize_text_preserve_paragraphs` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_terminal_pipeline.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_tone_escalation.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_validators.py` | `_normalize_terminal_punctuation` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_validators.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/final_emission_validators.py` | `_ACTION_RESULT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_validators.py` | `_ACTION_STOPWORDS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_validators.py` | `_AGENCY_SUBSTITUTE_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_validators.py` | `_ANSWER_DIRECT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_validators.py` | `_ANSWER_FILLER_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/final_emission_visibility_fallback.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/interaction_continuity.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/interaction_continuity.py` | `_RESPONSE_TYPE_VALUES` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/narrative_authenticity.py` | `_normalize_terminal_punctuation` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/narrative_authenticity.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/narrative_mode_contract.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/narrative_mode_contract.py` | `_ACTION_RESULT_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/narrative_mode_contract.py` | `_ANSWER_FILLER_PATTERNS` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/opening_deterministic_fallback.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/response_policy_contracts.py` | `_RESPONSE_TYPE_VALUES` | `game.final_emission_text` | `game.final_emission_text_policy` |
+| `game/speaker_contract_enforcement.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/upstream_response_repairs.py` | `_capitalize_sentence_fragment` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/upstream_response_repairs.py` | `_normalize_terminal_punctuation` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `game/upstream_response_repairs.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/helpers/post_speaker_finalize_probe.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/helpers/speaker_contract_risk.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/helpers/speaker_gate_order.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_acceptance_quality.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_diegetic_fallback_block4.py` | `_global_narrative_fallback_stock_line` | `game.final_emission_text` | `game.final_emission_text` |
+| `tests/test_final_emission_boundary_convergence.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_final_emission_boundary_no_semantic_repair.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_final_emission_opening_accept_debug.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_final_emission_visibility.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_final_emission_visibility.py` | `_decompress_overpacked_sentences` | `game.final_emission_text` | `game.final_emission_text_legacy_semantic_repair` |
+| `tests/test_final_emission_visibility.py` | `_repair_fragmentary_participial_splits` | `game.final_emission_text` | `game.final_emission_text_legacy_semantic_repair` |
+| `tests/test_narrative_authority_rules.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_prompt_context.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |
+| `tests/test_referential_clarity_player_coref.py` | `_normalize_text` | `game.final_emission_text` | `game.final_emission_text_formatting` |

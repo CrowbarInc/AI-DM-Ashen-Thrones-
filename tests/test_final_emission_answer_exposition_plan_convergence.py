@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pytest
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.repairs_consumer_facade import apply_answer_exposition_plan_layer
 
 pytestmark = pytest.mark.unit

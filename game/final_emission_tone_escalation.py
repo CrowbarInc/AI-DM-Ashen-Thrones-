@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.response_policy_contracts import _resolve_response_type_contract
 from game.tone_escalation import tone_escalation_repair_hints, validate_tone_escalation
 from game.turn_packet import resolve_turn_packet_contract, resolve_turn_packet_for_gate

@@ -1,0 +1,364 @@
+{
+  "game.final_emission_meta_read": [
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/observability_attribution_read.py",
+      "module": "game.observability_attribution_read",
+      "subsystem": "attribution",
+      "kind": "production",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY",
+        "NARRATIVE_AUTHENTICITY_FEM_KEYS",
+        "assemble_unified_observational_telemetry_bundle",
+        "build_fem_observability_events",
+        "classify_dead_turn",
+        "default_response_type_debug",
+        "infer_accept_path_final_emitted_source",
+        "normalize_final_emission_meta_for_observability",
+        "normalize_merged_na_telemetry_for_eval",
+        "normalized_observational_telemetry_bundle",
+        "read_dead_turn_from_gm_output",
+        "read_debug_notes_from_turn_payload",
+        "read_emission_debug_lane",
+        "read_emission_debug_lane_from_turn_payload",
+        "read_final_emission_meta_dict",
+        "read_final_emission_meta_from_turn_payload",
+        "stage_diff_narrative_authenticity_projection",
+        "summarize_gameplay_validation_for_turn"
+      ],
+      "read_frequency": "Import-only",
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/helpers/replay_smoke_assertions.py",
+      "module": "tests.helpers.replay_smoke_assertions",
+      "subsystem": "replay",
+      "kind": "helper",
+      "symbols": [
+        "read_debug_notes_from_turn_payload",
+        "read_final_emission_meta_dict"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/test_opening_fallback_owner_bucket.py",
+      "module": "tests.test_opening_fallback_owner_bucket",
+      "subsystem": "fallback",
+      "kind": "test",
+      "symbols": [
+        "final_emission_meta_read_side_surface"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tools/refresh_protected_replay_manifest.py",
+      "module": "tools.refresh_protected_replay_manifest",
+      "subsystem": "replay",
+      "kind": "tool",
+      "symbols": [
+        "opening_fallback_metadata_field_registry_parity_errors"
+      ],
+      "read_frequency": "Low",
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tools/run_scenario_spine_validation.py",
+      "module": "tools.run_scenario_spine_validation",
+      "subsystem": "diagnostics",
+      "kind": "tool",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_frequency": "Low",
+      "ownership_bucket": "read-side-access"
+    }
+  ],
+  "game.final_emission_owner_bucket_views": [
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/attribution_read_views.py",
+      "module": "game.attribution_read_views",
+      "subsystem": "attribution",
+      "kind": "production",
+      "symbols": [
+        "OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES",
+        "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_STRICT_SOCIAL",
+        "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE",
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+        "opening_fallback_owner_bucket_from_fields",
+        "opening_fallback_owner_bucket_from_meta",
+        "sealed_fallback_owner_bucket_from_fields",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_frequency": "Import-only",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_meta.py",
+      "module": "game.final_emission_meta",
+      "subsystem": "other",
+      "kind": "production",
+      "symbols": [
+        "opening_fallback_owner_bucket_from_fields",
+        "opening_fallback_owner_bucket_from_meta",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_sealed_fallback.py",
+      "module": "game.final_emission_sealed_fallback",
+      "subsystem": "fallback",
+      "kind": "production",
+      "symbols": [
+        "sealed_fallback_owner_bucket_from_fields"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_visibility_fallback.py",
+      "module": "game.final_emission_visibility_fallback",
+      "subsystem": "fallback",
+      "kind": "production",
+      "symbols": [
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/test_final_emission_meta.py",
+      "module": "tests.test_final_emission_meta",
+      "subsystem": "tests",
+      "kind": "test",
+      "symbols": [
+        "opening_fallback_owner_bucket_from_meta"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/test_opening_fallback_owner_bucket.py",
+      "module": "tests.test_opening_fallback_owner_bucket",
+      "subsystem": "fallback",
+      "kind": "test",
+      "symbols": [
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_STRICT_SOCIAL",
+        "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+        "opening_fallback_owner_bucket_from_fields",
+        "sealed_fallback_owner_bucket_from_fields",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    }
+  ],
+  "game.final_emission_ownership_schema": [
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/attribution_read_views.py",
+      "module": "game.attribution_read_views",
+      "subsystem": "attribution",
+      "kind": "production",
+      "symbols": [
+        "ALLOWED_FALLBACK_CONTENT_OWNERS",
+        "ALLOWED_FALLBACK_SELECTION_OWNERS",
+        "OPENING_FAIL_CLOSED_CONTENT_OWNER",
+        "OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED",
+        "OPENING_FALLBACK_CONTENT_OWNER",
+        "OPENING_FALLBACK_SELECTION_OWNER",
+        "SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_FALLBACK_SELECTION_OWNER",
+        "SANITIZER_STRICT_SOCIAL_CONTENT_OWNER",
+        "SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_TRACE_SELECTION_OWNER_SHORT",
+        "SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT",
+        "SEALED_FALLBACK_MODULE_CONTENT_OWNER",
+        "SEALED_FALLBACK_SELECTION_OWNER",
+        "SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER",
+        "STRICT_SOCIAL_FALLBACK_CONTENT_OWNER",
+        "STRICT_SOCIAL_FALLBACK_SELECTION_OWNER",
+        "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER",
+        "VISIBILITY_FALLBACK_SELECTION_OWNER",
+        "fallback_owner_bucket_registry_surface",
+        "ownership_schema_registry_surface"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_meta.py",
+      "module": "game.final_emission_meta",
+      "subsystem": "other",
+      "kind": "production",
+      "symbols": [
+        "OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES",
+        "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_STRICT_SOCIAL",
+        "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE",
+        "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+        "fallback_owner_bucket_registry_surface"
+      ],
+      "read_frequency": "Low",
+      "ownership_bucket": "owner-bucket-projection"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_sealed_fallback.py",
+      "module": "game.final_emission_sealed_fallback",
+      "subsystem": "fallback",
+      "kind": "production",
+      "symbols": [
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE"
+      ],
+      "read_frequency": "Import-only",
+      "ownership_bucket": "schema-vocabulary"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/final_emission_visibility_fallback.py",
+      "module": "game.final_emission_visibility_fallback",
+      "subsystem": "fallback",
+      "kind": "production",
+      "symbols": [
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE"
+      ],
+      "read_frequency": "Import-only",
+      "ownership_bucket": "schema-vocabulary"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/ownership_projection_views.py",
+      "module": "game.ownership_projection_views",
+      "subsystem": "other",
+      "kind": "production",
+      "symbols": [
+        "OPENING_FAIL_CLOSED_CONTENT_OWNER",
+        "OPENING_FALLBACK_CONTENT_OWNER",
+        "OPENING_FALLBACK_SELECTION_OWNER",
+        "OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS",
+        "SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_FALLBACK_SELECTION_OWNER",
+        "SANITIZER_STRICT_SOCIAL_CONTENT_OWNER",
+        "SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS",
+        "SANITIZER_TRACE_OWNER_TO_LINEAGE_OWNER",
+        "SANITIZER_TRACE_SELECTION_OWNER_SHORT",
+        "SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT",
+        "SEALED_FALLBACK_MODULE_CONTENT_OWNER",
+        "SEALED_FALLBACK_SELECTION_OWNER",
+        "SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER",
+        "SPEAKER_CONTRACT_ENFORCEMENT_LINEAGE_OWNER",
+        "STRICT_SOCIAL_FALLBACK_CONTENT_OWNER",
+        "STRICT_SOCIAL_FALLBACK_SELECTION_OWNER",
+        "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET",
+        "VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_SELECTION_OWNER",
+        "normalize_sanitizer_trace_owner_to_lineage_owner",
+        "ownership_schema_registry_surface"
+      ],
+      "read_frequency": "Medium",
+      "ownership_bucket": "schema-vocabulary"
+    },
+    {
+      "file": "C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/test_final_emission_meta.py",
+      "module": "tests.test_final_emission_meta",
+      "subsystem": "tests",
+      "kind": "test",
+      "symbols": [
+        "OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED",
+        "OPENING_FALLBACK_CONTENT_OWNER",
+        "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "OPENING_FALLBACK_SELECTION_OWNER",
+        "OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS",
+        "SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_FALLBACK_SELECTION_OWNER",
+        "SANITIZER_STRICT_SOCIAL_CONTENT_OWNER",
+        "SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD",
+        "SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS",
+        "SANITIZER_TRACE_SELECTION_OWNER_SHORT",
+        "SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT",
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE",
+        "SEALED_FALLBACK_SELECTION_OWNER",
+        "STRICT_SOCIAL_FALLBACK_CONTENT_OWNER",
+        "STRICT_SOCIAL_FALLBACK_SELECTION_OWNER",
+        "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_SELECTION_OWNER",
+        "normalize_sanitizer_trace_owner_to_lineage_owner",
+        "ownership_schema_registry_surface"
+      ],
+      "read_frequency": "Import-only",
+      "ownership_bucket": "schema-vocabulary"
+    }
+  ]
+}

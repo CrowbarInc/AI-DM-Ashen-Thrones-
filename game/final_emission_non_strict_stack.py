@@ -41,7 +41,7 @@ from game.final_emission_narrative_mode_output import (
 from game.final_emission_scene_emit_integrity import (
     _compute_scene_emit_integrity_assessment,
 )
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 _CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_meta import (
+from game.final_emission_narrative_mode_output import (
     NARRATIVE_MODE_OUTPUT_FEM_KEYS,
     default_narrative_mode_output_layer_meta,
     merge_narrative_mode_output_into_final_emission_meta,
@@ -26,10 +26,8 @@ from tests.helpers.narrative_mode_validator_fixtures import (
     minimal_ctir_continuation,
     resolution_pending_check,
 )
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 pytestmark = pytest.mark.unit
 

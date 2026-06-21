@@ -1,0 +1,984 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T15:35:19Z",
+  "cycle": "BV11",
+  "primary_question": "What is now the largest source of maintenance drag after BV10?",
+  "executive_answer": "Post-BV10, replay_smoke_assertions (FI 56) is the largest single module; the smoke bridge cluster (95 FI) exceeds gate/terminal convergence (56 FI).",
+  "selected_next_cycle": "BV12",
+  "sources": {
+    "bu_import_fan_in_fan_out": "docs/audits/BU_import_fan_in_fan_out.csv",
+    "bv9_hotspot_analysis": "artifacts/bv9_hotspot_analysis.json",
+    "bv8a_recurrence_history": "artifacts/bv8a_recurrence_history.json",
+    "bv1b_fallback_summary": "artifacts/bv1b_fallback_summary.json",
+    "bv10_read_cluster_verification": "docs/audits/BV10_read_cluster_verification.md",
+    "bv7_smoke_analysis": "artifacts/bv7_smoke_analysis.json",
+    "test_inventory_full": "artifacts/test_inventory_full.json"
+  },
+  "hotspot_scan": {
+    "module_count": 225,
+    "area_rollups": {
+      "replay": {
+        "modules": 9,
+        "fan_in_total": 136,
+        "fan_out_total": 33,
+        "top_fan_in": [
+          [
+            "tests.helpers.replay_smoke_assertions",
+            56,
+            1
+          ],
+          [
+            "game.final_emission_replay_projection",
+            15,
+            5
+          ],
+          [
+            "tests.helpers.replay_drift_taxonomy",
+            15,
+            3
+          ],
+          [
+            "tests.helpers.golden_replay_projection",
+            14,
+            6
+          ],
+          [
+            "tests.helpers.golden_replay_fixtures",
+            10,
+            2
+          ],
+          [
+            "tests.helpers.replay_observed_row_fixtures",
+            9,
+            2
+          ]
+        ]
+      },
+      "fallback": {
+        "modules": 7,
+        "fan_in_total": 76,
+        "fan_out_total": 50,
+        "top_fan_in": [
+          [
+            "game.final_emission_visibility_fallback",
+            17,
+            18
+          ],
+          [
+            "game.final_emission_opening_fallback",
+            14,
+            8
+          ],
+          [
+            "game.diegetic_fallback_narration",
+            13,
+            1
+          ],
+          [
+            "game.final_emission_passive_scene_pressure",
+            11,
+            4
+          ],
+          [
+            "game.final_emission_sealed_fallback",
+            10,
+            14
+          ],
+          [
+            "game.opening_deterministic_fallback",
+            6,
+            2
+          ]
+        ]
+      },
+      "attribution": {
+        "modules": 11,
+        "fan_in_total": 132,
+        "fan_out_total": 23,
+        "top_fan_in": [
+          [
+            "game.realization_provenance",
+            28,
+            1
+          ],
+          [
+            "game.attribution_read_views",
+            21,
+            1
+          ],
+          [
+            "game.observability_attribution_read",
+            19,
+            1
+          ],
+          [
+            "game.runtime_lineage_telemetry",
+            15,
+            2
+          ],
+          [
+            "tests.helpers.failure_classifier",
+            13,
+            4
+          ],
+          [
+            "game.final_emission_ownership_schema",
+            8,
+            1
+          ]
+        ]
+      },
+      "final_emission": {
+        "modules": 39,
+        "fan_in_total": 381,
+        "fan_out_total": 210,
+        "top_fan_in": [
+          [
+            "game.final_emission_text",
+            52,
+            1
+          ],
+          [
+            "game.final_emission_gate",
+            30,
+            9
+          ],
+          [
+            "game.final_emission_terminal_pipeline",
+            26,
+            14
+          ],
+          [
+            "game.final_emission_meta",
+            24,
+            8
+          ],
+          [
+            "game.final_emission_repairs",
+            23,
+            7
+          ],
+          [
+            "game.final_emission_strict_social_stack",
+            22,
+            22
+          ]
+        ]
+      },
+      "speaker_finalize": {
+        "modules": 6,
+        "fan_in_total": 34,
+        "fan_out_total": 30,
+        "top_fan_in": [
+          [
+            "game.speaker_contract_enforcement",
+            15,
+            4
+          ],
+          [
+            "game.emitted_speaker_signature",
+            7,
+            3
+          ],
+          [
+            "game.post_emission_speaker_adoption",
+            4,
+            5
+          ],
+          [
+            "tests.helpers.speaker_relocation_shadow_harness",
+            4,
+            5
+          ],
+          [
+            "tests.helpers.post_speaker_finalize_probe",
+            3,
+            8
+          ],
+          [
+            "tests.helpers.speaker_contract_risk",
+            1,
+            5
+          ]
+        ]
+      },
+      "tests_smoke": {
+        "modules": 2,
+        "fan_in_total": 54,
+        "fan_out_total": 7,
+        "top_fan_in": [
+          [
+            "tests.helpers.gate_integration_smoke",
+            39,
+            2
+          ],
+          [
+            "tests.helpers.emission_smoke_assertions",
+            15,
+            5
+          ]
+        ]
+      },
+      "tests_registry": {
+        "modules": 1,
+        "fan_in_total": 0,
+        "fan_out_total": 57,
+        "top_fan_in": [
+          [
+            "tests.test_ownership_registry",
+            0,
+            57
+          ]
+        ]
+      }
+    },
+    "ownership_domain_top": [
+      [
+        "fallback_ownership",
+        2539
+      ],
+      [
+        "gate_ownership",
+        650
+      ],
+      [
+        "final_emission_ownership",
+        321
+      ],
+      [
+        "speaker_ownership",
+        102
+      ],
+      [
+        "replay_ownership",
+        76
+      ],
+      [
+        "semantic_replacement_attribution",
+        20
+      ]
+    ],
+    "test_import_hubs_top10": [
+      {
+        "file_count": 93,
+        "game_module": "game.storage",
+        "sample_files": [
+          "tests/test_activate_scene_validation_and_get_persistence.py",
+          "tests/test_api_narration_path_selection.py",
+          "tests/test_broad_address_social_bid.py",
+          "tests/test_broadcast_open_call_social.py",
+          "tests/test_c1_narration_seam_regression.py",
+          "tests/test_campaign_reset.py",
+          "tests/test_clocks_projects_logging_lint.py",
+          "tests/test_clue_discovery.py",
+          "tests/test_clue_idempotence.py",
+          "tests/test_clue_knowledge.py",
+          "tests/test_combat_resolution.py",
+          "tests/test_conditional_affordances.py",
+          "tests/test_contextual_minimal_repair_regressions.py",
+          "tests/test_ctir_pipeline_integration.py",
+          "tests/test_ctir_retry_stability.py",
+          "tests/test_ctir_runtime_lifecycle.py",
+          "tests/test_debug_payload_spoiler_safety.py",
+          "tests/test_dialogue_interaction_establishment.py"
+        ]
+      },
+      {
+        "file_count": 77,
+        "game_module": "game.defaults",
+        "sample_files": [
+          "tests/test_activate_scene_validation_and_get_persistence.py",
+          "tests/test_anti_reset_emission_guard.py",
+          "tests/test_api_narration_path_selection.py",
+          "tests/test_c1_narration_seam_regression.py",
+          "tests/test_c4_narrative_mode_live_pipeline.py",
+          "tests/test_campaign_reset.py",
+          "tests/test_clue_idempotence.py",
+          "tests/test_combat_resolution.py",
+          "tests/test_ctir_pipeline_integration.py",
+          "tests/test_ctir_retry_stability.py",
+          "tests/test_ctir_runtime_lifecycle.py",
+          "tests/test_debug_payload_spoiler_safety.py",
+          "tests/test_dialogue_interaction_establishment.py",
+          "tests/test_dialogue_plan_final_emission_gate.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_directed_social_routing.py",
+          "tests/test_exploration_resolution.py",
+          "tests/test_exploration_skill_checks.py"
+        ]
+      },
+      {
+        "file_count": 54,
+        "game_module": "game.api",
+        "sample_files": [
+          "tests/test_activate_scene_validation_and_get_persistence.py",
+          "tests/test_api_narration_path_selection.py",
+          "tests/test_c1_narration_seam_regression.py",
+          "tests/test_clocks_projects_logging_lint.py",
+          "tests/test_combat_resolution.py",
+          "tests/test_ctir_pipeline_integration.py",
+          "tests/test_ctir_retry_stability.py",
+          "tests/test_ctir_runtime_lifecycle.py",
+          "tests/test_debug_payload_spoiler_safety.py",
+          "tests/test_dialogue_routing_lock.py",
+          "tests/test_directed_social_routing.py",
+          "tests/test_emergent_scene_actors.py",
+          "tests/test_empty_social_retry_regressions.py",
+          "tests/test_exploration_resolution.py",
+          "tests/test_gauntlet_regressions.py",
+          "tests/test_golden_replay.py",
+          "tests/test_interaction_context.py",
+          "tests/test_lead_debug_trace.py"
+        ]
+      },
+      {
+        "file_count": 46,
+        "game_module": "game.final_emission_gate",
+        "sample_files": [
+          "tests/test_anti_railroading_retry_alignment.py",
+          "tests/test_anti_railroading_transcript_regressions.py",
+          "tests/test_anti_reset_emission_guard.py",
+          "tests/test_api_narration_path_selection.py",
+          "tests/test_block_s_speaker_local_rebind_equivalence.py",
+          "tests/test_block_t_speaker_relocation_shadow_equivalence.py",
+          "tests/test_block_u_finalize_stack_divergence.py",
+          "tests/test_c4_narrative_mode_live_pipeline.py",
+          "tests/test_contextual_minimal_repair_regressions.py",
+          "tests/test_dead_turn_detection.py",
+          "tests/test_dialogue_plan_final_emission_gate.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_diegetic_fallback_block4.py",
+          "tests/test_fallback_behavior_gate.py",
+          "tests/test_fallback_behavior_repairs.py",
+          "tests/test_fallback_overwrite_containment.py",
+          "tests/test_fallback_shipped_contract_propagation.py",
+          "tests/test_final_emission_boundary_convergence.py"
+        ]
+      },
+      {
+        "file_count": 45,
+        "game_module": "game.interaction_context",
+        "sample_files": [
+          "tests/test_affordance_canonical_pipeline.py",
+          "tests/test_broad_address_social_bid.py",
+          "tests/test_broadcast_open_call_social.py",
+          "tests/test_c4_narrative_mode_live_pipeline.py",
+          "tests/test_dialogue_interaction_establishment.py",
+          "tests/test_dialogue_plan_final_emission_gate.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_directed_social_routing.py",
+          "tests/test_emergent_scene_actors.py",
+          "tests/test_fallback_behavior_gate.py",
+          "tests/test_fallback_shipped_contract_propagation.py",
+          "tests/test_final_emission_gate.py",
+          "tests/test_final_emission_visibility.py",
+          "tests/test_gm_retry.py",
+          "tests/test_human_adjacent_nearby_group_continuity.py",
+          "tests/test_interaction_context.py",
+          "tests/test_interaction_context_owner.py",
+          "tests/test_lead_lifecycle_block3_transcript_regression.py"
+        ]
+      },
+      {
+        "file_count": 43,
+        "game_module": "game.gm",
+        "sample_files": [
+          "tests/test_action_outcome_convergence.py",
+          "tests/test_anti_railroading_retry_alignment.py",
+          "tests/test_api_narration_path_selection.py",
+          "tests/test_api_upstream_preflight.py",
+          "tests/test_broadcast_open_call_social.py",
+          "tests/test_build_messages_projection.py",
+          "tests/test_clocks_projects_logging_lint.py",
+          "tests/test_contextual_minimal_repair_regressions.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_diegetic_fallback_block4.py",
+          "tests/test_empty_social_retry_regressions.py",
+          "tests/test_exploration_skill_checks.py",
+          "tests/test_fallback_behavior_repairs.py",
+          "tests/test_fallback_continuity_guard.py",
+          "tests/test_fallback_shipped_contract_propagation.py",
+          "tests/test_gm_retry.py",
+          "tests/test_gm_retry_context_separation.py",
+          "tests/test_intent_and_runtime.py"
+        ]
+      },
+      {
+        "file_count": 39,
+        "game_module": "game.final_emission_meta",
+        "sample_files": [
+          "tests/test_anti_railroading_retry_alignment.py",
+          "tests/test_anti_railroading_transcript_regressions.py",
+          "tests/test_anti_reset_emission_guard.py",
+          "tests/test_contextual_minimal_repair_regressions.py",
+          "tests/test_dead_turn_detection.py",
+          "tests/test_dead_turn_evaluation_threading.py",
+          "tests/test_dialogue_plan_final_emission_gate.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_empty_social_retry_regressions.py",
+          "tests/test_failure_classification_contract.py",
+          "tests/test_failure_classifier.py",
+          "tests/test_fallback_overwrite_containment.py",
+          "tests/test_fallback_shipped_contract_propagation.py",
+          "tests/test_final_emission_boundary_convergence.py",
+          "tests/test_final_emission_channel_separation.py",
+          "tests/test_final_emission_gate.py",
+          "tests/test_final_emission_meta.py",
+          "tests/test_final_emission_opening_fallback.py"
+        ]
+      },
+      {
+        "file_count": 30,
+        "game_module": "game.prompt_context",
+        "sample_files": [
+          "tests/test_c1_narration_seam_regression.py",
+          "tests/test_c4_narrative_mode_live_pipeline.py",
+          "tests/test_ctir_noncombat_consumption.py",
+          "tests/test_ctir_turn_packet_boundary.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_dialogue_social_plan.py",
+          "tests/test_lead_lifecycle_npc_repeat_suppression.py",
+          "tests/test_lead_lifecycle_vertical_slice.py",
+          "tests/test_lead_progression_turn_pipeline_integration.py",
+          "tests/test_n5_boundary_regressions.py",
+          "tests/test_narration_transcript_regressions.py",
+          "tests/test_narrative_plan_prompt_regressions.py",
+          "tests/test_narrative_plan_structural_readiness.py",
+          "tests/test_narrative_upstream_role_reemphasis.py",
+          "tests/test_objective8_block_d_authority_lock.py",
+          "tests/test_planner_ctir_projection.py",
+          "tests/test_planner_head_state.py",
+          "tests/test_post_gm_adoption_gateway.py"
+        ]
+      },
+      {
+        "file_count": 29,
+        "game_module": "game.ctir",
+        "sample_files": [
+          "tests/test_action_outcome_convergence.py",
+          "tests/test_c1_narration_seam_regression.py",
+          "tests/test_c4_narrative_mode_live_pipeline.py",
+          "tests/test_ctir_noncombat_consumption.py",
+          "tests/test_ctir_pipeline_integration.py",
+          "tests/test_ctir_retry_stability.py",
+          "tests/test_ctir_schema.py",
+          "tests/test_ctir_snapshot_examples.py",
+          "tests/test_ctir_turn_packet_boundary.py",
+          "tests/test_ctir_world_progression_projection.py",
+          "tests/test_dialogue_social_convergence.py",
+          "tests/test_dialogue_social_plan.py",
+          "tests/test_narrative_plan_prompt_regressions.py",
+          "tests/test_narrative_planning.py",
+          "tests/test_narrative_planning_transition_node.py",
+          "tests/test_narrative_roles.py",
+          "tests/test_narrative_upstream_role_reemphasis.py",
+          "tests/test_objective8_block_d_authority_lock.py"
+        ]
+      },
+      {
+        "file_count": 28,
+        "game_module": "game.leads",
+        "sample_files": [
+          "tests/test_campaign_state_factory.py",
+          "tests/test_clue_lead_registry_integration.py",
+          "tests/test_follow_lead_commitment_wiring.py",
+          "tests/test_intent_parser.py",
+          "tests/test_lead_commitment_context.py",
+          "tests/test_lead_debug_inspection.py",
+          "tests/test_lead_debug_trace.py",
+          "tests/test_lead_engine_upsert.py",
+          "tests/test_lead_future_fields.py",
+          "tests/test_lead_lifecycle_block3_transcript_regression.py",
+          "tests/test_lead_lifecycle_npc_repeat_suppression.py",
+          "tests/test_lead_lifecycle_vertical_slice.py",
+          "tests/test_lead_npc_payoff_and_fallback.py",
+          "tests/test_lead_npc_target_authority.py",
+          "tests/test_lead_obsolescence_and_journal_alignment.py",
+          "tests/test_lead_payoff_finalization.py",
+          "tests/test_lead_progression_reconciliation.py",
+          "tests/test_lead_progression_turn_pipeline_integration.py"
+        ]
+      }
+    ],
+    "smoke_facade_fi": 17,
+    "smoke_facade_fo": 9,
+    "authority_cluster_fi": 19,
+    "read_facade_fi": 48,
+    "smoke_bridge_fi": 95,
+    "recurrence_concentration": {
+      "source": "artifacts/bv8a_recurrence_history.json",
+      "before_metrics": {
+        "total_recurrence_rows": 11,
+        "recurring_keys": 1,
+        "dominant_share": 0.7273,
+        "active_recurrence_count": 4,
+        "projection_key_rows": 8,
+        "validated_outcome_count": 0
+      },
+      "after_metrics": {
+        "total_recurrence_rows": 4,
+        "recurring_keys": 0,
+        "dominant_share": 0.25,
+        "active_recurrence_count": 3,
+        "projection_key_rows": 1,
+        "validated_outcome_count": 1
+      },
+      "active_families": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "family": "speaker|selected_speaker_id|game/speaker_contract_enforcement.py"
+        },
+        {
+          "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+          "family": "fallback|final_emitted_source|game/final_emission_gate.py"
+        },
+        {
+          "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+          "family": "sanitizer|scaffold_leakage|game/output_sanitizer.py"
+        }
+      ],
+      "retired_families": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "family": "projection|selected_speaker_id|tests/helpers/golden_replay.py"
+        }
+      ],
+      "historical_families": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "family": "projection|selected_speaker_id|tests/helpers/golden_replay.py"
+        }
+      ],
+      "dominant_share_before": 0.7273,
+      "dominant_share_after": 0.25,
+      "recurring_keys_after": 0
+    },
+    "fallback_concentration": {
+      "bv1b": {
+        "fallback_trigger_rate": 0.010526315789473684,
+        "fallback_event_count": 1,
+        "eligible_turn_count": 95
+      },
+      "bv3f": {
+        "fallback_incidence": {
+          "bv3d": 0.4639175257731959,
+          "bv3e_projection": null,
+          "actual": 0.11578947368421053,
+          "delta_actual_vs_projection": null
+        }
+      },
+      "bv4b": {
+        "fallback_incidence": {
+          "bv3f_baseline": 0.11578947368421053,
+          "current": 0.010526315789473684,
+          "delta": -0.1053
+        }
+      },
+      "current": {
+        "fallback_trigger_rate": 0.010526315789473684,
+        "fallback_event_count": 1,
+        "latest_history_snapshot": null
+      },
+      "verdict": "fallback_drag_collapsed"
+    }
+  },
+  "top20_concentration_rankings": [
+    {
+      "rank": 1,
+      "module": "tests.helpers.replay_smoke_assertions",
+      "fi": 56,
+      "fo": 1,
+      "type": "helper",
+      "ownership_concentration": 0.0024,
+      "risk": "high",
+      "change_since_bv9": "+10"
+    },
+    {
+      "rank": 2,
+      "module": "game.social_exchange_emission",
+      "fi": 52,
+      "fo": 12,
+      "type": "production",
+      "ownership_concentration": 0.0266,
+      "risk": "high",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 3,
+      "module": "game.final_emission_text",
+      "fi": 52,
+      "fo": 1,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "high",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 4,
+      "module": "tests.helpers.gate_integration_smoke",
+      "fi": 39,
+      "fo": 2,
+      "type": "helper",
+      "ownership_concentration": 0.0024,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 5,
+      "module": "game.final_emission_gate",
+      "fi": 30,
+      "fo": 9,
+      "type": "production",
+      "ownership_concentration": 0.0072,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 6,
+      "module": "game.realization_provenance",
+      "fi": 28,
+      "fo": 1,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 7,
+      "module": "game.final_emission_terminal_pipeline",
+      "fi": 26,
+      "fo": 14,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 8,
+      "module": "game.final_emission_meta",
+      "fi": 24,
+      "fo": 8,
+      "type": "production",
+      "ownership_concentration": 0.2754,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 9,
+      "module": "game.final_emission_repairs",
+      "fi": 23,
+      "fo": 7,
+      "type": "production",
+      "ownership_concentration": 0.0072,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 10,
+      "module": "tests.helpers.opening_fallback_evidence",
+      "fi": 23,
+      "fo": 4,
+      "type": "helper",
+      "ownership_concentration": 0.0966,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 11,
+      "module": "game.final_emission_strict_social_stack",
+      "fi": 22,
+      "fo": 22,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "medium",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 12,
+      "module": "game.final_emission_validators",
+      "fi": 22,
+      "fo": 4,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 13,
+      "module": "game.attribution_read_views",
+      "fi": 21,
+      "fo": 1,
+      "type": "production",
+      "ownership_concentration": 0.3502,
+      "risk": "low",
+      "change_since_bv9": "new"
+    },
+    {
+      "rank": 14,
+      "module": "game.observability_attribution_read",
+      "fi": 19,
+      "fo": 1,
+      "type": "production",
+      "ownership_concentration": 0.0,
+      "risk": "low",
+      "change_since_bv9": "new"
+    },
+    {
+      "rank": 15,
+      "module": "game.final_emission_visibility_fallback",
+      "fi": 17,
+      "fo": 18,
+      "type": "production",
+      "ownership_concentration": 0.1159,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 16,
+      "module": "tests.helpers.failure_dashboard_report",
+      "fi": 16,
+      "fo": 7,
+      "type": "helper",
+      "ownership_concentration": 0.0531,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 17,
+      "module": "tests.helpers.strict_social_harness",
+      "fi": 15,
+      "fo": 7,
+      "type": "helper",
+      "ownership_concentration": 0.0024,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 18,
+      "module": "game.final_emission_replay_projection",
+      "fi": 15,
+      "fo": 5,
+      "type": "production",
+      "ownership_concentration": 0.3502,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 19,
+      "module": "tests.helpers.emission_smoke_assertions",
+      "fi": 15,
+      "fo": 5,
+      "type": "helper",
+      "ownership_concentration": 0.0121,
+      "risk": "low",
+      "change_since_bv9": "0"
+    },
+    {
+      "rank": 20,
+      "module": "game.speaker_contract_enforcement",
+      "fi": 15,
+      "fo": 4,
+      "type": "production",
+      "ownership_concentration": 0.0097,
+      "risk": "low",
+      "change_since_bv9": "0"
+    }
+  ],
+  "candidate_review": [
+    {
+      "id": "final_emission_text / social_exchange_emission",
+      "bv9_fi": "52 / 52",
+      "bv11_fi": "52 / 52",
+      "status": "unchanged_top_hotspot",
+      "verdict": "Still the largest production-core pair (104 combined FI). Not addressed by BV10; decomposition remains high-cost/high-risk."
+    },
+    {
+      "id": "replay_smoke_assertions",
+      "bv9_fi": "46",
+      "bv11_fi": "56",
+      "status": "increased",
+      "verdict": "Now rank #1 module repository-wide (FI +10). BV10C intentionally routed gate/smoke FEM reads through this bridge \u2014 maintenance magnet regrowth."
+    },
+    {
+      "id": "gate_integration_smoke",
+      "bv9_fi": "39",
+      "bv11_fi": "39",
+      "status": "unchanged",
+      "verdict": "Stable post-BV7 bridge hub. Combined with replay_smoke: 85 \u2192 95 FI (+12%)."
+    },
+    {
+      "id": "remaining read facades",
+      "bv9_fi": "meta_read 29 + bucket 22 + schema 19 = 70",
+      "bv11_fi": "authority 19; facades 48 (attribution 21, observability 19, projection 8)",
+      "status": "closed_bv10",
+      "verdict": "Authority cluster \u221273% (70\u219219). Traffic absorbed by governed facades (+48 FI). Governance lock in place."
+    },
+    {
+      "id": "recurrence active rows",
+      "bv9_fi": "3 active (BV8A)",
+      "bv11_fi": "3 active (unchanged)",
+      "status": "stable",
+      "verdict": "No recurring keys post-deduplication. Speaker projection retired; emerging families remain single-observation."
+    },
+    {
+      "id": "fallback residuals",
+      "bv9_fi": "1.05% (1/95)",
+      "bv11_fi": "1.05% (1/95)",
+      "status": "unchanged",
+      "verdict": "Single RC hard-replacement event. Not a structural maintenance driver."
+    }
+  ],
+  "maintenance_matrix": {
+    "classification": "MIXED_OR_INCONCLUSIVE",
+    "primary_drag_center": "smoke_bridge_and_terminal_emission_core",
+    "area_rows": [
+      {
+        "area": "replay",
+        "prior_fan_in": 126,
+        "current_fan_in": 136,
+        "prior_fan_out": 33,
+        "current_fan_out": 33,
+        "delta_fan_in": 10
+      },
+      {
+        "area": "fallback",
+        "prior_fan_in": 76,
+        "current_fan_in": 76,
+        "prior_fan_out": 50,
+        "current_fan_out": 50,
+        "delta_fan_in": 0
+      },
+      {
+        "area": "attribution",
+        "prior_fan_in": 106,
+        "current_fan_in": 132,
+        "prior_fan_out": 19,
+        "current_fan_out": 23,
+        "delta_fan_in": 26
+      },
+      {
+        "area": "final_emission",
+        "prior_fan_in": 410,
+        "current_fan_in": 381,
+        "prior_fan_out": 211,
+        "current_fan_out": 210,
+        "delta_fan_in": -29
+      },
+      {
+        "area": "speaker_finalize",
+        "prior_fan_in": 34,
+        "current_fan_in": 34,
+        "prior_fan_out": 30,
+        "current_fan_out": 30,
+        "delta_fan_in": 0
+      },
+      {
+        "area": "tests_smoke",
+        "prior_fan_in": 54,
+        "current_fan_in": 54,
+        "prior_fan_out": 8,
+        "current_fan_out": 7,
+        "delta_fan_in": 0
+      },
+      {
+        "area": "tests_registry",
+        "prior_fan_in": 0,
+        "current_fan_in": 0,
+        "prior_fan_out": 57,
+        "current_fan_out": 57,
+        "delta_fan_in": 0
+      }
+    ],
+    "fallback_status": "fallback_drag_collapsed",
+    "recurrence_status": "stable_post_bv8a",
+    "authority_cluster_fi": 19,
+    "smoke_bridge_fi": 95,
+    "notes": [
+      "BV10 closed the read-side authority cluster: combined FI 70 \u2192 19 (\u221273%).",
+      "Read traffic redistributed to governed facades (attribution + observability + projection \u2248 48 FI).",
+      "replay_smoke_assertions grew 46 \u2192 56 (+10) \u2014 now the single largest module by fan-in.",
+      "Production-core pair final_emission_text + social_exchange_emission unchanged at 52 FI each.",
+      "Gate + terminal convergence remains 30 + 26 = 56 FI with medium replay risk.",
+      "Fallback (1.05%) and recurrence (0 recurring keys) remain non-drivers."
+    ]
+  },
+  "candidate_rankings": [
+    {
+      "id": "BV12",
+      "title": "Smoke bridge domain decomposition (BV10B continuation)",
+      "target": "tests.helpers.replay_smoke_assertions + gate_integration_smoke",
+      "projected_fi_reduction": "25\u201335 (split domain-specific bridges; cap monolith regrowth)",
+      "implementation_risk": "medium",
+      "replay_risk": "low-medium",
+      "maintenance_impact": "Highest current FI cluster (95 combined, +10 post-BV10); reduces cross-domain test churn",
+      "evidence": "replay_smoke FI 56 (#1 repo-wide); gate_integration FI 39; BV10C added intentional bridge load",
+      "rank": 1
+    },
+    {
+      "id": "BV12B",
+      "title": "Gate / terminal pipeline convergence split",
+      "target": "game.final_emission_gate + final_emission_terminal_pipeline",
+      "projected_fi_reduction": "15\u201322 (orchestration vs assembly boundary)",
+      "implementation_risk": "high",
+      "replay_risk": "medium",
+      "maintenance_impact": "Second-largest production convergence hub (56 combined FI); 23+ test importers on terminal",
+      "evidence": "gate FI 30/FO 9; terminal FI 26/FO 14; unchanged since BV9",
+      "rank": 2
+    },
+    {
+      "id": "BV12C",
+      "title": "Terminal text / social emission surface thinning",
+      "target": "game.final_emission_text + social_exchange_emission",
+      "projected_fi_reduction": "20\u201330 (extract read-only views and policy slices)",
+      "implementation_risk": "high",
+      "replay_risk": "medium-high",
+      "maintenance_impact": "Largest production-core concentration (104 FI) but touches live composition path",
+      "evidence": "text FI 52; social FI 52; tied #2\u2013#3 rank unchanged since BV9",
+      "rank": 3
+    },
+    {
+      "id": "BV12D",
+      "title": "Attribution completeness & classifier routing (BS continuation)",
+      "target": "failure_classifier + attribution completeness metrics",
+      "projected_fi_reduction": "8\u201312 (narrow misrouted investigations)",
+      "implementation_risk": "medium",
+      "replay_risk": "low",
+      "maintenance_impact": "Closes owner-bucket strict completeness gap; adjacent to closed BV10 read cluster",
+      "evidence": "failure_classifier FI 13; strict completeness 0%; facades now govern read path",
+      "rank": 4
+    },
+    {
+      "id": "BV12E",
+      "title": "Residual RC observe fallback elimination",
+      "target": "referential_clarity_hard_replacement (1 event / 1.05%)",
+      "projected_fi_reduction": "1 incidence event (not FI)",
+      "implementation_risk": "medium",
+      "replay_risk": "medium",
+      "maintenance_impact": "Clears last measurable fallback; diminishing structural returns",
+      "evidence": "BV1B 1 event unchanged; gate_terminal_repair family",
+      "rank": 5
+    }
+  ],
+  "recommendation": {
+    "selected_cycle": "BV12",
+    "title": "Smoke bridge domain decomposition (BV10B continuation)",
+    "rationale": "BV10 closed the read-side attribution cluster (authority FI 70\u219219, governance locked) without changing runtime behavior. Post-closeout measurement shows maintenance cost **redistributed**, not eliminated: replay_smoke_assertions is now the **#1 module** (FI 56, +10 from BV10C routing), and the smoke bridge cluster (replay_smoke + gate_integration) totals **95 FI** \u2014 up from 85 at BV9. Production-core text/social (52 each) and gate/terminal (56 combined) remain large but higher-risk targets. BV12 addresses the largest **addressable** concentration with BV7/BV10 lineage and bounded replay risk.",
+    "projected_scorecard_impact": {
+      "maintenance_drag": "+0.5",
+      "ownership_clarity": "+0.25",
+      "operational_simplicity": "+0.5",
+      "maintenance_economics": "+0.5"
+    },
+    "top_modules_evidence": [
+      "tests.helpers.replay_smoke_assertions",
+      "game.social_exchange_emission",
+      "game.final_emission_text",
+      "tests.helpers.gate_integration_smoke",
+      "game.final_emission_gate"
+    ],
+    "alternates": [
+      "BV12B",
+      "BV12C"
+    ]
+  }
+}

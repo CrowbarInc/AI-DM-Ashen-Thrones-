@@ -7,9 +7,9 @@ Replay projection remains with golden replay helpers.
 
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 from tests.helpers.golden_replay import (
     assert_protected_golden_turn_observation,
     protected_social_speaker_observation_expectation,

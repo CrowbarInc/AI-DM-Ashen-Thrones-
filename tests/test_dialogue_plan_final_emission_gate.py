@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from game.defaults import default_session, default_world
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.dialogue_social_plan import validate_dialogue_social_plan

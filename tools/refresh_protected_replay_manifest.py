@@ -29,7 +29,7 @@ from tests.helpers.golden_replay_projection import (  # noqa: E402
     protected_observation_manifest_field_rows,
     render_protected_observation_manifest_section,
 )
-from game.final_emission_meta import opening_fallback_metadata_field_registry_parity_errors  # noqa: E402
+from game.final_emission_meta_read import opening_fallback_metadata_field_registry_parity_errors  # noqa: E402
 
 MANIFEST_PATH = ROOT / "docs" / "testing" / "protected_replay_manifest.md"
 BEGIN_MARKER = PROTECTED_REPLAY_MANIFEST_FIELD_PATHS_BEGIN

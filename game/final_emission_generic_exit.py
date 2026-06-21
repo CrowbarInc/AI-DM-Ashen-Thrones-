@@ -25,9 +25,13 @@ from game.final_emission_meta import (
     infer_accept_path_final_emitted_source,
     response_type_decision_payload,
 )
+from game.final_emission_passive_scene_pressure import (
+    passive_scene_concrete_beat_satisfier_meta_snapshot,
+    restore_passive_scene_concrete_beat_satisfier_meta,
+)
 from game.final_emission_tone_escalation import flag_non_hostile_escalation_from_writer_pregate
-from game.final_emission_text import _normalize_text
-from game.social_exchange_emission import (
+from game.final_emission_text_formatting import _normalize_text
+from game.social_exchange_projection import (
     log_final_emission_decision,
     log_final_emission_trace,
 )
@@ -116,6 +120,14 @@ def run_generic_accept_exit(
             **response_type_decision_payload(response_type_debug),
         }
     )
+    existing_fem = out.get(FINAL_EMISSION_META_KEY)
+    preserved_satisfier_meta = passive_scene_concrete_beat_satisfier_meta_snapshot(
+        existing_fem if isinstance(existing_fem, dict) else {}
+    )
+    if isinstance(existing_fem, dict) and existing_fem.get("passive_scene_concrete_beat_satisfier_applied") is True:
+        repair_kind = existing_fem.get("producer_repair_kind")
+        if isinstance(repair_kind, str) and repair_kind.strip():
+            preserved_satisfier_meta["producer_repair_kind"] = repair_kind.strip()
     out[FINAL_EMISSION_META_KEY] = fem_assembly.build_gate_accept_fem_base(
         eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
         strict_social_active=strict_social_active,
@@ -133,6 +145,14 @@ def run_generic_accept_exit(
         deterministic_social_fallback_passed=False,
         dialogue_plan_trace=dialogue_plan_trace,
     )
+    restore_passive_scene_concrete_beat_satisfier_meta(
+        out[FINAL_EMISSION_META_KEY],
+        preserved_satisfier_meta,
+    )
+    if preserved_satisfier_meta.get("producer_repair_kind"):
+        out[FINAL_EMISSION_META_KEY]["producer_repair_kind"] = preserved_satisfier_meta[
+            "producer_repair_kind"
+        ]
     flag_non_hostile_escalation_from_writer_pregate(
         pre_gate_text,
         gm_output=out,

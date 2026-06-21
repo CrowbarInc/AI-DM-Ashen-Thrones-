@@ -48,7 +48,7 @@ from game.final_emission_tone_escalation import (
     merge_tone_escalation_into_emission_debug,
     merge_tone_escalation_meta,
 )
-from game.social_exchange_emission import project_strict_social_replace_realization_family
+from game.social_exchange_projection import project_strict_social_replace_realization_family
 
 
 def _reply_kind(resolution: Dict[str, Any] | None) -> str:

@@ -15,10 +15,8 @@ from game.fallback_provenance_debug import METADATA_KEY as FB_PROV_KEY, attach_u
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.gm_retry import apply_deterministic_retry_fallback, force_terminal_retry_fallback
 from game.turn_packet import TURN_PACKET_METADATA_KEY, attach_turn_packet, build_turn_packet
-from tests.helpers.emission_smoke_assertions import (
-    assert_final_route_present_smoke,
-    final_emission_meta_from_output,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.emission_smoke_assertions import assert_final_route_present_smoke
 
 pytestmark = pytest.mark.unit
 STAGE_DIFF_METADATA_KEY = "stage_diff_telemetry"

@@ -7,7 +7,6 @@ wiring, hygiene, and coarse repair evidence only.
 What belongs here (downstream smoke):
 - Non-empty player-facing text and obvious leakage bans (subset tuples, not full matrices)
 - Repair/replacement evidence via tags or debug notes
-- Consumer-layer meta smoke (``response_type_*``, continuity validate-only)
 - Route **wiring** smoke (``final_route`` present / accept vs non-accept; dialogue-lock HTTP
   sentinels via ``assert_dialogue_lock_*``) — not ``choose_interaction_route`` tables
 - Broadcast / open-call routing smoke (``assert_open_social_solicitation_route``,
@@ -22,6 +21,11 @@ What stays in owner suites (do not restate here):
   ``tests/test_dialogue_routing_lock.py`` (``choose_interaction_route`` classification table)
 
 Intentionally separate (do not merge into this facade):
+- Replay / FEM read bridge: ``tests/helpers/replay_smoke_assertions.py`` (Cycle BV7A)
+- Gate integration bridge: ``tests/helpers/gate_integration_smoke.py`` (Cycle BV7A)
+- Response-type consumer bridge: ``tests/helpers/response_type_smoke.py`` (Cycle BV7B)
+- Answer-completeness consumer bridge: ``tests/helpers/actor_consistency_smoke.py`` (Cycle BV7B)
+- Response-delta consumer bridge: ``tests/helpers/route_determinism_smoke.py`` (Cycle BV7B)
 - Opening fallback scaffolds / owner-bucket asserts: ``tests/helpers/opening_fallback_evidence.py``
 - Strict-social harness bundle: ``tests/helpers/strict_social_harness.py``
 - Opening attach-then gate harness: ``tests/helpers/opening_fallback_gate_harness.py``
@@ -44,11 +48,20 @@ different failure surface (legality vs integration smoke vs protected replay dri
 
 Registry lock: ``tests/test_ownership_registry.py`` (``test_be6_scaffold_phrase_triple_layer_split_locked``).
 
-Cycle AS2 — downstream consumer suites should import gate integration and owned layer
-seams from this module instead of ``game.final_emission_gate`` / ``read_final_emission_meta_dict``.
+Cycle AS2 — downstream consumer suites should import gate integration from
+``tests/helpers/gate_integration_smoke.py`` (re-exported here) instead of
+``game.final_emission_gate`` / ``apply_final_emission_gate``.
 
-Cycle AS4 — downstream HTTP/pipeline/transcript smoke should use ``final_emission_meta_from_output``
-and ``read_turn_debug_notes`` here; golden-replay FEM reads use ``golden_replay_projection``.
+Cycle AS4 — downstream HTTP/pipeline/transcript smoke should use
+``tests/helpers/replay_smoke_assertions.py`` (re-exported here) for FEM reads;
+golden-replay FEM reads use ``golden_replay_projection``.
+
+Cycle BV7A — replay read bridge → ``replay_smoke_assertions.py``; gate integration
+bridge → ``gate_integration_smoke.py``.
+
+Cycle BV7B — AC/RD/RT consumer seams → ``actor_consistency_smoke.py``,
+``route_determinism_smoke.py``, ``response_type_smoke.py``. This module remains the
+compatibility barrel for phrase/route/speaker smoke.
 
 Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick reference).
 
@@ -65,122 +78,87 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from game.final_emission_meta import read_debug_notes_from_turn_payload, read_final_emission_meta_dict
+from tests.helpers.actor_consistency_smoke import (
+    apply_answer_completeness_layer,
+    skip_answer_completeness_layer,
+    validate_answer_completeness,
+)
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer, gm_response_stub
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output, read_turn_debug_notes
+from tests.helpers.response_type_smoke import (
+    assert_response_type_contract_surfaces,
+    assert_response_type_meta,
+    enforce_response_type_contract_layer,
+    response_type_contract,
+)
+from tests.helpers.route_determinism_smoke import (
+    apply_response_delta_layer,
+    assert_no_boundary_reorder_repair,
+    assert_response_delta_boundary_validate_only,
+    inspect_response_delta_failure,
+    skip_response_delta_layer,
+    strict_social_answer_pressure_rd_contract_active,
+    validate_response_delta,
+)
 
-_MISSING = object()
-
-
-# Core smoke helpers
-
-def response_type_contract(required: str) -> dict:
-    """Minimal response-type contract scaffold for downstream smoke and integration tests."""
-    return {
-        "required_response_type": required,
-        "action_must_preserve_agency": required == "action_outcome",
-    }
-
-
-# FEM/read-side consumer bridge
-
-def final_emission_meta_from_output(gm_output: Mapping[str, Any]) -> dict[str, Any]:
-    """Read normalized FEM from a gate output dict (downstream wiring smoke)."""
-    return read_final_emission_meta_dict(dict(gm_output)) or {}
-
-
-def read_turn_debug_notes(payload: Mapping[str, Any]) -> str:
-    """Read turn-packet debug notes (downstream HTTP/pipeline wiring smoke)."""
-    return read_debug_notes_from_turn_payload(payload)
+__all__ = [
+    "STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH",
+    "SMOKE_PROCEDURAL_ADJUDICATION_PHRASES",
+    "SMOKE_VALIDATOR_VOICE_PHRASES",
+    "SMOKE_RETRY_COACHING_LEAK_PHRASES",
+    "SMOKE_SOCIAL_VISIBLE_INTRO_FILLER_PHRASES",
+    "SMOKE_UNCERTAINTY_FALLBACK_STOCK_PHRASES",
+    "SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS",
+    "SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS",
+    "SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS",
+    "apply_answer_completeness_layer",
+    "apply_final_emission_gate_consumer",
+    "apply_response_delta_layer",
+    "assert_broadcast_open_call_rejected_smoke",
+    "assert_continuity_validation_failed_without_repair",
+    "assert_dialogue_lock_non_dialogue_route_smoke",
+    "assert_dialogue_lock_social_route_smoke",
+    "assert_emission_repair_evidence",
+    "assert_final_route_accept_candidate_smoke",
+    "assert_final_route_not_replaced_smoke",
+    "assert_final_route_present_smoke",
+    "assert_final_route_replaced_or_not_accept",
+    "assert_global_visibility_stock_absent",
+    "assert_http_chat_response_smoke",
+    "assert_no_advisory_prose",
+    "assert_no_boundary_reorder_repair",
+    "assert_no_internal_scaffold_labels",
+    "assert_no_retry_coaching_leak_smoke",
+    "assert_no_social_visible_intro_filler_smoke",
+    "assert_no_uncertainty_fallback_stock_smoke",
+    "assert_no_unresolved_stock_phrases",
+    "assert_no_validator_voice_smoke",
+    "assert_open_call_crowd_reaction_wiring_smoke",
+    "assert_open_call_no_unresolved_retry_smoke",
+    "assert_open_social_solicitation_route",
+    "assert_player_text_present",
+    "assert_procedural_adjudication_smoke",
+    "assert_response_delta_boundary_validate_only",
+    "assert_response_type_contract_surfaces",
+    "assert_response_type_meta",
+    "assert_social_grounding_smoke",
+    "enforce_response_type_contract_layer",
+    "final_emission_meta_from_output",
+    "gm_response_stub",
+    "has_non_accept_final_route_smoke",
+    "inspect_response_delta_failure",
+    "read_turn_debug_notes",
+    "response_type_contract",
+    "skip_answer_completeness_layer",
+    "skip_response_delta_layer",
+    "strict_social_answer_pressure_rd_contract_active",
+    "validate_answer_completeness",
+    "validate_response_delta",
+]
 
 
 STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH = "game.social_exchange_emission.strict_social_emission_will_apply"
 
-
-# Final emission gate consumer bridge
-
-def apply_final_emission_gate_consumer(
-    gm_output: Mapping[str, Any],
-    *,
-    resolution: Mapping[str, Any] | None = None,
-    session: Mapping[str, Any] | None = None,
-    scene_id: str = "",
-    scene: Mapping[str, Any] | None = None,
-    world: Mapping[str, Any] | None = None,
-) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Run full gate orchestration for downstream consumer integration tests; return (output, fem)."""
-    from game.final_emission_runtime import finalize_player_facing_emission
-
-    out = finalize_player_facing_emission(
-        dict(gm_output),
-        resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution,
-        session=dict(session) if isinstance(session, Mapping) else session,
-        scene_id=scene_id,
-        scene=dict(scene) if isinstance(scene, Mapping) else scene,
-        world=dict(world) if isinstance(world, Mapping) else world,
-    )
-    return out, final_emission_meta_from_output(out)
-
-
-# AC/RD owner-adjacent repair bridges
-
-def validate_answer_completeness(text: str, contract: Mapping[str, Any], *, resolution: Mapping[str, Any] | None = None) -> dict[str, Any]:
-    """Consumer-owned answer-completeness validator seam (delegates to validator owner)."""
-    from game.final_emission_validators import validate_answer_completeness as _fn
-
-    return _fn(text, dict(contract), resolution=dict(resolution) if isinstance(resolution, Mapping) else resolution)
-
-
-def apply_answer_completeness_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
-    """Consumer-owned answer-completeness layer seam (delegates to repair owner)."""
-    from game.final_emission_repairs import _apply_answer_completeness_layer as _fn
-
-    return _fn(*args, **kwargs)
-
-
-def apply_response_delta_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any], list[str]]:
-    """Consumer-owned response-delta layer seam (delegates to repair owner)."""
-    from game.final_emission_repairs import _apply_response_delta_layer as _fn
-
-    return _fn(*args, **kwargs)
-
-
-def enforce_response_type_contract_layer(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
-    """Consumer-owned response-type enforcement seam (delegates to response_type owner)."""
-    from game.final_emission_response_type import enforce_response_type_contract as _fn
-
-    return _fn(*args, **kwargs)
-
-
-def skip_answer_completeness_layer(*args: Any, **kwargs: Any) -> bool:
-    from game.final_emission_repairs import _skip_answer_completeness_layer as _fn
-
-    return _fn(*args, **kwargs)
-
-
-def skip_response_delta_layer(*args: Any, **kwargs: Any) -> bool:
-    from game.final_emission_repairs import _skip_response_delta_layer as _fn
-
-    return _fn(*args, **kwargs)
-
-
-def strict_social_answer_pressure_rd_contract_active(gm_output: Mapping[str, Any]) -> bool:
-    from game.final_emission_repairs import _strict_social_answer_pressure_rd_contract_active as _fn
-
-    return _fn(dict(gm_output))
-
-
-def validate_response_delta(emitted: str, contract: Mapping[str, Any]) -> dict[str, Any]:
-    from game.final_emission_validators import validate_response_delta as _fn
-
-    return _fn(emitted, dict(contract))
-
-
-def inspect_response_delta_failure(result: Mapping[str, Any]) -> dict[str, Any]:
-    from game.final_emission_validators import inspect_response_delta_failure as _fn
-
-    return _fn(dict(result))
-
-
-# Core smoke helpers
 
 _DEFAULT_REPAIR_TAG_MARKERS: tuple[str, ...] = (
     "final_emission_gate_replaced",
@@ -249,29 +227,6 @@ def _assert_phrases_absent(text: str, phrases: Sequence[str], *, label: str) -> 
     for phrase in phrases:
         assert phrase not in low, f"{label}: unexpected player-facing phrase {phrase!r}"
 
-
-# HTTP fixture compatibility helpers
-
-def gm_response_stub(
-    text: str,
-    *,
-    tags: Sequence[str] | None = None,
-    debug_notes: str = "",
-) -> dict[str, Any]:
-    """Minimal fake ``call_gpt`` return dict for HTTP/pipeline integration tests."""
-    return {
-        "player_facing_text": text,
-        "tags": list(tags or []),
-        "scene_update": None,
-        "activate_scene_id": None,
-        "new_scene_draft": None,
-        "world_updates": None,
-        "suggested_action": None,
-        "debug_notes": debug_notes,
-    }
-
-
-# Core smoke helpers
 
 def _coerce_player_text(data_or_text: Any) -> str:
     if isinstance(data_or_text, str):
@@ -394,44 +349,21 @@ def assert_emission_repair_evidence(
     """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
     gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
     tags = list((gm_out or {}).get("tags") or [])
-    reader = debug_notes_reader or read_debug_notes_from_turn_payload
+    reader = debug_notes_reader or read_turn_debug_notes
     dbg = _normalized_low(reader(data))
     tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
     debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
     assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
 
 
-def assert_response_type_meta(
-    meta: Mapping[str, Any],
-    *,
-    required: Any = None,
-    candidate_ok: Any = None,
-    repair_used: Any = None,
-    repair_kinds: Sequence[str] | None = None,
-) -> None:
-    """Smoke-check selected response-type FEM fields when provided."""
-    if required is not None:
-        assert meta.get("response_type_required") == required
-    if candidate_ok is not None:
-        assert meta.get("response_type_candidate_ok") is candidate_ok
-    if repair_used is not None:
-        assert meta.get("response_type_repair_used") is repair_used
-    if repair_kinds is not None:
-        assert meta.get("response_type_repair_kind") in set(repair_kinds)
-
-
 _DIALOGUE_LOCK_SOCIAL_KINDS: tuple[str, ...] = ("question", "social_probe")
 
-
-# Core smoke helpers
 
 def assert_http_chat_response_smoke(data: Mapping[str, Any]) -> str:
     """HTTP smoke: ``/api/chat`` returned ok with non-empty player-facing text."""
     assert data.get("ok") is True, "expected chat response ok=True"
     return assert_player_text_present(data)
 
-
-# Route smoke helpers
 
 def assert_dialogue_lock_social_route_smoke(
     resolution: Mapping[str, Any],
@@ -464,30 +396,6 @@ def assert_dialogue_lock_non_dialogue_route_smoke(resolution: Mapping[str, Any])
     )
 
 
-def assert_response_type_contract_surfaces(
-    *,
-    required: str,
-    debug: Mapping[str, Any] | None = None,
-    trace: Mapping[str, Any] | None = None,
-    resolution: Mapping[str, Any] | None = None,
-) -> None:
-    """HTTP smoke: ``response_type_contract`` threaded through named debug surfaces."""
-    for surface_name, contract in (
-        ("debug", debug),
-        ("trace", trace),
-        ("resolution", resolution),
-    ):
-        if contract is None:
-            continue
-        actual = contract.get("required_response_type")
-        assert actual == required, (
-            f"{surface_name} response_type_contract.required_response_type: "
-            f"expected {required!r}, got {actual!r}"
-        )
-
-
-# Social/open-call smoke helpers
-
 def assert_social_grounding_smoke(
     social: Mapping[str, Any],
     *,
@@ -519,8 +427,6 @@ def assert_continuity_validation_failed_without_repair(emission_debug: Mapping[s
     repair = emission_debug.get("interaction_continuity_repair") or {}
     assert repair.get("applied") is not True
 
-
-# Social/open-call smoke helpers
 
 def assert_open_social_solicitation_route(
     entry: Mapping[str, Any],
@@ -563,8 +469,6 @@ def assert_open_call_no_unresolved_retry_smoke(retry_failures: Sequence[Any]) ->
     )
 
 
-# Route smoke helpers
-
 def assert_final_route_present_smoke(meta: Mapping[str, Any]) -> None:
     """Smoke: ``final_route`` is present on FEM (wiring only)."""
     route = meta.get("final_route")
@@ -592,29 +496,3 @@ def assert_final_route_replaced_or_not_accept(meta: Mapping[str, Any]) -> None:
     """Smoke: final route is not an accept path (replacement or other non-accept wiring)."""
     route = meta.get("final_route")
     assert has_non_accept_final_route_smoke(meta), f"expected non-accept final_route smoke, got {route!r}"
-
-
-def assert_no_boundary_reorder_repair(meta: Mapping[str, Any], reason: str) -> None:
-    """Smoke: boundary validate-only reason appears in rejection sample."""
-    sample = meta.get("rejection_reasons_sample") or []
-    assert reason in sample
-
-
-# AC/RD owner-adjacent repair bridges
-
-def assert_response_delta_boundary_validate_only(
-    out: str,
-    raw: str,
-    meta: Mapping[str, Any],
-    extra: Sequence[str],
-    *,
-    reason: str = "response_delta_unsatisfied_at_boundary_no_reorder",
-    repair_mode: Any | object = _MISSING,
-) -> None:
-    """Smoke: response-delta boundary failed without reorder repair."""
-    assert out == raw
-    assert meta["response_delta_repaired"] is False
-    assert meta["response_delta_failed"] is True
-    if repair_mode is not _MISSING:
-        assert meta["response_delta_repair_mode"] is repair_mode
-    assert list(extra) == [reason]

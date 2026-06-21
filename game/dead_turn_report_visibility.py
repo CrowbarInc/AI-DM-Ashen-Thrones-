@@ -8,7 +8,7 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any, Mapping, MutableMapping, Sequence
 
-from game.final_emission_meta import (
+from game.observability_attribution_read import (
     normalized_observational_telemetry_bundle,
     summarize_gameplay_validation_for_turn,
 )

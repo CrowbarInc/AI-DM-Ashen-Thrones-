@@ -10,6 +10,8 @@ from collections.abc import Mapping
 from typing import Any, Dict
 
 from game.final_emission_meta import (
+    NARRATIVE_MODE_OUTPUT_FEM_KEYS,
+    default_narrative_mode_output_layer_meta,
     ensure_final_emission_meta_dict,
     merge_narrative_mode_output_into_final_emission_meta,
 )

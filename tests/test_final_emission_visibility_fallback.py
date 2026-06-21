@@ -14,7 +14,7 @@ from typing import Any
 
 import pytest
 
-from game.final_emission_meta import (
+from game.attribution_read_views import (
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
@@ -1245,16 +1245,17 @@ def test_select_non_strict_terminal_fallback_for_sealed_social_branch_uses_owner
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     import game.final_emission_passive_scene_pressure as passive_scene_pressure
-    import game.social_exchange_emission as social_exchange_emission
+    import game.social_exchange_fallback_catalog as social_exchange_fallback_catalog
+    import game.social_exchange_policy as social_exchange_policy
 
     monkeypatch.setattr(
-        social_exchange_emission,
+        social_exchange_fallback_catalog,
         "minimal_social_emergency_fallback_line",
         lambda _res: "owner social line",
     )
     monkeypatch.setattr(
-        social_exchange_emission,
-        "_npc_display_name_for_emission",
+        social_exchange_policy,
+        "npc_display_name_for_emission",
         lambda _w, _sid, _npc: "Aldric",
     )
     monkeypatch.setattr(

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_ownership_schema import (
+from game.ownership_projection_views import (
     OPENING_FAIL_CLOSED_CONTENT_OWNER,
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_SELECTION_OWNER,
@@ -30,7 +30,7 @@ from game.final_emission_replay_projection import (
     SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
 )
 
-from tests.helpers.golden_replay_projection import (
+from game.attribution_read_views import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,

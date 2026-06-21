@@ -1,0 +1,30 @@
+{
+  "scene": {
+    "id": "scene_investigate",
+    "location": "Investigator's Office",
+    "summary": "Lamplight pools over clutter: ink-stained maps, a ledger half-shut, and the damp smell of rain through the shutters.",
+    "mode": "exploration",
+    "visible_facts": [
+      "Filing shelves crowd one wall; loose papers curl at the edges.",
+      "A brass compass sits beside a blot of spilled ink on the desk.",
+      "Rain taps at shutter slats while distant bells mark the ward."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "desk_clue",
+        "text": "A map indicates patrol locations."
+      }
+    ],
+    "hidden_facts": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [
+      {
+        "id": "desk",
+        "type": "investigate",
+        "reveals_clue": "desk_clue"
+      }
+    ]
+  }
+}

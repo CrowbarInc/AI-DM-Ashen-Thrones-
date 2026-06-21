@@ -12,10 +12,24 @@ from __future__ import annotations
 
 from typing import Any, Dict, Mapping
 
-from game.final_emission_text import _normalize_text
-from game.final_emission_meta import default_opening_fallback_context_mirror_values
+from game.final_emission_text_formatting import _normalize_text
 
 OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER = "[opening_fallback_failed_closed: empty_curated_facts]"
+
+
+def default_opening_fallback_context_mirror_values() -> Dict[str, Any]:
+    """Default opening-context mirror values before curated-fact extraction."""
+    return {
+        "opening_fallback_context_source": "none",
+        "opening_fallback_basis_count": 0,
+        "opening_fallback_context_missing": True,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "none",
+        "opening_selector_selected_facts": [],
+        "opening_curated_facts": [],
+        "opening_final_fallback_basis": [],
+        "opening_final_basis_matches_selector": False,
+    }
 
 
 def _opening_clean_fact_list(raw: Any) -> list[str]:

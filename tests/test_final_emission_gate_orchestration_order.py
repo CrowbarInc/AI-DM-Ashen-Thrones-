@@ -12,6 +12,7 @@ BJ delegator locks live in ``tests/test_final_emission_gate_delegator_regression
 
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -20,14 +21,13 @@ import pytest
 import game.final_emission_repairs as emission_repairs
 import game.final_emission_response_type as response_type
 import game.final_emission_strict_social_stack as strict_social_stack
-import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.opening_deterministic_fallback as opening_deterministic_fallback
 import game.final_emission_non_strict_stack as non_strict_stack
 from game.context_separation import build_context_separation_contract
 from game.contract_registry import emergency_fallback_source_ids
 from game.defaults import default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate, get_speaker_selection_contract
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.opening_deterministic_fallback import deterministic_opening_fallback_text_and_meta as _deterministic_opening_under_test
 from game.realization_authority import FALLBACK_FAMILIES
@@ -36,12 +36,12 @@ from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
 )
-from game.social_exchange_emission import effective_strict_social_resolution_for_emission
+from game.social_exchange_policy import effective_strict_social_resolution_for_emission
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     maybe_attach_upstream_prepared_opening_fallback_payload,
 )
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.response_type_smoke import response_type_contract
 from tests.helpers.gate_equivalence_monkeypatch import patch_get_speaker_selection_contract
 from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 from tests.helpers.opening_fallback_evidence import opening_gm_output
@@ -704,7 +704,7 @@ def _dialogue_response_policy_with_social_structure(**srs_overrides):
     return {"response_type_contract": rtc, "social_response_structure": srs}
 
 def test_social_response_structure_layer_runs_after_response_delta_and_before_tone_escalation(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     order: list[str] = []
     orig_rd = non_strict_stack._apply_response_delta_layer
     orig_srs = non_strict_stack._apply_social_response_structure_layer
@@ -743,7 +743,7 @@ def test_social_response_structure_layer_runs_after_response_delta_and_before_to
     )
 
 def test_response_type_failure_skips_social_response_structure_layer(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     raw = "The lane stays quiet under the lamps without a direct reply."
     out = apply_final_emission_gate(

@@ -11,7 +11,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
-from game.final_emission_meta import (
+from game.attribution_read_views import (
     opening_fallback_owner_bucket_from_meta,
     sealed_fallback_owner_bucket_from_fields,
     visibility_fallback_owner_bucket_from_fields,

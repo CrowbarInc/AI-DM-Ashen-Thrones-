@@ -58,10 +58,17 @@ GAME_MODULE_PATHS: Final[dict[str, str]] = {
     "game.final_emission_strict_social_stack": "game/final_emission_strict_social_stack.py",
     "game.final_emission_terminal_pipeline": "game/final_emission_terminal_pipeline.py",
     "game.final_emission_text": "game/final_emission_text.py",
+    "game.final_emission_text_formatting": "game/final_emission_text_formatting.py",
+    "game.final_emission_text_policy": "game/final_emission_text_policy.py",
+    "game.final_emission_text_legacy_semantic_repair": "game/final_emission_text_legacy_semantic_repair.py",
     "game.final_emission_tone_escalation": "game/final_emission_tone_escalation.py",
     "game.final_emission_visibility_fallback": "game/final_emission_visibility_fallback.py",
     "game.interaction_continuity": "game/interaction_continuity.py",
     "game.social_exchange_emission": "game/social_exchange_emission.py",
+    "game.social_exchange_fallback_catalog": "game/social_exchange_fallback_catalog.py",
+    "game.social_exchange_policy": "game/social_exchange_policy.py",
+    "game.social_exchange_projection": "game/social_exchange_projection.py",
+    "game.social_exchange_validation": "game/social_exchange_validation.py",
     "game.speaker_contract_enforcement": "game/speaker_contract_enforcement.py",
     "game.stage_diff_telemetry": "game/stage_diff_telemetry.py",
 }
@@ -86,10 +93,17 @@ ACCEPTANCE_QUALITY: Final[str] = "game.final_emission_acceptance_quality"
 DIALOGUE_SOCIAL_PLAN: Final[str] = "game.dialogue_social_plan"
 META: Final[str] = "game.final_emission_meta"
 TEXT: Final[str] = "game.final_emission_text"
+TEXT_FORMATTING: Final[str] = "game.final_emission_text_formatting"
+TEXT_POLICY: Final[str] = "game.final_emission_text_policy"
+TEXT_LEGACY_REPAIR: Final[str] = "game.final_emission_text_legacy_semantic_repair"
 BOUNDARY_CONTRACT: Final[str] = "game.final_emission_boundary_contract"
 INTERACTION_CONTINUITY: Final[str] = "game.interaction_continuity"
 SPEAKER_CONTRACT: Final[str] = "game.speaker_contract_enforcement"
 SOCIAL_EXCHANGE: Final[str] = "game.social_exchange_emission"
+SOCIAL_EXCHANGE_FALLBACK: Final[str] = "game.social_exchange_fallback_catalog"
+SOCIAL_EXCHANGE_POLICY: Final[str] = "game.social_exchange_policy"
+SOCIAL_EXCHANGE_PROJECTION: Final[str] = "game.social_exchange_projection"
+SOCIAL_EXCHANGE_VALIDATION: Final[str] = "game.social_exchange_validation"
 STAGE_DIFF: Final[str] = "game.stage_diff_telemetry"
 FALLBACK_PROVENANCE: Final[str] = "game.fallback_provenance_debug"
 ANTI_RESET: Final[str] = "game.anti_reset_emission_guard"

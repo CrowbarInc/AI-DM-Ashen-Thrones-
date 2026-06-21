@@ -12,7 +12,7 @@ import game.final_emission_acceptance_quality as acceptance_quality_gate
 import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.final_emission_gate as feg
 from game.acceptance_quality import validate_and_repair_acceptance_quality
-from game.final_emission_meta import FINAL_EMISSION_META_KEY
+from game.observability_attribution_read import FINAL_EMISSION_META_KEY
 from game.realization_provenance import GATE_TERMINAL_REPAIR, REALIZATION_FALLBACK_FAMILY_FIELD
 
 

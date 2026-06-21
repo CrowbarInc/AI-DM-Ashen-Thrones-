@@ -6,8 +6,8 @@
 
 - **Status:** `healthy`
 - **Alerts:** 0
-- **Finalized FEM instances scanned:** 107
-- **Artifact files considered:** 3799
+- **Finalized FEM instances scanned:** 390
+- **Artifact files considered:** 9609
 
 ## Watch Registry
 

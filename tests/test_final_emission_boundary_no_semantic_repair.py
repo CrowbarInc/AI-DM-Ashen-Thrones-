@@ -7,13 +7,14 @@ import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
 import game.final_emission_terminal_pipeline as terminal_pipeline
-from game.final_emission_text import _normalize_text
+import game.final_emission_visibility_fallback as visibility_fallback
+from game.final_emission_text_formatting import _normalize_text
 from game.narrative_authenticity import build_narrative_authenticity_contract
 from tests.helpers.boundary_semantic_repair_fixtures import (
     assert_fem_has_no_semantic_repair_success_flags,
     dialogue_policy_with_social_structure,
 )
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.objective7_referent_fixtures import minimal_full_referent_artifact, referent_compact_mirror
 from tests.helpers.narrative_mode_validator_fixtures import (
     build_validator_narrative_mode_contract,
@@ -38,7 +39,7 @@ def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = No
 
 def test_list_like_dialogue_stays_list_like(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
@@ -96,7 +97,7 @@ def test_weak_response_delta_candidate_not_rewritten_at_boundary():
 
 def test_multi_speaker_format_not_collapsed(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
@@ -119,7 +120,7 @@ def test_multi_speaker_format_not_collapsed(monkeypatch):
 
 def test_awkward_but_legal_narration_not_polished(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
@@ -139,7 +140,7 @@ def test_awkward_but_legal_narration_not_polished(monkeypatch):
 
 def test_awkward_legalistic_narration_not_semantically_rewritten(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
@@ -162,7 +163,7 @@ def test_awkward_legalistic_narration_not_semantically_rewritten(monkeypatch):
 
 def test_n4_hard_illegal_still_sealed_fallback(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )
@@ -183,7 +184,7 @@ def test_n4_hard_illegal_still_sealed_fallback(monkeypatch):
 
 def test_referent_ambiguity_not_rewritten_when_semantic_repair_disabled(monkeypatch):
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )

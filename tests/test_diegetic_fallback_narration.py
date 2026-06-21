@@ -23,8 +23,8 @@ from game.realization_provenance import (
 from game.upstream_response_repairs import (
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
 )
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
     assert_final_route_not_replaced_smoke,
     assert_final_route_present_smoke,
 )

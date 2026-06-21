@@ -13,7 +13,8 @@ import re
 from typing import Any, Dict, Mapping, Optional, Set
 
 from game.interaction_context import inspect as inspect_interaction_context
-from game.social_exchange_emission import effective_strict_social_resolution_for_emission, minimal_social_emergency_fallback_line
+from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+from game.social_exchange_policy import effective_strict_social_resolution_for_emission
 
 # Sources that emit broad scene-establishing / first-mention intro shapes (not minimal social beats).
 SCENE_INTRO_EMITTER_SOURCES: frozenset[str] = frozenset(

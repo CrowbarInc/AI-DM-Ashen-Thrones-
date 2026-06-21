@@ -40,11 +40,12 @@ from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
 )
-from game.social_exchange_emission import (
+from game.social_exchange_projection import (
     project_strict_social_replace_realization_family,
     stamp_strict_social_deterministic_fallback_family,
     strict_social_deterministic_fallback_family_token,
 )
+from game.final_emission_owner_bucket_views import opening_fallback_owner_bucket_from_meta
 from game.final_emission_meta import (
     build_narration_constraint_debug,
     default_narration_constraint_debug,
@@ -91,7 +92,7 @@ from game.final_emission_meta import (
     normalize_final_emission_meta_for_observability,
     normalize_merged_na_telemetry_for_eval,
     opening_fallback_projection_fields,
-    opening_fallback_owner_bucket_from_meta,
+    package_emission_channel_sidecar,
     normalized_observational_telemetry_bundle,
     patch_final_emission_meta,
     read_emission_debug_lane,
@@ -904,6 +905,11 @@ def test_read_helpers_prefer_sidecar_lane_over_legacy_top_level() -> None:
     # Legacy-only fallback still works for mixed fixtures.
     assert read_final_emission_meta_dict({"_final_emission_meta": {"k": 1}}) == {"k": 1}
     assert read_final_emission_meta_dict({}) == {}
+
+
+def test_package_emission_channel_sidecar_omits_empty() -> None:
+    assert package_emission_channel_sidecar(debug_top_level={}, author_top_level={}) == {}
+    assert package_emission_channel_sidecar(debug_top_level=None, author_top_level=None) == {}
 
 
 def test_read_final_emission_meta_from_turn_payload_supports_api_envelope_and_gm_output_dict() -> None:

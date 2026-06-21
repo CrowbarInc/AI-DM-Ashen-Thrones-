@@ -12,11 +12,10 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any, Dict, Literal
 
-from game.final_emission_acceptance_quality import apply_acceptance_quality_n4_floor_seam
-from game.interaction_continuity import (
-    apply_interaction_continuity_emission_step,
-    attach_interaction_continuity_validation,
-)
+import game.final_emission_acceptance_quality as acceptance_quality
+import game.final_emission_repairs as emission_repairs
+import game.final_emission_visibility_fallback as visibility_fallback
+import game.interaction_continuity as interaction_continuity
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
@@ -32,21 +31,15 @@ from game.final_emission_narrative_mode_output import (
     _narrative_mode_output_legality_assessment,
 )
 from game.final_emission_referential_clarity import (
+    apply_observe_referential_clarity_upstream_repair,
     _strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id,
 )
-from game.final_emission_repairs import (
-    _apply_fallback_behavior_layer,
-    _apply_referent_clarity_emission_layer,
-    _merge_fallback_behavior_meta,
-    _merge_referent_clarity_meta,
-    merge_fallback_behavior_into_emission_debug,
+from game.final_emission_passive_scene_pressure import (
+    apply_observe_passive_scene_concrete_beat_upstream_satisfier,
 )
-from game.final_emission_text import _normalize_text
-from game.final_emission_visibility_fallback import apply_visibility_enforcement
-from game.social_exchange_emission import (
-    minimal_social_emergency_fallback_line,
-    stamp_strict_social_deterministic_fallback_family,
-)
+from game.final_emission_text_formatting import _normalize_text
+from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+from game.social_exchange_projection import stamp_strict_social_deterministic_fallback_family
 
 GateTerminalEnforcementProfile = Literal[
     "strict_accept",
@@ -103,7 +96,7 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
     if not isinstance(out, dict):
         return
     text_in = str(out.get("player_facing_text") or "")
-    text_out, dbg, _ = _apply_referent_clarity_emission_layer(
+    text_out, dbg, _ = emission_repairs._apply_referent_clarity_emission_layer(
         text_in,
         gm_output=out,
         allow_semantic_text_repair=False,
@@ -114,7 +107,7 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
     )
     out["player_facing_text"] = text_out
     fem = ensure_final_emission_meta_dict(out)
-    _merge_referent_clarity_meta(fem, dbg)
+    emission_repairs._merge_referent_clarity_meta(fem, dbg)
     gtxt = _normalize_text(text_out)
     if gtxt:
         fem["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
@@ -157,7 +150,28 @@ def run_gate_terminal_enforcement_pipeline(
         active_interlocutor=active_interlocutor,
         strict_social_active=strict_social_active,
     )
-    out = apply_visibility_enforcement(
+    out = apply_observe_referential_clarity_upstream_repair(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        eff_resolution=eff_res,
+        active_interlocutor=active_interlocutor,
+        res_kind=res_kind,
+        strict_social_active=strict_social_active,
+        grounded_speaker_first_mention_exemption_entity_id=grounded_fm_exempt,
+    )
+    out = apply_observe_passive_scene_concrete_beat_upstream_satisfier(
+        out,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=sid,
+        res_kind=res_kind,
+        strict_social_active=strict_social_active,
+    )
+    out = visibility_fallback.apply_visibility_enforcement(
         out,
         session=session,
         scene=scene,
@@ -179,7 +193,7 @@ def run_gate_terminal_enforcement_pipeline(
     resolution_for_ic_contracts = eff_res if strict_social_path else auth_res
 
     if profile == "strict_accept":
-        ic_strict_text, _, ic_strict_fb = apply_interaction_continuity_emission_step(
+        ic_strict_text, _, ic_strict_fb = interaction_continuity.apply_interaction_continuity_emission_step(
             out,
             text=_normalize_text(out.get("player_facing_text")),
             resolution_for_contracts=eff_res,
@@ -203,7 +217,7 @@ def run_gate_terminal_enforcement_pipeline(
             )
 
     if strict_social_path:
-        fb_text, fb_layer_meta, _ = _apply_fallback_behavior_layer(
+        fb_text, fb_layer_meta, _ = emission_repairs._apply_fallback_behavior_layer(
             _normalize_text(out.get("player_facing_text")),
             gm_output=out,
             resolution=eff_res,
@@ -221,7 +235,7 @@ def run_gate_terminal_enforcement_pipeline(
             source=fb_source,
         )
         out["player_facing_text"] = fb_text
-        merge_fallback_behavior_into_emission_debug(
+        emission_repairs.merge_fallback_behavior_into_emission_debug(
             out,
             auth_res,
             eff_res,
@@ -229,7 +243,7 @@ def run_gate_terminal_enforcement_pipeline(
         )
         fem_patch = out.get("_final_emission_meta")
         if isinstance(fem_patch, dict):
-            _merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
+            emission_repairs._merge_fallback_behavior_meta(fem_patch, fb_layer_meta)
             gtxt = _normalize_text(fb_text)
             fem_patch["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
             fem_patch["post_gate_mutation_detected"] = pre_gate_text != gtxt
@@ -272,7 +286,7 @@ def run_gate_terminal_enforcement_pipeline(
             )
             _merge_narrative_mode_output_trace_into_gate_fem(out, nmo_post_fb["trace"])
 
-    apply_acceptance_quality_n4_floor_seam(
+    acceptance_quality.apply_acceptance_quality_n4_floor_seam(
         out,
         gm_output_for_contract=out,
         candidate_text=str(out.get("player_facing_text") or ""),
@@ -289,7 +303,7 @@ def run_gate_terminal_enforcement_pipeline(
     )
 
     if profile == "strict_accept":
-        attach_interaction_continuity_validation(
+        interaction_continuity.attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=eff_res,
             eff_resolution=eff_res,
@@ -297,7 +311,7 @@ def run_gate_terminal_enforcement_pipeline(
             preserve_existing_validation=True,
         )
     else:
-        attach_interaction_continuity_validation(
+        interaction_continuity.attach_interaction_continuity_validation(
             out,
             resolution_for_contracts=resolution_for_ic_contracts,
             eff_resolution=eff_res,

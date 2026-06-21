@@ -15,16 +15,14 @@ from game.final_emission_narrative_authority import (
     resolve_narrative_authority_contract,
 )
 from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.narrative_authority import (
     build_narrative_authority_contract,
     validate_narrative_authority,
 )
-from game.social_exchange_emission import merged_player_prompt_for_gate
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-)
+from game.social_exchange_policy import merged_player_prompt_for_gate
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 pytestmark = pytest.mark.unit
 

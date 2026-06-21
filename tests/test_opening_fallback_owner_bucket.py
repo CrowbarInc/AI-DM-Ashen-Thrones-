@@ -17,18 +17,20 @@ from __future__ import annotations
 
 import pytest
 
-from game.final_emission_meta import (
+from game.final_emission_meta_read import (
+    final_emission_meta_read_side_surface,
+)
+from game.final_emission_owner_bucket_views import (
+    OPENING_FALLBACK_OWNER_BUCKETS,
     OPENING_FALLBACK_OWNER_RETRY,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    OPENING_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
-    final_emission_meta_read_side_surface,
     opening_fallback_owner_bucket_from_fields,
 )
 from tests.helpers.opening_fallback_evidence import (
@@ -154,7 +156,7 @@ def test_conflicting_upstream_prepared_and_fail_closed_signals_choose_sealed_gat
 
 def test_visibility_fallback_owner_bucket_from_fields_cases() -> None:
     """Visibility bucket mapping is owned by ``final_emission_meta`` (Cycle BK1/BK2)."""
-    from game.final_emission_meta import visibility_fallback_owner_bucket_from_fields
+    from game.final_emission_owner_bucket_views import visibility_fallback_owner_bucket_from_fields
 
     cases = (
         ({"fallback_pool": "scene_opening_deterministic", "fallback_kind": "", "final_emitted_source": ""}, VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY),
@@ -173,7 +175,7 @@ def test_visibility_fallback_owner_bucket_from_fields_cases() -> None:
 
 def test_sealed_fallback_owner_bucket_from_fields_cases() -> None:
     """Sealed bucket mapping is owned by ``final_emission_meta`` (Cycle BK1/BK2)."""
-    from game.final_emission_meta import (
+    from game.final_emission_owner_bucket_views import (
         SEALED_FALLBACK_OWNER_SEALED_GATE,
         SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
         sealed_fallback_owner_bucket_from_fields,

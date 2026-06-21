@@ -15,10 +15,8 @@ from game.final_emission_scene_state_anchor import (
     _resolve_scene_state_anchor_contract,
     _title_case_anchor_phrase,
 )
-from game.final_emission_text import (
-    _global_narrative_fallback_stock_line,
-    _normalize_text,
-)
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_text import _global_narrative_fallback_stock_line
 
 
 def _dedupe_preserve_order(items: List[str]) -> List[str]:

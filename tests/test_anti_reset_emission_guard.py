@@ -1,19 +1,19 @@
 """Anti-reset guard: opener-style stock fallbacks must not replay during established local exchange."""
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 import pytest
 
 import game.final_emission_gate_preflight_strict_social as gate_preflight_strict_social
-import game.social_exchange_emission as social_exchange_emission
+import game.social_exchange_policy as social_exchange_policy
 from game.anti_reset_emission_guard import (
     anti_reset_suppresses_intro_style_fallbacks,
     resolution_allows_scene_intro_framing,
     text_overlaps_known_scene_intro_sources,
 )
 from game.defaults import default_scene, default_session, default_world
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 pytestmark = [pytest.mark.regression]
 
@@ -72,7 +72,7 @@ def test_mid_scene_strict_social_first_mention_no_scene_summary_replay():
 def test_non_social_replace_uses_anti_reset_not_global_anchor(monkeypatch: pytest.MonkeyPatch):
     """A/D) Forced final replacement stays exchange-local when intro suppression is active."""
     _force_non_strict = lambda *a, **k: False
-    monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply", _force_non_strict)
+    monkeypatch.setattr(social_exchange_policy, "strict_social_emission_will_apply", _force_non_strict)
     monkeypatch.setattr(gate_preflight_strict_social, "strict_social_emission_will_apply", _force_non_strict)
 
     session = default_session()

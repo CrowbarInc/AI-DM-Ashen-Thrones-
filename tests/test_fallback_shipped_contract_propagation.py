@@ -8,7 +8,7 @@ consumption of already-shipped policy.
 """
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.fallback_bridge_smoke import final_emission_meta_from_output, apply_final_emission_gate_consumer
 
 import pytest
 
@@ -17,10 +17,9 @@ from game.context_separation import build_context_separation_contract
 from game.gm import apply_deterministic_retry_fallback, apply_response_policy_enforcement
 from game.gm_retry import force_terminal_retry_fallback
 from game.interaction_context import rebuild_active_scene_entities
-from game.social_exchange_emission import strict_social_emission_will_apply
+from game.social_exchange_policy import strict_social_emission_will_apply
 from game.storage import load_scene
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 pytestmark = pytest.mark.unit
 
 

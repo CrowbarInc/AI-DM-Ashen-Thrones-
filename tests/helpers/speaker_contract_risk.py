@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass, replace
 from typing import Any, Literal, Mapping, Sequence
 
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 from tests.helpers.golden_replay_fixtures import observed_turn_from_gate_output
 from tests.helpers.golden_replay_projection import golden_text_hash, normalize_golden_text

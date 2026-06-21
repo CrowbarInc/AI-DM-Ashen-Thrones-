@@ -1,0 +1,1404 @@
+{
+  "schema_version": 1,
+  "cycle": "BV12",
+  "targets": [
+    "tests.helpers.replay_smoke_assertions",
+    "tests.helpers.gate_integration_smoke"
+  ],
+  "bu_fan_in": {
+    "tests.helpers.replay_smoke_assertions": 56,
+    "tests.helpers.gate_integration_smoke": 39
+  },
+  "combined_fan_in": 95,
+  "exports_by_module": {
+    "tests.helpers.replay_smoke_assertions": [
+      "final_emission_meta_from_output",
+      "read_turn_debug_notes"
+    ],
+    "tests.helpers.gate_integration_smoke": [
+      "apply_final_emission_gate_consumer",
+      "gm_response_stub"
+    ]
+  },
+  "fan_out_by_module": {
+    "tests.helpers.replay_smoke_assertions": [
+      "__future__",
+      "collections.abc",
+      "game.final_emission_meta_read",
+      "typing"
+    ],
+    "tests.helpers.gate_integration_smoke": [
+      "__future__",
+      "collections.abc",
+      "game.final_emission_runtime",
+      "tests.helpers.replay_smoke_assertions",
+      "typing"
+    ]
+  },
+  "loc_by_module": {
+    "tests.helpers.replay_smoke_assertions": 26,
+    "tests.helpers.gate_integration_smoke": 58
+  },
+  "direct_importers": {
+    "tests.helpers.replay_smoke_assertions": [
+      {
+        "file": "tests/helpers/behavioral_gauntlet_eval.py",
+        "subsystem": "test helpers",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/helpers/emission_smoke_assertions.py",
+        "subsystem": "test helpers",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_turn_debug_notes"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/helpers/transcript_snapshots.py",
+        "subsystem": "replay helpers",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_railroading.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_railroading_retry_alignment.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_reset_emission_guard.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_api_narration_path_selection.py",
+        "subsystem": "HTTP/pipeline integration",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_block_s_speaker_local_rebind_equivalence.py",
+        "subsystem": "speaker/social",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_block_u_finalize_stack_divergence.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_bv3a_observe_referential_clarity_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_bv3e_eligibility_expansion.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_bv4b_concrete_beat_upstream_satisfier.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_c4_narrative_mode_live_pipeline.py",
+        "subsystem": "HTTP/pipeline integration",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_context_separation.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_contextual_minimal_repair_regressions.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_dead_turn_detection.py",
+        "subsystem": "observability/diagnostics",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "observability testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_dead_turn_evaluation_threading.py",
+        "subsystem": "observability/diagnostics",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "observability testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_empty_social_retry_regressions.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_behavior_gate.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_behavior_repairs.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_overwrite_containment.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_shipped_contract_propagation.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_gate_diagnostics.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_gate_n4.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_gate_orchestration_order.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_gate_selector_snapshots.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_opening_fallback.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_visibility.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_golden_replay_direct_seam.py",
+        "subsystem": "replay",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay projection"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_interaction_continuity_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_lead_lifecycle_block3_transcript_regression.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_manual_play_latency.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narration_transcript_regressions.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narrative_authority_rules.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narrative_mode_output_validator.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_observational_telemetry_confidence.py",
+        "subsystem": "observability/diagnostics",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "observability testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_player_facing_narration_purity.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_prompt_context.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_referential_clarity_player_coref.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_referential_clarity_strict_social_local_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_response_policy_contracts.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_retry_tone_alignment.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_run_scenario_spine_validation.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_scene_state_anchoring.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_scene_transition_authority.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "read_turn_debug_notes"
+        ],
+        "ownership_bucket": "debug-notes-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_social_emission_quality.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_social_exchange_emission.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_social_interaction_authority.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_speaker_contract_risk.py",
+        "subsystem": "speaker/social",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_strict_social_emergency_fallback_dialogue.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_tone_escalation_rules.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_transcript_gauntlet_actor_addressing.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "final_emission_meta_from_output",
+          "read_final_emission_meta_dict"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_turn_packet_stage_diff_integration.py",
+        "subsystem": "HTTP/pipeline integration",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_turn_pipeline_shared.py",
+        "subsystem": "HTTP/pipeline integration",
+        "symbols": [
+          "read_turn_debug_notes"
+        ],
+        "ownership_bucket": "debug-notes-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tools/bv3d_build_positive_control_corpus.py",
+        "subsystem": "tools/analysis",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tools/bv3e_shape_simulation.py",
+        "subsystem": "tools/analysis",
+        "symbols": [
+          "final_emission_meta_from_output"
+        ],
+        "ownership_bucket": "FEM-read-bridge",
+        "usage_domains": [
+          "replay acceptance"
+        ],
+        "import_path": "direct"
+      }
+    ],
+    "tests.helpers.gate_integration_smoke": [
+      {
+        "file": "tests/helpers/emission_smoke_assertions.py",
+        "subsystem": "test helpers",
+        "symbols": [
+          "apply_final_emission_gate_consumer",
+          "gm_response_stub"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/helpers/strict_social_harness.py",
+        "subsystem": "speaker helpers",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/helpers/turn_pipeline_http_fixtures.py",
+        "subsystem": "test helpers",
+        "symbols": [
+          "_gm_response",
+          "gm_response_stub"
+        ],
+        "ownership_bucket": "mixed/downstream-smoke",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_answer_completeness_rules.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_railroading.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_railroading_transcript_regressions.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_anti_reset_emission_guard.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_bv3a_observe_referential_clarity_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_bv4b_concrete_beat_upstream_satisfier.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_c4_narrative_mode_live_pipeline.py",
+        "subsystem": "HTTP/pipeline integration",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_context_separation.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_dialogue_plan_final_emission_gate.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate validation"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_dialogue_social_convergence.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_diegetic_fallback_narration.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_overwrite_containment.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_fallback_shipped_contract_propagation.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_answer_exposition_plan_convergence.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate validation"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_boundary_convergence.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate validation"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_final_emission_scene_integrity.py",
+        "subsystem": "final emission gate",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate validation"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_golden_replay_direct_seam.py",
+        "subsystem": "replay",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_interaction_continuity_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_lead_lifecycle_block3_transcript_regression.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_lead_npc_payoff_and_fallback.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narration_transcript_regressions.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narrative_authority_rules.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_narrative_mode_output_validator.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_player_facing_narration_purity.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_prompt_context.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_referential_clarity_strict_social_local_repair.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_response_delta_requirement.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_response_policy_contracts.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_run_scenario_spine_validation.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_scene_destination_binding.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_scene_state_anchoring.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_speaker_contract_enforcement.py",
+        "subsystem": "speaker/social",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_speaker_contract_risk.py",
+        "subsystem": "speaker/social",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_strict_social_emergency_fallback_dialogue.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_tone_escalation_rules.py",
+        "subsystem": "integration/regression",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tests/test_upstream_fast_fallback_block_l.py",
+        "subsystem": "fallback",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "fallback testing"
+        ],
+        "import_path": "direct"
+      },
+      {
+        "file": "tools/bv3d_build_positive_control_corpus.py",
+        "subsystem": "tools/analysis",
+        "symbols": [
+          "apply_final_emission_gate_consumer"
+        ],
+        "ownership_bucket": "gate-integration-bridge",
+        "usage_domains": [
+          "gate orchestration"
+        ],
+        "import_path": "direct"
+      }
+    ]
+  },
+  "barrel_importers": {
+    "tests.helpers.replay_smoke_assertions": [],
+    "tests.helpers.gate_integration_smoke": []
+  },
+  "symbol_fi": {
+    "tests.helpers.replay_smoke_assertions": {
+      "final_emission_meta_from_output": [
+        "tests/helpers/behavioral_gauntlet_eval.py",
+        "tests/helpers/emission_smoke_assertions.py",
+        "tests/helpers/transcript_snapshots.py",
+        "tests/test_anti_railroading.py",
+        "tests/test_anti_railroading_retry_alignment.py",
+        "tests/test_anti_reset_emission_guard.py",
+        "tests/test_api_narration_path_selection.py",
+        "tests/test_block_s_speaker_local_rebind_equivalence.py",
+        "tests/test_block_u_finalize_stack_divergence.py",
+        "tests/test_bv3a_observe_referential_clarity_repair.py",
+        "tests/test_bv3e_eligibility_expansion.py",
+        "tests/test_bv4b_concrete_beat_upstream_satisfier.py",
+        "tests/test_c4_narrative_mode_live_pipeline.py",
+        "tests/test_context_separation.py",
+        "tests/test_contextual_minimal_repair_regressions.py",
+        "tests/test_dead_turn_detection.py",
+        "tests/test_dead_turn_evaluation_threading.py",
+        "tests/test_empty_social_retry_regressions.py",
+        "tests/test_fallback_behavior_gate.py",
+        "tests/test_fallback_behavior_repairs.py",
+        "tests/test_fallback_overwrite_containment.py",
+        "tests/test_fallback_shipped_contract_propagation.py",
+        "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "tests/test_final_emission_gate_diagnostics.py",
+        "tests/test_final_emission_gate_n4.py",
+        "tests/test_final_emission_gate_orchestration_order.py",
+        "tests/test_final_emission_gate_selector_snapshots.py",
+        "tests/test_final_emission_opening_fallback.py",
+        "tests/test_final_emission_visibility.py",
+        "tests/test_golden_replay_direct_seam.py",
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_lead_lifecycle_block3_transcript_regression.py",
+        "tests/test_manual_play_latency.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_narrative_authority_rules.py",
+        "tests/test_narrative_mode_output_validator.py",
+        "tests/test_observational_telemetry_confidence.py",
+        "tests/test_player_facing_narration_purity.py",
+        "tests/test_prompt_context.py",
+        "tests/test_referential_clarity_player_coref.py",
+        "tests/test_referential_clarity_strict_social_local_repair.py",
+        "tests/test_response_policy_contracts.py",
+        "tests/test_retry_tone_alignment.py",
+        "tests/test_run_scenario_spine_validation.py",
+        "tests/test_scene_state_anchoring.py",
+        "tests/test_social_emission_quality.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_social_interaction_authority.py",
+        "tests/test_speaker_contract_risk.py",
+        "tests/test_strict_social_emergency_fallback_dialogue.py",
+        "tests/test_tone_escalation_rules.py",
+        "tests/test_transcript_gauntlet_actor_addressing.py",
+        "tests/test_turn_packet_stage_diff_integration.py",
+        "tools/bv3d_build_positive_control_corpus.py",
+        "tools/bv3e_shape_simulation.py"
+      ],
+      "read_final_emission_meta_dict": [
+        "tests/helpers/behavioral_gauntlet_eval.py",
+        "tests/test_dead_turn_evaluation_threading.py",
+        "tests/test_final_emission_gate_diagnostics.py",
+        "tests/test_final_emission_gate_n4.py",
+        "tests/test_final_emission_gate_orchestration_order.py",
+        "tests/test_final_emission_gate_selector_snapshots.py",
+        "tests/test_final_emission_opening_fallback.py",
+        "tests/test_final_emission_visibility.py",
+        "tests/test_golden_replay_direct_seam.py",
+        "tests/test_run_scenario_spine_validation.py",
+        "tests/test_tone_escalation_rules.py",
+        "tests/test_transcript_gauntlet_actor_addressing.py"
+      ],
+      "read_turn_debug_notes": [
+        "tests/helpers/emission_smoke_assertions.py",
+        "tests/test_scene_transition_authority.py",
+        "tests/test_turn_pipeline_shared.py"
+      ]
+    },
+    "tests.helpers.gate_integration_smoke": {
+      "apply_final_emission_gate_consumer": [
+        "tests/helpers/emission_smoke_assertions.py",
+        "tests/helpers/strict_social_harness.py",
+        "tests/test_answer_completeness_rules.py",
+        "tests/test_anti_railroading.py",
+        "tests/test_anti_railroading_transcript_regressions.py",
+        "tests/test_anti_reset_emission_guard.py",
+        "tests/test_bv3a_observe_referential_clarity_repair.py",
+        "tests/test_bv4b_concrete_beat_upstream_satisfier.py",
+        "tests/test_c4_narrative_mode_live_pipeline.py",
+        "tests/test_context_separation.py",
+        "tests/test_dialogue_plan_final_emission_gate.py",
+        "tests/test_dialogue_social_convergence.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_fallback_overwrite_containment.py",
+        "tests/test_fallback_shipped_contract_propagation.py",
+        "tests/test_final_emission_answer_exposition_plan_convergence.py",
+        "tests/test_final_emission_boundary_convergence.py",
+        "tests/test_final_emission_scene_integrity.py",
+        "tests/test_golden_replay_direct_seam.py",
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_lead_lifecycle_block3_transcript_regression.py",
+        "tests/test_lead_npc_payoff_and_fallback.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_narrative_authority_rules.py",
+        "tests/test_narrative_mode_output_validator.py",
+        "tests/test_player_facing_narration_purity.py",
+        "tests/test_prompt_context.py",
+        "tests/test_referential_clarity_strict_social_local_repair.py",
+        "tests/test_response_delta_requirement.py",
+        "tests/test_response_policy_contracts.py",
+        "tests/test_run_scenario_spine_validation.py",
+        "tests/test_scene_destination_binding.py",
+        "tests/test_scene_state_anchoring.py",
+        "tests/test_speaker_contract_enforcement.py",
+        "tests/test_speaker_contract_risk.py",
+        "tests/test_strict_social_emergency_fallback_dialogue.py",
+        "tests/test_tone_escalation_rules.py",
+        "tests/test_upstream_fast_fallback_block_l.py",
+        "tools/bv3d_build_positive_control_corpus.py"
+      ],
+      "gm_response_stub": [
+        "tests/helpers/emission_smoke_assertions.py",
+        "tests/helpers/turn_pipeline_http_fixtures.py"
+      ],
+      "_gm_response": [
+        "tests/helpers/turn_pipeline_http_fixtures.py"
+      ]
+    }
+  },
+  "symbol_fi_counts": {
+    "tests.helpers.replay_smoke_assertions": [
+      [
+        "final_emission_meta_from_output",
+        55
+      ],
+      [
+        "read_final_emission_meta_dict",
+        12
+      ],
+      [
+        "read_turn_debug_notes",
+        3
+      ]
+    ],
+    "tests.helpers.gate_integration_smoke": [
+      [
+        "apply_final_emission_gate_consumer",
+        39
+      ],
+      [
+        "gm_response_stub",
+        2
+      ],
+      [
+        "_gm_response",
+        1
+      ]
+    ]
+  },
+  "usage_domain_totals": {
+    "replay acceptance": 53,
+    "gate orchestration": 30,
+    "fallback testing": 6,
+    "gate validation": 4,
+    "observability testing": 3,
+    "replay projection": 1
+  },
+  "gate_replay_coupling": {
+    "gate_integration_smoke imports replay_smoke_assertions": true,
+    "coupling_symbol": "final_emission_meta_from_output"
+  },
+  "emission_smoke_barrel_fi": 15
+}

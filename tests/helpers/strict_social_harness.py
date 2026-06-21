@@ -13,10 +13,10 @@ import game.final_emission_strict_social_stack as strict_social_stack
 from game.defaults import default_session, default_world
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narrative_authority import build_narrative_authority_contract
-from game.social_exchange_emission import effective_strict_social_resolution_for_emission
+from game.social_exchange_policy import effective_strict_social_resolution_for_emission
 from game.storage import get_scene_runtime
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 def runner_strict_bundle():
     session = default_session()

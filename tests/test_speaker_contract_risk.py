@@ -8,7 +8,7 @@ from typing import Any
 import pytest
 
 import game.final_emission_strict_social_stack as strict_social_stack
-import game.final_emission_terminal_pipeline as terminal_pipeline
+import game.final_emission_visibility_fallback as visibility_fallback
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -16,7 +16,8 @@ from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS
 from game.speaker_contract_enforcement import enforce_emitted_speaker_with_contract
 from game.storage import get_scene_runtime
 from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer, final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.narrative_mode_validator_fixtures import (
     build_validator_narrative_mode_contract,
     minimal_ctir_continuation,
@@ -729,7 +730,7 @@ def test_bt3_replacement_fallback_fixture_matrix(monkeypatch: pytest.MonkeyPatch
     )
 
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
         lambda out, **kwargs: out,
     )

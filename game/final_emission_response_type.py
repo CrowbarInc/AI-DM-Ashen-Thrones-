@@ -24,7 +24,7 @@ from game.final_emission_opening_fallback import (
     opening_scene_safe_fallback_contract,
 )
 from game.final_emission_opening_mode import _opening_mode_active_for_turn
-from game.final_emission_text import (
+from game.final_emission_text_formatting import (
     _normalize_text,
     _normalize_text_preserve_paragraphs,
 )
@@ -47,7 +47,7 @@ from game.response_policy_contracts import (
     _last_player_input,
     _resolve_response_type_contract,
 )
-from game.social_exchange_emission import (
+from game.social_exchange_fallback_catalog import (
     minimal_social_emergency_fallback_line,
     strict_social_ownership_terminal_fallback,
 )

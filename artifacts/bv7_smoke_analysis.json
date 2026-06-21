@@ -1,0 +1,587 @@
+{
+  "module_fi": 17,
+  "module_fo": 9,
+  "fo_modules": [
+    "__future__",
+    "collections.abc",
+    "game.final_emission_meta_read",
+    "tests.helpers.actor_consistency_smoke",
+    "tests.helpers.gate_integration_smoke",
+    "tests.helpers.replay_smoke_assertions",
+    "tests.helpers.response_type_smoke",
+    "tests.helpers.route_determinism_smoke",
+    "typing"
+  ],
+  "public_export_count": 26,
+  "loc": 500,
+  "importers": [
+    {
+      "file": "tests/test_answer_completeness_rules.py",
+      "subsystem": "other",
+      "symbols": [
+        "STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH"
+      ],
+      "ownership_bucket": "mixed/downstream-smoke",
+      "usage_classes": [
+        "test helpers"
+      ]
+    },
+    {
+      "file": "tests/test_broad_address_social_bid.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_no_unresolved_stock_phrases",
+        "assert_open_social_solicitation_route"
+      ],
+      "ownership_bucket": "speaker/social-smoke",
+      "usage_classes": [
+        "attribution assertions",
+        "fallback assertions"
+      ]
+    },
+    {
+      "file": "tests/test_broadcast_open_call_social.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_broadcast_open_call_rejected_smoke",
+        "assert_open_call_crowd_reaction_wiring_smoke",
+        "assert_open_call_no_unresolved_retry_smoke",
+        "assert_open_social_solicitation_route"
+      ],
+      "ownership_bucket": "speaker/social-smoke",
+      "usage_classes": [
+        "attribution assertions"
+      ]
+    },
+    {
+      "file": "tests/test_c4_narrative_mode_live_pipeline.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_final_route_accept_candidate_smoke",
+        "assert_final_route_replaced_or_not_accept"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_diegetic_fallback_narration.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_final_route_not_replaced_smoke",
+        "assert_final_route_present_smoke"
+      ],
+      "ownership_bucket": "fallback-assertions",
+      "usage_classes": [
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_emission_smoke_assertions_contract.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_emission_repair_evidence",
+        "assert_global_visibility_stock_absent",
+        "assert_no_advisory_prose",
+        "assert_procedural_adjudication_smoke"
+      ],
+      "ownership_bucket": "hygiene-smoke",
+      "usage_classes": [
+        "fallback assertions",
+        "ownership assertions"
+      ]
+    },
+    {
+      "file": "tests/test_empty_social_retry_regressions.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_final_route_replaced_or_not_accept"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_gate_delegator_regression.py",
+      "subsystem": "other",
+      "symbols": [
+        "emission_smoke_assertions (module)"
+      ],
+      "ownership_bucket": "mixed/downstream-smoke",
+      "usage_classes": [
+        "test helpers"
+      ]
+    },
+    {
+      "file": "tests/test_interaction_continuity_repair.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_continuity_validation_failed_without_repair",
+        "assert_final_route_not_replaced_smoke",
+        "assert_final_route_present_smoke"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "observability assertions",
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_mixed_state_recovery_regressions.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_global_visibility_stock_absent",
+        "assert_no_social_visible_intro_filler_smoke"
+      ],
+      "ownership_bucket": "hygiene-smoke",
+      "usage_classes": [
+        "fallback assertions"
+      ]
+    },
+    {
+      "file": "tests/test_opening_start_seam_regressions.py",
+      "subsystem": "other",
+      "symbols": [
+        "has_non_accept_final_route_smoke"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "fallback assertions"
+      ]
+    },
+    {
+      "file": "tests/test_ownership_registry.py",
+      "subsystem": "other",
+      "symbols": [
+        "emission_smoke_assertions (module)"
+      ],
+      "ownership_bucket": "ownership-governance",
+      "usage_classes": [
+        "test helpers"
+      ]
+    },
+    {
+      "file": "tests/test_social_exchange_emission.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_final_route_replaced_or_not_accept"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_social_speaker_grounding.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_social_grounding_smoke"
+      ],
+      "ownership_bucket": "speaker/social-smoke",
+      "usage_classes": [
+        "speaker assertions"
+      ]
+    },
+    {
+      "file": "tests/test_synthetic_smoke.py",
+      "subsystem": "other",
+      "symbols": [
+        "SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS",
+        "SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS",
+        "SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS"
+      ],
+      "ownership_bucket": "mixed/downstream-smoke",
+      "usage_classes": [
+        "fallback assertions",
+        "observability assertions"
+      ]
+    },
+    {
+      "file": "tests/test_turn_packet_stage_diff_integration.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_final_route_present_smoke"
+      ],
+      "ownership_bucket": "route-wiring-smoke",
+      "usage_classes": [
+        "replay assertions"
+      ]
+    },
+    {
+      "file": "tests/test_turn_pipeline_shared.py",
+      "subsystem": "other",
+      "symbols": [
+        "assert_dialogue_lock_non_dialogue_route_smoke",
+        "assert_dialogue_lock_social_route_smoke",
+        "assert_emission_repair_evidence",
+        "assert_global_visibility_stock_absent",
+        "assert_http_chat_response_smoke",
+        "assert_no_advisory_prose",
+        "assert_no_internal_scaffold_labels",
+        "assert_no_retry_coaching_leak_smoke",
+        "assert_no_social_visible_intro_filler_smoke",
+        "assert_no_uncertainty_fallback_stock_smoke",
+        "assert_no_unresolved_stock_phrases",
+        "assert_no_validator_voice_smoke",
+        "assert_player_text_present",
+        "assert_procedural_adjudication_smoke"
+      ],
+      "ownership_bucket": "fallback-assertions",
+      "usage_classes": [
+        "fallback assertions",
+        "ownership assertions",
+        "speaker assertions"
+      ]
+    }
+  ],
+  "symbol_fi": {
+    "assert_final_route_replaced_or_not_accept": [
+      "tests/test_c4_narrative_mode_live_pipeline.py",
+      "tests/test_empty_social_retry_regressions.py",
+      "tests/test_social_exchange_emission.py"
+    ],
+    "assert_final_route_present_smoke": [
+      "tests/test_diegetic_fallback_narration.py",
+      "tests/test_interaction_continuity_repair.py",
+      "tests/test_turn_packet_stage_diff_integration.py"
+    ],
+    "assert_global_visibility_stock_absent": [
+      "tests/test_emission_smoke_assertions_contract.py",
+      "tests/test_mixed_state_recovery_regressions.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_unresolved_stock_phrases": [
+      "tests/test_broad_address_social_bid.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_open_social_solicitation_route": [
+      "tests/test_broad_address_social_bid.py",
+      "tests/test_broadcast_open_call_social.py"
+    ],
+    "assert_final_route_not_replaced_smoke": [
+      "tests/test_diegetic_fallback_narration.py",
+      "tests/test_interaction_continuity_repair.py"
+    ],
+    "assert_emission_repair_evidence": [
+      "tests/test_emission_smoke_assertions_contract.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_advisory_prose": [
+      "tests/test_emission_smoke_assertions_contract.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_procedural_adjudication_smoke": [
+      "tests/test_emission_smoke_assertions_contract.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_social_visible_intro_filler_smoke": [
+      "tests/test_mixed_state_recovery_regressions.py",
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH": [
+      "tests/test_answer_completeness_rules.py"
+    ],
+    "assert_broadcast_open_call_rejected_smoke": [
+      "tests/test_broadcast_open_call_social.py"
+    ],
+    "assert_open_call_crowd_reaction_wiring_smoke": [
+      "tests/test_broadcast_open_call_social.py"
+    ],
+    "assert_open_call_no_unresolved_retry_smoke": [
+      "tests/test_broadcast_open_call_social.py"
+    ],
+    "assert_final_route_accept_candidate_smoke": [
+      "tests/test_c4_narrative_mode_live_pipeline.py"
+    ],
+    "assert_continuity_validation_failed_without_repair": [
+      "tests/test_interaction_continuity_repair.py"
+    ],
+    "has_non_accept_final_route_smoke": [
+      "tests/test_opening_start_seam_regressions.py"
+    ],
+    "assert_social_grounding_smoke": [
+      "tests/test_social_speaker_grounding.py"
+    ],
+    "SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS": [
+      "tests/test_synthetic_smoke.py"
+    ],
+    "SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS": [
+      "tests/test_synthetic_smoke.py"
+    ],
+    "SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS": [
+      "tests/test_synthetic_smoke.py"
+    ],
+    "assert_dialogue_lock_non_dialogue_route_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_dialogue_lock_social_route_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_http_chat_response_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_internal_scaffold_labels": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_retry_coaching_leak_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_uncertainty_fallback_stock_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_no_validator_voice_smoke": [
+      "tests/test_turn_pipeline_shared.py"
+    ],
+    "assert_player_text_present": [
+      "tests/test_turn_pipeline_shared.py"
+    ]
+  },
+  "top_symbols": [
+    [
+      "assert_final_route_replaced_or_not_accept",
+      3
+    ],
+    [
+      "assert_final_route_present_smoke",
+      3
+    ],
+    [
+      "assert_global_visibility_stock_absent",
+      3
+    ],
+    [
+      "assert_no_unresolved_stock_phrases",
+      2
+    ],
+    [
+      "assert_open_social_solicitation_route",
+      2
+    ],
+    [
+      "assert_final_route_not_replaced_smoke",
+      2
+    ],
+    [
+      "assert_emission_repair_evidence",
+      2
+    ],
+    [
+      "assert_no_advisory_prose",
+      2
+    ],
+    [
+      "assert_procedural_adjudication_smoke",
+      2
+    ],
+    [
+      "assert_no_social_visible_intro_filler_smoke",
+      2
+    ],
+    [
+      "STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH",
+      1
+    ],
+    [
+      "assert_broadcast_open_call_rejected_smoke",
+      1
+    ],
+    [
+      "assert_open_call_crowd_reaction_wiring_smoke",
+      1
+    ],
+    [
+      "assert_open_call_no_unresolved_retry_smoke",
+      1
+    ],
+    [
+      "assert_final_route_accept_candidate_smoke",
+      1
+    ],
+    [
+      "assert_continuity_validation_failed_without_repair",
+      1
+    ],
+    [
+      "has_non_accept_final_route_smoke",
+      1
+    ],
+    [
+      "assert_social_grounding_smoke",
+      1
+    ],
+    [
+      "SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS",
+      1
+    ],
+    [
+      "SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS",
+      1
+    ],
+    [
+      "SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS",
+      1
+    ],
+    [
+      "assert_dialogue_lock_non_dialogue_route_smoke",
+      1
+    ],
+    [
+      "assert_dialogue_lock_social_route_smoke",
+      1
+    ],
+    [
+      "assert_http_chat_response_smoke",
+      1
+    ],
+    [
+      "assert_no_internal_scaffold_labels",
+      1
+    ]
+  ],
+  "family_stats": {
+    "FEM/read bridge": {
+      "assertion_count": 2,
+      "consumer_count": 0,
+      "members": [
+        "final_emission_meta_from_output",
+        "read_turn_debug_notes"
+      ],
+      "consumers": []
+    },
+    "Gate integration bridge": {
+      "assertion_count": 2,
+      "consumer_count": 0,
+      "members": [
+        "apply_final_emission_gate_consumer",
+        "gm_response_stub"
+      ],
+      "consumers": []
+    },
+    "Consumer layer bridge (AC/RD/RT)": {
+      "assertion_count": 14,
+      "consumer_count": 0,
+      "members": [
+        "validate_answer_completeness",
+        "apply_answer_completeness_layer",
+        "apply_response_delta_layer",
+        "enforce_response_type_contract_layer",
+        "skip_answer_completeness_layer",
+        "skip_response_delta_layer",
+        "strict_social_answer_pressure_rd_contract_active",
+        "validate_response_delta",
+        "inspect_response_delta_failure",
+        "assert_response_delta_boundary_validate_only",
+        "assert_no_boundary_reorder_repair",
+        "response_type_contract",
+        "assert_response_type_meta",
+        "assert_response_type_contract_surfaces"
+      ],
+      "consumers": []
+    },
+    "Route wiring smoke": {
+      "assertion_count": 7,
+      "consumer_count": 8,
+      "members": [
+        "assert_final_route_present_smoke",
+        "assert_final_route_accept_candidate_smoke",
+        "assert_final_route_not_replaced_smoke",
+        "has_non_accept_final_route_smoke",
+        "assert_final_route_replaced_or_not_accept",
+        "assert_dialogue_lock_social_route_smoke",
+        "assert_dialogue_lock_non_dialogue_route_smoke"
+      ],
+      "consumers": [
+        "tests/test_c4_narrative_mode_live_pipeline.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_empty_social_retry_regressions.py",
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_opening_start_seam_regressions.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_turn_packet_stage_diff_integration.py",
+        "tests/test_turn_pipeline_shared.py"
+      ]
+    },
+    "Phrase/hygiene smoke": {
+      "assertion_count": 11,
+      "consumer_count": 4,
+      "members": [
+        "assert_player_text_present",
+        "assert_global_visibility_stock_absent",
+        "assert_procedural_adjudication_smoke",
+        "assert_no_validator_voice_smoke",
+        "assert_no_retry_coaching_leak_smoke",
+        "assert_no_social_visible_intro_filler_smoke",
+        "assert_no_uncertainty_fallback_stock_smoke",
+        "assert_no_internal_scaffold_labels",
+        "assert_no_advisory_prose",
+        "assert_no_unresolved_stock_phrases",
+        "assert_http_chat_response_smoke"
+      ],
+      "consumers": [
+        "tests/test_broad_address_social_bid.py",
+        "tests/test_emission_smoke_assertions_contract.py",
+        "tests/test_mixed_state_recovery_regressions.py",
+        "tests/test_turn_pipeline_shared.py"
+      ]
+    },
+    "Repair evidence smoke": {
+      "assertion_count": 1,
+      "consumer_count": 2,
+      "members": [
+        "assert_emission_repair_evidence"
+      ],
+      "consumers": [
+        "tests/test_emission_smoke_assertions_contract.py",
+        "tests/test_turn_pipeline_shared.py"
+      ]
+    },
+    "Social/open-call smoke": {
+      "assertion_count": 6,
+      "consumer_count": 4,
+      "members": [
+        "assert_social_grounding_smoke",
+        "assert_continuity_validation_failed_without_repair",
+        "assert_open_social_solicitation_route",
+        "assert_broadcast_open_call_rejected_smoke",
+        "assert_open_call_crowd_reaction_wiring_smoke",
+        "assert_open_call_no_unresolved_retry_smoke"
+      ],
+      "consumers": [
+        "tests/test_broad_address_social_bid.py",
+        "tests/test_broadcast_open_call_social.py",
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_social_speaker_grounding.py"
+      ]
+    },
+    "Smoke phrase constants": {
+      "assertion_count": 9,
+      "consumer_count": 2,
+      "members": [
+        "SMOKE_PROCEDURAL_ADJUDICATION_PHRASES",
+        "SMOKE_VALIDATOR_VOICE_PHRASES",
+        "SMOKE_RETRY_COACHING_LEAK_PHRASES",
+        "SMOKE_SOCIAL_VISIBLE_INTRO_FILLER_PHRASES",
+        "SMOKE_UNCERTAINTY_FALLBACK_STOCK_PHRASES",
+        "SMOKE_SYNTHETIC_INTERNAL_LEAK_PATTERNS",
+        "SMOKE_SYNTHETIC_SCAFFOLD_LEAK_PATTERNS",
+        "SMOKE_SYNTHETIC_VAGUE_FILLER_PATTERNS",
+        "STRICT_SOCIAL_EMISSION_WILL_APPLY_PATCH"
+      ],
+      "consumers": [
+        "tests/test_answer_completeness_rules.py",
+        "tests/test_synthetic_smoke.py"
+      ]
+    }
+  },
+  "usage_class_totals": {
+    "fallback assertions": 6,
+    "replay assertions": 6,
+    "test helpers": 3,
+    "attribution assertions": 2,
+    "ownership assertions": 2,
+    "observability assertions": 2,
+    "speaker assertions": 2
+  }
+}

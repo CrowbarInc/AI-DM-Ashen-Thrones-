@@ -1,0 +1,40 @@
+{
+  "schema_version": 3,
+  "captured_at": "2026-06-21",
+  "scope": "BV2C post-closeout measurement",
+  "module": "game.final_emission_meta",
+  "fan_in": {
+    "total": 22,
+    "production": 20,
+    "tests": 2,
+    "helpers": 0,
+    "scripts": 0
+  },
+  "fan_in_timeline": {
+    "pre_bv2": 61,
+    "bv2a": 47,
+    "bv2b": 31,
+    "bv2c": 22
+  },
+  "fan_in_delta_from_pre_bv2": -39,
+  "fan_in_delta_from_bv2b": -9,
+  "phase_3_target": "20-22",
+  "phase_3_met": true,
+  "read_facade": {
+    "module": "game.final_emission_meta_read",
+    "fan_in": 28,
+    "fan_out": 1
+  },
+  "owner_bucket_views": {
+    "module": "game.final_emission_owner_bucket_views",
+    "fan_in": 21,
+    "fan_out": 1
+  },
+  "replay_projection": {
+    "module": "game.final_emission_replay_projection",
+    "fan_in": 15,
+    "fan_out": 5
+  },
+  "bv2_closed": true,
+  "source": "scripts/bu_final_emission_coupling_discovery.py"
+}

@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-from game.final_emission_ownership_schema import (
+from game.ownership_projection_views import (
     SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_FALLBACK_SELECTION_OWNER,
     SANITIZER_TRACE_SELECTION_OWNER_SHORT,

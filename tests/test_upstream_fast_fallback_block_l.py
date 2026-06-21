@@ -24,7 +24,7 @@ from game.api import (
     _build_gpt_narration_from_authoritative_state,
     _synthetic_manual_play_gpt_budget_gm,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from game.defaults import default_campaign, default_character, default_session, default_world
 from game.fallback_provenance_debug import (
     FALLBACK_PROVENANCE_SELECTOR_KEYS,

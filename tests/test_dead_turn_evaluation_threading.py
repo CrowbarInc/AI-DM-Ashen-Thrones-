@@ -5,8 +5,8 @@ from __future__ import annotations
 import importlib
 import sys
 
-from game.final_emission_meta import assemble_unified_observational_telemetry_bundle
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
+from game.observability_attribution_read import assemble_unified_observational_telemetry_bundle
 
 import pytest
 

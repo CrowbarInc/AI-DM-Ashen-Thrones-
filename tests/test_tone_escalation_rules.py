@@ -1,19 +1,21 @@
 """Regression tests for tone escalation contract, validator, final gate, and pregate audit."""
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import pytest
 
 import game.final_emission_non_strict_stack as non_strict_stack
-import game.final_emission_terminal_pipeline as terminal_pipeline
-from game.final_emission_meta import default_response_type_debug
+from game.context_separation import build_context_separation_contract
+from game.observability_attribution_read import default_response_type_debug
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 from game.final_emission_tone_escalation import (
     apply_tone_escalation_layer,
     flag_non_hostile_escalation_from_writer_pregate,
 )
 from game.tone_escalation import build_tone_escalation_contract, validate_tone_escalation
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer, response_type_contract
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import response_type_contract
 
 pytestmark = pytest.mark.unit
 
@@ -299,7 +301,7 @@ def test_final_emission_gate_marks_non_hostile_escalation_blocked_on_tone_writer
 
 
 def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Good morning. A loaf, please."
     cs = build_context_separation_contract(
         player_text=pt,
@@ -322,7 +324,7 @@ def test_gate_context_separation_tone_escalation_with_city_pressure_fails(monkey
 
 
 def test_social_response_structure_coexists_with_tone_escalation_layer(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     order: list[str] = []
     orig_srs = non_strict_stack._apply_social_response_structure_layer
     orig_te = non_strict_stack.apply_tone_escalation_layer

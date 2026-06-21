@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from game.final_emission_meta import (
-    read_final_emission_meta_dict,
-    SEALED_FALLBACK_OWNER_SEALED_GATE,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
+from game.attribution_read_views import SEALED_FALLBACK_OWNER_SEALED_GATE
 from game.realization_provenance import GATE_TERMINAL_REPAIR, REALIZATION_FALLBACK_FAMILY_FIELD
 
 from copy import deepcopy
@@ -15,9 +13,9 @@ import game.final_emission_finalize as emission_finalize
 import game.final_emission_gate as feg
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_text import (
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_text_legacy_semantic_repair import (
     _decompress_overpacked_sentences,
-    _normalize_text,
     _repair_fragmentary_participial_splits,
 )
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
@@ -26,7 +24,7 @@ from game.narration_visibility import (
     validate_player_facing_referential_clarity,
 )
 from game.storage import get_scene_runtime
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.opening_fallback_evidence import (
     assert_final_emission_meta_contains,
     assert_sealed_fallback_owner_bucket,

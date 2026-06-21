@@ -26,7 +26,10 @@ import json
 import logging
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 
-from game.final_emission_meta import read_final_emission_meta_dict, stage_diff_narrative_authenticity_projection
+from game.observability_attribution_read import (
+    read_final_emission_meta_dict,
+    stage_diff_narrative_authenticity_projection,
+)
 from game.telemetry_vocab import (
     TELEMETRY_ACTION_OBSERVED,
     TELEMETRY_ACTION_REPAIRED,

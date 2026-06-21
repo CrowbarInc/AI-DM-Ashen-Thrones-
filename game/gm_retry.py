@@ -1620,9 +1620,9 @@ def select_deterministic_retry_fallback_line(
         else {}
     )
     if isinstance(soc_open, dict) and soc_open.get("open_social_solicitation"):
-        from game.social_exchange_emission import (
+        from game.social_exchange_fallback_catalog import (
             build_open_social_solicitation_recovery,
-            _merge_open_social_recovery_emission_debug,
+            merge_open_social_recovery_emission_debug,
         )
 
         rec_fb = build_open_social_solicitation_recovery(
@@ -1648,7 +1648,7 @@ def select_deterministic_retry_fallback_line(
                 (dbg + " | " if dbg else "")
                 + f"retry_fallback:open_social_recovery:{rec_fb.get('mode')}|retry_fallback:suppressed:uncertainty_pool"
             )
-            _merge_open_social_recovery_emission_debug(out, rec_fb)
+            merge_open_social_recovery_emission_debug(out, rec_fb)
             return {
                 "selected": True,
                 "text": out["player_facing_text"],

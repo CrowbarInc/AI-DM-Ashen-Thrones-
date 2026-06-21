@@ -25,10 +25,10 @@ import game.opening_deterministic_fallback as opening_deterministic_fallback
 from game.defaults import default_scene, default_session, default_world
 from game.diegetic_fallback_narration import fallback_template_metadata
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import (
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
+from game.attribution_read_views import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-    read_final_emission_meta_dict,
 )
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 import game.final_emission_visibility_fallback as visibility_fallback
@@ -51,7 +51,8 @@ from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_upstream_prepared_opening_fallback_payload,
 )
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output, response_type_contract
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.response_type_smoke import response_type_contract
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     OPENING_FAILED_CLOSED_REPAIR_KIND,

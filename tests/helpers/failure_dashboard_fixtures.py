@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from game.final_emission_ownership_schema import (
+from game.attribution_read_views import (
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_SELECTION_OWNER,
     SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
@@ -27,7 +27,7 @@ from game.final_emission_replay_projection import (
     SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
     VISIBILITY_HARD_REPLACEMENT,
 )
-from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
+from game.attribution_read_views import SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
     global_fallback_source_drift_row,

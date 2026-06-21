@@ -29,10 +29,10 @@ from game.response_policy_contracts import (
     response_type_contract_requires_dialogue,
 )
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import (
     enforce_response_type_contract_layer,
-    final_emission_meta_from_output,
     response_type_contract,
 )
 

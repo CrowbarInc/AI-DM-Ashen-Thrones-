@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T13:45:34.721906Z",
+  "phase": "BV4B",
+  "measurement_scope": "BV3D filtered",
+  "comparison_table": {
+    "sealed_passive_scene_pressure_fallback_count": {
+      "bv3f_baseline": 10,
+      "current": 0,
+      "delta": -10
+    },
+    "observe_route_rate": {
+      "bv3f_baseline": 0.4782608695652174,
+      "current": 0.043478260869565216,
+      "delta": -0.4348
+    },
+    "fallback_incidence": {
+      "bv3f_baseline": 0.11578947368421053,
+      "current": 0.010526315789473684,
+      "delta": -0.1053
+    }
+  },
+  "satisfier_instrumentation": {
+    "observe_turn_count": 23,
+    "satisfier_attempted_count": 21,
+    "satisfier_applied_count": 10,
+    "fallback_avoided_count": 10,
+    "beat_type_counts": {
+      "generic_interruption": 10
+    },
+    "satisfier_success_rate_on_eligible": 0.4762
+  },
+  "classification": "EFFECTIVE_REDUCTION",
+  "baseline_source": "artifacts/bv3f_reduction_metrics.json"
+}

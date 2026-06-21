@@ -1,0 +1,93 @@
+{
+  "artifact_scan": {
+    "canonical_fem_instances": 95,
+    "generated_at": "2026-06-21T13:45:36.418647Z",
+    "measurement_scope": "BV3D",
+    "method": "BV3D measurement scope + build_fem_runtime_lineage_events projector",
+    "roots": [
+      "data",
+      "artifacts/scene_canon_hygiene_runtime",
+      "artifacts/scenario_spine_validation",
+      "artifacts/bv3d_measurement"
+    ]
+  },
+  "cross_tabs": {
+    "final_route_x_fallback_kind": {
+      "replaced": {
+        "referential_clarity_hard_replacement": 1
+      }
+    },
+    "route_kind_x_fallback_kind": {
+      "observe": {
+        "referential_clarity_hard_replacement": 1
+      }
+    },
+    "route_kind_x_fallback_owner_bucket": {
+      "observe": {
+        "sealed-gate": 1
+      }
+    },
+    "route_kind_x_final_route": {
+      "observe": {
+        "replaced": 1
+      }
+    }
+  },
+  "eligible_turn_count": 95,
+  "fallback_event_count": 1,
+  "fallback_trigger_rate": 0.010526315789473684,
+  "fallback_turn_count": 1,
+  "frequency": {
+    "diegetic_family": {},
+    "event_owner": {
+      "game.final_emission_gate": 1
+    },
+    "fallback_authorship_source": {},
+    "fallback_content_owner": {
+      "game.final_emission_sealed_fallback": 1
+    },
+    "fallback_kind": {
+      "referential_clarity_hard_replacement": 1
+    },
+    "fallback_owner_bucket": {
+      "sealed-gate": 1
+    },
+    "fallback_selection_owner": {
+      "game.final_emission_visibility_fallback": 1
+    },
+    "final_route": {
+      "replaced": 1
+    },
+    "gate_path": {},
+    "observed_family": {},
+    "realization_family": {
+      "gate_terminal_repair": 1
+    }
+  },
+  "metadata_coverage": {
+    "fallback_events_with_content_owner": 1,
+    "fallback_events_with_diegetic_family": 0,
+    "fallback_events_with_known_route": 1,
+    "fallback_events_with_observed_family": 0,
+    "fallback_events_with_owner_bucket": 1,
+    "fallback_events_with_realization_family": 1,
+    "fallback_events_with_selection_owner": 1,
+    "turns_with_final_emission_meta": 95,
+    "turns_with_runtime_lineage_events": 95
+  },
+  "route_fallback_trigger_rate": {
+    "observe": 0.043478260869565216,
+    "scene_opening": 0.0,
+    "social_probe": 0.0
+  },
+  "route_fallback_turn_count": {
+    "observe": 1
+  },
+  "route_turn_count": {
+    "observe": 23,
+    "scene_opening": 62,
+    "social_probe": 10
+  },
+  "schema_version": 1,
+  "unknown_route_turn_count": 0
+}

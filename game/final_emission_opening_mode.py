@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 def _narrative_mode_contract_from_gm_output(gm_output: Mapping[str, Any] | None) -> dict[str, Any] | None:

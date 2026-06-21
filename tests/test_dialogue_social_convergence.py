@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 import json
 from typing import Any, Dict, Mapping, Tuple
 

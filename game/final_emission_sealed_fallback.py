@@ -14,13 +14,11 @@ from game.final_emission_ownership_schema import (
     SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
 )
-from game.final_emission_meta import (
-    refresh_final_emission_mutation_lineage,
-    sealed_fallback_owner_bucket_from_fields,
-)
+from game.final_emission_meta import refresh_final_emission_mutation_lineage
+from game.final_emission_owner_bucket_views import sealed_fallback_owner_bucket_from_fields
 import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
     STRICT_SOCIAL_DETERMINISTIC_FALLBACK,
@@ -236,7 +234,7 @@ def stamp_non_strict_sealed_replacement_realization_family(
     """Stamp gate-terminal repair family on non-strict sealed replacement FEM fragments."""
     attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
     if not str(meta.get("sealed_fallback_owner_bucket") or "").strip():
-        from game.final_emission_meta import sealed_fallback_owner_bucket_from_fields
+        from game.final_emission_owner_bucket_views import sealed_fallback_owner_bucket_from_fields
 
         meta["sealed_fallback_owner_bucket"] = sealed_fallback_owner_bucket_from_fields(
             final_emitted_source=str(meta.get("final_emitted_source") or ""),
@@ -332,7 +330,7 @@ def select_acceptance_quality_n4_sealed_fallback_line(
 ) -> str:
     """Select the N4 sealed fallback line via owner modules; this helper must not author prose."""
     if strict_social_path:
-        from game.social_exchange_emission import minimal_social_emergency_fallback_line
+        from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
 
         return minimal_social_emergency_fallback_line(
             eff_resolution if isinstance(eff_resolution, dict) else None,

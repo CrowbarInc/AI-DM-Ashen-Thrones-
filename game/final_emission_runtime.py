@@ -8,7 +8,8 @@ here rather than :func:`game.final_emission_gate.apply_final_emission_gate`
 directly.
 
 Downstream integration tests should prefer
-``tests.helpers.emission_smoke_assertions.apply_final_emission_gate_consumer``.
+``tests.helpers.gate_integration_smoke.apply_final_emission_gate_consumer``
+(re-exported from ``tests.helpers.emission_smoke_assertions`` for compatibility).
 """
 from __future__ import annotations
 

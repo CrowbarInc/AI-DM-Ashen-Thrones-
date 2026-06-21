@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T13:11:16.861129Z",
+  "measurement_scope": "BV3D filtered (see docs/audits/BV3D_measurement_scope.md)",
+  "baseline_bv3d": {
+    "eligible_observe_turn_count": 11,
+    "upstream_repair_eligible_count": 11,
+    "upstream_repair_applied_count": 11,
+    "referential_clarity_hard_replacement_count": 38,
+    "observe_route_rate": 0.9545454545454546,
+    "source": "artifacts/bv3d_eligibility_report.json (pre-BV3E snapshot)"
+  },
+  "post_expansion": {
+    "eligible_observe_turn_count": 11,
+    "bv3a_eligible_count": 0,
+    "bv3e_eligible_count": 0,
+    "newly_eligible_turn_count": 0,
+    "simulated_bv3e_eligible_count": 11,
+    "simulated_newly_eligible_turn_count": 11,
+    "simulated_upstream_applied_count": 11,
+    "upstream_repair_eligible_count": 11,
+    "upstream_repair_applied_count": 11,
+    "bv3e_repair_applied_count": 10,
+    "bv3e_repair_success_count": 10,
+    "referential_clarity_hard_replacement_count": 1,
+    "observe_route_rate": 0.4782608695652174,
+    "repair_success_rate_on_observe": 11.0,
+    "simulation_source": "artifacts/bv3e_shape_simulation.json"
+  },
+  "delta": {
+    "newly_eligible_turn_count_frozen_fem": 0,
+    "newly_eligible_turn_count_simulated": 11,
+    "simulated_hard_replacement_avoidance": 11,
+    "eligible_observe_turn_count_delta_frozen_fem": 0,
+    "referential_clarity_hard_replacement_delta_frozen_fem": -37,
+    "observe_route_rate_pp_frozen_fem": -0.4763,
+    "projected_hard_replacement_delta_after_replay_refresh": -11
+  }
+}

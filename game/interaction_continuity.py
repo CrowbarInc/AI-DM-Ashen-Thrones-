@@ -15,7 +15,8 @@ import hashlib
 import re
 from typing import Any, Dict, List, Tuple
 
-from game.final_emission_text import _RESPONSE_TYPE_VALUES, _normalize_text
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_text_policy import _RESPONSE_TYPE_VALUES
 from game.interaction_context import (
     assert_valid_speaker,
     build_speaker_selection_contract,
@@ -1512,7 +1513,7 @@ def apply_interaction_continuity_emission_step(
 ) -> tuple[str, List[str], bool]:
     """Validate; optionally repair and enforce. Returns (text, extra_reasons, strict_continuity_fallback)."""
     from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
-    from game.social_exchange_emission import minimal_social_emergency_fallback_line
+    from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
 
     norm = _normalize_text(text)
     payload, ic_contract = _ic_build_validation_payload(

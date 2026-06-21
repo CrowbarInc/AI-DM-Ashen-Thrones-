@@ -12,6 +12,8 @@ Behavioral gate orchestration (layer order, continuity placement, diagnostics) r
 
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
+import game.final_emission_acceptance_quality as acceptance_quality
 import inspect
 import sys
 from typing import Any
@@ -23,14 +25,13 @@ import game.final_emission_gate as feg
 import game.final_emission_generic_exit as generic_exit
 import game.final_emission_sealed_fallback as sealed_fallback
 import game.final_emission_strict_social_stack as strict_social_stack
-import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.defaults import default_scene, default_session, default_world
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import (
+from game.observability_attribution_read import infer_accept_path_final_emitted_source
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
+from game.attribution_read_views import (
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-    infer_accept_path_final_emitted_source,
-    read_final_emission_meta_dict,
 )
 from game.interaction_context import rebuild_active_scene_entities
 from game.narrative_mode_contract import build_narrative_mode_contract
@@ -256,8 +257,8 @@ def test_selector_snapshot_valid_candidate_bypasses_sealed_branches() -> None:
 
 def test_sealed_branch_order_accept_path_visibility_before_n4(monkeypatch) -> None:
     order: list[str] = []
-    orig_vis = terminal_pipeline.apply_visibility_enforcement
-    orig_n4 = terminal_pipeline.apply_acceptance_quality_n4_floor_seam
+    orig_vis = visibility_fallback.apply_visibility_enforcement
+    orig_n4 = acceptance_quality.apply_acceptance_quality_n4_floor_seam
 
     def wrap_vis(*args: Any, **kwargs: Any):
         order.append("visibility")
@@ -267,8 +268,8 @@ def test_sealed_branch_order_accept_path_visibility_before_n4(monkeypatch) -> No
         order.append("n4")
         return orig_n4(*args, **kwargs)
 
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", wrap_vis)
-    monkeypatch.setattr(terminal_pipeline, "apply_acceptance_quality_n4_floor_seam", wrap_n4)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", wrap_vis)
+    monkeypatch.setattr(acceptance_quality, "apply_acceptance_quality_n4_floor_seam", wrap_n4)
 
     plan = _minimal_n4_narrative_plan(acceptance_quality={"enabled": True})
     apply_final_emission_gate(
@@ -287,8 +288,8 @@ def test_sealed_branch_order_accept_path_visibility_before_n4(monkeypatch) -> No
 
 def test_sealed_branch_order_replace_path_visibility_before_n4(monkeypatch) -> None:
     order: list[str] = []
-    orig_vis = terminal_pipeline.apply_visibility_enforcement
-    orig_n4 = terminal_pipeline.apply_acceptance_quality_n4_floor_seam
+    orig_vis = visibility_fallback.apply_visibility_enforcement
+    orig_n4 = acceptance_quality.apply_acceptance_quality_n4_floor_seam
 
     def wrap_vis(*args: Any, **kwargs: Any):
         order.append("visibility")
@@ -298,8 +299,8 @@ def test_sealed_branch_order_replace_path_visibility_before_n4(monkeypatch) -> N
         order.append("n4")
         return orig_n4(*args, **kwargs)
 
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", wrap_vis)
-    monkeypatch.setattr(terminal_pipeline, "apply_acceptance_quality_n4_floor_seam", wrap_n4)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", wrap_vis)
+    monkeypatch.setattr(acceptance_quality, "apply_acceptance_quality_n4_floor_seam", wrap_n4)
 
     apply_final_emission_gate(
         {"player_facing_text": "", "tags": []},

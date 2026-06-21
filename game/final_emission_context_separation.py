@@ -9,10 +9,10 @@ from __future__ import annotations
 from typing import Any, Dict, List, Mapping, Sequence
 
 from game.context_separation import context_separation_repair_hints, validate_context_separation
-from game.final_emission_text import _normalize_text_preserve_paragraphs
+from game.final_emission_text_formatting import _normalize_text_preserve_paragraphs
 from game.narrative_authority import _mask_dialogue_spans, _split_sentences
 from game.response_policy_contracts import _last_player_input
-from game.social_exchange_emission import merged_player_prompt_for_gate
+from game.social_exchange_policy import merged_player_prompt_for_gate
 from game.turn_packet import resolve_turn_packet_contract, resolve_turn_packet_for_gate
 
 

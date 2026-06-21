@@ -8,7 +8,7 @@ import pytest
 from game.final_emission_gate import apply_final_emission_gate
 from game.speaker_contract_enforcement import enforce_emitted_speaker_with_contract
 from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.gate_equivalence_monkeypatch import (
     install_strict_social_trunk_phase_trackers,
     patch_get_speaker_selection_contract,

@@ -8,9 +8,9 @@ from __future__ import annotations
 from typing import Any, Dict, List, NamedTuple
 
 from game.final_emission_gate_preflight_upstream import upstream_prepared_emission_payload
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.output_sanitizer import sanitize_player_facing_output
-from game.social_exchange_emission import (
+from game.social_exchange_policy import (
     effective_strict_social_resolution_for_emission,
     merged_player_prompt_for_gate,
     strict_social_emission_will_apply,

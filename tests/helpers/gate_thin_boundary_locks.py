@@ -93,6 +93,8 @@ BJ129_ALLOWED_GATE_IMPORT_MODULES: Final[frozenset[str]] = frozenset(
         "game.final_emission_strict_social_stack",
         "game.final_emission_gate_context",
         "game.interaction_continuity",
+        "game.final_emission_passive_scene_pressure",
+        "game.final_emission_gate_preflight_pregate_text",
     }
 )
 
@@ -114,7 +116,7 @@ BJ129_ORCHESTRATION_CALL_MARKERS: Final[tuple[str, ...]] = (
 BN1_RUNTIME_API_ENTRY_SEAM: Final[str] = "game.final_emission_runtime.finalize_player_facing_emission"
 BN1_ORCHESTRATION_OWNER_ENTRY: Final[str] = "game.final_emission_gate.apply_final_emission_gate"
 BN1_DOWNSTREAM_TEST_ENTRY_SEAM: Final[str] = (
-    "tests.helpers.emission_smoke_assertions.apply_final_emission_gate_consumer"
+    "tests.helpers.gate_orchestration_smoke.apply_final_emission_gate_consumer"
 )
 
 # Cycle BN2 — internal lazy ``feg`` namespace in extracted stack modules (import-path only).
@@ -264,12 +266,74 @@ BN8_FORBIDDEN_STRICT_SOCIAL_HELPER_IMPORT_MARKERS: Final[tuple[str, ...]] = (
     "from game.final_emission_terminal_pipeline import",
 )
 
+# Cycle BV13C — production must not regrow compat-barrel text imports (registry guard owner:
+# ``tests/test_ownership_registry.py`` ``collect_bv13c_text_compat_import_guard_violations``).
+BV13C_FORBIDDEN_TEXT_COMPAT_BARREL_IMPORT_MARKERS: Final[tuple[str, ...]] = (
+    "from game.final_emission_text import _normalize_text",
+    "from game.final_emission_text import _normalize_text_preserve_paragraphs",
+    "from game.final_emission_text import _sanitize_output_text",
+    "from game.final_emission_text import _RESPONSE_TYPE_VALUES",
+    "import game.final_emission_text",
+)
+
+# Cycle BV14C — production must not regrow compat-barrel social-exchange imports (registry guard owner:
+# ``tests/test_ownership_registry.py`` ``collect_bv14c_social_exchange_compat_import_guard_violations``).
+BV14C_FORBIDDEN_SOCIAL_EXCHANGE_COMPAT_BARREL_IMPORT_MARKERS: Final[tuple[str, ...]] = (
+    "from game.social_exchange_emission import strict_social_emission_will_apply",
+    "from game.social_exchange_emission import minimal_social_emergency_fallback_line",
+    "from game.social_exchange_emission import effective_strict_social_resolution_for_emission",
+    "from game.social_exchange_emission import merged_player_prompt_for_gate",
+    "from game.social_exchange_emission import is_route_illegal_global_or_sanitizer_fallback_text",
+    "from game.social_exchange_emission import log_final_emission_decision",
+    "from game.social_exchange_emission import log_final_emission_trace",
+    "import game.social_exchange_emission",
+)
+
+# Cycle BV16C — tests must monkeypatch finalize-tail owner modules, not terminal_pipeline namespace.
+BV16C_TERMINAL_PIPELINE_MODULE: Final[str] = "game.final_emission_terminal_pipeline"
+BV16C_VISIBILITY_OWNER: Final[str] = "game.final_emission_visibility_fallback"
+BV16C_N4_OWNER: Final[str] = "game.final_emission_acceptance_quality"
+BV16C_IC_OWNER: Final[str] = "game.interaction_continuity"
+BV16C_OPENING_OWNER: Final[str] = "game.final_emission_opening_fallback"
+BV16C_REPAIRS_OWNER: Final[str] = "game.final_emission_repairs"
+BV16C_TERMINAL_ORCHESTRATION_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {
+        "run_gate_terminal_enforcement_pipeline",
+        "apply_strict_social_emergency_fallback_patch",
+        "GateTerminalEnforcementProfile",
+        "_apply_referent_clarity_pre_finalize",
+        "_patch_fem_text_fingerprint",
+    }
+)
+BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS: Final[tuple[str, ...]] = (
+    'monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement"',
+    'monkeypatch.setattr(terminal_pipeline, "apply_acceptance_quality_n4_floor_seam"',
+    'monkeypatch.setattr(terminal_pipeline, "attach_interaction_continuity_validation"',
+    'monkeypatch.setattr(terminal_pipeline, "apply_interaction_continuity_emission_step"',
+    'monkeypatch.setattr(terminal_pipeline, "_apply_fallback_behavior_layer"',
+    "terminal_pipeline.apply_visibility_enforcement",
+    "terminal_pipeline.apply_acceptance_quality_n4_floor_seam",
+    "terminal_pipeline.attach_interaction_continuity_validation",
+    "terminal_pipeline.apply_interaction_continuity_emission_step",
+    "terminal_pipeline._apply_fallback_behavior_layer",
+)
+BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST: Final[frozenset[str]] = frozenset(
+    {
+        "tests/test_ownership_registry.py",
+        "tests/helpers/gate_thin_boundary_locks.py",
+        "tools/bv16c_migrate_monkeypatches.py",
+        "tools/bv16_generate_audit_docs.py",
+    }
+)
+BV16C_TERMINAL_MONKEYPATCH_SCAN_ROOTS: Final[tuple[str, ...]] = ("tests",)
+
 # Cycle BN9 — gate_context must not regrow direct pregate text imports after preflight split.
 BN9_GATE_CONTEXT_PREFLIGHT_PREGATE_TEXT_MODULE: Final[str] = (
     "game/final_emission_gate_preflight_pregate_text.py"
 )
 BN9_GATE_CONTEXT_FORBIDDEN_PREGATE_TEXT_IMPORT_MARKERS: Final[tuple[str, ...]] = (
     "from game.final_emission_text import",
+    "from game.final_emission_text_formatting import",
     "_normalize_text(",
 )
 BN9_GATE_CONTEXT_REQUIRED_PREFLIGHT_PREGATE_TEXT_IMPORT: Final[str] = (
@@ -365,6 +429,7 @@ BJ129_FORBIDDEN_GATE_IMPORT_CATEGORIES: Final[tuple[tuple[str, tuple[str, ...]],
         "text helper imports",
         (
             "from game.final_emission_text import",
+            "from game.final_emission_text_formatting import",
             "_global_narrative_fallback_stock_line",
             "_normalize_text(",
         ),

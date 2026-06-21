@@ -5,6 +5,7 @@ over brittle snapshots of private helper names. See ``docs/final_emission_owners
 """
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import json
 
 import pytest
@@ -12,21 +13,21 @@ import pytest
 import game.final_emission_finalize as emission_finalize
 import game.final_emission_response_type as response_type
 import game.final_emission_strict_social_stack as strict_social_stack
-import game.final_emission_terminal_pipeline as terminal_pipeline
-from game.final_emission_meta import default_response_type_debug
+from game.observability_attribution_read import default_response_type_debug
 from game.final_emission_validators import _default_response_type_debug as _validators_default_response_type_debug
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
     sanitize_player_facing_output,
 )
-from game.social_exchange_emission import minimal_social_emergency_fallback_line, strict_social_ownership_terminal_fallback
-from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.helpers.emission_smoke_assertions import (
-    apply_answer_completeness_layer,
-    apply_final_emission_gate_consumer,
-    apply_response_delta_layer,
+from game.social_exchange_fallback_catalog import (
+    minimal_social_emergency_fallback_line,
+    strict_social_ownership_terminal_fallback,
 )
+from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.actor_consistency_smoke import apply_answer_completeness_layer
+from tests.helpers.route_determinism_smoke import apply_response_delta_layer
 from tests.helpers.repairs_consumer_facade import repair_fallback_behavior
 from tests.helpers.strict_social_harness import runner_strict_bundle
 
@@ -35,7 +36,7 @@ pytestmark = pytest.mark.unit
 
 @pytest.fixture
 def _noop_visibility(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
 
 
 def _rtc(required: str) -> dict:

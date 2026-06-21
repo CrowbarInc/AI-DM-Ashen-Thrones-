@@ -9,14 +9,14 @@ import re
 from typing import Any, Dict, List
 
 from game.final_emission_player_facing_narration_purity import gate_text_preview
-from game.final_emission_text import (
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_text_policy import (
     _ACTION_RESULT_PATTERNS,
     _ANSWER_DIRECT_PATTERNS,
-    _normalize_text,
 )
 from game.final_emission_validators import _content_tokens, _split_sentences_answer_complete
 from game.response_policy_contracts import _last_player_input
-from game.social_exchange_emission import merged_player_prompt_for_gate
+from game.social_exchange_policy import merged_player_prompt_for_gate
 
 _ASP_PRESSURE_LEX_RE = re.compile(
     r"\b(?:tension|confrontation|crackdown|border\s+war|the\s+war\b|unrest|factions|politics|"

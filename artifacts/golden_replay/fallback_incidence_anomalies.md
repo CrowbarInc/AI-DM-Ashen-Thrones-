@@ -5,13 +5,13 @@
 ## Executive Summary
 
 - Status: `insufficient_history`
-- Stability: `insufficient_history + anomaly detection suppressed`
+- Stability: `stable + anomaly detection suppressed`
 - Highest severity: `none`
 - Detected anomalies: 0
 
 ## Baseline
 
-- Prior snapshots used: 0
+- Prior snapshots used: 1
 - Minimum required: 5
 - Rolling window: 10
 - Expected band: mean +/- 2 effective standard deviations.
@@ -24,7 +24,10 @@
 
 ## Current Snapshot
 
-No current snapshot is available.
+- Timestamp: `2026-06-21T11:37:14.736308Z`
+- Fallback trigger rate: 0.6916
+- Fallback turns: 74
+- Fallback events: 74
 
 ## Detected Anomalies
 

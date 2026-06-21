@@ -11,18 +11,18 @@ BJ delegator locks live in ``tests/test_final_emission_gate_delegator_regression
 
 from __future__ import annotations
 
+import game.interaction_continuity as interaction_continuity
 from typing import Any
 
 import pytest
 
 import game.final_emission_acceptance_quality as acceptance_quality_gate
-import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.acceptance_quality import (
     build_acceptance_quality_contract,
     validate_and_repair_acceptance_quality,
 )
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.realization_provenance import GATE_TERMINAL_REPAIR, REALIZATION_FALLBACK_FAMILY_FIELD
 from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
@@ -109,7 +109,7 @@ def test_acceptance_quality_n4_runs_before_interaction_continuity_attachment(mon
 
     monkeypatch.setattr(acceptance_quality_gate, "validate_and_repair_acceptance_quality", _spy)
 
-    _orig_ic = terminal_pipeline.attach_interaction_continuity_validation
+    _orig_ic = interaction_continuity.attach_interaction_continuity_validation
 
     def _ic_hook(
         out: dict,
@@ -128,7 +128,7 @@ def test_acceptance_quality_n4_runs_before_interaction_continuity_attachment(mon
             preserve_existing_validation=preserve_existing_validation,
         )
 
-    monkeypatch.setattr(terminal_pipeline, "attach_interaction_continuity_validation", _ic_hook)
+    monkeypatch.setattr(interaction_continuity, "attach_interaction_continuity_validation", _ic_hook)
 
     apply_final_emission_gate(
         {

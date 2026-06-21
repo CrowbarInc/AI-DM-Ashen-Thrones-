@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from tests.helpers.golden_replay_projection import (
+from game.attribution_read_views import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
@@ -290,7 +290,7 @@ def test_visibility_fallback_owner_bucket_values_are_contract_locked():
 
 
 def test_visibility_family_split_owner_fields_are_contract_locked():
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         ALLOWED_FALLBACK_CONTENT_OWNERS,
         ALLOWED_FALLBACK_SELECTION_OWNERS,
         SEALED_FALLBACK_MODULE_CONTENT_OWNER,
@@ -311,7 +311,7 @@ def test_visibility_family_split_owner_fields_are_contract_locked():
 
 
 def test_sealed_family_split_owner_fields_are_contract_locked():
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         ALLOWED_FALLBACK_CONTENT_OWNERS,
         ALLOWED_FALLBACK_SELECTION_OWNERS,
         SEALED_FALLBACK_MODULE_CONTENT_OWNER,
@@ -343,7 +343,7 @@ def test_sealed_family_split_owner_fields_are_contract_locked():
 
 
 def test_opening_family_split_owner_fields_are_contract_locked():
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         ALLOWED_FALLBACK_CONTENT_OWNERS,
         ALLOWED_FALLBACK_SELECTION_OWNERS,
         OPENING_FAIL_CLOSED_CONTENT_OWNER,

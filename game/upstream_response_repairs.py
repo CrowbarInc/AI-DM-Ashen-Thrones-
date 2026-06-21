@@ -22,7 +22,7 @@ from game.diegetic_fallback_narration import (
     fallback_template_metadata as diegetic_classified_fallback_meta,
     opening_scene_fallback_template_allowed as diegetic_opening_scene_template_allowed,
 )
-from game.final_emission_text import (
+from game.final_emission_text_formatting import (
     _capitalize_sentence_fragment,
     _normalize_terminal_punctuation,
     _normalize_text,
@@ -31,7 +31,7 @@ from game.opening_deterministic_fallback import deterministic_opening_fallback_t
 from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
 from game.final_emission_validators import _contract_bool
-from game.final_emission_ownership_schema import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+from game.attribution_read_views import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 from game.realization_provenance import (
     UPSTREAM_PREPARED_EMISSION,
     attach_realization_fallback_family,
@@ -42,9 +42,9 @@ from game.response_policy_contracts import (
     resolve_answer_completeness_contract,
     resolve_response_delta_contract,
 )
-from game.social_exchange_emission import (
-    _npc_display_name_for_emission,
-    minimal_social_emergency_fallback_line,
+from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+from game.social_exchange_policy import (
+    npc_display_name_for_emission,
     strict_social_emission_will_apply,
 )
 
@@ -72,7 +72,7 @@ def build_social_fallback_resolution(
         "kind": "question",
         "social": {
             "npc_id": active_interlocutor,
-            "npc_name": _npc_display_name_for_emission(world, scene_id, active_interlocutor),
+            "npc_name": npc_display_name_for_emission(world, scene_id, active_interlocutor),
             "social_intent_class": "social_exchange",
         },
     }

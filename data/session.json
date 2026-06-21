@@ -1,22 +1,21 @@
 {
   "persistence_version": 1,
   "kind": "session",
-  "saved_at": "2026-05-06T22:36:24.775856Z",
+  "saved_at": "2026-06-21T13:42:54.493424Z",
   "payload": {
-    "active_scene_id": "old_milestone",
+    "active_scene_id": "frontier_gate",
     "visited_scene_ids": [
-      "scene_investigate",
-      "old_milestone"
+      "frontier_gate"
     ],
     "current_date": "Day 1",
-    "turn_counter": 5,
+    "turn_counter": 2,
     "response_mode": "standard",
     "clocks": {
       "suspicion": 0,
       "unrest": 0,
       "danger": 0,
       "occult_instability": 0,
-      "time_pressure": 5
+      "time_pressure": 2
     },
     "interaction_context": {
       "active_interaction_target_id": null,
@@ -27,67 +26,30 @@
       "player_position_context": null
     },
     "scene_state": {
-      "active_scene_id": "old_milestone",
-      "active_entities": [],
+      "active_scene_id": "frontier_gate",
+      "active_entities": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner",
+        "guard_captain",
+        "refugee",
+        "threadbare_watcher"
+      ],
       "entity_presence": {
-        "guard_captain": "offscene",
-        "tavern_runner": "offscene"
+        "gate_guard": "active",
+        "gate_serjeant": "active",
+        "tavern_runner": "active",
+        "guard_captain": "active",
+        "refugee": "active",
+        "threadbare_watcher": "active"
       },
       "current_interlocutor": null,
       "emergent_addressables": [],
       "promoted_actor_npc_map": {}
     },
     "runtime_scene_overlays": {
-      "scene_investigate": {
-        "scene_id": "scene_investigate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "eastern_square": {
-        "scene_id": "eastern_square",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "tavern": {
-        "scene_id": "tavern",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "checkpoint": {
-        "scene_id": "checkpoint",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "partial_scene": {
-        "scene_id": "partial_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ward_raid": {
-        "scene_id": "ward_raid",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane": {
-        "scene_id": "lane",
+      "frontier_gate": {
+        "scene_id": "frontier_gate",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -102,24 +64,8 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "test_scene": {
-        "scene_id": "test_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "office": {
-        "scene_id": "office",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "m": {
-        "scene_id": "m",
+      "s_inn": {
+        "scene_id": "s_inn",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -134,152 +80,8 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "t_scene": {
-        "scene_id": "t_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "gate_yard": {
-        "scene_id": "gate_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lower_ward": {
-        "scene_id": "lower_ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "wild_moors": {
-        "scene_id": "wild_moors",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "lane_scene": {
-        "scene_id": "lane_scene",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "storeroom": {
-        "scene_id": "storeroom",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "s_inn": {
-        "scene_id": "s_inn",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "x": {
-        "scene_id": "x",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market_lane": {
-        "scene_id": "market_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "npc_repeat_scene_d": {
-        "scene_id": "npc_repeat_scene_d",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "hall": {
-        "scene_id": "hall",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "beacon_yard": {
-        "scene_id": "beacon_yard",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "ward": {
-        "scene_id": "ward",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "arch_lane": {
-        "scene_id": "arch_lane",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "street": {
-        "scene_id": "street",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "wall": {
-        "scene_id": "wall",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "gate": {
-        "scene_id": "gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "bridge": {
-        "scene_id": "bridge",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "rope_bridge": {
-        "scene_id": "rope_bridge",
+      "old_milestone": {
+        "scene_id": "old_milestone",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -294,24 +96,16 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "stone_quay": {
-        "scene_id": "stone_quay",
+      "pier": {
+        "scene_id": "pier",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "old_milestone": {
-        "scene_id": "old_milestone",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "market": {
-        "scene_id": "market",
+      "ward_raid": {
+        "scene_id": "ward_raid",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -326,72 +120,40 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "yard": {
-        "scene_id": "yard",
+      "storeroom": {
+        "scene_id": "storeroom",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "test": {
-        "scene_id": "test",
+      "watch_post": {
+        "scene_id": "watch_post",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "scene_docks": {
-        "scene_id": "scene_docks",
+      "bridge": {
+        "scene_id": "bridge",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "market_square": {
-        "scene_id": "market_square",
+      "gate_yard": {
+        "scene_id": "gate_yard",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "hut": {
-        "scene_id": "hut",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "crossroads": {
-        "scene_id": "crossroads",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "alley": {
-        "scene_id": "alley",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "frontier_gate": {
-        "scene_id": "frontier_gate",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "pier": {
-        "scene_id": "pier",
+      "checkpoint": {
+        "scene_id": "checkpoint",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -406,32 +168,40 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "npc_repeat_scene_c": {
-        "scene_id": "npc_repeat_scene_c",
+      "eastern_square": {
+        "scene_id": "eastern_square",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "s": {
-        "scene_id": "s",
+      "street": {
+        "scene_id": "street",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "road": {
-        "scene_id": "road",
+      "t_scene": {
+        "scene_id": "t_scene",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
       },
-      "watchtower": {
-        "scene_id": "watchtower",
+      "market": {
+        "scene_id": "market",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_d": {
+        "scene_id": "npc_repeat_scene_d",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -446,8 +216,40 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "npc_repeat_scene_a": {
-        "scene_id": "npc_repeat_scene_a",
+      "test": {
+        "scene_id": "test",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "gate": {
+        "scene_id": "gate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane_scene": {
+        "scene_id": "lane_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene_investigate": {
+        "scene_id": "scene_investigate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "stone_quay": {
+        "scene_id": "stone_quay",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -462,6 +264,22 @@
         "runtime_entities": [],
         "mutations": {}
       },
+      "yard": {
+        "scene_id": "yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "wild_moors": {
+        "scene_id": "wild_moors",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
       "npc_repeat_scene_b": {
         "scene_id": "npc_repeat_scene_b",
         "visible_facts_add": [],
@@ -470,8 +288,8 @@
         "runtime_entities": [],
         "mutations": {}
       },
-      "river_arch": {
-        "scene_id": "river_arch",
+      "lower_ward": {
+        "scene_id": "lower_ward",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -485,22 +303,210 @@
         "state_flags": {},
         "runtime_entities": [],
         "mutations": {}
+      },
+      "watchtower": {
+        "scene_id": "watchtower",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "crossroads": {
+        "scene_id": "crossroads",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "test_scene": {
+        "scene_id": "test_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "x": {
+        "scene_id": "x",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "arch_lane": {
+        "scene_id": "arch_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hut": {
+        "scene_id": "hut",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_square": {
+        "scene_id": "market_square",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "alley": {
+        "scene_id": "alley",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "wall": {
+        "scene_id": "wall",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "scene_docks": {
+        "scene_id": "scene_docks",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "hall": {
+        "scene_id": "hall",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "office": {
+        "scene_id": "office",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "rope_bridge": {
+        "scene_id": "rope_bridge",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "beacon_yard": {
+        "scene_id": "beacon_yard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "s": {
+        "scene_id": "s",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "tavern": {
+        "scene_id": "tavern",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "partial_scene": {
+        "scene_id": "partial_scene",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "ward": {
+        "scene_id": "ward",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_c": {
+        "scene_id": "npc_repeat_scene_c",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "road": {
+        "scene_id": "road",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "market_lane": {
+        "scene_id": "market_lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "m": {
+        "scene_id": "m",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "lane": {
+        "scene_id": "lane",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "npc_repeat_scene_a": {
+        "scene_id": "npc_repeat_scene_a",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
+      "river_arch": {
+        "scene_id": "river_arch",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
       }
     },
     "scene_runtime": {
-      "scene_investigate": {
-        "recent_contextual_leads": [
-          {
-            "key": "x",
-            "kind": "recent_named_figure",
-            "subject": "Lady Misia",
-            "position": "near",
-            "named": true,
-            "positioned": true,
-            "mentions": 1,
-            "last_turn": 0
-          }
-        ],
+      "frontier_gate": {
         "discovered_clues": [],
         "discovered_clue_ids": [],
         "pending_leads": [],
@@ -511,44 +517,20 @@
         "last_exploration_action_key": "i_look_around",
         "repeated_action_count": 1,
         "last_resolution_kind": "observe",
-        "last_description_hash": "5031d4d093f1fa28158dde347e707e52",
+        "last_description_hash": "b2db4b3888773c20ffef565a07fe492a",
         "consumed_action_ids": [],
-        "momentum_exchanges_since": 1,
-        "momentum_next_due_in": 2,
-        "momentum_last_kind": null,
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 3,
+        "momentum_last_kind": "new_actor_entering",
         "passive_action_streak": 1,
         "recent_player_actions": [
           {
-            "text": "I look around.",
-            "passive": true,
-            "markers": [
-              "observe"
-            ],
+            "text": "",
+            "passive": false,
+            "markers": [],
             "resolution_kind": null,
             "turn": 1
-          }
-        ],
-        "last_player_action_text": "I look around.",
-        "last_player_action_passive": true
-      },
-      "old_milestone": {
-        "discovered_clues": [],
-        "discovered_clue_ids": [],
-        "pending_leads": [],
-        "revealed_hidden_facts": [],
-        "suspicion_flags": [],
-        "searched_targets": [],
-        "resolved_interactables": [],
-        "last_exploration_action_key": "i_look_around",
-        "repeated_action_count": 4,
-        "last_resolution_kind": "observe",
-        "last_description_hash": "43ca49b9fe6e4a27ab68c44f0de37c2a",
-        "consumed_action_ids": [],
-        "momentum_exchanges_since": 0,
-        "momentum_next_due_in": 2,
-        "momentum_last_kind": "new_information",
-        "passive_action_streak": 4,
-        "recent_player_actions": [
+          },
           {
             "text": "I look around.",
             "passive": true,
@@ -557,57 +539,40 @@
             ],
             "resolution_kind": null,
             "turn": 2
-          },
-          {
-            "text": "I look around.",
-            "passive": true,
-            "markers": [
-              "observe"
-            ],
-            "resolution_kind": null,
-            "turn": 3
-          },
-          {
-            "text": "I look around.",
-            "passive": true,
-            "markers": [
-              "observe"
-            ],
-            "resolution_kind": null,
-            "turn": 4
-          },
-          {
-            "text": "I look around.",
-            "passive": true,
-            "markers": [
-              "observe"
-            ],
-            "resolution_kind": null,
-            "turn": 5
           }
         ],
         "last_player_action_text": "I look around.",
         "last_player_action_passive": true,
         "recent_contextual_leads": [
           {
-            "key": "active_event_leaning_milestone_beside_a_sump_of_black_rainwater_where_the_dead_courier_lies_half_buried",
+            "key": "active_event_near_the_checkpoint_a_guard_shifts_his_weight",
             "kind": "active_event",
-            "subject": "leaning milestone",
-            "position": "beside a sump of black rainwater where the dead courier lies half-buried",
-            "named": false,
-            "positioned": true,
-            "mentions": 1,
-            "last_turn": 3
-          },
-          {
-            "key": "active_event_nearby_a_satchel_a_partially_burnt_letter_and_a_small_worn_dagger_lie_close_to_the_fallen_figure",
-            "kind": "active_event",
-            "subject": "nearby, a satchel, a partially burnt letter, and a small, worn dagger lie close to the fallen figure",
+            "subject": "near the checkpoint a guard shifts his weight",
             "position": "",
             "named": false,
             "positioned": false,
             "mentions": 1,
-            "last_turn": 4
+            "last_turn": 1
+          },
+          {
+            "key": "visible_suspicious_figure_as_you",
+            "kind": "visible_suspicious_figure",
+            "subject": "as you",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 2
+          },
+          {
+            "key": "active_event_gate_serjeant_manages_the_crowd_and",
+            "kind": "active_event",
+            "subject": "gate serjeant manages the crowd and",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 2
           }
         ]
       }
@@ -642,18 +607,8 @@
         "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
         "world_tick_events": [
           {
-            "type": "faction_operation_complete",
-            "text": "House Verevin completes an off-screen operation.",
-            "source": "house_verevin"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "The Ash Cowl completes an off-screen operation.",
-            "source": "ash_cowl"
-          },
-          {
-            "type": "faction_operation_complete",
-            "text": "Ordo Pyric completes an off-screen operation.",
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
             "source": "ordo_pyric"
           }
         ]
@@ -677,48 +632,6 @@
         "kind": "state_mutation",
         "domain": "player_visible_state",
         "owner_module": "game.api",
-        "operation": "planner_convergence_snapshot",
-        "stage": "pre_prompt",
-        "report": {
-          "enabled": true,
-          "owner_module": "game.api",
-          "path_label": "action_outcome",
-          "ctir_present": true,
-          "ctir_stamp": "4:1b714461440:405ffabd",
-          "narrative_plan_present": true,
-          "narrative_plan_stamp": "4:1b714461440:405ffabd",
-          "stamp_matches": true,
-          "prompt_consumes_plan": false,
-          "raw_state_prompt_bypass_detected": false,
-          "emergency_nonplan_allowed": false,
-          "failure_codes": []
-        }
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "player_visible_state",
-        "owner_module": "game.api",
-        "operation": "planner_convergence_snapshot",
-        "stage": "post_prompt",
-        "report": {
-          "enabled": true,
-          "owner_module": "game.api",
-          "path_label": "action_outcome",
-          "ctir_present": true,
-          "ctir_stamp": "4:1b714461440:405ffabd",
-          "narrative_plan_present": true,
-          "narrative_plan_stamp": "4:1b714461440:405ffabd",
-          "stamp_matches": true,
-          "prompt_consumes_plan": true,
-          "raw_state_prompt_bypass_detected": false,
-          "emergency_nonplan_allowed": false,
-          "failure_codes": []
-        }
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "player_visible_state",
-        "owner_module": "game.api",
         "operation": "detect_surfaced_clues",
         "seam": "post_gm_updates",
         "source": "post_emission_surfaced_clue_telemetry",
@@ -732,9 +645,9 @@
         "risk_class": "low",
         "needs_gateway": false,
         "proposed_future_owner": "telemetry_only",
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "resolution": {
-          "kind": "observe"
+          "kind": "scene_opening"
         },
         "surfaced_clue_count": 0,
         "player_text_present": true
@@ -758,9 +671,9 @@
         "risk_class": "high",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "resolution": {
-          "kind": "observe"
+          "kind": "scene_opening"
         },
         "validation_reason_codes": [
           "social_lead_supplement:legacy_shape_allowed"
@@ -798,9 +711,9 @@
         "risk_class": "medium",
         "needs_gateway": false,
         "proposed_future_owner": "engine_resolution_gateway",
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "resolution": {
-          "kind": "observe"
+          "kind": "scene_opening"
         },
         "gm_output_present": true
       },
@@ -822,9 +735,9 @@
         "risk_class": "medium",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "resolution": {
-          "kind": "observe"
+          "kind": "scene_opening"
         },
         "gm_output_present": true
       },
@@ -846,9 +759,9 @@
         "risk_class": "high",
         "needs_gateway": true,
         "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "resolution": {
-          "kind": "observe"
+          "kind": "scene_opening"
         },
         "validation_reason_codes": [
           "emergent_actor_adoption:legacy_shape_allowed"
@@ -874,10 +787,10 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "timestamp": "2026-05-06T22:34:30.705442Z",
-        "source": "chat",
-        "action_type": "chat",
-        "raw_input": "I look around.",
+        "timestamp": "2026-06-21T13:42:54.334406Z",
+        "source": "start_campaign",
+        "action_type": "start_campaign",
+        "raw_input": "",
         "turn_stage_order": [
           "player_input",
           "intent_normalization_expansion",
@@ -890,81 +803,53 @@
           "response_debug_packaging"
         ],
         "incoming_payload": {
-          "text": "I look around."
+          "start_campaign": true
         },
         "parsed_intent": {
-          "id": "i_look_around",
-          "label": "I look around.",
-          "type": "observe",
-          "prompt": "I look around.",
-          "targetSceneId": null,
-          "target_scene_id": null
+          "id": "campaign_start_opening_scene",
+          "label": "start_campaign",
+          "type": "scene_opening",
+          "prompt": "",
+          "targetSceneId": "frontier_gate",
+          "target_scene_id": "frontier_gate"
         },
-        "segmented_turn": {
-          "declared_action_text": "I look around."
-        },
+        "segmented_turn": null,
         "normalized_action": {
-          "id": "i_look_around",
-          "label": "I look around.",
-          "type": "observe",
-          "prompt": "I look around.",
-          "targetSceneId": null,
-          "target_scene_id": null
+          "id": "campaign_start_opening_scene",
+          "label": "start_campaign",
+          "type": "scene_opening",
+          "prompt": "",
+          "targetSceneId": "frontier_gate",
+          "target_scene_id": "frontier_gate"
         },
         "resolution": {
-          "kind": "observe",
-          "action_id": "i_look_around",
-          "label": "I look around.",
-          "prompt": "I look around.",
-          "success": null,
+          "kind": "scene_opening",
+          "action_id": "campaign_start_opening_scene",
+          "label": "start_campaign",
+          "prompt": "",
+          "success": true,
           "resolved_transition": false,
-          "target_scene_id": null,
+          "target_scene_id": "frontier_gate",
           "clue_id": null,
           "discovered_clues": [],
-          "state_changes": {},
-          "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+          "state_changes": {
+            "opening_scene_turn": true,
+            "arrived_at_scene": true,
+            "new_scene_context_available": true
+          },
+          "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
           "metadata": {
-            "turn_segmentation": {
-              "declared_action_text": "I look around."
-            },
-            "unknown_legacy_keys": {
-              "noncombat_resolution": {
-                "framework_version": "2026.04.noncombat.v1",
-                "kind": "perception",
-                "subkind": "observe",
-                "authority_domain": "scene_state",
-                "deterministic_resolved": true,
-                "requires_check": false,
-                "check_request": null,
-                "outcome_type": "closed",
-                "success_state": "neutral",
-                "discovered_entities": [],
-                "surfaced_facts": [],
-                "state_changes": {},
-                "blocked_reason_codes": [],
-                "ambiguous_reason_codes": [],
-                "unsupported_reason_codes": [],
-                "authoritative_outputs": [
-                  {
-                    "output_kind": "resolution_trace",
-                    "source_engine": "game.exploration",
-                    "route": "exploration",
-                    "engine_action_id": "i_look_around"
-                  }
-                ]
-              }
-            },
             "response_type_contract": {
-              "required_response_type": "action_outcome",
+              "required_response_type": "scene_opening",
               "source_route": "exploration",
               "allow_escalation": false,
               "escalation_block_reason": "non_hostile_world_action_guard",
               "strict_target_id": null,
               "strict_answer_expected": false,
               "strict_dialogue_expected": false,
-              "action_must_preserve_agency": true,
+              "action_must_preserve_agency": false,
               "debug_reasons": [
-                "resolved_world_action_requires_action_outcome",
+                "scene_opening_requires_opening_response",
                 "non_hostile_world_action_guard"
               ]
             },
@@ -1051,25 +936,31 @@
                     "trust_low",
                     "unfriendly",
                     "unknown"
+                  ],
+                  "allowed_speaker_alias_resolution_sources": [
+                    "continuity_snapshot",
+                    "interaction_continuity_contract",
+                    "manual_bundle_override",
+                    "referent_tracking"
                   ]
                 },
                 "bounded_session_hints": {
                   "active_interaction_target_id": null,
                   "active_interaction_target_name": null,
-                  "active_interaction_kind": "observe",
-                  "interaction_mode": "activity",
-                  "engagement_level": "focused",
+                  "active_interaction_kind": null,
+                  "interaction_mode": "none",
+                  "engagement_level": "none",
                   "conversation_privacy": null,
                   "player_position_context": null
                 }
               },
               "scene_state_anchor": {
                 "enabled": true,
-                "scene_id": "old_milestone",
+                "scene_id": "frontier_gate",
                 "counts": {
-                  "location": 12,
-                  "actor": 2,
-                  "player_action": 5
+                  "location": 14,
+                  "actor": 9,
+                  "player_action": 3
                 }
               },
               "context_separation": {
@@ -1086,7 +977,7 @@
                   "pressure_overweighting": false
                 },
                 "repair_hints": [],
-                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=640;after_len=640;before_head='The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026';after_head='The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026'"
+                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=100;after_len=100;before_head='Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026';after_head='Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026'"
               },
               "conversational_memory_window": {
                 "enabled": true,
@@ -1098,7 +989,14 @@
                 "recent_turn_window": 6,
                 "soft_memory_limit": 12,
                 "stale_after_turns": 18,
-                "active_scene_entity_ids": [],
+                "active_scene_entity_ids": [
+                  "gate_guard",
+                  "gate_serjeant",
+                  "guard_captain",
+                  "refugee",
+                  "tavern_runner",
+                  "threadbare_watcher"
+                ],
                 "anchored_interlocutor_id": "",
                 "active_interaction_target_id": "",
                 "explicit_reintroduced_entity_ids": [],
@@ -1108,1055 +1006,22 @@
                   "matched_topics": [],
                   "matched_grounded_ids": [],
                   "callback_marker_hit": null,
+                  "reason": "empty_player_text",
                   "source_of_activity_anchor": "none",
                   "source_of_recentness": "session.turn_counter",
                   "source_of_reintroductions": "player_text+visibility_aliases"
                 }
               },
-              "selected_conversational_memory": [
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 3,
-                  "text": "P: I look around. | G: The barren road stretches onward, veering sharply amidst blasted scrub and battered stones. The leaning milestone stands guard beside a sump of black rainwater where the dead courier lies half-buried.",
-                  "score": 103.71428571428571,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 2,
-                  "text": "P: I look around. | G: You notice that the old road bends sharply through a stretch of blasted scrub and broken stones. The weathered milestone, leaning precariously beside a ditch filled with black rainwater, marks this lo",
-                  "score": 89.42857142857143,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "contextual_thread",
-                  "entity_ids": [],
-                  "topic_tokens": [
-                    "leaning",
-                    "milestone"
-                  ],
-                  "source_turn": 3,
-                  "text": "leaning milestone [active_event_leaning_milestone_beside_a_sump_of_black_rainwater_where_the_dead_courier_lies_half_buried]",
-                  "score": 85.71428571428571,
-                  "why_selected": [
-                    "recency"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 1,
-                  "text": "P: I look around. | G: You look around, and you get an immediate read on what is there.",
-                  "score": 75.14285714285714,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 0,
-                  "text": "P: I look around. | G: off to the side, just visible beyond the milestone, a lone figure stays crouched in shadows, seemingly watching for an opportunity comes straight to you before the pause can settle. \"Enough watching,\"",
-                  "score": 60.857142857142854,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": -1,
-                  "text": "P: I look around. | G: off to the side, just visible beyond the milestone, a lone figure stays crouched in shadows, seemingly watching for an opportunity comes straight to you before the pause can settle. \"Enough watching,\"",
-                  "score": 46.57142857142857,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                }
-              ],
+              "selected_conversational_memory": [],
               "conversational_memory": {
-                "selected_count": 6
+                "selected_count": 0
               },
               "scene_state_anchor_checked": true,
               "scene_state_anchor_passed": true,
               "scene_state_anchor_failed": false,
               "scene_state_anchor_skip_reason": null,
               "scene_state_anchor_matched_kinds": [
-                "location"
-              ],
-              "scene_state_anchor_failure_reasons": [],
-              "scene_state_anchor_repaired": false,
-              "scene_state_anchor_repair_mode": null,
-              "tone_escalation_checked": true,
-              "tone_escalation_ok": false,
-              "tone_escalation_failed": true,
-              "tone_escalation_failure_reasons": [
-                "physical_hostility_not_allowed"
-              ],
-              "tone_escalation_detected_flags": {
-                "guarded": false,
-                "verbal_pressure": false,
-                "explicit_threat": false,
-                "physical_hostility": true,
-                "combat_initiation": false
-              },
-              "tone_escalation_matched_tone_level": "violent",
-              "tone_escalation_repaired": false,
-              "tone_escalation_repair_mode": null,
-              "tone_escalation_contract_summary": {
-                "enabled": true,
-                "base_tone": "guarded",
-                "max_allowed_tone": "tense",
-                "allow_verbal_pressure": true,
-                "allow_explicit_threat": false,
-                "allow_physical_hostility": false,
-                "allow_combat_initiation": false,
-                "justification_reasons": [
-                  "visible_facts_engagement_or_moderate_topic_pressure"
-                ]
-              },
-              "tone_escalation_contract_resolution_source": "shipped_response_policy",
-              "tone_escalation_violation_before_repair": true,
-              "tone_escalation_boundary_semantic_repair_disabled": true,
-              "narrative_authority_checked": true,
-              "narrative_authority_failed": false,
-              "narrative_authority_failure_reasons": [],
-              "narrative_authority_repaired": false,
-              "narrative_authority_repair_mode": null,
-              "narrative_authority_skip_reason": null,
-              "narrative_authority_deferral_mode": null,
-              "narrative_authority_assertion_flags": {
-                "invented_outcome": false,
-                "invented_hidden_fact": false,
-                "invented_intent": false,
-                "overcertain_unresolved_action": false
-              },
-              "anti_railroading": {
-                "validation": {
-                  "checked": true,
-                  "passed": true
-                },
-                "failure_reasons": [],
-                "assertion_flags": {
-                  "player_decision_override": false,
-                  "forced_direction": false,
-                  "exclusive_path_claim": false,
-                  "lead_plot_gravity": false,
-                  "forced_conclusion": false
-                },
-                "repair_hints": []
-              },
-              "anti_railroading_checked": true,
-              "anti_railroading_ok": true,
-              "anti_railroading_failed": false,
-              "anti_railroading_failure_reasons": [],
-              "anti_railroading_assertion_flags": {
-                "player_decision_override": false,
-                "forced_direction": false,
-                "exclusive_path_claim": false,
-                "lead_plot_gravity": false,
-                "forced_conclusion": false
-              },
-              "anti_railroading_repair_hints": [],
-              "anti_railroading_repaired": false,
-              "anti_railroading_repair_mode": null,
-              "anti_railroading_skip_reason": null,
-              "anti_railroading_contract_resolution_source": "shipped",
-              "context_separation_contract_resolution_source": "response_policy",
-              "context_separation_skip_reason": null,
-              "context_separation_checked": true,
-              "context_separation_ok": true,
-              "context_separation_failed": false,
-              "context_separation_failure_reasons": [],
-              "context_separation_assertion_flags": {
-                "topic_hijack_background_pressure": false,
-                "pressure_answer_substitution": false,
-                "ambient_pressure_forced_tone_shift": false,
-                "scene_focus_displaced_by_world_pressure": false,
-                "pressure_overweighting": false
-              },
-              "context_separation_repair_hints": [],
-              "context_separation_repaired": false,
-              "context_separation_repair_mode": null,
-              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=640;after_len=640;before_head='The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026';after_head='The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026'",
-              "context_separation_passed_after_repair": null,
-              "player_facing_narration_purity": {
-                "validation": {
-                  "checked": true,
-                  "passed": true
-                },
-                "violation_keys": [],
-                "repair_hints": [],
-                "repair_modes": [],
-                "preview_before": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026",
-                "preview_after": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026"
-              },
-              "player_facing_narration_purity_contract_resolution_source": "response_policy",
-              "player_facing_narration_purity_skip_reason": null,
-              "player_facing_narration_purity_checked": true,
-              "player_facing_narration_purity_failed": false,
-              "player_facing_narration_purity_repaired": false,
-              "player_facing_narration_purity_repair_modes": [],
-              "player_facing_narration_purity_violation_keys": [],
-              "player_facing_narration_purity_repair_hints_used": [],
-              "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-              "player_facing_narration_purity_preview_before": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026",
-              "player_facing_narration_purity_preview_after": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026",
-              "answer_shape_primacy": {
-                "checked": true,
-                "passed": true,
-                "failure_reasons": []
-              },
-              "answer_shape_primacy_skip_reason": null,
-              "answer_shape_primacy_checked": true,
-              "answer_shape_primacy_failed": false,
-              "answer_shape_primacy_repaired": false,
-              "answer_shape_primacy_repair_mode": null,
-              "answer_shape_primacy_failure_reasons": [],
-              "answer_shape_primacy_preview_before": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026",
-              "answer_shape_primacy_preview_after": "The blasted old road continues to curve through jagged stones and sparse scrub brush. The leanin\u2026",
-              "interaction_continuity_validation": {
-                "ok": true,
-                "enabled": false,
-                "continuity_strength": "none",
-                "violations": [],
-                "warnings": [],
-                "facts": {
-                  "anchored_interlocutor_id": "",
-                  "anchor_required": false,
-                  "speaker_switch_detected": false,
-                  "explicit_switch_cue_present": false,
-                  "thread_drop_detected": false,
-                  "narrator_bridge_present": false,
-                  "multi_speaker_pattern_present": false,
-                  "dialogue_presence": false
-                },
-                "debug": {
-                  "speaker_labels_detected": [],
-                  "cue_labels": [],
-                  "reason_path": [
-                    "contract_disabled_or_strength_none"
-                  ]
-                }
-              },
-              "fallback_behavior": {
-                "validation": {
-                  "contract_present": true,
-                  "checked": false,
-                  "passed": true,
-                  "uncertainty_active": false
-                },
-                "failure_reasons": [],
-                "repair_mode": "none",
-                "skip_reason": "uncertainty_inactive"
-              },
-              "fallback_behavior_contract_present": true,
-              "fallback_behavior_checked": false,
-              "fallback_behavior_skip_reason": "uncertainty_inactive",
-              "fallback_behavior_uncertainty_active": false,
-              "fallback_behavior_failed": false,
-              "fallback_behavior_failure_reasons": [],
-              "fallback_behavior_repaired": false,
-              "fallback_behavior_repair_mode": "none",
-              "fallback_behavior_clarifying_question_used": false,
-              "fallback_behavior_partial_used": false,
-              "fallback_behavior_known_edge_preserved": false,
-              "fallback_behavior_unknown_edge_added": false,
-              "fallback_behavior_next_lead_added": false,
-              "fallback_behavior_meta_voice_stripped": false,
-              "fallback_behavior_boundary_semantic_synthesis_skipped": false,
-              "narration_constraint_debug": {
-                "response_type": {
-                  "required": "action_outcome",
-                  "contract_source": "response_policy",
-                  "candidate_ok": true,
-                  "repair_used": false,
-                  "repair_kind": null,
-                  "upstream_prepared_absent": false
-                },
-                "visibility": {
-                  "contract_present": true,
-                  "decision_mode": "validated",
-                  "visible_entity_count": 0,
-                  "withheld_fact_count": 1,
-                  "reason_codes": []
-                },
-                "speaker_selection": {
-                  "speaker_id": null,
-                  "speaker_name": null,
-                  "selection_source": null,
-                  "reason_code": "speaker_unresolved",
-                  "binding_confident": null
-                }
-              }
-            }
-          },
-          "world_tick_events": []
-        },
-        "scene_before": "old_milestone",
-        "scene_after": "old_milestone",
-        "clue_updates": [],
-        "world_flag_updates": [
-          "clock:time_pressure=4"
-        ],
-        "turn_trace": {
-          "source": "chat",
-          "player_input": "I look around.",
-          "intent": {
-            "parsed": {
-              "id": "i_look_around",
-              "label": "I look around.",
-              "type": "observe",
-              "prompt": "I look around.",
-              "targetSceneId": null,
-              "target_scene_id": null
-            },
-            "segmented_turn": {
-              "declared_action_text": "I look around."
-            },
-            "normalized": {
-              "id": "i_look_around",
-              "label": "I look around.",
-              "type": "observe",
-              "prompt": "I look around.",
-              "targetSceneId": null,
-              "target_scene_id": null,
-              "targetEntityId": null,
-              "target_id": null
-            },
-            "implied_context": {
-              "applied": false,
-              "cases": [],
-              "target_id": null,
-              "commitment_broken": false,
-              "break_reason": null
-            }
-          },
-          "classification": {
-            "action_type": "chat",
-            "resolved_kind": "observe",
-            "requires_check": false
-          },
-          "response_type_contract": {
-            "required_response_type": "action_outcome",
-            "source_route": "exploration",
-            "allow_escalation": false,
-            "debug_reasons": [
-              "resolved_world_action_requires_action_outcome",
-              "non_hostile_world_action_guard"
-            ]
-          },
-          "social_contract_trace": {
-            "route_selected": "undecided",
-            "routing_reason_code": "no_addressable_target",
-            "social_followup_recovery": "not_applicable",
-            "reply_owner_actor_id": null,
-            "interlocutor_status": "none",
-            "continuity_status": "broken",
-            "fallback_anchor_source": "none",
-            "visible_grounded_speaker": null,
-            "final_reply_owner": null
-          },
-          "resolution_path": "exploration_engine",
-          "authoritative_state_changes": {
-            "scene_transition": null,
-            "resolution_state_changes": {},
-            "resolution_world_updates": [],
-            "check_request": null
-          },
-          "interaction_after": {
-            "active_interaction_target_id": null,
-            "active_interaction_kind": "observe",
-            "interaction_mode": "activity",
-            "engagement_level": "focused",
-            "conversation_privacy": null,
-            "player_position_context": null
-          },
-          "narration_obligations": {
-            "is_opening_scene": false,
-            "must_advance_scene": false,
-            "should_answer_active_npc": false,
-            "avoid_input_echo": true,
-            "avoid_player_action_restatement": true,
-            "prefer_structured_turn_summary": true,
-            "active_npc_reply_expected": false,
-            "active_npc_reply_kind": null,
-            "scene_momentum_due": false,
-            "scene_momentum_exchanges_since": 0,
-            "scene_momentum_next_due_in": 2,
-            "suppress_non_social_emitters": false
-          },
-          "clues": {
-            "discovered_texts": [],
-            "presentation_changes": [],
-            "known_counts": {
-              "implicit": 0,
-              "explicit": 0,
-              "actionable": 0
-            }
-          },
-          "affordances_after": [
-            {
-              "id": "leave_for_the_old_road_bends_through_blasted_sc",
-              "type": "investigate",
-              "label": "Leave for The old road bends through blasted sc"
-            },
-            {
-              "id": "examine_a_weathered_milestone_leans_above_a_d",
-              "type": "investigate",
-              "label": "Examine A weathered milestone leans above a d"
-            },
-            {
-              "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-              "type": "investigate",
-              "label": "Examine A dead courier lies half-hidden in th"
-            },
-            {
-              "id": "examine_the_carrion_birds_stir_whenever_the_wind",
-              "type": "investigate",
-              "label": "Examine the Carrion birds stir whenever the wind"
-            },
-            {
-              "id": "examine_a_satchel",
-              "type": "investigate",
-              "label": "Examine A satchel"
-            }
-          ],
-          "emergent_actor": {
-            "emergent_actor_enrolled": false,
-            "emergent_actor_id": null,
-            "emergent_actor_source_text": null
-          },
-          "leads": {
-            "registry_debug": [],
-            "delta_after_reconcile": [],
-            "changed_count": 0
-          },
-          "latency_ms": {
-            "intent_classification": 3,
-            "engine_resolution": 0,
-            "prompt_construction": 6,
-            "gpt_call": 5322,
-            "retry_loop_total": 0,
-            "final_emission_gate": 9,
-            "fallback_repair": 2,
-            "total_turn": 5374
-          }
-        },
-        "gpt_called": true,
-        "response_ok": true,
-        "error": null,
-        "canonical_entry": {
-          "should_route_social": false,
-          "target_actor_id": null,
-          "target_source": null,
-          "reason": "no_addressable_target",
-          "spoken_text": null,
-          "declared_switch_detected": false,
-          "declared_switch_target_actor_id": null,
-          "continuity_overridden_by_declared_switch": false,
-          "spoken_vocative_detected": false,
-          "spoken_vocative_target_actor_id": null,
-          "continuity_overridden_by_spoken_vocative": false
-        },
-        "canonical_entry_path": "undecided",
-        "canonical_entry_reason": "no_addressable_target",
-        "canonical_entry_target_actor_id": null,
-        "response_type_contract": {
-          "required_response_type": "action_outcome",
-          "source_route": "exploration",
-          "allow_escalation": false,
-          "debug_reasons": [
-            "resolved_world_action_requires_action_outcome",
-            "non_hostile_world_action_guard"
-          ]
-        },
-        "latency_ms": {
-          "intent_classification": 3,
-          "engine_resolution": 0,
-          "prompt_construction": 6,
-          "gpt_call": 5322,
-          "retry_loop_total": 0,
-          "final_emission_gate": 9,
-          "fallback_repair": 2,
-          "total_turn": 5374
-        }
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "scene_state",
-        "owner_module": "game.interaction_context",
-        "operation": "rebuild_active_scene_entities",
-        "changed_area": "scene_state.active_entities"
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "scene_state",
-        "owner_module": "game.api",
-        "operation": "authoritative_resolution_mutation",
-        "changed_area": "session+world+scene_runtime",
-        "resolution_kind": "observe"
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "player_visible_state",
-        "owner_module": "game.api",
-        "operation": "planner_convergence_snapshot",
-        "stage": "pre_prompt",
-        "report": {
-          "enabled": true,
-          "owner_module": "game.api",
-          "path_label": "action_outcome",
-          "ctir_present": true,
-          "ctir_stamp": "5:19d45713c00:3f2de9f9",
-          "narrative_plan_present": true,
-          "narrative_plan_stamp": "5:19d45713c00:3f2de9f9",
-          "stamp_matches": true,
-          "prompt_consumes_plan": false,
-          "raw_state_prompt_bypass_detected": false,
-          "emergency_nonplan_allowed": false,
-          "failure_codes": []
-        }
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "player_visible_state",
-        "owner_module": "game.api",
-        "operation": "planner_convergence_snapshot",
-        "stage": "post_prompt",
-        "report": {
-          "enabled": true,
-          "owner_module": "game.api",
-          "path_label": "action_outcome",
-          "ctir_present": true,
-          "ctir_stamp": "5:19d45713c00:3f2de9f9",
-          "narrative_plan_present": true,
-          "narrative_plan_stamp": "5:19d45713c00:3f2de9f9",
-          "stamp_matches": true,
-          "prompt_consumes_plan": true,
-          "raw_state_prompt_bypass_detected": false,
-          "emergency_nonplan_allowed": false,
-          "failure_codes": []
-        }
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "player_visible_state",
-        "owner_module": "game.api",
-        "operation": "detect_surfaced_clues",
-        "seam": "post_gm_updates",
-        "source": "post_emission_surfaced_clue_telemetry",
-        "affected_domains": [
-          "player_visible_state"
-        ],
-        "derived_from_model_or_post_emission": true,
-        "authority": "telemetry-only",
-        "provenance_class": "telemetry_only",
-        "adoption_status": "telemetry_only",
-        "risk_class": "low",
-        "needs_gateway": false,
-        "proposed_future_owner": "telemetry_only",
-        "scene_id": "old_milestone",
-        "resolution": {
-          "kind": "observe"
-        },
-        "surfaced_clue_count": 0,
-        "player_text_present": true
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "world_state",
-        "owner_module": "game.api",
-        "operation": "apply_social_narration_lead_supplements",
-        "seam": "post_gm_updates",
-        "source": "post_emission_social_lead_supplement",
-        "affected_domains": [
-          "world_state",
-          "scene_state",
-          "player_visible_state"
-        ],
-        "derived_from_model_or_post_emission": true,
-        "authority": "authoritative",
-        "provenance_class": "post_emission_text",
-        "adoption_status": "authoritative_adopted",
-        "risk_class": "high",
-        "needs_gateway": true,
-        "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
-        "resolution": {
-          "kind": "observe"
-        },
-        "validation_reason_codes": [
-          "social_lead_supplement:legacy_shape_allowed"
-        ],
-        "sanitized_narration_available": true,
-        "scene_id_present": true,
-        "resolution_present": true,
-        "narration_present": true,
-        "narration_oversized": false,
-        "narration_social_leads_count": 0,
-        "player_text_present": true,
-        "gateway_present": true,
-        "gateway_decision": "allow_validated_legacy_social_lead_supplement",
-        "gateway_shape_validation_enforced": true,
-        "gateway_policy_enforcement": "observe_only",
-        "gateway_mode": "observe_only",
-        "future_blocking_candidate": true
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "world_state",
-        "owner_module": "game.api",
-        "operation": "ensure_scene_has_minimum_actionable_lead",
-        "seam": "post_gm_updates",
-        "source": "post_emission_minimum_actionable_lead",
-        "affected_domains": [
-          "world_state",
-          "scene_state",
-          "player_visible_state"
-        ],
-        "derived_from_model_or_post_emission": true,
-        "authority": "authoritative",
-        "provenance_class": "deterministic_resolution",
-        "adoption_status": "authoritative_adopted",
-        "risk_class": "medium",
-        "needs_gateway": false,
-        "proposed_future_owner": "engine_resolution_gateway",
-        "scene_id": "old_milestone",
-        "resolution": {
-          "kind": "observe"
-        },
-        "gm_output_present": true
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "interaction_state",
-        "owner_module": "game.api",
-        "operation": "apply_spoken_state_refinement_cash_out",
-        "seam": "post_gm_updates",
-        "source": "post_emission_spoken_state_refinement",
-        "affected_domains": [
-          "interaction_state",
-          "scene_state"
-        ],
-        "derived_from_model_or_post_emission": true,
-        "authority": "authoritative",
-        "provenance_class": "post_emission_text",
-        "adoption_status": "authoritative_adopted",
-        "risk_class": "medium",
-        "needs_gateway": true,
-        "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
-        "resolution": {
-          "kind": "observe"
-        },
-        "gm_output_present": true
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "scene_state",
-        "owner_module": "game.api",
-        "operation": "apply_conservative_emergent_enrollment_from_gm_output",
-        "seam": "post_gm_updates",
-        "source": "post_emission_emergent_actor_enrollment",
-        "affected_domains": [
-          "scene_state",
-          "interaction_state"
-        ],
-        "derived_from_model_or_post_emission": true,
-        "authority": "authoritative",
-        "provenance_class": "post_emission_text",
-        "adoption_status": "authoritative_adopted",
-        "risk_class": "high",
-        "needs_gateway": true,
-        "proposed_future_owner": "post_gm_adoption_gateway",
-        "scene_id": "old_milestone",
-        "resolution": {
-          "kind": "observe"
-        },
-        "validation_reason_codes": [
-          "emergent_actor_adoption:legacy_shape_allowed"
-        ],
-        "sanitized_narration_available": true,
-        "scene_id_present": true,
-        "narration_present": true,
-        "narration_oversized": false,
-        "emergent_actor_enrolled": false,
-        "emergent_actor_id_present": false,
-        "gateway_present": true,
-        "gateway_decision": "allow_validated_legacy_emergent_actor_adoption",
-        "gateway_shape_validation_enforced": true,
-        "gateway_policy_enforcement": "observe_only",
-        "gateway_mode": "observe_only",
-        "future_blocking_candidate": true
-      },
-      {
-        "kind": "state_mutation",
-        "domain": "scene_state",
-        "owner_module": "game.interaction_context",
-        "operation": "rebuild_active_scene_entities",
-        "changed_area": "scene_state.active_entities"
-      },
-      {
-        "timestamp": "2026-05-06T22:35:58.783670Z",
-        "source": "chat",
-        "action_type": "chat",
-        "raw_input": "I look around.",
-        "turn_stage_order": [
-          "player_input",
-          "intent_normalization_expansion",
-          "action_classification",
-          "engine_resolution",
-          "authoritative_state_mutation",
-          "prompt_context_construction",
-          "gpt_narration",
-          "affordance_derivation",
-          "response_debug_packaging"
-        ],
-        "incoming_payload": {
-          "text": "I look around."
-        },
-        "parsed_intent": {
-          "id": "i_look_around",
-          "label": "I look around.",
-          "type": "observe",
-          "prompt": "I look around.",
-          "targetSceneId": null,
-          "target_scene_id": null
-        },
-        "segmented_turn": {
-          "declared_action_text": "I look around."
-        },
-        "normalized_action": {
-          "id": "i_look_around",
-          "label": "I look around.",
-          "type": "observe",
-          "prompt": "I look around.",
-          "targetSceneId": null,
-          "target_scene_id": null
-        },
-        "resolution": {
-          "kind": "observe",
-          "action_id": "i_look_around",
-          "label": "I look around.",
-          "prompt": "I look around.",
-          "success": null,
-          "resolved_transition": false,
-          "target_scene_id": null,
-          "clue_id": null,
-          "discovered_clues": [],
-          "state_changes": {},
-          "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
-          "metadata": {
-            "turn_segmentation": {
-              "declared_action_text": "I look around."
-            },
-            "unknown_legacy_keys": {
-              "noncombat_resolution": {
-                "framework_version": "2026.04.noncombat.v1",
-                "kind": "perception",
-                "subkind": "observe",
-                "authority_domain": "scene_state",
-                "deterministic_resolved": true,
-                "requires_check": false,
-                "check_request": null,
-                "outcome_type": "closed",
-                "success_state": "neutral",
-                "discovered_entities": [],
-                "surfaced_facts": [],
-                "state_changes": {},
-                "blocked_reason_codes": [],
-                "ambiguous_reason_codes": [],
-                "unsupported_reason_codes": [],
-                "authoritative_outputs": [
-                  {
-                    "output_kind": "resolution_trace",
-                    "source_engine": "game.exploration",
-                    "route": "exploration",
-                    "engine_action_id": "i_look_around"
-                  }
-                ]
-              }
-            },
-            "response_type_contract": {
-              "required_response_type": "action_outcome",
-              "source_route": "exploration",
-              "allow_escalation": false,
-              "escalation_block_reason": "non_hostile_world_action_guard",
-              "strict_target_id": null,
-              "strict_answer_expected": false,
-              "strict_dialogue_expected": false,
-              "action_must_preserve_agency": true,
-              "debug_reasons": [
-                "resolved_world_action_requires_action_outcome",
-                "non_hostile_world_action_guard"
-              ]
-            },
-            "emission_debug": {
-              "dialogue_social_plan": {
-                "version": 1,
-                "applies": false,
-                "speaker_id": null,
-                "speaker_name": null,
-                "speaker_source": "unresolved",
-                "dialogue_intent": null,
-                "reply_kind": "unknown",
-                "pressure_state": "none",
-                "relationship_codes": [
-                  "unknown"
-                ],
-                "tone_bounds": [
-                  "neutral"
-                ],
-                "prohibited_content_codes": [
-                  "no_narrator_override",
-                  "no_ooc_instructions",
-                  "no_player_agency_override",
-                  "no_prompt_text"
-                ],
-                "derivation_codes": [
-                  "dialogue_social_plan:v1",
-                  "intent:ctir_only",
-                  "referent_tracking:consumed",
-                  "session_hints:bounded",
-                  "speaker:unresolved"
-                ],
-                "validator": {
-                  "validated": true,
-                  "errors": [],
-                  "reject_field_names": [
-                    "dialogue",
-                    "dialogue_line",
-                    "gm_guidance",
-                    "instructions",
-                    "message",
-                    "narration",
-                    "player_facing_text",
-                    "prompt",
-                    "system_prompt",
-                    "text"
-                  ],
-                  "allowed_reply_kinds": [
-                    "answer",
-                    "explanation",
-                    "reaction",
-                    "refusal",
-                    "unknown"
-                  ],
-                  "allowed_pressure_states": [
-                    "high",
-                    "low",
-                    "moderate",
-                    "none"
-                  ],
-                  "allowed_tone_codes": [
-                    "cold",
-                    "deferential",
-                    "direct",
-                    "evasive",
-                    "guarded",
-                    "hostile",
-                    "neutral",
-                    "threatening",
-                    "warm"
-                  ],
-                  "allowed_relationship_codes": [
-                    "engagement_engaged",
-                    "engagement_focused",
-                    "engagement_none",
-                    "fear_high",
-                    "fear_low",
-                    "friendly",
-                    "hostile",
-                    "neutral",
-                    "suspicion_high",
-                    "suspicion_low",
-                    "trust_high",
-                    "trust_low",
-                    "unfriendly",
-                    "unknown"
-                  ]
-                },
-                "bounded_session_hints": {
-                  "active_interaction_target_id": null,
-                  "active_interaction_target_name": null,
-                  "active_interaction_kind": "observe",
-                  "interaction_mode": "activity",
-                  "engagement_level": "focused",
-                  "conversation_privacy": null,
-                  "player_position_context": null
-                }
-              },
-              "scene_state_anchor": {
-                "enabled": true,
-                "scene_id": "old_milestone",
-                "counts": {
-                  "location": 12,
-                  "actor": 2,
-                  "player_action": 5
-                }
-              },
-              "context_separation": {
-                "validation": {
-                  "checked": true,
-                  "passed": true
-                },
-                "failure_reasons": [],
-                "assertion_flags": {
-                  "topic_hijack_background_pressure": false,
-                  "pressure_answer_substitution": false,
-                  "ambient_pressure_forced_tone_shift": false,
-                  "scene_focus_displaced_by_world_pressure": false,
-                  "pressure_overweighting": false
-                },
-                "repair_hints": [],
-                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=654;after_len=654;before_head='The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026';after_head='The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026'"
-              },
-              "conversational_memory_window": {
-                "enabled": true,
-                "window_version": "v1",
-                "prioritize_recent_turns": true,
-                "prioritize_active_scene_entities": true,
-                "deprioritize_stale_inactive_elements": true,
-                "allow_explicit_reintroduction": true,
-                "recent_turn_window": 6,
-                "soft_memory_limit": 12,
-                "stale_after_turns": 18,
-                "active_scene_entity_ids": [],
-                "anchored_interlocutor_id": "",
-                "active_interaction_target_id": "",
-                "explicit_reintroduced_entity_ids": [],
-                "explicit_reintroduced_topics": [],
-                "selection_debug": {
-                  "matched_entity_ids": [],
-                  "matched_topics": [],
-                  "matched_grounded_ids": [],
-                  "callback_marker_hit": null,
-                  "source_of_activity_anchor": "none",
-                  "source_of_recentness": "session.turn_counter",
-                  "source_of_reintroductions": "player_text+visibility_aliases"
-                }
-              },
-              "selected_conversational_memory": [
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 4,
-                  "text": "P: I look around. | G: The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-                  "score": 103.71428571428571,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 3,
-                  "text": "P: I look around. | G: The barren road stretches onward, veering sharply amidst blasted scrub and battered stones. The leaning milestone stands guard beside a sump of black rainwater where the dead courier lies half-buried.",
-                  "score": 89.42857142857143,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "contextual_thread",
-                  "entity_ids": [],
-                  "topic_tokens": [
-                    "burnt",
-                    "dagger",
-                    "letter",
-                    "nearby",
-                    "partially",
-                    "satchel",
-                    "small",
-                    "worn"
-                  ],
-                  "source_turn": 4,
-                  "text": "nearby, a satchel, a partially burnt letter, and a small, worn dagger lie close to the fallen figure [active_event_nearby_a_satchel_a_partially_burnt_letter_and_a_small_worn_dagger_lie_close_to_the_fallen_figure]",
-                  "score": 85.71428571428571,
-                  "why_selected": [
-                    "recency"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 2,
-                  "text": "P: I look around. | G: You notice that the old road bends sharply through a stretch of blasted scrub and broken stones. The weathered milestone, leaning precariously beside a ditch filled with black rainwater, marks this lo",
-                  "score": 75.14285714285714,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "contextual_thread",
-                  "entity_ids": [],
-                  "topic_tokens": [
-                    "leaning",
-                    "milestone"
-                  ],
-                  "source_turn": 3,
-                  "text": "leaning milestone [active_event_leaning_milestone_beside_a_sump_of_black_rainwater_where_the_dead_courier_lies_half_buried]",
-                  "score": 71.42857142857143,
-                  "why_selected": [
-                    "recency"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 1,
-                  "text": "P: I look around. | G: You look around, and you get an immediate read on what is there.",
-                  "score": 60.857142857142854,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                },
-                {
-                  "kind": "recent_turn",
-                  "entity_ids": [],
-                  "topic_tokens": [],
-                  "source_turn": 0,
-                  "text": "P: I look around. | G: off to the side, just visible beyond the milestone, a lone figure stays crouched in shadows, seemingly watching for an opportunity comes straight to you before the pause can settle. \"Enough watching,\"",
-                  "score": 46.57142857142857,
-                  "why_selected": [
-                    "recency",
-                    "recent_turn_kind"
-                  ]
-                }
-              ],
-              "conversational_memory": {
-                "selected_count": 7
-              },
-              "scene_state_anchor_checked": true,
-              "scene_state_anchor_passed": true,
-              "scene_state_anchor_failed": false,
-              "scene_state_anchor_skip_reason": null,
-              "scene_state_anchor_matched_kinds": [
-                "location"
+                "actor"
               ],
               "scene_state_anchor_failure_reasons": [],
               "scene_state_anchor_repaired": false,
@@ -2166,13 +1031,13 @@
               "tone_escalation_failed": false,
               "tone_escalation_failure_reasons": [],
               "tone_escalation_detected_flags": {
-                "guarded": true,
+                "guarded": false,
                 "verbal_pressure": false,
                 "explicit_threat": false,
                 "physical_hostility": false,
                 "combat_initiation": false
               },
-              "tone_escalation_matched_tone_level": "guarded",
+              "tone_escalation_matched_tone_level": null,
               "tone_escalation_repaired": false,
               "tone_escalation_repair_mode": null,
               "tone_escalation_contract_summary": {
@@ -2184,7 +1049,8 @@
                 "allow_physical_hostility": false,
                 "allow_combat_initiation": false,
                 "justification_reasons": [
-                  "visible_facts_engagement_or_moderate_topic_pressure"
+                  "visible_facts_engagement_or_moderate_topic_pressure",
+                  "visible_entity_roles_include_authority_guardship"
                 ]
               },
               "tone_escalation_contract_resolution_source": "shipped_response_policy",
@@ -2249,7 +1115,7 @@
               "context_separation_repair_hints": [],
               "context_separation_repaired": false,
               "context_separation_repair_mode": null,
-              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=654;after_len=654;before_head='The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026';after_head='The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026'",
+              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=100;after_len=100;before_head='Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026';after_head='Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026'",
               "context_separation_passed_after_repair": null,
               "player_facing_narration_purity": {
                 "validation": {
@@ -2259,8 +1125,8 @@
                 "violation_keys": [],
                 "repair_hints": [],
                 "repair_modes": [],
-                "preview_before": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026",
-                "preview_after": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026"
+                "preview_before": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026",
+                "preview_after": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026"
               },
               "player_facing_narration_purity_contract_resolution_source": "response_policy",
               "player_facing_narration_purity_skip_reason": null,
@@ -2271,8 +1137,8 @@
               "player_facing_narration_purity_violation_keys": [],
               "player_facing_narration_purity_repair_hints_used": [],
               "player_facing_narration_purity_collapsed_to_diegetic_core": false,
-              "player_facing_narration_purity_preview_before": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026",
-              "player_facing_narration_purity_preview_after": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026",
+              "player_facing_narration_purity_preview_before": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026",
+              "player_facing_narration_purity_preview_after": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026",
               "answer_shape_primacy": {
                 "checked": true,
                 "passed": true,
@@ -2284,8 +1150,959 @@
               "answer_shape_primacy_repaired": false,
               "answer_shape_primacy_repair_mode": null,
               "answer_shape_primacy_failure_reasons": [],
-              "answer_shape_primacy_preview_before": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026",
-              "answer_shape_primacy_preview_after": "The old milestone road twists through blasted scrub and shattered stones beneath a lean weathere\u2026",
+              "answer_shape_primacy_preview_before": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026",
+              "answer_shape_primacy_preview_after": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pas\u2026",
+              "interaction_continuity_validation": {
+                "ok": true,
+                "enabled": false,
+                "continuity_strength": "none",
+                "violations": [],
+                "warnings": [],
+                "facts": {
+                  "anchored_interlocutor_id": "",
+                  "anchor_required": false,
+                  "speaker_switch_detected": false,
+                  "explicit_switch_cue_present": false,
+                  "thread_drop_detected": false,
+                  "narrator_bridge_present": false,
+                  "multi_speaker_pattern_present": false,
+                  "dialogue_presence": false
+                },
+                "debug": {
+                  "speaker_labels_detected": [],
+                  "cue_labels": [],
+                  "reason_path": [
+                    "contract_disabled_or_strength_none"
+                  ]
+                }
+              },
+              "fallback_behavior": {
+                "validation": {
+                  "contract_present": true,
+                  "checked": false,
+                  "passed": true,
+                  "uncertainty_active": false
+                },
+                "failure_reasons": [],
+                "repair_mode": "none",
+                "skip_reason": "uncertainty_inactive"
+              },
+              "fallback_behavior_contract_present": true,
+              "fallback_behavior_checked": false,
+              "fallback_behavior_skip_reason": "uncertainty_inactive",
+              "fallback_behavior_uncertainty_active": false,
+              "fallback_behavior_failed": false,
+              "fallback_behavior_failure_reasons": [],
+              "fallback_behavior_repaired": false,
+              "fallback_behavior_repair_mode": "none",
+              "fallback_behavior_clarifying_question_used": false,
+              "fallback_behavior_partial_used": false,
+              "fallback_behavior_known_edge_preserved": false,
+              "fallback_behavior_unknown_edge_added": false,
+              "fallback_behavior_next_lead_added": false,
+              "fallback_behavior_meta_voice_stripped": false,
+              "fallback_behavior_boundary_semantic_synthesis_skipped": false,
+              "narration_constraint_debug": {
+                "response_type": {
+                  "required": "scene_opening",
+                  "contract_source": "response_policy",
+                  "candidate_ok": true,
+                  "repair_used": false,
+                  "repair_kind": null,
+                  "upstream_prepared_absent": false
+                },
+                "visibility": {
+                  "contract_present": true,
+                  "decision_mode": "validated",
+                  "visible_entity_count": 6,
+                  "withheld_fact_count": 4,
+                  "reason_codes": []
+                },
+                "speaker_selection": {
+                  "speaker_id": null,
+                  "speaker_name": null,
+                  "selection_source": null,
+                  "reason_code": "speaker_unresolved",
+                  "binding_confident": null
+                }
+              }
+            },
+            "narration_state_consistency": {
+              "narration_state_mismatch_detected": false,
+              "mismatch_kind": "",
+              "mismatch_repair_applied": "none",
+              "mismatch_repairs_applied": [],
+              "repaired_discovered_clue_texts": [],
+              "emergent_actor_hint_detected": false,
+              "scene_opening_reconcile_telemetry_only": true,
+              "scene_opening_text_len": 100,
+              "scene_opening_text_empty": false
+            }
+          },
+          "world_tick_events": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ]
+        },
+        "scene_before": "frontier_gate",
+        "scene_after": "frontier_gate",
+        "clue_updates": [],
+        "world_flag_updates": [
+          "clock:time_pressure=1"
+        ],
+        "turn_trace": {
+          "source": "start_campaign",
+          "player_input": "",
+          "intent": {
+            "parsed": {
+              "id": "campaign_start_opening_scene",
+              "label": "start_campaign",
+              "type": "scene_opening",
+              "prompt": "",
+              "targetSceneId": "frontier_gate",
+              "target_scene_id": "frontier_gate"
+            },
+            "segmented_turn": null,
+            "normalized": {
+              "id": "campaign_start_opening_scene",
+              "label": "start_campaign",
+              "type": "scene_opening",
+              "prompt": "",
+              "targetSceneId": "frontier_gate",
+              "target_scene_id": "frontier_gate",
+              "targetEntityId": null,
+              "target_id": null
+            },
+            "implied_context": {
+              "applied": false,
+              "cases": [],
+              "target_id": null,
+              "commitment_broken": false,
+              "break_reason": null
+            }
+          },
+          "classification": {
+            "action_type": "start_campaign",
+            "resolved_kind": "scene_opening",
+            "requires_check": false
+          },
+          "response_type_contract": {
+            "required_response_type": "scene_opening",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "scene_opening_requires_opening_response",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": {
+            "route_selected": "action",
+            "routing_reason_code": "empty_turn",
+            "social_followup_recovery": "not_applicable",
+            "reply_owner_actor_id": null,
+            "interlocutor_status": "none",
+            "continuity_status": "broken",
+            "fallback_anchor_source": "none",
+            "visible_grounded_speaker": null,
+            "final_reply_owner": null
+          },
+          "resolution_path": "exploration_engine",
+          "authoritative_state_changes": {
+            "scene_transition": null,
+            "resolution_state_changes": {
+              "opening_scene_turn": true,
+              "arrived_at_scene": true,
+              "new_scene_context_available": true
+            },
+            "resolution_world_updates": [],
+            "check_request": null
+          },
+          "interaction_after": {
+            "active_interaction_target_id": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "narration_obligations": {
+            "is_opening_scene": true,
+            "must_advance_scene": false,
+            "should_answer_active_npc": false,
+            "avoid_input_echo": true,
+            "avoid_player_action_restatement": true,
+            "prefer_structured_turn_summary": true,
+            "active_npc_reply_expected": false,
+            "active_npc_reply_kind": null,
+            "scene_momentum_due": false,
+            "scene_momentum_exchanges_since": 0,
+            "scene_momentum_next_due_in": 2,
+            "suppress_non_social_emitters": false
+          },
+          "clues": {
+            "discovered_texts": [],
+            "presentation_changes": [],
+            "known_counts": {
+              "implicit": 0,
+              "explicit": 0,
+              "actionable": 0
+            }
+          },
+          "affordances_after": [
+            {
+              "id": "question_gate_guard",
+              "type": "question",
+              "label": "Talk to Gate Guard",
+              "targetEntityId": "gate_guard"
+            },
+            {
+              "id": "question_gate_serjeant",
+              "type": "question",
+              "label": "Talk to Gate Serjeant",
+              "targetEntityId": "gate_serjeant"
+            },
+            {
+              "id": "question_tavern_runner",
+              "type": "question",
+              "label": "Talk to Tavern Runner",
+              "targetEntityId": "tavern_runner"
+            },
+            {
+              "id": "notice_board",
+              "type": "investigate",
+              "label": "Examine the Notice board",
+              "targetEntityId": "notice_board"
+            },
+            {
+              "id": "examine_the_notice_board_lists_taxes",
+              "type": "investigate",
+              "label": "Examine The notice board lists taxes"
+            }
+          ],
+          "emergent_actor": {
+            "emergent_actor_enrolled": false,
+            "emergent_actor_id": null,
+            "emergent_actor_source_text": null
+          },
+          "leads": {
+            "registry_debug": [],
+            "delta_after_reconcile": [],
+            "changed_count": 0
+          },
+          "latency_ms": {
+            "intent_classification": 0,
+            "engine_resolution": 0,
+            "prompt_construction": 7,
+            "gpt_call": 0,
+            "retry_loop_total": 0,
+            "final_emission_gate": 6,
+            "fallback_repair": 0,
+            "total_turn": 25
+          }
+        },
+        "gpt_called": true,
+        "response_ok": true,
+        "error": null,
+        "canonical_entry": {
+          "should_route_social": false,
+          "target_actor_id": null,
+          "target_source": null,
+          "reason": "empty_turn",
+          "spoken_text": null,
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false
+        },
+        "canonical_entry_path": "undecided",
+        "canonical_entry_reason": "empty_turn",
+        "canonical_entry_target_actor_id": null,
+        "response_type_contract": {
+          "required_response_type": "scene_opening",
+          "source_route": "exploration",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "scene_opening_requires_opening_response",
+            "non_hostile_world_action_guard"
+          ]
+        },
+        "latency_ms": {
+          "intent_classification": 0,
+          "engine_resolution": 0,
+          "prompt_construction": 7,
+          "gpt_call": 0,
+          "retry_loop_total": 0,
+          "final_emission_gate": 6,
+          "fallback_repair": 0,
+          "total_turn": 25
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "authoritative_resolution_mutation",
+        "changed_area": "session+world+scene_runtime",
+        "resolution_kind": "observe"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "pre_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "action_outcome",
+          "ctir_present": true,
+          "ctir_stamp": "2:1e7b7953500:cbcca187",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "2:1e7b7953500:cbcca187",
+          "stamp_matches": true,
+          "prompt_consumes_plan": false,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "planner_convergence_snapshot",
+        "stage": "post_prompt",
+        "report": {
+          "enabled": true,
+          "owner_module": "game.api",
+          "path_label": "action_outcome",
+          "ctir_present": true,
+          "ctir_stamp": "2:1e7b7953500:cbcca187",
+          "narrative_plan_present": true,
+          "narrative_plan_stamp": "2:1e7b7953500:cbcca187",
+          "stamp_matches": true,
+          "prompt_consumes_plan": true,
+          "raw_state_prompt_bypass_detected": false,
+          "emergency_nonplan_allowed": false,
+          "failure_codes": []
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "emergency_nonplan_output",
+        "reason": "force_terminal_retry_fallback",
+        "emergency_nonplan_output": true,
+        "failure_class": "scene_stall",
+        "retry_attempt": 2
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "detect_surfaced_clues",
+        "seam": "post_gm_updates",
+        "source": "post_emission_surfaced_clue_telemetry",
+        "affected_domains": [
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "telemetry-only",
+        "provenance_class": "telemetry_only",
+        "adoption_status": "telemetry_only",
+        "risk_class": "low",
+        "needs_gateway": false,
+        "proposed_future_owner": "telemetry_only",
+        "scene_id": "frontier_gate",
+        "resolution": {
+          "kind": "observe"
+        },
+        "surfaced_clue_count": 0,
+        "player_text_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "world_state",
+        "owner_module": "game.api",
+        "operation": "apply_social_narration_lead_supplements",
+        "seam": "post_gm_updates",
+        "source": "post_emission_social_lead_supplement",
+        "affected_domains": [
+          "world_state",
+          "scene_state",
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "frontier_gate",
+        "resolution": {
+          "kind": "observe"
+        },
+        "validation_reason_codes": [
+          "social_lead_supplement:legacy_shape_allowed"
+        ],
+        "sanitized_narration_available": true,
+        "scene_id_present": true,
+        "resolution_present": true,
+        "narration_present": true,
+        "narration_oversized": false,
+        "narration_social_leads_count": 0,
+        "player_text_present": true,
+        "gateway_present": true,
+        "gateway_decision": "allow_validated_legacy_social_lead_supplement",
+        "gateway_shape_validation_enforced": true,
+        "gateway_policy_enforcement": "observe_only",
+        "gateway_mode": "observe_only",
+        "future_blocking_candidate": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "world_state",
+        "owner_module": "game.api",
+        "operation": "ensure_scene_has_minimum_actionable_lead",
+        "seam": "post_gm_updates",
+        "source": "post_emission_minimum_actionable_lead",
+        "affected_domains": [
+          "world_state",
+          "scene_state",
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "deterministic_resolution",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": false,
+        "proposed_future_owner": "engine_resolution_gateway",
+        "scene_id": "frontier_gate",
+        "resolution": {
+          "kind": "observe"
+        },
+        "gm_output_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.api",
+        "operation": "apply_spoken_state_refinement_cash_out",
+        "seam": "post_gm_updates",
+        "source": "post_emission_spoken_state_refinement",
+        "affected_domains": [
+          "interaction_state",
+          "scene_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "frontier_gate",
+        "resolution": {
+          "kind": "observe"
+        },
+        "gm_output_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "apply_conservative_emergent_enrollment_from_gm_output",
+        "seam": "post_gm_updates",
+        "source": "post_emission_emergent_actor_enrollment",
+        "affected_domains": [
+          "scene_state",
+          "interaction_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "frontier_gate",
+        "resolution": {
+          "kind": "observe"
+        },
+        "validation_reason_codes": [
+          "emergent_actor_adoption:legacy_shape_allowed"
+        ],
+        "sanitized_narration_available": true,
+        "scene_id_present": true,
+        "narration_present": true,
+        "narration_oversized": false,
+        "emergent_actor_enrolled": false,
+        "emergent_actor_id_present": false,
+        "gateway_present": true,
+        "gateway_decision": "allow_validated_legacy_emergent_actor_adoption",
+        "gateway_shape_validation_enforced": true,
+        "gateway_policy_enforcement": "observe_only",
+        "gateway_mode": "observe_only",
+        "future_blocking_candidate": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "timestamp": "2026-06-21T13:42:54.410630Z",
+        "source": "chat",
+        "action_type": "chat",
+        "raw_input": "I look around.",
+        "turn_stage_order": [
+          "player_input",
+          "intent_normalization_expansion",
+          "action_classification",
+          "engine_resolution",
+          "authoritative_state_mutation",
+          "prompt_context_construction",
+          "gpt_narration",
+          "affordance_derivation",
+          "response_debug_packaging"
+        ],
+        "incoming_payload": {
+          "text": "I look around."
+        },
+        "parsed_intent": {
+          "id": "i_look_around",
+          "label": "I look around.",
+          "type": "observe",
+          "prompt": "I look around.",
+          "targetSceneId": null,
+          "target_scene_id": null
+        },
+        "segmented_turn": {
+          "declared_action_text": "I look around."
+        },
+        "normalized_action": {
+          "id": "i_look_around",
+          "label": "I look around.",
+          "type": "observe",
+          "prompt": "I look around.",
+          "targetSceneId": null,
+          "target_scene_id": null
+        },
+        "resolution": {
+          "kind": "observe",
+          "action_id": "i_look_around",
+          "label": "I look around.",
+          "prompt": "I look around.",
+          "success": null,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "clue_id": null,
+          "discovered_clues": [],
+          "state_changes": {},
+          "hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+          "metadata": {
+            "turn_segmentation": {
+              "declared_action_text": "I look around."
+            },
+            "unknown_legacy_keys": {
+              "noncombat_resolution": {
+                "framework_version": "2026.04.noncombat.v1",
+                "kind": "perception",
+                "subkind": "observe",
+                "authority_domain": "scene_state",
+                "deterministic_resolved": true,
+                "requires_check": false,
+                "check_request": null,
+                "outcome_type": "closed",
+                "success_state": "neutral",
+                "discovered_entities": [],
+                "surfaced_facts": [],
+                "state_changes": {},
+                "blocked_reason_codes": [],
+                "ambiguous_reason_codes": [],
+                "unsupported_reason_codes": [],
+                "authoritative_outputs": [
+                  {
+                    "output_kind": "resolution_trace",
+                    "source_engine": "game.exploration",
+                    "route": "exploration",
+                    "engine_action_id": "i_look_around"
+                  }
+                ]
+              }
+            },
+            "response_type_contract": {
+              "required_response_type": "action_outcome",
+              "source_route": "exploration",
+              "allow_escalation": false,
+              "escalation_block_reason": "non_hostile_world_action_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": false,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": true,
+              "debug_reasons": [
+                "resolved_world_action_requires_action_outcome",
+                "non_hostile_world_action_guard"
+              ]
+            },
+            "emission_debug": {
+              "dialogue_social_plan": {
+                "version": 1,
+                "applies": false,
+                "speaker_id": null,
+                "speaker_name": null,
+                "speaker_source": "unresolved",
+                "dialogue_intent": null,
+                "reply_kind": "unknown",
+                "pressure_state": "none",
+                "relationship_codes": [
+                  "unknown"
+                ],
+                "tone_bounds": [
+                  "neutral"
+                ],
+                "prohibited_content_codes": [
+                  "no_narrator_override",
+                  "no_ooc_instructions",
+                  "no_player_agency_override",
+                  "no_prompt_text"
+                ],
+                "derivation_codes": [
+                  "dialogue_social_plan:v1",
+                  "intent:ctir_only",
+                  "referent_tracking:consumed",
+                  "session_hints:bounded",
+                  "speaker:unresolved"
+                ],
+                "validator": {
+                  "validated": true,
+                  "errors": [],
+                  "reject_field_names": [
+                    "dialogue",
+                    "dialogue_line",
+                    "gm_guidance",
+                    "instructions",
+                    "message",
+                    "narration",
+                    "player_facing_text",
+                    "prompt",
+                    "system_prompt",
+                    "text"
+                  ],
+                  "allowed_reply_kinds": [
+                    "answer",
+                    "explanation",
+                    "reaction",
+                    "refusal",
+                    "unknown"
+                  ],
+                  "allowed_pressure_states": [
+                    "high",
+                    "low",
+                    "moderate",
+                    "none"
+                  ],
+                  "allowed_tone_codes": [
+                    "cold",
+                    "deferential",
+                    "direct",
+                    "evasive",
+                    "guarded",
+                    "hostile",
+                    "neutral",
+                    "threatening",
+                    "warm"
+                  ],
+                  "allowed_relationship_codes": [
+                    "engagement_engaged",
+                    "engagement_focused",
+                    "engagement_none",
+                    "fear_high",
+                    "fear_low",
+                    "friendly",
+                    "hostile",
+                    "neutral",
+                    "suspicion_high",
+                    "suspicion_low",
+                    "trust_high",
+                    "trust_low",
+                    "unfriendly",
+                    "unknown"
+                  ],
+                  "allowed_speaker_alias_resolution_sources": [
+                    "continuity_snapshot",
+                    "interaction_continuity_contract",
+                    "manual_bundle_override",
+                    "referent_tracking"
+                  ]
+                },
+                "bounded_session_hints": {
+                  "active_interaction_target_id": null,
+                  "active_interaction_target_name": null,
+                  "active_interaction_kind": null,
+                  "interaction_mode": "none",
+                  "engagement_level": "none",
+                  "conversation_privacy": null,
+                  "player_position_context": null
+                }
+              },
+              "scene_state_anchor": {
+                "enabled": true,
+                "scene_id": "frontier_gate",
+                "counts": {
+                  "location": 14,
+                  "actor": 9,
+                  "player_action": 5
+                }
+              },
+              "context_separation": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "topic_hijack_background_pressure": false,
+                  "pressure_answer_substitution": false,
+                  "ambient_pressure_forced_tone_shift": false,
+                  "scene_focus_displaced_by_world_pressure": false,
+                  "pressure_overweighting": false
+                },
+                "repair_hints": [],
+                "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=335;after_len=335;before_head='As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026';after_head='As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026'"
+              },
+              "conversational_memory_window": {
+                "enabled": true,
+                "window_version": "v1",
+                "prioritize_recent_turns": true,
+                "prioritize_active_scene_entities": true,
+                "deprioritize_stale_inactive_elements": true,
+                "allow_explicit_reintroduction": true,
+                "recent_turn_window": 6,
+                "soft_memory_limit": 12,
+                "stale_after_turns": 18,
+                "active_scene_entity_ids": [
+                  "gate_guard",
+                  "gate_serjeant",
+                  "guard_captain",
+                  "refugee",
+                  "tavern_runner",
+                  "threadbare_watcher"
+                ],
+                "anchored_interlocutor_id": "",
+                "active_interaction_target_id": "",
+                "explicit_reintroduced_entity_ids": [],
+                "explicit_reintroduced_topics": [],
+                "selection_debug": {
+                  "matched_entity_ids": [],
+                  "matched_topics": [],
+                  "matched_grounded_ids": [],
+                  "callback_marker_hit": null,
+                  "source_of_activity_anchor": "none",
+                  "source_of_recentness": "session.turn_counter",
+                  "source_of_reintroductions": "player_text+visibility_aliases"
+                }
+              },
+              "selected_conversational_memory": [
+                {
+                  "kind": "recent_turn",
+                  "entity_ids": [],
+                  "topic_tokens": [],
+                  "source_turn": 1,
+                  "text": "P:  | G: Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pass 1.",
+                  "score": 103.71428571428571,
+                  "why_selected": [
+                    "recency",
+                    "recent_turn_kind"
+                  ]
+                },
+                {
+                  "kind": "contextual_thread",
+                  "entity_ids": [],
+                  "topic_tokens": [
+                    "checkpoint",
+                    "guard",
+                    "near",
+                    "shifts",
+                    "weight"
+                  ],
+                  "source_turn": 1,
+                  "text": "near the checkpoint a guard shifts his weight [active_event_near_the_checkpoint_a_guard_shifts_his_weight]",
+                  "score": 85.71428571428571,
+                  "why_selected": [
+                    "recency"
+                  ]
+                }
+              ],
+              "conversational_memory": {
+                "selected_count": 2
+              },
+              "scene_state_anchor_checked": true,
+              "scene_state_anchor_passed": true,
+              "scene_state_anchor_failed": false,
+              "scene_state_anchor_skip_reason": null,
+              "scene_state_anchor_matched_kinds": [
+                "location",
+                "actor"
+              ],
+              "scene_state_anchor_failure_reasons": [],
+              "scene_state_anchor_repaired": false,
+              "scene_state_anchor_repair_mode": null,
+              "tone_escalation_checked": true,
+              "tone_escalation_ok": true,
+              "tone_escalation_failed": false,
+              "tone_escalation_failure_reasons": [],
+              "tone_escalation_detected_flags": {
+                "guarded": false,
+                "verbal_pressure": false,
+                "explicit_threat": false,
+                "physical_hostility": false,
+                "combat_initiation": false
+              },
+              "tone_escalation_matched_tone_level": null,
+              "tone_escalation_repaired": false,
+              "tone_escalation_repair_mode": null,
+              "tone_escalation_contract_summary": {
+                "enabled": true,
+                "base_tone": "guarded",
+                "max_allowed_tone": "tense",
+                "allow_verbal_pressure": true,
+                "allow_explicit_threat": false,
+                "allow_physical_hostility": false,
+                "allow_combat_initiation": false,
+                "justification_reasons": [
+                  "visible_facts_engagement_or_moderate_topic_pressure",
+                  "visible_entity_roles_include_authority_guardship"
+                ]
+              },
+              "tone_escalation_contract_resolution_source": "shipped_response_policy",
+              "tone_escalation_violation_before_repair": false,
+              "narrative_authority_checked": true,
+              "narrative_authority_failed": false,
+              "narrative_authority_failure_reasons": [],
+              "narrative_authority_repaired": false,
+              "narrative_authority_repair_mode": null,
+              "narrative_authority_skip_reason": null,
+              "narrative_authority_deferral_mode": null,
+              "narrative_authority_assertion_flags": {
+                "invented_outcome": false,
+                "invented_hidden_fact": false,
+                "invented_intent": false,
+                "overcertain_unresolved_action": false
+              },
+              "anti_railroading": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "failure_reasons": [],
+                "assertion_flags": {
+                  "player_decision_override": false,
+                  "forced_direction": false,
+                  "exclusive_path_claim": false,
+                  "lead_plot_gravity": false,
+                  "forced_conclusion": false
+                },
+                "repair_hints": []
+              },
+              "anti_railroading_checked": true,
+              "anti_railroading_ok": true,
+              "anti_railroading_failed": false,
+              "anti_railroading_failure_reasons": [],
+              "anti_railroading_assertion_flags": {
+                "player_decision_override": false,
+                "forced_direction": false,
+                "exclusive_path_claim": false,
+                "lead_plot_gravity": false,
+                "forced_conclusion": false
+              },
+              "anti_railroading_repair_hints": [],
+              "anti_railroading_repaired": false,
+              "anti_railroading_repair_mode": null,
+              "anti_railroading_skip_reason": null,
+              "anti_railroading_contract_resolution_source": "shipped",
+              "context_separation_contract_resolution_source": "response_policy",
+              "context_separation_skip_reason": null,
+              "context_separation_checked": true,
+              "context_separation_ok": true,
+              "context_separation_failed": false,
+              "context_separation_failure_reasons": [],
+              "context_separation_assertion_flags": {
+                "topic_hijack_background_pressure": false,
+                "pressure_answer_substitution": false,
+                "ambient_pressure_forced_tone_shift": false,
+                "scene_focus_displaced_by_world_pressure": false,
+                "pressure_overweighting": false
+              },
+              "context_separation_repair_hints": [],
+              "context_separation_repaired": false,
+              "context_separation_repair_mode": null,
+              "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=335;after_len=335;before_head='As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026';after_head='As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026'",
+              "context_separation_passed_after_repair": null,
+              "player_facing_narration_purity": {
+                "validation": {
+                  "checked": true,
+                  "passed": true
+                },
+                "violation_keys": [],
+                "repair_hints": [],
+                "repair_modes": [],
+                "preview_before": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026",
+                "preview_after": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026"
+              },
+              "player_facing_narration_purity_contract_resolution_source": "response_policy",
+              "player_facing_narration_purity_skip_reason": null,
+              "player_facing_narration_purity_checked": true,
+              "player_facing_narration_purity_failed": false,
+              "player_facing_narration_purity_repaired": false,
+              "player_facing_narration_purity_repair_modes": [],
+              "player_facing_narration_purity_violation_keys": [],
+              "player_facing_narration_purity_repair_hints_used": [],
+              "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+              "player_facing_narration_purity_preview_before": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026",
+              "player_facing_narration_purity_preview_after": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026",
+              "answer_shape_primacy": {
+                "checked": true,
+                "passed": true,
+                "failure_reasons": []
+              },
+              "answer_shape_primacy_skip_reason": null,
+              "answer_shape_primacy_checked": true,
+              "answer_shape_primacy_failed": false,
+              "answer_shape_primacy_repaired": false,
+              "answer_shape_primacy_repair_mode": null,
+              "answer_shape_primacy_failure_reasons": [],
+              "answer_shape_primacy_preview_before": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026",
+              "answer_shape_primacy_preview_after": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A ga\u2026",
               "interaction_continuity_validation": {
                 "ok": true,
                 "enabled": false,
@@ -2348,8 +2165,8 @@
                 "visibility": {
                   "contract_present": true,
                   "decision_mode": "validated",
-                  "visible_entity_count": 0,
-                  "withheld_fact_count": 1,
+                  "visible_entity_count": 6,
+                  "withheld_fact_count": 4,
                   "reason_codes": []
                 },
                 "speaker_selection": {
@@ -2364,27 +2181,17 @@
           },
           "world_tick_events": [
             {
-              "type": "faction_operation_complete",
-              "text": "House Verevin completes an off-screen operation.",
-              "source": "house_verevin"
-            },
-            {
-              "type": "faction_operation_complete",
-              "text": "The Ash Cowl completes an off-screen operation.",
-              "source": "ash_cowl"
-            },
-            {
-              "type": "faction_operation_complete",
-              "text": "Ordo Pyric completes an off-screen operation.",
+              "type": "faction_pressure",
+              "text": "Ordo Pyric's pressure mounts.",
               "source": "ordo_pyric"
             }
           ]
         },
-        "scene_before": "old_milestone",
-        "scene_after": "old_milestone",
+        "scene_before": "frontier_gate",
+        "scene_after": "frontier_gate",
         "clue_updates": [],
         "world_flag_updates": [
-          "clock:time_pressure=5"
+          "clock:time_pressure=2"
         ],
         "turn_trace": {
           "source": "chat",
@@ -2484,29 +2291,33 @@
           },
           "affordances_after": [
             {
-              "id": "leave_for_the_old_road_bends_through_blasted_sc",
-              "type": "investigate",
-              "label": "Leave for The old road bends through blasted sc"
+              "id": "question_gate_guard",
+              "type": "question",
+              "label": "Talk to Gate Guard",
+              "targetEntityId": "gate_guard"
             },
             {
-              "id": "examine_a_weathered_milestone_leans_above_a_d",
-              "type": "investigate",
-              "label": "Examine A weathered milestone leans above a d"
+              "id": "question_gate_serjeant",
+              "type": "question",
+              "label": "Talk to Gate Serjeant",
+              "targetEntityId": "gate_serjeant"
             },
             {
-              "id": "examine_a_dead_courier_lies_half_hidden_in_th",
-              "type": "investigate",
-              "label": "Examine A dead courier lies half-hidden in th"
+              "id": "question_tavern_runner",
+              "type": "question",
+              "label": "Talk to Tavern Runner",
+              "targetEntityId": "tavern_runner"
             },
             {
-              "id": "examine_the_carrion_birds_stir_whenever_the_wind",
+              "id": "notice_board",
               "type": "investigate",
-              "label": "Examine the Carrion birds stir whenever the wind"
+              "label": "Examine the Notice board",
+              "targetEntityId": "notice_board"
             },
             {
-              "id": "examine_a_satchel",
+              "id": "examine_the_notice_board_lists_taxes",
               "type": "investigate",
-              "label": "Examine A satchel"
+              "label": "Examine The notice board lists taxes"
             }
           ],
           "emergent_actor": {
@@ -2520,14 +2331,14 @@
             "changed_count": 0
           },
           "latency_ms": {
-            "intent_classification": 5,
+            "intent_classification": 25,
             "engine_resolution": 0,
-            "prompt_construction": 11,
-            "gpt_call": 12580,
-            "retry_loop_total": 0,
-            "final_emission_gate": 16,
-            "fallback_repair": 2,
-            "total_turn": 12677
+            "prompt_construction": 6,
+            "gpt_call": 1,
+            "retry_loop_total": 8,
+            "final_emission_gate": 10,
+            "fallback_repair": 7,
+            "total_turn": 77
           }
         },
         "gpt_called": true,
@@ -2559,23 +2370,23 @@
           ]
         },
         "latency_ms": {
-          "intent_classification": 5,
+          "intent_classification": 25,
           "engine_resolution": 0,
-          "prompt_construction": 11,
-          "gpt_call": 12580,
-          "retry_loop_total": 0,
-          "final_emission_gate": 16,
-          "fallback_repair": 2,
-          "total_turn": 12677
+          "prompt_construction": 6,
+          "gpt_call": 1,
+          "retry_loop_total": 8,
+          "final_emission_gate": 10,
+          "fallback_repair": 7,
+          "total_turn": 77
         }
       }
     ],
     "flags": {},
     "character_name": "Galinor",
-    "campaign_run_id": "545a9d55d66d22ae735f02a5",
-    "session_id": "545a9d55d66d22ae735f02a5",
-    "campaign_started": false,
-    "last_saved_at": "2026-05-06T22:36:24.775856Z",
+    "campaign_run_id": "29a020559d08aafb2bc6feb7",
+    "session_id": "29a020559d08aafb2bc6feb7",
+    "campaign_started": true,
+    "last_saved_at": "2026-06-21T13:42:54.493424Z",
     "last_turn_response_policy": {
       "rule_priority_order": [
         "ANSWER THE PLAYER",
@@ -2600,14 +2411,11 @@
         "delta_required": false,
         "delta_must_come_early": false,
         "trigger_source": "none",
-        "topic_tokens": [
-          "look",
-          "around"
-        ],
-        "press_depth": 3,
-        "previous_player_input": "I look around.",
-        "previous_answer_snippet": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-        "overlap_ratio": 1.0,
+        "topic_tokens": [],
+        "press_depth": 0,
+        "previous_player_input": null,
+        "previous_answer_snippet": null,
+        "overlap_ratio": null,
         "allowed_delta_kinds": [],
         "forbid_semantic_restatement": false,
         "forbid_repackaged_nonanswer": false,
@@ -2616,10 +2424,10 @@
         "expected_delta_shape": "none",
         "trace": {
           "question_detected_from_player_text": false,
-          "follow_up_pressure_detected": true,
-          "follow_up_press_depth": 3,
-          "follow_up_overlap_ratio": 1.0,
-          "prior_answer_available": true,
+          "follow_up_pressure_detected": false,
+          "follow_up_press_depth": 0,
+          "follow_up_overlap_ratio": null,
+          "prior_answer_available": false,
           "answer_completeness_required": false,
           "social_lock": false,
           "active_target_id": null,
@@ -2628,18 +2436,16 @@
           "same_interlocutor_followup": false,
           "answer_pressure_suppressed_because": [
             "no_active_interlocutor",
+            "no_prior_log_exchange",
             "not_question_or_answer_pressure"
           ],
           "answer_pressure_family": null,
-          "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+          "answer_pressure_anchor_kind": null,
           "contradiction_followup_detected": false,
           "explanation_followup_detected": false,
           "insufficiency_followup_detected": false,
           "short_followup_anchor_detected": false,
-          "anchor_tokens_extracted": [
-            "board",
-            "pick"
-          ],
+          "anchor_tokens_extracted": [],
           "anchor_token_matched": null,
           "anchor_followup_detected": false,
           "explanation_of_recent_anchor_followup": false,
@@ -2653,6 +2459,7 @@
           "resolution_kind": "observe",
           "uncertainty_suggests_partial": false,
           "suppressed_because": [
+            "no_follow_up_pressure",
             "not_answer_seeking_turn"
           ]
         }
@@ -2677,7 +2484,7 @@
           "adjudication"
         ]
       },
-      "scene_momentum_due": false,
+      "scene_momentum_due": true,
       "uncertainty": {
         "enabled": true,
         "categories": [
@@ -2716,18 +2523,16 @@
           "same_interlocutor_followup": false,
           "answer_pressure_suppressed_because": [
             "no_active_interlocutor",
+            "no_prior_log_exchange",
             "not_question_or_answer_pressure"
           ],
           "answer_pressure_family": null,
-          "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+          "answer_pressure_anchor_kind": null,
           "contradiction_followup_detected": false,
           "explanation_followup_detected": false,
           "insufficiency_followup_detected": false,
           "short_followup_anchor_detected": false,
-          "anchor_tokens_extracted": [
-            "board",
-            "pick"
-          ],
+          "anchor_tokens_extracted": [],
           "anchor_token_matched": null,
           "anchor_followup_detected": false,
           "explanation_of_recent_anchor_followup": false,
@@ -2806,7 +2611,7 @@
       },
       "tone_escalation": {
         "enabled": true,
-        "scene_id": "old_milestone",
+        "scene_id": "frontier_gate",
         "active_speaker_id": null,
         "base_tone": "guarded",
         "max_allowed_tone": "tense",
@@ -2820,14 +2625,15 @@
           "player_used_coercive_social_action": false,
           "player_persisted_after_refusal": false,
           "scene_has_active_tension": true,
-          "scene_has_authority_pressure": false,
+          "scene_has_authority_pressure": true,
           "scene_has_visible_hostile_actor": false,
           "combat_active": false,
           "resolution_is_risky": false,
           "npc_already_hostile_in_state": false
         },
         "justification_reasons": [
-          "visible_facts_engagement_or_moderate_topic_pressure"
+          "visible_facts_engagement_or_moderate_topic_pressure",
+          "visible_entity_roles_include_authority_guardship"
         ],
         "preferred_deescalations": [
           "Tighten diction and body language without 'or else' phrasing.",
@@ -2835,19 +2641,19 @@
         ],
         "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
         "debug_inputs": {
-          "scene_id": "old_milestone",
+          "scene_id": "frontier_gate",
           "has_session": true,
           "has_world": true,
           "has_resolution": true,
           "has_narration_visibility": true,
           "has_scene_state_anchor_contract": true,
           "has_speaker_selection_contract": true,
-          "recent_log_len": 8
+          "recent_log_len": 1
         },
         "debug_flags": {
           "base_rank": 1,
           "max_rank": 2,
-          "recent_player_text_latest_len": 14,
+          "recent_player_text_latest_len": 0,
           "resolution_kind": "observe",
           "normalized_action_type": null,
           "prior_refusal_seen_in_log": false,
@@ -2864,11 +2670,11 @@
         "active_speaker_id": null,
         "active_target_id": null,
         "visible_fact_strings": [
-          "the old road bends through blasted scrub and broken stones",
-          "a weathered milestone leans above a ditch filled with black rainwater",
-          "a dead courier lies half-hidden in the ditch",
-          "carrion birds stir whenever the wind shifts",
-          "a satchel, a partially burnt letter, and a small dagger lie near the courier"
+          "the notice board lists taxes, curfew rules, and a warning about a missing patrol",
+          "a gate serjeant manages the crowd and keeps one eye on the roster board",
+          "a tavern runner trades hot stew and rumors near the rain barrel",
+          "threadbare watchers and refugees cluster along the muddy gate line",
+          "ash compact census delays have tightened the eastern caravan choke point"
         ],
         "hidden_fact_strings_present": true,
         "discoverable_hinting_allowed": true,
@@ -2940,7 +2746,7 @@
           "player_text_nonempty": true,
           "obligation_hints": {
             "must_advance_scene": true,
-            "scene_momentum_due": false,
+            "scene_momentum_due": true,
             "is_opening_scene": false
           }
         },
@@ -2956,26 +2762,35 @@
       },
       "context_separation": {
         "enabled": true,
-        "scene_focus_summary": "The old road bends through blasted scrub and broken stones, where a weathered milestone leans above a ditch filled with black rainwater. Carrion birds stir when the wind shifts. observe (i_look_around) observe The old road bends through blasted scrub and broken stones, where a weathered milestone leans above a ditch filled with black rainwater. Carrion bi...",
+        "scene_focus_summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. observe (i_look_around) observe Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
         "interaction_kind": "observe",
         "player_intent_summary": "I look around.",
         "primary_topics": [
           "look",
           "around",
-          "old_milestone",
-          "old milestone",
-          "the old milestone road",
-          "the old",
-          "milestone road",
-          "road",
-          "bends",
-          "through",
-          "blasted",
-          "scrub",
-          "broken",
-          "stones",
+          "frontier_gate",
+          "frontier gate",
+          "cinderwatch gate district",
+          "cinderwatch gate",
+          "gate district",
+          "notice",
+          "board",
+          "lists",
+          "taxes",
+          "curfew",
+          "rules",
+          "warning",
+          "missing",
+          "patrol",
+          "gate guard",
+          "gate serjeant",
           "guard captain",
+          "ragged stranger",
           "tavern runner",
+          "threadbare watcher",
+          "guard",
+          "serjeant",
+          "runner",
           "observe",
           "i_look_around",
           "i look around"
@@ -2994,7 +2809,7 @@
         "max_pressure_sentences_without_player_prompt": 2,
         "tone_escalation_contract": {
           "enabled": true,
-          "scene_id": "old_milestone",
+          "scene_id": "frontier_gate",
           "active_speaker_id": null,
           "base_tone": "guarded",
           "max_allowed_tone": "tense",
@@ -3008,14 +2823,15 @@
             "player_used_coercive_social_action": false,
             "player_persisted_after_refusal": false,
             "scene_has_active_tension": true,
-            "scene_has_authority_pressure": false,
+            "scene_has_authority_pressure": true,
             "scene_has_visible_hostile_actor": false,
             "combat_active": false,
             "resolution_is_risky": false,
             "npc_already_hostile_in_state": false
           },
           "justification_reasons": [
-            "visible_facts_engagement_or_moderate_topic_pressure"
+            "visible_facts_engagement_or_moderate_topic_pressure",
+            "visible_entity_roles_include_authority_guardship"
           ],
           "preferred_deescalations": [
             "Tighten diction and body language without 'or else' phrasing.",
@@ -3023,19 +2839,19 @@
           ],
           "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
           "debug_inputs": {
-            "scene_id": "old_milestone",
+            "scene_id": "frontier_gate",
             "has_session": true,
             "has_world": true,
             "has_resolution": true,
             "has_narration_visibility": true,
             "has_scene_state_anchor_contract": true,
             "has_speaker_selection_contract": true,
-            "recent_log_len": 8
+            "recent_log_len": 1
           },
           "debug_flags": {
             "base_rank": 1,
             "max_rank": 2,
-            "recent_player_text_latest_len": 14,
+            "recent_player_text_latest_len": 0,
             "resolution_kind": "observe",
             "normalized_action_type": null,
             "prior_refusal_seen_in_log": false,
@@ -3058,7 +2874,7 @@
           "has_active_pending_leads": true,
           "has_follow_surface": false,
           "player_text_nonempty": true,
-          "primary_topic_count": 19,
+          "primary_topic_count": 28,
           "ambient_pressure_topic_count": 3
         },
         "debug_flags": {
@@ -3070,7 +2886,7 @@
           "tone_allow_verbal_pressure": true,
           "tone_allow_explicit_threat": false
         },
-        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=19 ambient=3"
+        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=28 ambient=3"
       },
       "player_facing_narration_purity": {
         "enabled": true,
@@ -3083,7 +2899,7 @@
         "forbid_engine_choice_framing": true,
         "forbid_non_diegetic_action_prompting": true,
         "response_type_required": null,
-        "interaction_kind": "observe"
+        "interaction_kind": null
       },
       "social_response_structure": {
         "enabled": false,
@@ -3100,7 +2916,7 @@
         "required_response_type": "action_outcome",
         "debug_reason": "response_type_not_dialogue:action_outcome",
         "debug_inputs": {
-          "scene_id": "old_milestone",
+          "scene_id": "frontier_gate",
           "response_type_contract_source": "response_policy"
         }
       },
@@ -3112,13 +2928,13 @@
         "drop_interlocutor_requires_explicit_break": false,
         "speaker_switch_requires_explicit_cue": false,
         "allow_narrator_bridge": true,
-        "interaction_mode": "activity",
-        "interaction_kind": "observe",
+        "interaction_mode": "none",
+        "interaction_kind": "",
         "active_interaction_target_id": "",
         "current_interlocutor": "",
         "anchored_interlocutor_id": "",
         "conversation_privacy": "",
-        "engagement_level": "focused",
+        "engagement_level": "none",
         "speaker_selection_contract": {
           "primary_speaker_id": null,
           "primary_speaker_name": null,
@@ -3269,10 +3085,10 @@
         },
         "trace": {
           "response_delta_contract_active": false,
-          "topic_follow_up_active": true,
+          "topic_follow_up_active": false,
           "answer_completeness_required": false,
           "dialogue_shape_expected": false,
-          "prior_turn_gm_snippet_for_overlap": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+          "prior_turn_gm_snippet_for_overlap": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pass 1.",
           "player_text_len": 14,
           "rumor_turn_active": false,
           "rumor_turn_reason_codes": [],
@@ -3289,7 +3105,14 @@
         "recent_turn_window": 6,
         "soft_memory_limit": 12,
         "stale_after_turns": 18,
-        "active_scene_entity_ids": [],
+        "active_scene_entity_ids": [
+          "gate_guard",
+          "gate_serjeant",
+          "guard_captain",
+          "refugee",
+          "tavern_runner",
+          "threadbare_watcher"
+        ],
         "anchored_interlocutor_id": "",
         "active_interaction_target_id": "",
         "explicit_reintroduced_entity_ids": [],
@@ -3306,15 +3129,12 @@
       }
     },
     "_runtime_progression_nodes_fingerprint_v1": {
-      "faction_agenda:ash_cowl": "active|5|10",
-      "faction_agenda:house_verevin": "active|5|10",
-      "faction_agenda:ordo_pyric": "active|5|10",
-      "faction_pressure:ash_cowl": "active|7|10",
-      "faction_pressure:house_verevin": "active|7|10",
-      "faction_pressure:ordo_pyric": "active|6|10",
-      "world_flag:faction_ash_cowl_agenda_advanced": "set|True",
-      "world_flag:faction_house_verevin_agenda_advanced": "set|True",
-      "world_flag:faction_ordo_pyric_agenda_advanced": "set|True"
+      "faction_agenda:ash_cowl": "active|2|10",
+      "faction_agenda:house_verevin": "active|2|10",
+      "faction_agenda:ordo_pyric": "active|2|10",
+      "faction_pressure:ash_cowl": "active|4|10",
+      "faction_pressure:house_verevin": "active|4|10",
+      "faction_pressure:ordo_pyric": "active|3|10"
     },
     "emergent_actor_debug": {
       "emergent_actor_enrolled": false,
@@ -3323,8 +3143,8 @@
     },
     "_runtime_canonical_ctir_v1": {
       "version": 1,
-      "turn_id": 5,
-      "scene_id": "old_milestone",
+      "turn_id": 2,
+      "scene_id": "frontier_gate",
       "player_input": "I look around.",
       "intent": {
         "raw_text": "I look around.",
@@ -3351,10 +3171,10 @@
       "noncombat": {},
       "state_mutations": {
         "scene": {
-          "scene_id": "old_milestone"
+          "scene_id": "frontier_gate"
         },
         "session": {
-          "scene_id": "old_milestone"
+          "scene_id": "frontier_gate"
         },
         "combat": {
           "combat_active": false,
@@ -3364,8 +3184,8 @@
       },
       "interaction": {
         "active_target_id": null,
-        "interaction_mode": "activity",
-        "interaction_kind": "observe",
+        "interaction_mode": "none",
+        "interaction_kind": null,
         "continuity_snapshot": {},
         "responder_target": {},
         "speaker_target": {}
@@ -3385,54 +3205,38 @@
             {
               "id": "ash_cowl",
               "status": "active",
-              "value": 7
+              "value": 4
             },
             {
               "id": "house_verevin",
               "status": "active",
-              "value": 7
+              "value": 4
             },
             {
               "id": "ordo_pyric",
               "status": "active",
-              "value": 6
+              "value": 3
             }
           ],
           "faction_agenda": [
             {
               "id": "ash_cowl",
               "status": "active",
-              "value": 5
+              "value": 2
             },
             {
               "id": "house_verevin",
               "status": "active",
-              "value": 5
+              "value": 2
             },
             {
               "id": "ordo_pyric",
               "status": "active",
-              "value": 5
+              "value": 2
             }
           ],
           "world_clocks": [],
-          "set_flags": [
-            {
-              "id": "faction_ash_cowl_agenda_advanced",
-              "status": "set",
-              "value": true
-            },
-            {
-              "id": "faction_house_verevin_agenda_advanced",
-              "status": "set",
-              "value": true
-            },
-            {
-              "id": "faction_ordo_pyric_agenda_advanced",
-              "status": "set",
-              "value": true
-            }
-          ]
+          "set_flags": []
         }
       },
       "narrative_anchors": {
@@ -3459,10 +3263,10 @@
         "normalization_notes": []
       }
     },
-    "_runtime_canonical_ctir_stamp_v1": "5:19d45713c00:3f2de9f9",
+    "_runtime_canonical_ctir_stamp_v1": "2:1e7b7953500:cbcca187",
     "_runtime_narration_plan_bundle_v1": {
       "plan_metadata": {
-        "ctir_stamp": "5:19d45713c00:3f2de9f9",
+        "ctir_stamp": "2:1e7b7953500:cbcca187",
         "narrative_plan_bundle_version": 1,
         "narrative_plan_version": 1,
         "narration_plan_bundle_error": null,
@@ -3471,28 +3275,28 @@
         "fallback_visible_failure": false,
         "legacy_no_ctir_only": false,
         "non_ctir_semantic_path": false,
-        "planning_session_interaction": {
-          "resume_entry": true
-        }
+        "planning_session_interaction": {}
       },
       "narrative_plan": {
         "version": 1,
         "scene_anchors": {
-          "scene_id": "old_milestone",
+          "scene_id": "frontier_gate",
           "scene_name": null,
           "location_anchors": [
-            "bends",
-            "blasted",
-            "broken",
-            "milestone road",
-            "old milestone",
-            "old_milestone",
-            "road",
-            "scrub",
-            "stones",
-            "the old",
-            "the old milestone road",
-            "through"
+            "board",
+            "cinderwatch gate",
+            "cinderwatch gate district",
+            "curfew",
+            "frontier gate",
+            "frontier_gate",
+            "gate district",
+            "lists",
+            "missing",
+            "notice",
+            "patrol",
+            "rules",
+            "taxes",
+            "warning"
           ],
           "active_interlocutor": null,
           "active_target": null,
@@ -3523,18 +3327,43 @@
             "value": "failure"
           }
         ],
-        "allowable_entity_references": [],
+        "allowable_entity_references": [
+          {
+            "entity_id": "gate_guard",
+            "descriptor": "gate guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "descriptor": "gate serjeant"
+          },
+          {
+            "entity_id": "guard_captain",
+            "descriptor": "guard captain"
+          },
+          {
+            "entity_id": "refugee",
+            "descriptor": "ragged stranger"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "descriptor": "tavern runner"
+          },
+          {
+            "entity_id": "threadbare_watcher",
+            "descriptor": "threadbare watcher"
+          }
+        ],
         "transition_node": {
           "transition_required": true,
           "transition_type": "location_change",
           "before_anchor": {
-            "scene_id": "old_milestone",
+            "scene_id": "frontier_gate",
             "location_id": null,
-            "location_label": "old_milestone",
+            "location_label": "frontier_gate",
             "time_anchor": null
           },
           "after_anchor": {
-            "scene_id": "old_milestone",
+            "scene_id": "frontier_gate",
             "location_id": null,
             "location_label": null,
             "time_anchor": null
@@ -3625,18 +3454,19 @@
               "has_scene_id",
               "multi_location_token"
             ],
-            "location_token_n": 12,
+            "location_token_n": 14,
             "scene_id_present": true,
             "scene_label_present": false
           },
           "actor_anchor": {
-            "emphasis_band": "low",
+            "emphasis_band": "moderate",
             "signals": [
-              "action_outcome_mode"
+              "action_outcome_mode",
+              "multi_visible_entity_handles"
             ],
             "relevant_actor_n": 0,
             "interlocutor_present": false,
-            "visible_entity_handle_n": 0
+            "visible_entity_handle_n": 6
           },
           "pressure": {
             "emphasis_band": "minimal",
@@ -3711,81 +3541,11 @@
             "action_outcome:derive"
           ]
         },
-        "scene_opening": {
-          "opening_required": true,
-          "opening_reason": "resume_entry",
-          "scene_id": "old_milestone",
-          "location_anchors": [
-            "bends",
-            "blasted",
-            "broken",
-            "milestone road",
-            "old milestone",
-            "old_milestone",
-            "road",
-            "scrub",
-            "stones",
-            "the old",
-            "the old milestone road",
-            "through"
-          ],
-          "actor_anchors": [],
-          "active_pressures": {
-            "clock_summaries": [],
-            "context_codes": [],
-            "interaction_pressure": "none",
-            "pending_lead_ids": [],
-            "scene_tension_codes": [],
-            "world_pressure": null
-          },
-          "visible_fact_categories": [
-            "A",
-            "E"
-          ],
-          "visible_fact_anchor_ids": [
-            "vf_slot:0",
-            "vf_slot:1",
-            "vf_slot:2",
-            "vf_slot:3",
-            "vf_slot:4"
-          ],
-          "prohibited_content_codes": [
-            "no_backstage_plot_briefings",
-            "no_engine_role_label_as_proper_name",
-            "no_hidden_gm_facts_as_immediate_perception",
-            "no_unfounded_faction_control_claims",
-            "no_unintroduced_offscene_npc_names"
-          ],
-          "derivation_codes": [
-            "opening_reason:resume_entry",
-            "visible_fact:cat:A",
-            "visible_fact:cat:E"
-          ],
-          "validator": {
-            "ok": true,
-            "issues": []
-          }
-        },
+        "scene_opening": null,
         "recent_compressed_events": [
           {
-            "gm_snippet": "off to the side, just visible beyond the milestone, a lone figure stays crouched in shadows, seemingly watching for an opportunity comes straight to you before the pause can settle. \"Enough watching,\"",
-            "player_input": "I look around."
-          },
-          {
-            "gm_snippet": "You look around, and you get an immediate read on what is there.",
-            "player_input": "I look around."
-          },
-          {
-            "gm_snippet": "You notice that the old road bends sharply through a stretch of blasted scrub and broken stones. The weathered milestone, leaning precariously beside a ditch filled with black rainwater, marks this lo",
-            "player_input": "I look around."
-          },
-          {
-            "gm_snippet": "The barren road stretches onward, veering sharply amidst blasted scrub and battered stones. The leaning milestone stands guard beside a sump of black rainwater where the dead courier lies half-buried.",
-            "player_input": "I look around."
-          },
-          {
-            "gm_snippet": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-            "player_input": "I look around."
+            "gm_snippet": "Near the checkpoint a guard shifts his weight. \"Keep moving,\" he says, watching the queue at pass 1.",
+            "player_input": ""
           }
         ],
         "resolution_meta": {},
@@ -3801,9 +3561,7 @@
             "nroles:hook",
             "nroles:consequence",
             "action_outcome:derive",
-            "opening_reason:resume_entry",
-            "visible_fact:cat:A",
-            "visible_fact:cat:E",
+            "opening_reason:none",
             "signal:state_mutations.scene",
             "transition_node:before_location:public_slice",
             "transition_node:derive",
@@ -3825,12 +3583,20 @@
           },
           "n3_upstream_role_reemphasis": {
             "version": 1,
-            "applied": false,
-            "weak_roles": [],
-            "reinforced_families": [],
-            "actions": [],
-            "safety_notes": [],
-            "skip_reason": "no_weak_roles"
+            "applied": true,
+            "weak_roles": [
+              "actor_anchor"
+            ],
+            "reinforced_families": [
+              "actor_anchor"
+            ],
+            "actions": [
+              "bump_emphasis:actor_anchor:low->moderate"
+            ],
+            "safety_notes": [
+              "safe:actor_anchor:metadata_only_band_bump_no_counters_no_allocation_contract_slice_unchanged"
+            ],
+            "skip_reason": null
           }
         }
       },
@@ -3859,14 +3625,11 @@
             "delta_required": false,
             "delta_must_come_early": false,
             "trigger_source": "none",
-            "topic_tokens": [
-              "look",
-              "around"
-            ],
-            "press_depth": 3,
-            "previous_player_input": "I look around.",
-            "previous_answer_snippet": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-            "overlap_ratio": 1.0,
+            "topic_tokens": [],
+            "press_depth": 0,
+            "previous_player_input": null,
+            "previous_answer_snippet": null,
+            "overlap_ratio": null,
             "allowed_delta_kinds": [],
             "forbid_semantic_restatement": false,
             "forbid_repackaged_nonanswer": false,
@@ -3875,10 +3638,10 @@
             "expected_delta_shape": "none",
             "trace": {
               "question_detected_from_player_text": false,
-              "follow_up_pressure_detected": true,
-              "follow_up_press_depth": 3,
-              "follow_up_overlap_ratio": 1.0,
-              "prior_answer_available": true,
+              "follow_up_pressure_detected": false,
+              "follow_up_press_depth": 0,
+              "follow_up_overlap_ratio": null,
+              "prior_answer_available": false,
               "answer_completeness_required": false,
               "social_lock": false,
               "active_target_id": null,
@@ -3887,18 +3650,16 @@
               "same_interlocutor_followup": false,
               "answer_pressure_suppressed_because": [
                 "no_active_interlocutor",
+                "no_prior_log_exchange",
                 "not_question_or_answer_pressure"
               ],
               "answer_pressure_family": null,
-              "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+              "answer_pressure_anchor_kind": null,
               "contradiction_followup_detected": false,
               "explanation_followup_detected": false,
               "insufficiency_followup_detected": false,
               "short_followup_anchor_detected": false,
-              "anchor_tokens_extracted": [
-                "board",
-                "pick"
-              ],
+              "anchor_tokens_extracted": [],
               "anchor_token_matched": null,
               "anchor_followup_detected": false,
               "explanation_of_recent_anchor_followup": false,
@@ -3912,6 +3673,7 @@
               "resolution_kind": "observe",
               "uncertainty_suggests_partial": false,
               "suppressed_because": [
+                "no_follow_up_pressure",
                 "not_answer_seeking_turn"
               ]
             }
@@ -3936,7 +3698,7 @@
               "adjudication"
             ]
           },
-          "scene_momentum_due": false,
+          "scene_momentum_due": true,
           "uncertainty": {
             "enabled": true,
             "categories": [
@@ -3975,18 +3737,16 @@
               "same_interlocutor_followup": false,
               "answer_pressure_suppressed_because": [
                 "no_active_interlocutor",
+                "no_prior_log_exchange",
                 "not_question_or_answer_pressure"
               ],
               "answer_pressure_family": null,
-              "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+              "answer_pressure_anchor_kind": null,
               "contradiction_followup_detected": false,
               "explanation_followup_detected": false,
               "insufficiency_followup_detected": false,
               "short_followup_anchor_detected": false,
-              "anchor_tokens_extracted": [
-                "board",
-                "pick"
-              ],
+              "anchor_tokens_extracted": [],
               "anchor_token_matched": null,
               "anchor_followup_detected": false,
               "explanation_of_recent_anchor_followup": false,
@@ -4039,14 +3799,21 @@
           }
         },
         "narration_visibility": {
-          "visible_entities": [],
+          "visible_entities": [
+            "gate guard",
+            "gate serjeant",
+            "guard captain",
+            "ragged stranger",
+            "tavern runner",
+            "threadbare watcher"
+          ],
           "active_interlocutor_id": null,
           "visible_facts": [
-            "the old road bends through blasted scrub and broken stones",
-            "a weathered milestone leans above a ditch filled with black rainwater",
-            "a dead courier lies half-hidden in the ditch",
-            "carrion birds stir whenever the wind shifts",
-            "a satchel, a partially burnt letter, and a small dagger lie near the courier"
+            "the notice board lists taxes, curfew rules, and a warning about a missing patrol",
+            "a gate serjeant manages the crowd and keeps one eye on the roster board",
+            "a tavern runner trades hot stew and rumors near the rain barrel",
+            "threadbare watchers and refugees cluster along the muddy gate line",
+            "ash compact census delays have tightened the eastern caravan choke point"
           ],
           "rules": {
             "no_unseen_entities": true,
@@ -4062,25 +3829,34 @@
             "player_action"
           ],
           "minimum_anchor_hits": 1,
-          "scene_id": "old_milestone",
-          "scene_location_label": "The Old Milestone Road",
+          "scene_id": "frontier_gate",
+          "scene_location_label": "Cinderwatch Gate District",
           "location_tokens": [
-            "old_milestone",
-            "old milestone",
-            "the old milestone road",
-            "the old",
-            "milestone road",
-            "road",
-            "bends",
-            "through",
-            "blasted",
-            "scrub",
-            "broken",
-            "stones"
+            "frontier_gate",
+            "frontier gate",
+            "cinderwatch gate district",
+            "cinderwatch gate",
+            "gate district",
+            "notice",
+            "board",
+            "lists",
+            "taxes",
+            "curfew",
+            "rules",
+            "warning",
+            "missing",
+            "patrol"
           ],
           "actor_tokens": [
+            "gate guard",
+            "gate serjeant",
             "guard captain",
-            "tavern runner"
+            "ragged stranger",
+            "tavern runner",
+            "threadbare watcher",
+            "guard",
+            "serjeant",
+            "runner"
           ],
           "player_action_tokens": [
             "observe",
@@ -4094,7 +3870,7 @@
             "player_action",
             "location"
           ],
-          "debug_reason": "scene_state_anchor: loc=12 actor=2 player_action=5 enabled=True",
+          "debug_reason": "scene_state_anchor: loc=14 actor=9 player_action=5 enabled=True",
           "debug_sources": {
             "location": [
               "scene.id",
@@ -4102,6 +3878,7 @@
               "visible_facts"
             ],
             "actor": [
+              "narration_visibility.visible_entity_names",
               "visible_entity_aliases"
             ],
             "player_action": [
@@ -4120,19 +3897,19 @@
           "prefer_structured_turn_summary": true,
           "active_npc_reply_expected": false,
           "active_npc_reply_kind": null,
-          "scene_momentum_due": false,
-          "scene_momentum_exchanges_since": 0,
-          "scene_momentum_next_due_in": 3,
+          "scene_momentum_due": true,
+          "scene_momentum_exchanges_since": 1,
+          "scene_momentum_next_due_in": 2,
           "suppress_non_social_emitters": false
         },
         "turn_packet": {
           "version": 1,
           "turn_id": null,
-          "scene_id": "old_milestone",
+          "scene_id": "frontier_gate",
           "player_text": "I look around.",
           "resolution_kind": "observe",
           "route": {
-            "interaction_mode": "activity",
+            "interaction_mode": "none",
             "active_target_id": null,
             "active_reply_kind": null,
             "strict_social_expected": false
@@ -4161,14 +3938,11 @@
               "delta_required": false,
               "delta_must_come_early": false,
               "trigger_source": "none",
-              "topic_tokens": [
-                "look",
-                "around"
-              ],
-              "press_depth": 3,
-              "previous_player_input": "I look around.",
-              "previous_answer_snippet": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-              "overlap_ratio": 1.0,
+              "topic_tokens": [],
+              "press_depth": 0,
+              "previous_player_input": null,
+              "previous_answer_snippet": null,
+              "overlap_ratio": null,
               "allowed_delta_kinds": [],
               "forbid_semantic_restatement": false,
               "forbid_repackaged_nonanswer": false,
@@ -4177,10 +3951,10 @@
               "expected_delta_shape": "none",
               "trace": {
                 "question_detected_from_player_text": false,
-                "follow_up_pressure_detected": true,
-                "follow_up_press_depth": 3,
-                "follow_up_overlap_ratio": 1.0,
-                "prior_answer_available": true,
+                "follow_up_pressure_detected": false,
+                "follow_up_press_depth": 0,
+                "follow_up_overlap_ratio": null,
+                "prior_answer_available": false,
                 "answer_completeness_required": false,
                 "social_lock": false,
                 "active_target_id": null,
@@ -4189,18 +3963,16 @@
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
                   "no_active_interlocutor",
+                  "no_prior_log_exchange",
                   "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
-                "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+                "answer_pressure_anchor_kind": null,
                 "contradiction_followup_detected": false,
                 "explanation_followup_detected": false,
                 "insufficiency_followup_detected": false,
                 "short_followup_anchor_detected": false,
-                "anchor_tokens_extracted": [
-                  "board",
-                  "pick"
-                ],
+                "anchor_tokens_extracted": [],
                 "anchor_token_matched": null,
                 "anchor_followup_detected": false,
                 "explanation_of_recent_anchor_followup": false,
@@ -4214,6 +3986,7 @@
                 "resolution_kind": "observe",
                 "uncertainty_suggests_partial": false,
                 "suppressed_because": [
+                  "no_follow_up_pressure",
                   "not_answer_seeking_turn"
                 ]
               }
@@ -4238,7 +4011,7 @@
                 "adjudication"
               ]
             },
-            "scene_momentum_due": false,
+            "scene_momentum_due": true,
             "uncertainty": {
               "enabled": true,
               "categories": [
@@ -4277,18 +4050,16 @@
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
                   "no_active_interlocutor",
+                  "no_prior_log_exchange",
                   "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
-                "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+                "answer_pressure_anchor_kind": null,
                 "contradiction_followup_detected": false,
                 "explanation_followup_detected": false,
                 "insufficiency_followup_detected": false,
                 "short_followup_anchor_detected": false,
-                "anchor_tokens_extracted": [
-                  "board",
-                  "pick"
-                ],
+                "anchor_tokens_extracted": [],
                 "anchor_token_matched": null,
                 "anchor_followup_detected": false,
                 "explanation_of_recent_anchor_followup": false,
@@ -4353,18 +4124,16 @@
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
                   "no_active_interlocutor",
+                  "no_prior_log_exchange",
                   "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
-                "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+                "answer_pressure_anchor_kind": null,
                 "contradiction_followup_detected": false,
                 "explanation_followup_detected": false,
                 "insufficiency_followup_detected": false,
                 "short_followup_anchor_detected": false,
-                "anchor_tokens_extracted": [
-                  "board",
-                  "pick"
-                ],
+                "anchor_tokens_extracted": [],
                 "anchor_token_matched": null,
                 "anchor_followup_detected": false,
                 "explanation_of_recent_anchor_followup": false,
@@ -4392,14 +4161,11 @@
               "delta_required": false,
               "delta_must_come_early": false,
               "trigger_source": "none",
-              "topic_tokens": [
-                "look",
-                "around"
-              ],
-              "press_depth": 3,
-              "previous_player_input": "I look around.",
-              "previous_answer_snippet": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
-              "overlap_ratio": 1.0,
+              "topic_tokens": [],
+              "press_depth": 0,
+              "previous_player_input": null,
+              "previous_answer_snippet": null,
+              "overlap_ratio": null,
               "allowed_delta_kinds": [],
               "forbid_semantic_restatement": false,
               "forbid_repackaged_nonanswer": false,
@@ -4408,10 +4174,10 @@
               "expected_delta_shape": "none",
               "trace": {
                 "question_detected_from_player_text": false,
-                "follow_up_pressure_detected": true,
-                "follow_up_press_depth": 3,
-                "follow_up_overlap_ratio": 1.0,
-                "prior_answer_available": true,
+                "follow_up_pressure_detected": false,
+                "follow_up_press_depth": 0,
+                "follow_up_overlap_ratio": null,
+                "prior_answer_available": false,
                 "answer_completeness_required": false,
                 "social_lock": false,
                 "active_target_id": null,
@@ -4420,18 +4186,16 @@
                 "same_interlocutor_followup": false,
                 "answer_pressure_suppressed_because": [
                   "no_active_interlocutor",
+                  "no_prior_log_exchange",
                   "not_question_or_answer_pressure"
                 ],
                 "answer_pressure_family": null,
-                "answer_pressure_anchor_kind": "prior_player_topic_overlap",
+                "answer_pressure_anchor_kind": null,
                 "contradiction_followup_detected": false,
                 "explanation_followup_detected": false,
                 "insufficiency_followup_detected": false,
                 "short_followup_anchor_detected": false,
-                "anchor_tokens_extracted": [
-                  "board",
-                  "pick"
-                ],
+                "anchor_tokens_extracted": [],
                 "anchor_token_matched": null,
                 "anchor_followup_detected": false,
                 "explanation_of_recent_anchor_followup": false,
@@ -4445,6 +4209,7 @@
                 "resolution_kind": "observe",
                 "uncertainty_suggests_partial": false,
                 "suppressed_because": [
+                  "no_follow_up_pressure",
                   "not_answer_seeking_turn"
                 ]
               }
@@ -4501,35 +4266,166 @@
           "referent_tracking_compact": {
             "referent_artifact_version": 1,
             "active_interaction_target": null,
-            "referential_ambiguity_class": "no_anchor",
-            "ambiguity_risk": 0
+            "referential_ambiguity_class": "ambiguous_plural",
+            "ambiguity_risk": 58
           }
         },
         "referent_tracking": {
           "version": 1,
-          "active_entities": [],
-          "active_entity_order": [],
+          "active_entities": [
+            {
+              "entity_id": "gate_guard",
+              "display_name": "gate guard",
+              "entity_kind": "npc",
+              "roles": []
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "display_name": "gate serjeant",
+              "entity_kind": "npc",
+              "roles": []
+            },
+            {
+              "entity_id": "guard_captain",
+              "display_name": "guard captain",
+              "entity_kind": "npc",
+              "roles": [
+                "captain",
+                "guard",
+                "guardsman",
+                "sentry",
+                "watchman"
+              ]
+            },
+            {
+              "entity_id": "refugee",
+              "display_name": "ragged stranger",
+              "entity_kind": "scene_actor",
+              "roles": [
+                "refugee",
+                "stranger"
+              ]
+            },
+            {
+              "entity_id": "tavern_runner",
+              "display_name": "tavern runner",
+              "entity_kind": "npc",
+              "roles": [
+                "informant",
+                "runner"
+              ]
+            },
+            {
+              "entity_id": "threadbare_watcher",
+              "display_name": "threadbare watcher",
+              "entity_kind": "scene_actor",
+              "roles": [
+                "watcher"
+              ]
+            }
+          ],
+          "active_entity_order": [
+            "gate_guard",
+            "gate_serjeant",
+            "guard_captain",
+            "refugee",
+            "tavern_runner",
+            "threadbare_watcher"
+          ],
           "active_interaction_target": null,
           "active_speaker_candidates": [],
           "continuity_subject": null,
           "continuity_object": null,
           "pronoun_resolution": {
-            "strategy": "neutral_buckets",
-            "buckets_by_entity": {},
+            "strategy": "unresolved",
+            "buckets_by_entity": {
+              "gate_guard": [
+                "they_them"
+              ],
+              "gate_serjeant": [
+                "they_them"
+              ],
+              "guard_captain": [
+                "they_them"
+              ],
+              "refugee": [
+                "they_them"
+              ],
+              "tavern_runner": [
+                "they_them"
+              ],
+              "threadbare_watcher": [
+                "they_them"
+              ]
+            },
             "explicit_sources": [],
-            "notes": "conservative_default_they_them_without_explicit_engine_buckets"
+            "notes": "elevated_to_unresolved_multi_person_like_without_explicit_buckets"
           },
-          "ambiguity_risk": 0,
-          "allowed_named_references": [],
-          "forbidden_or_unresolved_patterns": [
+          "ambiguity_risk": 58,
+          "allowed_named_references": [
             {
-              "kind": "pronoun_anchor_conservative",
-              "referential_ambiguity_class": "no_anchor"
+              "entity_id": "gate_guard",
+              "display_name": "gate guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "display_name": "gate serjeant"
+            },
+            {
+              "entity_id": "guard_captain",
+              "display_name": "guard captain"
+            },
+            {
+              "entity_id": "refugee",
+              "display_name": "ragged stranger"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "display_name": "tavern runner"
+            },
+            {
+              "entity_id": "threadbare_watcher",
+              "display_name": "threadbare watcher"
             }
           ],
-          "safe_explicit_fallback_labels": [],
+          "forbidden_or_unresolved_patterns": [
+            {
+              "kind": "gendered_pronoun_uncertainty",
+              "detail": "multiple_person_like_visible_without_explicit_pronoun_buckets"
+            },
+            {
+              "kind": "pronoun_anchor_conservative",
+              "referential_ambiguity_class": "ambiguous_plural"
+            }
+          ],
+          "safe_explicit_fallback_labels": [
+            {
+              "entity_id": "gate_guard",
+              "safe_explicit_label": "gate guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "safe_explicit_label": "gate serjeant"
+            },
+            {
+              "entity_id": "guard_captain",
+              "safe_explicit_label": "guard captain"
+            },
+            {
+              "entity_id": "refugee",
+              "safe_explicit_label": "ragged stranger"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "safe_explicit_label": "tavern runner"
+            },
+            {
+              "entity_id": "threadbare_watcher",
+              "safe_explicit_label": "threadbare watcher"
+            }
+          ],
           "single_unambiguous_entity": null,
-          "referential_ambiguity_class": "no_anchor",
+          "referential_ambiguity_class": "ambiguous_plural",
           "interaction_target_continuity": {
             "prior_target_id": null,
             "current_target_id": null,
@@ -4549,13 +4445,12 @@
               "interaction_continuity",
               "narration_visibility",
               "narrative_plan",
-              "session_interaction",
               "speaker_selection",
               "turn_packet"
             ],
             "target_resolution_trace": [],
-            "visible_entity_count": 0,
-            "person_like_visible_count": 0,
+            "visible_entity_count": 6,
+            "person_like_visible_count": 6,
             "memory_window_entity_ids": [],
             "conflicting_target_signals": false
           }
@@ -4642,25 +4537,30 @@
               "trust_low",
               "unfriendly",
               "unknown"
+            ],
+            "allowed_speaker_alias_resolution_sources": [
+              "continuity_snapshot",
+              "interaction_continuity_contract",
+              "manual_bundle_override",
+              "referent_tracking"
             ]
           },
           "bounded_session_hints": {
             "active_interaction_target_id": null,
             "active_interaction_target_name": null,
-            "active_interaction_kind": "observe",
-            "interaction_mode": "activity",
-            "engagement_level": "focused",
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
             "conversation_privacy": null,
             "player_position_context": null
           }
         }
       }
     },
-    "_runtime_narration_plan_bundle_stamp_v1": "5:19d45713c00:3f2de9f9",
-    "_narration_resume_entry_pending": true
+    "_runtime_narration_plan_bundle_stamp_v1": "2:1e7b7953500:cbcca187"
   },
   "integrity": {
-    "payload_sha256": "dbcf427a0d1155b4c10cca9f84fc93d8d334f0cb6facc895b04b234aa1ba54c7",
+    "payload_sha256": "847b057c2f2aa9a6389cef5c4309546b4282f9a43698a7f8a0ef0efee74a4927",
     "canonicalization": "json/sort_keys,separators",
     "hash": "sha256"
   }

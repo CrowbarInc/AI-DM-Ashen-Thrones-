@@ -21,12 +21,12 @@ from game.interaction_continuity import (
     repair_interaction_continuity,
     validate_interaction_continuity,
 )
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
     assert_continuity_validation_failed_without_repair,
     assert_final_route_not_replaced_smoke,
     assert_final_route_present_smoke,
-    final_emission_meta_from_output,
 )
 
 pytestmark = pytest.mark.unit

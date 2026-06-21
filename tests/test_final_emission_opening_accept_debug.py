@@ -12,8 +12,8 @@ import game.final_emission_non_strict_stack as non_strict_stack
 import game.final_emission_opening_fallback as opening_fallback
 import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
-from game.final_emission_meta import FINAL_EMISSION_META_KEY
-from game.final_emission_text import _normalize_text
+from game.observability_attribution_read import FINAL_EMISSION_META_KEY
+from game.final_emission_text_formatting import _normalize_text
 
 pytestmark = pytest.mark.unit
 

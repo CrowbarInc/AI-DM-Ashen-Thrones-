@@ -15,7 +15,7 @@ assertions are intentional incident-boundary locks, not accidental duplication.
 
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.fallback_bridge_smoke import final_emission_meta_from_output, apply_final_emission_gate_consumer
 
 import pytest
 
@@ -23,7 +23,6 @@ from game.fallback_provenance_debug import (
     FALLBACK_PROVENANCE_SELECTOR_KEYS,
     attach_upstream_fast_fallback_provenance,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 
 
 def _fallback_gm(selector_text: str) -> dict:

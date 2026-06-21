@@ -1,7 +1,7 @@
 """Retry prompt alignment with tone escalation policy (no invalid hostility before final gate)."""
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 
 import pytest
 

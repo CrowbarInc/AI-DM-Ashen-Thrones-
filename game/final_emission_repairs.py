@@ -24,7 +24,7 @@ from game.final_emission_meta import (
     merge_narrative_authenticity_into_final_emission_meta,
     stamp_producer_repair_kind,
 )
-from game.final_emission_text import (
+from game.final_emission_text_formatting import (
     _normalize_terminal_punctuation,
     _normalize_text,
 )

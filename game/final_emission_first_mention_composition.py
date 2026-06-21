@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.final_emission_visibility_fallback import (
     VisibilitySelectedFallback,
     default_first_mention_composition_layers as _default_first_mention_composition_layers,

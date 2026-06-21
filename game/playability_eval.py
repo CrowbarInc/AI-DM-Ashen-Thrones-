@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Any, Mapping, Sequence
 
-from game.final_emission_meta import normalized_observational_telemetry_bundle, summarize_gameplay_validation_for_turn
+from game.observability_attribution_read import normalized_observational_telemetry_bundle, summarize_gameplay_validation_for_turn
 
 SCHEMA_VERSION = 2
 

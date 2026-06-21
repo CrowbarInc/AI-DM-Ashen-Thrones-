@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any, Dict, List
 
 from game.anti_reset_emission_guard import _opening_scene_preference_active
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.storage import get_scene_runtime
 
 

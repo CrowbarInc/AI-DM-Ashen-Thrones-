@@ -1,0 +1,917 @@
+{
+  "count": 73,
+  "importers": [
+    {
+      "module": "game\\dead_turn_report_visibility",
+      "path": "game\\dead_turn_report_visibility.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "normalized_observational_telemetry_bundle",
+        "summarize_gameplay_validation_for_turn"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "observability"
+    },
+    {
+      "module": "game\\fallback_provenance_debug",
+      "path": "game\\fallback_provenance_debug.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "FEM_FALLBACK_PROVENANCE_TRACE_KEY",
+        "UPSTREAM_FAST_FALLBACK_CONTENT_OWNER",
+        "UPSTREAM_FAST_FALLBACK_MUTATION_HINTS_FINALIZE_CONTAIN",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "patch_final_emission_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\final_emission_acceptance_quality",
+      "path": "game\\final_emission_acceptance_quality.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "ensure_final_emission_meta_dict"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "game\\final_emission_fem_assembly",
+      "path": "game\\final_emission_fem_assembly.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "merge_narrative_authenticity_into_final_emission_meta",
+        "merge_response_type_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "game\\final_emission_finalize",
+      "path": "game\\final_emission_finalize.py",
+      "subsystem": "terminal pipeline",
+      "symbols": [
+        "apply_sanitizer_producer_attribution_to_fem",
+        "ensure_final_emission_meta_dict",
+        "package_dead_turn_snapshot_into_final_emission_meta",
+        "package_emission_channel_sidecar",
+        "patch_final_emission_meta",
+        "refresh_final_emission_mutation_lineage"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "producer-attribution"
+    },
+    {
+      "module": "game\\final_emission_gate",
+      "path": "game\\final_emission_gate.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\final_emission_gate_preflight_defaults",
+      "path": "game\\final_emission_gate_preflight_defaults.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "default_narrative_authenticity_layer_meta",
+        "default_response_type_debug"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "game\\final_emission_generic_exit",
+      "path": "game\\final_emission_generic_exit.py",
+      "subsystem": "terminal pipeline",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY",
+        "OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS",
+        "apply_opening_fallback_projection_fields",
+        "ensure_final_emission_meta_dict",
+        "infer_accept_path_final_emitted_source",
+        "response_type_decision_payload"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "game\\final_emission_narration_constraint_debug",
+      "path": "game\\final_emission_narration_constraint_debug.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "build_narration_constraint_debug",
+        "merge_narration_constraint_debug_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\final_emission_narrative_mode_output",
+      "path": "game\\final_emission_narrative_mode_output.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "ensure_final_emission_meta_dict",
+        "merge_narrative_mode_output_into_final_emission_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "game\\final_emission_opening_fallback",
+      "path": "game\\final_emission_opening_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY",
+        "OPENING_FALLBACK_RESULT_META_FIELDS",
+        "default_opening_fallback_fail_closed_result_meta",
+        "stamp_opening_fallback_owner_bucket"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "game\\final_emission_ownership_schema",
+      "path": "game\\final_emission_ownership_schema.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\final_emission_repairs",
+      "path": "game\\final_emission_repairs.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "PRODUCER_REPAIR_KIND_FALLBACK_BEHAVIOR_REPAIR",
+        "build_narrative_authenticity_emission_trace",
+        "default_narrative_authenticity_layer_meta",
+        "merge_narrative_authenticity_into_final_emission_meta",
+        "stamp_producer_repair_kind"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "producer-attribution"
+    },
+    {
+      "module": "game\\final_emission_replay_projection",
+      "path": "game\\final_emission_replay_projection.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "opening_fallback_owner_bucket_from_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "game\\final_emission_response_type",
+      "path": "game\\final_emission_response_type.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "_default_response_type_debug",
+        "stamp_opening_fallback_owner_bucket"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "game\\final_emission_sealed_fallback",
+      "path": "game\\final_emission_sealed_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "refresh_final_emission_mutation_lineage",
+        "sealed_fallback_owner_bucket_from_fields"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "sealed-fallback"
+    },
+    {
+      "module": "game\\final_emission_strict_social_stack",
+      "path": "game\\final_emission_strict_social_stack.py",
+      "subsystem": "terminal pipeline",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY",
+        "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR",
+        "infer_accept_path_final_emitted_source",
+        "response_type_decision_payload",
+        "stamp_producer_repair_kind"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "producer-attribution"
+    },
+    {
+      "module": "game\\final_emission_terminal_pipeline",
+      "path": "game\\final_emission_terminal_pipeline.py",
+      "subsystem": "terminal pipeline",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY",
+        "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR",
+        "ensure_final_emission_meta_dict",
+        "stamp_producer_repair_kind"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "producer-attribution"
+    },
+    {
+      "module": "game\\final_emission_visibility_fallback",
+      "path": "game\\final_emission_visibility_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT",
+        "PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT",
+        "PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION",
+        "PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT",
+        "ensure_final_emission_meta_dict",
+        "stamp_producer_repair_kind",
+        "stamp_visibility_fallback_owner_bucket_from_fields",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "visibility-fallback"
+    },
+    {
+      "module": "game\\gm_retry",
+      "path": "game\\gm_retry.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "read_final_emission_meta_dict",
+        "stamp_retry_terminal_fallback_producer_metadata"
+      ],
+      "read_freq": 6,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "game\\interaction_continuity",
+      "path": "game\\interaction_continuity.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "ensure_final_emission_meta_dict"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "game\\narrative_authenticity",
+      "path": "game\\narrative_authenticity.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "build_narrative_authenticity_emission_trace"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "game\\narrative_authenticity_eval",
+      "path": "game\\narrative_authenticity_eval.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "NARRATIVE_AUTHENTICITY_FEM_KEYS",
+        "normalize_merged_na_telemetry_for_eval",
+        "normalized_observational_telemetry_bundle",
+        "read_final_emission_meta_from_turn_payload",
+        "summarize_gameplay_validation_for_turn"
+      ],
+      "read_freq": 5,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "game\\opening_deterministic_fallback",
+      "path": "game\\opening_deterministic_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "default_opening_fallback_context_mirror_values"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\output_sanitizer",
+      "path": "game\\output_sanitizer.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "PRODUCER_REPAIR_KIND_FIELD",
+        "PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT",
+        "PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "producer-attribution"
+    },
+    {
+      "module": "game\\playability_eval",
+      "path": "game\\playability_eval.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "normalized_observational_telemetry_bundle",
+        "summarize_gameplay_validation_for_turn"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "observability"
+    },
+    {
+      "module": "game\\post_emission_speaker_adoption",
+      "path": "game\\post_emission_speaker_adoption.py",
+      "subsystem": "speaker finalize",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "game\\runtime_lineage_telemetry",
+      "path": "game\\runtime_lineage_telemetry.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "game\\stage_diff_telemetry",
+      "path": "game\\stage_diff_telemetry.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "read_final_emission_meta_dict",
+        "stage_diff_narrative_authenticity_projection"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "game\\upstream_response_repairs",
+      "path": "game\\upstream_response_repairs.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "stamp_upstream_prepared_opening_producer_metadata"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\failure_classification_contract",
+      "path": "tests\\failure_classification_contract.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\helpers\\attribution_contract",
+      "path": "tests\\helpers\\attribution_contract.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\helpers\\behavioral_gauntlet_eval",
+      "path": "tests\\helpers\\behavioral_gauntlet_eval.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "read_dead_turn_from_gm_output",
+        "read_final_emission_meta_dict",
+        "summarize_gameplay_validation_for_turn"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\helpers\\emission_smoke_assertions",
+      "path": "tests\\helpers\\emission_smoke_assertions.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_debug_notes_from_turn_payload",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 3,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\helpers\\failure_classifier",
+      "path": "tests\\helpers\\failure_classifier.py",
+      "subsystem": "attribution",
+      "symbols": [
+        "opening_fallback_owner_bucket_from_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\helpers\\gate_delegator_governance",
+      "path": "tests\\helpers\\gate_delegator_governance.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\helpers\\gate_thin_boundary_locks",
+      "path": "tests\\helpers\\gate_thin_boundary_locks.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\helpers\\golden_replay_projection",
+      "path": "tests\\helpers\\golden_replay_projection.py",
+      "subsystem": "replay",
+      "symbols": [
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "normalize_final_emission_meta_for_observability",
+        "opening_fallback_owner_bucket_from_meta",
+        "read_emission_debug_lane_from_turn_payload",
+        "read_final_emission_meta_from_turn_payload"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\helpers\\opening_fallback_evidence",
+      "path": "tests\\helpers\\opening_fallback_evidence.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "opening_fallback_owner_bucket_from_fields",
+        "opening_fallback_owner_bucket_from_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\helpers\\replacement_attribution_inventory",
+      "path": "tests\\helpers\\replacement_attribution_inventory.py",
+      "subsystem": "attribution",
+      "symbols": [
+        "opening_fallback_owner_bucket_from_meta",
+        "sealed_fallback_owner_bucket_from_fields",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\test_dead_turn_detection",
+      "path": "tests\\test_dead_turn_detection.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "classify_dead_turn",
+        "read_dead_turn_from_gm_output"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "observability"
+    },
+    {
+      "module": "tests\\test_dead_turn_evaluation_threading",
+      "path": "tests\\test_dead_turn_evaluation_threading.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "assemble_unified_observational_telemetry_bundle",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 3,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_final_emission_acceptance_quality",
+      "path": "tests\\test_final_emission_acceptance_quality.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "tests\\test_final_emission_boundary_convergence",
+      "path": "tests\\test_final_emission_boundary_convergence.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "default_response_type_debug"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "tests\\test_final_emission_channel_separation",
+      "path": "tests\\test_final_emission_channel_separation.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "package_emission_channel_sidecar",
+        "read_debug_notes_from_turn_payload",
+        "read_emission_debug_lane",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 4,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_final_emission_gate_delegator_regression",
+      "path": "tests\\test_final_emission_gate_delegator_regression.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 1,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\test_final_emission_gate_diagnostics",
+      "path": "tests\\test_final_emission_gate_diagnostics.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 3,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_final_emission_gate_n4",
+      "path": "tests\\test_final_emission_gate_n4.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 3,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_final_emission_gate_orchestration_order",
+      "path": "tests\\test_final_emission_gate_orchestration_order.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 8,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_final_emission_gate_selector_snapshots",
+      "path": "tests\\test_final_emission_gate_selector_snapshots.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "infer_accept_path_final_emitted_source",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 11,
+      "ownership_bucket": "sealed-fallback"
+    },
+    {
+      "module": "tests\\test_final_emission_meta",
+      "path": "tests\\test_final_emission_meta.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "EMISSION_DEBUG_LANE_KEY",
+        "EVALUATOR_FEM_KEY_PREFIX_FAMILIES",
+        "FINAL_EMISSION_META_KEY",
+        "FINAL_EMISSION_MUTATION_LINEAGE_KEY",
+        "INTERNAL_STATE_KEY",
+        "NARRATIVE_AUTHENTICITY_FEM_KEYS",
+        "NARRATIVE_MODE_OUTPUT_FEM_KEYS",
+        "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "OPENING_FALLBACK_PROJECTION_FIELDS",
+        "OPENING_FALLBACK_RESULT_META_FIELDS",
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE",
+        "UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER",
+        "UPSTREAM_FAST_FALLBACK_SELECTION_OWNER",
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "apply_opening_fallback_projection_fields",
+        "apply_sanitizer_producer_attribution_to_fem",
+        "assemble_unified_observational_telemetry_bundle",
+        "build_fem_observability_events",
+        "build_fem_runtime_lineage_events",
+        "build_narration_constraint_debug",
+        "build_narrative_authenticity_emission_trace",
+        "build_narrative_authenticity_trace_slice",
+        "default_narration_constraint_debug",
+        "default_narrative_authenticity_layer_meta",
+        "default_narrative_mode_output_layer_meta",
+        "default_response_type_debug",
+        "ensure_final_emission_meta_dict",
+        "fallback_owner_bucket_registry_surface",
+        "final_emission_meta_read_side_surface",
+        "infer_accept_path_final_emitted_source",
+        "merge_narration_constraint_debug_meta",
+        "merge_narrative_authenticity_into_final_emission_meta",
+        "merge_narrative_mode_output_into_final_emission_meta",
+        "merge_response_type_meta",
+        "narration_constraint_reason_codes",
+        "narration_constraint_small_code",
+        "narration_constraint_small_str",
+        "normalize_final_emission_meta_for_observability",
+        "normalize_merged_na_telemetry_for_eval",
+        "normalized_observational_telemetry_bundle",
+        "opening_fallback_metadata_field_registry_parity_errors",
+        "opening_fallback_metadata_field_registry_surface",
+        "opening_fallback_owner_bucket_from_meta",
+        "opening_fallback_projection_fields",
+        "patch_final_emission_meta",
+        "read_emission_debug_lane",
+        "read_final_emission_meta_dict",
+        "read_final_emission_meta_from_turn_payload",
+        "resolve_narrative_authenticity_emission_status",
+        "response_type_decision_payload",
+        "slim_na_evidence",
+        "slim_na_metrics",
+        "stage_diff_narrative_authenticity_projection",
+        "stamp_retry_terminal_fallback_producer_metadata",
+        "stamp_upstream_prepared_opening_producer_metadata",
+        "upstream_fast_fallback_provenance_field_registry_parity_errors",
+        "upstream_fast_fallback_provenance_field_registry_surface"
+      ],
+      "read_freq": 8,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\test_final_emission_narration_constraint_debug",
+      "path": "tests\\test_final_emission_narration_constraint_debug.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "build_narration_constraint_debug",
+        "merge_narration_constraint_debug_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\test_final_emission_narrative_mode_output",
+      "path": "tests\\test_final_emission_narrative_mode_output.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "tests\\test_final_emission_opening_accept_debug",
+      "path": "tests\\test_final_emission_opening_accept_debug.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "FINAL_EMISSION_META_KEY"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "write-packaging"
+    },
+    {
+      "module": "tests\\test_final_emission_opening_fallback",
+      "path": "tests\\test_final_emission_opening_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 11,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\test_final_emission_sealed_fallback",
+      "path": "tests\\test_final_emission_sealed_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "SEALED_FALLBACK_OWNER_BUCKETS",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "SEALED_FALLBACK_OWNER_UNKNOWN_NONE"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "sealed-fallback"
+    },
+    {
+      "module": "tests\\test_final_emission_visibility",
+      "path": "tests\\test_final_emission_visibility.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 65,
+      "ownership_bucket": "sealed-fallback"
+    },
+    {
+      "module": "tests\\test_final_emission_visibility_fallback",
+      "path": "tests\\test_final_emission_visibility_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "visibility-fallback"
+    },
+    {
+      "module": "tests\\test_gm_retry",
+      "path": "tests\\test_gm_retry.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "OPENING_FALLBACK_OWNER_RETRY"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\test_golden_replay_direct_seam",
+      "path": "tests\\test_golden_replay_direct_seam.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_narrative_mode_output_validator",
+      "path": "tests\\test_narrative_mode_output_validator.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "NARRATIVE_MODE_OUTPUT_FEM_KEYS",
+        "default_narrative_mode_output_layer_meta",
+        "merge_narrative_mode_output_into_final_emission_meta"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "tests\\test_observational_telemetry_confidence",
+      "path": "tests\\test_observational_telemetry_confidence.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "assemble_unified_observational_telemetry_bundle",
+        "build_fem_observability_events",
+        "normalize_final_emission_meta_for_observability",
+        "stage_diff_narrative_authenticity_projection"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "observability"
+    },
+    {
+      "module": "tests\\test_opening_fallback_owner_bucket",
+      "path": "tests\\test_opening_fallback_owner_bucket.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "OPENING_FALLBACK_OWNER_BUCKETS",
+        "OPENING_FALLBACK_OWNER_RETRY",
+        "OPENING_FALLBACK_OWNER_SEALED_GATE",
+        "OPENING_FALLBACK_OWNER_STRICT_SOCIAL",
+        "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+        "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED",
+        "SEALED_FALLBACK_OWNER_SEALED_GATE",
+        "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED",
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+        "final_emission_meta_read_side_surface",
+        "opening_fallback_owner_bucket_from_fields",
+        "sealed_fallback_owner_bucket_from_fields",
+        "visibility_fallback_owner_bucket_from_fields"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "opening-fallback"
+    },
+    {
+      "module": "tests\\test_ownership_registry",
+      "path": "tests\\test_ownership_registry.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 4,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\test_run_scenario_spine_validation",
+      "path": "tests\\test_run_scenario_spine_validation.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 3,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_tone_escalation_rules",
+      "path": "tests\\test_tone_escalation_rules.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "default_response_type_debug",
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 4,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_transcript_gauntlet_actor_addressing",
+      "path": "tests\\test_transcript_gauntlet_actor_addressing.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    },
+    {
+      "module": "tests\\test_upstream_response_repairs",
+      "path": "tests\\test_upstream_response_repairs.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "OPENING_FALLBACK_RESULT_META_FIELDS"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tests\\test_validation_layer_separation_runtime",
+      "path": "tests\\test_validation_layer_separation_runtime.py",
+      "subsystem": "final emission",
+      "symbols": [
+        "NARRATIVE_AUTHENTICITY_FEM_KEYS"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "layer-merge"
+    },
+    {
+      "module": "tools\\fallback_projection_coverage_audit",
+      "path": "tools\\fallback_projection_coverage_audit.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tools\\fallback_projection_gap_reality_audit",
+      "path": "tools\\fallback_projection_gap_reality_audit.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "module"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tools\\refresh_protected_replay_manifest",
+      "path": "tools\\refresh_protected_replay_manifest.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "opening_fallback_metadata_field_registry_parity_errors"
+      ],
+      "read_freq": 0,
+      "ownership_bucket": "none"
+    },
+    {
+      "module": "tools\\run_scenario_spine_validation",
+      "path": "tools\\run_scenario_spine_validation.py",
+      "subsystem": "diagnostics",
+      "symbols": [
+        "read_final_emission_meta_dict"
+      ],
+      "read_freq": 2,
+      "ownership_bucket": "read-side-access"
+    }
+  ]
+}

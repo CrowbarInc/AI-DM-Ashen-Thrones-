@@ -14,7 +14,7 @@ from game.api_turn_support import _finalize_player_facing_for_turn
 from game.final_emission_runtime import finalize_player_facing_emission as real_apply_final_emission_gate
 from game.gm import apply_response_policy_enforcement as real_apply_response_policy_enforcement
 from game.defaults import default_campaign, default_character, default_session, default_world
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GPT_BUDGET_OR_PROVIDER_FAILURE,

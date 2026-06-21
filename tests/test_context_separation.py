@@ -7,9 +7,9 @@ owning gate ordering.
 """
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import pytest
 
-import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.context_separation import (
     build_context_separation_contract,
     context_separation_repair_hints,
@@ -19,10 +19,8 @@ from game.final_emission_context_separation import (
     apply_context_separation_layer,
     resolve_context_separation_contract,
 )
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 pytestmark = pytest.mark.unit
 
@@ -192,7 +190,7 @@ def test_invalid_contract_soft_pass():
 
 
 def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -212,7 +210,7 @@ def test_gate_context_separation_pass_brief_pressure_after_direct_answer(monkeyp
 
 
 def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Where is the exit?"
     cs = build_context_separation_contract(
         player_text=pt,
@@ -235,7 +233,7 @@ def test_gate_context_separation_pass_crisis_scene_pressure_focus(monkeypatch):
 
 
 def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "Is it safe to linger here with the patrols?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
     text = (
@@ -254,7 +252,7 @@ def test_gate_context_separation_pass_player_asks_danger(monkeypatch):
 
 
 def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -276,7 +274,7 @@ def test_gate_context_separation_repair_drops_pressure_lead_in(monkeypatch):
 
 
 def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What does the loaf cost today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -296,7 +294,7 @@ def test_gate_context_separation_fail_pressure_monologue_replaces_non_social(mon
 
 
 def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What is the price today?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "barter"})
     text = (
@@ -316,7 +314,7 @@ def test_gate_context_separation_substitution_fail_then_replace(monkeypatch):
 
 
 def test_gate_context_separation_pressure_overweight_replaces(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pt = "What is your name?"
     cs = build_context_separation_contract(player_text=pt, resolution={"kind": "social_probe"})
     text = (

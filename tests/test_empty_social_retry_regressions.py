@@ -1,7 +1,8 @@
 """Regression: empty strict-social terminal output is repaired; continuity and API sweep stay live."""
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 
 from typing import Any
 
@@ -17,7 +18,6 @@ from game.gm import (
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
 )
-from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 from tests.helpers.turn_pipeline_http_fixtures import _gm_response, _seed_runner_dialogue_context
 
 pytestmark = [pytest.mark.integration, pytest.mark.regression]

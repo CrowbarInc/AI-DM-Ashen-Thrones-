@@ -24,10 +24,10 @@ from game.final_emission_meta import (
     PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT,
     stamp_producer_repair_kind,
     stamp_visibility_fallback_owner_bucket_from_fields,
-    visibility_fallback_owner_bucket_from_fields,
 )
+from game.final_emission_owner_bucket_views import visibility_fallback_owner_bucket_from_fields
 from game.exploration import NPC_PURSUIT_CONTACT_SESSION_KEY
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.interaction_context import inspect as inspect_interaction_context
 from game.narration_visibility import (
     validate_player_facing_first_mentions,
@@ -271,7 +271,7 @@ def strict_social_visibility_minimal_fallback_candidate(
     composition_meta: Mapping[str, Any] | None | object = _UNSET,
 ) -> VisibilitySelectedFallback:
     """Canonical strict-social visibility minimal emergency fallback candidate."""
-    from game.social_exchange_emission import select_strict_social_emergency_fallback_line
+    from game.social_exchange_fallback_catalog import select_strict_social_emergency_fallback_line
 
     meta = (
         first_mention_composition_meta()
@@ -297,17 +297,15 @@ def social_active_interlocutor_visibility_fallback(
     composition_meta: Mapping[str, Any] | None | object = _UNSET,
 ) -> VisibilitySelectedFallback:
     """Canonical social-interlocutor minimal fallback candidate (visibility + sealed terminal)."""
-    from game.social_exchange_emission import (
-        _npc_display_name_for_emission,
-        minimal_social_emergency_fallback_line,
-    )
+    from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+    from game.social_exchange_policy import npc_display_name_for_emission
 
     sid = str(scene_id or "").strip()
     mini_res: Dict[str, Any] = {
         "kind": "question",
         "social": {
             "npc_id": active_interlocutor,
-            "npc_name": _npc_display_name_for_emission(world, sid, active_interlocutor),
+            "npc_name": npc_display_name_for_emission(world, sid, active_interlocutor),
             "social_intent_class": "social_exchange",
         },
     }
@@ -1536,9 +1534,16 @@ def apply_visibility_enforcement(
         first_mention_enforcement_applier = apply_first_mention_enforcement
     from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
     from game.final_emission_meta import ensure_final_emission_meta_dict
-    from game.final_emission_referential_clarity import _apply_default_referential_clarity_meta
+    from game.final_emission_referential_clarity import (
+        _apply_default_referential_clarity_meta,
+        _referential_clarity_repair_meta_snapshot,
+        _restore_referential_clarity_repair_meta,
+    )
     from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
-    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+    from game.social_exchange_projection import (
+        log_final_emission_decision,
+        log_final_emission_trace,
+    )
 
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_visibility(
@@ -1561,7 +1566,17 @@ def apply_visibility_enforcement(
     visibility_pre_route_metadata_context = visibility_stage_context.pre_route_metadata
     for key, value in visibility_pre_route_metadata_context.first_mention_defaults.meta_updates().items():
         meta[key] = value
+    preserved_repair_meta = _referential_clarity_repair_meta_snapshot(meta)
+    from game.final_emission_passive_scene_pressure import (
+        passive_scene_concrete_beat_satisfier_meta_snapshot,
+        passive_scene_concrete_beat_satisfier_preserves_upstream,
+        restore_passive_scene_concrete_beat_satisfier_meta,
+    )
+
+    preserved_satisfier_meta = passive_scene_concrete_beat_satisfier_meta_snapshot(meta)
     _apply_default_referential_clarity_meta(meta, passed=None)
+    _restore_referential_clarity_repair_meta(meta, preserved_repair_meta)
+    restore_passive_scene_concrete_beat_satisfier_meta(meta, preserved_satisfier_meta)
     stamp_visibility_fallback_metadata(
         meta,
         **visibility_pre_route_metadata_context.visibility_defaults.stamp_kwargs(),
@@ -1623,6 +1638,20 @@ def apply_visibility_enforcement(
 
     visibility_selection_inputs = visibility_route_dispatch_context.selection_inputs
     assert visibility_selection_inputs is not None
+    if passive_scene_concrete_beat_satisfier_preserves_upstream(meta, candidate_text):
+        stamp_visibility_fallback_metadata(
+            meta,
+            validation_passed=None,
+            replacement_applied=False,
+            violation_kinds=list(visibility_observation.violation_kinds),
+            violation_sample=list(visibility_observation.violation_sample),
+            checked_entities=list(visibility_observation.checked_entities),
+            checked_facts=list(visibility_observation.checked_facts),
+        )
+        _restore_referential_clarity_repair_meta(meta, preserved_repair_meta)
+        restore_passive_scene_concrete_beat_satisfier_meta(meta, preserved_satisfier_meta)
+        return first_mention_enforcement_applier(out, **first_mention_kwargs)
+
     visibility_selected_fallback = standard_visibility_safe_fallback(
         session=session,
         scene=scene,
@@ -1707,9 +1736,16 @@ def apply_first_mention_enforcement(
         anti_reset_suppresses_intro_style_fallbacks,
     )
     from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
-    from game.final_emission_referential_clarity import _apply_default_referential_clarity_meta
+    from game.final_emission_referential_clarity import (
+        _apply_default_referential_clarity_meta,
+        _referential_clarity_repair_meta_snapshot,
+        _restore_referential_clarity_repair_meta,
+    )
     from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
-    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+    from game.social_exchange_projection import (
+        log_final_emission_decision,
+        log_final_emission_trace,
+    )
 
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_first_mentions(
@@ -1744,7 +1780,9 @@ def apply_first_mention_enforcement(
     meta["first_mention_strict_social_grounded_speaker_exemption_entity_id"] = (
         grounded_speaker_first_mention_exemption_entity_id
     )
+    preserved_repair_meta = _referential_clarity_repair_meta_snapshot(meta)
     _apply_default_referential_clarity_meta(meta, passed=None)
+    _restore_referential_clarity_repair_meta(meta, preserved_repair_meta)
 
     referential_clarity_kwargs = {
         "session": session,
@@ -1762,6 +1800,14 @@ def apply_first_mention_enforcement(
     }
 
     if validation.get("ok") is True:
+        return referential_clarity_enforcement_applier(out, **referential_clarity_kwargs)
+
+    from game.final_emission_passive_scene_pressure import (
+        passive_scene_concrete_beat_satisfier_preserves_upstream,
+    )
+
+    if passive_scene_concrete_beat_satisfier_preserves_upstream(meta, candidate_text):
+        meta["first_mention_validation_passed"] = None
         return referential_clarity_enforcement_applier(out, **referential_clarity_kwargs)
 
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
@@ -1870,13 +1916,20 @@ def apply_referential_clarity_enforcement(
     from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
     from game.final_emission_meta import ensure_final_emission_meta_dict
     from game.final_emission_referential_clarity import (
+        _apply_referential_clarity_local_repair_success_meta,
         _build_referential_clarity_violation_sample,
+        _referential_clarity_repair_meta_snapshot,
         _referential_clarity_violations_have_multi_entity_candidates,
         _referential_clarity_violations_only_dialogue_attribution_they,
+        _restore_referential_clarity_repair_meta,
+        _try_non_strict_local_pronoun_substitution_repair,
         _try_strict_social_local_pronoun_substitution_repair,
     )
     from game.final_emission_sealed_fallback import prepare_sealed_replacement_route_meta
-    from game.social_exchange_emission import log_final_emission_decision, log_final_emission_trace
+    from game.social_exchange_projection import (
+        log_final_emission_decision,
+        log_final_emission_trace,
+    )
 
     candidate_text = _normalize_text(out.get("player_facing_text"))
     validation = validate_player_facing_referential_clarity(
@@ -1886,6 +1939,7 @@ def apply_referential_clarity_enforcement(
         world=world if isinstance(world, dict) else None,
     )
     meta = ensure_final_emission_meta_dict(out)
+    preserved_repair_meta = _referential_clarity_repair_meta_snapshot(meta)
     violations = validation.get("violations") if isinstance(validation.get("violations"), list) else []
     checked_entities = validation.get("checked_entities") if isinstance(validation.get("checked_entities"), list) else []
     violation_kinds = _dedupe_preserve_order(
@@ -1904,6 +1958,21 @@ def apply_referential_clarity_enforcement(
     meta["referential_clarity_fallback_after_failed_local_repair"] = False
 
     if validation.get("ok") is True:
+        _restore_referential_clarity_repair_meta(meta, preserved_repair_meta)
+        meta["referential_clarity_validation_passed"] = True
+        meta["referential_clarity_violation_kinds"] = []
+        meta["referential_clarity_violation_sample"] = []
+        return out
+
+    from game.final_emission_passive_scene_pressure import (
+        passive_scene_concrete_beat_satisfier_preserves_upstream,
+    )
+
+    if passive_scene_concrete_beat_satisfier_preserves_upstream(meta, candidate_text):
+        _restore_referential_clarity_repair_meta(meta, preserved_repair_meta)
+        meta["referential_clarity_validation_passed"] = None
+        meta["referential_clarity_replacement_applied"] = False
+        meta["referential_clarity_fallback_avoided"] = True
         return out
 
     if not checked_entities and _reply_already_has_concrete_interaction(candidate_text):
@@ -1953,6 +2022,47 @@ def apply_referential_clarity_enforcement(
                 candidate_text != gate_out_text
             )
             meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+            stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
+            stamp_visibility_fallback_owner_bucket_from_fields(meta)
+            log_final_emission_decision(
+                {
+                    "stage": "final_emission_gate_referential_clarity",
+                    "social_route": strict_social_active,
+                    "candidate_ok": True,
+                    "rejection_reasons": [],
+                    "fallback_pool": "referential_clarity_local_substitution",
+                    "fallback_kind": "none",
+                    "active_interlocutor": active_interlocutor or None,
+                }
+            )
+            log_final_emission_trace(
+                {**meta, "stage": "final_emission_gate_referential_clarity_local_substitution"}
+            )
+            return out
+
+    if not strict_social_active:
+        repaired, subst_dbg = _try_non_strict_local_pronoun_substitution_repair(
+            candidate_text,
+            violations=[v for v in violations if isinstance(v, dict)],
+            session=session,
+            scene=scene,
+            world=world,
+            scene_id=scene_id,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            active_interlocutor=active_interlocutor,
+            grounded_speaker_first_mention_exemption_entity_id=grounded_speaker_first_mention_exemption_entity_id,
+            strict_social_active=False,
+        )
+        for k, val in subst_dbg.items():
+            meta[k] = val
+        if repaired is not None:
+            _apply_referential_clarity_local_repair_success_meta(
+                out,
+                meta,
+                candidate_text=candidate_text,
+                repaired=repaired,
+                subst_dbg=subst_dbg,
+            )
             stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
             stamp_visibility_fallback_owner_bucket_from_fields(meta)
             log_final_emission_decision(

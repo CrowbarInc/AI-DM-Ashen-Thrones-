@@ -14,7 +14,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.observability_attribution_read import read_final_emission_meta_dict
 from game.interaction_context import (
     canonical_scene_addressable_roster,
     clear_stale_social_interlocutor_continuity,

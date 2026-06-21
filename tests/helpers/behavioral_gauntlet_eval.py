@@ -12,8 +12,8 @@ from dataclasses import dataclass, field
 from typing import Any, Iterable, Mapping, Sequence
 
 from game.dead_turn_report_visibility import build_dead_turn_run_report
-from game.final_emission_meta import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
+from game.observability_attribution_read import read_dead_turn_from_gm_output, summarize_gameplay_validation_for_turn
 
 SCHEMA_VERSION = "behavioral_gauntlet_eval.v2"
 MAX_EVIDENCE_TURNS = 5

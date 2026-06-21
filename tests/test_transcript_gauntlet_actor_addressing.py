@@ -1,7 +1,7 @@
 """Transcript-level gauntlet: actor binding, generic addressing, continuity (real chat turns)."""
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 
 import json
 from pathlib import Path

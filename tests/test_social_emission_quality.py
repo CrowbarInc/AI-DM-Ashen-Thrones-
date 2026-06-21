@@ -6,17 +6,17 @@ families stay in ``test_social_exchange_emission.py`` / ``test_output_sanitizer.
 
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 
 import pytest
 
 from game.defaults import default_session, default_world
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
+from game.social_exchange_validation import social_final_emission_malformed_player_echo
 from game.social_exchange_emission import (
     build_final_strict_social_response,
     select_best_grounded_social_answer_text,
-    social_final_emission_malformed_player_echo,
 )
 from game.storage import get_scene_runtime
 

@@ -1,4 +1,4 @@
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 """Social interaction authority coverage for continuity, routing, and downstream emission behavior."""
 
 from game.api import (
@@ -13,7 +13,7 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
     set_social_target,
 )
-from game.social_exchange_emission import reconcile_strict_social_resolution_speaker
+from game.social_exchange_policy import reconcile_strict_social_resolution_speaker
 
 
 import pytest

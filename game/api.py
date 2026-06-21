@@ -195,7 +195,7 @@ from game.prompt_context import build_response_policy
 from game.response_type_gating import compact_response_type_contract, derive_response_type_contract
 from game.behavioral_evaluators.intent_fulfillment import maybe_attach_intent_fulfillment_eval
 from game.behavioral_evaluators.player_agency import maybe_attach_player_agency_eval
-from game.social_exchange_emission import strict_social_emission_will_apply
+from game.social_exchange_policy import strict_social_emission_will_apply
 from game.post_emission_speaker_adoption import (
     apply_post_emission_speaker_adoption,
     apply_stale_interlocutor_invalidation_after_emission,

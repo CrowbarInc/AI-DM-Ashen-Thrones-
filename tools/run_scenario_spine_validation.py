@@ -35,7 +35,7 @@ from game.scenario_spine_eval import (  # noqa: E402
     evaluate_scenario_spine_branch_divergence,
     evaluate_scenario_spine_session,
 )
-from game.final_emission_meta import read_final_emission_meta_dict  # noqa: E402  # tooling: raw post-gate FEM read
+from game.final_emission_meta_read import read_final_emission_meta_dict  # noqa: E402  # tooling: raw post-gate FEM read
 from game.final_emission_replay_projection import build_fem_runtime_lineage_events  # noqa: E402
 from tests.helpers.runtime_lineage_reporting import (  # noqa: E402
     build_runtime_lineage_summary_from_branch_transcripts,

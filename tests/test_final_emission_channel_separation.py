@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-from game.final_emission_meta import read_final_emission_meta_dict
-
 from game.final_emission_finalize import finalize_emission_output
-from game.final_emission_meta import (
-    package_emission_channel_sidecar,
+from game.observability_attribution_read import (
     read_debug_notes_from_turn_payload,
     read_emission_debug_lane,
     read_final_emission_meta_dict,
@@ -73,11 +70,6 @@ def test_finalize_emission_output_splits_public_and_debug_lanes() -> None:
 
     assert read_final_emission_meta_dict(out).get("final_route") == "accepted"
     assert read_emission_debug_lane(out).get("reason_codes") == ["rc1"]
-
-
-def test_package_emission_channel_sidecar_omits_empty() -> None:
-    assert package_emission_channel_sidecar(debug_top_level={}, author_top_level={}) == {}
-    assert package_emission_channel_sidecar(debug_top_level=None, author_top_level=None) == {}
 
 
 def test_debug_key_classification_covers_fem() -> None:

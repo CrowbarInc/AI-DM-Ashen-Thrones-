@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T14:04:40.637150Z",
+  "measurement_scope": {
+    "policy": "BV3D",
+    "roots": [
+      "data",
+      "artifacts/scene_canon_hygiene_runtime",
+      "artifacts/scenario_spine_validation",
+      "artifacts/bv3d_measurement"
+    ],
+    "doc": "docs/audits/BV3D_measurement_scope.md"
+  },
+  "baseline": {
+    "observe_route_rate": 0.9545454545454546,
+    "fallback_incidence": 0.6915887850467289,
+    "referential_clarity_hard_replacement_count": 38,
+    "source": "artifacts/golden_replay/bv1b_fallback_incidence_report.baseline.json"
+  },
+  "current": {
+    "eligible_turn_count": 95,
+    "fallback_trigger_rate": 0.010526315789473684,
+    "observe_route_rate": 0.043478260869565216,
+    "referential_clarity_hard_replacement_count": 1,
+    "fallback_kind_counts": {
+      "referential_clarity_hard_replacement": 1
+    }
+  },
+  "delta_vs_baseline": {
+    "observe_route_rate_pp": -0.9111,
+    "fallback_incidence_pp": -0.6811,
+    "referential_clarity_hard_replacement_delta": -37
+  },
+  "observe_instrumentation": {
+    "observe_turn_count": 23,
+    "ambiguous_entity_reference_turns": 1,
+    "upstream_repair_applied_count": 11,
+    "local_substitution_applied_count": 11,
+    "referential_clarity_replacement_applied_count": 1,
+    "repair_success_rate_on_observe": 11.0,
+    "unrepaired_violation_turns": 1
+  },
+  "projected_after_bv3a": {
+    "description": "Synthetic gate simulation + corpus shape analysis; historical FEM frozen until replay refresh",
+    "eligible_shape_turns_ambiguous_speaker": 35,
+    "simulation": {
+      "dialogue_he_with_interlocutor_avoids_fallback": true,
+      "dialogue_he_multi_person_no_grounding_still_replaces": true
+    },
+    "conservative_referential_clarity_hard_replacement_delta": "-8 to -15 events when observe turns carry social/interlocutor grounding",
+    "conservative_observe_route_rate_target": "0.70-0.80",
+    "conservative_fallback_incidence_target": "0.58-0.62",
+    "replay_refresh_required": true
+  },
+  "note": "BV3D measurement scope: excludes pre-refresh archives, run_debug.json, nested debug FEM, and derived golden_replay reports. Includes bv3d_measurement positive-control fixtures."
+}

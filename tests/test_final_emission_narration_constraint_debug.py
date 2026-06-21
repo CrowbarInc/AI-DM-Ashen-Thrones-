@@ -10,7 +10,10 @@ import pytest
 
 import game.final_emission_narration_constraint_debug as narration_constraint_debug
 import game.final_emission_terminal_pipeline as terminal_pipeline
-from game.final_emission_meta import build_narration_constraint_debug, merge_narration_constraint_debug_meta
+from game.final_emission_narration_constraint_debug import (
+    build_narration_constraint_debug,
+    merge_narration_constraint_debug_meta,
+)
 from game.narration_visibility import build_narration_visibility_contract
 from game.speaker_contract_enforcement import get_speaker_selection_contract
 

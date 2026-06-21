@@ -1,6 +1,6 @@
 # BQ-C4 Final Graduation Decision
 
-**Date:** 2026-06-20T18:10:17Z
+**Date:** 2026-06-12T00:00:00Z
 **Protected replay only:** true
 
 # Trajectory Activation
@@ -18,8 +18,8 @@
 
 # Confidence Recalculation
 
-- Calibration score: `84.0`
-- Largest calibration gap: `0.29`
+- Calibration score: `66.0`
+- Largest calibration gap: `0.47`
 - Graduation confidence ready: `false`
 - Forecast status: `calibrated`
 - Governance status: `underconfident`
@@ -28,32 +28,33 @@
 # Calibration Comparison
 
 - BQ-C3 calibration score: `57.3`
-- BQ-C4 calibration score: `84.0`
-- Score delta: `+26.7`
+- BQ-C4 calibration score: `66.0`
+- Score delta: `+8.7`
 - BQ-C3 largest gap: `0.61`
-- BQ-C4 largest gap: `0.29`
-- Gap delta: `-0.32`
+- BQ-C4 largest gap: `0.47`
+- Gap delta: `-0.14`
 - Trajectory activated: `false`
 
 # Graduation Readiness
 
-- Graduation readiness score: `52.3`
-- Readiness level: `Moderate gaps remain`
-- Overall completion score: `68.8`
-- Overall maturity score: `36.2`
-- Operational readiness score: `11.7`
+- Graduation readiness score: `21.9`
+- Readiness level: `Major capability gaps remain`
+- Overall completion score: `61.7`
+- Overall maturity score: `25.2`
+- Operational readiness score: `0.0`
 - Program graduated: `false`
 - Critical blind spots: `2`
 
 # Remaining Blockers
 
 - trajectory_available remains false
-- largest calibration gap above target (0.29 > 0.20)
+- calibration score below target (66.0 < 70)
+- largest calibration gap above target (0.47 > 0.20)
 - graduation_confidence_ready is false
 - critical blind spots remain in graduation audit
 - critical blind spot unresolved: recurrence_data_quality
-- completion dimensions incomplete: governance, forecasting, operational_readiness
-- graduation readiness below formal threshold (52.3 < 90)
+- completion dimensions incomplete: observability, governance, forecasting, operational_readiness
+- graduation readiness below formal threshold (21.9 < 90)
 - unsupported graduation threshold: forecast_confidence
 - unsupported graduation threshold: effectiveness_confidence
 - unsupported graduation threshold: operational_readiness

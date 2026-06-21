@@ -20,7 +20,7 @@ from game.output_sanitizer import (
     rewrite_analytical_sentence,
     sanitize_player_facing_output,
 )
-from game.final_emission_ownership_schema import (
+from game.ownership_projection_views import (
     SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_FALLBACK_SELECTION_OWNER,
     SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,

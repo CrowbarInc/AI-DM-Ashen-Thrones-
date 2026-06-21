@@ -1,7 +1,7 @@
 """BLOCK 14: contextual minimal repair improves wording without inventing state."""
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 
 import copy
 import re
@@ -16,7 +16,7 @@ from game.gm import (
     ensure_minimal_nonsocial_resolution,
     ensure_minimal_social_resolution,
 )
-from game.social_exchange_emission import is_route_illegal_global_or_sanitizer_fallback_text
+from game.social_exchange_validation import is_route_illegal_global_or_sanitizer_fallback_text
 from game.storage import get_scene_runtime
 from game.tone_escalation import validate_tone_escalation
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate

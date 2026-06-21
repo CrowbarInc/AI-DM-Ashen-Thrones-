@@ -18,7 +18,7 @@ predicates (floor / anti-collapse), not offline evaluator axes or holistic “go
 
 **Not the canonical owner for:** deterministic validators (:mod:`game.final_emission_validators`),
 repair/layer wiring (:mod:`game.final_emission_repairs`), shared text/normalization patterns
-(:mod:`game.final_emission_text`), or ``response_type`` contract resolution
+(:mod:`game.final_emission_text_formatting`), or ``response_type`` contract resolution
 (:mod:`game.response_policy_contracts`). Those modules are imported by extracted stack owners; prefer
 importing from their real module for new code — BJ-123/124/128 removed historical test-only re-exports
 from this orchestration entrypoint. BJ-129 locks the thin boundary against regrowth.
@@ -60,6 +60,9 @@ from game.speaker_contract_enforcement import (
     validate_emitted_speaker_against_contract,
 )
 from game.final_emission_non_strict_stack import run_non_strict_layer_stack
+from game.final_emission_passive_scene_pressure import (
+    apply_observe_passive_scene_concrete_beat_upstream_satisfier,
+)
 from game.final_emission_generic_exit import (
     run_generic_accept_exit,
     run_generic_replace_exit,
@@ -72,6 +75,7 @@ from game.interaction_continuity import (
     apply_interaction_continuity_emission_step,
     attach_interaction_continuity_validation,
 )
+from game.final_emission_gate_preflight_pregate_text import resolve_gate_preflight_pregate_text
 
 
 def apply_final_emission_gate(
@@ -184,6 +188,16 @@ def apply_final_emission_gate(
         )
 
     # Non-strict layer stack (AN4): response_type.enforce_response_type_contract → policy layers → IC → fallback → NMO pre-assess
+    out = apply_observe_passive_scene_concrete_beat_upstream_satisfier(
+        out,
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene_id=sid,
+        res_kind=res_kind,
+        strict_social_active=strict_social_active,
+    )
+    text = resolve_gate_preflight_pregate_text(out).pre_gate_text
     _nss = run_non_strict_layer_stack(
         out,
         text=text,

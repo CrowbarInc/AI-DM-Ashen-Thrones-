@@ -44,7 +44,10 @@ from game.final_emission_meta import (
     UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
     patch_final_emission_meta,
 )
-from game.final_emission_text import _normalize_text, _sanitize_output_text
+from game.final_emission_text_formatting import (
+    _normalize_text,
+    _sanitize_output_text,
+)
 
 _LOG = logging.getLogger(__name__)
 

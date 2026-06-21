@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.narrative_authority import (
     narrative_authority_prefers_roll_prompt,
     narrative_authority_repair_hints,
@@ -25,7 +25,7 @@ from game.narrative_authority import (
     _STRONG_OUTCOME_ASSERTION_RE,
 )
 from game.response_policy_contracts import _last_player_input
-from game.social_exchange_emission import merged_player_prompt_for_gate
+from game.social_exchange_policy import merged_player_prompt_for_gate
 
 
 def is_shipped_full_narrative_authority_contract(candidate: Any) -> bool:

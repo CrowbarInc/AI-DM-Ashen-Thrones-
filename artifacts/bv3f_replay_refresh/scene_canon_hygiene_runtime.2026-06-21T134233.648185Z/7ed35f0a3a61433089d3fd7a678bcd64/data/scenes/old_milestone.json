@@ -1,0 +1,94 @@
+{
+  "scene": {
+    "id": "old_milestone",
+    "location": "The Old Milestone Road",
+    "summary": "The old road bends through blasted scrub and broken stones, where a weathered milestone leans above a ditch filled with black rainwater. Carrion birds stir when the wind shifts.",
+    "mode": "exploration",
+    "visible_facts": [
+      "The old road bends through blasted scrub and broken stones.",
+      "A weathered milestone leans above a ditch filled with black rainwater.",
+      "A dead courier lies half-hidden in the ditch.",
+      "Carrion birds stir whenever the wind shifts.",
+      "A satchel, a partially burnt letter, and a small dagger lie near the courier."
+    ],
+    "discoverable_clues": [
+      "The letter hints at treachery and warnings, but the details are hard to read.",
+      "The dagger shows wear but has not yet been drawn.",
+      "Galinor can examine the dead courier's belongings for more information.",
+      "The dead courier's belongings include a partially burnt letter, hinting at urgent matters.",
+      "The bandit seems prepped for an opportunity.",
+      "The dagger at the courier's side looks worn but hasn't been drawn recently.",
+      "The dead courier's belongings include a satchel, a partially burnt letter, and a small dagger.",
+      "The partially burnt letter hints at urgent matters but is difficult to read.",
+      "The bootprints appear to lead deeper into the underbrush.",
+      "The claw marks could suggest involvement of a creature roaming this area."
+    ],
+    "hidden_facts": [
+      "A scavenger bandit is concealed behind the milestone."
+    ],
+    "exits": [
+      {
+        "label": "Back to Cinderwatch",
+        "target_scene_id": "frontier_gate"
+      }
+    ],
+    "enemies": [
+      {
+        "id": "bandit_1",
+        "name": "Scavenger Bandit",
+        "creature_type": "humanoid",
+        "hd": 1,
+        "hp": {
+          "current": 8,
+          "max": 8
+        },
+        "ac": {
+          "normal": 14,
+          "touch": 11,
+          "flat_footed": 13
+        },
+        "initiative_bonus": 1,
+        "saves": {
+          "fort": 2,
+          "ref": 1,
+          "will": 0
+        },
+        "conditions": [],
+        "attacks": [
+          {
+            "id": "rusted_spear",
+            "name": "Rusted Spear",
+            "attack_bonus": 3,
+            "damage": {
+              "dice_count": 1,
+              "dice_sides": 8,
+              "bonus": 1,
+              "type": "piercing"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [],
+    "interactables": [],
+    "objects": [],
+    "opening_seed_facts": [
+      "The old road bends through blasted scrub and broken stones.",
+      "A weathered milestone leans above a ditch filled with black rainwater.",
+      "A dead courier lies half-hidden in the ditch.",
+      "Carrion birds stir whenever the wind shifts."
+    ]
+  },
+  "scene_state": {
+    "active_scene_id": "old_milestone",
+    "active_entities": [],
+    "entity_presence": {
+      "guard_captain": "offscene",
+      "tavern_runner": "offscene",
+      "emergent_town_crier": "offscene"
+    },
+    "current_interlocutor": null,
+    "emergent_addressables": [],
+    "promoted_actor_npc_map": {}
+  }
+}

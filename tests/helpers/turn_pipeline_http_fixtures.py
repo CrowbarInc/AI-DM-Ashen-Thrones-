@@ -21,7 +21,7 @@ from game.defaults import (
     default_session,
     default_world,
 )
-from tests.helpers.emission_smoke_assertions import gm_response_stub as _gm_response
+from tests.helpers.gate_orchestration_smoke import gm_response_stub as _gm_response
 
 FAKE_GPT_RESPONSE = {
     "player_facing_text": "[Narration]",

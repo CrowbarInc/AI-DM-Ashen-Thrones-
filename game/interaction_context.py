@@ -2747,7 +2747,10 @@ def build_speaker_selection_contract(
     reconcile path), authoritative resolution is not re-run.
     """
     from game.social import apply_social_reply_speaker_grounding, finalize_social_target_with_promotion
-    from game.social_exchange_emission import merged_player_prompt_for_gate, should_apply_strict_social_exchange_emission
+    from game.social_exchange_policy import (
+        merged_player_prompt_for_gate,
+        should_apply_strict_social_exchange_emission,
+    )
 
     sid = _clean_string(scene_id) or ""
     sess = session if isinstance(session, dict) else None

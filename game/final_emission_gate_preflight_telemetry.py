@@ -11,7 +11,7 @@ from game.fallback_provenance_debug import (
     apply_upstream_fallback_pregate_containment,
     record_final_emission_gate_entry,
 )
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.stage_diff_telemetry import (
     diff_turn_stage,
     record_stage_snapshot,

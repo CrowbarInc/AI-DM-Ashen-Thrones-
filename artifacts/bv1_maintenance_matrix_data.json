@@ -1,0 +1,274 @@
+{
+  "replay": {
+    "modules": 20,
+    "fan_in_total": 86,
+    "fan_out_total": 80,
+    "production_fan_in_total": 1,
+    "test_fan_in_total": 57,
+    "ownership_refs_total": 650,
+    "top_fan_in": [
+      [
+        "tests.helpers.golden_replay_projection",
+        18,
+        7
+      ],
+      [
+        "game.final_emission_replay_projection",
+        15,
+        4
+      ],
+      [
+        "tests.helpers.replay_drift_taxonomy",
+        15,
+        3
+      ],
+      [
+        "tests.helpers.golden_replay_fixtures",
+        9,
+        2
+      ],
+      [
+        "tests.helpers.golden_replay",
+        8,
+        12
+      ],
+      [
+        "tests.helpers.golden_replay_api",
+        8,
+        1
+      ]
+    ]
+  },
+  "final_emission": {
+    "modules": 43,
+    "fan_in_total": 443,
+    "fan_out_total": 218,
+    "production_fan_in_total": 174,
+    "test_fan_in_total": 239,
+    "ownership_refs_total": 156,
+    "top_fan_in": [
+      [
+        "game.final_emission_meta",
+        61,
+        6
+      ],
+      [
+        "game.final_emission_text",
+        51,
+        1
+      ],
+      [
+        "game.final_emission_gate",
+        28,
+        7
+      ],
+      [
+        "game.final_emission_terminal_pipeline",
+        26,
+        13
+      ],
+      [
+        "game.final_emission_strict_social_stack",
+        22,
+        22
+      ],
+      [
+        "game.final_emission_repairs",
+        21,
+        7
+      ]
+    ]
+  },
+  "fallback": {
+    "modules": 43,
+    "fan_in_total": 103,
+    "fan_out_total": 193,
+    "production_fan_in_total": 41,
+    "test_fan_in_total": 56,
+    "ownership_refs_total": 734,
+    "top_fan_in": [
+      [
+        "tests.helpers.opening_fallback_evidence",
+        22,
+        4
+      ],
+      [
+        "game.final_emission_visibility_fallback",
+        17,
+        17
+      ],
+      [
+        "game.diegetic_fallback_narration",
+        13,
+        1
+      ],
+      [
+        "game.final_emission_opening_fallback",
+        13,
+        8
+      ],
+      [
+        "game.fallback_provenance_debug",
+        10,
+        3
+      ],
+      [
+        "game.final_emission_sealed_fallback",
+        10,
+        13
+      ]
+    ]
+  },
+  "attribution": {
+    "modules": 17,
+    "fan_in_total": 75,
+    "fan_out_total": 53,
+    "production_fan_in_total": 13,
+    "test_fan_in_total": 47,
+    "ownership_refs_total": 515,
+    "top_fan_in": [
+      [
+        "game.realization_provenance",
+        28,
+        1
+      ],
+      [
+        "game.runtime_lineage_telemetry",
+        15,
+        2
+      ],
+      [
+        "game.realization_authority",
+        12,
+        0
+      ],
+      [
+        "tests.helpers.replacement_attribution_inventory",
+        5,
+        6
+      ],
+      [
+        "tests.helpers.attribution_contract",
+        4,
+        4
+      ],
+      [
+        "tests.helpers.runtime_lineage_reporting",
+        4,
+        1
+      ]
+    ]
+  },
+  "speaker_finalize": {
+    "modules": 19,
+    "fan_in_total": 80,
+    "fan_out_total": 125,
+    "production_fan_in_total": 13,
+    "test_fan_in_total": 57,
+    "ownership_refs_total": 25,
+    "top_fan_in": [
+      [
+        "game.final_emission_terminal_pipeline",
+        26,
+        13
+      ],
+      [
+        "game.speaker_contract_enforcement",
+        15,
+        4
+      ],
+      [
+        "game.final_emission_finalize",
+        11,
+        8
+      ],
+      [
+        "game.emitted_speaker_signature",
+        7,
+        3
+      ],
+      [
+        "game.final_emission_generic_exit",
+        5,
+        12
+      ],
+      [
+        "game.post_emission_speaker_adoption",
+        4,
+        5
+      ]
+    ]
+  },
+  "key_modules": {
+    "game.final_emission_gate": {
+      "fan_in": 28,
+      "fan_out": 7,
+      "production_fan_in": 1,
+      "ownership_refs": 3,
+      "responsibility": "gate orchestration/preflight"
+    },
+    "game.final_emission_meta": {
+      "fan_in": 61,
+      "fan_out": 6,
+      "production_fan_in": 27,
+      "ownership_refs": 134,
+      "responsibility": "final-emission policy/metadata"
+    },
+    "game.final_emission_replay_projection": {
+      "fan_in": 15,
+      "fan_out": 4,
+      "production_fan_in": 1,
+      "ownership_refs": 136,
+      "responsibility": "replay projection/governance"
+    },
+    "tests.helpers.golden_replay_projection": {
+      "fan_in": 18,
+      "fan_out": 7,
+      "production_fan_in": 0,
+      "ownership_refs": 39,
+      "responsibility": "replay projection/governance"
+    },
+    "game.final_emission_visibility_fallback": {
+      "fan_in": 17,
+      "fan_out": 17,
+      "production_fan_in": 6,
+      "ownership_refs": 44,
+      "responsibility": "fallback selection/projection"
+    },
+    "game.speaker_contract_enforcement": {
+      "fan_in": 15,
+      "fan_out": 4,
+      "production_fan_in": 4,
+      "ownership_refs": 4,
+      "responsibility": "speaker finalization"
+    },
+    "game.final_emission_finalize": {
+      "fan_in": 11,
+      "fan_out": 8,
+      "production_fan_in": 2,
+      "ownership_refs": 0,
+      "responsibility": "finalization/exit"
+    },
+    "game.final_emission_terminal_pipeline": {
+      "fan_in": 26,
+      "fan_out": 13,
+      "production_fan_in": 2,
+      "ownership_refs": 0,
+      "responsibility": "finalization/exit"
+    },
+    "tests.helpers.emission_smoke_assertions": {
+      "fan_in": 70,
+      "fan_out": 5,
+      "production_fan_in": 0,
+      "ownership_refs": 9,
+      "responsibility": "supporting contract/test"
+    },
+    "tests.test_ownership_registry": {
+      "fan_in": 0,
+      "fan_out": 57,
+      "production_fan_in": 0,
+      "ownership_refs": 320,
+      "responsibility": "ownership enforcement"
+    }
+  }
+}

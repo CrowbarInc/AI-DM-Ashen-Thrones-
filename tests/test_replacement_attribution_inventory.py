@@ -1,7 +1,7 @@
 """BS1 canonical replacement attribution inventory tests."""
 from __future__ import annotations
 
-from game.final_emission_ownership_schema import (
+from game.attribution_read_views import (
     OPENING_FAIL_CLOSED_CONTENT_OWNER,
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_SELECTION_OWNER,
@@ -310,7 +310,7 @@ def test_bs5_visibility_lineage_preserves_owner_bucket_and_mutation_class():
 
 
 def test_bu10_first_mention_lineage_preserves_split_owner_trifecta():
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         SEALED_FALLBACK_MODULE_CONTENT_OWNER,
         VISIBILITY_FALLBACK_SELECTION_OWNER,
     )
@@ -345,7 +345,7 @@ def test_bu10_first_mention_lineage_preserves_split_owner_trifecta():
 
 
 def test_bu10_referential_lineage_preserves_split_owner_trifecta():
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         SEALED_FALLBACK_MODULE_CONTENT_OWNER,
         VISIBILITY_FALLBACK_SELECTION_OWNER,
     )

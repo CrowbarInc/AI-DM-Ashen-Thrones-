@@ -29,10 +29,10 @@ import json
 import re
 from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Tuple
 
-from game.final_emission_text import (
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_text_policy import (
     _ACTION_RESULT_PATTERNS,
     _ANSWER_FILLER_PATTERNS,
-    _normalize_text,
 )
 
 NARRATIVE_MODE_CONTRACT_VERSION = 1

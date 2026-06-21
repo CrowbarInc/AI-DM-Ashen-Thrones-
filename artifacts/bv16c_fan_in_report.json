@@ -1,0 +1,897 @@
+{
+  "schema_version": 1,
+  "cycle": "BV16C",
+  "module_fi": {
+    "terminal_pipeline": {
+      "ast_importers": 9,
+      "production_importers": 0,
+      "test_importers": 9,
+      "importers": [
+        {
+          "file": "tests/helpers/post_speaker_finalize_probe.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "_apply_referent_clarity_pre_finalize"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_acceptance_quality.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "_apply_referent_clarity_pre_finalize"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_narration_constraint_debug.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_opening_accept_debug.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_sealed_fallback.py",
+          "symbols": [
+            "apply_strict_social_emergency_fallback_patch"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_visibility_fallback.py",
+          "symbols": [
+            "tp (module)"
+          ],
+          "attribute_uses": [
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        },
+        {
+          "file": "tests/test_ownership_registry.py",
+          "symbols": [
+            "terminal_pipeline (module)",
+            "tp (module)"
+          ],
+          "attribute_uses": [
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        },
+        {
+          "file": "tests/test_referential_clarity_player_coref.py",
+          "symbols": [
+            "terminal_pipeline (module)"
+          ],
+          "attribute_uses": [
+            "_apply_referent_clarity_pre_finalize",
+            "run_gate_terminal_enforcement_pipeline"
+          ]
+        }
+      ],
+      "symbol_fi": {
+        "terminal_pipeline": 7,
+        "_apply_referent_clarity_pre_finalize": 3,
+        "run_gate_terminal_enforcement_pipeline": 6,
+        "apply_strict_social_emergency_fallback_patch": 1,
+        "tp": 2
+      }
+    },
+    "visibility_owner": {
+      "ast_importers": 25,
+      "production_importers": 0,
+      "test_importers": 25,
+      "importers": [
+        {
+          "file": "tests/helpers/opening_fallback_gate_harness.py",
+          "symbols": [
+            "VisibilitySelectedFallback",
+            "first_mention_composition_meta"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/helpers/post_speaker_finalize_probe.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/helpers/terminal_owner_test_seams.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_anti_railroading.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_anti_railroading_transcript_regressions.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_context_separation.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_boundary_convergence.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_first_mention_composition.py",
+          "symbols": [
+            "VisibilitySelectedFallback"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_gate_orchestration_order.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_gate_selector_snapshots.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_opening_fallback.py",
+          "symbols": [
+            "VisibilitySelectedFallback",
+            "visibility_fallback (module)",
+            "visibility_selected_fallback_candidate"
+          ],
+          "attribute_uses": [
+            "standard_visibility_safe_fallback"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_passive_scene_pressure.py",
+          "symbols": [
+            "VisibilitySelectedFallback"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_scene_emit_integrity.py",
+          "symbols": [
+            "VisibilitySelectedFallback"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_sealed_fallback.py",
+          "symbols": [
+            "VisibilitySelectedFallback",
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+            "_standard_visibility_safe_fallback_core",
+            "select_non_strict_terminal_fallback_for_sealed",
+            "standard_visibility_safe_fallback"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_visibility_fallback.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "FirstMentionReplacementLoggingPayload",
+            "FirstMentionSelectedFallbackMetadataPayload",
+            "ReferentialClarityReplacementLoggingPayload",
+            "ReferentialClaritySelectedFallbackMetadataPayload",
+            "VISIBILITY_FALLBACK_OWNER_BUCKETS",
+            "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY",
+            "VISIBILITY_FALLBACK_OWNER_SEALED_GATE",
+            "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY",
+            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS",
+            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE",
+            "VisibilityDefaultMetadataPayload",
+            "VisibilityEnforcementStageContext",
+            "VisibilityFallbackSelectionInputs",
+            "VisibilityFirstMentionDefaultMetadataPayload",
+            "VisibilityFirstMentionMetadataPayload",
+            "VisibilityHardReplacementContext",
+            "VisibilityHardReplacementLoggingPayload",
+            "VisibilityHardReplacementPlan",
+            "VisibilityNonReplacementRouteContext",
+            "VisibilityPreRouteMetadataContext",
+            "VisibilityRouteDecisionInputs",
+            "VisibilityRouteMetadataOutcome",
+            "VisibilitySelectedFallback",
+            "VisibilityValidationObservation",
+            "_should_use_neutral_nonprogress_fallback_instead_of_global_stock",
+            "anti_reset_local_continuation_visibility_fallback",
+            "apply_first_mention_enforcement",
+            "apply_referential_clarity_enforcement",
+            "apply_visibility_enforcement",
+            "build_first_mention_replacement_logging_payload",
+            "build_first_mention_selected_fallback_metadata_payload",
+            "build_referential_clarity_replacement_logging_payload",
+            "build_referential_clarity_selected_fallback_metadata_payload",
+            "build_visibility_default_metadata_payload",
+            "build_visibility_enforcement_stage_context",
+            "build_visibility_fallback_selection_inputs",
+            "build_visibility_first_mention_default_metadata_payload",
+            "build_visibility_first_mention_metadata_payload",
+            "build_visibility_hard_replacement_context",
+            "build_visibility_hard_replacement_logging_payload",
+            "build_visibility_hard_replacement_plan",
+            "build_visibility_non_replacement_route_context",
+            "build_visibility_pre_route_metadata_context",
+            "build_visibility_pre_route_validation_context",
+            "build_visibility_replacement_annotations",
+            "build_visibility_route_decision_inputs",
+            "build_visibility_route_dispatch_context",
+            "build_visibility_route_metadata_outcome",
+            "build_visibility_validation_observation",
+            "default_first_mention_composition_layers",
+            "first_mention_composition_meta",
+            "npc_pursuit_neutral_nonprogress_visibility_fallback",
+            "passive_scene_pressure_visibility_fallback_candidates",
+            "route_visibility_enforcement_after_failed_validation",
+            "scene_emit_integrity_global_visibility_fallback",
+            "select_non_strict_terminal_fallback_for_sealed",
+            "social_active_interlocutor_visibility_fallback",
+            "stamp_visibility_fallback_metadata",
+            "standard_visibility_safe_fallback",
+            "visibility_selected_fallback_candidate"
+          ]
+        },
+        {
+          "file": "tests/test_narration_transcript_regressions.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_ownership_registry.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_player_facing_narration_purity.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_prompt_context.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_referential_clarity_strict_social_local_repair.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "validate_player_facing_referential_clarity"
+          ]
+        },
+        {
+          "file": "tests/test_social_exchange_emission.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_speaker_contract_enforcement.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "VisibilitySelectedFallback",
+            "apply_referential_clarity_enforcement",
+            "apply_visibility_enforcement",
+            "first_mention_composition_meta",
+            "standard_visibility_safe_fallback",
+            "validate_player_facing_referential_clarity"
+          ]
+        },
+        {
+          "file": "tests/test_speaker_contract_risk.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        },
+        {
+          "file": "tests/test_tone_escalation_rules.py",
+          "symbols": [
+            "visibility_fallback (module)"
+          ],
+          "attribute_uses": [
+            "apply_visibility_enforcement"
+          ]
+        }
+      ],
+      "symbol_fi": {
+        "VisibilitySelectedFallback": 8,
+        "first_mention_composition_meta": 3,
+        "visibility_fallback": 21,
+        "apply_visibility_enforcement": 18,
+        "visibility_selected_fallback_candidate": 2,
+        "standard_visibility_safe_fallback": 4,
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock": 2,
+        "_standard_visibility_safe_fallback_core": 1,
+        "select_non_strict_terminal_fallback_for_sealed": 2,
+        "FirstMentionReplacementLoggingPayload": 1,
+        "FirstMentionSelectedFallbackMetadataPayload": 1,
+        "ReferentialClarityReplacementLoggingPayload": 1,
+        "ReferentialClaritySelectedFallbackMetadataPayload": 1,
+        "VISIBILITY_FALLBACK_OWNER_BUCKETS": 1,
+        "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY": 1,
+        "VISIBILITY_FALLBACK_OWNER_SEALED_GATE": 1,
+        "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY": 1,
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": 1,
+        "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE": 1,
+        "VisibilityDefaultMetadataPayload": 1,
+        "VisibilityEnforcementStageContext": 1,
+        "VisibilityFallbackSelectionInputs": 1,
+        "VisibilityFirstMentionDefaultMetadataPayload": 1,
+        "VisibilityFirstMentionMetadataPayload": 1,
+        "VisibilityHardReplacementContext": 1,
+        "VisibilityHardReplacementLoggingPayload": 1,
+        "VisibilityHardReplacementPlan": 1,
+        "VisibilityNonReplacementRouteContext": 1,
+        "VisibilityPreRouteMetadataContext": 1,
+        "VisibilityRouteDecisionInputs": 1,
+        "VisibilityRouteMetadataOutcome": 1,
+        "VisibilityValidationObservation": 1,
+        "anti_reset_local_continuation_visibility_fallback": 1,
+        "apply_first_mention_enforcement": 1,
+        "apply_referential_clarity_enforcement": 2,
+        "build_first_mention_replacement_logging_payload": 1,
+        "build_first_mention_selected_fallback_metadata_payload": 1,
+        "build_referential_clarity_replacement_logging_payload": 1,
+        "build_referential_clarity_selected_fallback_metadata_payload": 1,
+        "build_visibility_default_metadata_payload": 1,
+        "build_visibility_enforcement_stage_context": 1,
+        "build_visibility_fallback_selection_inputs": 1,
+        "build_visibility_first_mention_default_metadata_payload": 1,
+        "build_visibility_first_mention_metadata_payload": 1,
+        "build_visibility_hard_replacement_context": 1,
+        "build_visibility_hard_replacement_logging_payload": 1,
+        "build_visibility_hard_replacement_plan": 1,
+        "build_visibility_non_replacement_route_context": 1,
+        "build_visibility_pre_route_metadata_context": 1,
+        "build_visibility_pre_route_validation_context": 1,
+        "build_visibility_replacement_annotations": 1,
+        "build_visibility_route_decision_inputs": 1,
+        "build_visibility_route_dispatch_context": 1,
+        "build_visibility_route_metadata_outcome": 1,
+        "build_visibility_validation_observation": 1,
+        "default_first_mention_composition_layers": 1,
+        "npc_pursuit_neutral_nonprogress_visibility_fallback": 1,
+        "passive_scene_pressure_visibility_fallback_candidates": 1,
+        "route_visibility_enforcement_after_failed_validation": 1,
+        "scene_emit_integrity_global_visibility_fallback": 1,
+        "social_active_interlocutor_visibility_fallback": 1,
+        "stamp_visibility_fallback_metadata": 1,
+        "validate_player_facing_referential_clarity": 2
+      }
+    },
+    "n4_owner": {
+      "ast_importers": 6,
+      "production_importers": 0,
+      "test_importers": 6,
+      "importers": [
+        {
+          "file": "tests/helpers/post_speaker_finalize_probe.py",
+          "symbols": [
+            "acceptance_quality (module)"
+          ],
+          "attribute_uses": [
+            "apply_acceptance_quality_n4_floor_seam"
+          ]
+        },
+        {
+          "file": "tests/helpers/terminal_owner_test_seams.py",
+          "symbols": [
+            "acceptance_quality (module)"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_acceptance_quality.py",
+          "symbols": [
+            "acceptance_quality_gate (module)"
+          ],
+          "attribute_uses": [
+            "_merge_acceptance_quality_n4_results_into_gate_fem",
+            "_resolve_acceptance_quality_contract_for_gate",
+            "_shipped_acceptance_quality_overrides_from_gm_output",
+            "apply_acceptance_quality_n4_floor_seam",
+            "validate_and_repair_acceptance_quality"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_gate_n4.py",
+          "symbols": [
+            "acceptance_quality_gate (module)"
+          ],
+          "attribute_uses": [
+            "validate_and_repair_acceptance_quality"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_gate_selector_snapshots.py",
+          "symbols": [
+            "acceptance_quality (module)"
+          ],
+          "attribute_uses": [
+            "apply_acceptance_quality_n4_floor_seam"
+          ]
+        },
+        {
+          "file": "tests/test_ownership_registry.py",
+          "symbols": [
+            "aq (module)"
+          ],
+          "attribute_uses": []
+        }
+      ],
+      "symbol_fi": {
+        "acceptance_quality": 3,
+        "apply_acceptance_quality_n4_floor_seam": 3,
+        "acceptance_quality_gate": 2,
+        "_merge_acceptance_quality_n4_results_into_gate_fem": 1,
+        "_resolve_acceptance_quality_contract_for_gate": 1,
+        "_shipped_acceptance_quality_overrides_from_gm_output": 1,
+        "validate_and_repair_acceptance_quality": 2,
+        "aq": 1
+      }
+    },
+    "ic_owner": {
+      "ast_importers": 11,
+      "production_importers": 0,
+      "test_importers": 11,
+      "importers": [
+        {
+          "file": "tests/helpers/gate_thin_boundary_locks.py",
+          "symbols": [
+            "ic (module)"
+          ],
+          "attribute_uses": [
+            "apply_interaction_continuity_emission_step",
+            "attach_interaction_continuity_validation"
+          ]
+        },
+        {
+          "file": "tests/helpers/post_speaker_finalize_probe.py",
+          "symbols": [
+            "interaction_continuity (module)"
+          ],
+          "attribute_uses": [
+            "apply_interaction_continuity_emission_step",
+            "attach_interaction_continuity_validation"
+          ]
+        },
+        {
+          "file": "tests/helpers/terminal_owner_test_seams.py",
+          "symbols": [
+            "interaction_continuity (module)"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_fallback_behavior_gate.py",
+          "symbols": [
+            "interaction_continuity (module)"
+          ],
+          "attribute_uses": [
+            "apply_interaction_continuity_emission_step"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_gate_n4.py",
+          "symbols": [
+            "interaction_continuity (module)"
+          ],
+          "attribute_uses": [
+            "attach_interaction_continuity_validation"
+          ]
+        },
+        {
+          "file": "tests/test_interaction_continuity_contract.py",
+          "symbols": [
+            "build_interaction_continuity_contract"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_interaction_continuity_hardening.py",
+          "symbols": [
+            "BRIDGE_TEMPLATES",
+            "_has_dialogue_presence",
+            "_pick_bridge_template",
+            "repair_interaction_continuity",
+            "validate_interaction_continuity"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_interaction_continuity_repair.py",
+          "symbols": [
+            "apply_interaction_continuity_emission_step",
+            "attach_interaction_continuity_validation",
+            "ic (module)",
+            "repair_interaction_continuity",
+            "validate_interaction_continuity"
+          ],
+          "attribute_uses": [
+            "repair_interaction_continuity"
+          ]
+        },
+        {
+          "file": "tests/test_interaction_continuity_speaker_bridge.py",
+          "symbols": [
+            "repair_interaction_continuity",
+            "validate_interaction_continuity"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_interaction_continuity_validation.py",
+          "symbols": [
+            "validate_interaction_continuity"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_ownership_registry.py",
+          "symbols": [
+            "ic (module)"
+          ],
+          "attribute_uses": [
+            "apply_interaction_continuity_emission_step",
+            "attach_interaction_continuity_validation"
+          ]
+        }
+      ],
+      "symbol_fi": {
+        "ic": 3,
+        "apply_interaction_continuity_emission_step": 5,
+        "attach_interaction_continuity_validation": 5,
+        "interaction_continuity": 4,
+        "build_interaction_continuity_contract": 1,
+        "BRIDGE_TEMPLATES": 1,
+        "_has_dialogue_presence": 1,
+        "_pick_bridge_template": 1,
+        "repair_interaction_continuity": 3,
+        "validate_interaction_continuity": 4
+      }
+    },
+    "opening_owner": {
+      "ast_importers": 6,
+      "production_importers": 0,
+      "test_importers": 6,
+      "importers": [
+        {
+          "file": "tests/helpers/opening_fallback_gate_harness.py",
+          "symbols": [
+            "opening_scene_safe_fallback_selection"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_meta.py",
+          "symbols": [
+            "build_opening_fallback_result_meta"
+          ],
+          "attribute_uses": []
+        },
+        {
+          "file": "tests/test_final_emission_opening_accept_debug.py",
+          "symbols": [
+            "opening_fallback (module)"
+          ],
+          "attribute_uses": [
+            "patch_scene_opening_candidate_emission_debug",
+            "reassert_scene_opening_accepted_candidate"
+          ]
+        },
+        {
+          "file": "tests/test_final_emission_opening_fallback.py",
+          "symbols": [
+            "opening_fallback (module)"
+          ],
+          "attribute_uses": [
+            "_upstream_prepared_opening_fallback_payload_if_usable",
+            "make_opening_sealed_fallback_provider",
+            "opening_scene_safe_fallback_selection",
+            "opening_sealed_fallback_selection",
+            "scene_opening_rt_contract_accept_path_promotes_candidate",
+            "select_opening_fallback_for_response_type_contract"
+          ]
+        },
+        {
+          "file": "tests/test_ownership_registry.py",
+          "symbols": [
+            "ob (module)",
+            "opening_fallback (module)"
+          ],
+          "attribute_uses": [
+            "patch_scene_opening_candidate_emission_debug",
+            "reassert_scene_opening_accepted_candidate",
+            "scene_opening_rt_contract_accept_path_promotes_candidate"
+          ]
+        },
+        {
+          "file": "tests/test_upstream_response_repairs.py",
+          "symbols": [
+            "OPENING_FALLBACK_RESULT_META_FIELDS"
+          ],
+          "attribute_uses": []
+        }
+      ],
+      "symbol_fi": {
+        "opening_scene_safe_fallback_selection": 2,
+        "build_opening_fallback_result_meta": 1,
+        "opening_fallback": 3,
+        "patch_scene_opening_candidate_emission_debug": 2,
+        "reassert_scene_opening_accepted_candidate": 2,
+        "_upstream_prepared_opening_fallback_payload_if_usable": 1,
+        "make_opening_sealed_fallback_provider": 1,
+        "opening_sealed_fallback_selection": 1,
+        "scene_opening_rt_contract_accept_path_promotes_candidate": 2,
+        "select_opening_fallback_for_response_type_contract": 1,
+        "ob": 1,
+        "OPENING_FALLBACK_RESULT_META_FIELDS": 1
+      }
+    }
+  },
+  "terminal_ast_importers": 9,
+  "terminal_ast_importers_pre_bv16c_baseline": 26,
+  "terminal_visibility_patch_baseline": 16,
+  "stale_terminal_delegate_patches": 0,
+  "monkeypatch_inventory": {
+    "inventory": [
+      {
+        "file": "tests/helpers/post_speaker_finalize_probe.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/helpers/post_speaker_finalize_probe.py",
+        "class": "N4",
+        "owner_alias": "acceptance_quality",
+        "symbol": "apply_acceptance_quality_n4_floor_seam"
+      },
+      {
+        "file": "tests/helpers/post_speaker_finalize_probe.py",
+        "class": "IC",
+        "owner_alias": "interaction_continuity",
+        "symbol": "apply_interaction_continuity_emission_step"
+      },
+      {
+        "file": "tests/helpers/post_speaker_finalize_probe.py",
+        "class": "repairs",
+        "owner_alias": "emission_repairs",
+        "symbol": "_apply_fallback_behavior_layer"
+      },
+      {
+        "file": "tests/helpers/post_speaker_finalize_probe.py",
+        "class": "terminal orchestration",
+        "owner_alias": "terminal_pipeline",
+        "symbol": "_apply_referent_clarity_pre_finalize"
+      },
+      {
+        "file": "tests/helpers/terminal_owner_test_seams.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_anti_railroading.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_anti_railroading_transcript_regressions.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_context_separation.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_fallback_behavior_gate.py",
+        "class": "IC",
+        "owner_alias": "interaction_continuity",
+        "symbol": "apply_interaction_continuity_emission_step"
+      },
+      {
+        "file": "tests/test_fallback_behavior_gate.py",
+        "class": "repairs",
+        "owner_alias": "emission_repairs",
+        "symbol": "_apply_fallback_behavior_layer"
+      },
+      {
+        "file": "tests/test_final_emission_boundary_convergence.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "class": "terminal orchestration",
+        "owner_alias": "terminal_pipeline",
+        "symbol": "_apply_referent_clarity_pre_finalize"
+      },
+      {
+        "file": "tests/test_final_emission_gate_n4.py",
+        "class": "IC",
+        "owner_alias": "interaction_continuity",
+        "symbol": "attach_interaction_continuity_validation"
+      },
+      {
+        "file": "tests/test_final_emission_gate_orchestration_order.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_final_emission_gate_selector_snapshots.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_final_emission_gate_selector_snapshots.py",
+        "class": "N4",
+        "owner_alias": "acceptance_quality",
+        "symbol": "apply_acceptance_quality_n4_floor_seam"
+      },
+      {
+        "file": "tests/test_final_emission_repairs.py",
+        "class": "repairs",
+        "owner_alias": "emission_repairs",
+        "symbol": "_apply_fallback_behavior_layer"
+      },
+      {
+        "file": "tests/test_interaction_continuity_repair.py",
+        "class": "IC",
+        "owner_alias": "interaction_continuity",
+        "symbol": "apply_interaction_continuity_emission_step"
+      },
+      {
+        "file": "tests/test_narration_transcript_regressions.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_ownership_registry.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_player_facing_narration_purity.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_prompt_context.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_social_exchange_emission.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_speaker_contract_enforcement.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      },
+      {
+        "file": "tests/test_tone_escalation_rules.py",
+        "class": "visibility",
+        "owner_alias": "visibility_fallback",
+        "symbol": "apply_visibility_enforcement"
+      }
+    ],
+    "stale_terminal_patches": []
+  },
+  "defined_terminal_exports": 5,
+  "terminal_loc": 341
+}

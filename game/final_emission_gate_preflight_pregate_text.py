@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, NamedTuple
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 class GatePreflightPregateText(NamedTuple):

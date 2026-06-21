@@ -8,7 +8,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Mapping, NamedTuple, NotRequired, Sequence, get_origin, get_type_hints
 
-from game.final_emission_ownership_schema import (
+from game.attribution_read_views import (
     OPENING_FAIL_CLOSED_CONTENT_OWNER,
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
@@ -45,7 +45,7 @@ from game.final_emission_replay_projection import (
     VISIBILITY_HARD_REPLACEMENT,
 )
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
-from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
+from game.attribution_read_views import SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.failure_classification_contract import (
     ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_FAILURE_CATEGORIES,

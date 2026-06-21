@@ -8,13 +8,13 @@ from __future__ import annotations
 import copy
 from typing import Any
 
-from game.final_emission_meta import (
+from game.observability_attribution_read import (
     assemble_unified_observational_telemetry_bundle,
     build_fem_observability_events,
     normalize_final_emission_meta_for_observability,
     stage_diff_narrative_authenticity_projection,
 )
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from game.narrative_authenticity_eval import (
     build_evaluator_observability_events,
     evaluate_narrative_authenticity,

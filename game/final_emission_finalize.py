@@ -22,7 +22,10 @@ from game.final_emission_meta import (
     patch_final_emission_meta,
     refresh_final_emission_mutation_lineage,
 )
-from game.final_emission_text import _normalize_text, _sanitize_output_text
+from game.final_emission_text_formatting import (
+    _normalize_text,
+    _sanitize_output_text,
+)
 from game.final_emission_validators import _split_sentences_answer_complete
 from game.stage_diff_telemetry import record_stage_snapshot
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload

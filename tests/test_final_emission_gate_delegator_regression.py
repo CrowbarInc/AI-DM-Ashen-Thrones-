@@ -26,6 +26,7 @@ from tests.helpers.gate_delegator_governance import (
     ACCEPTANCE_QUALITY,
     META,
     TEXT,
+    TEXT_FORMATTING,
     TONE_ESCALATION,
     NARRATIVE_AUTHORITY,
     ANTI_RAILROADING,
@@ -77,7 +78,7 @@ def test_bj41_finalize_emission_output_strips_appended_stock_and_packages_sideca
         "metadata": {},
         "debug_notes": "dbg",
     }
-    emission_text = load_game_module("game.final_emission_text")
+    emission_text = load_game_module(TEXT_FORMATTING)
     emission_meta = load_game_module("game.final_emission_meta")
     finalize = load_game_module(FINALIZE)
     pre = emission_text._normalize_text(selector)
@@ -613,11 +614,11 @@ def test_bj110_generic_exit_calls_assert_final_emission_mutation_allowed_owner_d
 
 def test_bj111_normalize_text_gate_reexport_removed() -> None:
     """BJ-111: _normalize_text no longer re-exported through gate."""
-    assert_owner_callable(TEXT, "_normalize_text")
+    assert_owner_callable(TEXT_FORMATTING, "_normalize_text")
 
 
 def test_bj111_callers_use_normalize_text_owner_directly() -> None:
-    """BJ-111: stack/exit callers use final_emission_text._normalize_text directly."""
+    """BJ-111: stack/exit callers use final_emission_text_formatting._normalize_text directly."""
     nss_src = function_source(NON_STRICT_STACK, "run_non_strict_layer_stack")
     ss_src = function_source(STRICT_SOCIAL_STACK, "run_strict_social_composition_trunk")
     ge_accept_src = function_source(GENERIC_EXIT, "run_generic_accept_exit")
@@ -634,11 +635,11 @@ def test_bj111_callers_use_normalize_text_owner_directly() -> None:
 
 def test_bj112_normalize_text_preserve_paragraphs_gate_reexport_removed() -> None:
     """BJ-112: _normalize_text_preserve_paragraphs no longer re-exported through gate."""
-    assert_owner_callable(TEXT, "_normalize_text_preserve_paragraphs")
+    assert_owner_callable(TEXT_FORMATTING, "_normalize_text_preserve_paragraphs")
 
 
 def test_bj112_strict_social_stack_calls_normalize_text_preserve_paragraphs_owner_directly() -> None:
-    """BJ-112: strict_social_stack calls final_emission_text._normalize_text_preserve_paragraphs directly."""
+    """BJ-112: strict_social_stack calls final_emission_text_formatting._normalize_text_preserve_paragraphs directly."""
     ss_src = function_source(STRICT_SOCIAL_STACK, "run_strict_social_composition_trunk")
     assert "_normalize_text_preserve_paragraphs(" in ss_src
     assert "feg._normalize_text_preserve_paragraphs" not in ss_src

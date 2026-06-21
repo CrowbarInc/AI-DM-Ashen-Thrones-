@@ -6,7 +6,7 @@ first-mention gate integration, and historical compatibility alias coverage only
 """
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.fallback_bridge_smoke import final_emission_meta_from_output, apply_final_emission_gate_consumer
 
 from typing import Any
 
@@ -17,10 +17,9 @@ from game.gm import (
     ensure_minimal_social_resolution,
     force_terminal_retry_fallback,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
 from game.narration_visibility import validate_player_facing_first_mentions
-from game.social_exchange_emission import (
+from game.social_exchange_fallback_catalog import (
     apply_strict_social_terminal_dialogue_fallback_if_needed,
     lawful_strict_social_dialogue_emergency_fallback_line,
     repair_strict_social_terminal_dialogue_fallback_if_needed,

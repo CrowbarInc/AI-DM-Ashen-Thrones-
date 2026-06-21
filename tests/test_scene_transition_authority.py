@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from game import storage
 from game.api import app
-from tests.helpers.emission_smoke_assertions import read_turn_debug_notes
+from tests.helpers.replay_fem_read_smoke import read_turn_debug_notes
 from game.intent_parser import maybe_build_declared_travel_action, segment_mixed_player_turn
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.storage import get_scene_runtime

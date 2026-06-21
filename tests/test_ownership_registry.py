@@ -36,6 +36,64 @@ Design notes (read before extending):
 - **Gate dependency compression guard** (Cycle BD-6): non-owner tests must not reintroduce
   direct imports of gate entry, FEM read, replay projection, or owner-bucket constants already
   routed through helper facades during BD-2–BD-5. Enforced by ``test_bd6_gate_dependency_compression_*``.
+- **BV7C smoke monolith import lockdown** (Cycle BV7C): non-barrel modules must not import
+  BV7A/BV7B extracted bridge or consumer-layer symbols from
+  ``tests/helpers/emission_smoke_assertions.py``; route through
+  ``response_type_smoke``, ``actor_consistency_smoke``, ``route_determinism_smoke``,
+  ``replay_fem_read_smoke``, ``gate_orchestration_smoke``, or ``fallback_bridge_smoke``.
+  Compatibility barrels ``replay_smoke_assertions`` and ``gate_integration_smoke`` remain
+  re-export-only shims (BV12B consumer migration complete). Monolith FI capped at 18 static
+  importers (phrase/route/speaker smoke only). Enforced by ``test_bv7c_smoke_monolith_*``.
+- **BV12A/BV12B smoke-bridge domain facades** (Cycle BV12A/BV12B): replay FEM read, gate
+  orchestration, and fallback dual-bridge surfaces live in ``replay_fem_read_smoke``,
+  ``gate_orchestration_smoke``, and ``fallback_bridge_smoke``. BV12B migrated consumers off
+  compatibility barrels onto domain facades; barrels remain re-export shims for BV12C governance.
+- **BV12C compat barrel regrowth lockdown** (Cycle BV12C): non-barrel modules must not import
+  ``replay_smoke_assertions`` or ``gate_integration_smoke`` directly; route through
+  ``replay_fem_read_smoke``, ``gate_orchestration_smoke``, or ``fallback_bridge_smoke``.
+  Compat barrel FI capped at 2 each (delegate verification residual only). Enforced by
+  ``test_bv12c_compat_barrel_*``.
+- **BV13A final-emission text extraction** (Cycle BV13A): formatting primitives live in
+  ``final_emission_text_formatting``; validator policy vocabulary in ``final_emission_text_policy``;
+  legacy semantic repair in ``final_emission_text_legacy_semantic_repair``. Compatibility barrel
+  ``final_emission_text`` re-exports only until Phase 2 consumer migration. Enforced by
+  ``test_bv13a_final_emission_text_facade_delegates``.
+- **BV13B text consumer migration** (Cycle BV13B): production/tests import formatting and policy
+  authorities directly; compat barrel reserved for fallback wrapper and legacy re-exports.
+  Enforced by ``test_bv13a_*`` delegate identity + AST fan-in reports in ``docs/audits/BV13B_*``.
+- **BV13C text compat barrel regrowth lockdown** (Cycle BV13C): non-barrel modules must not import
+  ``game.final_emission_text`` for formatting or policy symbols; route through
+  ``final_emission_text_formatting`` or ``final_emission_text_policy``. Compat barrel FI capped at
+  8 (fallback wrapper + delegate verification residual only). Enforced by
+  ``test_bv13c_text_compat_*``.
+- **BV14A social-exchange emission extraction** (Cycle BV14A): fallback catalog, policy, validation,
+  and projection live in ``social_exchange_fallback_catalog``, ``social_exchange_policy``,
+  ``social_exchange_validation``, and ``social_exchange_projection``. Compatibility barrel
+  ``social_exchange_emission`` retains strict-social composition authority only. Enforced by
+  ``test_bv14a_social_exchange_emission_facade_delegates``.
+- **BV14B social-exchange consumer migration** (Cycle BV14B): production/tests import fallback,
+  policy, validation, and projection authorities directly; compat barrel reserved for composition
+  assembly and BD-2 legality surfaces. Enforced by ``test_bv14a_*`` delegate identity + AST fan-in
+  reports in ``docs/audits/BV14B_*``.
+- **BV14C social-exchange compat barrel regrowth lockdown** (Cycle BV14C): non-barrel modules must
+  not import ``game.social_exchange_emission`` for fallback, policy, validation, or projection
+  symbols; route through ``social_exchange_fallback_catalog``, ``social_exchange_policy``,
+  ``social_exchange_validation``, or ``social_exchange_projection``. Compat barrel FI capped at 12
+  (composition authority + BD-2 legality + delegate verification residual only). Enforced by
+  ``test_bv14c_social_exchange_compat_*``.
+- **BV2C meta import lockdown** (Cycle BV2C): non-owner ``game/`` and ``tests/`` modules must not
+  import ``game.final_emission_meta`` directly except production write owners and the FEM owner /
+  governance suites. Read traffic routes through ``final_emission_meta_read``,
+  ``final_emission_owner_bucket_views``, or ``final_emission_replay_projection``. Enforced by
+  ``test_bv2c_final_emission_meta_direct_import_guard_*``.
+- **BV10 read-cluster facade routing** (Cycle BV10C): non-owner modules must not import
+  ``final_emission_meta_read``, ``final_emission_owner_bucket_views``, or
+  ``final_emission_ownership_schema`` directly except production write owners, vocabulary
+  authority modules, facade delegates, and allowlisted owner suites. Route attribution reads
+  through ``game.attribution_read_views``; lineage/sanitizer projection through
+  ``game.ownership_projection_views``; observability/FEM dict reads through
+  ``game.observability_attribution_read`` or ``tests/helpers/replay_fem_read_smoke``.
+  Enforced by ``test_bv10_read_cluster_direct_import_guard_*``.
 - **Runtime gate entry guard** (Cycle BN1): non-owner ``game/`` modules must not import
   ``apply_final_emission_gate`` from ``game.final_emission_gate``; runtime/API callers use
   ``game.final_emission_runtime.finalize_player_facing_emission``. Enforced by
@@ -225,7 +283,15 @@ _FORBIDDEN_GATE_READ_SIDE_SOURCE_FRAGMENTS: Final[tuple[str, ...]] = (
 
 # Cycle BD-6: compressed gate-owned imports non-owner tests must not reintroduce (BD-2–BD-5).
 _BD6_SMOKE_FACADE: Final[str] = "tests/helpers/emission_smoke_assertions.py"
+_BD6_GATE_BRIDGE_FACADE: Final[str] = "tests/helpers/gate_integration_smoke.py"
+_BD6_REPLAY_BRIDGE_FACADE: Final[str] = "tests/helpers/replay_smoke_assertions.py"
+_BD6_RT_SMOKE_FACADE: Final[str] = "tests/helpers/response_type_smoke.py"
+_BD6_AC_SMOKE_FACADE: Final[str] = "tests/helpers/actor_consistency_smoke.py"
+_BD6_RD_SMOKE_FACADE: Final[str] = "tests/helpers/route_determinism_smoke.py"
 _BD6_GOLDEN_REPLAY_FACADE: Final[str] = "tests/helpers/golden_replay_projection.py"
+_BV12A_REPLAY_FEM_READ_FACADE: Final[str] = "tests/helpers/replay_fem_read_smoke.py"
+_BV12A_GATE_ORCHESTRATION_FACADE: Final[str] = "tests/helpers/gate_orchestration_smoke.py"
+_BV12A_FALLBACK_BRIDGE_FACADE: Final[str] = "tests/helpers/fallback_bridge_smoke.py"
 # Cycle BE6: scaffold/phrase ownership layers — intentional separation; do not merge matrices.
 _BE6_SCAFFOLD_PHRASE_LAYER_OWNERS: Final[Mapping[str, str]] = {
     "sanitizer_legality": "tests/test_output_sanitizer.py",
@@ -238,6 +304,38 @@ _BJ4_SMOKE_FACADE_ALLOWED_GATE_BRIDGES: Final[frozenset[str]] = frozenset(
         "enforce_response_type_contract_layer",
         "final_emission_meta_from_output",
         "read_turn_debug_notes",
+    }
+)
+_BV7A_EXTRACTED_GATE_BRIDGE_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {"apply_final_emission_gate_consumer", "gm_response_stub"}
+)
+_BV7A_EXTRACTED_REPLAY_BRIDGE_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {"final_emission_meta_from_output", "read_turn_debug_notes"}
+)
+_BV7B_EXTRACTED_RT_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {
+        "response_type_contract",
+        "assert_response_type_meta",
+        "assert_response_type_contract_surfaces",
+        "enforce_response_type_contract_layer",
+    }
+)
+_BV7B_EXTRACTED_AC_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {
+        "validate_answer_completeness",
+        "apply_answer_completeness_layer",
+        "skip_answer_completeness_layer",
+    }
+)
+_BV7B_EXTRACTED_RD_SYMBOLS: Final[frozenset[str]] = frozenset(
+    {
+        "validate_response_delta",
+        "apply_response_delta_layer",
+        "skip_response_delta_layer",
+        "strict_social_answer_pressure_rd_contract_active",
+        "inspect_response_delta_failure",
+        "assert_response_delta_boundary_validate_only",
+        "assert_no_boundary_reorder_repair",
     }
 )
 _BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES: Final[frozenset[str]] = frozenset(
@@ -264,6 +362,143 @@ _BJ4_SMOKE_FACADE_FORBIDDEN_PUBLIC_NAME_FRAGMENTS: Final[Mapping[str, str]] = {
     "repair_matrix": "AC/RD repair semantics belong to owner suites",
     "repair_semantic": "AC/RD repair semantics belong to owner suites",
 }
+_BV7C_EXTRACTED_SYMBOL_TO_FACADE: Final[Mapping[str, str]] = {
+    **{symbol: _BD6_RT_SMOKE_FACADE for symbol in _BV7B_EXTRACTED_RT_SYMBOLS},
+    **{symbol: _BD6_AC_SMOKE_FACADE for symbol in _BV7B_EXTRACTED_AC_SYMBOLS},
+    **{symbol: _BD6_RD_SMOKE_FACADE for symbol in _BV7B_EXTRACTED_RD_SYMBOLS},
+    **{symbol: _BV12A_GATE_ORCHESTRATION_FACADE for symbol in _BV7A_EXTRACTED_GATE_BRIDGE_SYMBOLS},
+    **{symbol: _BV12A_REPLAY_FEM_READ_FACADE for symbol in _BV7A_EXTRACTED_REPLAY_BRIDGE_SYMBOLS},
+}
+_BV7C_MONOLITH_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
+    "tests/helpers/emission_smoke_assertions.py": (
+        "compatibility barrel owner re-exports extracted bridge/family symbols"
+    ),
+}
+_BV7C_ALLOWED_MONOLITH_STATIC_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {
+        "tests/test_answer_completeness_rules.py",
+        "tests/test_broad_address_social_bid.py",
+        "tests/test_broadcast_open_call_social.py",
+        "tests/test_c4_narrative_mode_live_pipeline.py",
+        "tests/test_diegetic_fallback_narration.py",
+        "tests/test_emission_smoke_assertions_contract.py",
+        "tests/test_empty_social_retry_regressions.py",
+        "tests/test_interaction_continuity_repair.py",
+        "tests/test_mixed_state_recovery_regressions.py",
+        "tests/test_opening_start_seam_regressions.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_social_speaker_grounding.py",
+        "tests/test_synthetic_smoke.py",
+        "tests/test_turn_packet_stage_diff_integration.py",
+        "tests/test_turn_pipeline_shared.py",
+    }
+)
+_BV7C_ALLOWED_MONOLITH_DYNAMIC_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {
+        "tests/test_ownership_registry.py",
+        "tests/test_final_emission_gate_delegator_regression.py",
+    }
+)
+_BV7C_MONOLITH_FI_CAP: Final[int] = 18
+
+# Cycle BV12C: compat smoke bridge barrels are re-export-only; consumers route through domain facades.
+_BV12C_REPLAY_COMPAT_MODULE: Final[str] = "tests.helpers.replay_smoke_assertions"
+_BV12C_GATE_COMPAT_MODULE: Final[str] = "tests.helpers.gate_integration_smoke"
+_BV12C_COMPAT_BARREL_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
+    "tests/helpers/replay_smoke_assertions.py": "compat barrel re-exports replay FEM domain facade",
+    "tests/helpers/gate_integration_smoke.py": "compat barrel re-exports gate orchestration domain facade",
+    "tests/test_bv12a_smoke_bridge_facade_delegates.py": "BV12A/BV12C delegate verification owner",
+    "tests/test_bv13a_final_emission_text_facade_delegates.py": "BV13A text compat delegate verification owner",
+    "tests/test_ownership_registry.py": "Governance module; synthetic violation fixtures",
+}
+_BV12C_ALLOWED_REPLAY_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {"tests/test_bv12a_smoke_bridge_facade_delegates.py"}
+)
+_BV12C_ALLOWED_GATE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {"tests/test_bv12a_smoke_bridge_facade_delegates.py"}
+)
+_BV12C_COMPAT_BARREL_FI_CAP: Final[int] = 2
+_BV12C_INTENTIONAL_DOMAIN_HUBS: Final[Mapping[str, str]] = {
+    "tests.helpers.replay_fem_read_smoke": "FEM read + debug notes (replay acceptance, projection, observability)",
+    "tests.helpers.gate_orchestration_smoke": "Gate consumer + HTTP stub (orchestration/integration suites)",
+    "tests.helpers.fallback_bridge_smoke": "Dual-bridge fallback suites only (narrow combined surface)",
+}
+_BV12C_COMPAT_BARREL_SCAN_ROOTS: Final[tuple[str, ...]] = ("tests", "tools", "scripts")
+
+# Cycle BV13C: final_emission_text compat barrel is re-export + fallback wrapper only.
+_BV13C_TEXT_COMPAT_MODULE: Final[str] = "game.final_emission_text"
+_BV13C_TEXT_FORMATTING_AUTHORITY: Final[str] = "game.final_emission_text_formatting"
+_BV13C_TEXT_POLICY_AUTHORITY: Final[str] = "game.final_emission_text_policy"
+_BV13C_TEXT_LEGACY_REPAIR_AUTHORITY: Final[str] = "game.final_emission_text_legacy_semantic_repair"
+_BV13C_TEXT_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
+    "game/final_emission_text.py": "compat barrel re-exports formatting/policy/legacy authorities",
+    "game/final_emission_fast_fallback_composition.py": "fallback wrapper consumer (_global_narrative_fallback_stock_line)",
+    "game/final_emission_scene_emit_integrity.py": "fallback wrapper consumer (_global_narrative_fallback_stock_line)",
+    "tests/test_bv13a_final_emission_text_facade_delegates.py": "BV13A/BV13C delegate verification owner",
+    "tests/test_diegetic_fallback_block4.py": "fallback wrapper test consumer",
+    "tests/test_ownership_registry.py": "Governance module; synthetic violation fixtures",
+}
+_BV13C_ALLOWED_TEXT_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {
+        "game/final_emission_fast_fallback_composition.py",
+        "game/final_emission_scene_emit_integrity.py",
+        "tests/test_bv13a_final_emission_text_facade_delegates.py",
+        "tests/test_diegetic_fallback_block4.py",
+    }
+)
+_BV13C_TEXT_COMPAT_FI_CAP: Final[int] = 8
+_BV13C_INTENTIONAL_TEXT_DOMAIN_HUBS: Final[Mapping[str, str]] = {
+    "game.final_emission_text_formatting": "Text normalization/sanitization primitives (production-core)",
+    "game.final_emission_text_policy": "Validator policy vocabulary tuples (controlled policy surface)",
+    "game.final_emission_text_legacy_semantic_repair": "Test-only legacy semantic repair (isolated from compat)",
+}
+_BV13C_TEXT_COMPAT_SCAN_ROOTS: Final[tuple[str, ...]] = ("game", "tests", "tools", "scripts")
+
+# Cycle BV14C: social_exchange_emission compat barrel is composition authority + re-exports only.
+_BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE: Final[str] = "game.social_exchange_emission"
+_BV14C_SOCIAL_EXCHANGE_FALLBACK_AUTHORITY: Final[str] = "game.social_exchange_fallback_catalog"
+_BV14C_SOCIAL_EXCHANGE_POLICY_AUTHORITY: Final[str] = "game.social_exchange_policy"
+_BV14C_SOCIAL_EXCHANGE_VALIDATION_AUTHORITY: Final[str] = "game.social_exchange_validation"
+_BV14C_SOCIAL_EXCHANGE_PROJECTION_AUTHORITY: Final[str] = "game.social_exchange_projection"
+_BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
+    "game/social_exchange_emission.py": "compat barrel re-exports fallback/policy/validation/projection authorities",
+    "game/final_emission_strict_social_stack.py": "composition authority consumer (build_final_strict_social_response)",
+    "game/social_exchange_validation.py": "BD-2 delegate verification (lazy hard_reject composition import)",
+    "tests/test_bv14a_social_exchange_emission_facade_delegates.py": "BV14A/BV14C delegate verification owner",
+    "tests/test_narration_transcript_regressions.py": "composition regression consumer",
+    "tests/test_output_sanitizer.py": "sanitizer integration consumer (composition filter monkeypatch)",
+    "tests/test_ownership_registry.py": "Governance module; BJ-115/116 delegate introspection + synthetic fixtures",
+    "tests/test_realization_provenance.py": "composition regression consumer",
+    "tests/test_social_answer_candidate.py": "composition regression consumer",
+    "tests/test_social_emission_quality.py": "composition regression consumer",
+    "tests/test_social_exchange_emission.py": "BD-2 strict-social emission legality owner",
+    "tests/test_social_speaker_grounding.py": "composition regression consumer",
+    "tests/test_social_target_authority_regressions.py": "composition regression consumer",
+}
+_BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
+    {
+        "game/final_emission_strict_social_stack.py",
+        "game/social_exchange_validation.py",
+        "tests/test_bv14a_social_exchange_emission_facade_delegates.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_output_sanitizer.py",
+        "tests/test_ownership_registry.py",
+        "tests/test_realization_provenance.py",
+        "tests/test_social_answer_candidate.py",
+        "tests/test_social_emission_quality.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_social_speaker_grounding.py",
+        "tests/test_social_target_authority_regressions.py",
+    }
+)
+_BV14C_SOCIAL_EXCHANGE_COMPAT_FI_CAP: Final[int] = 12
+_BV14C_INTENTIONAL_SOCIAL_EXCHANGE_DOMAIN_HUBS: Final[Mapping[str, str]] = {
+    "game.social_exchange_fallback_catalog": "Strict-social fallback phrase catalog + terminal recovery (explicit maintenance surface)",
+    "game.social_exchange_policy": "Strict-social routing/policy predicates + NPC display helpers (controlled policy surface)",
+    "game.social_exchange_validation": "Route legality + interruption shape validators (BD-2 validation authority)",
+    "game.social_exchange_projection": "Final-emission logging/trace projection for strict-social paths",
+}
+_BV14C_SOCIAL_EXCHANGE_COMPAT_SCAN_ROOTS: Final[tuple[str, ...]] = ("game", "tests", "tools", "scripts")
 
 # Cycle BI-8: golden replay is a consumer/bridge, not a subsystem legality owner.
 _BI8_GOLDEN_REPLAY_TARGETS: Final[tuple[str, ...]] = (
@@ -340,6 +575,79 @@ _BD6_COMPRESSED_OWNER_MODULES: Final[frozenset[str]] = frozenset(
         "game.final_emission_replay_projection",
     },
 )
+# BV2C: production modules allowed to import ``game.final_emission_meta`` (write/packaging owners).
+_BV2C_META_WRITE_OWNER_GAME_MODULES: Final[frozenset[str]] = frozenset(
+    {
+        "game.final_emission_meta",
+        "game.final_emission_meta_read",
+        "game.fallback_provenance_debug",
+        "game.final_emission_acceptance_quality",
+        "game.final_emission_fem_assembly",
+        "game.final_emission_finalize",
+        "game.final_emission_gate_preflight_defaults",
+        "game.final_emission_generic_exit",
+        "game.final_emission_narration_constraint_debug",
+        "game.final_emission_narrative_mode_output",
+        "game.final_emission_opening_fallback",
+        "game.final_emission_repairs",
+        "game.final_emission_response_type",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_terminal_pipeline",
+        "game.final_emission_visibility_fallback",
+        "game.gm_retry",
+        "game.interaction_continuity",
+        "game.output_sanitizer",
+        "game.upstream_response_repairs",
+    },
+)
+_BV2C_META_DIRECT_IMPORT_TEST_ALLOWLIST: Final[Mapping[str, str]] = {
+    "tests/test_final_emission_meta.py": "Canonical FEM owner regression suite (BV2C KEEP)",
+    "tests/test_ownership_registry.py": "Import governance / boundary enforcement owner (BV2C KEEP)",
+}
+_BV2C_META_READ_FACADE: Final[str] = "game.final_emission_meta_read"
+_BV2C_OWNER_BUCKET_VIEWS_FACADE: Final[str] = "game.final_emission_owner_bucket_views"
+# BV10C: read-side authority modules guarded against non-owner direct imports.
+_BV10C_META_READ_AUTHORITY: Final[str] = "game.final_emission_meta_read"
+_BV10C_BUCKET_VIEWS_AUTHORITY: Final[str] = "game.final_emission_owner_bucket_views"
+_BV10C_OWNERSHIP_SCHEMA_AUTHORITY: Final[str] = "game.final_emission_ownership_schema"
+_BV10C_READ_CLUSTER_AUTHORITIES: Final[frozenset[str]] = frozenset(
+    {
+        _BV10C_META_READ_AUTHORITY,
+        _BV10C_BUCKET_VIEWS_AUTHORITY,
+        _BV10C_OWNERSHIP_SCHEMA_AUTHORITY,
+    },
+)
+_BV10C_ATTRIBUTION_READ_FACADE: Final[str] = "game.attribution_read_views"
+_BV10C_OWNERSHIP_PROJECTION_FACADE: Final[str] = "game.ownership_projection_views"
+_BV10C_OBSERVABILITY_READ_FACADE: Final[str] = "game.observability_attribution_read"
+_BV10C_REPLAY_SMOKE_FACADE: Final[str] = "tests.helpers.replay_fem_read_smoke"
+_BV10C_READ_CLUSTER_GAME_ALLOWLIST: Final[frozenset[str]] = frozenset(
+    {
+        "game.final_emission_meta",
+        _BV10C_META_READ_AUTHORITY,
+        _BV10C_BUCKET_VIEWS_AUTHORITY,
+        _BV10C_OWNERSHIP_SCHEMA_AUTHORITY,
+        _BV10C_ATTRIBUTION_READ_FACADE,
+        _BV10C_OWNERSHIP_PROJECTION_FACADE,
+        _BV10C_OBSERVABILITY_READ_FACADE,
+        "game.final_emission_visibility_fallback",
+        "game.final_emission_sealed_fallback",
+        "game.final_emission_replay_projection",
+    },
+)
+_BV10C_READ_CLUSTER_TEST_ALLOWLIST: Final[Mapping[str, str]] = {
+    "tests/test_final_emission_meta.py": "FEM / schema owner regression suite (BV10C KEEP)",
+    "tests/test_opening_fallback_owner_bucket.py": "Opening fallback owner-bucket mapping owner (BV10C KEEP)",
+    "tests/test_ownership_registry.py": "Import governance / boundary enforcement owner (BV10C KEEP)",
+    "tests/test_bv10a_read_facade_delegates.py": "BV10 facade delegate verification owner (BV10C KEEP)",
+    "tests/helpers/replay_smoke_assertions.py": "Replay FEM read bridge facade (BV7A/BV10C KEEP)",
+    "tests/helpers/replay_fem_read_smoke.py": "Replay FEM read domain facade owner (BV12A KEEP)",
+    "tests/helpers/gate_orchestration_smoke.py": "Gate orchestration domain facade owner (BV12A KEEP)",
+    "tests/helpers/fallback_bridge_smoke.py": "Fallback dual-bridge import surface (BV12A KEEP)",
+    "tests/test_bv12a_smoke_bridge_facade_delegates.py": "BV12A facade delegate verification owner (BV12A KEEP)",
+    "tests/test_bv13a_final_emission_text_facade_delegates.py": "BV13A/BV13B text compat delegate verification owner (BV13A KEEP)",
+}
 # Narrow allowlist: primary owners, BD-2–BD-5 KEEP suites, facade delegates, gate monkeypatch helpers,
 # and audit fixture modules that embed gate-import strings intentionally.
 _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST: Final[Mapping[str, str]] = {
@@ -407,7 +715,7 @@ _BN1_RUNTIME_GATE_ENTRY_REPLACEMENT: Final[str] = (
     "game.final_emission_runtime.finalize_player_facing_emission"
 )
 _BN1_DOWNSTREAM_TEST_GATE_ENTRY_REPLACEMENT: Final[str] = (
-    "tests.helpers.emission_smoke_assertions.apply_final_emission_gate_consumer"
+    "tests.helpers.gate_orchestration_smoke.apply_final_emission_gate_consumer"
 )
 
 
@@ -853,10 +1161,10 @@ def _bd6_is_forbidden_owner_bucket_symbol(module: str, symbol: str) -> bool:
 
 def _bd6_facade_replacement(module: str, symbol: str) -> str:
     if module == "game.final_emission_gate" and symbol == "apply_final_emission_gate":
-        return f"{_BD6_SMOKE_FACADE}::apply_final_emission_gate_consumer"
+        return f"{_BV12A_GATE_ORCHESTRATION_FACADE}::apply_final_emission_gate_consumer"
     if module == "game.final_emission_meta" and symbol in _BD6_FORBIDDEN_FEM_READ_SYMBOLS:
         return (
-            f"{_BD6_SMOKE_FACADE}::final_emission_meta_from_output "
+            f"{_BV12A_REPLAY_FEM_READ_FACADE}::final_emission_meta_from_output "
             f"(integration/smoke) or game.final_emission_meta.read_final_emission_meta_dict "
             f"(gate-output FEM read)"
         )
@@ -946,6 +1254,580 @@ def iter_gate_dependency_compression_guard_scan_paths(
             continue
         paths.append(rel)
     return tuple(paths)
+
+
+def collect_bv7c_smoke_monolith_import_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: Mapping[str, str] = _BV7C_MONOLITH_IMPORT_GUARD_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports BV7A/BV7B extracted symbols from the monolith barrel."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm in allowlist:
+        return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.ImportFrom) or node.module != "tests.helpers.emission_smoke_assertions":
+            continue
+        for alias in node.names:
+            symbol = alias.name
+            if symbol == "*":
+                key = ("*", _DOWNSTREAM_SMOKE_FACADE)
+                if key in seen:
+                    continue
+                seen.add(key)
+                violations.append(
+                    f"{norm}: forbidden star import from {_DOWNSTREAM_SMOKE_FACADE!r} "
+                    f"(import extracted symbols from family/bridge facades only)",
+                )
+                continue
+            facade = _BV7C_EXTRACTED_SYMBOL_TO_FACADE.get(symbol)
+            if not facade:
+                continue
+            key = (symbol, facade)
+            if key in seen:
+                continue
+            seen.add(key)
+            violations.append(
+                f"{norm}: forbidden monolith import {symbol!r} from {_DOWNSTREAM_SMOKE_FACADE} "
+                f"(use facade replacement: {facade})",
+            )
+    return violations
+
+
+def iter_bv7c_smoke_monolith_import_guard_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    allowlist: Mapping[str, str] = _BV7C_MONOLITH_IMPORT_GUARD_ALLOWLIST,
+) -> tuple[str, ...]:
+    """All tests/**/*.py paths subject to BV7C monolith import guard (excluding allowlisted paths)."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for path in sorted((root / "tests").rglob("*.py")):
+        rel = _normalize_test_rel_path(path.relative_to(root))
+        if rel in allowlist:
+            continue
+        paths.append(rel)
+    return tuple(paths)
+
+
+def collect_bv7c_monolith_static_importers(source_by_rel: Mapping[str, str]) -> frozenset[str]:
+    """Return test modules with static ``from tests.helpers.emission_smoke_assertions import``."""
+    importers: set[str] = set()
+    for rel, source in source_by_rel.items():
+        tree = ast.parse(source)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "tests.helpers.emission_smoke_assertions":
+                importers.add(_normalize_test_rel_path(rel))
+                break
+    return frozenset(importers)
+
+
+def collect_bv12c_compat_barrel_import_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: Mapping[str, str] = _BV12C_COMPAT_BARREL_IMPORT_GUARD_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports BV12 compat barrels outside the allowlist."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm in allowlist:
+        return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[str] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module in (
+            _BV12C_REPLAY_COMPAT_MODULE,
+            _BV12C_GATE_COMPAT_MODULE,
+        ):
+            if node.module in seen:
+                continue
+            seen.add(node.module)
+            domain = (
+                _BV12A_REPLAY_FEM_READ_FACADE
+                if node.module == _BV12C_REPLAY_COMPAT_MODULE
+                else _BV12A_GATE_ORCHESTRATION_FACADE
+            )
+            violations.append(
+                f"{norm}: forbidden compat barrel import from {node.module!r} "
+                f"(use domain facade: {domain})",
+            )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name not in (_BV12C_REPLAY_COMPAT_MODULE, _BV12C_GATE_COMPAT_MODULE):
+                    continue
+                if alias.name in seen:
+                    continue
+                seen.add(alias.name)
+                domain = (
+                    _BV12A_REPLAY_FEM_READ_FACADE
+                    if alias.name == _BV12C_REPLAY_COMPAT_MODULE
+                    else _BV12A_GATE_ORCHESTRATION_FACADE
+                )
+                violations.append(
+                    f"{norm}: forbidden compat barrel import {alias.name!r} "
+                    f"(use domain facade: {domain})",
+                )
+    return violations
+
+
+def iter_bv12c_compat_barrel_import_guard_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    allowlist: Mapping[str, str] = _BV12C_COMPAT_BARREL_IMPORT_GUARD_ALLOWLIST,
+    scan_roots: tuple[str, ...] = _BV12C_COMPAT_BARREL_SCAN_ROOTS,
+) -> tuple[str, ...]:
+    """All Python paths subject to BV12C compat-barrel import guard (excluding allowlisted paths)."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel in allowlist:
+                continue
+            paths.append(rel)
+    return tuple(paths)
+
+
+def collect_bv12c_compat_barrel_static_importers(
+    repo_root: Path | None = None,
+    *,
+    compat_module: str,
+    scan_roots: tuple[str, ...] = _BV12C_COMPAT_BARREL_SCAN_ROOTS,
+) -> frozenset[str]:
+    """Return modules with static imports of a BV12 compat barrel."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    barrel_paths = {
+        "tests/helpers/replay_smoke_assertions.py",
+        "tests/helpers/gate_integration_smoke.py",
+    }
+    importers: set[str] = set()
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel in barrel_paths:
+                continue
+            source = path.read_text(encoding="utf-8")
+            tree = ast.parse(source)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == compat_module:
+                    importers.add(rel)
+                    break
+                if isinstance(node, ast.Import):
+                    if any(alias.name == compat_module for alias in node.names):
+                        importers.add(rel)
+                        break
+    return frozenset(importers)
+
+
+def collect_bv13c_text_compat_import_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: Mapping[str, str] = _BV13C_TEXT_COMPAT_IMPORT_GUARD_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports the BV13 text compat barrel outside the allowlist."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm in allowlist:
+        return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[str] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module == _BV13C_TEXT_COMPAT_MODULE:
+            if _BV13C_TEXT_COMPAT_MODULE in seen:
+                continue
+            seen.add(_BV13C_TEXT_COMPAT_MODULE)
+            violations.append(
+                f"{norm}: forbidden compat barrel import from {_BV13C_TEXT_COMPAT_MODULE!r} "
+                f"(use formatting authority: {_BV13C_TEXT_FORMATTING_AUTHORITY}; "
+                f"policy authority: {_BV13C_TEXT_POLICY_AUTHORITY})",
+            )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name != _BV13C_TEXT_COMPAT_MODULE:
+                    continue
+                if alias.name in seen:
+                    continue
+                seen.add(alias.name)
+                violations.append(
+                    f"{norm}: forbidden compat barrel import {alias.name!r} "
+                    f"(use formatting authority: {_BV13C_TEXT_FORMATTING_AUTHORITY}; "
+                    f"policy authority: {_BV13C_TEXT_POLICY_AUTHORITY})",
+                )
+    return violations
+
+
+def iter_bv13c_text_compat_import_guard_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    allowlist: Mapping[str, str] = _BV13C_TEXT_COMPAT_IMPORT_GUARD_ALLOWLIST,
+    scan_roots: tuple[str, ...] = _BV13C_TEXT_COMPAT_SCAN_ROOTS,
+) -> tuple[str, ...]:
+    """All Python paths subject to BV13C text compat-barrel import guard (excluding allowlisted paths)."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel in allowlist:
+                continue
+            paths.append(rel)
+    return tuple(paths)
+
+
+def collect_bv13c_text_compat_static_importers(
+    repo_root: Path | None = None,
+    *,
+    scan_roots: tuple[str, ...] = _BV13C_TEXT_COMPAT_SCAN_ROOTS,
+) -> frozenset[str]:
+    """Return modules with static imports of the BV13 text compat barrel."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    barrel_path = "game/final_emission_text.py"
+    importers: set[str] = set()
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel == barrel_path:
+                continue
+            source = path.read_text(encoding="utf-8")
+            tree = ast.parse(source)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == _BV13C_TEXT_COMPAT_MODULE:
+                    importers.add(rel)
+                    break
+                if isinstance(node, ast.Import):
+                    if any(alias.name == _BV13C_TEXT_COMPAT_MODULE for alias in node.names):
+                        importers.add(rel)
+                        break
+    return frozenset(importers)
+
+
+def _bv14c_social_exchange_compat_authority_guidance() -> str:
+    return (
+        f"fallback authority: {_BV14C_SOCIAL_EXCHANGE_FALLBACK_AUTHORITY}; "
+        f"policy authority: {_BV14C_SOCIAL_EXCHANGE_POLICY_AUTHORITY}; "
+        f"validation authority: {_BV14C_SOCIAL_EXCHANGE_VALIDATION_AUTHORITY}; "
+        f"projection authority: {_BV14C_SOCIAL_EXCHANGE_PROJECTION_AUTHORITY}"
+    )
+
+
+def collect_bv14c_social_exchange_compat_import_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: Mapping[str, str] = _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports the BV14 social-exchange compat barrel outside the allowlist."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm in allowlist:
+        return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[str] = set()
+    guidance = _bv14c_social_exchange_compat_authority_guidance()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module == _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE:
+            if _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE in seen:
+                continue
+            seen.add(_BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE)
+            violations.append(
+                f"{norm}: forbidden compat barrel import from {_BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE!r} "
+                f"(use {_bv14c_social_exchange_compat_authority_guidance()})",
+            )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name != _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE:
+                    continue
+                if alias.name in seen:
+                    continue
+                seen.add(alias.name)
+                violations.append(
+                    f"{norm}: forbidden compat barrel import {alias.name!r} (use {guidance})",
+                )
+    return violations
+
+
+def iter_bv14c_social_exchange_compat_import_guard_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    allowlist: Mapping[str, str] = _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST,
+    scan_roots: tuple[str, ...] = _BV14C_SOCIAL_EXCHANGE_COMPAT_SCAN_ROOTS,
+) -> tuple[str, ...]:
+    """All Python paths subject to BV14C social-exchange compat-barrel import guard (excluding allowlisted paths)."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel in allowlist:
+                continue
+            paths.append(rel)
+    return tuple(paths)
+
+
+def collect_bv14c_social_exchange_compat_static_importers(
+    repo_root: Path | None = None,
+    *,
+    scan_roots: tuple[str, ...] = _BV14C_SOCIAL_EXCHANGE_COMPAT_SCAN_ROOTS,
+) -> frozenset[str]:
+    """Return modules with static imports of the BV14 social-exchange compat barrel."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    barrel_path = "game/social_exchange_emission.py"
+    importers: set[str] = set()
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel == barrel_path:
+                continue
+            source = path.read_text(encoding="utf-8")
+            tree = ast.parse(source)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE:
+                    importers.add(rel)
+                    break
+                if isinstance(node, ast.Import):
+                    if any(alias.name == _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE for alias in node.names):
+                        importers.add(rel)
+                        break
+    return frozenset(importers)
+
+
+def collect_bv16c_terminal_delegate_monkeypatch_violations(
+    rel_path: str,
+    source: str,
+    *,
+    allowlist: frozenset[str] | None = None,
+    forbidden_markers: tuple[str, ...] | None = None,
+) -> list[str]:
+    """Return violations when tests monkeypatch terminal_pipeline delegate symbols (BV16C)."""
+    from tests.helpers.gate_thin_boundary_locks import (
+        BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS,
+        BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST,
+    )
+
+    norm = _normalize_test_rel_path(rel_path)
+    allowed = BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST if allowlist is None else allowlist
+    if norm in allowed:
+        return []
+    markers = (
+        BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS
+        if forbidden_markers is None
+        else forbidden_markers
+    )
+    violations: list[str] = []
+    for marker in markers:
+        if marker in source:
+            violations.append(
+                f"{norm}: forbidden terminal_pipeline delegate monkeypatch {marker!r} "
+                f"(patch owner module: visibility_fallback / acceptance_quality / interaction_continuity / emission_repairs)",
+            )
+    return violations
+
+
+def iter_bv16c_terminal_monkeypatch_scan_paths(
+    repo_root: Path | None = None,
+    *,
+    scan_roots: tuple[str, ...] = ("tests",),
+) -> tuple[str, ...]:
+    from tests.helpers.gate_thin_boundary_locks import BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST
+
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for scan_root in scan_roots:
+        base = root / scan_root
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.py")):
+            rel = _normalize_test_rel_path(path.relative_to(root))
+            if rel in BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST:
+                continue
+            paths.append(rel)
+    return tuple(paths)
+
+
+def _bv2c_meta_import_replacement(module: str, symbol: str) -> str:
+    if symbol.startswith(("OPENING_FALLBACK_OWNER_", "SEALED_FALLBACK_OWNER_", "VISIBILITY_FALLBACK_OWNER_")):
+        return _BV2C_OWNER_BUCKET_VIEWS_FACADE
+    if symbol.endswith("_owner_bucket_from_meta") or symbol.endswith("_owner_bucket_from_fields"):
+        return _BV2C_OWNER_BUCKET_VIEWS_FACADE
+    return _BV2C_META_READ_FACADE
+
+
+def collect_bv2c_final_emission_meta_import_violations(
+    rel_path: str,
+    source: str,
+    *,
+    game_allowlist: frozenset[str] = _BV2C_META_WRITE_OWNER_GAME_MODULES,
+    test_allowlist: Mapping[str, str] = _BV2C_META_DIRECT_IMPORT_TEST_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports ``game.final_emission_meta`` outside BV2C allowlists."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm.startswith("tests/") and norm in test_allowlist:
+        return []
+    if norm.startswith("game/"):
+        module_name = norm.replace("/", ".").removesuffix(".py")
+        if module_name in game_allowlist:
+            return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[tuple[str, str]] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module == "game.final_emission_meta":
+            for alias in node.names:
+                symbol = alias.name
+                key = (node.module, symbol)
+                if key in seen:
+                    continue
+                seen.add(key)
+                imported = f"{node.module}.{symbol}"
+                replacement = _bv2c_meta_import_replacement(node.module, symbol)
+                violations.append(
+                    f"{norm}: forbidden direct final_emission_meta import {imported!r} "
+                    f"(use facade: {replacement})",
+                )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name != "game.final_emission_meta":
+                    continue
+                key = (alias.name, alias.asname or alias.name)
+                if key in seen:
+                    continue
+                seen.add(key)
+                violations.append(
+                    f"{norm}: forbidden direct final_emission_meta module import "
+                    f"(use {_BV2C_META_READ_FACADE} / {_BV2C_OWNER_BUCKET_VIEWS_FACADE} / "
+                    f"game.final_emission_replay_projection for read-side access)",
+                )
+    return violations
+
+
+def iter_bv2c_final_emission_meta_import_guard_scan_paths(
+    repo_root: Path | None = None,
+) -> tuple[str, ...]:
+    """All game/tests Python paths subject to BV2C meta import lockdown."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    paths: list[str] = []
+    for subdir in ("game", "tests"):
+        for path in sorted((root / subdir).rglob("*.py")):
+            paths.append(_normalize_test_rel_path(path.relative_to(root)))
+    return tuple(paths)
+
+
+def _bv10_read_cluster_import_replacement(authority_module: str, symbol: str) -> str:
+    if authority_module == _BV10C_BUCKET_VIEWS_AUTHORITY:
+        return _BV10C_ATTRIBUTION_READ_FACADE
+    if authority_module == _BV10C_OWNERSHIP_SCHEMA_AUTHORITY:
+        if any(
+            token in symbol
+            for token in (
+                "LINEAGE",
+                "SANITIZER",
+                "PROVENANCE",
+                "SPEAKER_CONTRACT",
+                "normalize_sanitizer",
+            )
+        ):
+            return _BV10C_OWNERSHIP_PROJECTION_FACADE
+        return _BV10C_ATTRIBUTION_READ_FACADE
+    if symbol in {"read_final_emission_meta_dict", "FINAL_EMISSION_META_KEY"}:
+        return f"{_BV10C_REPLAY_SMOKE_FACADE}::final_emission_meta_from_output (tests) or {_BV10C_OBSERVABILITY_READ_FACADE} (production)"
+    if symbol.endswith("_owner_bucket_from_meta") or symbol.endswith("_owner_bucket_from_fields"):
+        return _BV10C_ATTRIBUTION_READ_FACADE
+    if symbol.startswith(("OPENING_FALLBACK_OWNER_", "SEALED_FALLBACK_OWNER_", "VISIBILITY_FALLBACK_OWNER_")):
+        return _BV10C_ATTRIBUTION_READ_FACADE
+    return _BV10C_OBSERVABILITY_READ_FACADE
+
+
+def collect_bv10_read_cluster_direct_import_guard_violations(
+    rel_path: str,
+    source: str,
+    *,
+    game_allowlist: frozenset[str] = _BV10C_READ_CLUSTER_GAME_ALLOWLIST,
+    test_allowlist: Mapping[str, str] = _BV10C_READ_CLUSTER_TEST_ALLOWLIST,
+) -> list[str]:
+    """Return violations when a module imports read-cluster authority outside BV10C allowlists."""
+    norm = _normalize_test_rel_path(rel_path)
+    if norm.startswith("tests/") and norm in test_allowlist:
+        return []
+    if norm.startswith("game/"):
+        module_name = norm.replace("/", ".").removesuffix(".py")
+        if module_name in game_allowlist:
+            return []
+
+    tree = ast.parse(source)
+    violations: list[str] = []
+    seen: set[tuple[str, str]] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module in _BV10C_READ_CLUSTER_AUTHORITIES:
+            for alias in node.names:
+                symbol = alias.name
+                key = (node.module, symbol)
+                if key in seen:
+                    continue
+                seen.add(key)
+                imported = f"{node.module}.{symbol}"
+                replacement = _bv10_read_cluster_import_replacement(node.module, symbol)
+                violations.append(
+                    f"{norm}: forbidden read-cluster authority import {imported!r} "
+                    f"(use facade: {replacement})",
+                )
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name not in _BV10C_READ_CLUSTER_AUTHORITIES:
+                    continue
+                key = (alias.name, alias.asname or alias.name)
+                if key in seen:
+                    continue
+                seen.add(key)
+                replacement = (
+                    f"{_BV10C_ATTRIBUTION_READ_FACADE} / {_BV10C_OWNERSHIP_PROJECTION_FACADE} / "
+                    f"{_BV10C_OBSERVABILITY_READ_FACADE}"
+                )
+                violations.append(
+                    f"{norm}: forbidden read-cluster authority module import {alias.name!r} "
+                    f"(use facade: {replacement})",
+                )
+    return violations
+
+
+def iter_bv10_read_cluster_direct_import_guard_scan_paths(
+    repo_root: Path | None = None,
+) -> tuple[str, ...]:
+    """All game/tests Python paths subject to BV10 read-cluster import lockdown."""
+    return iter_bv2c_final_emission_meta_import_guard_scan_paths(repo_root)
 
 
 def collect_bn1_runtime_gate_entry_guard_violations(
@@ -1888,6 +2770,73 @@ def test_bd6_gate_dependency_compression_guard_non_owners_avoid_compressed_gate_
     assert not violations, "gate dependency compression-guard import violations:\n" + "\n".join(violations)
 
 
+def test_bv2c_final_emission_meta_direct_import_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV2C: every meta direct-import allowlist path documents why it may import the write owner."""
+    for path, reason in _BV2C_META_DIRECT_IMPORT_TEST_ALLOWLIST.items():
+        assert path.startswith("tests/"), path
+        assert reason.strip(), f"empty BV2C allowlist reason for {path!r}"
+
+
+def test_bv2c_final_emission_meta_direct_import_guard_detects_synthetic_violation() -> None:
+    """BV2C: guard flags representative read-side imports with facade guidance."""
+    synthetic = (
+        "from game.final_emission_meta import read_final_emission_meta_dict, default_response_type_debug\n"
+        "import game.final_emission_meta as emission_meta\n"
+    )
+    rel = "tests/test_synthetic_bv2c_violation.py"
+    violations = collect_bv2c_final_emission_meta_import_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert any("read_final_emission_meta_dict" in v for v in violations)
+    assert any("default_response_type_debug" in v for v in violations)
+    assert "game.final_emission_meta_read" in joined
+
+
+def test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades() -> None:
+    """BV2C: non-owner modules must not import game.final_emission_meta directly."""
+    violations: list[str] = []
+    for rel in iter_bv2c_final_emission_meta_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV2C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv2c_final_emission_meta_import_violations(rel, source))
+    assert not violations, "BV2C final_emission_meta direct-import violations:\n" + "\n".join(violations)
+
+
+def test_bv10_read_cluster_direct_import_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV10C: every read-cluster allowlist path documents why it may import authority modules."""
+    for path, reason in _BV10C_READ_CLUSTER_TEST_ALLOWLIST.items():
+        assert path.startswith("tests/"), path
+        assert reason.strip(), f"empty BV10C allowlist reason for {path!r}"
+
+
+def test_bv10_read_cluster_direct_import_guard_detects_synthetic_violation() -> None:
+    """BV10C: guard flags representative read-cluster authority imports with facade guidance."""
+    synthetic = (
+        "from game.final_emission_meta_read import read_final_emission_meta_dict\n"
+        "from game.final_emission_owner_bucket_views import opening_fallback_owner_bucket_from_meta\n"
+        "from game.final_emission_ownership_schema import ALLOWED_FALLBACK_SELECTION_OWNERS\n"
+    )
+    rel = "tests/test_synthetic_bv10c_violation.py"
+    violations = collect_bv10_read_cluster_direct_import_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert any("read_final_emission_meta_dict" in v for v in violations)
+    assert any("opening_fallback_owner_bucket_from_meta" in v for v in violations)
+    assert any("ALLOWED_FALLBACK_SELECTION_OWNERS" in v for v in violations)
+    assert _BV10C_ATTRIBUTION_READ_FACADE in joined
+    assert _BV10C_OBSERVABILITY_READ_FACADE in joined
+
+
+def test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades() -> None:
+    """BV10C: non-owner modules must not import read-cluster authority modules directly."""
+    violations: list[str] = []
+    for rel in iter_bv10_read_cluster_direct_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV10C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv10_read_cluster_direct_import_guard_violations(rel, source))
+    assert not violations, "BV10C read-cluster direct-import violations:\n" + "\n".join(violations)
+
+
 def test_bn1_runtime_gate_entry_allowlist_entries_have_non_empty_reasons() -> None:
     """BN1: every runtime gate-entry allowlist path documents why it may import gate entry."""
     for path, reason in _BN1_RUNTIME_GATE_ENTRY_ALLOWLIST.items():
@@ -2299,14 +3248,14 @@ def test_bn9_gate_context_preflight_pregate_text_guard_detects_synthetic_violati
     from tests.helpers.gate_thin_boundary_locks import collect_bn9_gate_context_pregate_text_import_violations
 
     synthetic = (
-        "from game.final_emission_text import _normalize_text\n"
+        "from game.final_emission_text_formatting import _normalize_text\n"
         "def initialize_gate_execution_context():\n"
         "    return _normalize_text(out.get('player_facing_text'))\n"
     )
     violations = collect_bn9_gate_context_pregate_text_import_violations(synthetic)
     joined = "\n".join(violations)
     assert violations
-    assert "final_emission_text" in joined
+    assert "final_emission_text_formatting" in joined
     assert "preflight_pregate_text" in joined
 
 
@@ -2657,7 +3606,7 @@ def test_al4_legality_owners_and_smoke_facade_locked() -> None:
 
 
 def test_bj4_emission_smoke_facade_stays_weak_consumer_bridge() -> None:
-    """Cycle BJ-4: emission_smoke_assertions remains smoke/bridge, not a hidden legality owner."""
+    """Cycle BJ-4 / BV7A / BV7B: smoke facade stays weak; bridges live in dedicated modules."""
     facade_path = (_REPO_ROOT / _DOWNSTREAM_SMOKE_FACADE).resolve()
     source = facade_path.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -2667,11 +3616,103 @@ def test_bj4_emission_smoke_facade_stays_weak_consumer_bridge() -> None:
         for node in tree.body
         if isinstance(node, ast.FunctionDef) and not node.name.startswith("_")
     }
+    bv7b_extracted_repair = (
+        _BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES
+        & (_BV7B_EXTRACTED_AC_SYMBOLS | _BV7B_EXTRACTED_RD_SYMBOLS)
+    )
+    for expected_bridge in _BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES - bv7b_extracted_repair:
+        assert expected_bridge in public_functions
     for expected_bridge in (
         _BJ4_SMOKE_FACADE_ALLOWED_GATE_BRIDGES
-        | _BJ4_SMOKE_FACADE_ALLOWED_REPAIR_BRIDGES
+        - _BV7A_EXTRACTED_GATE_BRIDGE_SYMBOLS
+        - _BV7A_EXTRACTED_REPLAY_BRIDGE_SYMBOLS
+        - _BV7B_EXTRACTED_RT_SYMBOLS
     ):
         assert expected_bridge in public_functions
+
+    gate_bridge_path = (_REPO_ROOT / _BD6_GATE_BRIDGE_FACADE).resolve()
+    replay_bridge_path = (_REPO_ROOT / _BD6_REPLAY_BRIDGE_FACADE).resolve()
+    replay_fem_path = (_REPO_ROOT / _BV12A_REPLAY_FEM_READ_FACADE).resolve()
+    gate_orch_path = (_REPO_ROOT / _BV12A_GATE_ORCHESTRATION_FACADE).resolve()
+    fallback_bridge_path = (_REPO_ROOT / _BV12A_FALLBACK_BRIDGE_FACADE).resolve()
+    rt_bridge_path = (_REPO_ROOT / _BD6_RT_SMOKE_FACADE).resolve()
+    ac_bridge_path = (_REPO_ROOT / _BD6_AC_SMOKE_FACADE).resolve()
+    rd_bridge_path = (_REPO_ROOT / _BD6_RD_SMOKE_FACADE).resolve()
+    assert gate_bridge_path.is_file(), f"missing BV7A gate bridge: {_BD6_GATE_BRIDGE_FACADE}"
+    assert replay_bridge_path.is_file(), f"missing BV7A replay bridge: {_BD6_REPLAY_BRIDGE_FACADE}"
+    assert replay_fem_path.is_file(), f"missing BV12A replay FEM facade: {_BV12A_REPLAY_FEM_READ_FACADE}"
+    assert gate_orch_path.is_file(), f"missing BV12A gate orchestration facade: {_BV12A_GATE_ORCHESTRATION_FACADE}"
+    assert fallback_bridge_path.is_file(), f"missing BV12A fallback bridge: {_BV12A_FALLBACK_BRIDGE_FACADE}"
+    assert rt_bridge_path.is_file(), f"missing BV7B RT bridge: {_BD6_RT_SMOKE_FACADE}"
+    assert ac_bridge_path.is_file(), f"missing BV7B AC bridge: {_BD6_AC_SMOKE_FACADE}"
+    assert rd_bridge_path.is_file(), f"missing BV7B RD bridge: {_BD6_RD_SMOKE_FACADE}"
+
+    def _public_functions(module_path: Path) -> set[str]:
+        module_tree = ast.parse(module_path.read_text(encoding="utf-8"))
+        return {
+            node.name
+            for node in module_tree.body
+            if isinstance(node, ast.FunctionDef) and not node.name.startswith("_")
+        }
+
+    def _module_all_exports(module_path: Path) -> set[str]:
+        module_tree = ast.parse(module_path.read_text(encoding="utf-8"))
+        for node in module_tree.body:
+            if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+                if node.targets[0].id == "__all__" and isinstance(node.value, (ast.List, ast.Tuple)):
+                    return {elt.value for elt in node.value.elts if isinstance(elt, ast.Constant)}
+        return set()
+
+    gate_functions = _public_functions(gate_orch_path)
+    replay_functions = _public_functions(replay_fem_path)
+    gate_compat_exports = _module_all_exports(gate_bridge_path)
+    replay_compat_exports = _module_all_exports(replay_bridge_path)
+    rt_functions = _public_functions(rt_bridge_path)
+    ac_functions = _public_functions(ac_bridge_path)
+    rd_functions = _public_functions(rd_bridge_path)
+    for expected_gate in _BV7A_EXTRACTED_GATE_BRIDGE_SYMBOLS:
+        assert expected_gate in gate_functions, (
+            f"expected gate bridge {expected_gate!r} in {_BV12A_GATE_ORCHESTRATION_FACADE}"
+        )
+        assert expected_gate in gate_compat_exports, (
+            f"expected gate compat re-export {expected_gate!r} in {_BD6_GATE_BRIDGE_FACADE}"
+        )
+    for expected_replay in _BV7A_EXTRACTED_REPLAY_BRIDGE_SYMBOLS:
+        assert expected_replay in replay_functions, (
+            f"expected replay bridge {expected_replay!r} in {_BV12A_REPLAY_FEM_READ_FACADE}"
+        )
+        assert expected_replay in replay_compat_exports, (
+            f"expected replay compat re-export {expected_replay!r} in {_BD6_REPLAY_BRIDGE_FACADE}"
+        )
+    for expected_rt in _BV7B_EXTRACTED_RT_SYMBOLS:
+        assert expected_rt in rt_functions, (
+            f"expected RT bridge {expected_rt!r} in {_BD6_RT_SMOKE_FACADE}"
+        )
+    for expected_ac in _BV7B_EXTRACTED_AC_SYMBOLS:
+        assert expected_ac in ac_functions, (
+            f"expected AC bridge {expected_ac!r} in {_BD6_AC_SMOKE_FACADE}"
+        )
+    for expected_rd in _BV7B_EXTRACTED_RD_SYMBOLS:
+        assert expected_rd in rd_functions, (
+            f"expected RD bridge {expected_rd!r} in {_BD6_RD_SMOKE_FACADE}"
+        )
+
+    facade_all = set()
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+            if node.targets[0].id == "__all__" and isinstance(node.value, (ast.List, ast.Tuple)):
+                facade_all = {elt.value for elt in node.value.elts if isinstance(elt, ast.Constant)}
+    bv7_extracted = (
+        _BV7A_EXTRACTED_GATE_BRIDGE_SYMBOLS
+        | _BV7A_EXTRACTED_REPLAY_BRIDGE_SYMBOLS
+        | _BV7B_EXTRACTED_RT_SYMBOLS
+        | _BV7B_EXTRACTED_AC_SYMBOLS
+        | _BV7B_EXTRACTED_RD_SYMBOLS
+    )
+    for expected_bridge in bv7_extracted:
+        assert expected_bridge in facade_all, (
+            f"compatibility facade must re-export {expected_bridge!r} via __all__"
+        )
 
     public_names = set(public_functions)
     public_table_lengths: dict[str, int] = {}
@@ -2739,6 +3780,252 @@ def test_be6_scaffold_phrase_triple_layer_split_locked() -> None:
     registry_doc = Path(__file__).read_text(encoding="utf-8")
     assert "BE6" in registry_doc, "ownership registry must document Cycle BE6 triple-layer split"
     assert "do not merge" in registry_doc.lower()
+
+
+def test_bv7c_smoke_monolith_import_guard_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV7C: every monolith import-guard allowlist path documents why it may import extracted symbols."""
+    for path, reason in _BV7C_MONOLITH_IMPORT_GUARD_ALLOWLIST.items():
+        assert path.startswith("tests/"), path
+        assert reason.strip(), f"empty BV7C allowlist reason for {path!r}"
+
+
+def test_bv7c_smoke_monolith_import_guard_detects_synthetic_violation() -> None:
+    """BV7C: guard flags representative extracted-symbol imports with facade guidance."""
+    synthetic = (
+        "from tests.helpers.emission_smoke_assertions import response_type_contract\n"
+        "from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer\n"
+        "from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output\n"
+        "from tests.helpers.emission_smoke_assertions import validate_answer_completeness\n"
+        "from tests.helpers.emission_smoke_assertions import apply_response_delta_layer\n"
+    )
+    rel = "tests/test_synthetic_bv7c_violation.py"
+    violations = collect_bv7c_smoke_monolith_import_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert any("response_type_contract" in v for v in violations)
+    assert any("apply_final_emission_gate_consumer" in v for v in violations)
+    assert any("final_emission_meta_from_output" in v for v in violations)
+    assert any("validate_answer_completeness" in v for v in violations)
+    assert any("apply_response_delta_layer" in v for v in violations)
+    assert _BD6_RT_SMOKE_FACADE in joined
+    assert _BV12A_GATE_ORCHESTRATION_FACADE in joined
+    assert _BV12A_REPLAY_FEM_READ_FACADE in joined
+    assert _BD6_AC_SMOKE_FACADE in joined
+    assert _BD6_RD_SMOKE_FACADE in joined
+
+
+def test_bv7c_smoke_monolith_import_guard_non_owners_route_through_family_facades() -> None:
+    """BV7C: non-barrel modules must not reimport BV7A/BV7B extracted symbols from monolith."""
+    violations: list[str] = []
+    for rel in iter_bv7c_smoke_monolith_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV7C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv7c_smoke_monolith_import_guard_violations(rel, source))
+    assert not violations, "BV7C smoke monolith import-guard violations:\n" + "\n".join(violations)
+
+
+def test_bv7c_emission_smoke_assertions_concentration_locked() -> None:
+    """BV7C: monolith FI stays within smoke-core band; no new static importers without registry update."""
+    source_by_rel: dict[str, str] = {}
+    for rel in iter_bv7c_smoke_monolith_import_guard_scan_paths():
+        source_by_rel[rel] = (_REPO_ROOT / rel).read_text(encoding="utf-8")
+    static_importers = collect_bv7c_monolith_static_importers(source_by_rel)
+    assert len(static_importers) <= _BV7C_MONOLITH_FI_CAP, (
+        f"emission_smoke_assertions static importer count {len(static_importers)} "
+        f"exceeds BV7C cap {_BV7C_MONOLITH_FI_CAP}: "
+        f"{sorted(static_importers - _BV7C_ALLOWED_MONOLITH_STATIC_IMPORTERS)!r}"
+    )
+    unexpected = static_importers - _BV7C_ALLOWED_MONOLITH_STATIC_IMPORTERS
+    assert not unexpected, (
+        "new static emission_smoke_assertions importers require BV7C registry update: "
+        f"{sorted(unexpected)!r}"
+    )
+    missing = _BV7C_ALLOWED_MONOLITH_STATIC_IMPORTERS - static_importers
+    assert not missing, (
+        "BV7C allowed importer registry drift — remove stale entries or restore imports: "
+        f"{sorted(missing)!r}"
+    )
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BV7C" in registry_doc
+
+
+def test_bv12c_compat_barrel_import_guard_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV12C: every compat-barrel import-guard allowlist path documents why it may import compat barrels."""
+    for path, reason in _BV12C_COMPAT_BARREL_IMPORT_GUARD_ALLOWLIST.items():
+        assert path.startswith(("tests/", "tools/", "scripts/")), path
+        assert reason.strip(), f"empty BV12C allowlist reason for {path!r}"
+
+
+def test_bv12c_compat_barrel_import_guard_detects_synthetic_violation() -> None:
+    """BV12C: guard flags compat-barrel imports with domain-facade guidance."""
+    synthetic = (
+        "import tests.helpers.replay_smoke_assertions as replay_smoke_assertions\n"
+        "import tests.helpers.gate_integration_smoke as gate_integration_smoke\n"
+        "from tests.helpers.replay_smoke_assertions import final_emission_meta_from_output\n"
+        "from tests.helpers.gate_integration_smoke import apply_final_emission_gate_consumer\n"
+    )
+    rel = "tests/test_synthetic_bv12c_violation.py"
+    violations = collect_bv12c_compat_barrel_import_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert _BV12C_REPLAY_COMPAT_MODULE in joined
+    assert _BV12C_GATE_COMPAT_MODULE in joined
+    assert _BV12A_REPLAY_FEM_READ_FACADE in joined
+    assert _BV12A_GATE_ORCHESTRATION_FACADE in joined
+    assert len(violations) >= 2
+
+
+def test_bv12c_compat_barrel_import_guard_non_owners_route_through_domain_facades() -> None:
+    """BV12C: non-barrel modules must not import compat smoke bridge barrels directly."""
+    violations: list[str] = []
+    for rel in iter_bv12c_compat_barrel_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV12C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv12c_compat_barrel_import_guard_violations(rel, source))
+    assert not violations, "BV12C compat-barrel import-guard violations:\n" + "\n".join(violations)
+
+
+def test_bv12c_compat_barrel_fi_cap_locked() -> None:
+    """BV12C: compat barrel FI stays at delegate-verification residual; domain hubs documented separately."""
+    replay_importers = collect_bv12c_compat_barrel_static_importers(compat_module=_BV12C_REPLAY_COMPAT_MODULE)
+    gate_importers = collect_bv12c_compat_barrel_static_importers(compat_module=_BV12C_GATE_COMPAT_MODULE)
+    assert len(replay_importers) <= _BV12C_COMPAT_BARREL_FI_CAP, (
+        f"replay_smoke_assertions static importer count {len(replay_importers)} "
+        f"exceeds BV12C cap {_BV12C_COMPAT_BARREL_FI_CAP}: "
+        f"{sorted(replay_importers - _BV12C_ALLOWED_REPLAY_COMPAT_IMPORTERS)!r}"
+    )
+    assert len(gate_importers) <= _BV12C_COMPAT_BARREL_FI_CAP, (
+        f"gate_integration_smoke static importer count {len(gate_importers)} "
+        f"exceeds BV12C cap {_BV12C_COMPAT_BARREL_FI_CAP}: "
+        f"{sorted(gate_importers - _BV12C_ALLOWED_GATE_COMPAT_IMPORTERS)!r}"
+    )
+    unexpected_replay = replay_importers - _BV12C_ALLOWED_REPLAY_COMPAT_IMPORTERS
+    unexpected_gate = gate_importers - _BV12C_ALLOWED_GATE_COMPAT_IMPORTERS
+    assert not unexpected_replay, (
+        "new replay_smoke_assertions importers require BV12C registry update: "
+        f"{sorted(unexpected_replay)!r}"
+    )
+    assert not unexpected_gate, (
+        "new gate_integration_smoke importers require BV12C registry update: "
+        f"{sorted(unexpected_gate)!r}"
+    )
+    assert replay_importers == _BV12C_ALLOWED_REPLAY_COMPAT_IMPORTERS
+    assert gate_importers == _BV12C_ALLOWED_GATE_COMPAT_IMPORTERS
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BV12C" in registry_doc
+    for hub, role in _BV12C_INTENTIONAL_DOMAIN_HUBS.items():
+        assert hub in registry_doc, f"intentional domain hub {hub!r} must be documented in registry"
+        assert role.strip(), f"empty domain hub role for {hub!r}"
+
+
+def test_bv13c_text_compat_import_guard_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV13C: every text compat-barrel import-guard allowlist path documents why it may import compat."""
+    for path, reason in _BV13C_TEXT_COMPAT_IMPORT_GUARD_ALLOWLIST.items():
+        assert path.startswith(("game/", "tests/", "tools/", "scripts/")), path
+        assert reason.strip(), f"empty BV13C allowlist reason for {path!r}"
+
+
+def test_bv13c_text_compat_import_guard_detects_synthetic_violation() -> None:
+    """BV13C: guard flags compat-barrel imports with formatting/policy authority guidance."""
+    synthetic = (
+        "from game.final_emission_text import _normalize_text\n"
+        "import game.final_emission_text as emission_text\n"
+    )
+    rel = "tests/test_synthetic_bv13c_violation.py"
+    violations = collect_bv13c_text_compat_import_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert _BV13C_TEXT_COMPAT_MODULE in joined
+    assert _BV13C_TEXT_FORMATTING_AUTHORITY in joined
+    assert _BV13C_TEXT_POLICY_AUTHORITY in joined
+    assert len(violations) >= 1
+
+
+def test_bv13c_text_compat_import_guard_non_owners_route_through_authorities() -> None:
+    """BV13C: non-barrel modules must not import final_emission_text compat barrel directly."""
+    violations: list[str] = []
+    for rel in iter_bv13c_text_compat_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV13C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv13c_text_compat_import_guard_violations(rel, source))
+    assert not violations, "BV13C text compat-barrel import-guard violations:\n" + "\n".join(violations)
+
+
+def test_bv13c_text_compat_fi_cap_locked() -> None:
+    """BV13C: text compat barrel FI stays at fallback-wrapper residual; domain hubs documented separately."""
+    importers = collect_bv13c_text_compat_static_importers()
+    assert len(importers) <= _BV13C_TEXT_COMPAT_FI_CAP, (
+        f"final_emission_text static importer count {len(importers)} "
+        f"exceeds BV13C cap {_BV13C_TEXT_COMPAT_FI_CAP}: "
+        f"{sorted(importers - _BV13C_ALLOWED_TEXT_COMPAT_IMPORTERS)!r}"
+    )
+    unexpected = importers - _BV13C_ALLOWED_TEXT_COMPAT_IMPORTERS
+    assert not unexpected, (
+        "new final_emission_text importers require BV13C registry update: "
+        f"{sorted(unexpected)!r}"
+    )
+    assert importers == _BV13C_ALLOWED_TEXT_COMPAT_IMPORTERS
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BV13C" in registry_doc
+    for hub, role in _BV13C_INTENTIONAL_TEXT_DOMAIN_HUBS.items():
+        assert hub in registry_doc, f"intentional text domain hub {hub!r} must be documented in registry"
+        assert role.strip(), f"empty text domain hub role for {hub!r}"
+
+
+def test_bv14c_social_exchange_compat_import_guard_allowlist_entries_have_non_empty_reasons() -> None:
+    """BV14C: every social-exchange compat-barrel import-guard allowlist path documents why it may import compat."""
+    for path, reason in _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST.items():
+        assert path.startswith(("game/", "tests/", "tools/", "scripts/")), path
+        assert reason.strip(), f"empty BV14C allowlist reason for {path!r}"
+
+
+def test_bv14c_social_exchange_compat_import_guard_detects_synthetic_violation() -> None:
+    """BV14C: guard flags compat-barrel imports with fallback/policy/validation/projection authority guidance."""
+    synthetic = (
+        "from game.social_exchange_emission import strict_social_emission_will_apply\n"
+        "import game.social_exchange_emission as social_exchange_emission\n"
+    )
+    rel = "tests/test_synthetic_bv14c_violation.py"
+    violations = collect_bv14c_social_exchange_compat_import_guard_violations(rel, synthetic)
+    joined = "\n".join(violations)
+    assert _BV14C_SOCIAL_EXCHANGE_COMPAT_MODULE in joined
+    assert _BV14C_SOCIAL_EXCHANGE_FALLBACK_AUTHORITY in joined
+    assert _BV14C_SOCIAL_EXCHANGE_POLICY_AUTHORITY in joined
+    assert _BV14C_SOCIAL_EXCHANGE_VALIDATION_AUTHORITY in joined
+    assert _BV14C_SOCIAL_EXCHANGE_PROJECTION_AUTHORITY in joined
+    assert len(violations) >= 1
+
+
+def test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities() -> None:
+    """BV14C: non-barrel modules must not import social_exchange_emission compat barrel directly."""
+    violations: list[str] = []
+    for rel in iter_bv14c_social_exchange_compat_import_guard_scan_paths():
+        path = _REPO_ROOT / rel
+        assert path.is_file(), f"missing BV14C scan path: {rel}"
+        source = path.read_text(encoding="utf-8")
+        violations.extend(collect_bv14c_social_exchange_compat_import_guard_violations(rel, source))
+    assert not violations, "BV14C social-exchange compat-barrel import-guard violations:\n" + "\n".join(violations)
+
+
+def test_bv14c_social_exchange_compat_fi_cap_locked() -> None:
+    """BV14C: social-exchange compat barrel FI stays at composition-authority residual; domain hubs documented separately."""
+    importers = collect_bv14c_social_exchange_compat_static_importers()
+    assert len(importers) <= _BV14C_SOCIAL_EXCHANGE_COMPAT_FI_CAP, (
+        f"social_exchange_emission static importer count {len(importers)} "
+        f"exceeds BV14C cap {_BV14C_SOCIAL_EXCHANGE_COMPAT_FI_CAP}: "
+        f"{sorted(importers - _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS)!r}"
+    )
+    unexpected = importers - _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS
+    assert not unexpected, (
+        "new social_exchange_emission importers require BV14C registry update: "
+        f"{sorted(unexpected)!r}"
+    )
+    assert importers == _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BV14C" in registry_doc
+    for hub, role in _BV14C_INTENTIONAL_SOCIAL_EXCHANGE_DOMAIN_HUBS.items():
+        assert hub in registry_doc, f"intentional social-exchange domain hub {hub!r} must be documented in registry"
+        assert role.strip(), f"empty social-exchange domain hub role for {hub!r}"
 
 
 def test_bj27_referential_clarity_enforcement_owner_entrypoint_locked() -> None:
@@ -3882,14 +5169,14 @@ def test_bj110_ownership_registry_generic_exit_calls_assert_final_emission_mutat
 
 
 def test_bj111_ownership_registry_callers_use_normalize_text_owner_directly() -> None:
-    """Cycle BJ-111: stack/exit callers use final_emission_text._normalize_text directly."""
+    """Cycle BJ-111: stack/exit callers use final_emission_text_formatting._normalize_text directly."""
     import inspect
 
     import game.final_emission_gate as feg
     import game.final_emission_generic_exit as generic_exit
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_strict_social_stack as ss
-    import game.final_emission_text as emission_text
+    import game.final_emission_text_formatting as emission_text_formatting
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
@@ -3904,22 +5191,22 @@ def test_bj111_ownership_registry_callers_use_normalize_text_owner_directly() ->
     assert "_normalize_text(" in ge_replace_src
     assert "feg._normalize_text(" not in ge_replace_src
     assert not hasattr(feg, "_normalize_text")
-    assert callable(getattr(emission_text, "_normalize_text", None))
+    assert callable(getattr(emission_text_formatting, "_normalize_text", None))
 
 
 def test_bj112_ownership_registry_strict_social_stack_calls_normalize_text_preserve_paragraphs_owner_directly() -> None:
-    """Cycle BJ-112: strict_social_stack calls final_emission_text._normalize_text_preserve_paragraphs directly."""
+    """Cycle BJ-112: strict_social_stack calls final_emission_text_formatting._normalize_text_preserve_paragraphs directly."""
     import inspect
 
     import game.final_emission_gate as feg
     import game.final_emission_strict_social_stack as ss
-    import game.final_emission_text as emission_text
+    import game.final_emission_text_formatting as emission_text_formatting
 
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
     assert "_normalize_text_preserve_paragraphs(" in ss_src
     assert "feg._normalize_text_preserve_paragraphs" not in ss_src
     assert not hasattr(feg, "_normalize_text_preserve_paragraphs")
-    assert callable(getattr(emission_text, "_normalize_text_preserve_paragraphs", None))
+    assert callable(getattr(emission_text_formatting, "_normalize_text_preserve_paragraphs", None))
 
 
 def test_bj113_ownership_registry_generic_exit_calls_diegetic_classified_fallback_meta_owner_directly() -> None:
@@ -4246,7 +5533,7 @@ def test_bj125_ownership_registry_anti_reset_tests_patch_strict_social_owner_not
     assert "from game.final_emission_gate import" not in module_src
     assert "feg." not in module_src
     assert "_feg" not in module_src
-    assert 'monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply"' in module_src
+    assert 'monkeypatch.setattr(social_exchange_policy, "strict_social_emission_will_apply"' in module_src
     assert 'monkeypatch.setattr(gate_preflight_strict_social, "strict_social_emission_will_apply"' in module_src
     assert 'monkeypatch.setattr(feg, "strict_social_emission_will_apply"' not in module_src
     assert '"game.final_emission_gate.strict_social_emission_will_apply"' not in module_src
@@ -4281,10 +5568,10 @@ def test_bj126_ownership_registry_narration_transcript_tests_patch_strict_social
     assert '"game.final_emission_gate.strict_social_emission_will_apply"' not in module_src
     assert "def patch_strict_social_emission_will_apply(" in module_src
     helper_src = inspect.getsource(narration_transcript_tests.patch_strict_social_emission_will_apply)
-    assert 'monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply"' in helper_src
+    assert 'monkeypatch.setattr(social_exchange_policy, "strict_social_emission_will_apply"' in helper_src
     assert 'monkeypatch.setattr(gate_preflight_strict_social, "strict_social_emission_will_apply"' in helper_src
     vis_src = inspect.getsource(narration_transcript_tests.patch_final_emission_helpers)
-    assert 'monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement"' in vis_src
+    assert 'monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement"' in vis_src
     assert 'monkeypatch.setattr(_feg, "_apply_visibility_enforcement"' not in vis_src
 
     rel = "tests/test_narration_transcript_regressions.py"
@@ -4359,6 +5646,40 @@ def test_bj127_ownership_registry_global_stale_gate_harness_scan() -> None:
 
     registry_doc = Path(__file__).read_text(encoding="utf-8")
     assert "BJ-127" in registry_doc
+
+
+def test_bv16c_ownership_registry_terminal_pipeline_delegate_monkeypatch_governance() -> None:
+    """Cycle BV16C: tests must monkeypatch finalize-tail owner modules, not terminal_pipeline delegates."""
+    import pathlib
+
+    from tests.helpers.gate_thin_boundary_locks import (
+        BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS,
+        BV16C_IC_OWNER,
+        BV16C_N4_OWNER,
+        BV16C_OPENING_OWNER,
+        BV16C_REPAIRS_OWNER,
+        BV16C_TERMINAL_ORCHESTRATION_SYMBOLS,
+        BV16C_TERMINAL_PIPELINE_MODULE,
+        BV16C_VISIBILITY_OWNER,
+    )
+
+    repo_root = pathlib.Path(__file__).resolve().parents[1]
+    violations: list[str] = []
+    for rel in iter_bv16c_terminal_monkeypatch_scan_paths(repo_root):
+        source = (repo_root / rel).read_text(encoding="utf-8")
+        violations.extend(collect_bv16c_terminal_delegate_monkeypatch_violations(rel, source))
+    assert not violations, "BV16C terminal delegate monkeypatch violations:\n" + "\n".join(violations)
+
+    registry_doc = Path(__file__).read_text(encoding="utf-8")
+    assert "BV16C" in registry_doc
+    assert BV16C_TERMINAL_PIPELINE_MODULE in registry_doc
+    assert BV16C_VISIBILITY_OWNER in registry_doc
+    assert BV16C_N4_OWNER in registry_doc
+    assert BV16C_IC_OWNER in registry_doc
+    assert BV16C_OPENING_OWNER in registry_doc
+    assert BV16C_REPAIRS_OWNER in registry_doc
+    assert "run_gate_terminal_enforcement_pipeline" in BV16C_TERMINAL_ORCHESTRATION_SYMBOLS
+    assert BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS
 
 
 # Cycle BJ-128/BJ-129 — thin gate boundary locks (canonical constants in tests/helpers).

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T13:11:38.377708Z",
+  "phase": "BV3F",
+  "measurement_scope": "BV3D filtered + post-BV3F replay refresh",
+  "comparison_table": {
+    "eligible_turns": {
+      "bv3d": 1,
+      "bv3e_projection": 12,
+      "actual": 11,
+      "delta_actual_vs_projection": -1
+    },
+    "repairs_applied": {
+      "bv3d": 1,
+      "bv3e_projection": 12,
+      "actual": 10,
+      "delta_actual_vs_projection": -2
+    },
+    "repair_success_rate": {
+      "bv3d": 0.0909,
+      "bv3e_projection": 1.0,
+      "actual": 1.0,
+      "delta_actual_vs_projection": 0.0
+    },
+    "referential_clarity_hard_replacements": {
+      "bv3d": 12,
+      "bv3e_projection": 1,
+      "actual": 1,
+      "delta_actual_vs_projection": 0
+    },
+    "observe_route_rate": {
+      "bv3d": 0.5217391304347826,
+      "bv3e_projection": 0.0435,
+      "actual": 0.4782608695652174,
+      "delta_actual_vs_projection": 0.4347608695652174
+    },
+    "fallback_incidence": {
+      "bv3d": 0.4639175257731959,
+      "bv3e_projection": null,
+      "actual": 0.11578947368421053,
+      "delta_actual_vs_projection": null
+    }
+  },
+  "bv3d_frozen_baseline": {
+    "eligible_turns": 1,
+    "repairs_applied": 1,
+    "referential_clarity_hard_replacements": 12,
+    "observe_route_rate": 0.5217391304347826,
+    "fallback_incidence": 0.4639175257731959
+  },
+  "bv3e_projection": {
+    "eligible_turns": 12,
+    "repairs_applied": 12,
+    "referential_clarity_hard_replacements": 1,
+    "observe_route_rate": 0.0435,
+    "hard_replacement_delta": -11,
+    "source": "artifacts/bv3f_replay_refresh/pre_refresh.bv3e_shape_simulation.json"
+  },
+  "actual_post_refresh": {
+    "eligible_turns": 11,
+    "repairs_applied": 10,
+    "bv3e_repair_applied_count": 10,
+    "referential_clarity_hard_replacements": 1,
+    "observe_route_rate": 0.4782608695652174,
+    "fallback_incidence": 0.11578947368421053,
+    "fallback_kind_counts": {
+      "referential_clarity_hard_replacement": 1,
+      "sealed_passive_scene_pressure_fallback": 10
+    },
+    "scene_opening_fallback_count": null
+  },
+  "reduction_signals": {
+    "referential_clarity_delta_vs_bv3d": -11,
+    "repairs_applied_delta_vs_bv3d": 9,
+    "eligible_turns_delta_vs_bv3d": 10,
+    "projection_convergence_rc": 0,
+    "projection_convergence_repairs": -2
+  },
+  "classification": "EFFECTIVE_REDUCTION",
+  "sources": {
+    "bv3a": "artifacts/bv3a_referential_clarity_metrics.json",
+    "bv3d": "artifacts/bv3d_eligibility_report.json",
+    "bv3e": "artifacts/bv3e_eligibility_metrics.json",
+    "bv1b": "artifacts/golden_replay/bv1b_fallback_incidence_report.json",
+    "pre_refresh": "artifacts/bv3f_replay_refresh"
+  }
+}

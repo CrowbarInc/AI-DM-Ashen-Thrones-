@@ -7,7 +7,7 @@
       "history_depth_points": 0,
       "remediation_count_points": 0
     },
-    "history_depth": 0,
+    "history_depth": 2,
     "level": "low",
     "maximum_score": 6,
     "remediation_count": 0,
@@ -24,26 +24,26 @@
   "ingestion_contract": "fallback_maintenance_economics_summary/v1",
   "maintenance_burden": {
     "active_remediation_burden": 0,
-    "classification": "negligible",
+    "classification": "high",
     "components": {
       "active_remediation_points": 0.0,
-      "instability_points": 0.0,
-      "recurring_hotspot_points": 0.0,
-      "unresolved_risk_points": 0.0
+      "instability_points": 2.0,
+      "recurring_hotspot_points": 20.0,
+      "unresolved_risk_points": 40.0
     },
-    "fallback_maintenance_burden": 0.0,
-    "instability_burden": 0,
-    "recurring_hotspot_burden": 0,
-    "score": 0.0,
-    "unresolved_risk_burden": 0
+    "fallback_maintenance_burden": 62.0,
+    "instability_burden": 2,
+    "recurring_hotspot_burden": 48,
+    "score": 62.0,
+    "unresolved_risk_burden": 620.0003
   },
   "recurring_hotspots": {
     "counts": {
-      "dominant": 0,
+      "dominant": 16,
       "persistent": 0,
       "recurring": 0
     },
-    "weighted_burden": 0
+    "weighted_burden": 48
   },
   "roi": {
     "backlog_risk": 0,
@@ -54,5 +54,5 @@
     "unresolved_risk_per_engineering_hour": null
   },
   "schema_version": 1,
-  "unresolved_risk": 0
+  "unresolved_risk": 620.0003
 }

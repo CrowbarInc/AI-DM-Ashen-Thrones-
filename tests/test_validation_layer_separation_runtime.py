@@ -64,7 +64,7 @@ def test_live_api_and_gate_do_not_import_offline_evaluator() -> None:
 
 
 def test_legality_meta_keys_distinct_from_na_telemetry_keys() -> None:
-    from game.final_emission_meta import NARRATIVE_AUTHENTICITY_FEM_KEYS
+    from game.observability_attribution_read import NARRATIVE_AUTHENTICITY_FEM_KEYS
 
     rd_legality = set(_default_response_delta_meta_keys())
     na_fem = set(NARRATIVE_AUTHENTICITY_FEM_KEYS)

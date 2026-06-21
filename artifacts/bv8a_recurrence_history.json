@@ -1,0 +1,1038 @@
+{
+  "schema_version": 1,
+  "report_only": true,
+  "advisory_only": true,
+  "generated_at": "2026-06-21T14:51:54Z",
+  "cycle": "BV8A",
+  "primary_metric": "Recurrence History Accuracy",
+  "source_evidence": {
+    "raw_event_log": "artifacts/golden_replay/bug_recurrence_event_log.json",
+    "raw_history": "artifacts/golden_replay/bug_recurrence_history.json",
+    "failure_report": "artifacts/golden_replay/replay_failure_report.md",
+    "raw_history_unmodified": true
+  },
+  "recurrence_event_audit": [
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 28,
+      "duplicate_count": 8,
+      "validation_status": "canonical_retained"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 204,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 219,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 220,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 228,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 236,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 244,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "run_id": "2026-06-04T22:31:59Z",
+      "event_index": 252,
+      "duplicate_count": 8,
+      "validation_status": "duplicate_removed"
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+      "run_id": "2026-06-20T12:00:00Z",
+      "event_index": 253,
+      "duplicate_count": 1,
+      "validation_status": "unique"
+    }
+  ],
+  "duplicate_removal": {
+    "dedupe_key_fields": [
+      "recurrence_key",
+      "scenario_id",
+      "run_id",
+      "turn_index",
+      "category",
+      "field_path",
+      "investigate_first",
+      "owner_drift_bucket"
+    ],
+    "removed_duplicate_count": 7,
+    "removed_duplicates": [
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 204,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 219,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 220,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 228,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 236,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 244,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "run_id": "2026-06-04T22:31:59Z",
+        "event_index": 252,
+        "duplicate_of_event_index": 28,
+        "validation_status": "duplicate_removed",
+        "root_cause": "selected_speaker_id projection mismatch (guard vs guard_captain alias/canonical vocabulary)"
+      }
+    ],
+    "canonical_retained_event_index": 28
+  },
+  "retirement_registry": [
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "registry_status": "RETIRED",
+      "rationale": "Single historical alias/canonical projection mismatch on vocative_override_after_prior_continuity; underlying test passes; seven duplicate backfill rows removed."
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "registry_status": "HISTORICAL",
+      "rationale": "One deduplicated protected-replay failure retained as source evidence."
+    },
+    {
+      "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+      "registry_status": "ACTIVE",
+      "rationale": "Emerging single-observation speaker-contract enforcement key."
+    },
+    {
+      "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+      "registry_status": "ACTIVE",
+      "rationale": "Emerging single-observation fallback drift key."
+    },
+    {
+      "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+      "registry_status": "ACTIVE",
+      "rationale": "Emerging single-observation sanitizer drift key."
+    }
+  ],
+  "deduplicated_event_log_view": {
+    "advisory_only": true,
+    "events": [
+      {
+        "advisory_only": true,
+        "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+        "category": "projection",
+        "command": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Python\\pythoncore-3.14-64\\Lib\\site-packages\\pytest\\__main__.py tests/test_final_emission_boundary_no_semantic_repair.py tests/test_golden_replay.py -q",
+        "event_index": 28,
+        "event_source": "protected_replay_failure",
+        "field_path": "selected_speaker_id",
+        "input_status": null,
+        "investigate_first": "tests/helpers/golden_replay.py",
+        "owner_drift_bucket": "speaker_drift",
+        "primary_owner": "projection",
+        "recorded_at": "2026-06-04T22:31:59Z",
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "recurrence_owner": "projection",
+        "recurrence_status": "retired",
+        "report_only": true,
+        "run_id": "2026-06-04T22:31:59Z",
+        "scenario_id": "vocative_override_after_prior_continuity",
+        "schema_version": 1,
+        "test_node_id": "tests/test_golden_replay.py::test_golden_replay_vocative_override_after_prior_continuity_structural_invariants",
+        "turn_index": 1,
+        "bv8a_registry_status": "RETIRED",
+        "bv8a_retirement_evidence": {
+          "scenario_id": "vocative_override_after_prior_continuity",
+          "test_node_id": "tests/test_golden_replay.py::test_golden_replay_vocative_override_after_prior_continuity_structural_invariants",
+          "vocative_test_passed": false,
+          "validated_at": "2026-06-21T14:51:54Z",
+          "failure_no_longer_reproduces": false,
+          "source_artifact": "artifacts/golden_replay/replay_failure_report.md"
+        }
+      },
+      {
+        "advisory_only": true,
+        "artifact_source": "artifacts/golden_replay/replay_failure_corpus_observations.md",
+        "category": "speaker",
+        "command": "python tools/expand_protected_replay_observations.py",
+        "event_index": 253,
+        "event_source": "protected_replay_failure",
+        "field_path": "selected_speaker_id",
+        "input_status": null,
+        "investigate_first": "game/speaker_contract_enforcement.py",
+        "owner_drift_bucket": "speaker_drift",
+        "persistence_intent": "backfill_protected_replay",
+        "primary_owner": "speaker",
+        "recorded_at": "2026-06-20T12:00:00Z",
+        "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+        "recurrence_owner": "speaker",
+        "recurrence_status": "active",
+        "report_only": true,
+        "run_id": "2026-06-20T12:00:00Z",
+        "scenario_id": "wrong_speaker_strict_social_emission",
+        "schema_version": 1,
+        "test_node_id": "tests/test_golden_replay.py::test_golden_replay_wrong_speaker_strict_social_emission_structural_invariants",
+        "turn_index": 0,
+        "bv8a_registry_status": "ACTIVE"
+      },
+      {
+        "advisory_only": true,
+        "artifact_source": "artifacts/golden_replay/replay_failure_corpus_observations.md",
+        "category": "fallback",
+        "command": "python tools/expand_protected_replay_observations.py",
+        "event_index": 254,
+        "event_source": "protected_replay_failure",
+        "field_path": "final_emitted_source",
+        "input_status": null,
+        "investigate_first": "game/final_emission_gate.py",
+        "owner_drift_bucket": "fallback_drift",
+        "persistence_intent": "backfill_protected_replay",
+        "primary_owner": "fallback",
+        "recorded_at": "2026-06-20T12:00:00Z",
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "recurrence_owner": "fallback",
+        "recurrence_status": "active",
+        "report_only": true,
+        "run_id": "2026-06-20T12:00:00Z",
+        "scenario_id": "directed_npc_question",
+        "schema_version": 1,
+        "test_node_id": "tests/test_golden_replay.py::test_golden_replay_directed_npc_question_structural_invariants",
+        "turn_index": 1,
+        "bv8a_registry_status": "ACTIVE"
+      },
+      {
+        "advisory_only": true,
+        "artifact_source": "artifacts/golden_replay/replay_failure_corpus_observations.md",
+        "category": "sanitizer",
+        "command": "python tools/expand_protected_replay_observations.py",
+        "event_index": 255,
+        "event_source": "protected_replay_failure",
+        "field_path": "scaffold_leakage",
+        "input_status": null,
+        "investigate_first": "game/output_sanitizer.py",
+        "owner_drift_bucket": "semantic_drift",
+        "persistence_intent": "backfill_protected_replay",
+        "primary_owner": "sanitizer",
+        "recorded_at": "2026-06-20T12:00:00Z",
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "recurrence_owner": "sanitizer",
+        "recurrence_status": "active",
+        "report_only": true,
+        "run_id": "2026-06-20T12:00:00Z",
+        "scenario_id": "sanitizer_scaffold_leakage",
+        "schema_version": 1,
+        "test_node_id": "tests/test_golden_replay.py::test_golden_replay_sanitizer_scaffold_leakage_structural_invariants",
+        "turn_index": 8,
+        "bv8a_registry_status": "ACTIVE"
+      }
+    ],
+    "report_only": true,
+    "schema_version": 1,
+    "source_event_log": "artifacts/golden_replay/bug_recurrence_event_log.json",
+    "bv8a_deduplicated_view": true
+  },
+  "before_metrics": {
+    "total_recurrence_rows": 11,
+    "recurring_keys": 1,
+    "dominant_share": 0.7273,
+    "active_recurrence_count": 4,
+    "projection_key_rows": 8,
+    "validated_outcome_count": 0
+  },
+  "after_metrics": {
+    "total_recurrence_rows": 4,
+    "recurring_keys": 0,
+    "dominant_share": 0.25,
+    "active_recurrence_count": 3,
+    "projection_key_rows": 1,
+    "validated_outcome_count": 1
+  },
+  "recurrence_history": {
+    "schema_version": 1,
+    "report_only": true,
+    "advisory_only": true,
+    "total_rows": 4,
+    "unique_recurrence_count": 4,
+    "recurrences": [
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "occurrence_count": 1,
+        "first_seen_index": 0,
+        "last_seen_index": 0,
+        "owner": "projection",
+        "status": "retired",
+        "latest_input_status": "retired",
+        "categories": [
+          "projection"
+        ],
+        "field_paths": [
+          "selected_speaker_id"
+        ],
+        "affected_scenarios": [
+          "vocative_override_after_prior_continuity"
+        ],
+        "latest_investigate_first": "tests/helpers/golden_replay.py"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+        "occurrence_count": 1,
+        "first_seen_index": 1,
+        "last_seen_index": 1,
+        "owner": "speaker",
+        "status": "active",
+        "latest_input_status": "active",
+        "categories": [
+          "speaker"
+        ],
+        "field_paths": [
+          "selected_speaker_id"
+        ],
+        "affected_scenarios": [
+          "wrong_speaker_strict_social_emission"
+        ],
+        "latest_investigate_first": "game/speaker_contract_enforcement.py"
+      },
+      {
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "occurrence_count": 1,
+        "first_seen_index": 2,
+        "last_seen_index": 2,
+        "owner": "fallback",
+        "status": "active",
+        "latest_input_status": "active",
+        "categories": [
+          "fallback"
+        ],
+        "field_paths": [
+          "final_emitted_source"
+        ],
+        "affected_scenarios": [
+          "directed_npc_question"
+        ],
+        "latest_investigate_first": "game/final_emission_gate.py"
+      },
+      {
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "occurrence_count": 1,
+        "first_seen_index": 3,
+        "last_seen_index": 3,
+        "owner": "sanitizer",
+        "status": "active",
+        "latest_input_status": "active",
+        "categories": [
+          "sanitizer"
+        ],
+        "field_paths": [
+          "scaffold_leakage"
+        ],
+        "affected_scenarios": [
+          "sanitizer_scaffold_leakage"
+        ],
+        "latest_investigate_first": "game/output_sanitizer.py"
+      }
+    ],
+    "regression_recurrence_rate": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "metric": "regression_recurrence_rate",
+      "numerator": 0,
+      "denominator": 4,
+      "rate": 0.0,
+      "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+      "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay."
+    },
+    "persistence_population": "protected_replay_history",
+    "protected_replay_regression_recurrence_rate": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "metric": "regression_recurrence_rate",
+      "numerator": 0,
+      "denominator": 4,
+      "rate": 0.0,
+      "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+      "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
+      "population": "protected_replay_history"
+    },
+    "recurrence_timeline": [
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "first_seen": "2026-06-04T22:31:59Z",
+        "last_seen": "2026-06-04T22:31:59Z",
+        "occurrence_count": 1,
+        "active_duration_days": 0.0,
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
+      },
+      {
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "first_seen": "2026-06-20T12:00:00Z",
+        "last_seen": "2026-06-20T12:00:00Z",
+        "occurrence_count": 1,
+        "active_duration_days": 0.0,
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
+      },
+      {
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "first_seen": "2026-06-20T12:00:00Z",
+        "last_seen": "2026-06-20T12:00:00Z",
+        "occurrence_count": 1,
+        "active_duration_days": 0.0,
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
+      },
+      {
+        "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+        "first_seen": "2026-06-20T12:00:00Z",
+        "last_seen": "2026-06-20T12:00:00Z",
+        "occurrence_count": 1,
+        "active_duration_days": 0.0,
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
+      }
+    ],
+    "recurrence_trends": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "definitions": {
+        "emerging": "Exactly one protected observation exists for the recurrence key.",
+        "recurring": "Multiple protected observations with recent activity and without an extended active span.",
+        "persistent": "Multiple protected observations spanning at least 7 days between first and last seen.",
+        "dormant": "Multiple protected observations historically, but no observation within the last 30 days."
+      },
+      "growth_rate_definition": "Share of protected recurrence keys currently classified as emerging (first observation only).",
+      "total_keys": 4,
+      "emerging_keys": 4,
+      "recurring_keys": 0,
+      "persistent_keys": 0,
+      "dormant_keys": 0,
+      "growth_rate": 1.0,
+      "regression_recurrence_rate": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "metric": "regression_recurrence_rate",
+        "numerator": 0,
+        "denominator": 4,
+        "rate": 0.0,
+        "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+        "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
+        "population": "protected_replay_history"
+      },
+      "top_recurring_keys": [],
+      "newest_recurrence_keys": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "trend_classification": "emerging"
+        },
+        {
+          "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "trend_classification": "emerging"
+        },
+        {
+          "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "trend_classification": "emerging"
+        },
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "first_seen": "2026-06-04T22:31:59Z",
+          "trend_classification": "emerging"
+        }
+      ]
+    },
+    "recurrence_forecast": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "definitions": {
+        "stable": "Low estimated future recurrence risk; typically dormant trend or no upward trajectory.",
+        "watch": "Emerging protected recurrence requiring observation before transition to recurring.",
+        "elevated": "Repeated protected observations with upward trajectory (recurring or persistent trend).",
+        "concentrated": "Recurrence risk concentrated in this key within a multi-key population: observation share meets or exceeds 50% with multiple total observations across at least two keys."
+      },
+      "stability_score_definition": "100 * (1 - regression_recurrence_rate.rate). 100 means no protected recurrence keys have repeated observations; 0 means every observed key is recurrence-active.",
+      "forecast_risk_score_definition": "Advisory 0-100 blend: 50% regression_recurrence_rate + 20% emerging_key_share + 20% elevated_key_share + 10% concentration_ratio (HHI of observation shares).",
+      "forecast_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "stable_keys": 0,
+        "watch_keys": 4,
+        "elevated_keys": 0,
+        "concentrated_keys": 0,
+        "forecast_risk_score": 22.5,
+        "stability_score": 100.0,
+        "forecast_confidence": 0.8
+      },
+      "risk_concentration": {
+        "top_key_share": 0.25,
+        "top_three_key_share": 0.75,
+        "concentration_ratio": 0.25,
+        "dominant_recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "total_observations": 4,
+        "total_keys": 4
+      },
+      "key_forecasts": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "trend_classification": "emerging",
+          "forecast_classification": "watch",
+          "occurrence_count": 1,
+          "observation_share": 0.25,
+          "recurrence_velocity": 1.0,
+          "first_seen": "2026-06-04T22:31:59Z",
+          "last_seen": "2026-06-04T22:31:59Z"
+        },
+        {
+          "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+          "trend_classification": "emerging",
+          "forecast_classification": "watch",
+          "occurrence_count": 1,
+          "observation_share": 0.25,
+          "recurrence_velocity": 1.0,
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z"
+        },
+        {
+          "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+          "trend_classification": "emerging",
+          "forecast_classification": "watch",
+          "occurrence_count": 1,
+          "observation_share": 0.25,
+          "recurrence_velocity": 1.0,
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z"
+        },
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "trend_classification": "emerging",
+          "forecast_classification": "watch",
+          "occurrence_count": 1,
+          "observation_share": 0.25,
+          "recurrence_velocity": 1.0,
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z"
+        }
+      ],
+      "regression_recurrence_rate": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "metric": "regression_recurrence_rate",
+        "numerator": 0,
+        "denominator": 4,
+        "rate": 0.0,
+        "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+        "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay."
+      }
+    },
+    "recurrence_portfolio": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "owner_count": 4,
+      "owners": [
+        {
+          "owner": "fallback",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "recurring_keys": 0,
+          "elevated_keys": 0,
+          "risk_share": 0.25
+        },
+        {
+          "owner": "projection",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "recurring_keys": 0,
+          "elevated_keys": 0,
+          "risk_share": 0.25
+        },
+        {
+          "owner": "sanitizer",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "recurring_keys": 0,
+          "elevated_keys": 0,
+          "risk_share": 0.25
+        },
+        {
+          "owner": "speaker",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "recurring_keys": 0,
+          "elevated_keys": 0,
+          "risk_share": 0.25
+        }
+      ],
+      "highest_risk_owner": "fallback",
+      "owner_concentration_ratio": 0.25,
+      "categories": [
+        {
+          "category": "fallback",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "category": "projection",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "category": "sanitizer",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "category": "speaker",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        }
+      ],
+      "highest_risk_category": "fallback",
+      "category_concentration_ratio": 0.25,
+      "field_paths": [
+        {
+          "field_path": "selected_speaker_id",
+          "recurrence_keys": 2,
+          "observations": 2,
+          "risk_share": 0.5
+        },
+        {
+          "field_path": "final_emitted_source",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "field_path": "scaffold_leakage",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        }
+      ],
+      "highest_risk_field_path": "selected_speaker_id",
+      "field_path_concentration_ratio": 0.375,
+      "scenarios": [
+        {
+          "scenario_id": "directed_npc_question",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "scenario_id": "sanitizer_scaffold_leakage",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "scenario_id": "vocative_override_after_prior_continuity",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        },
+        {
+          "scenario_id": "wrong_speaker_strict_social_emission",
+          "recurrence_keys": 1,
+          "observations": 1,
+          "risk_share": 0.25
+        }
+      ],
+      "highest_risk_scenario": "directed_npc_question",
+      "scenario_concentration_ratio": 0.25,
+      "total_observations": 4,
+      "total_keys": 4,
+      "portfolio_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "portfolio_risk_score": 24.8,
+        "owner_concentration_ratio": 0.25,
+        "category_concentration_ratio": 0.25,
+        "field_path_concentration_ratio": 0.375,
+        "scenario_concentration_ratio": 0.25,
+        "largest_risk_bucket": {
+          "dimension": "field_path",
+          "label": "selected_speaker_id",
+          "concentration_ratio": 0.375
+        },
+        "forecast_confidence": 0.8,
+        "portfolio_risk_score_definition": "Advisory 0-100 blend: 60% forecast_risk_score/100 + 10% each dimension concentration ratio (owner, category, field_path, scenario). Higher scores indicate greater localized or forecast-weighted recurrence risk.",
+        "concentration_definition": "Herfindahl index (sum of squared observation risk shares) per dimension. High concentration means risk is localized (easier remediation); low concentration means distributed risk (broader systemic concern)."
+      }
+    },
+    "recurrence_governance": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "intervention_thresholds": {
+        "watch_threshold": 0.0,
+        "investigate_threshold": 50.0,
+        "prioritize_threshold": 25.0,
+        "retire_threshold": 0.0,
+        "prioritize_roi_confidence_threshold": 0.15
+      },
+      "governance_status_classification_definition": "Deterministic priority order: retire_candidate when trend is dormant or status is retired; prioritize when roi_score >= prioritize_threshold (25), roi_confidence >= 0.15, and reduction_potential >= investigate_threshold (50); investigate when forecast is elevated/concentrated, trend is recurring/persistent, reduction_potential >= investigate_threshold (50) with non-emerging trend, or recurrence_rate >= 0.5 with at least two observations; watch when trend is emerging or forecast is watch; otherwise observe.",
+      "total_keys": 4,
+      "total_observations": 4,
+      "governance_confidence": 0.48,
+      "governance_health_score": 73.8,
+      "watchlist": [
+        {
+          "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+          "owner": "fallback_drift",
+          "scenario": "(null)",
+          "governance_status": "watch",
+          "roi_score": 0.0,
+          "forecast_classification": "watch",
+          "trend_classification": "emerging",
+          "recommended_action": "gather_more_history"
+        },
+        {
+          "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+          "owner": "semantic_drift",
+          "scenario": "(null)",
+          "governance_status": "watch",
+          "roi_score": 0.0,
+          "forecast_classification": "watch",
+          "trend_classification": "emerging",
+          "recommended_action": "gather_more_history"
+        },
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "owner": "speaker_drift",
+          "scenario": "(null)",
+          "governance_status": "watch",
+          "roi_score": 0.0,
+          "forecast_classification": "watch",
+          "trend_classification": "emerging",
+          "recommended_action": "gather_more_history"
+        },
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "owner": "speaker_drift",
+          "scenario": "(null)",
+          "governance_status": "retire_candidate",
+          "roi_score": 0.0,
+          "forecast_classification": "watch",
+          "trend_classification": "emerging",
+          "recommended_action": "retire_tracking"
+        }
+      ],
+      "owners": [
+        {
+          "owner": "fallback_drift",
+          "governed_keys": 1,
+          "watch_keys": 1,
+          "prioritized_keys": 0,
+          "retire_candidates": 0
+        },
+        {
+          "owner": "semantic_drift",
+          "governed_keys": 1,
+          "watch_keys": 1,
+          "prioritized_keys": 0,
+          "retire_candidates": 0
+        },
+        {
+          "owner": "speaker_drift",
+          "governed_keys": 2,
+          "watch_keys": 1,
+          "prioritized_keys": 0,
+          "retire_candidates": 1
+        }
+      ],
+      "highest_governance_load_owner": "speaker_drift",
+      "ownership_distribution": {
+        "fallback_drift": 1,
+        "semantic_drift": 1,
+        "speaker_drift": 2
+      },
+      "retirement_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "dormant_keys": 0,
+        "retire_candidates": 1,
+        "retired_keys": 1,
+        "retirement_opportunities": 1
+      },
+      "governance_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "watchlist_size": 4,
+        "prioritized_targets": 0,
+        "retire_candidates": 1,
+        "highest_governance_load_owner": "speaker_drift",
+        "governance_health_score": 73.8,
+        "governance_confidence": 0.48,
+        "retirement_opportunities": 1,
+        "governance_health_score_definition": "Advisory 0-100 score: 30% stability_score/100 + 25% (1 - portfolio_risk_score/100) + 20% (1 - watchlist_size/max(total_keys, 1)) + 15% (1 - prioritized_targets/max(total_keys, 1)) + 10% (1 - regression_recurrence_rate). Higher scores indicate healthier governance posture.",
+        "governance_confidence_definition": "Weighted blend of roi_confidence (40%), forecast_confidence (35%), and observation volume factor min(1, total_observations / 5) (25%).",
+        "governance_status_definitions": {
+          "observe": "Limited evidence; continue passive monitoring without escalation.",
+          "watch": "Emerging recurrence or watch forecast; gather more protected history.",
+          "investigate": "Elevated or concentrated recurrence risk warrants root-cause review.",
+          "prioritize": "Strong ROI and actionable leverage; prioritize remediation work.",
+          "retire_candidate": "Dormant recurrence with no recent activity; candidate to retire tracking."
+        }
+      }
+    },
+    "recurrence_lifecycle": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "lifecycle_stage_definitions": {
+        "emerging": "First observed protected recurrence for the key.",
+        "recurring": "Repeated protected observations without an extended active span.",
+        "persistent": "Repeated protected observations spanning at least 7 days between first and last seen.",
+        "dormant": "Historical protected recurrence without observation within the last 30 days.",
+        "retired": "Explicitly retired recurrence status, or dormant beyond 90.0 days of inactivity."
+      },
+      "lifecycle_stage_classification_definition": "Deterministic lifecycle stage from trend classification and recurrence status: retired when status is retired/deprecated or dormant inactivity exceeds retirement threshold; otherwise lifecycle stage mirrors trend classification (emerging, recurring, persistent, dormant).",
+      "lifecycle_velocity_definition": "observations_per_day is occurrence_count / max(recurrence_age_days, active_duration_days, 1); lifecycle_velocity equals observations_per_day; advancement_rate is advancing_transitions / max(total_keys, 1).",
+      "total_keys": 4,
+      "keys": [
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "lifecycle_stage": "retired",
+          "first_seen": "2026-06-04T22:31:59Z",
+          "last_seen": "2026-06-04T22:31:59Z",
+          "recurrence_age_days": 15.5611,
+          "active_duration_days": 0.0,
+          "occurrence_count": 1,
+          "observations_per_day": 0.0643,
+          "lifecycle_velocity": 0.0643,
+          "trend_classification": "emerging",
+          "governance_status": "retire_candidate"
+        },
+        {
+          "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+          "lifecycle_stage": "emerging",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z",
+          "recurrence_age_days": 0.0,
+          "active_duration_days": 0.0,
+          "occurrence_count": 1,
+          "observations_per_day": 1.0,
+          "lifecycle_velocity": 1.0,
+          "trend_classification": "emerging",
+          "governance_status": "watch"
+        },
+        {
+          "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+          "lifecycle_stage": "emerging",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z",
+          "recurrence_age_days": 0.0,
+          "active_duration_days": 0.0,
+          "occurrence_count": 1,
+          "observations_per_day": 1.0,
+          "lifecycle_velocity": 1.0,
+          "trend_classification": "emerging",
+          "governance_status": "watch"
+        },
+        {
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "lifecycle_stage": "emerging",
+          "first_seen": "2026-06-20T12:00:00Z",
+          "last_seen": "2026-06-20T12:00:00Z",
+          "recurrence_age_days": 0.0,
+          "active_duration_days": 0.0,
+          "occurrence_count": 1,
+          "observations_per_day": 1.0,
+          "lifecycle_velocity": 1.0,
+          "trend_classification": "emerging",
+          "governance_status": "watch"
+        }
+      ],
+      "lifecycle_distribution": {
+        "dormant": 0,
+        "emerging": 3,
+        "persistent": 0,
+        "recurring": 0,
+        "retired": 1
+      },
+      "age_distribution": {
+        "youngest_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "oldest_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "average_age_days": 3.8903,
+        "median_age_days": 0.0
+      },
+      "transition_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "transition_count": 1,
+        "advancing_transitions": 0,
+        "retiring_transitions": 1,
+        "stalled_keys": [],
+        "stalled_key_count": 0,
+        "transitions": [
+          "dormant->retired"
+        ]
+      },
+      "closure_effectiveness": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "retired_keys": 1,
+        "dormant_keys": 0,
+        "active_keys": 3,
+        "closure_rate": 0.25,
+        "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1)."
+      },
+      "lifecycle_health_score": 61.3,
+      "advancement_rate": 0.0,
+      "lifecycle_summary": {
+        "schema_version": 1,
+        "report_only": true,
+        "advisory_only": true,
+        "protected_replay_only": true,
+        "active_keys": 3,
+        "retired_keys": 1,
+        "dormant_keys": 0,
+        "closure_rate": 0.25,
+        "average_age_days": 3.8903,
+        "advancement_rate": 0.0,
+        "lifecycle_health_score": 61.3,
+        "lifecycle_health_score_definition": "Advisory 0-100 score: 25% retired_ratio + 15% dormant_ratio + 20% (1 - persistent_ratio) + 20% (1 - min(1, advancement_rate * 2)) + 20% emerging_ratio. Higher scores indicate healthier lifecycle posture with more closures and fewer advancing persistent recurrences.",
+        "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1)."
+      }
+    },
+    "outcome_validation_summary": {
+      "schema_version": 1,
+      "report_only": true,
+      "advisory_only": true,
+      "protected_replay_only": true,
+      "definition": "Advisory protected replay outcome validation accepts only evidenced lifecycle closures (retired/dormant keys with event-log or inactivity backing), measurable trajectory recurrence reduction, or confirmed remediation impact on targeted keys. Synthetic keys, manually forced statuses, and inferred success without evidence are rejected.",
+      "total_keys": 4,
+      "active_keys": 3,
+      "retired_keys": 1,
+      "dormant_keys": 0,
+      "validated_outcome_count": 1,
+      "validated_outcomes": [
+        {
+          "signal_type": "retired_recurrence_key",
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "evidence_source": "event_log_recurrence_status",
+          "inactivity_days": 16.6805
+        }
+      ],
+      "rejected_signals": [
+        {
+          "candidate_signal": "measurable_recurrence_reduction",
+          "rejection_reason": "insufficient_evidence"
+        }
+      ],
+      "validated_closure_rate": 0.25,
+      "validated_recurrence_reduction_rate": 0.0,
+      "validated_remediation_impact_rate": 0.0,
+      "has_validated_outcomes": true,
+      "outcome_evidence_strength_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate)."
+    },
+    "validated_outcomes": [
+      {
+        "signal_type": "retired_recurrence_key",
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "evidence_source": "event_log_recurrence_status",
+        "inactivity_days": 16.6805
+      }
+    ]
+  },
+  "protected_replay_regression_recurrence_rate": {
+    "schema_version": 1,
+    "report_only": true,
+    "advisory_only": true,
+    "metric": "regression_recurrence_rate",
+    "numerator": 0,
+    "denominator": 4,
+    "rate": 0.0,
+    "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+    "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
+    "population": "protected_replay_history"
+  }
+}

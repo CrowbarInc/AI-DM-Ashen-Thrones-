@@ -15,7 +15,7 @@ import pytest
 
 import game.final_emission_gate as feg
 from game.final_emission_terminal_pipeline import apply_strict_social_emergency_fallback_patch
-from game.final_emission_meta import (
+from game.attribution_read_views import (
     SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
@@ -26,7 +26,8 @@ import game.final_emission_passive_scene_pressure as passive_scene_pressure
 import game.final_emission_scene_emit_integrity as scene_emit_integrity
 import game.final_emission_sealed_fallback as sealed_fallback
 import game.final_emission_visibility_fallback as visibility_fallback
-import game.social_exchange_emission as social_exchange_emission
+import game.social_exchange_fallback_catalog as social_exchange_fallback_catalog
+import game.social_exchange_policy as social_exchange_policy
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.realization_provenance import (
     REALIZATION_FALLBACK_FAMILY_FIELD,
@@ -150,13 +151,13 @@ def test_select_non_strict_terminal_sealed_fallback_social_branch_uses_owner_mod
 ) -> None:
     gm = {"player_facing_text": "x", "tags": []}
     monkeypatch.setattr(
-        social_exchange_emission,
+        social_exchange_fallback_catalog,
         "minimal_social_emergency_fallback_line",
         lambda _res: "owner social line",
     )
     monkeypatch.setattr(
-        social_exchange_emission,
-        "_npc_display_name_for_emission",
+        social_exchange_policy,
+        "npc_display_name_for_emission",
         lambda _w, _sid, _npc: "Aldric",
     )
     monkeypatch.setattr(
@@ -255,7 +256,7 @@ def test_block_ai_n4_sealed_line_selector_preserves_copied_input_dicts(
     eff0 = copy.deepcopy(eff)
     session0 = copy.deepcopy(session)
     monkeypatch.setattr(
-        social_exchange_emission,
+        social_exchange_fallback_catalog,
         "minimal_social_emergency_fallback_line",
         lambda _resolution: "strict-social line",
     )
@@ -280,7 +281,7 @@ def test_block_ai_extracted_n4_selector_uses_owner_modules_only(
     calls: list[str] = []
 
     monkeypatch.setattr(
-        social_exchange_emission,
+        social_exchange_fallback_catalog,
         "minimal_social_emergency_fallback_line",
         lambda _resolution: calls.append("minimal") or "strict-social owner line",
     )
@@ -377,9 +378,9 @@ def test_strict_social_emergency_fallback_patch_applies_caller_provided_text_wit
     def _forbidden_minimal(*_a: Any, **_k: Any) -> str:
         raise AssertionError("patch helper must not invoke minimal_social_emergency_fallback_line")
 
-    import game.social_exchange_emission as social_exchange_emission
+    import game.social_exchange_fallback_catalog as social_exchange_fallback_catalog
 
-    monkeypatch.setattr(social_exchange_emission, "minimal_social_emergency_fallback_line", _forbidden_minimal)
+    monkeypatch.setattr(social_exchange_fallback_catalog, "minimal_social_emergency_fallback_line", _forbidden_minimal)
     out = {
         "player_facing_text": "Bad candidate.",
         "tags": ["existing"],

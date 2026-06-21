@@ -33,11 +33,11 @@ from game.narration_plan_bundle import attach_narration_plan_bundle, get_attache
 from game.narrative_mode_contract import build_narrative_mode_contract
 from game.prompt_context import build_narration_context
 from tests.helpers.ctir_narration_bundle import ensure_narration_plan_bundle_for_manual_ctir_tests
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
     assert_final_route_accept_candidate_smoke,
     assert_final_route_replaced_or_not_accept,
-    final_emission_meta_from_output,
 )
 from tests.helpers.narrative_mode_validator_fixtures import minimal_ctir_continuation
 

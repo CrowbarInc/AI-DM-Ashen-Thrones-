@@ -23,7 +23,7 @@ from game.opening_deterministic_fallback import (
 )
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.final_emission_sealed_fallback import SealedFallbackSelection
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,

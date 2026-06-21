@@ -18,7 +18,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Sequence, Set
 
-from game.final_emission_meta import (
+from game.observability_attribution_read import (
     NARRATIVE_AUTHENTICITY_FEM_KEYS,
     normalize_merged_na_telemetry_for_eval,
     normalized_observational_telemetry_bundle,

@@ -23,7 +23,7 @@ from game.upstream_response_repairs import (
     maybe_attach_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
-from game.final_emission_meta import OPENING_FALLBACK_RESULT_META_FIELDS
+from game.final_emission_opening_fallback import OPENING_FALLBACK_RESULT_META_FIELDS
 from tests.helpers.opening_fallback_evidence import (
     EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
     opening_gm_output,

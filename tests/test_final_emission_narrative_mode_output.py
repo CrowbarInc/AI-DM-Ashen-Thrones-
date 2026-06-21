@@ -7,7 +7,7 @@ timing and hard-replace policy remain in ``tests/test_final_emission_gate.py``.
 from __future__ import annotations
 
 import game.final_emission_narrative_mode_output as narrative_mode_output
-from game.final_emission_meta import FINAL_EMISSION_META_KEY
+from game.observability_attribution_read import FINAL_EMISSION_META_KEY
 from game.narrative_mode_contract import build_narrative_mode_contract
 
 

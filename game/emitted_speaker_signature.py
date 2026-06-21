@@ -10,12 +10,10 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS
-from game.social_exchange_emission import (
-    _has_explicit_interruption_shape,
-    interruption_cue_present_in_text,
-)
+from game.social_exchange_validation import has_explicit_interruption_shape
+from game.social_exchange_projection import interruption_cue_present_in_text
 
 _SPEECH_VERB_ATTRIBUTION_RE = re.compile(
     r"^\s*([^\n]+?)\s+"
@@ -89,7 +87,7 @@ def detect_emitted_speaker_signature(
             confidence = "high"
         elif raw:
             confidence = "medium"
-        intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
+        intr = bool(interruption_cue_present_in_text(t) or has_explicit_interruption_shape(t))
         return {
             "speaker_name": speaker_name,
             "speaker_label": speaker_label,
@@ -116,7 +114,7 @@ def detect_emitted_speaker_signature(
             speaker_label = raw
             confidence = "medium"
 
-    intr = bool(interruption_cue_present_in_text(t) or _has_explicit_interruption_shape(t))
+    intr = bool(interruption_cue_present_in_text(t) or has_explicit_interruption_shape(t))
 
     return {
         "speaker_name": speaker_name,

@@ -8,14 +8,16 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Sequence
 
-from game.final_emission_text import (
-    _ACTION_STOPWORDS,
+from game.final_emission_text_formatting import (
+    _normalize_terminal_punctuation,
+    _normalize_text,
+)
+from game.final_emission_text_policy import (
     _ACTION_RESULT_PATTERNS,
+    _ACTION_STOPWORDS,
     _AGENCY_SUBSTITUTE_PATTERNS,
     _ANSWER_DIRECT_PATTERNS,
     _ANSWER_FILLER_PATTERNS,
-    _normalize_terminal_punctuation,
-    _normalize_text,
 )
 from game.response_policy_contracts import (
     resolve_answer_completeness_contract as _policy_resolve_answer_completeness_contract,
@@ -24,7 +26,7 @@ from game.response_policy_contracts import (
     resolve_social_response_structure_contract as _policy_resolve_social_response_structure_contract,
 )
 from game.referent_tracking import REFERENT_TRACKING_ARTIFACT_VERSION
-from game.social_exchange_emission import (
+from game.social_exchange_validation import (
     is_route_illegal_global_or_sanitizer_fallback_text,
     replacement_is_route_legal_social,
 )

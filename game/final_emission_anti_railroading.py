@@ -17,7 +17,7 @@ from game.anti_railroading import (
 from game.final_emission_narrative_authority import resolve_narrative_authority_contract
 from game.final_emission_scene_state_anchor import _resolve_scene_state_anchor_contract
 from game.response_policy_contracts import _last_player_input
-from game.social_exchange_emission import merged_player_prompt_for_gate
+from game.social_exchange_policy import merged_player_prompt_for_gate
 from game.turn_packet import resolve_turn_packet_contract, resolve_turn_packet_for_gate
 
 

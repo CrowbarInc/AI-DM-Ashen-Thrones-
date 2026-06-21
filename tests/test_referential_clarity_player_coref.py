@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import game.final_emission_terminal_pipeline as terminal_pipeline
-from game.final_emission_text import _normalize_text
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from game.final_emission_text_formatting import _normalize_text
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.objective7_referent_fixtures import (
     minimal_full_referent_artifact,
     referent_compact_mirror,

@@ -6,9 +6,9 @@ owning gate ordering.
 """
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import pytest
 
-import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.anti_railroading import (
     ALLOWED_LEAD_ROLES,
     FORBIDDEN_LEAD_ROLES,
@@ -21,10 +21,8 @@ from game.final_emission_anti_railroading import (
     repair_anti_railroading_narrow,
     resolve_anti_railroading_contract,
 )
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 pytestmark = pytest.mark.unit
 
@@ -381,7 +379,7 @@ def test_anti_railroading_prompt_context_contract_resolution():
 
 def test_anti_railroading_surfaced_lead_mandatory_repair(monkeypatch):
     """Surfaced-lead mandatory framing fails AR validation and triggers non-social replace."""
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     c = _ar_contract(prompt_leads=[{"id": "h1", "title": "Harbor warehouse"}])
     raw = "The Harbor warehouse lead isn't optional; you're going there now."
     out = _apply_gate(

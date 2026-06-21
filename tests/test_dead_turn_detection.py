@@ -8,8 +8,8 @@ from __future__ import annotations
 import pytest
 
 from game.final_emission_runtime import finalize_player_facing_emission as apply_final_emission_gate
-from game.final_emission_meta import classify_dead_turn, read_dead_turn_from_gm_output
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from game.observability_attribution_read import classify_dead_turn, read_dead_turn_from_gm_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 
 pytestmark = pytest.mark.unit
 

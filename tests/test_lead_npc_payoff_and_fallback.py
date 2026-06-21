@@ -9,7 +9,7 @@ from game.exploration import (
     maybe_finalize_pursued_lead_npc_contact_payoff,
     maybe_finalize_pursued_lead_destination_payoff_after_scene_transition,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from game.leads import LeadLifecycle, LeadStatus, create_lead, get_lead, upsert_lead
 from game.scene_actions import normalize_scene_action
 

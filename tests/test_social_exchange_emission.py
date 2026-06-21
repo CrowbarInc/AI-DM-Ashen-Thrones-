@@ -19,7 +19,7 @@ Block C: ``question_resolution_rule_check`` / first-sentence social legality (in
 rather than duplicated in ``tests/test_prompt_and_guard.py``."""
 from __future__ import annotations
 
-import game.final_emission_terminal_pipeline as terminal_pipeline
+import game.final_emission_visibility_fallback as visibility_fallback
 import game.final_emission_strict_social_stack as strict_social_stack
 
 from game.contract_registry import emergency_fallback_source_ids
@@ -32,7 +32,7 @@ from game.final_emission_validators import (
 )
 from game.speaker_contract_enforcement import enforce_emitted_speaker_with_contract
 from game.interaction_context import rebuild_active_scene_entities, set_social_target
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.emission_smoke_assertions import assert_final_route_replaced_or_not_accept
 from game.output_sanitizer import (
     SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
@@ -43,27 +43,31 @@ from game.output_sanitizer import (
     sanitize_player_facing_output,
 )
 from game.response_policy_contracts import response_type_contract_requires_dialogue
-from game.social_exchange_emission import (
-    _apply_interruption_repeat_guard,
-    _social_integrity_fallback_line_candidates,
+from game.social_exchange_fallback_catalog import (
     apply_strict_social_terminal_dialogue_fallback_if_needed,
-    apply_strict_social_ownership_enforcement,
-    apply_strict_social_sentence_ownership_filter,
-    build_final_strict_social_response,
-    coerce_resolution_for_strict_social_emission,
-    effective_strict_social_resolution_for_emission,
     deterministic_social_fallback_line,
-    hard_reject_social_exchange_text,
-    is_route_illegal_global_or_sanitizer_fallback_text,
     lawful_strict_social_dialogue_emergency_fallback_line,
     minimal_social_emergency_fallback_line,
-    normalize_social_exchange_candidate,
+    social_integrity_fallback_line_candidates,
+    strict_social_ownership_terminal_fallback,
+    strict_social_terminal_dialogue_fallback_valid,
+)
+from game.social_exchange_policy import (
+    coerce_resolution_for_strict_social_emission,
+    effective_strict_social_resolution_for_emission,
     reconcile_strict_social_resolution_speaker,
     should_apply_strict_social_exchange_emission,
     strict_social_emission_will_apply,
-    strict_social_ownership_terminal_fallback,
-    strict_social_terminal_dialogue_fallback_valid,
     synthetic_social_exchange_resolution_for_emission,
+)
+from game.social_exchange_validation import is_route_illegal_global_or_sanitizer_fallback_text
+from game.social_exchange_emission import (
+    apply_interruption_repeat_guard,
+    apply_strict_social_ownership_enforcement,
+    apply_strict_social_sentence_ownership_filter,
+    build_final_strict_social_response,
+    hard_reject_social_exchange_text,
+    normalize_social_exchange_candidate,
 )
 from game.storage import get_scene_runtime
 
@@ -1147,7 +1151,7 @@ def test_existing_progression_output_for_cause_followup_survives_repeat_guard():
         '"Fish carts collided there, and two watchmen are hauling a fishmonger clear."'
     )
 
-    _apply_interruption_repeat_guard(
+    apply_interruption_repeat_guard(
         interruption,
         resolution=resolution,
         session=session,
@@ -1156,7 +1160,7 @@ def test_existing_progression_output_for_cause_followup_survives_repeat_guard():
         tags=[],
         source_text=interruption,
     )
-    out, meta = _apply_interruption_repeat_guard(
+    out, meta = apply_interruption_repeat_guard(
         progressed,
         resolution=resolution,
         session=session,
@@ -1186,7 +1190,7 @@ def test_existing_progression_output_for_reaction_followup_survives_repeat_guard
         '"That rattled me. Give me a breath and I will tell you where the patrol was last seen."'
     )
 
-    _apply_interruption_repeat_guard(
+    apply_interruption_repeat_guard(
         interruption,
         resolution=resolution,
         session=session,
@@ -1195,7 +1199,7 @@ def test_existing_progression_output_for_reaction_followup_survives_repeat_guard
         tags=[],
         source_text=interruption,
     )
-    out, meta = _apply_interruption_repeat_guard(
+    out, meta = apply_interruption_repeat_guard(
         progressed,
         resolution=resolution,
         session=session,
@@ -1222,7 +1226,7 @@ def test_existing_progression_output_for_partial_answer_survives_repeat_guard():
     interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
     progressed = 'Tavern Runner says, "Short version: they were last seen near the old millstone. I did not see who led them."'
 
-    _apply_interruption_repeat_guard(
+    apply_interruption_repeat_guard(
         interruption,
         resolution=resolution,
         session=session,
@@ -1231,7 +1235,7 @@ def test_existing_progression_output_for_partial_answer_survives_repeat_guard():
         tags=[],
         source_text=interruption,
     )
-    out, meta = _apply_interruption_repeat_guard(
+    out, meta = apply_interruption_repeat_guard(
         progressed,
         resolution=resolution,
         session=session,
@@ -1400,7 +1404,7 @@ def test_strict_social_gate_merges_social_response_structure_metadata(monkeypatc
         )
 
     monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = apply_final_emission_gate(
         {
             "player_facing_text": "stub",
@@ -1650,7 +1654,7 @@ def test_strict_social_ignorance_plus_compatible_detail_keeps_both_sentences():
 
 
 def test_deterministic_social_fallback_variety_uses_speaker_label():
-    from game.social_exchange_emission import deterministic_social_fallback_line
+    from game.social_exchange_fallback_catalog import deterministic_social_fallback_line
 
     res = {
         "kind": "question",
@@ -1685,7 +1689,7 @@ def test_scene_narration_leakage_still_removed_from_strict_social_blob():
 
 def test_strict_social_reconcile_binds_fallback_to_active_not_first_roster():
     """Stale engine npc_id must not make deterministic fallback speak as roster[0] when active is another NPC."""
-    from game.social_exchange_emission import deterministic_social_fallback_line
+    from game.social_exchange_fallback_catalog import deterministic_social_fallback_line
 
     session = default_session()
     world = dict(default_world())
@@ -2281,7 +2285,7 @@ def test_social_integrity_fallback_candidates_avoid_stock_passive_pressure():
             "probe_outcome": "partial",
         },
     }
-    cands = _social_integrity_fallback_line_candidates(
+    cands = social_integrity_fallback_line_candidates(
         resolution=res,
         player_text="Who ordered the patrol?",
         session=default_session(),

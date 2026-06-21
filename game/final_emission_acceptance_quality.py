@@ -19,7 +19,7 @@ from game.final_emission_sealed_fallback import (
     finalize_n4_sealed_replace_fem_route_meta,
     select_acceptance_quality_n4_sealed_fallback_line,
 )
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 def _narrative_plan_bundle_present_on_gm_output(gm_output: Mapping[str, Any] | None) -> bool:

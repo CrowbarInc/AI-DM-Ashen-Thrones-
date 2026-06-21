@@ -11,7 +11,7 @@ from game.interaction_context import (
     rebuild_active_scene_entities,
     set_social_target,
 )
-from game.social_exchange_emission import (
+from game.social_exchange_policy import (
     player_line_triggers_strict_social_emission,
     reconcile_strict_social_resolution_speaker,
     resolve_strict_social_npc_target_id,

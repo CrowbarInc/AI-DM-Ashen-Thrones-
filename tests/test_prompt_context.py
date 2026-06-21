@@ -8,6 +8,7 @@ gate suites keep ordering and cross-layer routing only.
 """
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import copy
 import json
 from types import SimpleNamespace
@@ -60,15 +61,12 @@ from game.referent_tracking import validate_referent_tracking_artifact
 from tests.helpers.objective7_referent_fixtures import REFERENT_TRACKING_COMPACT_KEYS
 from game.world import upsert_world_npc
 
-import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.final_emission_strict_social_stack as strict_social_stack
 from game.final_emission_repairs import _apply_social_response_structure_layer
-from game.final_emission_text import _normalize_text
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-    response_type_contract,
-)
+from game.final_emission_text_formatting import _normalize_text
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import response_type_contract
 from tests.helpers.strict_social_harness import runner_strict_bundle
 
 
@@ -3447,7 +3445,7 @@ def _dialogue_response_policy_with_social_structure(**srs_overrides):
 
 @pytest.mark.unit
 def test_non_strict_social_failed_repair_adds_unsatisfied_after_repair_reason(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     bad = _monoblob_dialogue_quote()
     pol = _dialogue_response_policy_with_social_structure()
     out = _apply_gate(
@@ -3483,7 +3481,7 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
         return bad, dict(stub_details)
 
     monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     out = _apply_gate(
         {"player_facing_text": bad, "tags": [], "response_policy": pol},
@@ -3505,7 +3503,7 @@ def test_strict_social_failed_repair_does_not_add_unsatisfied_after_repair_reaso
 
 @pytest.mark.unit
 def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     bullet = '- "East gate is two hundred feet south," he says.\n- "Patrols chart that lane nightly."'
     out = _apply_gate(
@@ -3526,7 +3524,7 @@ def test_social_response_structure_boundary_skips_list_to_prose_repair(monkeypat
 
 @pytest.mark.unit
 def test_social_response_structure_metadata_merged_on_layer_execution(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     out = _apply_gate(
         {
@@ -3581,7 +3579,7 @@ def test_social_response_structure_skip_path_records_skip_reason_on_answer_compl
 
 @pytest.mark.unit
 def test_action_outcome_turn_social_response_structure_not_applicable(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     rtc = response_type_contract("action_outcome")
     srs = _secondary_social_response_structure_contract("action_outcome")
     raw = "You lift the bar; it groans, and the side door eases open a finger's width."

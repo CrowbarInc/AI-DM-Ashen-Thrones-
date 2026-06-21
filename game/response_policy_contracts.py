@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
-from game.final_emission_text import _RESPONSE_TYPE_VALUES
+from game.final_emission_text_policy import _RESPONSE_TYPE_VALUES
 from game.social import SOCIAL_KINDS
 from game.storage import get_scene_runtime
 

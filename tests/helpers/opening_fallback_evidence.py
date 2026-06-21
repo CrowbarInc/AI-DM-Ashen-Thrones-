@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.final_emission_meta import (
+from game.attribution_read_views import (
     OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
@@ -29,7 +29,7 @@ from game.final_emission_meta import (
     opening_fallback_owner_bucket_from_fields,
     opening_fallback_owner_bucket_from_meta,
 )
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.response_type_smoke import response_type_contract
 
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 

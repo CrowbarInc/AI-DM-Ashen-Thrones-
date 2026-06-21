@@ -9,14 +9,16 @@ Alignment with classifier rule tables is enforced by
 """
 from __future__ import annotations
 
-from game.final_emission_ownership_schema import (
+from game.attribution_read_views import (
     ALLOWED_FALLBACK_CONTENT_OWNERS,
     ALLOWED_FALLBACK_SELECTION_OWNERS,
 )
-from tests.helpers.golden_replay_projection import (
+from game.attribution_read_views import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
+)
+from tests.helpers.golden_replay_projection import (
     protected_classifier_evidence_field_paths,
 )
 from tests.helpers.replay_drift_taxonomy import ALLOWED_OWNER_DRIFT_BUCKETS

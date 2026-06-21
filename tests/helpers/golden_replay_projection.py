@@ -46,24 +46,14 @@ import re
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-from game.final_emission_meta import (
-    OPENING_FALLBACK_OWNER_BUCKETS,
-    SEALED_FALLBACK_OWNER_BUCKETS,
-    SEALED_FALLBACK_OWNER_SEALED_GATE,
-    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-    VISIBILITY_FALLBACK_OWNER_BUCKETS,
-    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-    normalize_final_emission_meta_for_observability,
-    opening_fallback_owner_bucket_from_meta,
-    read_emission_debug_lane_from_turn_payload,
-    read_final_emission_meta_from_turn_payload,
-)
 from game.final_emission_replay_projection import (
     SEALED_REPLACEMENT_SUBKINDS,
     build_fem_runtime_lineage_events,
     is_sealed_replacement_lineage_kind,
+    normalize_fem_for_replay_acceptance,
+    read_emission_debug_lane_for_replay,
+    read_fem_from_turn_for_replay,
+    read_opening_fallback_owner_bucket_for_replay,
 )
 from game.output_sanitizer import resembles_serialized_response_payload
 from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
@@ -1411,7 +1401,7 @@ def _project_flat_protected_observed_fields(
         elif spec.source in ("sanitizer_lineage", "sanitizer_lineage_legacy"):
             out[path] = sanitizer_lineage_flat.get(path)
         elif spec.source == "fem_opening_bucket":
-            out[path] = opening_fallback_owner_bucket_from_meta(fem)
+            out[path] = read_opening_fallback_owner_bucket_for_replay(fem)
         elif spec.source == "fallback_family":
             out[path] = fallback_family
         elif spec.source == "final_text":
@@ -1444,11 +1434,11 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
 
     resolution = payload.get("resolution") if isinstance(payload.get("resolution"), Mapping) else {}
     social = resolution.get("social") if isinstance(resolution.get("social"), Mapping) else {}
-    fem = read_final_emission_meta_from_turn_payload(payload)
-    fem_normalized = normalize_final_emission_meta_for_observability(fem)
+    fem = read_fem_from_turn_for_replay(payload)
+    fem_normalized = normalize_fem_for_replay_acceptance(fem)
     fem_flat = _extract_fem_flat_observed_fields(fem)
     runtime_lineage_events = _runtime_lineage_events_from_payload(payload, fem)
-    emission_debug_lane = read_emission_debug_lane_from_turn_payload(payload)
+    emission_debug_lane = read_emission_debug_lane_for_replay(payload)
     trace = _trace_from_payload_or_snapshot(payload, snap)
     turn_trace = trace.get("turn_trace") if isinstance(trace.get("turn_trace"), Mapping) else {}
     social_contract_trace = (

@@ -32,11 +32,10 @@ cross-layer routing / gate behavior, not as the primary prompt-contract authorit
 """
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-    response_type_contract,
-)
+import game.final_emission_visibility_fallback as visibility_fallback
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import response_type_contract
 
 import json
 import random
@@ -46,8 +45,7 @@ from typing import Any, Callable, Mapping
 import pytest
 
 import game.final_emission_gate_preflight_strict_social as gate_preflight_strict_social
-import game.final_emission_terminal_pipeline as terminal_pipeline
-import game.social_exchange_emission as social_exchange_emission
+import game.social_exchange_policy as social_exchange_policy
 from game.interaction_routing import choose_interaction_route
 from game.defaults import default_scene, default_session, default_world
 from game.intent_parser import parse_freeform_to_action
@@ -192,7 +190,7 @@ def patch_strict_social_emission_will_apply(
 ) -> None:
     """Patch owner + strict-social preflight import binding for strict-social route decision."""
     stub = lambda *a, **k: will_apply
-    monkeypatch.setattr(social_exchange_emission, "strict_social_emission_will_apply", stub)
+    monkeypatch.setattr(social_exchange_policy, "strict_social_emission_will_apply", stub)
     monkeypatch.setattr(gate_preflight_strict_social, "strict_social_emission_will_apply", stub)
 
 
@@ -205,7 +203,7 @@ def patch_final_emission_helpers(
     """Optional stability hooks (same spirit as ``test_anti_railroading_transcript_regressions``)."""
     hook = visibility_hook or (lambda out, **kwargs: out)
     if patch_visibility:
-        monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", hook)
+        monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", hook)
 
 
 def assert_narration_transcript_outcome(gm_out: Mapping[str, Any], assertions: NarrationTranscriptAssertions) -> None:

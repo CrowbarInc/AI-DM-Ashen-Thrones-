@@ -785,8 +785,8 @@ def test_scenario_spine_runtime_lineage_summary_uses_shared_reporting_surface() 
 
 
 def test_cycle_i_opening_attribution_survives_prepared_payload_gate_lineage_and_diagnostics() -> None:
-    from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
-    from game.final_emission_meta import read_final_emission_meta_dict
+    from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+    from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
     from game.final_emission_replay_projection import build_fem_runtime_lineage_events
     from game.upstream_response_repairs import (
         UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,

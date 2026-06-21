@@ -40,18 +40,20 @@ from game.interaction_context import (
     assert_valid_speaker,
     inspect as inspect_interaction_context,
 )
-from game.social_exchange_emission import (
-    apply_strict_social_terminal_dialogue_fallback_if_needed,
+from game.social_exchange_fallback_catalog import (
     apply_social_exchange_retry_fallback_gm,
-    effective_strict_social_resolution_for_emission,
-    is_route_illegal_global_or_sanitizer_fallback_text,
-    is_scene_directed_watch_question,
-    looks_like_npc_directed_question,
+    apply_strict_social_terminal_dialogue_fallback_if_needed,
     minimal_social_emergency_fallback_line,
     repair_strict_social_terminal_dialogue_fallback_if_needed,
-    strict_social_emission_will_apply,
     strict_social_terminal_dialogue_fallback_valid,
 )
+from game.social_exchange_policy import (
+    effective_strict_social_resolution_for_emission,
+    is_scene_directed_watch_question,
+    looks_like_npc_directed_question,
+    strict_social_emission_will_apply,
+)
+from game.social_exchange_validation import is_route_illegal_global_or_sanitizer_fallback_text
 
 COMBAT_KINDS = frozenset({
     'initiative', 'attack', 'spell', 'skill_check',

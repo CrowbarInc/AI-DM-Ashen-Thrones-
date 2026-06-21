@@ -11,14 +11,11 @@ import pytest
 import game.dialogue_social_plan as dialogue_social_plan
 import game.final_emission_strict_social_stack as strict_social_stack
 import game.final_emission_referential_clarity as referential_clarity
-import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.final_emission_visibility_fallback as visibility_fallback
 import game.speaker_contract_enforcement as sce
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    response_type_contract,
-)
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import response_type_contract
 from tests.helpers.strict_social_harness import (
     run_strict_social_motive_overclaim_gate_case,
     runner_strict_bundle,
@@ -829,7 +826,7 @@ def test_strict_social_long_quoted_line_retains_speaker_and_dialogue_payload(mon
         return bad, dict(stub_details)
 
     monkeypatch.setattr(strict_social_stack, "build_final_strict_social_response", fake_build)
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     pol = _dialogue_response_policy_with_social_structure()
     out = _apply_gate(
         {"player_facing_text": bad, "tags": [], "response_policy": pol},

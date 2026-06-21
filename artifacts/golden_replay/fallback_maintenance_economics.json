@@ -7,7 +7,7 @@
       "history_depth_points": 0,
       "remediation_count_points": 0
     },
-    "history_depth": 0,
+    "history_depth": 2,
     "level": "low",
     "maximum_score": 6,
     "remediation_count": 0,
@@ -48,55 +48,203 @@
   },
   "maintenance_burden": {
     "active_remediation_burden": 0,
-    "classification": "negligible",
+    "classification": "high",
     "components": {
       "active_remediation_points": 0.0,
-      "instability_points": 0.0,
-      "recurring_hotspot_points": 0.0,
-      "unresolved_risk_points": 0.0
+      "instability_points": 2.0,
+      "recurring_hotspot_points": 20.0,
+      "unresolved_risk_points": 40.0
     },
-    "fallback_maintenance_burden": 0.0,
-    "instability_burden": 0,
-    "recurring_hotspot_burden": 0,
-    "score": 0.0,
-    "unresolved_risk_burden": 0
+    "fallback_maintenance_burden": 62.0,
+    "instability_burden": 2,
+    "recurring_hotspot_burden": 48,
+    "score": 62.0,
+    "unresolved_risk_burden": 620.0003
   },
   "recommendations": [
     "Collect fallback history and remediation evidence before using economics in contraction planning."
   ],
   "recurring_hotspots": {
     "counts": {
-      "dominant": 0,
+      "dominant": 16,
       "persistent": 0,
       "recurring": 0
     },
-    "weighted_burden": 0
+    "weighted_burden": 48
   },
   "risk_analysis": {
     "anomaly_count": 0,
     "anomaly_severity": "none",
     "backlog_risk": 0,
     "queue_entry_count": 0,
-    "trend_classification": "insufficient_history",
-    "unresolved_contributor_count": 0,
-    "unresolved_risk": 0
+    "trend_classification": "stable",
+    "unresolved_contributor_count": 16,
+    "unresolved_risk": 620.0003
   },
   "schema_version": 1,
   "source_status": {
     "bp10_effectiveness": "no_remediations",
     "bp11_portfolio": "empty_portfolio",
     "bp12_roi": "no_remediations",
-    "bp5_trends": "insufficient_history",
+    "bp5_trends": "stable",
     "bp6_anomalies": "insufficient_history",
-    "bp7_recurrence": "no_history",
-    "bp8_risk": "no_history",
+    "bp7_recurrence": "ok",
+    "bp8_risk": "ok",
     "bp9_queue": "empty"
   },
-  "status": "insufficient_data",
+  "status": "ok",
   "structural_hotspots": {
-    "fallback_kinds": [],
-    "families": [],
-    "owners": [],
-    "routes": []
+    "fallback_kinds": [
+      {
+        "anomaly_count": 0,
+        "contributor": "referential_clarity_hard_replacement",
+        "dimension": "fallback_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 40.2703
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "scene_opening",
+        "dimension": "fallback_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 38.3784
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "response_type_prepared_emission",
+        "dimension": "fallback_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 31.0811
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "sealed_passive_scene_pressure_fallback",
+        "dimension": "fallback_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 30.2703
+      }
+    ],
+    "families": [
+      {
+        "anomaly_count": 0,
+        "contributor": "scene_opening",
+        "dimension": "diegetic_family",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 50.0
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "gate_terminal_repair",
+        "dimension": "realization_family",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 50.0
+      }
+    ],
+    "owners": [
+      {
+        "anomaly_count": 0,
+        "contributor": "game.final_emission_sealed_fallback",
+        "dimension": "content_owner",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 41.1429
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "game.final_emission_visibility_fallback",
+        "dimension": "selection_owner",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 40.8571
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "sealed-gate",
+        "dimension": "owner_bucket",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 39.8361
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "upstream-prepared",
+        "dimension": "owner_bucket",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 39.8361
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "game.final_emission_gate",
+        "dimension": "selection_owner",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 39.1429
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "game.opening_deterministic_fallback",
+        "dimension": "content_owner",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 38.8571
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "unknown-ambiguous",
+        "dimension": "owner_bucket",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 30.3279
+      }
+    ],
+    "routes": [
+      {
+        "anomaly_count": 0,
+        "contributor": "observe",
+        "dimension": "route_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "elevated",
+        "risk_score": 41.3514
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "scene_opening",
+        "dimension": "route_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 38.3784
+      },
+      {
+        "anomaly_count": 0,
+        "contributor": "unknown",
+        "dimension": "route_kind",
+        "priority": "monitor",
+        "recurrence": "dominant",
+        "risk_classification": "moderate",
+        "risk_score": 30.2703
+      }
+    ]
   }
 }

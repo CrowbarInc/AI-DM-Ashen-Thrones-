@@ -9,12 +9,15 @@ subtractive strip following fast-fallback neutral composition), which are not a 
 
 Does not change production behavior beyond monkeypatched wrappers delegating to originals.
 
-**BJ-123 owner seams:** layer wrappers in :func:`install_post_speaker_text_probes` and
-:func:`chain_enforce_phase_marker` patch strict-social stack, terminal pipeline, and finalize
-owner symbols — not removed ``feg._*`` re-exports.
+**BJ-123 / BV16C owner seams:** layer wrappers in :func:`install_post_speaker_text_probes` and
+:func:`chain_enforce_phase_marker` patch strict-social stack, terminal orchestration helpers,
+finalize owner, and finalize-tail **owner modules** (visibility, IC, N4, repairs) — not
+``terminal_pipeline`` delegate namespace bindings.
 """
 from __future__ import annotations
 
+import game.interaction_continuity as interaction_continuity
+import game.final_emission_acceptance_quality as acceptance_quality
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Protocol
 
@@ -25,7 +28,7 @@ import game.final_emission_repairs as emission_repairs
 import game.final_emission_strict_social_stack as strict_social_stack
 import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.final_emission_visibility_fallback as visibility_fallback
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 
 _MAX_PRESERVED_PROBE_TEXT = 240
@@ -267,19 +270,19 @@ def install_post_speaker_text_probes(
     )
 
     monkeypatch.setattr(
-        terminal_pipeline,
+        visibility_fallback,
         "apply_visibility_enforcement",
-        wrap_visibility(terminal_pipeline.apply_visibility_enforcement),
+        wrap_visibility(visibility_fallback.apply_visibility_enforcement),
     )
     monkeypatch.setattr(
-        terminal_pipeline,
+        interaction_continuity,
         "apply_interaction_continuity_emission_step",
-        wrap_ic_step(terminal_pipeline.apply_interaction_continuity_emission_step),
+        wrap_ic_step(interaction_continuity.apply_interaction_continuity_emission_step),
     )
     monkeypatch.setattr(
-        terminal_pipeline,
+        emission_repairs,
         "_apply_fallback_behavior_layer",
-        wrap_tuple("fallback_behavior", terminal_pipeline._apply_fallback_behavior_layer),
+        wrap_tuple("fallback_behavior", emission_repairs._apply_fallback_behavior_layer),
     )
     monkeypatch.setattr(
         terminal_pipeline,
@@ -290,19 +293,19 @@ def install_post_speaker_text_probes(
         ),
     )
     monkeypatch.setattr(
-        terminal_pipeline,
+        acceptance_quality,
         "apply_acceptance_quality_n4_floor_seam",
         wrap_out_mutate(
             "acceptance_quality_n4",
-            terminal_pipeline.apply_acceptance_quality_n4_floor_seam,
+            acceptance_quality.apply_acceptance_quality_n4_floor_seam,
         ),
     )
     monkeypatch.setattr(
-        terminal_pipeline,
+        interaction_continuity,
         "attach_interaction_continuity_validation",
         wrap_out_mutate(
             "attach_interaction_continuity_validation",
-            terminal_pipeline.attach_interaction_continuity_validation,
+            interaction_continuity.attach_interaction_continuity_validation,
         ),
     )
     monkeypatch.setattr(

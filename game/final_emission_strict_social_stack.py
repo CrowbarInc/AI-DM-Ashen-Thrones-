@@ -42,19 +42,22 @@ from game.final_emission_meta import (
 from game.final_emission_scene_emit_integrity import (
     _compute_scene_emit_integrity_assessment,
 )
-from game.final_emission_text import _normalize_text, _normalize_text_preserve_paragraphs
+from game.final_emission_text_formatting import (
+    _normalize_text,
+    _normalize_text_preserve_paragraphs,
+)
 from game.fallback_provenance_debug import realign_fallback_provenance_selector_to_current_text
 from game.speaker_contract_enforcement import (
     _sync_eff_social_to_resolution,
     enforce_emitted_speaker_with_contract,
 )
-from game.social_exchange_emission import (
-    build_final_strict_social_response,
+from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+from game.social_exchange_projection import (
     log_final_emission_decision,
     log_final_emission_trace,
-    minimal_social_emergency_fallback_line,
     strict_social_deterministic_fallback_family_token,
 )
+from game.social_exchange_emission import build_final_strict_social_response
 from game.stage_diff_telemetry import record_stage_snapshot
 
 

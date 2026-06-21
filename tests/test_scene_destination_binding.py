@@ -38,7 +38,7 @@ from game.scene_destination_binding import (
     reconcile_scene_transition_destination,
 )
 from game.storage import get_scene_runtime
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 
 def _gate_with_stone_boar_and_milestone_exits() -> dict:

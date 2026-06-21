@@ -13,10 +13,8 @@ import game.final_emission_strict_social_stack as strict_social_stack
 import game.scene_state_anchoring as ssa
 from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
 from game.scene_state_anchoring import validate_scene_state_anchoring
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 from tests.helpers.strict_social_harness import runner_strict_bundle
 
 pytestmark = pytest.mark.unit

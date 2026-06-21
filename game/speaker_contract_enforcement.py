@@ -13,13 +13,11 @@ from typing import Any, Dict, Optional
 
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
 from game.social import SPEAKER_CONTRACT_FORBIDDEN_FALLBACK_LABELS, neutral_reply_speaker_grounding_bridge_line
-from game.social_exchange_emission import (
-    _has_explicit_interruption_shape,
-    _npc_display_name_for_emission,
-    interruption_cue_present_in_text,
-    strict_social_ownership_terminal_fallback,
-)
-from game.final_emission_text import _normalize_text
+from game.social_exchange_fallback_catalog import strict_social_ownership_terminal_fallback
+from game.social_exchange_policy import npc_display_name_for_emission
+from game.social_exchange_validation import has_explicit_interruption_shape
+from game.social_exchange_projection import interruption_cue_present_in_text
+from game.final_emission_text_formatting import _normalize_text
 
 _SPEAKER_REASON_SPEAKER_CONTRACT_MATCH = "speaker_contract_match"
 _SPEAKER_REASON_SPEAKER_BINDING_MISMATCH = "speaker_binding_mismatch"
@@ -203,7 +201,7 @@ def _emitted_invents_dialogue_ownership(text: str) -> bool:
 
 
 def _explicit_interruption_scene_event_framing(text: str) -> bool:
-    return bool(_has_explicit_interruption_shape(_normalize_text(text)))
+    return bool(has_explicit_interruption_shape(_normalize_text(text)))
 
 
 def validate_emitted_speaker_against_contract(
@@ -455,7 +453,7 @@ def _apply_speaker_contract_repairs(
             if cname:
                 soc["npc_name"] = cname
             elif cid:
-                soc["npc_name"] = _npc_display_name_for_emission(
+                soc["npc_name"] = npc_display_name_for_emission(
                     world if isinstance(world, dict) else {},
                     str(scene_id or "").strip(),
                     str(cid).strip(),

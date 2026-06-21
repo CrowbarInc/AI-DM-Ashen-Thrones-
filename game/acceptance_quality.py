@@ -60,7 +60,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, MutableMapping, Sequence, Tuple
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 
 ACCEPTANCE_QUALITY_VERSION = 1
 

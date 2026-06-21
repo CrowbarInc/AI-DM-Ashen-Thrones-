@@ -1,12 +1,12 @@
 # BQ16 Recurrence Graduation Audit
 
-**Date:** 2026-06-20T18:10:17Z
+**Date:** 2026-06-12T00:00:00Z
 **Protected replay only:** true
 
 ## Graduation Readiness
 
-- Graduation readiness score: `52.3`
-- Readiness level: `Moderate gaps remain`
+- Graduation readiness score: `21.9`
+- Readiness level: `Major capability gaps remain`
 - Program graduated: `false`
 - Recommended next action: Collect more protected replay observations before optimizing models.
 
@@ -14,32 +14,32 @@
 
 | Capability | Implemented | Validated | Operational | Confidence |
 |---|---|---|---|---:|
-| Historical Persistence | `true` | `true` | `false` | `0.07` |
-| Trend Analytics | `true` | `true` | `true` | `0.17` |
-| Forecasting | `true` | `true` | `true` | `0.20` |
-| Portfolio Analytics | `true` | `true` | `false` | `0.13` |
-| Remediation Targeting | `true` | `true` | `true` | `0.15` |
-| ROI Analytics | `true` | `true` | `true` | `0.20` |
-| Governance | `true` | `true` | `true` | `0.18` |
-| Lifecycle Management | `true` | `true` | `true` | `0.27` |
-| Effectiveness Measurement | `true` | `true` | `false` | `0.14` |
-| Maturity Assessment | `true` | `true` | `true` | `0.36` |
+| Historical Persistence | `true` | `false` | `false` | `0.00` |
+| Trend Analytics | `true` | `false` | `false` | `0.10` |
+| Forecasting | `true` | `false` | `false` | `0.00` |
+| Portfolio Analytics | `true` | `false` | `false` | `0.00` |
+| Remediation Targeting | `true` | `false` | `false` | `0.10` |
+| ROI Analytics | `true` | `false` | `false` | `0.15` |
+| Governance | `true` | `false` | `false` | `0.00` |
+| Lifecycle Management | `true` | `false` | `false` | `0.20` |
+| Effectiveness Measurement | `true` | `false` | `false` | `0.00` |
+| Maturity Assessment | `true` | `true` | `true` | `0.25` |
 | Strategic Roadmap | `true` | `true` | `true` | `0.80` |
-| Completion Tracking | `true` | `true` | `true` | `0.69` |
+| Completion Tracking | `true` | `true` | `true` | `0.62` |
 
 # Completion Criteria Validation
 
-- `recurrence_history_present` (observability): current `True`, target `True`, status `met`
+- `recurrence_history_present` (observability): current `False`, target `True`, status `unmet`
 - `trend_analytics_present` (observability): current `True`, target `True`, status `met`
 - `forecasting_present` (observability): current `True`, target `True`, status `met`
 - `portfolio_analytics_present` (observability): current `True`, target `True`, status `met`
 - `governance_analytics_present` (observability): current `True`, target `True`, status `met`
 - `lifecycle_analytics_present` (observability): current `True`, target `True`, status `met`
-- `governance_health_target_met` (governance): current `65.5`, target `80.0`, status `unmet`
-- `watchlist_operational` (governance): current `True`, target `True`, status `met`
-- `ownership_accountability_present` (governance): current `True`, target `True`, status `met`
+- `governance_health_target_met` (governance): current `100.0`, target `80.0`, status `met`
+- `watchlist_operational` (governance): current `False`, target `True`, status `unmet`
+- `ownership_accountability_present` (governance): current `False`, target `True`, status `unmet`
 - `retirement_tracking_present` (governance): current `True`, target `True`, status `met`
-- `forecast_confidence_target_met` (forecasting): current `0.2`, target `0.75`, status `unmet`
+- `forecast_confidence_target_met` (forecasting): current `0.0`, target `0.75`, status `unmet`
 - `forecast_effectiveness_measurable` (forecasting): current `True`, target `True`, status `met`
 - `trajectory_available` (forecasting): current `False`, target `True`, status `unmet`
 - `forecast_validation_available` (forecasting): current `True`, target `True`, status `met`
@@ -51,13 +51,13 @@
 - `transition_tracking_available` (lifecycle): current `True`, target `True`, status `met`
 - `closure_effectiveness_measurable` (lifecycle): current `True`, target `True`, status `met`
 - `age_distribution_available` (lifecycle): current `True`, target `True`, status `met`
-- `operational_readiness_target_met` (operational_readiness): current `11.7`, target `80.0`, status `unmet`
-- `effectiveness_confidence_target_met` (operational_readiness): current `0.14`, target `0.75`, status `unmet`
-- `governance_confidence_target_met` (operational_readiness): current `0.18`, target `0.75`, status `unmet`
+- `operational_readiness_target_met` (operational_readiness): current `0.0`, target `80.0`, status `unmet`
+- `effectiveness_confidence_target_met` (operational_readiness): current `0.0`, target `0.75`, status `unmet`
+- `governance_confidence_target_met` (operational_readiness): current `0.0`, target `0.75`, status `unmet`
 - `trajectory_available` (operational_readiness): current `False`, target `True`, status `unmet`
-- `overall_maturity_target_met` (program): current `36.2`, target `80.0`, status `unmet`
-- `forecast_confidence_graduation` (program): current `0.2`, target `0.75`, status `unmet`
-- `effectiveness_confidence_graduation` (program): current `0.14`, target `0.75`, status `unmet`
+- `overall_maturity_target_met` (program): current `25.2`, target `80.0`, status `unmet`
+- `forecast_confidence_graduation` (program): current `0.0`, target `0.75`, status `unmet`
+- `effectiveness_confidence_graduation` (program): current `0.0`, target `0.75`, status `unmet`
 
 # Roadmap Validation
 
@@ -70,9 +70,9 @@
 
 # Effectiveness Validation
 
-- forecast_accuracy: `potentially_misleading` — Perfect accuracy with very low confidence suggests insufficient validation volume.
+- forecast_accuracy: `insufficient_evidence` — Forecast effectiveness measurable but confidence remains low.
 - governance_effectiveness: `insufficient_evidence` — Zero conversion rates indicate governance funnel not yet exercised by history volume.
-- remediation_effectiveness: `insufficient_evidence` — No resolved remediation outcomes observed in protected replay history.
+- remediation_effectiveness: `supported_by_evidence` — No resolved remediation outcomes observed in protected replay history.
 - lifecycle_closure_effectiveness: `insufficient_evidence` — Lifecycle closure rate requires retired or dormant keys to validate effectiveness.
 
 # Blind Spots
@@ -81,7 +81,6 @@
 - **recurrence_trajectory_history** (critical): No longitudinal trajectory baseline exists for portfolio and readiness comparisons.
 - **recurrence_confidence_decay** (medium): Confidence scores do not decay with stale observations or aging keys.
 - **recurrence_auditability** (low): No immutable audit chain links recurrence analytics revisions over time.
-- **recurrence_model_calibration** (high): High forecast accuracy coexists with low forecast confidence, risking over-interpretation.
 - **recurrence_ownership_drift** (medium): Recurrence ownership drift across runs is not tracked as a dedicated longitudinal signal.
 
 # Redundancies

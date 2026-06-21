@@ -38,14 +38,14 @@ Owner semantics for projected runtime-lineage events:
   Fail-closed opening keeps gate/sealed ownership and is not treated as
   upstream-authored content.
 - ``fallback_owner_bucket`` for opening paths delegates to
-  :func:`game.final_emission_meta.opening_fallback_owner_bucket_from_meta`; this module
+  :func:`game.final_emission_owner_bucket_views.opening_fallback_owner_bucket_from_meta`; this module
   does not re-derive bucket rules from scratch.
 """
 from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.final_emission_ownership_schema import (
+from game.ownership_projection_views import (
     OPENING_FAIL_CLOSED_CONTENT_OWNER,
     OPENING_FALLBACK_CONTENT_OWNER,
     OPENING_FALLBACK_SELECTION_OWNER,
@@ -405,7 +405,7 @@ def _fallback_split_owners_for_kind(
 
 
 def _opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
-    from game.final_emission_meta import opening_fallback_owner_bucket_from_meta
+    from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
 
     return opening_fallback_owner_bucket_from_meta(meta)
 
@@ -846,3 +846,34 @@ def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict
         )
     _append_fem_mutation_projections(events, fem, fallback=fallback, speaker_projections=speaker_projections)
     return events[:16]
+
+
+# --- BV2B replay acceptance adapters (read-side; no meta imports for consumers) ---
+
+
+def normalize_fem_for_replay_acceptance(fem: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Normalize FEM for golden-replay protected observation (read-side only)."""
+    from game.observability_attribution_read import normalize_final_emission_meta_for_observability
+
+    return normalize_final_emission_meta_for_observability(fem)
+
+
+def read_fem_from_turn_for_replay(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read FEM sidecar from a turn payload for golden replay acceptance."""
+    from game.observability_attribution_read import read_final_emission_meta_from_turn_payload
+
+    return read_final_emission_meta_from_turn_payload(payload)
+
+
+def read_emission_debug_lane_for_replay(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read emission debug lane from a turn payload for golden replay acceptance."""
+    from game.observability_attribution_read import read_emission_debug_lane_from_turn_payload
+
+    return read_emission_debug_lane_from_turn_payload(payload)
+
+
+def read_opening_fallback_owner_bucket_for_replay(meta: Mapping[str, Any] | None) -> str:
+    """Project opening fallback owner bucket from FEM for replay acceptance."""
+    from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
+
+    return opening_fallback_owner_bucket_from_meta(meta)

@@ -7,7 +7,7 @@ import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
 from tests.helpers.block_stu_equivalence_fixtures import locked_runner_contract, stub_strict_social_details
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 from tests.helpers.dialogue_social_plan import (
     attach_dialogue_social_plan_to_resolution,
     make_valid_dialogue_social_plan,

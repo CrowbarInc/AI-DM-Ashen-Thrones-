@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-21T12:35:59.933302Z",
+  "baseline": {
+    "observe_route_rate": 0.9545454545454546,
+    "fallback_incidence": 0.6915887850467289,
+    "referential_clarity_hard_replacement_count": 38,
+    "source": "artifacts/golden_replay/bv1b_fallback_incidence_report.json"
+  },
+  "current": {
+    "eligible_turn_count": 200,
+    "fallback_trigger_rate": 0.575,
+    "observe_route_rate": 0.8,
+    "referential_clarity_hard_replacement_count": 48,
+    "fallback_kind_counts": {
+      "scene_opening": 62,
+      "referential_clarity_hard_replacement": 48,
+      "response_type_prepared_emission": 4,
+      "sealed_passive_scene_pressure_fallback": 1
+    }
+  },
+  "delta_vs_baseline": {
+    "observe_route_rate_pp": -0.1545,
+    "fallback_incidence_pp": -0.1166,
+    "referential_clarity_hard_replacement_delta": 10
+  },
+  "observe_instrumentation": {
+    "observe_turn_count": 65,
+    "ambiguous_entity_reference_turns": 49,
+    "upstream_repair_applied_count": 0,
+    "local_substitution_applied_count": 0,
+    "referential_clarity_replacement_applied_count": 49,
+    "repair_success_rate_on_observe": 0.0,
+    "unrepaired_violation_turns": 10
+  },
+  "projected_after_bv3a": {
+    "description": "Synthetic gate simulation + corpus shape analysis; historical FEM frozen until replay refresh",
+    "eligible_shape_turns_ambiguous_speaker": 35,
+    "simulation": {
+      "dialogue_he_with_interlocutor_avoids_fallback": true,
+      "dialogue_he_multi_person_no_grounding_still_replaces": true
+    },
+    "conservative_referential_clarity_hard_replacement_delta": "-8 to -15 events when observe turns carry social/interlocutor grounding",
+    "conservative_observe_route_rate_target": "0.70-0.80",
+    "conservative_fallback_incidence_target": "0.58-0.62",
+    "replay_refresh_required": true
+  },
+  "note": "Historical FEM corpus reflects pre-BV3A finalized turns until protected replay is re-run. Repair instrumentation populates on newly finalized observe turns."
+}

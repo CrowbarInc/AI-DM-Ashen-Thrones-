@@ -11,7 +11,7 @@ from __future__ import annotations
 import game.final_emission_gate as feg
 import game.final_emission_response_type as response_type
 from game.upstream_response_repairs import UPSTREAM_PREPARED_EMISSION_KEY
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.response_type_smoke import response_type_contract
 
 
 def test_upstream_prepared_emission_field_source_prefers_attribution() -> None:

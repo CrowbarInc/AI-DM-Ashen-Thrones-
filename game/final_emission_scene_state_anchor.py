@@ -9,7 +9,7 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Any, Dict, List
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.scene_state_anchoring import validate_scene_state_anchoring
 
 

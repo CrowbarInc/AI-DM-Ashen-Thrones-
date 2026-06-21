@@ -6,7 +6,8 @@ the engine must stay deterministic (explicit pursuit parse, same-scene suppressi
 from __future__ import annotations
 
 from game.narrative_authenticity_eval import _extract_final_emission_meta
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 import pytest
 from fastapi.testclient import TestClient
@@ -22,7 +23,6 @@ from game.defaults import (
     default_session,
     default_world,
 )
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 from game.interaction_context import inspect as inspect_interaction_context
 from game.interaction_context import rebuild_active_scene_entities, set_non_social_activity, set_social_target
 from game.affordances import generate_scene_affordances

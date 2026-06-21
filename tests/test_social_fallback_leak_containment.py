@@ -12,7 +12,7 @@ from game.campaign_state import create_fresh_session_document
 from tests.helpers.repairs_consumer_facade import repair_fallback_behavior
 from game.final_emission_validators import validate_fallback_behavior
 from game.interaction_context import rebuild_active_scene_entities
-from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm
+from game.social_exchange_fallback_catalog import apply_social_exchange_retry_fallback_gm
 from game.storage import load_scene
 
 pytestmark = pytest.mark.unit

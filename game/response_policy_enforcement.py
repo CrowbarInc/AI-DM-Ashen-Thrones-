@@ -11,7 +11,7 @@ import re
 from typing import Any, Dict, List
 
 from game.prompt_context import RESPONSE_RULE_PRIORITY
-from game.social_exchange_emission import strict_social_emission_will_apply
+from game.social_exchange_policy import strict_social_emission_will_apply
 from game.utils import slugify
 
 # ``gm["metadata"][GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED]`` is set by
@@ -769,10 +769,8 @@ def sanitize_player_facing_text(
         classify_uncertainty,
         normalize_clue_record,
     )
-    from game.social_exchange_emission import (
-        effective_strict_social_resolution_for_emission,
-        minimal_social_emergency_fallback_line,
-    )
+    from game.social_exchange_fallback_catalog import minimal_social_emergency_fallback_line
+    from game.social_exchange_policy import effective_strict_social_resolution_for_emission
 
     public_scene, discoverable, hidden = _scene_layers(scene_envelope)
     _ = public_scene  # kept for future extensions; not used yet

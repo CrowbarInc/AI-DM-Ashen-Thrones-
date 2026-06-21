@@ -5,14 +5,37 @@ Does not own fallback ordering inside gate visibility routing.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Mapping, Tuple
 
-from game.final_emission_text import _normalize_text
+from game.final_emission_text_formatting import _normalize_text
 from game.final_emission_visibility_fallback import (
     VisibilitySelectedFallback,
     first_mention_composition_meta as _first_mention_composition_meta,
 )
 from game.storage import get_scene_runtime
+
+_CONCRETE_INTERACTION_PATTERNS: tuple[re.Pattern[str], ...] = (
+    re.compile("[\"“”'‘’]"),
+    re.compile(
+        r"\b(?:approach(?:es|ed)?|step(?:s|ped)?\s+(?:toward|forward|out)|comes?\s+(?:straight\s+)?to|cuts?\s+across|"
+        r"blocks?|halts?|stops?\s+at|squares?\s+up|hails?|calls?\s+out|speaks?\s+first|says?|asks?|mutters?|warns?|"
+        r"orders?|interrupts?|thrusts?|hands?|points?)\b",
+        re.IGNORECASE,
+    ),
+)
+
+_BEAT_TYPE_BY_FALLBACK_KIND: dict[str, str] = {
+    "passive_scene_pressure_lead_figure": "observer_interruption",
+    "passive_scene_pressure_guard_rumor": "guard_reaction",
+    "passive_scene_pressure_visible_figure": "guard_reaction",
+    "passive_scene_pressure_generic": "generic_interruption",
+}
+
+
+def reply_has_concrete_interaction(text: str) -> bool:
+    """True when *text* satisfies the passive-scene concrete interaction beat contract."""
+    return _reply_already_has_concrete_interaction(text)
 
 
 def _dedupe_preserve_order(items: List[str]) -> List[str]:
@@ -196,3 +219,147 @@ def _passive_scene_pressure_fallback_candidates(
             fallback_candidate_source="passive_scene_pressure:fallback",
         )
     ]
+
+
+def _merge_upstream_concrete_beat(existing_text: str, beat_text: str) -> str:
+    existing = _normalize_text(existing_text)
+    beat = _output_sentence(beat_text)
+    if not existing:
+        return beat
+    if not beat:
+        return existing
+    if existing[-1] not in ".!?":
+        existing += "."
+    return f"{existing} {beat}"
+
+
+def _select_deterministic_upstream_concrete_beat(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> Tuple[str, str] | None:
+    """Pick a minimal deterministic beat for upstream satisfier (same pool as sealed candidates)."""
+    candidates = _passive_scene_pressure_fallback_candidates(
+        session=session,
+        scene=scene,
+        scene_id=scene_id,
+    )
+    if not candidates:
+        visible_facts = _scene_visible_facts(scene)
+        visible_low = " ".join(fact.lower() for fact in visible_facts)
+        if "merchant" in visible_low:
+            return (
+                'A nearby merchant catches your lingering look and nods. '
+                '"If you mean to buy or ask, speak up before the board changes," she says.',
+                "merchant_acknowledgement",
+            )
+        return None
+    candidate = candidates[0]
+    beat_type = _BEAT_TYPE_BY_FALLBACK_KIND.get(str(candidate.fallback_kind or ""), "environmental_reaction")
+    return candidate.text, beat_type
+
+
+def _reset_passive_scene_concrete_beat_satisfier_meta(meta: Dict[str, Any]) -> None:
+    meta["passive_scene_concrete_beat_satisfier_attempted"] = False
+    meta["passive_scene_concrete_beat_satisfier_applied"] = False
+    meta["passive_scene_concrete_beat_satisfier_eligible"] = False
+    meta["passive_scene_concrete_beat_type"] = None
+    meta["passive_scene_pressure_fallback_avoided"] = False
+
+
+def passive_scene_concrete_beat_satisfier_meta_snapshot(meta: Mapping[str, Any]) -> dict[str, Any]:
+    keys = (
+        "passive_scene_concrete_beat_satisfier_attempted",
+        "passive_scene_concrete_beat_satisfier_applied",
+        "passive_scene_concrete_beat_satisfier_eligible",
+        "passive_scene_concrete_beat_type",
+        "passive_scene_pressure_fallback_avoided",
+    )
+    return {key: meta[key] for key in keys if key in meta}
+
+
+def restore_passive_scene_concrete_beat_satisfier_meta(
+    meta: Dict[str, Any], preserved: Mapping[str, Any]
+) -> None:
+    for key, value in preserved.items():
+        meta[key] = value
+
+
+def passive_scene_concrete_beat_satisfier_preserves_upstream(
+    meta: Mapping[str, Any], candidate_text: str
+) -> bool:
+    """True when upstream satisfier already injected a contract-satisfying concrete beat."""
+    return (
+        meta.get("passive_scene_concrete_beat_satisfier_applied") is True
+        and reply_has_concrete_interaction(candidate_text)
+    )
+
+
+def apply_observe_passive_scene_concrete_beat_upstream_satisfier(
+    out: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    res_kind: str,
+    strict_social_active: bool,
+) -> Dict[str, Any]:
+    """Observe-route upstream concrete-beat satisfier before non-strict stack / sealed replace."""
+    from game.final_emission_meta import (
+        PRODUCER_REPAIR_KIND_PASSIVE_SCENE_CONCRETE_BEAT,
+        ensure_final_emission_meta_dict,
+        stamp_producer_repair_kind,
+    )
+
+    _ = world  # reserved for future scene-aware beat selection
+    meta = ensure_final_emission_meta_dict(out)
+    candidate_text = _normalize_text(out.get("player_facing_text"))
+    if (
+        meta.get("passive_scene_concrete_beat_satisfier_applied") is True
+        and _reply_already_has_concrete_interaction(candidate_text)
+    ):
+        return out
+
+    _reset_passive_scene_concrete_beat_satisfier_meta(meta)
+
+    if strict_social_active or str(res_kind or "").strip().lower() != "observe":
+        return out
+
+    if not candidate_text:
+        return out
+
+    meta["passive_scene_concrete_beat_satisfier_attempted"] = True
+    sid = str(scene_id or "").strip()
+
+    if not _passive_scene_pressure_due_for_fallback(
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+    ):
+        return out
+
+    if _reply_already_has_concrete_interaction(candidate_text):
+        return out
+
+    meta["passive_scene_concrete_beat_satisfier_eligible"] = True
+    selected = _select_deterministic_upstream_concrete_beat(
+        session=session if isinstance(session, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
+    )
+    if selected is None:
+        return out
+
+    beat_text, beat_type = selected
+    merged = _merge_upstream_concrete_beat(candidate_text, beat_text)
+    if not _reply_already_has_concrete_interaction(merged):
+        return out
+
+    out["player_facing_text"] = merged
+    meta["passive_scene_concrete_beat_satisfier_applied"] = True
+    meta["passive_scene_concrete_beat_type"] = beat_type
+    meta["passive_scene_pressure_fallback_avoided"] = True
+    stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_PASSIVE_SCENE_CONCRETE_BEAT)
+    return out

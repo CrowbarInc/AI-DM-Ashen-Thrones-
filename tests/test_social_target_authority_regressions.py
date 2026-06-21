@@ -21,10 +21,8 @@ from game.interaction_context import (
     synchronize_scene_addressability,
 )
 from game.social import can_actor_speak_in_current_exchange, resolve_social_action
-from game.social_exchange_emission import (
-    build_final_strict_social_response,
-    player_line_triggers_strict_social_emission,
-)
+from game.social_exchange_policy import player_line_triggers_strict_social_emission
+from game.social_exchange_emission import build_final_strict_social_response
 from game.storage import load_scene
 
 pytestmark = [pytest.mark.integration, pytest.mark.regression]

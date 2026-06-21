@@ -1,0 +1,925 @@
+{
+  "schema_version": 1,
+  "cycle": "BV13",
+  "target": "game.final_emission_text",
+  "bu_fan_in": 52,
+  "ast_direct_importers": 53,
+  "production_importers": 39,
+  "test_importers": 14,
+  "loc": 61,
+  "export_count": 2,
+  "exports": [
+    "__all__",
+    "_global_narrative_fallback_stock_line"
+  ],
+  "fan_out": [
+    "__future__",
+    "game.diegetic_fallback_narration",
+    "game.final_emission_text_formatting",
+    "game.final_emission_text_legacy_semantic_repair",
+    "game.final_emission_text_policy",
+    "typing"
+  ],
+  "importers": [
+    {
+      "file": "game/acceptance_quality.py",
+      "subsystem": "production runtime",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/dialogue_social_plan.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/emitted_speaker_signature.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/fallback_provenance_debug.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "_normalize_text",
+        "_sanitize_output_text"
+      ],
+      "ownership_bucket": "formatting-sanitize",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/final_emission_acceptance_quality.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_answer_shape_primacy.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_ACTION_RESULT_PATTERNS",
+        "_ANSWER_DIRECT_PATTERNS",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "validator-pattern",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_context_separation.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text_preserve_paragraphs"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_fast_fallback_composition.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_global_narrative_fallback_stock_line",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "fallback-content-bridge",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/final_emission_finalize.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text",
+        "_sanitize_output_text"
+      ],
+      "ownership_bucket": "formatting-sanitize",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/final_emission_first_mention_composition.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_gate.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_gate_preflight_pregate_text.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_gate_preflight_strict_social.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_gate_preflight_telemetry.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_generic_exit.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_narrative_authority.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_non_strict_stack.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_opening_fallback.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/final_emission_opening_mode.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_passive_scene_pressure.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_referential_clarity.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_ANSWER_DIRECT_PATTERNS",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "validator-pattern",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_repairs.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_terminal_punctuation",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "formatting-punctuation",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_response_type.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text",
+        "_normalize_text_preserve_paragraphs"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_scene_emit_integrity.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_global_narrative_fallback_stock_line"
+      ],
+      "ownership_bucket": "fallback-content-bridge",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_scene_facts.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_scene_state_anchor.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_sealed_fallback.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/final_emission_strict_social_stack.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text",
+        "_normalize_text_preserve_paragraphs"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_terminal_pipeline.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_tone_escalation.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_validators.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_ACTION_RESULT_PATTERNS",
+        "_ACTION_STOPWORDS",
+        "_AGENCY_SUBSTITUTE_PATTERNS",
+        "_ANSWER_DIRECT_PATTERNS",
+        "_ANSWER_FILLER_PATTERNS",
+        "_normalize_terminal_punctuation",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "validator-pattern",
+      "usage_classes": [
+        "gate"
+      ]
+    },
+    {
+      "file": "game/final_emission_visibility_fallback.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/interaction_continuity.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_RESPONSE_TYPE_VALUES",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "policy-constant",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/narrative_authenticity.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_normalize_terminal_punctuation",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "formatting-punctuation",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/narrative_mode_contract.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_ACTION_RESULT_PATTERNS",
+        "_ANSWER_FILLER_PATTERNS",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "validator-pattern",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/opening_deterministic_fallback.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "diagnostics"
+      ]
+    },
+    {
+      "file": "game/response_policy_contracts.py",
+      "subsystem": "production runtime",
+      "symbols": [
+        "_RESPONSE_TYPE_VALUES"
+      ],
+      "ownership_bucket": "policy-constant",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/speaker_contract_enforcement.py",
+      "subsystem": "narrative/social",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "game/upstream_response_repairs.py",
+      "subsystem": "production runtime",
+      "symbols": [
+        "_capitalize_sentence_fragment",
+        "_normalize_terminal_punctuation",
+        "_normalize_text"
+      ],
+      "ownership_bucket": "formatting-punctuation",
+      "usage_classes": [
+        "finalization"
+      ]
+    },
+    {
+      "file": "tests/helpers/post_speaker_finalize_probe.py",
+      "subsystem": "speaker helpers",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/helpers/speaker_contract_risk.py",
+      "subsystem": "speaker helpers",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/helpers/speaker_gate_order.py",
+      "subsystem": "speaker helpers",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_acceptance_quality.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_bv13a_final_emission_text_facade_delegates.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "emission_text_compat (module)"
+      ],
+      "ownership_bucket": "mixed-text-utility",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_diegetic_fallback_block4.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "_global_narrative_fallback_stock_line"
+      ],
+      "ownership_bucket": "fallback-content-bridge",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_boundary_convergence.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_opening_accept_debug.py",
+      "subsystem": "fallback",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_visibility.py",
+      "subsystem": "final emission gate",
+      "symbols": [
+        "_decompress_overpacked_sentences",
+        "_normalize_text",
+        "_repair_fragmentary_participial_splits"
+      ],
+      "ownership_bucket": "legacy-semantic-repair",
+      "usage_classes": [
+        "gate",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_narrative_authority_rules.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_ownership_registry.py",
+      "subsystem": "ownership governance",
+      "symbols": [
+        "_normalize_text\\n\"",
+        "emission_text (module)"
+      ],
+      "ownership_bucket": "ownership-governance",
+      "usage_classes": [
+        "ownership",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_prompt_context.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_referential_clarity_player_coref.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "_normalize_text"
+      ],
+      "ownership_bucket": "normalize-primitive",
+      "usage_classes": [
+        "tests"
+      ]
+    }
+  ],
+  "symbol_fi_counts": [
+    [
+      "_normalize_text",
+      47
+    ],
+    [
+      "_normalize_terminal_punctuation",
+      4
+    ],
+    [
+      "_ACTION_RESULT_PATTERNS",
+      3
+    ],
+    [
+      "_ANSWER_DIRECT_PATTERNS",
+      3
+    ],
+    [
+      "_normalize_text_preserve_paragraphs",
+      3
+    ],
+    [
+      "_global_narrative_fallback_stock_line",
+      3
+    ],
+    [
+      "_sanitize_output_text",
+      2
+    ],
+    [
+      "_ANSWER_FILLER_PATTERNS",
+      2
+    ],
+    [
+      "_RESPONSE_TYPE_VALUES",
+      2
+    ],
+    [
+      "_ACTION_STOPWORDS",
+      1
+    ],
+    [
+      "_AGENCY_SUBSTITUTE_PATTERNS",
+      1
+    ],
+    [
+      "_capitalize_sentence_fragment",
+      1
+    ],
+    [
+      "emission_text_compat",
+      1
+    ],
+    [
+      "_decompress_overpacked_sentences",
+      1
+    ],
+    [
+      "_repair_fragmentary_participial_splits",
+      1
+    ],
+    [
+      "_normalize_text\\n\"",
+      1
+    ],
+    [
+      "emission_text",
+      1
+    ]
+  ],
+  "symbol_meta": {
+    "_normalize_text": {
+      "fan_in": 47,
+      "category": "formatting",
+      "authority_class": "formatting-helper",
+      "importers": [
+        "game/acceptance_quality.py",
+        "game/dialogue_social_plan.py",
+        "game/emitted_speaker_signature.py",
+        "game/fallback_provenance_debug.py",
+        "game/final_emission_acceptance_quality.py",
+        "game/final_emission_answer_shape_primacy.py",
+        "game/final_emission_fast_fallback_composition.py",
+        "game/final_emission_finalize.py",
+        "game/final_emission_first_mention_composition.py",
+        "game/final_emission_gate.py",
+        "game/final_emission_gate_preflight_pregate_text.py",
+        "game/final_emission_gate_preflight_strict_social.py",
+        "game/final_emission_gate_preflight_telemetry.py",
+        "game/final_emission_generic_exit.py",
+        "game/final_emission_narrative_authority.py",
+        "game/final_emission_non_strict_stack.py",
+        "game/final_emission_opening_fallback.py",
+        "game/final_emission_opening_mode.py",
+        "game/final_emission_passive_scene_pressure.py",
+        "game/final_emission_referential_clarity.py",
+        "game/final_emission_repairs.py",
+        "game/final_emission_response_type.py",
+        "game/final_emission_scene_facts.py",
+        "game/final_emission_scene_state_anchor.py",
+        "game/final_emission_sealed_fallback.py",
+        "game/final_emission_strict_social_stack.py",
+        "game/final_emission_terminal_pipeline.py",
+        "game/final_emission_tone_escalation.py",
+        "game/final_emission_validators.py",
+        "game/final_emission_visibility_fallback.py",
+        "game/interaction_continuity.py",
+        "game/narrative_authenticity.py",
+        "game/narrative_mode_contract.py",
+        "game/opening_deterministic_fallback.py",
+        "game/speaker_contract_enforcement.py",
+        "game/upstream_response_repairs.py",
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/helpers/speaker_contract_risk.py",
+        "tests/helpers/speaker_gate_order.py",
+        "tests/test_acceptance_quality.py",
+        "tests/test_final_emission_boundary_convergence.py",
+        "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "tests/test_final_emission_opening_accept_debug.py",
+        "tests/test_final_emission_visibility.py",
+        "tests/test_narrative_authority_rules.py",
+        "tests/test_prompt_context.py",
+        "tests/test_referential_clarity_player_coref.py"
+      ]
+    },
+    "_sanitize_output_text": {
+      "fan_in": 2,
+      "category": "formatting",
+      "authority_class": "formatting-helper",
+      "importers": [
+        "game/fallback_provenance_debug.py",
+        "game/final_emission_finalize.py"
+      ]
+    },
+    "_ACTION_RESULT_PATTERNS": {
+      "fan_in": 3,
+      "category": "policy",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/final_emission_answer_shape_primacy.py",
+        "game/final_emission_validators.py",
+        "game/narrative_mode_contract.py"
+      ]
+    },
+    "_ANSWER_DIRECT_PATTERNS": {
+      "fan_in": 3,
+      "category": "policy",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/final_emission_answer_shape_primacy.py",
+        "game/final_emission_referential_clarity.py",
+        "game/final_emission_validators.py"
+      ]
+    },
+    "_normalize_text_preserve_paragraphs": {
+      "fan_in": 3,
+      "category": "formatting",
+      "authority_class": "formatting-helper",
+      "importers": [
+        "game/final_emission_context_separation.py",
+        "game/final_emission_response_type.py",
+        "game/final_emission_strict_social_stack.py"
+      ]
+    },
+    "_global_narrative_fallback_stock_line": {
+      "fan_in": 3,
+      "category": "orchestration",
+      "authority_class": "convenience-wrapper",
+      "importers": [
+        "game/final_emission_fast_fallback_composition.py",
+        "game/final_emission_scene_emit_integrity.py",
+        "tests/test_diegetic_fallback_block4.py"
+      ]
+    },
+    "_normalize_terminal_punctuation": {
+      "fan_in": 4,
+      "category": "formatting",
+      "authority_class": "formatting-helper",
+      "importers": [
+        "game/final_emission_repairs.py",
+        "game/final_emission_validators.py",
+        "game/narrative_authenticity.py",
+        "game/upstream_response_repairs.py"
+      ]
+    },
+    "_ACTION_STOPWORDS": {
+      "fan_in": 1,
+      "category": "policy",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/final_emission_validators.py"
+      ]
+    },
+    "_AGENCY_SUBSTITUTE_PATTERNS": {
+      "fan_in": 1,
+      "category": "other",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/final_emission_validators.py"
+      ]
+    },
+    "_ANSWER_FILLER_PATTERNS": {
+      "fan_in": 2,
+      "category": "policy",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/final_emission_validators.py",
+        "game/narrative_mode_contract.py"
+      ]
+    },
+    "_RESPONSE_TYPE_VALUES": {
+      "fan_in": 2,
+      "category": "policy",
+      "authority_class": "policy-constant",
+      "importers": [
+        "game/interaction_continuity.py",
+        "game/response_policy_contracts.py"
+      ]
+    },
+    "_capitalize_sentence_fragment": {
+      "fan_in": 1,
+      "category": "formatting",
+      "authority_class": "formatting-helper",
+      "importers": [
+        "game/upstream_response_repairs.py"
+      ]
+    },
+    "emission_text_compat": {
+      "fan_in": 1,
+      "category": "other",
+      "authority_class": "projection-helper",
+      "importers": [
+        "tests/test_bv13a_final_emission_text_facade_delegates.py"
+      ]
+    },
+    "_decompress_overpacked_sentences": {
+      "fan_in": 1,
+      "category": "legacy-repair",
+      "authority_class": "accidental-bridge",
+      "importers": [
+        "tests/test_final_emission_visibility.py"
+      ]
+    },
+    "_repair_fragmentary_participial_splits": {
+      "fan_in": 1,
+      "category": "legacy-repair",
+      "authority_class": "accidental-bridge",
+      "importers": [
+        "tests/test_final_emission_visibility.py"
+      ]
+    },
+    "_normalize_text\\n\"": {
+      "fan_in": 1,
+      "category": "other",
+      "authority_class": "projection-helper",
+      "importers": [
+        "tests/test_ownership_registry.py"
+      ]
+    },
+    "emission_text": {
+      "fan_in": 1,
+      "category": "other",
+      "authority_class": "projection-helper",
+      "importers": [
+        "tests/test_ownership_registry.py"
+      ]
+    }
+  },
+  "usage_class_totals": {
+    "gate": 29,
+    "tests": 14,
+    "finalization": 10,
+    "diagnostics": 6,
+    "ownership": 1
+  },
+  "ownership_bucket_totals": {
+    "normalize-primitive": 36,
+    "validator-pattern": 4,
+    "fallback-content-bridge": 3,
+    "formatting-punctuation": 3,
+    "formatting-sanitize": 2,
+    "policy-constant": 2,
+    "mixed-text-utility": 1,
+    "legacy-semantic-repair": 1,
+    "ownership-governance": 1
+  }
+}

@@ -11,9 +11,9 @@ from game.interaction_context import (
     set_social_target,
 )
 from game.social import resolve_social_action
-from game.social_exchange_emission import (
+from game.social_exchange_fallback_catalog import (
     build_open_social_solicitation_recovery,
-    _open_social_recovery_passes_anti_stall,
+    open_social_recovery_passes_anti_stall,
 )
 from game.storage import load_scene
 from tests.helpers.emission_smoke_assertions import (
@@ -192,9 +192,9 @@ def test_resolve_social_action_open_solicitation_payload():
 
 
 def test_build_open_social_solicitation_recovery_concrete_responder_top_ranked(monkeypatch):
-    import game.social_exchange_emission as see
+    import game.social_exchange_fallback_catalog as fallback_catalog
 
-    monkeypatch.setattr(see, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": True})
+    monkeypatch.setattr(fallback_catalog, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": True})
 
     session, scene, world = _gate_session_scene()
     resolution = {
@@ -233,9 +233,9 @@ def test_build_open_social_solicitation_recovery_concrete_responder_top_ranked(m
 
 def test_build_open_social_solicitation_recovery_concrete_lead_when_grounding_blocks_speakers(monkeypatch):
     session, scene, world = _gate_session_scene()
-    import game.social_exchange_emission as see
+    import game.social_exchange_fallback_catalog as fallback_catalog
 
-    monkeypatch.setattr(see, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": False})
+    monkeypatch.setattr(fallback_catalog, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": False})
 
     resolution = {
         "kind": "question",
@@ -275,24 +275,24 @@ def test_build_open_social_solicitation_recovery_concrete_lead_when_grounding_bl
 
 
 def test_open_social_recovery_anti_stall_guard_directly():
-    assert _open_social_recovery_passes_anti_stall("No one answers.", "the tavern runner") is False
-    assert _open_social_recovery_passes_anti_stall("The moment passes.", "") is False
-    assert _open_social_recovery_passes_anti_stall(
+    assert open_social_recovery_passes_anti_stall("No one answers.", "the tavern runner") is False
+    assert open_social_recovery_passes_anti_stall("The moment passes.", "") is False
+    assert open_social_recovery_passes_anti_stall(
         "The tavern runner lifts a hand. Nobody steps forward.",
         "the tavern runner",
     ) is False
     ok_line = (
         'The tavern runner lifts a hand through the rain. "Depends what you\'re buying—stew, rumor, or both?"'
     )
-    assert _open_social_recovery_passes_anti_stall(ok_line, "the tavern runner") is True
+    assert open_social_recovery_passes_anti_stall(ok_line, "the tavern runner") is True
 
 
 def test_build_open_social_solicitation_recovery_rejects_anti_stall_templates(monkeypatch):
     session, scene, world = _gate_session_scene()
-    import game.social_exchange_emission as see
+    import game.social_exchange_fallback_catalog as fallback_catalog
 
-    monkeypatch.setattr(see, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": True})
-    monkeypatch.setattr(see, "_open_social_responder_templates", lambda _nid: ("No one answers.",))
+    monkeypatch.setattr(fallback_catalog, "resolve_grounded_social_speaker", lambda *a, **k: {"allowed": True})
+    monkeypatch.setattr(fallback_catalog, "_open_social_responder_templates", lambda _nid: ("No one answers.",))
 
     resolution = {
         "kind": "question",

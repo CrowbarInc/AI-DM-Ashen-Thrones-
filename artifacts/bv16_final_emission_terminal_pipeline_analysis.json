@@ -1,0 +1,926 @@
+{
+  "schema_version": 1,
+  "cycle": "BV16",
+  "target": "game.final_emission_terminal_pipeline",
+  "gate_bu_fan_in": 30,
+  "bu_fan_in": 26,
+  "ast_direct_importers": 26,
+  "production_importers": 2,
+  "test_importers": 24,
+  "loc": 350,
+  "export_count": 30,
+  "public_export_count": 20,
+  "defined_export_count": 5,
+  "reexport_count": 24,
+  "defined_exports": [
+    "GateTerminalEnforcementProfile",
+    "_patch_fem_text_fingerprint",
+    "apply_strict_social_emergency_fallback_patch",
+    "_apply_referent_clarity_pre_finalize",
+    "run_gate_terminal_enforcement_pipeline"
+  ],
+  "reexports": [
+    "apply_acceptance_quality_n4_floor_seam",
+    "apply_interaction_continuity_emission_step",
+    "attach_interaction_continuity_validation",
+    "assert_final_emission_mutation_allowed",
+    "FINAL_EMISSION_META_KEY",
+    "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR",
+    "ensure_final_emission_meta_dict",
+    "stamp_producer_repair_kind",
+    "merge_narration_constraint_debug_into_outputs",
+    "stamp_sealed_fallback_realization_family",
+    "_merge_narrative_mode_output_trace_into_gate_fem",
+    "_narrative_mode_output_legality_assessment",
+    "apply_observe_referential_clarity_upstream_repair",
+    "_strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id",
+    "apply_observe_passive_scene_concrete_beat_upstream_satisfier",
+    "_apply_fallback_behavior_layer",
+    "_apply_referent_clarity_emission_layer",
+    "_merge_fallback_behavior_meta",
+    "_merge_referent_clarity_meta",
+    "merge_fallback_behavior_into_emission_debug",
+    "_normalize_text",
+    "apply_visibility_enforcement",
+    "minimal_social_emergency_fallback_line",
+    "stamp_strict_social_deterministic_fallback_family"
+  ],
+  "exports": [
+    "FINAL_EMISSION_META_KEY",
+    "GateTerminalEnforcementProfile",
+    "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR",
+    "_apply_fallback_behavior_layer",
+    "_apply_referent_clarity_emission_layer",
+    "_apply_referent_clarity_pre_finalize",
+    "_merge_fallback_behavior_meta",
+    "_merge_narrative_mode_output_trace_into_gate_fem",
+    "_merge_referent_clarity_meta",
+    "_narrative_mode_output_legality_assessment",
+    "_normalize_text",
+    "_patch_fem_text_fingerprint",
+    "_strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id",
+    "apply_acceptance_quality_n4_floor_seam",
+    "apply_interaction_continuity_emission_step",
+    "apply_observe_passive_scene_concrete_beat_upstream_satisfier",
+    "apply_observe_referential_clarity_upstream_repair",
+    "apply_strict_social_emergency_fallback_patch",
+    "apply_visibility_enforcement",
+    "assert_final_emission_mutation_allowed",
+    "attach_interaction_continuity_validation",
+    "ensure_final_emission_meta_dict",
+    "merge_fallback_behavior_into_emission_debug",
+    "merge_narration_constraint_debug_into_outputs",
+    "minimal_social_emergency_fallback_line",
+    "opening_fallback",
+    "run_gate_terminal_enforcement_pipeline",
+    "stamp_producer_repair_kind",
+    "stamp_sealed_fallback_realization_family",
+    "stamp_strict_social_deterministic_fallback_family"
+  ],
+  "export_map": {
+    "apply_acceptance_quality_n4_floor_seam": "re-export from game.final_emission_acceptance_quality",
+    "apply_interaction_continuity_emission_step": "re-export from game.interaction_continuity",
+    "attach_interaction_continuity_validation": "re-export from game.interaction_continuity",
+    "assert_final_emission_mutation_allowed": "re-export from game.final_emission_boundary_contract",
+    "FINAL_EMISSION_META_KEY": "re-export from game.final_emission_meta",
+    "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR": "re-export from game.final_emission_meta",
+    "ensure_final_emission_meta_dict": "re-export from game.final_emission_meta",
+    "stamp_producer_repair_kind": "re-export from game.final_emission_meta",
+    "merge_narration_constraint_debug_into_outputs": "re-export from game.final_emission_narration_constraint_debug",
+    "opening_fallback": "import game.final_emission_opening_fallback",
+    "stamp_sealed_fallback_realization_family": "re-export from game.final_emission_sealed_fallback",
+    "_merge_narrative_mode_output_trace_into_gate_fem": "re-export from game.final_emission_narrative_mode_output",
+    "_narrative_mode_output_legality_assessment": "re-export from game.final_emission_narrative_mode_output",
+    "apply_observe_referential_clarity_upstream_repair": "re-export from game.final_emission_referential_clarity",
+    "_strict_social_terminal_grounded_speaker_first_mention_exemption_entity_id": "re-export from game.final_emission_referential_clarity",
+    "apply_observe_passive_scene_concrete_beat_upstream_satisfier": "re-export from game.final_emission_passive_scene_pressure",
+    "_apply_fallback_behavior_layer": "re-export from game.final_emission_repairs",
+    "_apply_referent_clarity_emission_layer": "re-export from game.final_emission_repairs",
+    "_merge_fallback_behavior_meta": "re-export from game.final_emission_repairs",
+    "_merge_referent_clarity_meta": "re-export from game.final_emission_repairs",
+    "merge_fallback_behavior_into_emission_debug": "re-export from game.final_emission_repairs",
+    "_normalize_text": "re-export from game.final_emission_text_formatting",
+    "apply_visibility_enforcement": "re-export from game.final_emission_visibility_fallback",
+    "minimal_social_emergency_fallback_line": "re-export from game.social_exchange_fallback_catalog",
+    "stamp_strict_social_deterministic_fallback_family": "re-export from game.social_exchange_projection",
+    "GateTerminalEnforcementProfile": "defined",
+    "_patch_fem_text_fingerprint": "defined",
+    "apply_strict_social_emergency_fallback_patch": "defined",
+    "_apply_referent_clarity_pre_finalize": "defined",
+    "run_gate_terminal_enforcement_pipeline": "defined"
+  },
+  "public_exports": [
+    "FINAL_EMISSION_META_KEY",
+    "GateTerminalEnforcementProfile",
+    "PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR",
+    "apply_acceptance_quality_n4_floor_seam",
+    "apply_interaction_continuity_emission_step",
+    "apply_observe_passive_scene_concrete_beat_upstream_satisfier",
+    "apply_observe_referential_clarity_upstream_repair",
+    "apply_strict_social_emergency_fallback_patch",
+    "apply_visibility_enforcement",
+    "assert_final_emission_mutation_allowed",
+    "attach_interaction_continuity_validation",
+    "ensure_final_emission_meta_dict",
+    "merge_fallback_behavior_into_emission_debug",
+    "merge_narration_constraint_debug_into_outputs",
+    "minimal_social_emergency_fallback_line",
+    "opening_fallback",
+    "run_gate_terminal_enforcement_pipeline",
+    "stamp_producer_repair_kind",
+    "stamp_sealed_fallback_realization_family",
+    "stamp_strict_social_deterministic_fallback_family"
+  ],
+  "fan_out": [
+    "__future__",
+    "collections.abc",
+    "game.final_emission_acceptance_quality",
+    "game.final_emission_boundary_contract",
+    "game.final_emission_meta",
+    "game.final_emission_narration_constraint_debug",
+    "game.final_emission_narrative_mode_output",
+    "game.final_emission_opening_fallback",
+    "game.final_emission_passive_scene_pressure",
+    "game.final_emission_referential_clarity",
+    "game.final_emission_repairs",
+    "game.final_emission_sealed_fallback",
+    "game.final_emission_text_formatting",
+    "game.final_emission_visibility_fallback",
+    "game.interaction_continuity",
+    "game.social_exchange_fallback_catalog",
+    "game.social_exchange_projection",
+    "typing"
+  ],
+  "fan_out_count": 18,
+  "importers": [
+    {
+      "file": "game/final_emission_generic_exit.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "IC",
+        "finalize path"
+      ]
+    },
+    {
+      "file": "game/final_emission_strict_social_stack.py",
+      "subsystem": "final emission pipeline",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "IC",
+        "finalize path"
+      ]
+    },
+    {
+      "file": "tests/helpers/post_speaker_finalize_probe.py",
+      "subsystem": "gate helpers",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "_apply_fallback_behavior_layer",
+        "_apply_referent_clarity_pre_finalize",
+        "apply_acceptance_quality_n4_floor_seam",
+        "apply_interaction_continuity_emission_step",
+        "apply_visibility_enforcement",
+        "attach_interaction_continuity_validation"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "IC",
+        "N4",
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_anti_railroading.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_anti_railroading_transcript_regressions.py",
+      "subsystem": "replay",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "replay",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_context_separation.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_fallback_behavior_gate.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "_apply_fallback_behavior_layer",
+        "apply_interaction_continuity_emission_step"
+      ],
+      "ownership_bucket": "terminal-tail-monkeypatch",
+      "usage_classes": [
+        "IC",
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_acceptance_quality.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_boundary_convergence.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_boundary_no_semantic_repair.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "_apply_referent_clarity_pre_finalize",
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "IC",
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_gate_n4.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "attach_interaction_continuity_validation"
+      ],
+      "ownership_bucket": "terminal-tail-monkeypatch",
+      "usage_classes": [
+        "IC",
+        "N4",
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_gate_orchestration_order.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_gate_selector_snapshots.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_acceptance_quality_n4_floor_seam",
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "N4",
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_narration_constraint_debug.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_opening_accept_debug.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "finalize path",
+        "opening",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_sealed_fallback.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "apply_strict_social_emergency_fallback_patch"
+      ],
+      "attribute_uses": [],
+      "ownership_bucket": "finalize-realization",
+      "usage_classes": [
+        "realization",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_final_emission_visibility_fallback.py",
+      "subsystem": "final emission terminal",
+      "symbols": [
+        "tp (module)"
+      ],
+      "attribute_uses": [
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "terminal-orchestration",
+      "usage_classes": [
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_narration_transcript_regressions.py",
+      "subsystem": "replay",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "replay",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_ownership_registry.py",
+      "subsystem": "ownership governance",
+      "symbols": [
+        "terminal_pipeline (module)",
+        "tp (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement",
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "ownership-governance",
+      "usage_classes": [
+        "finalize path",
+        "governance",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_player_facing_narration_purity.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_prompt_context.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_referential_clarity_player_coref.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "_apply_referent_clarity_pre_finalize",
+        "run_gate_terminal_enforcement_pipeline"
+      ],
+      "ownership_bucket": "module-introspection",
+      "usage_classes": [
+        "finalize path",
+        "tests"
+      ]
+    },
+    {
+      "file": "tests/test_social_exchange_emission.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_speaker_contract_enforcement.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_speaker_contract_risk.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    },
+    {
+      "file": "tests/test_tone_escalation_rules.py",
+      "subsystem": "integration/regression",
+      "symbols": [
+        "terminal_pipeline (module)"
+      ],
+      "attribute_uses": [
+        "apply_visibility_enforcement"
+      ],
+      "ownership_bucket": "visibility-monkeypatch",
+      "usage_classes": [
+        "finalize path",
+        "tests",
+        "visibility"
+      ]
+    }
+  ],
+  "symbol_fi_counts": [
+    [
+      "terminal_pipeline",
+      24,
+      24,
+      "other",
+      "accidental-coupling"
+    ],
+    [
+      "apply_visibility_enforcement",
+      16,
+      16,
+      "visibility",
+      "visibility-policy-delegate"
+    ],
+    [
+      "run_gate_terminal_enforcement_pipeline",
+      8,
+      2,
+      "finalize",
+      "canonical-finalize-authority"
+    ],
+    [
+      "_apply_referent_clarity_pre_finalize",
+      3,
+      3,
+      "finalize",
+      "internal-helper"
+    ],
+    [
+      "_apply_fallback_behavior_layer",
+      2,
+      2,
+      "compatibility",
+      "accidental-bridge"
+    ],
+    [
+      "apply_acceptance_quality_n4_floor_seam",
+      2,
+      2,
+      "N4",
+      "N4-policy-delegate"
+    ],
+    [
+      "apply_interaction_continuity_emission_step",
+      2,
+      2,
+      "IC",
+      "IC-projection-delegate"
+    ],
+    [
+      "attach_interaction_continuity_validation",
+      2,
+      2,
+      "IC",
+      "IC-projection-delegate"
+    ],
+    [
+      "tp",
+      2,
+      2,
+      "other",
+      "accidental-coupling"
+    ],
+    [
+      "apply_strict_social_emergency_fallback_patch",
+      1,
+      1,
+      "finalize",
+      "realization-helper"
+    ]
+  ],
+  "symbol_meta": {
+    "run_gate_terminal_enforcement_pipeline": {
+      "fan_in_ast": 8,
+      "fan_in_bu": 2,
+      "category": "finalize",
+      "authority_class": "canonical-finalize-authority",
+      "importers": [
+        "game/final_emission_generic_exit.py",
+        "game/final_emission_strict_social_stack.py",
+        "tests/test_final_emission_acceptance_quality.py",
+        "tests/test_final_emission_narration_constraint_debug.py",
+        "tests/test_final_emission_opening_accept_debug.py",
+        "tests/test_final_emission_visibility_fallback.py",
+        "tests/test_ownership_registry.py",
+        "tests/test_referential_clarity_player_coref.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 8
+    },
+    "_apply_fallback_behavior_layer": {
+      "fan_in_ast": 2,
+      "fan_in_bu": 2,
+      "category": "compatibility",
+      "authority_class": "accidental-bridge",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_fallback_behavior_gate.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 2
+    },
+    "apply_visibility_enforcement": {
+      "fan_in_ast": 16,
+      "fan_in_bu": 16,
+      "category": "visibility",
+      "authority_class": "visibility-policy-delegate",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_anti_railroading.py",
+        "tests/test_anti_railroading_transcript_regressions.py",
+        "tests/test_context_separation.py",
+        "tests/test_final_emission_boundary_convergence.py",
+        "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "tests/test_final_emission_gate_orchestration_order.py",
+        "tests/test_final_emission_gate_selector_snapshots.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_ownership_registry.py",
+        "tests/test_player_facing_narration_purity.py",
+        "tests/test_prompt_context.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_speaker_contract_enforcement.py",
+        "tests/test_speaker_contract_risk.py",
+        "tests/test_tone_escalation_rules.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 16
+    },
+    "terminal_pipeline": {
+      "fan_in_ast": 24,
+      "fan_in_bu": 24,
+      "category": "other",
+      "authority_class": "accidental-coupling",
+      "importers": [
+        "game/final_emission_generic_exit.py",
+        "game/final_emission_strict_social_stack.py",
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_anti_railroading.py",
+        "tests/test_anti_railroading_transcript_regressions.py",
+        "tests/test_context_separation.py",
+        "tests/test_fallback_behavior_gate.py",
+        "tests/test_final_emission_acceptance_quality.py",
+        "tests/test_final_emission_boundary_convergence.py",
+        "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "tests/test_final_emission_gate_n4.py",
+        "tests/test_final_emission_gate_orchestration_order.py",
+        "tests/test_final_emission_gate_selector_snapshots.py",
+        "tests/test_final_emission_narration_constraint_debug.py",
+        "tests/test_final_emission_opening_accept_debug.py",
+        "tests/test_narration_transcript_regressions.py",
+        "tests/test_ownership_registry.py",
+        "tests/test_player_facing_narration_purity.py",
+        "tests/test_prompt_context.py",
+        "tests/test_referential_clarity_player_coref.py",
+        "tests/test_social_exchange_emission.py",
+        "tests/test_speaker_contract_enforcement.py",
+        "tests/test_speaker_contract_risk.py",
+        "tests/test_tone_escalation_rules.py"
+      ],
+      "import_only_fi": 24,
+      "attribute_only_fi": 0
+    },
+    "_apply_referent_clarity_pre_finalize": {
+      "fan_in_ast": 3,
+      "fan_in_bu": 3,
+      "category": "finalize",
+      "authority_class": "internal-helper",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_final_emission_boundary_no_semantic_repair.py",
+        "tests/test_referential_clarity_player_coref.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 3
+    },
+    "attach_interaction_continuity_validation": {
+      "fan_in_ast": 2,
+      "fan_in_bu": 2,
+      "category": "IC",
+      "authority_class": "IC-projection-delegate",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_final_emission_gate_n4.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 2
+    },
+    "apply_strict_social_emergency_fallback_patch": {
+      "fan_in_ast": 1,
+      "fan_in_bu": 1,
+      "category": "finalize",
+      "authority_class": "realization-helper",
+      "importers": [
+        "tests/test_final_emission_sealed_fallback.py"
+      ],
+      "import_only_fi": 1,
+      "attribute_only_fi": 0
+    },
+    "tp": {
+      "fan_in_ast": 2,
+      "fan_in_bu": 2,
+      "category": "other",
+      "authority_class": "accidental-coupling",
+      "importers": [
+        "tests/test_final_emission_visibility_fallback.py",
+        "tests/test_ownership_registry.py"
+      ],
+      "import_only_fi": 2,
+      "attribute_only_fi": 0
+    },
+    "apply_interaction_continuity_emission_step": {
+      "fan_in_ast": 2,
+      "fan_in_bu": 2,
+      "category": "IC",
+      "authority_class": "IC-projection-delegate",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_fallback_behavior_gate.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 2
+    },
+    "apply_acceptance_quality_n4_floor_seam": {
+      "fan_in_ast": 2,
+      "fan_in_bu": 2,
+      "category": "N4",
+      "authority_class": "N4-policy-delegate",
+      "importers": [
+        "tests/helpers/post_speaker_finalize_probe.py",
+        "tests/test_final_emission_gate_selector_snapshots.py"
+      ],
+      "import_only_fi": 0,
+      "attribute_only_fi": 2
+    }
+  },
+  "usage_class_totals": {
+    "finalize path": 25,
+    "tests": 24,
+    "visibility": 16,
+    "IC": 6,
+    "N4": 3,
+    "replay": 2,
+    "opening": 1,
+    "realization": 1,
+    "governance": 1
+  },
+  "ownership_bucket_totals": {
+    "visibility-monkeypatch": 15,
+    "terminal-orchestration": 6,
+    "terminal-tail-monkeypatch": 2,
+    "finalize-realization": 1,
+    "ownership-governance": 1,
+    "module-introspection": 1
+  },
+  "category_totals": {
+    "module-import": 26,
+    "visibility": 16,
+    "finalize": 12,
+    "IC": 4,
+    "compatibility": 2,
+    "N4": 2
+  },
+  "category_symbol_counts": {
+    "finalize": 3,
+    "other": 2,
+    "IC": 2,
+    "compatibility": 1,
+    "visibility": 1,
+    "N4": 1
+  },
+  "subsystem_totals": {
+    "final emission terminal": 11,
+    "integration/regression": 9,
+    "final emission pipeline": 2,
+    "replay": 2,
+    "gate helpers": 1,
+    "ownership governance": 1
+  },
+  "finalize_boundary": {
+    "gate_fan_out_count": 11,
+    "terminal_fan_out_count": 18,
+    "visibility_fan_out_count": 25,
+    "opening_fan_out_count": 10,
+    "ic_fan_out_count": 13,
+    "shared_gate_terminal": [
+      "__future__",
+      "game.final_emission_passive_scene_pressure",
+      "game.interaction_continuity",
+      "typing"
+    ],
+    "shared_gate_terminal_count": 4,
+    "gate_only_dependencies": [
+      "game.emitted_speaker_signature",
+      "game.final_emission_gate_context",
+      "game.final_emission_gate_preflight_pregate_text",
+      "game.final_emission_generic_exit",
+      "game.final_emission_non_strict_stack",
+      "game.final_emission_strict_social_stack",
+      "game.speaker_contract_enforcement"
+    ],
+    "terminal_only_dependencies": [
+      "collections.abc",
+      "game.final_emission_acceptance_quality",
+      "game.final_emission_boundary_contract",
+      "game.final_emission_meta",
+      "game.final_emission_narration_constraint_debug",
+      "game.final_emission_narrative_mode_output",
+      "game.final_emission_opening_fallback",
+      "game.final_emission_referential_clarity",
+      "game.final_emission_repairs",
+      "game.final_emission_sealed_fallback",
+      "game.final_emission_text_formatting",
+      "game.final_emission_visibility_fallback",
+      "game.social_exchange_fallback_catalog",
+      "game.social_exchange_projection"
+    ],
+    "gate_imports_terminal": false,
+    "terminal_imports_gate": false,
+    "dual_importers": [
+      "tests/test_fallback_behavior_gate.py",
+      "tests/test_final_emission_acceptance_quality.py",
+      "tests/test_final_emission_boundary_no_semantic_repair.py",
+      "tests/test_final_emission_gate_n4.py",
+      "tests/test_final_emission_gate_orchestration_order.py",
+      "tests/test_final_emission_gate_selector_snapshots.py",
+      "tests/test_final_emission_sealed_fallback.py",
+      "tests/test_final_emission_visibility_fallback.py",
+      "tests/test_ownership_registry.py",
+      "tests/test_social_exchange_emission.py",
+      "tests/test_speaker_contract_risk.py",
+      "tests/test_tone_escalation_rules.py"
+    ],
+    "dual_importer_count": 12,
+    "terminal_direct_calls": {
+      "visibility": "game.final_emission_visibility_fallback.apply_visibility_enforcement",
+      "opening": "game.final_emission_opening_fallback.reassert_scene_opening_accepted_candidate",
+      "n4": "game.final_emission_acceptance_quality.apply_acceptance_quality_n4_floor_seam",
+      "ic_step": "game.interaction_continuity.apply_interaction_continuity_emission_step",
+      "ic_attach": "game.interaction_continuity.attach_interaction_continuity_validation"
+    },
+    "visibility_imports_terminal": false
+  }
+}

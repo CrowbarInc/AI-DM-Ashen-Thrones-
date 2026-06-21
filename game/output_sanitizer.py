@@ -20,7 +20,11 @@ from game.final_emission_meta import (
     PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
     PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
 )
-from game.final_emission_ownership_schema import (
+from game.attribution_read_views import (
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+)
+from game.ownership_projection_views import (
     SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_FALLBACK_SELECTION_OWNER,
     SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
@@ -28,14 +32,14 @@ from game.final_emission_ownership_schema import (
     SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_TRACE_SELECTION_OWNER_SHORT,
     SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
-    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
     normalize_sanitizer_trace_owner_to_lineage_owner,
 )
-from game.social_exchange_emission import (
-    effective_strict_social_resolution_for_emission,
+from game.social_exchange_fallback_catalog import (
     select_strict_social_emergency_fallback_line,
     social_fallback_line_for_sanitizer,
+)
+from game.social_exchange_policy import (
+    effective_strict_social_resolution_for_emission,
     strict_social_emission_will_apply,
 )
 

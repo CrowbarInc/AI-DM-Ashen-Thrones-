@@ -16,14 +16,14 @@ import pytest
 import game.final_emission_strict_social_stack as strict_social_stack
 from game.contract_registry import emergency_fallback_source_ids
 from game.final_emission_gate import apply_final_emission_gate
-from game.final_emission_meta import read_final_emission_meta_dict
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output as read_final_emission_meta_dict
 from game.realization_authority import FALLBACK_FAMILIES
 from game.realization_provenance import (
     GATE_TERMINAL_REPAIR,
     REALIZATION_FALLBACK_FAMILY_FIELD,
     UPSTREAM_PREPARED_EMISSION,
 )
-from tests.helpers.emission_smoke_assertions import response_type_contract
+from tests.helpers.response_type_smoke import response_type_contract
 from tests.helpers.gate_equivalence_monkeypatch import patch_get_speaker_selection_contract
 from tests.helpers.strict_social_harness import runner_strict_bundle
 

@@ -1,7 +1,8 @@
 """Block 3: strict-social dialogue + local pronoun substitution before referential fallback."""
 from __future__ import annotations
 
-from tests.helpers.emission_smoke_assertions import final_emission_meta_from_output
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
 
 import re
 
@@ -14,7 +15,6 @@ from game.interaction_context import rebuild_active_scene_entities, set_social_t
 from game.narration_visibility import validate_player_facing_referential_clarity
 from game.storage import get_scene_runtime
 
-from tests.helpers.emission_smoke_assertions import apply_final_emission_gate_consumer
 pytestmark = pytest.mark.unit
 
 
@@ -296,6 +296,11 @@ def test_strict_social_second_pass_referential_fail_falls_back_without_chaining(
 
     monkeypatch.setattr(
         visibility_fallback,
+        "validate_player_facing_referential_clarity",
+        wrapped_validate,
+    )
+    monkeypatch.setattr(
+        referential_clarity,
         "validate_player_facing_referential_clarity",
         wrapped_validate,
     )

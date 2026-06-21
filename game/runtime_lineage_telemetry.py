@@ -31,7 +31,7 @@ from __future__ import annotations
 import re
 from typing import Any, Iterable, Mapping
 
-from game.final_emission_ownership_schema import (
+from game.ownership_projection_views import (
     OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS,
     SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS,
 )

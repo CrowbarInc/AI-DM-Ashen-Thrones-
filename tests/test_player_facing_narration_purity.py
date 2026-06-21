@@ -5,18 +5,16 @@ ASP gate-layer helpers live on ``game.final_emission_answer_shape_primacy`` (see
 ``tests/test_answer_shape_primacy.py``). Gate-order purity/ASP pins remain in ``tests/test_final_emission_gate.py``."""
 from __future__ import annotations
 
+import game.final_emission_visibility_fallback as visibility_fallback
 import pytest
 
-import game.final_emission_terminal_pipeline as terminal_pipeline
 from game.final_emission_player_facing_narration_purity import (
     apply_player_facing_narration_purity_layer,
     resolve_player_facing_narration_purity_contract,
 )
-from tests.helpers.emission_smoke_assertions import (
-    apply_final_emission_gate_consumer,
-    final_emission_meta_from_output,
-    response_type_contract,
-)
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
+from tests.helpers.gate_orchestration_smoke import apply_final_emission_gate_consumer
+from tests.helpers.response_type_smoke import response_type_contract
 
 from game.player_facing_narration_purity import (
     build_player_facing_narration_purity_contract,
@@ -245,7 +243,7 @@ def test_bj35_apply_player_facing_narration_purity_layer_boundary_no_minimal_rep
 
 
 def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = _apply_gate(
         {
             "player_facing_text": "Rain hammers the slate roof; torchlight shivers in the gutter below.",
@@ -265,7 +263,7 @@ def test_gate_purity_and_asp_pass_clean_observation(monkeypatch):
 
 
 def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     out = _apply_gate(
         {
             "player_facing_text": (
@@ -290,7 +288,7 @@ def test_gate_purity_and_asp_pass_scene_transition_arrival(monkeypatch):
 
 
 def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     text = (
         'The sergeant does not raise her voice. "Move toward the gate, now," she says, '
         "and the line stiffens as if pulled by a single wire."
@@ -313,7 +311,7 @@ def test_gate_purity_pass_npc_quoted_command_in_observe(monkeypatch):
 
 
 def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     text = (
         "You thumb the latch; it gives with a dry snap. "
         "Patrol whistles tighten two streets over, a thin urgent sound against the rain."
@@ -336,7 +334,7 @@ def test_gate_purity_and_asp_pass_action_outcome_then_brief_consequence(monkeypa
 
 
 def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Consequence / Opportunity:\nThe patrol's torchlight sweeps the far arch."
     out = _apply_gate(
         {
@@ -357,7 +355,7 @@ def test_gate_purity_repairs_scaffold_header_leak(monkeypatch):
 
 
 def test_gate_purity_repairs_coaching_language(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "You weigh what you just tried near the checkpoint; rain drums on the slate roof."
     out = _apply_gate(
         {
@@ -377,7 +375,7 @@ def test_gate_purity_repairs_coaching_language(monkeypatch):
 
 
 def test_gate_purity_repairs_ui_label_leak(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "Take the exit labeled North and you smell cold river air beyond the arch."
     out = _apply_gate(
         {
@@ -397,7 +395,7 @@ def test_gate_purity_repairs_ui_label_leak(monkeypatch):
 
 
 def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = (
         "The ward's tension mounts; confrontation feels inevitable. "
         "You hear boots on wet cobbles to your left, uneven and hurried."
@@ -420,7 +418,7 @@ def test_gate_asp_repairs_observe_when_pressure_leads_concrete_observation(monke
 
 
 def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = "The next beat is yours. You emerge onto the quay, ropes creaking, gulls wheeling overhead."
     out = _apply_gate(
         {
@@ -440,7 +438,7 @@ def test_gate_purity_strips_transition_scaffold_on_travel(monkeypatch):
 
 
 def test_gate_asp_triggers_replace_when_no_observation_payload(monkeypatch):
-    monkeypatch.setattr(terminal_pipeline, "apply_visibility_enforcement", lambda out, **kwargs: out)
+    monkeypatch.setattr(visibility_fallback, "apply_visibility_enforcement", lambda out, **kwargs: out)
     raw = (
         "Unrest makes factions bold and the crown brittle. "
         "Invasion rumors outrun truth, and politics turns markets into maps."

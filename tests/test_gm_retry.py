@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import game.social_exchange_emission as social_exchange_emission
+import game.social_exchange_fallback_catalog as social_exchange_fallback_catalog
 from game.campaign_state import create_fresh_session_document
 from game.interaction_context import rebuild_active_scene_entities
 from game.realization_authority import FALLBACK_FAMILIES
@@ -14,10 +14,10 @@ from game.realization_provenance import (
     UPSTREAM_PREPARED_EMISSION,
 )
 import game.gm as _gm  # noqa: F401 - primes gm/gm_retry's circular import path for direct retry tests.
-from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm
+from game.social_exchange_fallback_catalog import apply_social_exchange_retry_fallback_gm
 from game.storage import load_scene
 import game.gm_retry as gm_retry
-from game.final_emission_meta import OPENING_FALLBACK_OWNER_RETRY
+from game.attribution_read_views import OPENING_FALLBACK_OWNER_RETRY
 
 import pytest
 
@@ -77,7 +77,7 @@ def test_apply_social_exchange_retry_fallback_gm_prefers_open_social_recovery(mo
     def _boom(*a, **k):
         raise AssertionError("deterministic_social_fallback_line must not run when open-social recovery succeeds")
 
-    monkeypatch.setattr(social_exchange_emission, "deterministic_social_fallback_line", _boom)
+    monkeypatch.setattr(social_exchange_fallback_catalog, "deterministic_social_fallback_line", _boom)
 
     gm = {"player_facing_text": "The square stays vague.", "tags": [], "metadata": {}}
     out = apply_social_exchange_retry_fallback_gm(
@@ -314,7 +314,7 @@ def test_apply_deterministic_retry_fallback_open_social_branch_labels_retry_fami
     _install_retry_fallback_harness(monkeypatch, soc_in_scope=True)
     monkeypatch.setattr(gm_retry, "resolve_known_fact_before_uncertainty", lambda *args, **kwargs: None)
     monkeypatch.setattr(
-        social_exchange_emission,
+        social_exchange_fallback_catalog,
         "build_open_social_solicitation_recovery",
         lambda **kwargs: {
             "used": True,
@@ -324,8 +324,8 @@ def test_apply_deterministic_retry_fallback_open_social_branch_labels_retry_fami
         },
     )
     monkeypatch.setattr(
-        social_exchange_emission,
-        "_merge_open_social_recovery_emission_debug",
+        social_exchange_fallback_catalog,
+        "merge_open_social_recovery_emission_debug",
         lambda out, rec: out.setdefault("metadata", {})
         .setdefault("emission_debug", {})
         .update({"open_social_recovery_used": True}),
