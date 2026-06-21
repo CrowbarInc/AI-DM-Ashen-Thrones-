@@ -4,6 +4,8 @@
 
 This folder is the **canonical home** for cycle-level reconnaissance, closure, and block implementation reports from the post-AER consolidation program (Cycles H through AF). These documents record what was discovered, what shipped, and what was deferred—they do **not** replace executable governance (CI workflows, registries, closeout pytest slices, or protected replay manifest).
 
+**Current governance navigation:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (executable CI/local parity; split-owner matrix governance in dedicated section).
+
 ## Canonical location
 
 | Doc type | Location |

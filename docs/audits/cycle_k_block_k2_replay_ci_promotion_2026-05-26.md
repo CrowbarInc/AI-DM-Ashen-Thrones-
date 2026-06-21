@@ -1,5 +1,7 @@
 # Replay CI Promotion
 
+**Current governance navigation:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (authoritative CI step list; this note records the K2 promotion history).
+
 ## Change Summary
 
 Cycle K Block K2 promotes the protected golden replay lane from documented acceptance policy to an enforced CI check.

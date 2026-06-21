@@ -14,8 +14,8 @@ from game.fallback_provenance_debug import (
     record_final_emission_gate_exit,
 )
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+from game.final_emission_opening_fallback import reassert_scene_opening_accepted_candidate
 from game.final_emission_meta import (
-    FINAL_EMISSION_META_KEY,
     ensure_final_emission_meta_dict,
     package_dead_turn_snapshot_into_final_emission_meta,
     package_emission_channel_sidecar,
@@ -89,63 +89,6 @@ def _refresh_output_mutation_lineage(out: Mapping[str, Any] | None) -> None:
 
     apply_sanitizer_producer_attribution_to_fem(meta, sanitizer_trace)
     refresh_final_emission_mutation_lineage(meta, sanitizer_trace=sanitizer_trace)
-
-
-def _scene_opening_debug_preview(text: str, *, limit: int = 120) -> str:
-    clean = _normalize_text(text)
-    return (clean[:limit] + "…") if len(clean) > limit else clean
-
-
-def patch_scene_opening_candidate_emission_debug(
-    out: Dict[str, Any],
-    *,
-    accepted_scene_opening_text: str | None,
-) -> None:
-    if not isinstance(out, dict):
-        return
-    md = out.setdefault("metadata", {})
-    if not isinstance(md, dict):
-        md = {}
-        out["metadata"] = md
-    em = md.setdefault("emission_debug", {})
-    if not isinstance(em, dict):
-        em = {}
-        md["emission_debug"] = em
-    accepted = _normalize_text(accepted_scene_opening_text or "")
-    emitted = _normalize_text(out.get("player_facing_text") or "")
-    em["scene_opening_candidate_len"] = len(accepted)
-    em["scene_opening_emitted_len"] = len(emitted)
-    em["scene_opening_candidate_emitted_match"] = bool(accepted) and emitted == accepted
-    em["scene_opening_accepted_candidate_promoted"] = bool(accepted) and emitted == accepted
-    em["response_type_candidate_preview"] = _scene_opening_debug_preview(accepted)
-    em["response_type_emitted_preview"] = _scene_opening_debug_preview(emitted)
-
-    fem = out.get(FINAL_EMISSION_META_KEY)
-    if isinstance(fem, dict):
-        fem["response_type_candidate_preview"] = em["response_type_candidate_preview"]
-        fem["response_type_emitted_preview"] = em["response_type_emitted_preview"]
-
-
-def reassert_scene_opening_accepted_candidate(
-    out: Dict[str, Any],
-    *,
-    accepted_scene_opening_text: str | None,
-    source: str,
-) -> None:
-    accepted = _normalize_text(accepted_scene_opening_text or "")
-    if not accepted:
-        return
-    if _normalize_text(out.get("player_facing_text") or "") != accepted:
-        assert_final_emission_mutation_allowed(
-            "restore_accepted_scene_opening_candidate",
-            source=source,
-        )
-        out["player_facing_text"] = accepted
-    patch_scene_opening_candidate_emission_debug(
-        out,
-        accepted_scene_opening_text=accepted,
-    )
-    assert _normalize_text(out.get("player_facing_text") or "") == accepted
 
 
 def final_emission_fast_path_eligible(out: Dict[str, Any]) -> bool:

@@ -2,6 +2,31 @@ from __future__ import annotations
 
 import pytest
 
+from game.final_emission_ownership_schema import (
+    OPENING_FAIL_CLOSED_CONTENT_OWNER,
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_FALLBACK_SELECTION_OWNER,
+    SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+    STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    VISIBILITY_FALLBACK_SELECTION_OWNER,
+)
+from game.final_emission_replay_projection import (
+    FIRST_MENTION_HARD_REPLACEMENT,
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    VISIBILITY_HARD_REPLACEMENT,
+)
 from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
@@ -13,6 +38,9 @@ from tests.helpers.failure_classifier import classify_replay_failure, validate_f
 from tests.helpers.failure_classification_sync import (
     assert_contract_classifier_alignment,
     assert_failure_dashboard_row_shape,
+    assert_split_owner_matrix_classifier_row,
+    assert_split_owner_matrix_dashboard_expected,
+    assert_split_owner_matrix_lineage_event,
     classification_contract_summary,
     classify_replay_probe_row,
     expected_failure_classification_row_fields,
@@ -27,6 +55,7 @@ from tests.helpers.failure_classification_sync import (
     observed_global_replacement_row,
     observed_legacy_opening_fallback_row,
     observed_opening_fallback_row,
+    observed_opening_family_split_owner_row,
     observed_opening_projection_missing_row,
     observed_post_gate_mutation_row,
     observed_response_type_repair_row,
@@ -34,20 +63,33 @@ from tests.helpers.failure_classification_sync import (
     observed_sanitizer_legacy_rewrite_row,
     observed_sanitizer_row,
     observed_sealed_replacement_row,
+    observed_sealed_family_split_owner_row,
     observed_social_fallback_row,
     observed_speaker_mismatch_observed_row,
     observed_upstream_prepared_emission_row,
     observed_visibility_replacement_row,
+    observed_visibility_family_hard_replacement_row,
+    observed_sanitizer_split_owner_row,
+    observed_upstream_fast_split_owner_row,
+    observed_referential_local_substitution_classifier_row,
     opening_recovered_drift_row,
     post_gate_mutation_drift_row,
     projection_unavailable_drift_row,
     protected_observation_registry_summary,
+    render_split_owner_acceptance_matrix_report,
     replay_drift_row,
     response_type_repair_drift_row,
     route_mismatch_drift_row,
     scaffold_leakage_drift_row,
     semantic_text_fragment_drift_row,
     speaker_mismatch_drift_row,
+    split_owner_acceptance_matrix_rows,
+    split_owner_fem_projection_excluded,
+    split_owner_lineage_event_from_matrix_row,
+    split_owner_matrix_classifier_drift_row,
+    split_owner_observed_row_from_matrix_row,
+    project_split_owner_matrix_row,
+    assert_split_owner_matrix_fem_projection,
 )
 from tests.helpers.failure_dashboard_report import (
     build_classified_dashboard_row,
@@ -882,7 +924,7 @@ def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prep
     assert row["source_family"] == "output_sanitizer"
     assert row["emission_sublayer"] == "sanitizer"
     assert row["prepared_emission_owner"] is None
-    assert row["sanitizer_empty_fallback_owner"] == "output_sanitizer"
+    assert row["sanitizer_empty_fallback_owner"] == "game.output_sanitizer"
     assert row["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
 
 
@@ -926,7 +968,7 @@ def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly(
     assert rows[0]["prepared_emission_owner"] is None
     assert "sanitizer_empty=True" in report
     assert "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text" in report
-    assert "sanitizer_empty_owner=output_sanitizer" in report
+    assert "sanitizer_empty_owner=game.output_sanitizer" in report
     assert "prepared_emission=used" not in report
 
 
@@ -1037,8 +1079,8 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
         observed_turn=_observed(
             strict_social_active=True,
             sanitizer_strict_social_fallback_used=True,
-            sanitizer_strict_social_selection_owner="output_sanitizer",
-            sanitizer_strict_social_prose_owner="strict_social_emission",
+            sanitizer_strict_social_selection_owner="game.output_sanitizer",
+            sanitizer_strict_social_prose_owner="game.social_exchange_emission",
             sanitizer_strict_social_source="social_fallback_line_for_sanitizer.empty_output",
             sanitizer_empty_fallback_used=None,
             upstream_prepared_emission_used=False,
@@ -1068,47 +1110,84 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
     assert rows[0]["emission_sublayer"] == "strict_social_replacement"
     assert rows[0]["prepared_emission_owner"] is None
     assert rows[0]["sanitizer_empty_fallback_used"] is None
-    assert rows[0]["sanitizer_strict_social_selection_owner"] == "output_sanitizer"
-    assert rows[0]["sanitizer_strict_social_prose_owner"] == "strict_social_emission"
-    assert "strict_social_selection_owner=output_sanitizer" in report
-    assert "strict_social_prose_owner=strict_social_emission" in report
+    assert rows[0]["sanitizer_strict_social_selection_owner"] == "game.output_sanitizer"
+    assert rows[0]["sanitizer_strict_social_prose_owner"] == "game.social_exchange_emission"
+    assert "strict_social_selection_owner=game.output_sanitizer" in report
+    assert "strict_social_prose_owner=game.social_exchange_emission" in report
     assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report
 
 
-def test_failure_classifier_accepts_opening_runtime_lineage_split_owners():
-    rows = build_failure_dashboard_rows(
-        observed_turn=observed_opening_fallback_row(
-            owner_bucket=True,
-            runtime_lineage_events=[
-                make_runtime_lineage_event(
-                    event_kind="fallback_selected",
-                    stage="gate",
-                    owner="game.final_emission_gate",
-                    fallback_kind="scene_opening",
-                    fallback_selection_owner="game.final_emission_gate",
-                    fallback_content_owner="game.opening_deterministic_fallback",
-                )
-            ],
+@pytest.mark.parametrize(
+    (
+        "scenario_suffix",
+        "fallback_kind",
+        "fallback_content_owner",
+        "opening_fallback_owner_bucket",
+        "repair_kind",
+    ),
+    [
+        (
+            "scene_opening",
+            "scene_opening",
+            OPENING_FALLBACK_CONTENT_OWNER,
+            OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            "opening_deterministic_fallback",
         ),
+        (
+            "opening_failed_closed",
+            "opening_failed_closed",
+            OPENING_FAIL_CLOSED_CONTENT_OWNER,
+            OPENING_FALLBACK_OWNER_SEALED_GATE,
+            "opening_deterministic_fallback_failed_closed",
+        ),
+    ],
+)
+def test_failure_classifier_accepts_opening_family_runtime_lineage_split_owners(
+    scenario_suffix: str,
+    fallback_kind: str,
+    fallback_content_owner: str,
+    opening_fallback_owner_bucket: str,
+    repair_kind: str | None,
+) -> None:
+    observed = observed_opening_family_split_owner_row(
+        fallback_kind=fallback_kind,
+        fallback_content_owner=fallback_content_owner,
+        opening_fallback_owner_bucket=opening_fallback_owner_bucket,
+    )
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
         drift_rows=[
             exact_value_drift_row(
                 "fallback_content_owner",
-                expected="game.final_emission_gate",
-                actual="game.opening_deterministic_fallback",
-                reason="split owner projection changed",
+                expected=OPENING_FALLBACK_SELECTION_OWNER,
+                actual=fallback_content_owner,
+                reason=f"{scenario_suffix} opening-family split owner projection changed",
             )
         ],
-        scenario_id="opening_split_owner_probe",
+        scenario_id=f"opening_family_split_owner_{scenario_suffix}",
         turn_index=0,
     )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
 
-    report = render_failure_dashboard_markdown(rows, generated_at="2026-05-29T00:00:00Z", command_used="pytest")
-
-    assert rows[0]["fallback_selection_owner"] == "game.final_emission_gate"
-    assert rows[0]["fallback_content_owner"] == "game.opening_deterministic_fallback"
+    assert rows[0]["fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
+    assert rows[0]["fallback_content_owner"] == fallback_content_owner
+    assert rows[0]["opening_fallback_owner_bucket"] == opening_fallback_owner_bucket
+    if repair_kind is not None:
+        assert rows[0]["repair_kind"] == repair_kind
+    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert "fallback_selection_owner=game.final_emission_gate" in report
-    assert "fallback_content_owner=game.opening_deterministic_fallback" in report
+    assert f"fallback_selection_owner={OPENING_FALLBACK_SELECTION_OWNER}" in report
+    assert f"fallback_content_owner={fallback_content_owner}" in report
+    assert f"opening_owner={opening_fallback_owner_bucket}" in report
+    if repair_kind is not None:
+        assert f"repair={repair_kind}" in report
+    fallback = next(
+        event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == fallback_kind
+    assert fallback["fallback_owner_bucket"] == opening_fallback_owner_bucket
+    assert fallback["fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == fallback_content_owner
 
 
 def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_split_owners():
@@ -1143,6 +1222,641 @@ def test_failure_classifier_accepts_gate_selected_strict_social_runtime_lineage_
     assert_failure_dashboard_row_shape(rows[0])
 
 
+@pytest.mark.parametrize(
+    (
+        "scenario_suffix",
+        "observed_kwargs",
+        "fallback_kind",
+        "repair_kind",
+        "expected_bucket",
+        "expected_content_owner",
+    ),
+    [
+        (
+            "visibility_enforcement",
+            {
+                "visibility_replacement_applied": True,
+                "fallback_kind": VISIBILITY_HARD_REPLACEMENT,
+                "repair_kind": "visibility_enforcement",
+            },
+            VISIBILITY_HARD_REPLACEMENT,
+            "visibility_enforcement",
+            "sealed-gate",
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "first_mention_enforcement",
+            {
+                "first_mention_replacement_applied": True,
+                "fallback_kind": FIRST_MENTION_HARD_REPLACEMENT,
+                "repair_kind": "first_mention_enforcement",
+            },
+            FIRST_MENTION_HARD_REPLACEMENT,
+            "first_mention_enforcement",
+            "sealed-gate",
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "referential_clarity_enforcement",
+            {
+                "referential_clarity_replacement_applied": True,
+                "fallback_kind": REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+                "repair_kind": "referential_clarity_enforcement",
+                "visibility_fallback_owner_bucket": "strict-social-visibility",
+                "fallback_content_owner": STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+            },
+            REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+            "referential_clarity_enforcement",
+            "strict-social-visibility",
+            STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+        ),
+    ],
+)
+def test_failure_classifier_accepts_visibility_family_runtime_lineage_split_owners(
+    scenario_suffix: str,
+    observed_kwargs: dict,
+    fallback_kind: str,
+    repair_kind: str,
+    expected_bucket: str,
+    expected_content_owner: str,
+) -> None:
+    observed = observed_visibility_family_hard_replacement_row(**observed_kwargs)
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected="game.final_emission_gate",
+                actual=expected_content_owner,
+                reason=f"{scenario_suffix} split owner projection changed",
+            )
+        ],
+        scenario_id=f"visibility_family_split_owner_{scenario_suffix}",
+        turn_index=0,
+    )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["fallback_selection_owner"] == VISIBILITY_FALLBACK_SELECTION_OWNER
+    assert rows[0]["fallback_content_owner"] == expected_content_owner
+    assert rows[0]["visibility_fallback_owner_bucket"] == expected_bucket
+    assert rows[0]["repair_kind"] == repair_kind
+    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
+    assert f"fallback_selection_owner={VISIBILITY_FALLBACK_SELECTION_OWNER}" in report
+    assert f"fallback_content_owner={expected_content_owner}" in report
+    assert f"visibility_owner={expected_bucket}" in report
+    assert f"repair={repair_kind}" in report
+    fallback = next(
+        event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == fallback_kind
+    assert fallback["fallback_owner_bucket"] == expected_bucket
+
+
+@pytest.mark.parametrize(
+    (
+        "scenario_suffix",
+        "observed_kwargs",
+        "fallback_kind",
+        "repair_kind",
+        "expected_content_owner",
+    ),
+    [
+        (
+            "strict_social",
+            {
+                "fallback_kind": "sanitizer_strict_social",
+                "fallback_content_owner": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+                "repair_kind": "strict_social_repair",
+            },
+            "sanitizer_strict_social",
+            "strict_social_repair",
+            SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+        ),
+        (
+            "empty_output",
+            {
+                "fallback_kind": "sanitizer_empty_output",
+                "fallback_content_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+                "repair_kind": "sanitizer_empty_output",
+            },
+            "sanitizer_empty_output",
+            "sanitizer_empty_output",
+            SANITIZER_FALLBACK_SELECTION_OWNER,
+        ),
+    ],
+)
+def test_failure_classifier_accepts_sanitizer_runtime_lineage_split_owners(
+    scenario_suffix: str,
+    observed_kwargs: dict,
+    fallback_kind: str,
+    repair_kind: str,
+    expected_content_owner: str,
+) -> None:
+    observed = observed_sanitizer_split_owner_row(**observed_kwargs)
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected="game.final_emission_gate",
+                actual=expected_content_owner,
+                reason=f"{scenario_suffix} sanitizer split owner projection changed",
+            )
+        ],
+        scenario_id=f"sanitizer_split_owner_{scenario_suffix}",
+        turn_index=0,
+    )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert rows[0]["fallback_content_owner"] == expected_content_owner
+    assert rows[0]["repair_kind"] == repair_kind
+    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
+    assert f"fallback_selection_owner={SANITIZER_FALLBACK_SELECTION_OWNER}" in report
+    assert f"fallback_content_owner={expected_content_owner}" in report
+    assert f"repair={repair_kind}" in report
+    fallback = next(
+        event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == fallback_kind
+    assert fallback["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == expected_content_owner
+
+
+def test_failure_classifier_accepts_upstream_fast_runtime_lineage_split_owners() -> None:
+    observed = observed_upstream_fast_split_owner_row()
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected=UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+                actual=UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+                reason="upstream-fast split owner projection changed",
+            )
+        ],
+        scenario_id="upstream_fast_split_owner_probe",
+        turn_index=0,
+    )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
+    assert rows[0]["fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
+    assert f"fallback_selection_owner={UPSTREAM_FAST_FALLBACK_SELECTION_OWNER}" in report
+    assert f"fallback_content_owner={UPSTREAM_FAST_FALLBACK_CONTENT_OWNER}" in report
+    fallback = next(
+        event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == "upstream_fast_fallback"
+    assert fallback["stage"] == "retry"
+
+
+@pytest.mark.parametrize(
+    (
+        "scenario_suffix",
+        "fallback_kind",
+        "final_emitted_source",
+        "expected_bucket",
+        "expected_content_owner",
+    ),
+    [
+        (
+            "social_interlocutor",
+            SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+            "social_interlocutor_minimal_fallback",
+            "strict-social-sealed",
+            STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+        ),
+        (
+            "passive_scene_pressure",
+            SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+            "passive_scene_pressure_fallback",
+            SEALED_FALLBACK_OWNER_SEALED_GATE,
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "npc_pursuit_neutral",
+            SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+            "npc_pursuit_neutral_fallback",
+            SEALED_FALLBACK_OWNER_SEALED_GATE,
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "anti_reset_continuation",
+            SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+            "anti_reset_local_continuation_fallback",
+            SEALED_FALLBACK_OWNER_SEALED_GATE,
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "global_scene",
+            SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+            "global_scene_fallback",
+            SEALED_FALLBACK_OWNER_SEALED_GATE,
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        (
+            "unknown_replacement",
+            SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+            "unclassified_terminal_fallback",
+            "unknown-none",
+            SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        ),
+        (
+            "legacy_sealed_or_global",
+            "sealed_or_global_replacement",
+            "global_scene_fallback",
+            SEALED_FALLBACK_OWNER_SEALED_GATE,
+            SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        ),
+    ],
+)
+def test_failure_classifier_accepts_sealed_family_runtime_lineage_split_owners(
+    scenario_suffix: str,
+    fallback_kind: str,
+    final_emitted_source: str,
+    expected_bucket: str,
+    expected_content_owner: str,
+) -> None:
+    observed = observed_sealed_family_split_owner_row(
+        fallback_kind=fallback_kind,
+        final_emitted_source=final_emitted_source,
+        fallback_content_owner=expected_content_owner,
+        sealed_fallback_owner_bucket=expected_bucket,
+    )
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected=SEALED_FALLBACK_SELECTION_OWNER,
+                actual=expected_content_owner,
+                reason=f"{scenario_suffix} sealed-family split owner projection changed",
+            )
+        ],
+        scenario_id=f"sealed_family_split_owner_{scenario_suffix}",
+        turn_index=0,
+    )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
+    assert rows[0]["fallback_content_owner"] == expected_content_owner
+    assert rows[0]["sealed_fallback_owner_bucket"] == expected_bucket
+    assert validate_failure_classification_row(rows[0]) == []
+    assert_failure_dashboard_row_shape(rows[0])
+    assert f"fallback_selection_owner={SEALED_FALLBACK_SELECTION_OWNER}" in report
+    assert f"fallback_content_owner={expected_content_owner}" in report
+    assert f"sealed_owner={expected_bucket}" in report
+    fallback = next(
+        event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == fallback_kind
+    assert fallback["fallback_owner_bucket"] == expected_bucket
+    assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == expected_content_owner
+
+
+def test_failure_dashboard_runtime_lineage_summary_counts_sanitizer_upstream_fast_owner_trifecta() -> None:
+    sanitizer_strict = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="sanitizer",
+        owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+        fallback_kind="sanitizer_strict_social",
+        fallback_selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    )
+    sanitizer_empty = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="sanitizer",
+        owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+        fallback_kind="sanitizer_empty_output",
+        fallback_selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+    )
+    upstream_fast = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="retry",
+        owner=UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        fallback_kind="upstream_fast_fallback",
+        fallback_owner_bucket="retry",
+        fallback_selection_owner=UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    )
+    events = [sanitizer_strict, sanitizer_empty, upstream_fast, upstream_fast]
+    summary = build_runtime_lineage_summary(events)
+
+    assert summary["total_events"] == 4
+    assert summary["fallback_frequency"] == {
+        "sanitizer_strict_social": 1,
+        "sanitizer_empty_output": 1,
+        "upstream_fast_fallback": 2,
+    }
+    assert summary["fallback_owner_bucket_frequency"] == {"retry": 2}
+    assert summary["fallback_selection_owner_frequency"] == {
+        SANITIZER_FALLBACK_SELECTION_OWNER: 2,
+        UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: 2,
+    }
+    assert summary["fallback_content_owner_frequency"] == {
+        SANITIZER_FALLBACK_SELECTION_OWNER: 1,
+        SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: 1,
+        UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: 2,
+    }
+
+    report = render_failure_dashboard_markdown(
+        [],
+        generated_at="2026-06-20T00:00:00Z",
+        command_used="pytest sanitizer-upstream-lineage-summary",
+        runtime_lineage_events=events,
+    )
+    assert "`game.output_sanitizer` (2)" in report
+    assert "`game.social_exchange_emission` (1)" in report
+    assert "`game.api` (2)" in report
+    assert "`game.gm_retry` (2)" in report
+    assert "`retry` (2)" in report
+
+
+def test_failure_dashboard_runtime_lineage_summary_counts_sealed_family_split_owner_trifecta() -> None:
+    global_scene = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_kind=SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+        fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+        fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    )
+    social_interlocutor = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_kind=SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+        fallback_owner_bucket="strict-social-sealed",
+        fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    )
+    unknown_replacement = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_kind=SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+        fallback_owner_bucket="unknown-none",
+        fallback_selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+    )
+    events = [global_scene, social_interlocutor, unknown_replacement, global_scene]
+    summary = build_runtime_lineage_summary(events)
+
+    assert summary["total_events"] == 4
+    assert summary["fallback_frequency"] == {
+        SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: 2,
+        SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: 1,
+        SEALED_REPLACEMENT_SUBKIND_UNKNOWN: 1,
+    }
+    assert summary["fallback_owner_bucket_frequency"] == {
+        SEALED_FALLBACK_OWNER_SEALED_GATE: 2,
+        "strict-social-sealed": 1,
+        "unknown-none": 1,
+    }
+    assert summary["fallback_selection_owner_frequency"] == {SEALED_FALLBACK_SELECTION_OWNER: 4}
+    assert summary["fallback_content_owner_frequency"] == {
+        SEALED_FALLBACK_MODULE_CONTENT_OWNER: 2,
+        STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: 1,
+        SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: 1,
+    }
+
+    report = render_failure_dashboard_markdown(
+        [],
+        generated_at="2026-06-20T00:00:00Z",
+        command_used="pytest sealed-family-lineage-summary",
+        runtime_lineage_events=events,
+    )
+    assert "`game.final_emission_gate` (4)" in report
+    assert "`game.final_emission_sealed_fallback` (2)" in report
+    assert "`game.social_exchange_emission` (1)" in report
+    assert "`sealed-gate` (2)" in report
+    assert "`strict-social-sealed` (1)" in report
+    assert "`unknown-none` (1)" in report
+
+
+def test_failure_dashboard_runtime_lineage_summary_counts_opening_family_split_owner_trifecta() -> None:
+    scene_opening = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner=OPENING_FALLBACK_SELECTION_OWNER,
+        fallback_kind="scene_opening",
+        fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        fallback_authorship_source="upstream_prepared_opening_fallback",
+        fallback_selection_owner=OPENING_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=OPENING_FALLBACK_CONTENT_OWNER,
+        repair_kind="opening_deterministic_fallback",
+    )
+    opening_failed_closed = make_runtime_lineage_event(
+        event_kind="fallback_selected",
+        stage="gate",
+        owner=OPENING_FALLBACK_SELECTION_OWNER,
+        fallback_kind="opening_failed_closed",
+        fallback_owner_bucket=OPENING_FALLBACK_OWNER_SEALED_GATE,
+        fallback_selection_owner=OPENING_FALLBACK_SELECTION_OWNER,
+        fallback_content_owner=OPENING_FAIL_CLOSED_CONTENT_OWNER,
+        repair_kind="opening_deterministic_fallback_failed_closed",
+    )
+    events = [scene_opening, opening_failed_closed, scene_opening]
+    summary = build_runtime_lineage_summary(events)
+
+    assert summary["total_events"] == 3
+    assert summary["fallback_frequency"] == {"scene_opening": 2, "opening_failed_closed": 1}
+    assert summary["fallback_owner_bucket_frequency"] == {
+        OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED: 2,
+        OPENING_FALLBACK_OWNER_SEALED_GATE: 1,
+    }
+    assert summary["fallback_selection_owner_frequency"] == {OPENING_FALLBACK_SELECTION_OWNER: 3}
+    assert summary["fallback_content_owner_frequency"] == {
+        OPENING_FALLBACK_CONTENT_OWNER: 2,
+        OPENING_FAIL_CLOSED_CONTENT_OWNER: 1,
+    }
+
+    report = render_failure_dashboard_markdown(
+        [],
+        generated_at="2026-06-20T00:00:00Z",
+        command_used="pytest opening-family-lineage-summary",
+        runtime_lineage_events=events,
+    )
+    assert "`game.final_emission_gate` (3)" in report
+    assert "`game.opening_deterministic_fallback` (2)" in report
+    assert "`upstream-prepared` (2)" in report
+    assert "`sealed-gate` (1)" in report
+
+
+def test_failure_classifier_accepts_referential_local_substitution_producer_bucket_without_short_owner_names() -> None:
+    observed = observed_referential_local_substitution_classifier_row()
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "producer_repair_kind",
+                expected="visibility_enforcement",
+                actual="referential_clarity_local_substitution",
+                reason="local substitution repair kind drift",
+            )
+        ],
+        scenario_id="referential_local_substitution_classifier_probe",
+        turn_index=0,
+    )
+    report = render_failure_dashboard_markdown(rows, generated_at="2026-06-20T00:00:00Z", command_used="pytest")
+
+    assert rows[0]["visibility_fallback_owner_bucket"] == "strict-social-visibility"
+    assert rows[0]["repair_kind"] == "referential_clarity_local_substitution"
+    assert rows[0]["fallback_selection_owner"] is None
+    assert rows[0]["fallback_content_owner"] is None
+    assert validate_failure_classification_row(rows[0]) == []
+    assert "visibility_owner=strict-social-visibility" in report
+    assert "repair=referential_clarity_local_substitution" in report
+    assert "fallback_selection_owner=" not in report
+
+
+def test_failure_classification_contract_rejects_short_names_on_visibility_family_split_owner_fields() -> None:
+    row = build_failure_dashboard_rows(
+        observed_turn=observed_visibility_family_hard_replacement_row(
+            visibility_replacement_applied=True,
+            fallback_kind=VISIBILITY_HARD_REPLACEMENT,
+            repair_kind="visibility_enforcement",
+        ),
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_selection_owner",
+                expected="final_emission_visibility_fallback",
+                actual="game.final_emission_visibility_fallback",
+                reason="short selection owner rejected",
+            )
+        ],
+        scenario_id="visibility_short_owner_probe",
+        turn_index=0,
+    )[0]
+    row["fallback_selection_owner"] = "final_emission_visibility_fallback"
+    row["fallback_content_owner"] = "final_emission_sealed_fallback"
+    errors = validate_failure_classification_row(row)
+    assert "invalid fallback_selection_owner: 'final_emission_visibility_fallback'" in errors
+    assert "invalid fallback_content_owner: 'final_emission_sealed_fallback'" in errors
+
+    row["fallback_selection_owner"] = VISIBILITY_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    assert validate_failure_classification_row(row) == []
+
+
+def test_failure_classification_contract_rejects_short_names_on_sanitizer_upstream_split_owner_fields() -> None:
+    row = build_failure_dashboard_rows(
+        observed_turn=observed_sanitizer_split_owner_row(
+            fallback_kind="sanitizer_strict_social",
+            fallback_content_owner=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+            repair_kind="strict_social_repair",
+        ),
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_selection_owner",
+                expected=SANITIZER_FALLBACK_SELECTION_OWNER,
+                actual="output_sanitizer",
+                reason="short selection owner rejected",
+            )
+        ],
+        scenario_id="sanitizer_short_owner_probe",
+        turn_index=0,
+    )[0]
+    row["fallback_selection_owner"] = "output_sanitizer"
+    row["fallback_content_owner"] = "strict_social_emission"
+    errors = validate_failure_classification_row(row)
+    assert "invalid fallback_selection_owner: 'output_sanitizer'" in errors
+    assert "invalid fallback_content_owner: 'strict_social_emission'" in errors
+
+    row["fallback_selection_owner"] = SANITIZER_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
+    assert validate_failure_classification_row(row) == []
+
+    upstream_row = build_failure_dashboard_rows(
+        observed_turn=observed_upstream_fast_split_owner_row(),
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_content_owner",
+                expected=UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+                actual="gm_retry",
+                reason="short upstream content owner rejected",
+            )
+        ],
+        scenario_id="upstream_fast_short_owner_probe",
+        turn_index=0,
+    )[0]
+    upstream_row["fallback_selection_owner"] = "api"
+    upstream_row["fallback_content_owner"] = "gm_retry"
+    upstream_errors = validate_failure_classification_row(upstream_row)
+    assert "invalid fallback_selection_owner: 'api'" in upstream_errors
+    assert "invalid fallback_content_owner: 'gm_retry'" in upstream_errors
+
+    upstream_row["fallback_selection_owner"] = UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
+    upstream_row["fallback_content_owner"] = UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    assert validate_failure_classification_row(upstream_row) == []
+
+
+def test_failure_classification_contract_rejects_short_names_on_sealed_family_split_owner_fields() -> None:
+    row = build_failure_dashboard_rows(
+        observed_turn=observed_sealed_family_split_owner_row(
+            fallback_kind=SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+            final_emitted_source="global_scene_fallback",
+            fallback_content_owner=SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        ),
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_selection_owner",
+                expected="final_emission_gate",
+                actual=SEALED_FALLBACK_SELECTION_OWNER,
+                reason="short selection owner rejected",
+            )
+        ],
+        scenario_id="sealed_family_short_owner_probe",
+        turn_index=0,
+    )[0]
+    row["fallback_selection_owner"] = "final_emission_gate"
+    row["fallback_content_owner"] = "final_emission_sealed_fallback"
+    errors = validate_failure_classification_row(row)
+    assert "invalid fallback_selection_owner: 'final_emission_gate'" in errors
+    assert "invalid fallback_content_owner: 'final_emission_sealed_fallback'" in errors
+
+    row["fallback_selection_owner"] = SEALED_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    assert validate_failure_classification_row(row) == []
+
+
+def test_failure_classification_contract_rejects_short_names_on_opening_family_split_owner_fields() -> None:
+    row = build_failure_dashboard_rows(
+        observed_turn=observed_opening_family_split_owner_row(
+            fallback_kind="scene_opening",
+            fallback_content_owner=OPENING_FALLBACK_CONTENT_OWNER,
+            opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        ),
+        drift_rows=[
+            exact_value_drift_row(
+                "fallback_selection_owner",
+                expected="final_emission_gate",
+                actual=OPENING_FALLBACK_SELECTION_OWNER,
+                reason="short selection owner rejected",
+            )
+        ],
+        scenario_id="opening_family_short_owner_probe",
+        turn_index=0,
+    )[0]
+    row["fallback_selection_owner"] = "final_emission_gate"
+    row["fallback_content_owner"] = "opening_deterministic_fallback"
+    errors = validate_failure_classification_row(row)
+    assert "invalid fallback_selection_owner: 'final_emission_gate'" in errors
+    assert "invalid fallback_content_owner: 'opening_deterministic_fallback'" in errors
+
+    row["fallback_selection_owner"] = OPENING_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = OPENING_FALLBACK_CONTENT_OWNER
+    assert validate_failure_classification_row(row) == []
+
+
 def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_owner():
     row = build_failure_dashboard_rows(
         observed_turn=_observed(
@@ -1172,3 +1886,66 @@ def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_o
     errors = validate_failure_classification_row(row[0])
     assert "invalid fallback_selection_owner: 'game.unowned_selector'" in errors
     assert "invalid fallback_content_owner: 'game.unknown_content_owner'" in errors
+
+
+def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
+    """BU15: one matrix drives classifier, dashboard, lineage, and observed-row builders."""
+    from game.runtime_lineage_telemetry import summarize_runtime_lineage_events
+    from tests.helpers.failure_dashboard_fixtures import CONTROLLED_FAILURE_CASES
+
+    dashboard_expected_by_id = {
+        case_id: expected for case_id, _observed, _drift, expected in CONTROLLED_FAILURE_CASES
+    }
+    lineage_events: list[dict] = []
+
+    for row in split_owner_acceptance_matrix_rows():
+        built_event = split_owner_lineage_event_from_matrix_row(row)
+        assert_split_owner_matrix_lineage_event(row, built_event)
+        lineage_events.append(built_event)
+
+        observed = split_owner_observed_row_from_matrix_row(row)
+        embedded = observed["runtime_lineage_events"][0]
+        assert_split_owner_matrix_lineage_event(row, embedded)
+
+        classified = build_failure_dashboard_rows(
+            observed_turn=observed,
+            drift_rows=[split_owner_matrix_classifier_drift_row(row)],
+            scenario_id=f"matrix_{row.matrix_id}",
+            turn_index=0,
+        )[0]
+        assert_split_owner_matrix_classifier_row(row, classified)
+        assert validate_failure_classification_row(classified) == []
+        assert_failure_dashboard_row_shape(classified)
+
+        if row.dashboard_case_id is not None:
+            assert row.dashboard_case_id in dashboard_expected_by_id
+            assert_split_owner_matrix_dashboard_expected(
+                row,
+                dashboard_expected_by_id[row.dashboard_case_id],
+            )
+
+    summary = summarize_runtime_lineage_events(lineage_events)
+    assert summary["total_events"] == len(lineage_events)
+    for row in split_owner_acceptance_matrix_rows():
+        if row.event_kind == "mutation":
+            assert summary["by_event_kind"].get("mutation", 0) >= 1
+            continue
+        assert summary["fallback_frequency"].get(str(row.fallback_kind), 0) >= 1
+        assert summary["fallback_selection_owner_frequency"].get(str(row.fallback_selection_owner), 0) >= 1
+        assert summary["fallback_content_owner_frequency"].get(str(row.fallback_content_owner), 0) >= 1
+
+    report = render_split_owner_acceptance_matrix_report()
+    assert "scene_opening" in report
+    assert "referential_local_substitution" in report
+    assert "Legacy matrix rows (BU17 synthetic-only)" in report
+    assert "Dashboard case id aliases" not in report
+    assert "sealed_or_global_replacement_legacy" in report
+    assert "Dashboard probes: 15" in report
+    assert "Sealed subkind dashboard parity: 6/6 non-legacy rows" in report
+    assert f"Total rows: {len(split_owner_acceptance_matrix_rows())}" in report
+
+    for row in split_owner_acceptance_matrix_rows():
+        if split_owner_fem_projection_excluded(row):
+            continue
+        observed = project_split_owner_matrix_row(row)
+        assert_split_owner_matrix_fem_projection(row, observed)

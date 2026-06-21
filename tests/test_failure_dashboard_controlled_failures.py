@@ -4,6 +4,9 @@ import pytest
 
 from tests.helpers.failure_classification_sync import (
     assert_contract_classifier_alignment,
+    assert_split_owner_matrix_dashboard_case_id_parity,
+    assert_split_owner_matrix_dashboard_expected,
+    assert_split_owner_matrix_lineage_event,
     classifier_evidence_field_paths,
     classification_contract_summary,
     failure_dashboard_evidence_labels,
@@ -12,6 +15,13 @@ from tests.helpers.failure_classification_sync import (
     dashboard_evidence_manifest_misalignments,
     known_failure_categories,
     known_owner_buckets,
+    split_owner_acceptance_matrix_rows,
+    split_owner_lineage_event_from_matrix_row,
+    SPLIT_OWNER_DASHBOARD_CASE_ID_ALIASES,
+    split_owner_expected_dashboard_case_id,
+    split_owner_matrix_legacy,
+    split_owner_observed_row_from_matrix_row,
+    split_owner_sealed_matrix_rows_requiring_dashboard_probe,
 )
 from tests.helpers.golden_replay_projection import (
     project_turn_observation,
@@ -43,6 +53,7 @@ _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS = frozenset(
         "opening_final_fallback_basis",
         "fallback_content_owner",
         "post_gate_mutation_detected",
+        "referential_clarity_local_substitution_applied",
         "sanitizer_strict_social_fallback_used",
     }
 )
@@ -83,6 +94,17 @@ _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
         "opening_authorship=upstream_prepared_opening_fallback; opening_owner=upstream-prepared; "
         "mutation=opening_fallback"
     ),
+    "scene_opening_split_owner": (
+        "sublayer=opening_fallback; repair=opening_deterministic_fallback; "
+        "opening_authorship=upstream_prepared_opening_fallback; opening_owner=upstream-prepared; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.opening_deterministic_fallback; mutation=opening_fallback"
+    ),
+    "opening_failed_closed_split_owner": (
+        "sublayer=opening_fallback; repair=opening_deterministic_fallback_failed_closed; "
+        "opening_owner=sealed-gate; fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_gate; mutation=opening_fallback"
+    ),
     "opening_fallback_authorship_source": (
         "sublayer=opening_fallback; opening_authorship=compatibility_local_opening_deterministic; "
         "opening_owner=unknown-ambiguous; mutation=opening_fallback"
@@ -94,6 +116,84 @@ _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
         "sublayer=terminal_fallback; visibility_owner=sealed-gate; visibility_replaced=True; "
         "visibility_pool=global_scene_narrative; visibility_kind=narrative_safe_fallback; mutation=terminal_fallback"
     ),
+    "visibility_enforcement_split_owner": (
+        "sublayer=terminal_fallback; repair=visibility_enforcement; "
+        "fallback_selection_owner=game.final_emission_visibility_fallback; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "visibility_owner=sealed-gate; visibility_replaced=True; "
+        "visibility_pool=global_scene_narrative; visibility_kind=narrative_safe_fallback; mutation=terminal_fallback"
+    ),
+    "first_mention_enforcement_split_owner": (
+        "sublayer=terminal_fallback; repair=first_mention_enforcement; "
+        "fallback_selection_owner=game.final_emission_visibility_fallback; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "visibility_owner=sealed-gate; visibility_replaced=False; "
+        "visibility_pool=global_scene_narrative; visibility_kind=narrative_safe_fallback; mutation=terminal_fallback"
+    ),
+    "referential_clarity_enforcement_split_owner": (
+        "sublayer=terminal_fallback; repair=referential_clarity_enforcement; "
+        "fallback_selection_owner=game.final_emission_visibility_fallback; "
+        "fallback_content_owner=game.social_exchange_emission; "
+        "visibility_owner=strict-social-visibility; visibility_replaced=False; "
+        "visibility_pool=global_scene_narrative; visibility_kind=narrative_safe_fallback; mutation=terminal_fallback"
+    ),
+    "referential_local_substitution_split_owner": (
+        "repair=referential_clarity_local_substitution; visibility_owner=strict-social-visibility; "
+        "mutation=referential_clarity_local_substitution_mutation"
+    ),
+    "sanitizer_strict_social_split_owner": (
+        "sublayer=strict_social_replacement; repair=strict_social_repair; "
+        "fallback_selection_owner=game.output_sanitizer; fallback_content_owner=game.social_exchange_emission; "
+        "mutation=strict_social_replacement; strict_social_fallback=True; "
+        "strict_social_selection_owner=game.output_sanitizer; strict_social_prose_owner=game.social_exchange_emission; "
+        "strict_social_source=social_fallback_line_for_sanitizer.empty_output"
+    ),
+    "sanitizer_empty_output_split_owner": (
+        "sublayer=sanitizer; repair=sanitizer_empty_output; "
+        "fallback_selection_owner=game.output_sanitizer; fallback_content_owner=game.output_sanitizer; "
+        "mutation=sanitizer; sanitizer_empty=True; "
+        "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text; "
+        "sanitizer_empty_owner=game.output_sanitizer; sanitizer_lineage_mode=strip_only; sanitizer_lineage_empty=True"
+    ),
+    "upstream_fast_fallback_split_owner": (
+        "fallback_selection_owner=game.api; fallback_content_owner=game.gm_retry"
+    ),
+    "sealed_global_scene_split_owner": (
+        "sublayer=terminal_fallback; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "sealed_owner=sealed-gate; mutation=terminal_fallback"
+    ),
+    "sealed_social_interlocutor_split_owner": (
+        "sublayer=fallback_behavior; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.social_exchange_emission; "
+        "sealed_owner=strict-social-sealed; mutation=fallback_behavior"
+    ),
+    "sealed_passive_scene_pressure_split_owner": (
+        "sublayer=fallback_behavior; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "sealed_owner=sealed-gate; mutation=fallback_behavior"
+    ),
+    "sealed_npc_pursuit_neutral_split_owner": (
+        "sublayer=fallback_behavior; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "sealed_owner=sealed-gate; mutation=fallback_behavior"
+    ),
+    "sealed_anti_reset_continuation_split_owner": (
+        "sublayer=fallback_behavior; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_sealed_fallback; "
+        "sealed_owner=sealed-gate; mutation=fallback_behavior"
+    ),
+    "sealed_unknown_replacement_split_owner": (
+        "sublayer=terminal_fallback; "
+        "fallback_selection_owner=game.final_emission_gate; "
+        "fallback_content_owner=game.final_emission_gate; "
+        "sealed_owner=unknown-none; mutation=terminal_fallback"
+    ),
     "sanitizer_leakage": (
         "sublayer=sanitizer; mutation=sanitizer; sanitizer_mode=strip_only; sanitizer_events=1; "
         "sanitizer_changed=0; sanitizer_lineage_mode=strip_only; sanitizer_lineage_changed=1; "
@@ -103,12 +203,12 @@ _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
         "sublayer=sanitizer; lineage=pre_gate_sanitizer>sanitizer_empty_fallback>finalize_packaging; "
         "mutation=sanitizer; sanitizer_mode=strip_only; sanitizer_empty=True; "
         "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text; "
-        "sanitizer_empty_owner=output_sanitizer; sanitizer_lineage_mode=strip_only; sanitizer_lineage_changed=1; "
+        "sanitizer_empty_owner=game.output_sanitizer; sanitizer_lineage_mode=strip_only; sanitizer_lineage_changed=1; "
         "sanitizer_lineage_dropped=1; sanitizer_lineage_empty=True; sanitizer_lineage_legacy=False"
     ),
     "strict_social_sanitizer_fallback": (
         "sublayer=strict_social_replacement; mutation=strict_social_replacement; strict_social_fallback=True; "
-        "strict_social_selection_owner=output_sanitizer; strict_social_prose_owner=strict_social_emission; "
+        "strict_social_selection_owner=game.output_sanitizer; strict_social_prose_owner=game.social_exchange_emission; "
         "strict_social_source=social_fallback_line_for_sanitizer.empty_output"
     ),
     "legacy_sanitizer_rewrite_diagnostic": (
@@ -239,6 +339,8 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "fallback_source_mismatch" in report
     assert "opening_fallback_owner_bucket" in report
     assert "opening_owner=upstream-prepared" in report
+    assert "scene_opening_split_owner" in report
+    assert "fallback_content_owner=game.opening_deterministic_fallback" in report
     assert "opening_authorship=upstream_prepared_opening_fallback" in report
     assert "game/final_emission_meta.py" in report
     assert "opening_fallback_authorship_source" in report
@@ -254,16 +356,31 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "visibility_replaced=True" in report
     assert "visibility_pool=global_scene_narrative" in report
     assert "visibility_kind=narrative_safe_fallback" in report
+    assert "fallback_selection_owner=game.final_emission_visibility_fallback" in report
+    assert "fallback_content_owner=game.final_emission_sealed_fallback" in report
+    assert "fallback_selection_owner=game.output_sanitizer" in report
+    assert "fallback_content_owner=game.social_exchange_emission" in report
+    assert "fallback_selection_owner=game.api" in report
+    assert "fallback_content_owner=game.gm_retry" in report
+    assert "sealed_global_scene_split_owner" in report
+    assert "sealed_social_interlocutor_split_owner" in report
+    assert "sealed_passive_scene_pressure_split_owner" in report
+    assert "sealed_unknown_replacement_split_owner" in report
+    assert "fallback_content_owner=game.social_exchange_emission" in report
+    assert "sealed_owner=strict-social-sealed" in report
+    assert "sealed_owner=unknown-none" in report
+    assert "fallback_selection_owner=game.final_emission_gate" in report
+    assert "fallback_content_owner=game.final_emission_sealed_fallback" in report
     assert "prepared_emission=used valid=True source=prepared_action_fallback_text" in report
     assert "lineage=response_type_repair>prepared_emission_selection>finalize_packaging" in report
     assert "prepared_emission=rejected reason=missing_answer_specificity" in report
-    assert "sanitizer_empty_owner=output_sanitizer" in report
+    assert "sanitizer_empty_owner=game.output_sanitizer" in report
     assert "sanitizer_lineage_changed=1" in report
     assert "sanitizer_lineage_dropped=1" in report
     assert "sanitizer_lineage_empty=True" in report
     assert "sanitizer_lineage_legacy=legacy_diagnostic" in report
-    assert "strict_social_selection_owner=output_sanitizer" in report
-    assert "strict_social_prose_owner=strict_social_emission" in report
+    assert "strict_social_selection_owner=game.output_sanitizer" in report
+    assert "strict_social_prose_owner=game.social_exchange_emission" in report
     assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report
     assert "missing=runtime_missing_raw_absent" in report
     assert "missing=projection_missing_raw_present" in report
@@ -275,3 +392,43 @@ def test_controlled_failure_probe_dashboard_contains_triage_columns():
     assert "lineage=response_type_repair>finalize_packaging" in report
     assert "mutation=response_type" in report
     assert "route_kind" in report
+
+
+def test_split_owner_matrix_dashboard_case_id_parity_guard() -> None:
+    """BU18/BU19: dashboard probe ids must equal {matrix_id}_split_owner with no aliases."""
+    assert SPLIT_OWNER_DASHBOARD_CASE_ID_ALIASES == {}
+    assert_split_owner_matrix_dashboard_case_id_parity()
+
+
+def test_sealed_subkind_matrix_rows_have_dashboard_parity_except_legacy() -> None:
+    """BU17/BU18: every non-legacy sealed matrix row must have a matrix-wired dashboard probe."""
+    assert_split_owner_matrix_dashboard_case_id_parity()
+    for row in split_owner_sealed_matrix_rows_requiring_dashboard_probe():
+        assert row.dashboard_case_id is not None, row.matrix_id
+        assert row.dashboard_case_id == split_owner_expected_dashboard_case_id(row)
+
+    legacy_rows = [row for row in split_owner_acceptance_matrix_rows() if split_owner_matrix_legacy(row)]
+    assert [row.matrix_id for row in legacy_rows] == ["sealed_or_global_replacement_legacy"]
+    for row in legacy_rows:
+        assert row.dashboard_case_id is None
+
+
+def test_split_owner_acceptance_matrix_controlled_probe_owners_match_canonical_literals() -> None:
+    """BU15: dashboard controlled split-owner probes stay aligned with the canonical matrix."""
+    dashboard_expected_by_id = {
+        case_id: expected for case_id, _observed, _drift, expected in CONTROLLED_FAILURE_CASES
+    }
+    matrix_dashboard_ids = {
+        row.dashboard_case_id
+        for row in split_owner_acceptance_matrix_rows()
+        if row.dashboard_case_id is not None
+    }
+    assert matrix_dashboard_ids <= set(dashboard_expected_by_id)
+
+    for row in split_owner_acceptance_matrix_rows():
+        if row.dashboard_case_id is None:
+            continue
+        assert_split_owner_matrix_dashboard_expected(row, dashboard_expected_by_id[row.dashboard_case_id])
+        observed = split_owner_observed_row_from_matrix_row(row, profile="dashboard_probe")
+        embedded = observed["runtime_lineage_events"][0]
+        assert_split_owner_matrix_lineage_event(row, embedded)

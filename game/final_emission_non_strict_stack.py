@@ -11,7 +11,6 @@ from typing import Any, Dict, List, NamedTuple
 
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.fallback_provenance_debug import realign_fallback_provenance_selector_to_current_text
-from game.final_emission_finalize import patch_scene_opening_candidate_emission_debug
 from game.final_emission_repairs import (
     _apply_answer_completeness_layer,
     _apply_answer_exposition_plan_layer,
@@ -19,38 +18,17 @@ from game.final_emission_repairs import (
     _apply_narrative_authenticity_layer,
     _apply_response_delta_layer,
     _apply_social_response_structure_layer,
-    merge_conversational_memory_inspection_into_emission_debug,
     merge_fallback_behavior_into_emission_debug,
 )
 from game.final_emission_fast_fallback_composition import apply_fast_fallback_neutral_composition_layer
-from game.final_emission_answer_shape_primacy import (
-    apply_answer_shape_primacy_layer,
-    merge_answer_shape_primacy_into_emission_debug as _merge_answer_shape_primacy_into_emission_debug,
-)
-from game.final_emission_scene_state_anchor import (
-    _merge_scene_state_anchor_into_emission_debug,
-    apply_scene_state_anchor_layer,
-)
-from game.final_emission_context_separation import (
-    apply_context_separation_layer,
-    merge_context_separation_into_emission_debug as _merge_context_separation_into_emission_debug,
-)
-from game.final_emission_player_facing_narration_purity import (
-    apply_player_facing_narration_purity_layer,
-    merge_player_facing_narration_purity_into_emission_debug as _merge_player_facing_narration_purity_into_emission_debug,
-)
-from game.final_emission_anti_railroading import (
-    apply_anti_railroading_layer,
-    merge_anti_railroading_into_emission_debug as _merge_anti_railroading_into_emission_debug,
-)
-from game.final_emission_tone_escalation import (
-    apply_tone_escalation_layer,
-    merge_tone_escalation_into_emission_debug as _merge_tone_escalation_into_emission_debug,
-)
-from game.final_emission_narrative_authority import (
-    apply_narrative_authority_layer,
-    merge_narrative_authority_into_emission_debug as _merge_narrative_authority_into_emission_debug,
-)
+import game.final_emission_fem_assembly as fem_assembly
+from game.final_emission_answer_shape_primacy import apply_answer_shape_primacy_layer
+from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
+from game.final_emission_context_separation import apply_context_separation_layer
+from game.final_emission_player_facing_narration_purity import apply_player_facing_narration_purity_layer
+from game.final_emission_anti_railroading import apply_anti_railroading_layer
+from game.final_emission_tone_escalation import apply_tone_escalation_layer
+from game.final_emission_narrative_authority import apply_narrative_authority_layer
 from game.interaction_continuity import apply_interaction_continuity_emission_step
 import game.final_emission_opening_fallback as opening_fallback
 import game.final_emission_response_type as response_type
@@ -179,7 +157,7 @@ def run_non_strict_layer_stack(
         accepted_scene_opening_text = _normalize_text(text)
         out["player_facing_text"] = accepted_scene_opening_text
         response_type_debug["scene_opening_accepted_candidate_promoted"] = True
-        patch_scene_opening_candidate_emission_debug(
+        opening_fallback.patch_scene_opening_candidate_emission_debug(
             out,
             accepted_scene_opening_text=accepted_scene_opening_text,
         )
@@ -340,55 +318,17 @@ def run_non_strict_layer_stack(
             text=str(out.get("player_facing_text") or ""),
             reason="fast_fallback_neutral_composition",
         )
-    _merge_scene_state_anchor_into_emission_debug(
+    fem_assembly.merge_pre_terminal_layer_debug(
         out,
         auth_res,
         eff_res,
-        gate_meta=ssa_layer_meta,
-    )
-    _merge_tone_escalation_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=te_layer_meta,
-        gm_output=out,
-    )
-    _merge_narrative_authority_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=na_layer_meta,
-        gm_output=out,
-    )
-    _merge_anti_railroading_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=ar_layer_meta,
-        gm_output=out,
-    )
-    _merge_context_separation_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=cs_layer_meta,
-    )
-    _merge_player_facing_narration_purity_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=purity_layer_meta,
-    )
-    _merge_answer_shape_primacy_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
-        gate_meta=asp_layer_meta,
-    )
-    merge_conversational_memory_inspection_into_emission_debug(
-        out,
-        auth_res,
-        eff_res,
+        ssa_layer_meta=ssa_layer_meta,
+        te_layer_meta=te_layer_meta,
+        na_layer_meta=na_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
     )
 
     ic_text, ic_extra_reasons, _ic_strict_fb = apply_interaction_continuity_emission_step(

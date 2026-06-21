@@ -3,6 +3,12 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+from game.final_emission_ownership_schema import (
+    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+)
+
 from tests.helpers.golden_replay_api import observed_turn_from_payload
 from tests.helpers.golden_replay_fixtures import (
     fem_payload,
@@ -223,7 +229,8 @@ def test_ak5_every_protected_path_is_projected_or_marked_unavailable():
                 "sanitizer_lineage_mode": "strip_only",
                 "sanitizer_empty_fallback_used": True,
                 "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                "sanitizer_empty_fallback_owner": "output_sanitizer",
+                "sanitizer_empty_fallback_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+                SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD: SANITIZER_TRACE_SELECTION_OWNER_SHORT,
                 "sanitizer_lineage_changed_count": 1,
                 "sanitizer_lineage_dropped_count": 0,
                 "sanitizer_lineage_empty_fallback_used": True,
@@ -355,7 +362,8 @@ def test_bl2_representative_projected_observed_turns_unchanged():
                         "sanitizer_lineage_mode": "strip_only",
                         "sanitizer_empty_fallback_used": True,
                         "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                        "sanitizer_empty_fallback_owner": "output_sanitizer",
+                        "sanitizer_empty_fallback_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+                SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD: SANITIZER_TRACE_SELECTION_OWNER_SHORT,
                         "sanitizer_lineage_changed_count": 1,
                         "sanitizer_lineage_dropped_count": 0,
                         "sanitizer_lineage_empty_fallback_used": True,
@@ -537,7 +545,8 @@ def test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields():
                         "sanitizer_lineage_mode": "strip_only",
                         "sanitizer_empty_fallback_used": True,
                         "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
-                        "sanitizer_empty_fallback_owner": "output_sanitizer",
+                        "sanitizer_empty_fallback_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+                SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD: SANITIZER_TRACE_SELECTION_OWNER_SHORT,
                         "sanitizer_lineage_changed_count": 2,
                         "sanitizer_lineage_dropped_count": 1,
                     }
@@ -552,7 +561,7 @@ def test_ak5_synthetic_turn_exercises_sanitizer_backed_protected_fields():
 
     assert observed["sanitizer_empty_fallback_used"] is True
     assert observed["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
-    assert observed["sanitizer_empty_fallback_owner"] == "output_sanitizer"
+    assert observed["sanitizer_empty_fallback_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
     assert observed["sanitizer_lineage_mode"] == "strip_only"
     assert observed["sanitizer_lineage_changed_count"] == 2
     assert observed["sanitizer_lineage_dropped_count"] == 1

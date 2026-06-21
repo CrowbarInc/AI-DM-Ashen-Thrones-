@@ -21,6 +21,9 @@ from tests.failure_classification_contract import (
     ALLOWED_OWNER_DRIFT_BUCKETS,
     ALLOWED_PRIMARY_OWNERS,
     ALLOWED_REPLAY_TAGS,
+    ALLOWED_SANITIZER_EMPTY_FALLBACK_OWNERS,
+    ALLOWED_SANITIZER_STRICT_SOCIAL_PROSE_OWNERS,
+    ALLOWED_SANITIZER_STRICT_SOCIAL_SELECTION_OWNERS,
     ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS,
     ALLOWED_SECONDARY_OWNERS,
     ALLOWED_SOURCE_FAMILY_TAGS,
@@ -381,15 +384,21 @@ def validate_failure_classification_row(row: Mapping[str, Any]) -> list[str]:
         errors.append(f"invalid prepared_emission_owner: {prepared_owner!r}")
 
     sanitizer_empty_owner = row.get("sanitizer_empty_fallback_owner")
-    if sanitizer_empty_owner not in (None, "") and sanitizer_empty_owner != "output_sanitizer":
+    if sanitizer_empty_owner not in (None, "") and sanitizer_empty_owner not in ALLOWED_SANITIZER_EMPTY_FALLBACK_OWNERS:
         errors.append(f"invalid sanitizer_empty_fallback_owner: {sanitizer_empty_owner!r}")
 
     strict_social_selection_owner = row.get("sanitizer_strict_social_selection_owner")
-    if strict_social_selection_owner not in (None, "") and strict_social_selection_owner != "output_sanitizer":
+    if (
+        strict_social_selection_owner not in (None, "")
+        and strict_social_selection_owner not in ALLOWED_SANITIZER_STRICT_SOCIAL_SELECTION_OWNERS
+    ):
         errors.append(f"invalid sanitizer_strict_social_selection_owner: {strict_social_selection_owner!r}")
 
     strict_social_prose_owner = row.get("sanitizer_strict_social_prose_owner")
-    if strict_social_prose_owner not in (None, "") and strict_social_prose_owner != "strict_social_emission":
+    if (
+        strict_social_prose_owner not in (None, "")
+        and strict_social_prose_owner not in ALLOWED_SANITIZER_STRICT_SOCIAL_PROSE_OWNERS
+    ):
         errors.append(f"invalid sanitizer_strict_social_prose_owner: {strict_social_prose_owner!r}")
 
     owner_drift_bucket = row.get("owner_drift_bucket")
@@ -545,7 +554,10 @@ def _opening_fallback_owner_bucket(observed_turn: Mapping[str, Any], drift_row: 
     observed = observed_turn.get("opening_fallback_owner_bucket")
     if isinstance(observed, str) and observed.strip():
         return observed.strip()
-    lineage_bucket = _preserved_owner_bucket_from_lineage(observed_turn)
+    lineage_bucket = _preserved_owner_bucket_from_lineage(
+        observed_turn,
+        fallback_kinds=frozenset({"scene_opening", "opening_failed_closed"}),
+    )
     if lineage_bucket:
         return lineage_bucket
     if not _opening_fallback_evidence_present(observed_turn, drift_row):
@@ -581,9 +593,16 @@ def _source_family_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
     return None
 
 
-def _preserved_owner_bucket_from_lineage(observed_turn: Mapping[str, Any]) -> str | None:
+def _preserved_owner_bucket_from_lineage(
+    observed_turn: Mapping[str, Any],
+    *,
+    fallback_kinds: frozenset[str] | None = None,
+) -> str | None:
     event = _lineage_fallback_selected_event(observed_turn)
     if event is None:
+        return None
+    fallback_kind = str(event.get("fallback_kind") or "").strip().lower()
+    if fallback_kinds is not None and fallback_kind not in fallback_kinds:
         return None
     bucket = event.get("fallback_owner_bucket")
     return bucket.strip() if isinstance(bucket, str) and bucket.strip() else None

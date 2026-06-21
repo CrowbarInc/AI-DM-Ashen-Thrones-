@@ -24,35 +24,16 @@ from game.final_emission_meta import (
 )
 from game.final_emission_sealed_fallback import stamp_sealed_fallback_realization_family
 from game.final_emission_fast_fallback_composition import apply_fast_fallback_neutral_composition_layer
-from game.final_emission_answer_shape_primacy import (
-    apply_answer_shape_primacy_layer,
-    merge_answer_shape_primacy_into_emission_debug as _merge_answer_shape_primacy_into_emission_debug,
-)
-from game.final_emission_scene_state_anchor import (
-    _merge_scene_state_anchor_into_emission_debug,
-    apply_scene_state_anchor_layer,
-)
-from game.final_emission_context_separation import (
-    apply_context_separation_layer,
-    merge_context_separation_into_emission_debug as _merge_context_separation_into_emission_debug,
-)
-from game.final_emission_player_facing_narration_purity import (
-    apply_player_facing_narration_purity_layer,
-    merge_player_facing_narration_purity_into_emission_debug as _merge_player_facing_narration_purity_into_emission_debug,
-)
-from game.final_emission_anti_railroading import (
-    apply_anti_railroading_layer,
-    merge_anti_railroading_into_emission_debug as _merge_anti_railroading_into_emission_debug,
-)
+from game.final_emission_answer_shape_primacy import apply_answer_shape_primacy_layer
+from game.final_emission_scene_state_anchor import apply_scene_state_anchor_layer
+from game.final_emission_context_separation import apply_context_separation_layer
+from game.final_emission_player_facing_narration_purity import apply_player_facing_narration_purity_layer
+from game.final_emission_anti_railroading import apply_anti_railroading_layer
 from game.final_emission_tone_escalation import (
     apply_tone_escalation_layer,
     flag_non_hostile_escalation_from_writer_pregate,
-    merge_tone_escalation_into_emission_debug as _merge_tone_escalation_into_emission_debug,
 )
-from game.final_emission_narrative_authority import (
-    apply_narrative_authority_layer,
-    merge_narrative_authority_into_emission_debug as _merge_narrative_authority_into_emission_debug,
-)
+from game.final_emission_narrative_authority import apply_narrative_authority_layer
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
     infer_accept_path_final_emitted_source,
@@ -362,55 +343,17 @@ def run_strict_social_composition_trunk(
             text=str(text or ""),
             reason="fast_fallback_neutral_composition",
         )
-    _merge_scene_state_anchor_into_emission_debug(
+    fem_assembly.merge_pre_terminal_layer_debug(
         out,
         resolution if isinstance(resolution, dict) else None,
         eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=ssa_layer_meta,
-    )
-    _merge_tone_escalation_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=te_layer_meta,
-        gm_output=out,
-    )
-    _merge_narrative_authority_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=na_layer_meta,
-        gm_output=out,
-    )
-    _merge_anti_railroading_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=ar_layer_meta,
-        gm_output=out,
-    )
-    _merge_context_separation_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=cs_layer_meta,
-    )
-    _merge_player_facing_narration_purity_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=purity_layer_meta,
-    )
-    _merge_answer_shape_primacy_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
-        gate_meta=asp_layer_meta,
-    )
-    emission_repairs.merge_conversational_memory_inspection_into_emission_debug(
-        out,
-        resolution if isinstance(resolution, dict) else None,
-        eff_resolution if isinstance(eff_resolution, dict) else None,
+        ssa_layer_meta=ssa_layer_meta,
+        te_layer_meta=te_layer_meta,
+        na_layer_meta=na_layer_meta,
+        ar_layer_meta=ar_layer_meta,
+        cs_layer_meta=cs_layer_meta,
+        purity_layer_meta=purity_layer_meta,
+        asp_layer_meta=asp_layer_meta,
     )
     if isinstance(eff_resolution, dict):
         sp = eff_resolution.get("social") if isinstance(eff_resolution.get("social"), dict) else {}

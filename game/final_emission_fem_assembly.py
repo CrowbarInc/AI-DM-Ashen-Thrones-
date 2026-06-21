@@ -8,24 +8,46 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any, Dict
 
-from game.final_emission_answer_shape_primacy import merge_answer_shape_primacy_meta
-from game.final_emission_anti_railroading import merge_anti_railroading_meta
-from game.final_emission_context_separation import merge_context_separation_meta
+from game.final_emission_answer_shape_primacy import (
+    merge_answer_shape_primacy_into_emission_debug,
+    merge_answer_shape_primacy_meta,
+)
+from game.final_emission_anti_railroading import (
+    merge_anti_railroading_into_emission_debug,
+    merge_anti_railroading_meta,
+)
+from game.final_emission_context_separation import (
+    merge_context_separation_into_emission_debug,
+    merge_context_separation_meta,
+)
 from game.final_emission_meta import (
     merge_narrative_authenticity_into_final_emission_meta,
     merge_response_type_meta,
 )
-from game.final_emission_narrative_authority import merge_narrative_authority_meta
-from game.final_emission_player_facing_narration_purity import merge_player_facing_narration_purity_meta
+from game.final_emission_narrative_authority import (
+    merge_narrative_authority_into_emission_debug,
+    merge_narrative_authority_meta,
+)
+from game.final_emission_player_facing_narration_purity import (
+    merge_player_facing_narration_purity_into_emission_debug,
+    merge_player_facing_narration_purity_meta,
+)
 from game.final_emission_repairs import (
     _merge_answer_completeness_meta,
     _merge_answer_exposition_plan_meta,
     _merge_fallback_behavior_meta,
     _merge_response_delta_meta,
     _merge_social_response_structure_meta,
+    merge_conversational_memory_inspection_into_emission_debug,
 )
-from game.final_emission_scene_state_anchor import _merge_scene_state_anchor_meta
-from game.final_emission_tone_escalation import merge_tone_escalation_meta
+from game.final_emission_scene_state_anchor import (
+    _merge_scene_state_anchor_into_emission_debug,
+    _merge_scene_state_anchor_meta,
+)
+from game.final_emission_tone_escalation import (
+    merge_tone_escalation_into_emission_debug,
+    merge_tone_escalation_meta,
+)
 from game.social_exchange_emission import project_strict_social_replace_realization_family
 
 
@@ -166,6 +188,75 @@ def build_gate_replace_fem_base(
         fem["strict_social_suppression_reason"] = strict_social_suppression_reason
         fem["anti_reset_intro_suppressed"] = bool(anti_reset_intro_suppressed)
     return fem
+
+
+def merge_pre_terminal_layer_debug(
+    out: Dict[str, Any],
+    resolution: Dict[str, Any] | None,
+    eff_resolution: Dict[str, Any] | None,
+    *,
+    ssa_layer_meta: Dict[str, Any],
+    te_layer_meta: Dict[str, Any],
+    na_layer_meta: Dict[str, Any],
+    ar_layer_meta: Dict[str, Any],
+    cs_layer_meta: Dict[str, Any],
+    purity_layer_meta: Dict[str, Any],
+    asp_layer_meta: Dict[str, Any],
+) -> None:
+    """Merge post-composition layer debug into ``metadata.emission_debug`` before FEM/terminal fork.
+
+    Shared by strict-social and non-strict stacks; order matches the pre-BU2-A inline sequence.
+    """
+    _merge_scene_state_anchor_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=ssa_layer_meta,
+    )
+    merge_tone_escalation_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=te_layer_meta,
+        gm_output=out,
+    )
+    merge_narrative_authority_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=na_layer_meta,
+        gm_output=out,
+    )
+    merge_anti_railroading_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=ar_layer_meta,
+        gm_output=out,
+    )
+    merge_context_separation_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=cs_layer_meta,
+    )
+    merge_player_facing_narration_purity_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=purity_layer_meta,
+    )
+    merge_answer_shape_primacy_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+        gate_meta=asp_layer_meta,
+    )
+    merge_conversational_memory_inspection_into_emission_debug(
+        out,
+        resolution,
+        eff_resolution,
+    )
 
 
 def _merge_fast_fallback_neutral_composition_meta(meta: Dict[str, Any], dbg: Dict[str, Any]) -> None:

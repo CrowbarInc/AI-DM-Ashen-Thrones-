@@ -45,10 +45,29 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.final_emission_meta import (
+from game.final_emission_ownership_schema import (
+    OPENING_FAIL_CLOSED_CONTENT_OWNER,
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SANITIZER_TRACE_OWNER_TO_LINEAGE_OWNER,
+    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_FALLBACK_SELECTION_OWNER,
+    SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+    SPEAKER_CONTRACT_ENFORCEMENT_LINEAGE_OWNER,
+    STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
     UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
     UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
     UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET,
+    VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER,
+    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+    VISIBILITY_FALLBACK_SELECTION_OWNER,
+    normalize_sanitizer_trace_owner_to_lineage_owner,
 )
 from game.runtime_lineage_telemetry import (
     RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
@@ -60,22 +79,9 @@ from game.runtime_lineage_telemetry import (
 from game.telemetry_vocab import normalize_owner, normalize_reason_list
 
 FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
-OPENING_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
-OPENING_FALLBACK_CONTENT_OWNER: str = "game.opening_deterministic_fallback"
-OPENING_FAIL_CLOSED_CONTENT_OWNER: str = "game.final_emission_gate"
-STRICT_SOCIAL_FALLBACK_SELECTION_OWNER: str = "game.final_emission_gate"
-STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: str = "game.social_exchange_emission"
-SANITIZER_FALLBACK_SELECTION_OWNER: str = "game.output_sanitizer"
-SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: str = "game.social_exchange_emission"
-SEALED_FALLBACK_SELECTION_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
-SEALED_FALLBACK_MODULE_CONTENT_OWNER: str = "game.final_emission_sealed_fallback"
-SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: str = OPENING_FALLBACK_SELECTION_OWNER
 
 # Short names stamped on sanitizer FEM/trace surfaces → canonical lineage module owners.
-_SANITIZER_TRACE_OWNER_TO_LINEAGE: dict[str, str] = {
-    "output_sanitizer": SANITIZER_FALLBACK_SELECTION_OWNER,
-    "strict_social_emission": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
-}
+_SANITIZER_TRACE_OWNER_TO_LINEAGE: dict[str, str] = dict(SANITIZER_TRACE_OWNER_TO_LINEAGE_OWNER)
 
 # Read-side sealed replacement sub-kinds (Cycle AB6). Runtime FEM keeps
 # ``final_emitted_source`` / ``final_route`` unchanged; lineage projection refines
@@ -197,6 +203,10 @@ def read_side_lineage_projection_surface() -> dict[str, object]:
         "upstream_fast_fallback_selection_owner": UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
         "upstream_fast_fallback_content_owner": UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
         "upstream_fast_fallback_provenance_packager": UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+        "visibility_fallback_selection_owner": VISIBILITY_FALLBACK_SELECTION_OWNER,
+        "visibility_fallback_content_owner_by_bucket": dict(
+            sorted(VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET.items())
+        ),
         "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
         "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
         "visibility_scene_fallback_kinds": sorted(VISIBILITY_SCENE_FALLBACK_KINDS),
@@ -323,12 +333,12 @@ def project_sealed_replacement_subkind_from_fem(fem: Mapping[str, Any]) -> str |
 
 
 def _lineage_module_owner_from_trace(value: str | None, *, default: str) -> str:
-    """Map sanitizer trace short owner names to canonical ``game.*`` lineage owners."""
+    """Map sanitizer trace owner names to canonical ``game.*`` lineage owners."""
     if not value:
         return default
-    mapped = _SANITIZER_TRACE_OWNER_TO_LINEAGE.get(value)
-    if mapped:
-        return mapped
+    raw = str(value).strip()
+    if raw in _SANITIZER_TRACE_OWNER_TO_LINEAGE or raw.startswith("game."):
+        return normalize_sanitizer_trace_owner_to_lineage_owner(raw, default=default)
     normalized = normalize_owner(value)
     if normalized and normalized.startswith("game."):
         return normalized
@@ -337,11 +347,29 @@ def _lineage_module_owner_from_trace(value: str | None, *, default: str) -> str:
     return default
 
 
+def _visibility_fallback_content_owner_from_fem(fem: Mapping[str, Any]) -> str:
+    bucket = _fem_lineage_source(fem, "visibility_fallback_owner_bucket")
+    if bucket in VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET:
+        return VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET[bucket]
+    return VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER
+
+
+def _visibility_fallback_split_owners(
+    fem: Mapping[str, Any],
+) -> tuple[str, str]:
+    return VISIBILITY_FALLBACK_SELECTION_OWNER, _visibility_fallback_content_owner_from_fem(fem)
+
+
 def _fallback_split_owners_for_kind(
     fem: Mapping[str, Any],
     fallback_kind: str,
 ) -> tuple[str | None, str | None]:
     """Return ``(fallback_selection_owner, fallback_content_owner)`` for a projected kind."""
+    if fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS or fallback_kind in {
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    }:
+        return _visibility_fallback_split_owners(fem)
     if fallback_kind == "scene_opening":
         return OPENING_FALLBACK_SELECTION_OWNER, OPENING_FALLBACK_CONTENT_OWNER
     if fallback_kind == "opening_failed_closed":
@@ -530,7 +558,7 @@ def _fem_speaker_repair_projections(fem: Mapping[str, Any]) -> list[tuple[str, s
     }
     repair_kind = reason_to_kind.get(reason)
     if repair_kind:
-        projections.append((repair_kind, "game.speaker_contract_enforcement", reason, [reason]))
+        projections.append((repair_kind, SPEAKER_CONTRACT_ENFORCEMENT_LINEAGE_OWNER, reason, [reason]))
 
     continuity = fem.get("interaction_continuity_repair")
     if isinstance(continuity, Mapping) and continuity.get("applied") is True:

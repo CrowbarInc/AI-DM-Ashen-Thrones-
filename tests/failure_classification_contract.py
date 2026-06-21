@@ -9,6 +9,10 @@ Alignment with classifier rule tables is enforced by
 """
 from __future__ import annotations
 
+from game.final_emission_ownership_schema import (
+    ALLOWED_FALLBACK_CONTENT_OWNERS,
+    ALLOWED_FALLBACK_SELECTION_OWNERS,
+)
 from tests.helpers.golden_replay_projection import (
     OPENING_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_BUCKETS,
@@ -111,15 +115,24 @@ ALLOWED_SOURCE_FAMILY_TAGS: frozenset[str] = frozenset(
 ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = OPENING_FALLBACK_OWNER_BUCKETS
 ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = SEALED_FALLBACK_OWNER_BUCKETS
 ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = VISIBILITY_FALLBACK_OWNER_BUCKETS
-ALLOWED_FALLBACK_SELECTION_OWNERS: frozenset[str] = frozenset(
+# BU10 — single source: canonical split-owner registry in ``game.final_emission_ownership_schema``.
+
+# BU6/BU7 — canonical sanitizer ownership fields accept legacy short trace companions separately.
+ALLOWED_SANITIZER_EMPTY_FALLBACK_OWNERS: frozenset[str] = frozenset(
     {
-        "game.final_emission_gate",
+        "output_sanitizer",
+        "game.output_sanitizer",
     }
 )
-ALLOWED_FALLBACK_CONTENT_OWNERS: frozenset[str] = frozenset(
+ALLOWED_SANITIZER_STRICT_SOCIAL_SELECTION_OWNERS: frozenset[str] = frozenset(
     {
-        "game.final_emission_gate",
-        "game.opening_deterministic_fallback",
+        "output_sanitizer",
+        "game.output_sanitizer",
+    }
+)
+ALLOWED_SANITIZER_STRICT_SOCIAL_PROSE_OWNERS: frozenset[str] = frozenset(
+    {
+        "strict_social_emission",
         "game.social_exchange_emission",
     }
 )

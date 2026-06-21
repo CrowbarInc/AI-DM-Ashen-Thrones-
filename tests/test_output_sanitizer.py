@@ -20,6 +20,15 @@ from game.output_sanitizer import (
     rewrite_analytical_sentence,
     sanitize_player_facing_output,
 )
+from game.final_emission_ownership_schema import (
+    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+    SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
+)
 
 
 def _legacy_rewrite_ctx(extra: dict | None = None) -> dict:
@@ -46,7 +55,8 @@ def test_strip_only_mode_drops_scaffold_without_diegetic_template_substitution()
     trace = ctx.get("sanitizer_trace") or {}
     assert trace.get("sanitizer_empty_fallback_used") is True
     assert trace.get("sanitizer_empty_fallback_source") == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
-    assert trace.get("sanitizer_empty_fallback_owner") == "output_sanitizer"
+    assert trace.get("sanitizer_empty_fallback_owner") == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert trace.get(SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD) == SANITIZER_TRACE_SELECTION_OWNER_SHORT
     assert trace.get("sanitizer_lineage_mode") == "strip_only"
     assert trace.get("sanitizer_lineage_changed_count") == 1
     assert trace.get("sanitizer_lineage_dropped_count") == 1
@@ -644,7 +654,9 @@ def test_strict_social_empty_output_fallback_records_sanitizer_selection_and_soc
     assert out != "UPSTREAM_EMPTY_STOCK."
     trace = ctx.get("sanitizer_trace") or {}
     assert trace.get("sanitizer_strict_social_fallback_used") is True
-    assert trace.get("sanitizer_strict_social_selection_owner") == "output_sanitizer"
-    assert trace.get("sanitizer_strict_social_prose_owner") == "strict_social_emission"
+    assert trace.get("sanitizer_strict_social_selection_owner") == SANITIZER_FALLBACK_SELECTION_OWNER
+    assert trace.get("sanitizer_strict_social_prose_owner") == SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
+    assert trace.get(SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD) == SANITIZER_TRACE_SELECTION_OWNER_SHORT
+    assert trace.get(SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD) == SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT
     assert trace.get("sanitizer_strict_social_source") == "social_fallback_line_for_sanitizer.empty_output"
     assert trace.get("sanitizer_empty_fallback_used") is None

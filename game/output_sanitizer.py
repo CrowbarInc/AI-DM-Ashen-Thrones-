@@ -19,8 +19,18 @@ from game.final_emission_meta import (
     PRODUCER_REPAIR_KIND_FIELD,
     PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
     PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
+)
+from game.final_emission_ownership_schema import (
+    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+    SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+    normalize_sanitizer_trace_owner_to_lineage_owner,
 )
 from game.social_exchange_emission import (
     effective_strict_social_resolution_for_emission,
@@ -1339,14 +1349,18 @@ def _mark_sanitizer_empty_fallback(
     *,
     used: bool,
     source: str | None = None,
-    owner: str = "output_sanitizer",
+    owner: str = SANITIZER_TRACE_SELECTION_OWNER_SHORT,
 ) -> None:
     trace = context.setdefault("sanitizer_trace", {})
     if not isinstance(trace, dict):
         return
     trace["sanitizer_empty_fallback_used"] = bool(used)
     trace["sanitizer_empty_fallback_source"] = source
-    trace["sanitizer_empty_fallback_owner"] = owner
+    trace["sanitizer_empty_fallback_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
+        owner,
+        default=SANITIZER_FALLBACK_SELECTION_OWNER,
+    )
+    trace[SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_SELECTION_OWNER_SHORT
     trace["sanitizer_lineage_empty_fallback_used"] = bool(used)
     if used:
         _stamp_sanitizer_producer_attribution(
@@ -1366,8 +1380,16 @@ def _mark_sanitizer_strict_social_fallback(
     if not isinstance(trace, dict):
         return
     trace["sanitizer_strict_social_fallback_used"] = bool(used)
-    trace["sanitizer_strict_social_selection_owner"] = "output_sanitizer"
-    trace["sanitizer_strict_social_prose_owner"] = "strict_social_emission"
+    trace["sanitizer_strict_social_selection_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
+        SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+        default=SANITIZER_FALLBACK_SELECTION_OWNER,
+    )
+    trace["sanitizer_strict_social_prose_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
+        SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
+        default=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    )
+    trace[SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_SELECTION_OWNER_SHORT
+    trace[SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT
     trace["sanitizer_strict_social_source"] = source
     if used:
         _stamp_sanitizer_producer_attribution(

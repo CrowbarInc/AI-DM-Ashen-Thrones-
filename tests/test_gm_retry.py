@@ -17,6 +17,7 @@ import game.gm as _gm  # noqa: F401 - primes gm/gm_retry's circular import path 
 from game.social_exchange_emission import apply_social_exchange_retry_fallback_gm
 from game.storage import load_scene
 import game.gm_retry as gm_retry
+from game.final_emission_meta import OPENING_FALLBACK_OWNER_RETRY
 
 import pytest
 
@@ -166,6 +167,9 @@ def _assert_retry_family(out):
     assert family != GATE_TERMINAL_REPAIR
     assert out["metadata"][REALIZATION_FALLBACK_FAMILY_FIELD] == RETRY_TERMINAL_FALLBACK
     assert out["_final_emission_meta"][REALIZATION_FALLBACK_FAMILY_FIELD] == RETRY_TERMINAL_FALLBACK
+    assert out.get("opening_fallback_owner_bucket") == OPENING_FALLBACK_OWNER_RETRY
+    assert out["metadata"].get("opening_fallback_owner_bucket") == OPENING_FALLBACK_OWNER_RETRY
+    assert out["_final_emission_meta"].get("opening_fallback_owner_bucket") == OPENING_FALLBACK_OWNER_RETRY
 
 
 def _assert_metadata_preserved(out):

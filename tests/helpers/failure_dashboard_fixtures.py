@@ -7,6 +7,26 @@ from __future__ import annotations
 
 from typing import Any
 
+from game.final_emission_ownership_schema import (
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
+    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
+    SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+    SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
+    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_FALLBACK_SELECTION_OWNER,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    VISIBILITY_FALLBACK_SELECTION_OWNER,
+)
+from game.final_emission_replay_projection import (
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+    VISIBILITY_HARD_REPLACEMENT,
+)
 from tests.helpers.golden_replay_projection import SEALED_FALLBACK_OWNER_SEALED_GATE
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
@@ -31,6 +51,7 @@ from tests.helpers.failure_classification_sync import (
     scaffold_leakage_drift_row,
     semantic_text_fragment_drift_row,
     speaker_mismatch_drift_row,
+    split_owner_matrix_controlled_failure_cases,
 )
 from tests.helpers.failure_dashboard_report import build_classified_dashboard_row, record_protected_replay_assertion_failure
 from tests.helpers.opening_fallback_evidence import (
@@ -45,7 +66,7 @@ SYNTHETIC_PROTECTED_BRIDGE_TEST_NODE_ID = "tests/test_golden_replay.py::syntheti
 
 _DASHBOARD_PROFILE = "dashboard_probe"
 
-CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
+_BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
     (
         "wrong_speaker",
         observed_speaker_mismatch_observed_row(profile=_DASHBOARD_PROFILE),
@@ -227,7 +248,7 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "severity": "critical",
             "investigate_first": "game/output_sanitizer.py",
             "emission_sublayer": "sanitizer",
-            "sanitizer_empty_fallback_owner": "output_sanitizer",
+            "sanitizer_empty_fallback_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
             "sanitizer_lineage_empty_fallback_used": True,
             "final_emission_mutation_lineage": [
                 "pre_gate_sanitizer",
@@ -241,8 +262,10 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
         _observed(
             strict_social_active=True,
             sanitizer_strict_social_fallback_used=True,
-            sanitizer_strict_social_selection_owner="output_sanitizer",
-            sanitizer_strict_social_prose_owner="strict_social_emission",
+            sanitizer_strict_social_selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+            sanitizer_strict_social_prose_owner=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+            sanitizer_strict_social_selection_owner_trace_short=SANITIZER_TRACE_SELECTION_OWNER_SHORT,
+            sanitizer_strict_social_prose_owner_trace_short=SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
             sanitizer_strict_social_source="social_fallback_line_for_sanitizer.empty_output",
             sanitizer_empty_fallback_used=None,
             upstream_prepared_emission_used=False,
@@ -261,8 +284,8 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "severity": "critical",
             "investigate_first": "game/output_sanitizer.py",
             "emission_sublayer": "strict_social_replacement",
-            "sanitizer_strict_social_selection_owner": "output_sanitizer",
-            "sanitizer_strict_social_prose_owner": "strict_social_emission",
+            "sanitizer_strict_social_selection_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+            "sanitizer_strict_social_prose_owner": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
             "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
             "prepared_emission_owner": None,
             "sanitizer_empty_fallback_used": None,
@@ -447,6 +470,10 @@ CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[
             "final_emission_mutation_lineage": ["response_type_repair", "finalize_packaging"],
         },
     ),
+)
+
+CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
+    _BASE_CONTROLLED_FAILURE_CASES + split_owner_matrix_controlled_failure_cases()
 )
 
 

@@ -31,6 +31,7 @@ from game.opening_deterministic_fallback import deterministic_opening_fallback_t
 from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
 from game.final_emission_validators import _contract_bool
+from game.final_emission_ownership_schema import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 from game.realization_provenance import (
     UPSTREAM_PREPARED_EMISSION,
     attach_realization_fallback_family,
@@ -50,7 +51,6 @@ from game.social_exchange_emission import (
 UPSTREAM_PREPARED_EMISSION_KEY = "upstream_prepared_emission"
 UPSTREAM_PREPARED_OPENING_FALLBACK_KEY = "upstream_prepared_opening_fallback"
 SANITIZER_BOUNDARY_STRIP_ONLY = "strip_only"
-OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED = "upstream_prepared_opening_fallback"
 UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN = (
     "upstream_response_repairs.build_upstream_prepared_opening_fallback_payload"
 )
@@ -216,6 +216,12 @@ def build_upstream_prepared_opening_fallback_payload(
         "upstream_prepared_opening_fallback_origin": UPSTREAM_PREPARED_OPENING_FALLBACK_ORIGIN,
     }
     attach_realization_fallback_family(payload, UPSTREAM_PREPARED_EMISSION)
+    from game.final_emission_meta import stamp_upstream_prepared_opening_producer_metadata
+
+    stamp_upstream_prepared_opening_producer_metadata(composition_meta)
+    bucket = composition_meta.get("opening_fallback_owner_bucket")
+    if isinstance(bucket, str) and bucket.strip():
+        payload["opening_fallback_owner_bucket"] = bucket.strip()
     return payload
 
 

@@ -7,12 +7,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, Literal, Mapping, MutableMapping
 
-from game.final_emission_meta import (
+from game.final_emission_ownership_schema import (
     SEALED_FALLBACK_OWNER_BUCKETS,
     SEALED_FALLBACK_OWNER_SEALED_GATE,
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+)
+from game.final_emission_meta import (
     refresh_final_emission_mutation_lineage,
     sealed_fallback_owner_bucket_from_fields,
 )
@@ -88,6 +90,59 @@ class SealedFallbackSelection:
             final_emitted_source=str(final_emitted_source),
             composition_meta=composition_meta if isinstance(composition_meta, Mapping) else None,
         )
+
+
+def select_visibility_safe_fallback(
+    *,
+    gm_output: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    enforce_first_mentions: bool = False,
+    enforce_referential_clarity: bool = False,
+    prefer_grounded_scene_intro: bool = False,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+) -> VisibilitySelectedFallback:
+    """Facade for visibility-safe fallback selection; hoists cross-owner routing lazy imports."""
+    from game.anti_reset_emission_guard import (
+        anti_reset_suppresses_intro_style_fallbacks,
+        should_replace_candidate_intro_fallback,
+    )
+    from game.final_emission_first_mention_composition import _grounded_scene_intro_fallback_candidates
+    from game.final_emission_opening_mode import _opening_mode_active_for_turn
+    from game.final_emission_passive_scene_pressure import _passive_scene_pressure_due_for_fallback
+    from game.final_emission_scene_facts import _augment_scene_with_runtime_visible_leads
+
+    return visibility_fallback._standard_visibility_safe_fallback_core(
+        gm_output=gm_output,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=enforce_first_mentions,
+        enforce_referential_clarity=enforce_referential_clarity,
+        prefer_grounded_scene_intro=prefer_grounded_scene_intro,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=emit_integrity_response_type_required,
+        opening_mode_active_for_turn=_opening_mode_active_for_turn,
+        augment_scene_with_runtime_visible_leads=_augment_scene_with_runtime_visible_leads,
+        anti_reset_suppresses_intro_style_fallbacks=anti_reset_suppresses_intro_style_fallbacks,
+        should_replace_candidate_intro_fallback=should_replace_candidate_intro_fallback,
+        grounded_scene_intro_fallback_candidates=_grounded_scene_intro_fallback_candidates,
+        passive_scene_pressure_due_for_fallback=_passive_scene_pressure_due_for_fallback,
+    )
 
 
 def _opening_visibility_fallback_for_sealed_terminal(
@@ -179,7 +234,15 @@ def stamp_non_strict_sealed_replacement_realization_family(
     meta: MutableMapping[str, Any],
 ) -> MutableMapping[str, Any]:
     """Stamp gate-terminal repair family on non-strict sealed replacement FEM fragments."""
-    return attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
+    attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
+    if not str(meta.get("sealed_fallback_owner_bucket") or "").strip():
+        from game.final_emission_meta import sealed_fallback_owner_bucket_from_fields
+
+        meta["sealed_fallback_owner_bucket"] = sealed_fallback_owner_bucket_from_fields(
+            final_emitted_source=str(meta.get("final_emitted_source") or ""),
+            strict_social_route=bool(meta.get("strict_social_active")),
+        )
+    return meta
 
 
 def stamp_sealed_fallback_realization_family(

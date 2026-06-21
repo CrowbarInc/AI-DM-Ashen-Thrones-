@@ -87,6 +87,11 @@ jobs:
       - name: Pytest — test ownership registry
         run: python -m pytest tests/test_ownership_registry.py -q
 
+      - name: Split-owner acceptance matrix contract (BU20/BU21)
+        # CI canonical entrypoint: read-only check script (not refresh wrapper — no report writes, no nested pytest).
+        # Local matrix edits: python scripts/refresh_split_owner_acceptance_matrix.py — see docs/convergence_ci_inventory.md
+        run: python scripts/check_split_owner_acceptance_matrix.py
+
       - name: Test inventory drift check
         run: python tools/test_audit.py --check
 

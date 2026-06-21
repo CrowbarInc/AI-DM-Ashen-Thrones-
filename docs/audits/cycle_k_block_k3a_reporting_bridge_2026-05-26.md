@@ -1,5 +1,7 @@
 # Protected Replay Failure Reporting Bridge
 
+**Current governance navigation:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (protected replay CI step and failure artifact behavior).
+
 ## Change Summary
 
 Block K3A connects failures from the declared protected replay assertions to the existing replay classification machinery and a new canonical failure report. It is reporting-only: replay inputs, expectation dictionaries, classification taxonomy, test pass/fail conditions, production code, and CI workflow wiring are unchanged.

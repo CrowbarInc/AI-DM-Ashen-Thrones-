@@ -31,6 +31,10 @@ from __future__ import annotations
 import re
 from typing import Any, Iterable, Mapping
 
+from game.final_emission_ownership_schema import (
+    OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS,
+    SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS,
+)
 from game.telemetry_vocab import normalize_owner, normalize_reason_list
 
 RUNTIME_LINEAGE_EVENT_TYPE: str = "runtime_lineage"
@@ -71,12 +75,7 @@ RUNTIME_LINEAGE_STAGES: frozenset[str] = frozenset(
     }
 )
 
-RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS: tuple[str, ...] = (
-    "fallback_authorship_source",
-    "fallback_owner_bucket",
-    "fallback_selection_owner",
-    "fallback_content_owner",
-)
+RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS: tuple[str, ...] = OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS
 
 
 def runtime_lineage_vocabulary_summary() -> dict[str, object]:
@@ -88,6 +87,11 @@ def runtime_lineage_vocabulary_summary() -> dict[str, object]:
         "event_kinds": sorted(RUNTIME_LINEAGE_EVENT_KINDS),
         "stages": sorted(RUNTIME_LINEAGE_STAGES),
         "fallback_attribution_fields": list(RUNTIME_LINEAGE_FALLBACK_ATTRIBUTION_FIELDS),
+        "sanitizer_trace_owner_legacy_short_fields": list(SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS),
+        "producer_stamp_helpers_note": (
+            "Write-time owner buckets are stamped by final_emission_meta producer helpers "
+            "(opening, retry, sealed, visibility) before FEM finalize."
+        ),
         "recurrence_identity_note": (
             "Recurrence identity remains event_kind/stage/owner/detail; "
             "fallback_content_owner does not participate in recurrence_key."

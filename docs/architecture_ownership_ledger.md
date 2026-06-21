@@ -10,6 +10,8 @@ They establish the cleanup target: future moves, trims, and test/doc realignment
 
 If current code shape still contradicts a declaration, treat that contradiction as cleanup work to reduce, not as a reason to blur the boundary again.
 
+**Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](convergence_ci_inventory.md) (convergence CI, test ownership registry, split-owner matrix governance).
+
 ## Validation layer separation (phase contract)
 
 Cross-cutting **phase responsibilities** (truth vs structure vs expression vs legality vs offline scoring) are declared in `docs/validation_layer_separation.md`. The machine-readable, import-light registry lives in `game/validation_layer_contracts.py` (stable layer ids, governed domains, pure predicates). It **does not** replace this ledger’s **module** owners; it constrains how new concerns should map onto existing owners without inventing a parallel policy stack.

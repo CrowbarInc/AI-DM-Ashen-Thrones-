@@ -9,6 +9,8 @@ It makes accepted-vs-blocked governance language explicit without changing
 replay execution, replay classification, owner attribution, reports, dashboards,
 scorecards, thresholds, pytest behavior, or protected replay acceptance.
 
+**Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (convergence CI seams and replay-adjacent governance navigation).
+
 ## Boundaries
 
 The contract owns:

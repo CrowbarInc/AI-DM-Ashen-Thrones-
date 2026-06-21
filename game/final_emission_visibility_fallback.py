@@ -9,17 +9,19 @@ from dataclasses import dataclass
 import re
 from typing import Any, Dict, List, Literal, Sequence
 
-from game.final_emission_meta import (
-    PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT,
-    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT,
-    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION,
-    PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT,
+from game.final_emission_ownership_schema import (
     VISIBILITY_FALLBACK_OWNER_BUCKETS,
     VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+)
+from game.final_emission_meta import (
+    PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT,
+    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT,
+    PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION,
+    PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT,
     stamp_producer_repair_kind,
     stamp_visibility_fallback_owner_bucket_from_fields,
     visibility_fallback_owner_bucket_from_fields,
@@ -1303,20 +1305,58 @@ def standard_visibility_safe_fallback(
     emit_integrity_response_type_required: str = "",
 ) -> VisibilitySelectedFallback:
     """Assemble and validate visibility-safe fallback candidates in canonical gate order."""
-    from game.anti_reset_emission_guard import (
-        anti_reset_suppresses_intro_style_fallbacks,
-        should_replace_candidate_intro_fallback,
+    from game.final_emission_sealed_fallback import select_visibility_safe_fallback
+
+    return select_visibility_safe_fallback(
+        gm_output=gm_output,
+        session=session,
+        scene=scene,
+        world=world,
+        scene_id=scene_id,
+        eff_resolution=eff_resolution,
+        active_interlocutor=active_interlocutor,
+        strict_social_active=strict_social_active,
+        strict_social_suppressed_non_social_turn=strict_social_suppressed_non_social_turn,
+        enforce_first_mentions=enforce_first_mentions,
+        enforce_referential_clarity=enforce_referential_clarity,
+        prefer_grounded_scene_intro=prefer_grounded_scene_intro,
+        emit_integrity_authoritative_resolution=emit_integrity_authoritative_resolution,
+        emit_integrity_res_kind=emit_integrity_res_kind,
+        emit_integrity_response_type_required=emit_integrity_response_type_required,
     )
-    from game.final_emission_first_mention_composition import _grounded_scene_intro_fallback_candidates
-    from game.final_emission_opening_mode import _opening_mode_active_for_turn
-    from game.final_emission_passive_scene_pressure import _passive_scene_pressure_due_for_fallback
-    from game.final_emission_scene_facts import _augment_scene_with_runtime_visible_leads
-    if _opening_mode_active_for_turn(gm_output, eff_resolution):
+
+
+def _standard_visibility_safe_fallback_core(
+    *,
+    gm_output: Dict[str, Any] | None = None,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene_id: str,
+    eff_resolution: Dict[str, Any] | None,
+    active_interlocutor: str,
+    strict_social_active: bool,
+    strict_social_suppressed_non_social_turn: bool,
+    enforce_first_mentions: bool = False,
+    enforce_referential_clarity: bool = False,
+    prefer_grounded_scene_intro: bool = False,
+    emit_integrity_authoritative_resolution: Dict[str, Any] | None = None,
+    emit_integrity_res_kind: str = "",
+    emit_integrity_response_type_required: str = "",
+    opening_mode_active_for_turn: Callable[[Dict[str, Any] | None, Dict[str, Any] | None], bool],
+    augment_scene_with_runtime_visible_leads: Callable[..., Any],
+    anti_reset_suppresses_intro_style_fallbacks: Callable[..., bool],
+    should_replace_candidate_intro_fallback: Callable[..., bool],
+    grounded_scene_intro_fallback_candidates: Callable[..., Sequence[VisibilitySelectedFallback]],
+    passive_scene_pressure_due_for_fallback: Callable[..., bool],
+) -> VisibilitySelectedFallback:
+    """Visibility-safe fallback assembly core; routing deps are resolved by sealed_fallback facade."""
+    if opening_mode_active_for_turn(gm_output, eff_resolution):
         return opening_visibility_mode_safe_fallback_selection(gm_output)
 
     inspected = inspect_interaction_context(session) if isinstance(session, dict) else {}
     mode = str((inspected or {}).get("interaction_mode") or "").strip().lower()
-    validation_scene = _augment_scene_with_runtime_visible_leads(
+    validation_scene = augment_scene_with_runtime_visible_leads(
         scene,
         session=session if isinstance(session, dict) else None,
         scene_id=scene_id,
@@ -1353,7 +1393,7 @@ def standard_visibility_safe_fallback(
         )
         if prefer_grounded_scene_intro and not suppress_intro:
             fallback_candidates.extend(
-                _grounded_scene_intro_fallback_candidates(
+                grounded_scene_intro_fallback_candidates(
                     session=session,
                     scene=validation_scene if isinstance(validation_scene, dict) else scene,
                     world=world,
@@ -1379,7 +1419,7 @@ def standard_visibility_safe_fallback(
 
     if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
         fallback_candidates.append(npc_pursuit_neutral_nonprogress_visibility_fallback())
-    elif not strict_social_active and not _passive_scene_pressure_due_for_fallback(
+    elif not strict_social_active and not passive_scene_pressure_due_for_fallback(
         session=session if isinstance(session, dict) else None,
         scene=scene,
         scene_id=scene_id,

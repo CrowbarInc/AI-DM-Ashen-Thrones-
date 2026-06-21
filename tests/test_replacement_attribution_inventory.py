@@ -1,9 +1,21 @@
 """BS1 canonical replacement attribution inventory tests."""
 from __future__ import annotations
 
+from game.final_emission_ownership_schema import (
+    OPENING_FAIL_CLOSED_CONTENT_OWNER,
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
+)
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.failure_classification_sync import (
+    assert_split_owner_matrix_lineage_event,
+    project_split_owner_matrix_row,
+    split_owner_acceptance_matrix_rows,
+    split_owner_fem_meta_from_matrix_row,
+    split_owner_fem_projection_excluded,
+    split_owner_lineage_event_from_matrix_row,
+    split_owner_observed_row_from_matrix_row,
     exact_value_drift_row,
     observed_opening_fallback_row,
     observed_visibility_replacement_row,
@@ -11,13 +23,16 @@ from tests.helpers.failure_classification_sync import (
 )
 from tests.helpers.opening_fallback_evidence import (
     OPENING_SUCCESS_REPAIR_KIND,
+    fail_closed_opening_fem_meta,
     successful_opening_fem_meta,
 )
 from tests.helpers.replacement_attribution_inventory import (
     ATTRIBUTION_ORIGIN_DIRECT,
     ATTRIBUTION_ORIGIN_PROJECTED,
+    REPLACEMENT_PATH_FIRST_MENTION,
     REPLACEMENT_PATH_OPENING_FALLBACK,
     REPLACEMENT_PATH_RESPONSE_TYPE,
+    REPLACEMENT_PATH_REFERENTIAL,
     REPLACEMENT_PATH_VISIBILITY,
     REQUIRED_ATTRIBUTION_FIELDS,
     attribution_record_from_failure_classification,
@@ -51,6 +66,35 @@ def test_visibility_fem_inventory_construction():
     assert record["source_family"] == "final_emission_gate"
     assert record["attribution_origin"]["source_family"] == ATTRIBUTION_ORIGIN_PROJECTED
     assert "repair_kind" in record["missing_fields"]
+
+
+def test_opening_lineage_inventory_preserves_split_owner_trifecta_from_fem_builder():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    cases = (
+        (
+            successful_opening_fem_meta(
+                final_route="replaced",
+                response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+            ),
+            "scene_opening",
+            OPENING_FALLBACK_CONTENT_OWNER,
+        ),
+        (
+            fail_closed_opening_fem_meta(
+                opening_recovered_via_fallback=True,
+                fallback_family_used="scene_opening",
+            ),
+            "opening_failed_closed",
+            OPENING_FAIL_CLOSED_CONTENT_OWNER,
+        ),
+    )
+    for fem, expected_kind, expected_content_owner in cases:
+        events = build_fem_runtime_lineage_events(fem)
+        fallback = next(event for event in events if event.get("event_kind") == "fallback_selected")
+        assert fallback["fallback_kind"] == expected_kind
+        assert fallback["fallback_selection_owner"] == OPENING_FALLBACK_SELECTION_OWNER
+        assert fallback["fallback_content_owner"] == expected_content_owner
 
 
 def test_opening_lineage_inventory_has_direct_recurrence_key():
@@ -265,6 +309,91 @@ def test_bs5_visibility_lineage_preserves_owner_bucket_and_mutation_class():
     assert "mutation_classification" not in record["missing_fields"]
 
 
+def test_bu10_first_mention_lineage_preserves_split_owner_trifecta():
+    from game.final_emission_ownership_schema import (
+        SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        VISIBILITY_FALLBACK_SELECTION_OWNER,
+    )
+    from game.final_emission_replay_projection import (
+        FIRST_MENTION_HARD_REPLACEMENT,
+        build_fem_runtime_lineage_events,
+    )
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "first_mention_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "first_mention_enforcement",
+    }
+    fallback = next(
+        event for event in build_fem_runtime_lineage_events(fem) if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == FIRST_MENTION_HARD_REPLACEMENT
+    assert fallback["fallback_owner_bucket"] == "sealed-gate"
+    assert fallback["fallback_selection_owner"] == VISIBILITY_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    assert fallback["repair_kind"] == "first_mention_enforcement"
+
+    record = attribution_record_from_lineage_event(fallback, replacement_path=REPLACEMENT_PATH_FIRST_MENTION)
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["repair_kind"] == "first_mention_enforcement"
+    assert record["mutation_classification"] == "first_mention_replacement_mutation"
+    assert "owner_bucket" not in record["missing_fields"]
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_bu10_referential_lineage_preserves_split_owner_trifecta():
+    from game.final_emission_ownership_schema import (
+        SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        VISIBILITY_FALLBACK_SELECTION_OWNER,
+    )
+    from game.final_emission_replay_projection import (
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+        build_fem_runtime_lineage_events,
+    )
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "referential_clarity_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "referential_clarity_enforcement",
+    }
+    fallback = next(
+        event for event in build_fem_runtime_lineage_events(fem) if event.get("event_kind") == "fallback_selected"
+    )
+    assert fallback["fallback_kind"] == REFERENTIAL_CLARITY_HARD_REPLACEMENT
+    assert fallback["fallback_owner_bucket"] == "sealed-gate"
+    assert fallback["fallback_selection_owner"] == VISIBILITY_FALLBACK_SELECTION_OWNER
+    assert fallback["fallback_content_owner"] == SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    assert fallback["repair_kind"] == "referential_clarity_enforcement"
+
+    record = attribution_record_from_lineage_event(fallback, replacement_path=REPLACEMENT_PATH_REFERENTIAL)
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["repair_kind"] == "referential_clarity_enforcement"
+    assert record["mutation_classification"] == "referential_clarity_replacement_mutation"
+    assert "owner_bucket" not in record["missing_fields"]
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_bu10_referential_local_substitution_fem_preserves_owner_bucket_and_repair_kind():
+    fem = {
+        "final_route": "accept_candidate",
+        "referential_clarity_local_substitution_applied": True,
+        "visibility_fallback_owner_bucket": "strict-social-visibility",
+        "producer_repair_kind": "referential_clarity_local_substitution",
+    }
+    record = attribution_record_from_fem(fem)
+    assert record is not None
+    assert record["owner_bucket"] == "strict-social-visibility"
+    assert record["repair_kind"] == "referential_clarity_local_substitution"
+    assert "owner_bucket" not in record["missing_fields"]
+    assert "repair_kind" not in record["missing_fields"]
+
+
 def test_bs5_first_mention_and_referential_fallback_kinds_are_distinct():
     from game.final_emission_replay_projection import (
         FIRST_MENTION_HARD_REPLACEMENT,
@@ -397,3 +526,54 @@ def test_bs4_producer_stamp_report_improves_completeness():
     assert bs4["resolved_completeness_pct"] > BS1_BASELINE_COMPLETENESS["resolved_completeness_pct"]
     assert bs4["resolved_completeness_pct"] >= BS5_BASELINE_COMPLETENESS["resolved_completeness_pct"]
     assert bs4["strict_completeness_pct"] >= BS1_BASELINE_COMPLETENESS["strict_completeness_pct"]
+
+
+def test_split_owner_acceptance_matrix_attribution_inventory_lineage_alignment() -> None:
+    """BU15: attribution inventory reads the same owner literals as the canonical matrix."""
+    for row in split_owner_acceptance_matrix_rows():
+        if row.event_kind == "mutation":
+            observed = split_owner_observed_row_from_matrix_row(row)
+            record = attribution_record_from_replay_projection(observed)
+            assert record is not None
+            assert record["owner_bucket"] == row.owner_bucket
+            assert record["repair_kind"] == row.repair_kind
+            continue
+
+        event = split_owner_lineage_event_from_matrix_row(row)
+        assert_split_owner_matrix_lineage_event(row, event)
+        record = attribution_record_from_lineage_event(event)
+        assert record is not None
+        if row.owner_bucket is not None:
+            assert record["owner_bucket"] == row.owner_bucket
+            assert "owner_bucket" not in record["missing_fields"]
+        if row.repair_kind is not None:
+            assert record["repair_kind"] == row.repair_kind
+            assert "repair_kind" not in record["missing_fields"]
+
+
+def test_split_owner_acceptance_matrix_fem_attribution_inventory_matches_production_projection() -> None:
+    """BU16: attribution inventory reads owner literals from production FEM projection fixtures."""
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    for row in split_owner_acceptance_matrix_rows():
+        if split_owner_fem_projection_excluded(row):
+            continue
+        fem = split_owner_fem_meta_from_matrix_row(row)
+        events = build_fem_runtime_lineage_events(fem)
+        if row.event_kind == "mutation":
+            observed = project_split_owner_matrix_row(row)
+            fem_record = attribution_record_from_fem(fem)
+            assert fem_record is not None
+            assert fem_record["owner_bucket"] == row.owner_bucket
+            assert fem_record["repair_kind"] == row.repair_kind
+            assert observed.get(row.owner_bucket_field) == row.owner_bucket
+            continue
+
+        event = next(item for item in events if item.get("event_kind") == "fallback_selected")
+        assert_split_owner_matrix_lineage_event(row, event)
+        record = attribution_record_from_lineage_event(event)
+        assert record is not None
+        if row.owner_bucket is not None and record.get("owner_bucket") is not None:
+            assert record["owner_bucket"] == row.owner_bucket
+        if row.repair_kind is not None and record.get("repair_kind") is not None:
+            assert record["repair_kind"] == row.repair_kind

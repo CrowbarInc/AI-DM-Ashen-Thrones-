@@ -934,6 +934,16 @@ def test_standard_visibility_safe_fallback_resolves_routing_deps_from_owner_modu
     assert selected.text == "owner passive line"
 
 
+def test_standard_visibility_safe_fallback_delegates_to_sealed_facade() -> None:
+    wrapper_src = inspect.getsource(visibility_fallback.standard_visibility_safe_fallback)
+    assert "select_visibility_safe_fallback(" in wrapper_src
+    assert "anti_reset_emission_guard" not in wrapper_src
+    assert "final_emission_first_mention_composition" not in wrapper_src
+    assert "final_emission_opening_mode" not in wrapper_src
+    assert "final_emission_passive_scene_pressure" not in wrapper_src
+    assert "final_emission_scene_facts" not in wrapper_src
+
+
 def test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -1918,6 +1928,8 @@ def test_block_ai_visibility_fallback_helper_entrypoints_remain_importable() -> 
         "test_visibility_selected_fallback_round_trips_legacy_tuple",
         "test_block_ai_route_visibility_selector_does_not_mutate_inputs",
         "test_block_ai_standard_visibility_safe_fallback_returns_canonical_dataclass",
+        "test_standard_visibility_safe_fallback_delegates_to_sealed_facade",
+        "test_standard_visibility_safe_fallback_resolves_routing_deps_from_owner_modules",
         "test_select_non_strict_terminal_fallback_for_sealed_selects_each_branch",
         "test_select_non_strict_terminal_fallback_for_sealed_social_branch_uses_owner_modules",
         "test_apply_visibility_enforcement_default_chain_wires_first_mention_then_referential",

@@ -2,6 +2,8 @@
 
 **Status:** Planning / **CI parity only**. This document maps closed convergence seams to executable checks. It does **not** change runtime behavior, evaluator scoring, gate legality, or test semantics.
 
+**Governance discovery index:** Canonical entry point for convergence CI wiring and maintainer navigation to replay, ownership, failure-classification, and split-owner governance surfaces. Edit checklists and command details stay in linked docs (`docs/audits/README.md`, `tests/README_TESTS.md`); link here rather than duplicating them.
+
 **Non-goals:** No reopening of Evaluator, Gate, or FE-C2 cleanup blocks. Test code and production code are not rewritten here; only CI wiring and pointers are in scope.
 
 **Automation:** Continuous integration parity is enforced by `.github/workflows/convergence-checks.yml`, including the required protected golden replay gate declared in `docs/testing/protected_replay_manifest.md`. Planner convergence remains owned by `.github/workflows/content-lint.yml` (see [Planner convergence](#planner-convergence--ctir--narrative-plan--prompt) below)—do not duplicate that step in `convergence-checks.yml`.
@@ -22,6 +24,8 @@ python -m pytest tests/test_final_emission_boundary_contract.py tests/test_final
 python -m pytest tests/test_gate_convergence_closeout.py -q
 python -m pytest tests/test_validation_coverage_audit.py -q
 python -m pytest tests/test_ownership_registry.py -q
+python scripts/check_split_owner_acceptance_matrix.py
+python tools/test_audit.py --check
 ```
 
 **Hard-fail — strict audits:**
@@ -68,10 +72,60 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 | **Validation layer (Objective #11)** | `docs/validation_layer_separation.md`, `docs/validation_layer_audit.md` | `tests/test_validation_layer_audit_smoke.py` (also in evaluator boundary bundle) | `tools/validation_layer_audit.py` | No | **Hard-fail (`--strict`)** | Strict mode fails on `likely_drift`; aligns with doc “CI opt-in” language. |
 | **Validation coverage registry (Objective #12)** | `docs/validation_layer_separation.md`, `tests/TEST_AUDIT.md` | `tests/test_validation_coverage_audit.py` | `tools/validation_coverage_audit.py` | No | **Hard-fail (`--strict`)** | Guard tests lock tool behavior; `--strict` fails on registry validation errors (non-strict CLI exits 0 even when errors print). |
 | **Test ownership / inventory** | `docs/architecture_ownership_ledger.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `docs/cycles/cycle_bf_test_inventory_de_amplification_closeout.md` | `tests/test_ownership_registry.py` | `tools/test_audit.py --check` | Yes (`convergence-checks.yml` only) | **Hard-fail** | Registry map + committed `tests/test_inventory_governance.json` drift gate. **Do not duplicate** in `content-lint.yml` (Cycle BF8). |
+| **Split-owner acceptance matrix (BU20–BU25)** | [`docs/audits/README.md`](audits/README.md), [`docs/audits/BU15_split_owner_acceptance_matrix.md`](audits/BU15_split_owner_acceptance_matrix.md) | `tests/test_split_owner_acceptance_matrix_contract.py`, `tests/test_refresh_split_owner_acceptance_matrix.py` (`-m split_owner_matrix_contract`) | **`python scripts/check_split_owner_acceptance_matrix.py`** (CI canonical); local refresh: `python scripts/refresh_split_owner_acceptance_matrix.py` | Yes | **Hard-fail** | Locks canonical split-owner literals, dashboard `{matrix_id}_split_owner` parity, checked-in audit report text, and classifier/dashboard builder surfaces. See [Split-owner acceptance matrix governance](#split-owner-acceptance-matrix-governance). |
 | **Architecture governance (broad)** | `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md` | `tests/test_architecture_audit_tool.py` (included in evaluator boundary bundle) | `tools/architecture_audit.py --print-summary` | No | **Informational** | Heuristic breadth; summary keeps artifacts warm without noisy hard-fail until signals stabilize. |
 | **Narrative realization / failure locality** | `docs/realization_failure_locality_closeout.md` | Guard tests exist (`tests/test_realization_*`) but not part of this minimal CI slice | **`tools/realization_layer_audit.py`** (maps *realization surface* intent), **`tools/realization_provenance_audit.py`** (maps *failure locality / provenance* intent). Repo does **not** ship `realization_surface_audit.py` or `realization_failure_locality_audit.py` under those names. | No | **Informational** | Advisory-only exit 0; large lexical counts—observe drift, do not gate merges yet. |
 | **C1 narration seam** | `docs/narrative_integrity_architecture.md` (cross-links), C1 seam docs | — | `tools/c1_narration_seam_audit.py` | No | **Informational** | AST seam tripwire; may exit 1 on issues—kept informational until noise profile is reviewed. |
 | **UI mode separation (Objective #15)** | `docs/narrative_integrity_architecture.md` | — | `tools/ui_mode_separation_audit.py` | No | **Informational** | Findings print by default without fatal exit unless `--fail-on`; informational tier. |
+
+---
+
+## Split-owner acceptance matrix governance
+
+BU20–BU25 lock cross-family split-owner owner literals shared by the failure classifier, failure dashboard, golden replay FEM projection, runtime lineage summary, and attribution inventory tests. **This section is the CI/local discovery index**; the edit checklist lives in [`docs/audits/README.md`](audits/README.md).
+
+| Item | Location / command |
+| --- | --- |
+| **Matrix source of truth** | `SPLIT_OWNER_ACCEPTANCE_MATRIX` in `tests/helpers/failure_classification_sync.py` |
+| **Checked-in audit report** | `docs/audits/BU15_split_owner_acceptance_matrix.md` (regenerate after matrix edits) |
+| **CI workflow** | `.github/workflows/convergence-checks.yml` — step *Split-owner acceptance matrix contract (BU20/BU21)* |
+| **Canonical CI entrypoint** | **`python scripts/check_split_owner_acceptance_matrix.py`** — read-only drift gate; no report writes; no nested pytest subprocess |
+| **Local maintainer refresh (Windows-native)** | `python scripts/refresh_split_owner_acceptance_matrix.py` — report write + check + pytest contract slice (default) |
+| **Make shortcuts (Unix/mac/Git Bash)** | `make split-owner-matrix-refresh`, `make split-owner-matrix-check`, `make split-owner-matrix-report` (delegate to the Python wrappers) |
+| **Shared implementation** | `scripts/split_owner_acceptance_matrix_ops.py` |
+| **Contract tests** | `tests/test_split_owner_acceptance_matrix_contract.py`, `tests/test_refresh_split_owner_acceptance_matrix.py` — marker `split_owner_matrix_contract` (included in fast lane) |
+| **Doc / CI parity guard (BU29)** | `tests/helpers/convergence_ci_inventory_contract.py` — locks inventory header, workflow wiring, and forward pointers from `docs/audits/README.md` + `tests/README_TESTS.md` |
+| **Detailed test doc** | `tests/README_TESTS.md` → *Split-owner acceptance matrix contract* |
+
+### Why the check script is CI-canonical
+
+CI runs **`check_split_owner_acceptance_matrix.py`**, not the refresh wrapper, because:
+
+- **Read-only** — validates committed matrix + report; never rewrites files in Actions.
+- **Fast** — single Python process; avoids refresh’s nested `pytest` subprocess on every push/PR.
+- **Stable exit surface** — same misalignment messages developers see locally via `--check-only`.
+
+Use **`refresh_split_owner_acceptance_matrix.py`** locally after editing the matrix (especially on Windows without `make`). The refresh wrapper’s default path ends with the same contract checks the check script runs, plus an optional pytest slice for extra confidence before push.
+
+### Quick-reference commands
+
+Run from repo root (`py -3` in place of `python` on Windows when needed):
+
+```bash
+# Local full refresh (report + check + pytest contract slice)
+python scripts/refresh_split_owner_acceptance_matrix.py
+
+# Check only (matches CI gate; no report write)
+python scripts/refresh_split_owner_acceptance_matrix.py --check-only
+python scripts/check_split_owner_acceptance_matrix.py
+
+# Make equivalents (Git Bash / macOS / Linux)
+make split-owner-matrix-refresh
+make split-owner-matrix-check
+
+# Pytest contract slice (also invoked by refresh default)
+python -m pytest tests/test_split_owner_acceptance_matrix_contract.py tests/test_refresh_split_owner_acceptance_matrix.py -q -m split_owner_matrix_contract
+```
 
 ---
 
@@ -104,6 +158,8 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 - `python tools/validation_coverage_audit.py --strict`
 - `pytest tests/test_validation_coverage_audit.py`
 - `pytest tests/test_ownership_registry.py`
+- `python scripts/check_split_owner_acceptance_matrix.py` — split-owner matrix/report/dashboard parity (canonical CI entrypoint; see [Split-owner acceptance matrix governance](#split-owner-acceptance-matrix-governance))
+- `python tools/test_audit.py --check`
 
 ### Informational (`continue-on-error: true`)
 
@@ -123,6 +179,8 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 
 ## Related governance artifacts
 
+- [`docs/audits/README.md`](audits/README.md) — split-owner matrix edit checklist (BU22).
+- [`docs/audits/BU15_split_owner_acceptance_matrix.md`](audits/BU15_split_owner_acceptance_matrix.md) — generated split-owner acceptance matrix report.
 - `docs/testing/protected_replay_manifest.md` — canonical protected replay declaration and developer reproduction commands.
 - `docs/audits/cycle_k_block_k2_replay_ci_promotion_2026-05-26.md` — replay CI promotion record.
 - `docs/audits/cycle_k_block_k3b_failure_artifact_retention_2026-05-26.md` — protected replay failure artifact retention record.

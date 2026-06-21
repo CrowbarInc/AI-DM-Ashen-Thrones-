@@ -33,7 +33,10 @@ from game.diegetic_fallback_narration import (
     render_travel_arrival_fallback_line,
 )
 from game.fallback_provenance_debug import preserve_fallback_provenance_metadata
-from game.final_emission_meta import read_final_emission_meta_dict
+from game.final_emission_meta import (
+    read_final_emission_meta_dict,
+    stamp_retry_terminal_fallback_producer_metadata,
+)
 from game.realization_provenance import (
     RETRY_TERMINAL_FALLBACK,
     attach_realization_fallback_family,
@@ -96,13 +99,16 @@ def _gm_binding():
 
 def _attach_retry_terminal_family(gm_output: Dict[str, Any]) -> Dict[str, Any]:
     attach_realization_fallback_family(gm_output, RETRY_TERMINAL_FALLBACK)
+    stamp_retry_terminal_fallback_producer_metadata(gm_output)
     meta = dict(gm_output.get("metadata")) if isinstance(gm_output.get("metadata"), dict) else {}
     gm_output["metadata"] = meta
     attach_realization_fallback_family(meta, RETRY_TERMINAL_FALLBACK)
+    stamp_retry_terminal_fallback_producer_metadata(meta)
     fem = dict(gm_output.get("_final_emission_meta")) if isinstance(gm_output.get("_final_emission_meta"), dict) else None
     if isinstance(fem, dict):
         gm_output["_final_emission_meta"] = fem
         attach_realization_fallback_family(fem, RETRY_TERMINAL_FALLBACK)
+        stamp_retry_terminal_fallback_producer_metadata(fem)
     return gm_output
 
 

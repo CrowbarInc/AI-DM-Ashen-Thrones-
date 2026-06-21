@@ -15,7 +15,7 @@ These rules keep the suite maintainable without turning CI into a heavy transcri
 - **New validation rules** — Before adding **broad** coverage across many files, add or extend **one canonical owner** for the new rule, then optional smoke elsewhere. `tests/test_ownership_registry.py` locks the responsibility registry (exactly one **direct_owner** path per governed slice, inventory presence, layer alignment, and **no transcript/gauntlet/playability/evaluator** module as direct owner for **live legality** groups). Cross-file duplicate `test_*` **base names** stay **heuristic** triage (derived at `py -3 tools/test_audit.py --check`; allowlisted pairs require reasons in `test_ownership_registry.py`); see `tests/TEST_AUDIT.md`.
 - **Gate magnet guard (BA-7)** — Gate-layer **direct-owner** suites (for example `tests/test_final_emission_gate.py`) must not import replay read-side projection helpers (`tests/helpers/golden_replay_projection.py`, classifier, or dashboard helpers) or grow golden-replay/dashboard/classifier ownership assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors keep those contracts. Enforced by `test_ba7_gate_direct_owners_*` in `tests/test_ownership_registry.py`.
 
-**Quick maintenance loop (local, low noise):** `py -3 tools/test_audit.py` → `py -3 -m pytest tests/test_ownership_registry.py -q` → `py -3 -m pytest --collect-only -q` → day-to-day `py -3 -m pytest -m "not transcript and not slow" -q`. Details: *Command cheat sheet* below and `tests/TEST_AUDIT.md`.
+**Quick maintenance loop (local, low noise):** `py -3 tools/test_audit.py` → `py -3 -m pytest tests/test_ownership_registry.py -q` → `python scripts/check_split_owner_acceptance_matrix.py` → `py -3 -m pytest --collect-only -q` → day-to-day `py -3 -m pytest -m "not transcript and not slow" -q`. Details: *Command cheat sheet* below and `tests/TEST_AUDIT.md`.
 
 **Block C prompt / strict-social split (final):** strict-social **first-sentence** and **question-resolution** legality matrices live in `tests/test_social_exchange_emission.py`. `tests/test_prompt_and_guard.py` keeps **retry prompt text** for unresolved-question / social-contract failures, **`enforce_question_resolution_rule` prepend** behavior, **validator-voice detect/rewrite** at the GM layer, and thin smoke near the prompt stack for that boundary. **`apply_final_emission_gate` orchestration** remains owned by `tests/test_final_emission_gate.py`.
 
@@ -49,6 +49,40 @@ py -3 -m pytest tests/test_planner_convergence_contract.py tests/test_planner_co
 **Optional Make** (same audit + same four tests): `make planner-convergence-check` from repo root.
 
 CI runs the audit in `.github/workflows/content-lint.yml` (step **Planner convergence static audit**).
+
+## Split-owner acceptance matrix contract (BU20/BU21)
+
+Fast gate for split-owner matrix row counts, dashboard `{matrix_id}_split_owner` parity, checked-in audit report text, and lightweight classifier/dashboard builder surfaces. It does **not** run the opt-in failure dashboard probe suite.
+
+**Discovery index:** [`docs/convergence_ci_inventory.md`](../docs/convergence_ci_inventory.md) → *Split-owner acceptance matrix governance* (CI entrypoint, local refresh, Make targets, contract tests, audit report).
+
+**BU20/BU21 contract gate** (CI: `.github/workflows/convergence-checks.yml` step *Split-owner acceptance matrix contract (BU20/BU21)*; canonical command **`python scripts/check_split_owner_acceptance_matrix.py`**):
+
+```bash
+make split-owner-matrix-check
+```
+
+Equivalent: `python scripts/check_split_owner_acceptance_matrix.py` or `python -m pytest tests/test_split_owner_acceptance_matrix_contract.py -q -m split_owner_matrix_contract`.
+
+The contract tests are **not** marked `transcript` or `slow`, so they also run under the default **fast lane** (`pytest -m "not transcript and not slow"`).
+
+### Split-owner matrix change workflow (BU22/BU23/BU24)
+
+When editing `SPLIT_OWNER_ACCEPTANCE_MATRIX` in `tests/helpers/failure_classification_sync.py`, follow this order (full detail: [`docs/audits/README.md`](../docs/audits/README.md)):
+
+1. Update `SPLIT_OWNER_ACCEPTANCE_MATRIX` (matrix-only edits must not change production emission behavior).
+2. Update dashboard evidence cells **only if** dashboard strings changed (`tests/test_failure_dashboard_controlled_failures.py`).
+3. Regenerate and validate (Windows-native, no `make` required):
+
+   ```bash
+   python scripts/refresh_split_owner_acceptance_matrix.py
+   ```
+
+   Unix/mac/Git Bash equivalent: `make split-owner-matrix-refresh`. Partial modes: `--write-report-only`, `--check-only`, `--skip-pytest`.
+
+4. Run focused affected tests only when projection/classifier/dashboard behavior changed (classifier, dashboard probes, FEM projection, golden replay — see audit README for commands).
+
+**Refresh wrapper (BU24):** `scripts/refresh_split_owner_acceptance_matrix.py` performs report regeneration, the BU20/BU21 script gate, and the pytest contract slice (default). **Make targets (BU23):** delegate to the same wrapper where noted in `Makefile`.
 
 **Copy/paste — registry pytest and audit CLI** (repo root; if `pytest` is not on `PATH`, use `py -3 -m pytest`):
 
@@ -191,6 +225,8 @@ pytest tests/test_playability_smoke.py -q
 
 ## Golden replay
 
+**Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../docs/convergence_ci_inventory.md) (protected replay CI step, local parity; [split-owner matrix governance](../docs/convergence_ci_inventory.md#split-owner-acceptance-matrix-governance) for cross-family owner literals).
+
 Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, compact scenario-spine branch structure, and the protected 20-turn Frontier Gate long-session stability lane. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
 
 Metadata ownership is intentionally split. Golden replay uses `scenario_id`; scenario-spine fixtures use `spine_id`, `branch_id`, and per-turn `turn_id`; the N1 synthetic lane uses `scenario_spine_id` and remains advisory rather than protected golden replay. Text projections are also layer-specific: `player_facing_text` is runtime response output, `gm_text` is snapshot/transcript output, and `final_text` is the golden replay assertion surface.
@@ -230,6 +266,8 @@ When the protected replay CI step fails, the `convergence-checks` workflow prese
 Historical replay baseline archived; current protected replay authority is [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Archived baseline: [`docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`](../docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md).
 
 ## Failure Classification Dashboard
+
+**Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../docs/convergence_ci_inventory.md) → [Split-owner acceptance matrix governance](../docs/convergence_ci_inventory.md#split-owner-acceptance-matrix-governance) (split-owner dashboard parity and classifier alignment).
 
 The failure classification dashboard is a replay-side diagnostic layer for golden replay drift.  It turns existing golden replay drift rows plus replay-visible observation fields into deterministic rows with category, severity, owner, and first investigation target.
 
@@ -435,6 +473,11 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 |------|---------|
 | **Test audit (regenerate inventory)** | `py -3 tools/test_audit.py` |
 | **Ownership registry governance** | `py -3 -m pytest tests/test_ownership_registry.py -q` |
+| **Split-owner matrix refresh (BU24, Windows-native)** | `python scripts/refresh_split_owner_acceptance_matrix.py` |
+| **Split-owner matrix report only** | `python scripts/refresh_split_owner_acceptance_matrix.py --write-report-only` |
+| **Split-owner matrix refresh (Make)** | `make split-owner-matrix-refresh` |
+| **Split-owner matrix contract** | `python scripts/check_split_owner_acceptance_matrix.py` or `make split-owner-matrix-check` |
+| **Split-owner matrix contract (pytest)** | `python -m pytest tests/test_split_owner_acceptance_matrix_contract.py -q -m split_owner_matrix_contract` |
 | **Full lane** | `pytest` or `pytest tests/` (uses repo-local `codex_pytest_tmp` from `pytest.ini`) |
 | **Full lane, collect only** | `pytest --collect-only -q` |
 | **Fast lane** | `pytest -m "not transcript and not slow"` |
@@ -458,6 +501,7 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 - **synthetic** — Synthetic-player harness and automation-owned checks (tag for ownership; fast lane does **not** exclude unless you add `not synthetic`).
 - **slow** — Longer or expensive runs (**fast lane excludes**).
 - **brittle** — Prompt/prose-sensitive (**optional** extra exclusion for stricter fast).
+- **split_owner_matrix_contract** — Fast BU20 split-owner matrix/report/dashboard parity gate (**included in fast lane**; refresh via `python scripts/refresh_split_owner_acceptance_matrix.py` or `make split-owner-matrix-refresh`).
 
 Ownership markers (`routing`, `retry`, `fallback`, …) are for inventory and feature tagging only — **not** for choosing fast vs full. See `pytest.ini` for the full list.
 

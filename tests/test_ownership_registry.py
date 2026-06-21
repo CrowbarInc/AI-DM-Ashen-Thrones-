@@ -2750,17 +2750,26 @@ def test_bj27_referential_clarity_enforcement_owner_entrypoint_locked() -> None:
 
 def test_bj50_visibility_enforcement_gate_wrapper_collapsed() -> None:
     """Cycle BJ-50/BJ-73: visibility enforcement lives on final_emission_visibility_fallback owner."""
-    import game.final_emission_gate as feg
-    import game.final_emission_visibility_fallback as visibility_fallback
+    from tests.helpers.gate_delegator_governance import (
+        SEALED_FALLBACK,
+        VISIBILITY_FALLBACK,
+        assert_gate_lacks,
+        assert_owner_callable,
+        load_game_module,
+    )
 
-    assert not hasattr(feg, "_apply_visibility_enforcement")
-    assert not hasattr(feg, "_standard_visibility_safe_fallback")
-    assert not hasattr(feg, "_apply_first_mention_enforcement")
-    assert not hasattr(feg, "_apply_referential_clarity_enforcement")
-    assert callable(getattr(visibility_fallback, "apply_visibility_enforcement", None))
-    assert callable(getattr(visibility_fallback, "apply_first_mention_enforcement", None))
-    assert callable(getattr(visibility_fallback, "apply_referential_clarity_enforcement", None))
-    assert callable(getattr(visibility_fallback, "standard_visibility_safe_fallback", None))
+    assert_gate_lacks("_apply_visibility_enforcement")
+    assert_gate_lacks("_standard_visibility_safe_fallback")
+    assert_gate_lacks("_apply_first_mention_enforcement")
+    assert_gate_lacks("_apply_referential_clarity_enforcement")
+    assert_owner_callable(VISIBILITY_FALLBACK, "apply_visibility_enforcement")
+    assert_owner_callable(VISIBILITY_FALLBACK, "apply_first_mention_enforcement")
+    assert_owner_callable(VISIBILITY_FALLBACK, "apply_referential_clarity_enforcement")
+    assert_owner_callable(VISIBILITY_FALLBACK, "standard_visibility_safe_fallback")
+    assert_owner_callable(SEALED_FALLBACK, "select_visibility_safe_fallback")
+    assert load_game_module(SEALED_FALLBACK).select_visibility_safe_fallback.__module__ == (
+        "game.final_emission_sealed_fallback"
+    )
 
 
 def test_bj73_ownership_registry_terminal_pipeline_calls_visibility_owner_directly() -> None:
@@ -2842,12 +2851,18 @@ def test_bj53_referent_clarity_pre_finalize_gate_wrapper_collapsed() -> None:
 
 
 def test_bj54_narration_constraint_debug_merge_gate_wrapper_collapsed() -> None:
-    """Cycle BJ-54: narration-constraint debug merge wrapper removed from gate; terminal pipeline owns merge."""
+    """BU2-B: narration-constraint debug merge owned by final_emission_narration_constraint_debug."""
+    import inspect
+
     import game.final_emission_gate as feg
+    import game.final_emission_narration_constraint_debug as narration_constraint_debug
     import game.final_emission_terminal_pipeline as tp
 
+    tp_src = inspect.getsource(tp.run_gate_terminal_enforcement_pipeline)
     assert not hasattr(feg, "_merge_narration_constraint_debug_into_outputs")
-    assert callable(getattr(tp, "_merge_narration_constraint_debug_into_outputs", None))
+    assert not hasattr(tp, "_merge_narration_constraint_debug_into_outputs")
+    assert "merge_narration_constraint_debug_into_outputs(" in tp_src
+    assert callable(getattr(narration_constraint_debug, "merge_narration_constraint_debug_into_outputs", None))
 
 
 def test_bj55_gate_fem_text_fingerprint_helper_collapsed() -> None:
@@ -2860,14 +2875,22 @@ def test_bj55_gate_fem_text_fingerprint_helper_collapsed() -> None:
 
 
 def test_bj56_scene_opening_finalize_delegators_collapsed() -> None:
-    """Cycle BJ-56: scene-opening finalize wrappers removed from gate; finalize owner owns hooks."""
+    """BU2-C: scene-opening accept debug owned by final_emission_opening_fallback."""
     import game.final_emission_finalize as fin
     import game.final_emission_gate as feg
+    import game.final_emission_opening_fallback as opening_fallback
 
     assert not hasattr(feg, "_patch_scene_opening_candidate_emission_debug")
     assert not hasattr(feg, "_reassert_scene_opening_accepted_candidate")
-    assert callable(getattr(fin, "patch_scene_opening_candidate_emission_debug", None))
-    assert callable(getattr(fin, "reassert_scene_opening_accepted_candidate", None))
+    assert opening_fallback.patch_scene_opening_candidate_emission_debug.__module__ == (
+        "game.final_emission_opening_fallback"
+    )
+    assert opening_fallback.reassert_scene_opening_accepted_candidate.__module__ == (
+        "game.final_emission_opening_fallback"
+    )
+    assert getattr(fin, "reassert_scene_opening_accepted_candidate", None) is (
+        opening_fallback.reassert_scene_opening_accepted_candidate
+    )
 
 
 def test_bj57_strip_appended_route_illegal_contamination_sentences_gate_wrapper_collapsed() -> None:
@@ -2964,6 +2987,7 @@ def test_bj63_strict_social_stack_fem_assembly_calls_owner_directly() -> None:
     assert "fem_assembly.build_gate_accept_fem_base" in src
     assert "fem_assembly.build_gate_replace_fem_base" in src
     assert src.count("fem_assembly.merge_gate_layer_metas_into_fem") == 2
+    assert "fem_assembly.merge_pre_terminal_layer_debug" in src
     assert "_build_gate_accept_fem_base" not in src
     assert "_build_gate_replace_fem_base" not in src
     assert "_merge_gate_layer_metas_into_fem" not in src
@@ -3525,9 +3549,10 @@ def test_bj93_ownership_registry_stacks_call_fallback_behavior_debug_merge_repai
 
 
 def test_bj94_ownership_registry_stacks_call_conversational_memory_inspection_debug_merge_repairs_owner_directly() -> None:
-    """Cycle BJ-94: strict and non-strict stacks call repairs conversational memory debug merge directly."""
+    """BU2-A: conversational memory debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_repairs as emission_repairs
@@ -3535,10 +3560,11 @@ def test_bj94_ownership_registry_stacks_call_conversational_memory_inspection_de
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "merge_conversational_memory_inspection_into_emission_debug(" in nss_src
-    assert "feg._merge_conversational_memory_inspection_into_emission_debug" not in nss_src
-    assert "emission_repairs.merge_conversational_memory_inspection_into_emission_debug(" in ss_src
-    assert "feg._merge_conversational_memory_inspection_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "merge_conversational_memory_inspection_into_emission_debug(" not in src
+    assert "merge_conversational_memory_inspection_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_conversational_memory_inspection_into_emission_debug")
     assert callable(
         getattr(emission_repairs, "merge_conversational_memory_inspection_into_emission_debug", None)
@@ -3546,9 +3572,10 @@ def test_bj94_ownership_registry_stacks_call_conversational_memory_inspection_de
 
 
 def test_bj95_ownership_registry_stacks_call_scene_state_anchor_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-95: strict and non-strict stacks call scene_state_anchor emission_debug merge directly."""
+    """BU2-A: scene_state_anchor debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_scene_state_anchor as scene_state_anchor
@@ -3556,18 +3583,20 @@ def test_bj95_ownership_registry_stacks_call_scene_state_anchor_emission_debug_m
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_scene_state_anchor_into_emission_debug(" in nss_src
-    assert "feg._merge_scene_state_anchor_into_emission_debug" not in nss_src
-    assert "_merge_scene_state_anchor_into_emission_debug(" in ss_src
-    assert "feg._merge_scene_state_anchor_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_scene_state_anchor_into_emission_debug(" not in src
+    assert "_merge_scene_state_anchor_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_scene_state_anchor_into_emission_debug")
     assert callable(getattr(scene_state_anchor, "_merge_scene_state_anchor_into_emission_debug", None))
 
 
 def test_bj96_ownership_registry_stacks_call_tone_escalation_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-96: strict and non-strict stacks call tone_escalation emission_debug merge directly."""
+    """BU2-A: tone_escalation debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_strict_social_stack as ss
@@ -3575,18 +3604,20 @@ def test_bj96_ownership_registry_stacks_call_tone_escalation_emission_debug_merg
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_tone_escalation_into_emission_debug(" in nss_src
-    assert "feg._merge_tone_escalation_into_emission_debug" not in nss_src
-    assert "_merge_tone_escalation_into_emission_debug(" in ss_src
-    assert "feg._merge_tone_escalation_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_tone_escalation_into_emission_debug(" not in src
+    assert "merge_tone_escalation_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_tone_escalation_into_emission_debug")
     assert callable(getattr(tone_escalation, "merge_tone_escalation_into_emission_debug", None))
 
 
 def test_bj97_ownership_registry_stacks_call_narrative_authority_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-97: strict and non-strict stacks call narrative_authority emission_debug merge directly."""
+    """BU2-A: narrative_authority debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_narrative_authority as narrative_authority
     import game.final_emission_non_strict_stack as nss
@@ -3594,56 +3625,62 @@ def test_bj97_ownership_registry_stacks_call_narrative_authority_emission_debug_
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_narrative_authority_into_emission_debug(" in nss_src
-    assert "feg._merge_narrative_authority_into_emission_debug" not in nss_src
-    assert "_merge_narrative_authority_into_emission_debug(" in ss_src
-    assert "feg._merge_narrative_authority_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_narrative_authority_into_emission_debug(" not in src
+    assert "merge_narrative_authority_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_narrative_authority_into_emission_debug")
     assert callable(getattr(narrative_authority, "merge_narrative_authority_into_emission_debug", None))
 
 
 def test_bj98_ownership_registry_stacks_call_anti_railroading_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-98: strict and non-strict stacks call anti_railroading emission_debug merge directly."""
+    """BU2-A: anti_railroading debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
     import game.final_emission_anti_railroading as anti_railroading
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_strict_social_stack as ss
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_anti_railroading_into_emission_debug(" in nss_src
-    assert "feg._merge_anti_railroading_into_emission_debug" not in nss_src
-    assert "_merge_anti_railroading_into_emission_debug(" in ss_src
-    assert "feg._merge_anti_railroading_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_anti_railroading_into_emission_debug(" not in src
+    assert "merge_anti_railroading_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_anti_railroading_into_emission_debug")
     assert callable(getattr(anti_railroading, "merge_anti_railroading_into_emission_debug", None))
 
 
 def test_bj99_ownership_registry_stacks_call_context_separation_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-99: strict and non-strict stacks call context_separation emission_debug merge directly."""
+    """BU2-A: context_separation debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
     import game.final_emission_context_separation as context_separation
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_strict_social_stack as ss
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_context_separation_into_emission_debug(" in nss_src
-    assert "feg._merge_context_separation_into_emission_debug" not in nss_src
-    assert "_merge_context_separation_into_emission_debug(" in ss_src
-    assert "feg._merge_context_separation_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_context_separation_into_emission_debug(" not in src
+    assert "merge_context_separation_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_context_separation_into_emission_debug")
     assert callable(getattr(context_separation, "merge_context_separation_into_emission_debug", None))
 
 
 def test_bj100_ownership_registry_stacks_call_narration_purity_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-100: strict and non-strict stacks call narration_purity emission_debug merge directly."""
+    """BU2-A: narration_purity debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_player_facing_narration_purity as narration_purity
@@ -3651,10 +3688,11 @@ def test_bj100_ownership_registry_stacks_call_narration_purity_emission_debug_me
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_player_facing_narration_purity_into_emission_debug(" in nss_src
-    assert "feg._merge_player_facing_narration_purity_into_emission_debug" not in nss_src
-    assert "_merge_player_facing_narration_purity_into_emission_debug(" in ss_src
-    assert "feg._merge_player_facing_narration_purity_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_player_facing_narration_purity_into_emission_debug(" not in src
+    assert "merge_player_facing_narration_purity_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_player_facing_narration_purity_into_emission_debug")
     assert callable(
         getattr(narration_purity, "merge_player_facing_narration_purity_into_emission_debug", None)
@@ -3662,20 +3700,22 @@ def test_bj100_ownership_registry_stacks_call_narration_purity_emission_debug_me
 
 
 def test_bj101_ownership_registry_stacks_call_answer_shape_primacy_emission_debug_merge_owner_directly() -> None:
-    """Cycle BJ-101: strict and non-strict stacks call answer_shape_primacy emission_debug merge directly."""
+    """BU2-A: answer_shape_primacy debug merge consolidated on fem_assembly pre-terminal helper."""
     import inspect
 
     import game.final_emission_answer_shape_primacy as answer_shape_primacy
+    import game.final_emission_fem_assembly as fem_assembly
     import game.final_emission_gate as feg
     import game.final_emission_non_strict_stack as nss
     import game.final_emission_strict_social_stack as ss
 
     nss_src = inspect.getsource(nss.run_non_strict_layer_stack)
     ss_src = inspect.getsource(ss.run_strict_social_composition_trunk)
-    assert "_merge_answer_shape_primacy_into_emission_debug(" in nss_src
-    assert "feg._merge_answer_shape_primacy_into_emission_debug" not in nss_src
-    assert "_merge_answer_shape_primacy_into_emission_debug(" in ss_src
-    assert "feg._merge_answer_shape_primacy_into_emission_debug" not in ss_src
+    fa_src = inspect.getsource(fem_assembly.merge_pre_terminal_layer_debug)
+    for src in (nss_src, ss_src):
+        assert "fem_assembly.merge_pre_terminal_layer_debug(" in src
+        assert "_merge_answer_shape_primacy_into_emission_debug(" not in src
+    assert "merge_answer_shape_primacy_into_emission_debug(" in fa_src
     assert not hasattr(feg, "_merge_answer_shape_primacy_into_emission_debug")
     assert callable(getattr(answer_shape_primacy, "merge_answer_shape_primacy_into_emission_debug", None))
 
@@ -4361,26 +4401,32 @@ def test_bj129_ownership_registry_gate_module_thin_boundary_stabilization_locked
 
 def test_bj49_gate_context_owner_entrypoint_locked() -> None:
     """Cycle BJ-49/BJ-72: gate entry/preflight context lives on final_emission_gate_context owner."""
-    import game.final_emission_gate as feg
-    import game.final_emission_gate_context as gc
+    from tests.helpers.gate_delegator_governance import (
+        GATE_CONTEXT,
+        assert_gate_lacks,
+        assert_owner_callable,
+    )
 
-    assert callable(getattr(gc, "initialize_gate_execution_context", None))
-    assert callable(getattr(gc, "GateExecutionContext", None))
-    assert not hasattr(feg, "_initialize_gate_execution_context")
+    assert_owner_callable(GATE_CONTEXT, "initialize_gate_execution_context")
+    assert_owner_callable(GATE_CONTEXT, "GateExecutionContext")
+    assert_gate_lacks("_initialize_gate_execution_context")
 
 
 def test_bj72_ownership_registry_apply_gate_calls_gate_context_owner_directly() -> None:
     """Cycle BJ-72: apply_final_emission_gate calls gate_context owner directly."""
-    import inspect
+    from tests.helpers.gate_delegator_governance import (
+        GATE,
+        GATE_CONTEXT,
+        assert_gate_lacks,
+        assert_owner_callable,
+        function_source,
+    )
 
-    import game.final_emission_gate as feg
-    import game.final_emission_gate_context as gc
-
-    gate_src = inspect.getsource(feg.apply_final_emission_gate)
+    gate_src = function_source(GATE, "apply_final_emission_gate")
     assert "initialize_gate_execution_context(" in gate_src
     assert "_initialize_gate_execution_context" not in gate_src
-    assert not hasattr(feg, "_initialize_gate_execution_context")
-    assert callable(getattr(gc, "initialize_gate_execution_context", None))
+    assert_gate_lacks("_initialize_gate_execution_context")
+    assert_owner_callable(GATE_CONTEXT, "initialize_gate_execution_context")
 
 
 def test_bj41_finalize_emission_output_owner_entrypoint_locked() -> None:
@@ -4516,3 +4562,55 @@ def test_bj38_fallback_debug_merge_helpers_live_on_repairs_owner() -> None:
     assert callable(getattr(fer, "merge_conversational_memory_inspection_into_emission_debug", None))
     assert not hasattr(feg, "_merge_fallback_behavior_into_emission_debug")
     assert not hasattr(feg, "_merge_conversational_memory_inspection_into_emission_debug")
+
+
+def test_bu8_bu4_production_ownership_write_paths_parity_locked() -> None:
+    """BU8: BU4 CSV registry stays parity-locked with live game/ ownership write-path discovery."""
+    from tests.helpers.ownership_write_path_governance import (
+        bu4_csv_path,
+        production_write_path_keys_from_csv,
+        production_write_path_parity_errors,
+        REQUIRED_PRODUCTION_WRITE_PATH_KEYS,
+    )
+
+    assert bu4_csv_path().is_file()
+    csv_keys = production_write_path_keys_from_csv()
+    assert REQUIRED_PRODUCTION_WRITE_PATH_KEYS <= csv_keys
+    assert production_write_path_parity_errors() == []
+
+
+def test_bu8_attach_realization_fallback_family_producer_stamp_pairing_locked() -> None:
+    """BU8: attach_realization_fallback_family call sites pair with bucket stamper helpers."""
+    from tests.helpers.ownership_write_path_governance import (
+        attach_realization_exempt_documentation,
+        producer_stamp_pairing_errors,
+    )
+
+    assert producer_stamp_pairing_errors() == []
+    assert attach_realization_exempt_documentation()
+
+
+def test_bu9_visibility_fallback_producer_stamp_pairing_locked() -> None:
+    """BU9/BU10: visibility-family producer repair kinds pair with bucket stamper helpers."""
+    from tests.helpers.ownership_write_path_governance import (
+        visibility_fallback_write_path_inventory,
+        visibility_producer_stamp_exempt_documentation,
+        visibility_producer_stamp_pairing_errors,
+    )
+
+    assert visibility_producer_stamp_pairing_errors() == []
+    assert visibility_producer_stamp_exempt_documentation()
+    inventory = visibility_fallback_write_path_inventory()
+    assert inventory["visibility_producer_repair_kind_sites"]
+    assert inventory["visibility_fallback_owner_bucket_writes"]
+    first_mention_site = (
+        "game/final_emission_visibility_fallback.py",
+        "apply_first_mention_enforcement",
+    )
+    referential_site = (
+        "game/final_emission_visibility_fallback.py",
+        "apply_referential_clarity_enforcement",
+    )
+    producer_sites = inventory["visibility_producer_repair_kind_sites"]
+    assert any(site[0] == first_mention_site[0] and site[1] == first_mention_site[1] for site in producer_sites)
+    assert sum(1 for site in producer_sites if site[0] == referential_site[0] and site[1] == referential_site[1]) >= 2

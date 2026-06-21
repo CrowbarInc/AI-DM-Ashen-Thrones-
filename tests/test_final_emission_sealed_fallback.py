@@ -61,6 +61,7 @@ def test_sealed_fallback_owner_bucket_constants_match_canonical_registry() -> No
 def test_block_ai_sealed_fallback_metadata_module_exports_helpers_only() -> None:
     for name in (
         "SealedFallbackSelection",
+        "select_visibility_safe_fallback",
         "stamp_sealed_fallback_realization_family",
         "stamp_non_strict_sealed_replacement_realization_family",
         "prepare_sealed_replacement_route_meta",
@@ -497,6 +498,50 @@ def test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines()
         assert forbidden not in helper_source
 
 
+def test_select_visibility_safe_fallback_delegates_to_visibility_core() -> None:
+    vf_src = inspect.getsource(sealed_fallback.select_visibility_safe_fallback)
+    assert "visibility_fallback._standard_visibility_safe_fallback_core(" in vf_src
+    assert "anti_reset_emission_guard" in vf_src
+    assert "final_emission_first_mention_composition" in vf_src
+    assert "final_emission_opening_mode" in vf_src
+    assert "final_emission_passive_scene_pressure" in vf_src
+    assert "final_emission_scene_facts" in vf_src
+
+
+def test_select_visibility_safe_fallback_matches_standard_wrapper() -> None:
+    gm = opening_gm_output()
+    kwargs = {
+        "gm_output": gm,
+        "session": {},
+        "scene": {"scene": gm["prompt_context"]["scene"]["public"]},
+        "world": {},
+        "scene_id": "frontier_gate",
+        "eff_resolution": {"kind": "scene_opening", "prompt": "Start the campaign."},
+        "active_interlocutor": "",
+        "strict_social_active": False,
+        "strict_social_suppressed_non_social_turn": False,
+    }
+    facade_selected = sealed_fallback.select_visibility_safe_fallback(**kwargs)
+    wrapper_selected = visibility_fallback.standard_visibility_safe_fallback(**kwargs)
+    assert facade_selected == wrapper_selected
+
+
+def test_standard_visibility_safe_fallback_core_preserves_branch_order() -> None:
+    core_src = inspect.getsource(visibility_fallback._standard_visibility_safe_fallback_core)
+    assert core_src.index("strict_social_visibility_minimal_fallback_candidate(") < core_src.index(
+        "passive_scene_pressure_visibility_fallback_candidates("
+    )
+    assert core_src.index("passive_scene_pressure_visibility_fallback_candidates(") < core_src.index(
+        "social_active_interlocutor_visibility_fallback("
+    )
+    assert core_src.index("social_active_interlocutor_visibility_fallback(") < core_src.index(
+        "_should_use_neutral_nonprogress_fallback_instead_of_global_stock("
+    )
+    assert core_src.index("_should_use_neutral_nonprogress_fallback_instead_of_global_stock(") < core_src.index(
+        "for selected in fallback_candidates:"
+    )
+
+
 def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None:
     """Regression anchor: relocated Block AI sealed helper tests must stay importable."""
     mod = sys.modules[__name__]
@@ -512,5 +557,8 @@ def test_block_ai_sealed_fallback_helper_entrypoints_remain_importable() -> None
         "test_block_ai_extracted_n4_selector_uses_owner_modules_only",
         "test_block_ai_extracted_non_strict_branch_selector_preserves_order",
         "test_block_ai_assembly_helpers_stamp_meta_without_selecting_fallback_lines",
+        "test_select_visibility_safe_fallback_delegates_to_visibility_core",
+        "test_select_visibility_safe_fallback_matches_standard_wrapper",
+        "test_standard_visibility_safe_fallback_core_preserves_branch_order",
     ):
         assert callable(getattr(mod, name, None)), name

@@ -289,6 +289,87 @@ def test_visibility_fallback_owner_bucket_values_are_contract_locked():
     assert "invalid visibility_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
 
 
+def test_visibility_family_split_owner_fields_are_contract_locked():
+    from game.final_emission_ownership_schema import (
+        ALLOWED_FALLBACK_CONTENT_OWNERS,
+        ALLOWED_FALLBACK_SELECTION_OWNERS,
+        SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        VISIBILITY_FALLBACK_SELECTION_OWNER,
+    )
+
+    row = _valid_sample_row()
+    row["fallback_selection_owner"] = VISIBILITY_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    row["visibility_fallback_owner_bucket"] = "sealed-gate"
+    row["repair_kind"] = "first_mention_enforcement"
+    assert VISIBILITY_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
+    assert SEALED_FALLBACK_MODULE_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_selection_owner"] = "final_emission_visibility_fallback"
+    assert "invalid fallback_selection_owner: 'final_emission_visibility_fallback'" in validate_failure_classification_row(row)
+
+
+def test_sealed_family_split_owner_fields_are_contract_locked():
+    from game.final_emission_ownership_schema import (
+        ALLOWED_FALLBACK_CONTENT_OWNERS,
+        ALLOWED_FALLBACK_SELECTION_OWNERS,
+        SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+        SEALED_FALLBACK_SELECTION_OWNER,
+        SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    )
+
+    row = _valid_sample_row()
+    row["fallback_selection_owner"] = SEALED_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
+    row["sealed_fallback_owner_bucket"] = "sealed-gate"
+    assert SEALED_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
+    assert SEALED_FALLBACK_MODULE_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_content_owner"] = STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
+    row["sealed_fallback_owner_bucket"] = "strict-social-sealed"
+    assert STRICT_SOCIAL_FALLBACK_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_content_owner"] = SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER
+    row["sealed_fallback_owner_bucket"] = "unknown-none"
+    assert SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_selection_owner"] = "final_emission_gate"
+    assert "invalid fallback_selection_owner: 'final_emission_gate'" in validate_failure_classification_row(row)
+
+
+def test_opening_family_split_owner_fields_are_contract_locked():
+    from game.final_emission_ownership_schema import (
+        ALLOWED_FALLBACK_CONTENT_OWNERS,
+        ALLOWED_FALLBACK_SELECTION_OWNERS,
+        OPENING_FAIL_CLOSED_CONTENT_OWNER,
+        OPENING_FALLBACK_CONTENT_OWNER,
+        OPENING_FALLBACK_SELECTION_OWNER,
+    )
+
+    row = _valid_sample_row()
+    row["fallback_selection_owner"] = OPENING_FALLBACK_SELECTION_OWNER
+    row["fallback_content_owner"] = OPENING_FALLBACK_CONTENT_OWNER
+    row["opening_fallback_owner_bucket"] = "upstream-prepared"
+    row["repair_kind"] = "opening_deterministic_fallback"
+    assert OPENING_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
+    assert OPENING_FALLBACK_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_content_owner"] = OPENING_FAIL_CLOSED_CONTENT_OWNER
+    row["opening_fallback_owner_bucket"] = "sealed-gate"
+    row["repair_kind"] = "opening_deterministic_fallback_failed_closed"
+    assert OPENING_FAIL_CLOSED_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
+    assert validate_failure_classification_row(row) == []
+
+    row["fallback_selection_owner"] = "final_emission_gate"
+    assert "invalid fallback_selection_owner: 'final_emission_gate'" in validate_failure_classification_row(row)
+
+
 def test_runtime_response_type_repair_kind_taxonomy_is_contract_locked():
     assert_contract_classifier_alignment()
 
@@ -320,6 +401,11 @@ def test_strict_social_from_sanitizer_owner_split_fields_are_contract_locked():
     row["sanitizer_strict_social_source"] = "social_fallback_line_for_sanitizer.empty_output"
     row["prepared_emission_owner"] = None
 
+    assert validate_failure_classification_row(row) == []
+
+    row["sanitizer_empty_fallback_owner"] = "game.output_sanitizer"
+    row["sanitizer_strict_social_selection_owner"] = "game.output_sanitizer"
+    row["sanitizer_strict_social_prose_owner"] = "game.social_exchange_emission"
     assert validate_failure_classification_row(row) == []
 
     row["sanitizer_strict_social_prose_owner"] = "output_sanitizer"

@@ -32,6 +32,31 @@ import importlib
 import re
 from typing import Any, Dict, List, Mapping, MutableMapping
 
+from game.final_emission_ownership_schema import (
+    OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES,
+    OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    OPENING_FALLBACK_OWNER_BUCKETS,
+    OPENING_FALLBACK_OWNER_RETRY,
+    OPENING_FALLBACK_OWNER_SEALED_GATE,
+    OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
+    OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    SEALED_FALLBACK_OWNER_BUCKETS,
+    SEALED_FALLBACK_OWNER_SEALED_GATE,
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    VISIBILITY_FALLBACK_OWNER_BUCKETS,
+    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+    VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
+    fallback_owner_bucket_registry_surface,
+)
 from game.final_emission_validators import (
     _default_response_type_debug as _validators_default_response_type_debug,
     _merge_response_type_meta as _validators_merge_response_type_meta,
@@ -586,11 +611,8 @@ FEM_RESPONSE_TYPE_KEYS: frozenset[str] = frozenset(
 # stable provenance owner); not owner-bucket assignment, diegetic family, or prose authorship.
 FEM_FALLBACK_PROVENANCE_TRACE_KEY: str = "fallback_provenance_trace"
 
-# Canonical upstream API fast-fallback provenance field and ownership registry (BK6).
+# Canonical upstream API fast-fallback provenance field (BK6 metadata keys; owners in ownership schema).
 UPSTREAM_FAST_FALLBACK_PROVENANCE_METADATA_KEY: str = "fallback_provenance"
-UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: str = "game.api"
-UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER: str = "game.fallback_provenance_debug"
-UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: str = "game.gm_retry"
 
 UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS: frozenset[str] = frozenset(
     {
@@ -818,86 +840,10 @@ def apply_opening_fallback_projection_fields(
 
 
 # --- Canonical fallback owner-bucket registry (read-side vocabulary; not policy) ---
-# Single source of bucket string values and read-side classification for opening, sealed,
-# and visibility fallback observability (Cycle BK1).
-# - opening: ``opening_fallback_owner_bucket_from_meta`` / ``_from_fields``
-# - sealed: ``sealed_fallback_owner_bucket_from_fields``
-# - visibility: ``visibility_fallback_owner_bucket_from_fields``
-# Sealed/visibility modules re-export bucket constants for stable import paths.
+# Single source of bucket string values: :mod:`game.final_emission_ownership_schema`.
+# Read-side classification helpers remain here (Cycle BK1).
 
-OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED = "upstream-prepared"
-OPENING_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
-OPENING_FALLBACK_OWNER_RETRY = "retry"
-OPENING_FALLBACK_OWNER_STRICT_SOCIAL = "strict-social"
-OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
-
-OPENING_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
-    {
-        OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-        OPENING_FALLBACK_OWNER_SEALED_GATE,
-        OPENING_FALLBACK_OWNER_RETRY,
-        OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
-        OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-    }
-)
-
-SEALED_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
-SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED = "strict-social-sealed"
-SEALED_FALLBACK_OWNER_UNKNOWN_NONE = "unknown-none"
-SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
-
-SEALED_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
-    {
-        SEALED_FALLBACK_OWNER_SEALED_GATE,
-        SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-        SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
-        SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-    }
-)
-
-VISIBILITY_FALLBACK_OWNER_SEALED_GATE = "sealed-gate"
-VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY = "strict-social-visibility"
-VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY = "opening-visibility"
-VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE = "unknown-none"
-VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS = "unknown-ambiguous"
-
-VISIBILITY_FALLBACK_OWNER_BUCKETS: frozenset[str] = frozenset(
-    {
-        VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-        VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-        VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-        VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
-        VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-    }
-)
-
-
-def fallback_owner_bucket_registry_surface() -> dict[str, dict[str, str]]:
-    """Named constant→value maps for each fallback owner-bucket family (diagnostic only)."""
-    return {
-        "opening": {
-            "OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-            "OPENING_FALLBACK_OWNER_SEALED_GATE": OPENING_FALLBACK_OWNER_SEALED_GATE,
-            "OPENING_FALLBACK_OWNER_RETRY": OPENING_FALLBACK_OWNER_RETRY,
-            "OPENING_FALLBACK_OWNER_STRICT_SOCIAL": OPENING_FALLBACK_OWNER_STRICT_SOCIAL,
-            "OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-        },
-        "sealed": {
-            "SEALED_FALLBACK_OWNER_SEALED_GATE": SEALED_FALLBACK_OWNER_SEALED_GATE,
-            "SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED": SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-            "SEALED_FALLBACK_OWNER_UNKNOWN_NONE": SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
-            "SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-        },
-        "visibility": {
-            "VISIBILITY_FALLBACK_OWNER_SEALED_GATE": VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
-            "VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY": VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
-            "VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY": VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
-            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE": VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
-            "VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS": VISIBILITY_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-        },
-    }
-
-
+_OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED = OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES
 def final_emission_meta_read_side_surface() -> dict[str, object]:
     """Summarize FEM read-side packaging keys and fallback owner bucket registries.
 
@@ -919,21 +865,6 @@ def final_emission_meta_read_side_surface() -> dict[str, object]:
     }
 
 
-_OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED: frozenset[str] = frozenset(
-    {
-        "upstream_prepared",
-        "upstream_prepared_opening_fallback",
-    }
-)
-# Cycle AP1: retired gate-local opening composer authorship tokens. Production game code
-# never writes these values; the read-side owner-bucket mapper maps them to
-# unknown-ambiguous when they appear in injected test fixtures or stale FEM evidence.
-OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES: frozenset[str] = frozenset(
-    {
-        "compatibility_local",
-        "compatibility_local_opening_deterministic",
-    }
-)
 _OPENING_FALLBACK_STRICT_SOCIAL_SIGNALS: frozenset[str] = frozenset(
     {
         "minimal_social_emergency_fallback",
@@ -1127,6 +1058,27 @@ def stamp_opening_fallback_owner_bucket(meta: MutableMapping[str, Any]) -> None:
         meta["opening_fallback_owner_bucket"] = bucket
 
 
+def stamp_retry_terminal_fallback_producer_metadata(meta: MutableMapping[str, Any]) -> None:
+    """Stamp retry owner bucket when retry terminal fallback family is already on *meta*."""
+    if not isinstance(meta, MutableMapping):
+        return
+    from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD, RETRY_TERMINAL_FALLBACK
+
+    family = str(meta.get(REALIZATION_FALLBACK_FAMILY_FIELD) or "").strip()
+    if family != RETRY_TERMINAL_FALLBACK:
+        return
+    if str(meta.get("opening_fallback_owner_bucket") or "").strip():
+        return
+    meta["opening_fallback_owner_bucket"] = OPENING_FALLBACK_OWNER_RETRY
+
+
+def stamp_upstream_prepared_opening_producer_metadata(meta: MutableMapping[str, Any]) -> None:
+    """Stamp opening owner bucket for upstream-prepared opening producer payloads."""
+    if not isinstance(meta, MutableMapping):
+        return
+    stamp_opening_fallback_owner_bucket(meta)
+
+
 def stamp_visibility_fallback_owner_bucket_from_fields(
     meta: MutableMapping[str, Any],
     *,
@@ -1134,7 +1086,11 @@ def stamp_visibility_fallback_owner_bucket_from_fields(
     fallback_kind: str | None = None,
     final_emitted_source: str | None = None,
 ) -> None:
-    """Stamp visibility owner bucket from already-known fallback selection fields."""
+    """Stamp visibility owner bucket from already-known fallback selection fields.
+
+    Hard-replacement orchestrators pair this with :func:`stamp_producer_repair_kind`
+    for visibility/first-mention/referential paths (BU9 producer-stamp governance).
+    """
     if not isinstance(meta, MutableMapping):
         return
     if str(meta.get("visibility_fallback_owner_bucket") or "").strip():
@@ -1171,6 +1127,12 @@ def apply_sanitizer_producer_attribution_to_fem(
         "sanitizer_strict_social_fallback_used",
         "sanitizer_empty_fallback_source",
         "sanitizer_strict_social_source",
+        "sanitizer_empty_fallback_owner",
+        "sanitizer_strict_social_selection_owner",
+        "sanitizer_strict_social_prose_owner",
+        "sanitizer_empty_fallback_owner_trace_short",
+        "sanitizer_strict_social_selection_owner_trace_short",
+        "sanitizer_strict_social_prose_owner_trace_short",
     ):
         if key in trace and meta.get(key) is None:
             meta[key] = trace.get(key)

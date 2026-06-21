@@ -4,6 +4,8 @@
 
 This manifest declares the canonical protected replay set for acceptance review. It is governance-only: it does not change runtime behavior, pytest assertions, markers, selection, or CI wiring.
 
+**Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (protected replay hard-fail step and local reproduction commands).
+
 Classification meanings:
 
 | Status | Meaning |

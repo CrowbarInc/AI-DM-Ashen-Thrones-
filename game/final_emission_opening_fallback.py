@@ -21,11 +21,15 @@ from game.opening_deterministic_fallback import (
     OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
     opening_context_from_gm_output as _opening_context_from_gm_output,
 )
+from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.final_emission_sealed_fallback import SealedFallbackSelection
+from game.final_emission_text import _normalize_text
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.final_emission_meta import (
+    FINAL_EMISSION_META_KEY,
     OPENING_FALLBACK_RESULT_META_FIELDS,
     default_opening_fallback_fail_closed_result_meta,
+    stamp_opening_fallback_owner_bucket,
 )
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
@@ -292,6 +296,65 @@ def scene_opening_rt_contract_accept_path_promotes_candidate(
     )
 
 
+def _scene_opening_debug_preview(text: str, *, limit: int = 120) -> str:
+    clean = _normalize_text(text)
+    return (clean[:limit] + "…") if len(clean) > limit else clean
+
+
+def patch_scene_opening_candidate_emission_debug(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+) -> None:
+    """Patch scene-opening accept-path candidate/emitted debug keys on gm output."""
+    if not isinstance(out, dict):
+        return
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        md = {}
+        out["metadata"] = md
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        em = {}
+        md["emission_debug"] = em
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    emitted = _normalize_text(out.get("player_facing_text") or "")
+    em["scene_opening_candidate_len"] = len(accepted)
+    em["scene_opening_emitted_len"] = len(emitted)
+    em["scene_opening_candidate_emitted_match"] = bool(accepted) and emitted == accepted
+    em["scene_opening_accepted_candidate_promoted"] = bool(accepted) and emitted == accepted
+    em["response_type_candidate_preview"] = _scene_opening_debug_preview(accepted)
+    em["response_type_emitted_preview"] = _scene_opening_debug_preview(emitted)
+
+    fem = out.get(FINAL_EMISSION_META_KEY)
+    if isinstance(fem, dict):
+        fem["response_type_candidate_preview"] = em["response_type_candidate_preview"]
+        fem["response_type_emitted_preview"] = em["response_type_emitted_preview"]
+
+
+def reassert_scene_opening_accepted_candidate(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+    source: str,
+) -> None:
+    """Restore accepted scene-opening candidate text and refresh accept-path debug telemetry."""
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    if not accepted:
+        return
+    if _normalize_text(out.get("player_facing_text") or "") != accepted:
+        assert_final_emission_mutation_allowed(
+            "restore_accepted_scene_opening_candidate",
+            source=source,
+        )
+        out["player_facing_text"] = accepted
+    patch_scene_opening_candidate_emission_debug(
+        out,
+        accepted_scene_opening_text=accepted,
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == accepted
+
+
 def select_opening_fallback_for_response_type_contract(
     gm_output: Mapping[str, Any] | None,
 ) -> tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]:
@@ -363,6 +426,7 @@ def _visibility_selected_from_opening_contract(
     if upstream_selected and upstream_payload is not None:
         composition_meta = dict(upstream_payload["opening_fallback_composition_meta"])
         composition_meta.update(stub_patch)
+        stamp_opening_fallback_owner_bucket(composition_meta)
         return VisibilitySelectedFallback(
             text=fallback_text,
             fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
@@ -379,6 +443,7 @@ def _visibility_selected_from_opening_contract(
     meta.update(fallback_meta)
     meta.update(stub_patch)
     meta["opening_fallback_authorship_source"] = None
+    stamp_opening_fallback_owner_bucket(meta)
     return VisibilitySelectedFallback(
         text=fallback_text,
         fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
