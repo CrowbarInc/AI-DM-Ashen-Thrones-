@@ -1,14 +1,46 @@
 {
   "advisory_only": true,
-  "field_counts": {},
+  "field_counts": {
+    "selected_speaker_source": 1
+  },
   "field_trends": {},
-  "investigation_target_counts": {},
-  "owner_bucket_by_field": [],
-  "owner_drift_bucket_counts": {},
+  "investigation_target_counts": {
+    "game/speaker_contract_enforcement.py": 1
+  },
+  "owner_bucket_by_field": [
+    {
+      "count": 1,
+      "field": "selected_speaker_source",
+      "owner_drift_bucket": "speaker_drift"
+    }
+  ],
+  "owner_drift_bucket_counts": {
+    "speaker_drift": 1
+  },
   "report_only": true,
   "schema_version": 1,
-  "top_drift_fields": [],
-  "top_investigation_targets": [],
-  "top_owner_drift_buckets": [],
-  "total_classifications": 0
+  "top_drift_fields": [
+    {
+      "count": 1,
+      "current_count": 1,
+      "name": "selected_speaker_source",
+      "rank": 1,
+      "trend_direction": "stable"
+    }
+  ],
+  "top_investigation_targets": [
+    {
+      "count": 1,
+      "name": "game/speaker_contract_enforcement.py",
+      "rank": 1
+    }
+  ],
+  "top_owner_drift_buckets": [
+    {
+      "count": 1,
+      "name": "speaker_drift",
+      "rank": 1
+    }
+  ],
+  "total_classifications": 1
 }

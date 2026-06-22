@@ -15,6 +15,7 @@ from game.interaction_context import (
     npc_id_from_explicit_generic_role_address,
     resolve_authoritative_social_target,
     scene_addressable_actor_ids,
+    scene_roster_generic_role_label_ambiguous,
     session_allows_implicit_social_reply_authority,
 )
 from game.prompt_context import canonical_interaction_target_npc_id
@@ -629,6 +630,10 @@ def reconcile_strict_social_resolution_speaker(
 
     Prevents deterministic fallbacks from using a stale engine ``npc_id`` or ``first_roster`` ambient NPC
     when vocative / active interlocutor / substring addressing resolves a different target.
+
+    When authoritative routing leaves a bare generic role label ambiguous among scene addressables
+    (e.g. multiple roster rows match ``guard``), reconcile does not promote via ``first_roster`` or
+    roster order — the resolution is returned unchanged so downstream stamp/replay preserve ambiguity.
     """
     # Authoritative social target selection happens here. After this point, emission/validation may reject
     # output text, but may not null the selected target unless it is invalidated by scene scope.
@@ -645,6 +650,29 @@ def reconcile_strict_social_resolution_speaker(
     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
     na = meta.get("normalized_action") if isinstance(meta.get("normalized_action"), dict) else None
     env = _scene_envelope_for_strict_social(session if isinstance(session, dict) else None, sid)
+    merged_low = str(merged or "").strip().lower()
+    roster = (
+        canonical_scene_addressable_roster(
+            world if isinstance(world, dict) else None,
+            sid,
+            scene_envelope=env,
+            session=session if isinstance(session, dict) else None,
+        )
+        if merged_low
+        else []
+    )
+    addr_ids = (
+        scene_addressable_actor_ids(
+            world if isinstance(world, dict) else None,
+            sid,
+            scene_envelope=env,
+            session=session if isinstance(session, dict) else None,
+        )
+        if merged_low
+        else set()
+    )
+    if merged_low and roster and scene_roster_generic_role_label_ambiguous(merged_low, roster, addr_ids):
+        return resolution
     auth = resolve_authoritative_social_target(
         session if isinstance(session, dict) else None,
         world if isinstance(world, dict) else None,
@@ -653,8 +681,19 @@ def reconcile_strict_social_resolution_speaker(
         normalized_action=na,
         merged_player_prompt=merged,
         scene_envelope=env,
-        allow_first_roster_fallback=True,
+        allow_first_roster_fallback=False,
     )
+    if not auth.get("target_resolved"):
+        auth = resolve_authoritative_social_target(
+            session if isinstance(session, dict) else None,
+            world if isinstance(world, dict) else None,
+            sid,
+            player_text=merged,
+            normalized_action=na,
+            merged_player_prompt=merged,
+            scene_envelope=env,
+            allow_first_roster_fallback=True,
+        )
     auth, tb3, tph3 = _auth_after_social_promotion_binding(
         session, world, sid, auth, env, merged_player_prompt=merged
     )

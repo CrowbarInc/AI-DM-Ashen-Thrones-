@@ -476,6 +476,12 @@ def run_strict_social_composition_trunk(
             pre_gate_text=pre_gate_text,
             fast_path=emission_finalize.final_emission_fast_path_eligible(out),
             scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+            scene_id=sid,
         )
 
     fb_kind = str(details.get("fallback_kind") or "none")
@@ -606,4 +612,10 @@ def run_strict_social_composition_trunk(
         pre_gate_text=pre_gate_text,
         fast_path=emission_finalize.final_emission_fast_path_eligible(out),
         scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
     )

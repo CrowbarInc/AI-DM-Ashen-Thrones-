@@ -11,6 +11,7 @@ from typing import Any, Literal, Mapping, Sequence
 
 from game.emitted_speaker_signature import detect_emitted_speaker_signature
 from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_speaker_observation import read_final_speaker_observation
 
 from tests.helpers.golden_replay_fixtures import observed_turn_from_gate_output
 from tests.helpers.golden_replay_projection import golden_text_hash, normalize_golden_text
@@ -76,6 +77,7 @@ class SpeakerContractObservation:
     enforcement_owner: str | None
     replay_selected_speaker_id: str | None
     replay_selected_speaker_source: str | None
+    replay_speaker_projection_parity: dict[str, Any] | None
     first_text_divergence_checkpoint_id: str | None
     first_speaker_divergence_checkpoint_id: str | None
     first_divergence_checkpoint_id: str | None
@@ -93,6 +95,7 @@ class SpeakerContractObservation:
             "enforcement_owner": self.enforcement_owner,
             "replay_selected_speaker_id": self.replay_selected_speaker_id,
             "replay_selected_speaker_source": self.replay_selected_speaker_source,
+            "replay_speaker_projection_parity": self.replay_speaker_projection_parity,
             "first_text_divergence_checkpoint_id": self.first_text_divergence_checkpoint_id,
             "first_speaker_divergence_checkpoint_id": self.first_speaker_divergence_checkpoint_id,
             "first_divergence_checkpoint_id": self.first_divergence_checkpoint_id,
@@ -107,6 +110,26 @@ class SpeakerContractObservation:
                 "band": self.risk.band,
             },
         }
+
+
+def _checkpoint_from_final_speaker_observation(
+    cp: SpeakerCheckpoint,
+    observation: Mapping[str, Any],
+) -> SpeakerCheckpoint:
+    """When BX2 stamp is present, P3 identity follows final-emission observation authority."""
+    status = str(observation.get("status") or "").strip().lower()
+    if status not in {"resolved", "neutral", "unattributed", "ambiguous", "unresolved"}:
+        return cp
+    canonical = observation.get("canonical_speaker_id")
+    resolved_id = str(canonical).strip() if canonical and status == "resolved" else None
+    source = str(observation.get("resolution_source") or "").strip() or cp.source
+    return replace(
+        cp,
+        resolved_speaker_id=resolved_id,
+        speaker_status=status,  # type: ignore[arg-type]
+        source=source,
+        owner="game.final_emission_finalize",
+    )
 
 
 def normalize_checkpoint_text(text: Any, *, use_golden: bool = False) -> str:
@@ -222,6 +245,25 @@ def build_speaker_checkpoint(
     )
 
 
+def replay_speaker_projection_parity_from_observation(
+    replay_observation: Mapping[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Return replay speaker parity payload when present on a projected observation."""
+    if not isinstance(replay_observation, Mapping):
+        return None
+    parity = replay_observation.get("speaker_projection_parity")
+    return dict(parity) if isinstance(parity, Mapping) else None
+
+
+def _parity_status_is_disagreement(status: Any) -> bool:
+    token = str(status or "").strip().lower()
+    return token in {
+        "mismatch",
+        "final_ambiguous",
+        "final_unresolved",
+    }
+
+
 def build_replay_projection_checkpoint(
     replay_observation: Mapping[str, Any],
     *,
@@ -229,10 +271,8 @@ def build_replay_projection_checkpoint(
     expected_speaker_name: str | None = None,
     resolution: Mapping[str, Any] | None = None,
 ) -> SpeakerCheckpoint:
-    """Build P4 from :func:`project_turn_observation` output with explicit unavailable handling."""
     speaker_unavailable = replay_speaker_evidence_unavailable(replay_observation)
-    selected_id = replay_observation.get("selected_speaker_id")
-    selected_source = replay_observation.get("selected_speaker_source")
+    parity = replay_speaker_projection_parity_from_observation(replay_observation)
 
     if speaker_unavailable:
         final_text = str(replay_observation.get("final_text") or "")
@@ -255,10 +295,35 @@ def build_replay_projection_checkpoint(
         expected_speaker_name=expected_speaker_name,
         resolution=resolution,
     )
-    if selected_id is not None and not selected_source:
-        return replace(cp, source=None)
+    selected_source = replay_observation.get("selected_speaker_source")
     if selected_source:
-        return replace(cp, source=str(selected_source))
+        cp = replace(cp, source=str(selected_source))
+
+    if not isinstance(parity, Mapping):
+        return cp
+
+    parity_status = parity.get("status")
+    final_status = str(parity.get("final_observed_status") or "").strip().lower()
+    final_observed_id = parity.get("final_observed_speaker_id")
+    selected_id = parity.get("selected_speaker_id")
+
+    if parity_status == "aligned" and final_status == "resolved" and final_observed_id:
+        return replace(
+            cp,
+            resolved_speaker_id=str(final_observed_id),
+            speaker_status="resolved",
+        )
+    if parity_status == "final_ambiguous":
+        return replace(cp, resolved_speaker_id=None, speaker_status="ambiguous")
+    if parity_status == "final_unresolved":
+        return replace(cp, resolved_speaker_id=None, speaker_status="unresolved")
+    if parity_status == "mismatch":
+        resolved = str(selected_id) if selected_id else None
+        return replace(cp, resolved_speaker_id=resolved, speaker_status="unresolved")
+    if parity_status == "missing_final_observation":
+        return cp
+    if final_status in {"neutral", "unattributed"} and parity_status == "aligned":
+        return replace(cp, resolved_speaker_id=None, speaker_status=final_status)  # type: ignore[arg-type]
     return cp
 
 
@@ -310,6 +375,22 @@ def final_replay_parity_record(
         if isinstance(replay_observation, Mapping)
         else False
     )
+    parity = (
+        replay_speaker_projection_parity_from_observation(replay_observation)
+        if isinstance(replay_observation, Mapping)
+        else None
+    )
+    parity_aligned = isinstance(parity, Mapping) and parity.get("status") == "aligned"
+    speaker_id_match = False
+    if parity_aligned and not speaker_unavailable:
+        speaker_id_match = True
+    elif (
+        not speaker_unavailable
+        and final_cp.resolved_speaker_id is not None
+        and observation.replay_selected_speaker_id is not None
+        and final_cp.resolved_speaker_id == observation.replay_selected_speaker_id
+    ):
+        speaker_id_match = True
     return {
         "p3_final_text": final_cp.normalized_text,
         "p3_final_text_hash": final_cp.normalized_text_hash,
@@ -321,12 +402,8 @@ def final_replay_parity_record(
         "p4_selected_speaker_source": observation.replay_selected_speaker_source,
         "p4_speaker_unavailable": speaker_unavailable,
         "text_hash_match": final_cp.normalized_text_hash == replay_cp.normalized_text_hash,
-        "speaker_id_match": (
-            not speaker_unavailable
-            and final_cp.resolved_speaker_id is not None
-            and observation.replay_selected_speaker_id is not None
-            and final_cp.resolved_speaker_id == observation.replay_selected_speaker_id
-        ),
+        "speaker_id_match": speaker_id_match,
+        "speaker_projection_parity": parity,
     }
 
 
@@ -366,6 +443,7 @@ def observe_final_to_replay_speaker_contract(
         replay_observation=replay_observation,
         resolution=resolution,
         align_final_replay_normalization=True,
+        final_speaker_observation=read_final_speaker_observation(gm_output),
     )
 
 
@@ -513,7 +591,12 @@ def _mismatch_present(
     checkpoints: Sequence[SpeakerCheckpoint],
     expected_speaker_id: str | None,
     replay_selected_speaker_id: str | None,
+    replay_speaker_projection_parity: Mapping[str, Any] | None = None,
 ) -> bool:
+    if isinstance(replay_speaker_projection_parity, Mapping):
+        if _parity_status_is_disagreement(replay_speaker_projection_parity.get("status")):
+            return True
+
     final_cp = _checkpoint_by_id(checkpoints, CHECKPOINT_FINAL)
     replay_cp = _checkpoint_by_id(checkpoints, CHECKPOINT_REPLAY)
     post_cp = _checkpoint_by_id(checkpoints, CHECKPOINT_POST_SPEAKER)
@@ -576,6 +659,14 @@ def score_speaker_contract_risk(
     elif "unresolved" in status_counts or "ambiguous" in status_counts:
         s_score = 20
 
+    parity = observation.replay_speaker_projection_parity
+    if isinstance(parity, Mapping):
+        parity_status = parity.get("status")
+        if parity_status == "mismatch":
+            s_score = max(s_score, 40)
+        elif parity_status in {"final_ambiguous", "final_unresolved"}:
+            s_score = max(s_score, 20)
+
     t_score = 0
     if post_cp and final_cp and post_cp.normalized_text_hash != final_cp.normalized_text_hash:
         if observation.first_divergence_layer_id:
@@ -613,15 +704,27 @@ def speaker_contract_family_risk_rows(
             text_parity = post_cp.normalized_text_hash == final_cp.normalized_text_hash
         elif obs.mismatch_present:
             text_parity = False
+        parity = obs.replay_speaker_projection_parity
+        parity_status = parity.get("status") if isinstance(parity, Mapping) else None
         rows.append(
             {
                 "family": family,
                 "total": obs.risk.total,
                 "band": obs.risk.band,
+                "risk_S": obs.risk.S,
                 "first_divergence": obs.first_divergence_checkpoint_id,
                 "speaker_status": status_cp.speaker_status if status_cp else None,
                 "text_parity": text_parity,
                 "attribution_score": obs.risk.A,
+                "replay_selected_speaker_id": obs.replay_selected_speaker_id,
+                "replay_selected_speaker_source": obs.replay_selected_speaker_source,
+                "speaker_projection_parity_status": parity_status,
+                "final_observed_speaker_id": (
+                    parity.get("final_observed_speaker_id") if isinstance(parity, Mapping) else None
+                ),
+                "final_observed_status": (
+                    parity.get("final_observed_status") if isinstance(parity, Mapping) else None
+                ),
             }
         )
     return rows
@@ -673,6 +776,7 @@ def observe_speaker_contract(
     replay_observation: Mapping[str, Any] | None = None,
     resolution: Mapping[str, Any] | None = None,
     align_final_replay_normalization: bool = False,
+    final_speaker_observation: Mapping[str, Any] | None = None,
 ) -> SpeakerContractObservation:
     """Build a full speaker-contract observation and risk score."""
     events = tuple(layer_events or ())
@@ -722,11 +826,22 @@ def observe_speaker_contract(
             use_golden=align_final_replay_normalization,
         )
     )
+    if isinstance(final_speaker_observation, Mapping) and checkpoints:
+        final_idx = len(checkpoints) - 1
+        if checkpoints[final_idx].checkpoint_id == CHECKPOINT_FINAL:
+            checkpoints[final_idx] = _checkpoint_from_final_speaker_observation(
+                checkpoints[final_idx],
+                final_speaker_observation,
+            )
     replay_selected_speaker_id = None
     replay_selected_speaker_source = None
+    replay_speaker_projection_parity = None
     if isinstance(replay_observation, Mapping):
         replay_selected_speaker_id = replay_observation.get("selected_speaker_id")
         replay_selected_speaker_source = replay_observation.get("selected_speaker_source")
+        replay_speaker_projection_parity = replay_speaker_projection_parity_from_observation(
+            replay_observation
+        )
         if "final_text" in replay_observation:
             checkpoints.append(
                 build_replay_projection_checkpoint(
@@ -750,6 +865,7 @@ def observe_speaker_contract(
         checkpoints=ordered,
         expected_speaker_id=expected_speaker_id,
         replay_selected_speaker_id=str(replay_selected_speaker_id) if replay_selected_speaker_id else None,
+        replay_speaker_projection_parity=replay_speaker_projection_parity,
     )
 
     partial = SpeakerContractObservation(
@@ -760,6 +876,7 @@ def observe_speaker_contract(
         enforcement_owner=enforcement_owner,
         replay_selected_speaker_id=str(replay_selected_speaker_id) if replay_selected_speaker_id else None,
         replay_selected_speaker_source=str(replay_selected_speaker_source) if replay_selected_speaker_source else None,
+        replay_speaker_projection_parity=replay_speaker_projection_parity,
         first_text_divergence_checkpoint_id=text_div,
         first_speaker_divergence_checkpoint_id=speaker_div,
         first_divergence_checkpoint_id=unified,
@@ -775,6 +892,7 @@ def observe_speaker_contract(
         enforcement_owner=partial.enforcement_owner,
         replay_selected_speaker_id=partial.replay_selected_speaker_id,
         replay_selected_speaker_source=partial.replay_selected_speaker_source,
+        replay_speaker_projection_parity=partial.replay_speaker_projection_parity,
         first_text_divergence_checkpoint_id=partial.first_text_divergence_checkpoint_id,
         first_speaker_divergence_checkpoint_id=partial.first_speaker_divergence_checkpoint_id,
         first_divergence_checkpoint_id=partial.first_divergence_checkpoint_id,

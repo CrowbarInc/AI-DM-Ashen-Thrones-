@@ -3,8 +3,8 @@
 ## Run Summary
 
 - Status: `failed`
-- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_final_emission_boundary_no_semantic_repair.py tests/test_golden_replay.py -q`
-- Generated at: `2026-06-04T22:31:59Z`
+- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_bx_speaker_identity_end_to_end_parity.py tests/test_bx_speaker_identity_golden_replay.py tests/test_golden_replay.py tests/test_golden_replay_projection.py tests/test_golden_replay_trend.py tests/test_golden_replay_structural_invariants.py tests/test_speaker_contract_risk.py tests/test_social_interaction_authority.py -q --tb=line`
+- Generated at: `2026-06-22T21:39:03Z`
 - Artifact location: `artifacts/golden_replay/replay_failure_report.md`
 - Classified failures: `1`
 
@@ -12,30 +12,37 @@
 
 | Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |
 |---|---|---|---:|---|---|---|
-| vocative_override_after_prior_continuity | none | none | 1 | none | selected_speaker_id: exact value mismatch | tests/test_golden_replay.py::test_golden_replay_vocative_override_after_prior_continuity_structural_invariants |
+| bx5_guard_ambiguous_multi_guard | none | none | 0 | none | selected_speaker_source: required field absent | tests/test_bx_speaker_identity_golden_replay.py::test_bx5_protected_golden_ambiguous_guard_no_false_parity |
 
 ## Failure Table
 
-| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First |
-|---|---|---:|---|---|---|---|---|---|---|---|---|
-| vocative_override_after_prior_continuity | tests/test_golden_replay.py::test_golden_replay_vocative_override_after_prior_continuity_structural_invariants | 1 | selected_speaker_id: exact value mismatch | structural_drift | guard | guard_captain | projection | medium | projection | none | tests/helpers/golden_replay.py |
+| Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First | Owner Drift Bucket |
+|---|---|---:|---|---|---|---|---|---|---|---|---|---|
+| bx5_guard_ambiguous_multi_guard | tests/test_bx_speaker_identity_golden_replay.py::test_bx5_protected_golden_ambiguous_guard_no_false_parity | 0 | selected_speaker_source: required field absent | structural_drift | present non-empty value | none | speaker | high | speaker | emission | game/speaker_contract_enforcement.py | speaker_drift |
 
 ## Classification Summary
 
-- Categories: `projection` (1)
-- Primary owners: `projection` (1)
+- Categories: `speaker` (1)
+- Primary owners: `speaker` (1)
+
+
+## Owner Drift Breakdown
+
+```
+speaker_drift .................. 1
+```
 
 ## Fallback Summary
 
 | Scenario | Final Source | Fallback Family | Temporal Frame | Opening Authorship | Opening Owner | Sealed Owner | Sanitizer Empty Owner |
 |---|---|---|---|---|---|---|---|
-| vocative_override_after_prior_continuity | anti_reset_local_continuation_fallback | gate_terminal_repair | none | none | unknown-ambiguous | sealed-gate | none |
+| bx5_guard_ambiguous_multi_guard | minimal_social_emergency_fallback | strict_social_deterministic_fallback | none | none | strict-social | strict-social-sealed | none |
 
 ## Sanitizer Summary
 
 | Scenario | Mode | Changed | Dropped | Empty Fallback | Empty Owner | Legacy Rewrite | Strict Social Owner |
 |---|---|---:|---:|---|---|---|---|
-| vocative_override_after_prior_continuity | <object object at 0x0000023D9A0F4130> | none | none | none | none | False | none |
+| bx5_guard_ambiguous_multi_guard | <object object at 0x000001598FB74170> | none | none | none | none | False | none |
 
 ## Runtime Lineage Summary
 
@@ -45,21 +52,21 @@
 - **Mutation:** 2
 - **Gate outcome:** 1
 - **Top recurring recurrence keys:** _(none)_
-- **Top fallback kinds:** `visibility_or_scene_replacement` (1)
+- **Top fallback kinds:** `minimal_social_emergency_fallback` (1)
 - **Top fallback authorship sources:** _(none)_
 - **Top fallback owner buckets:** _(none)_
-- **Top fallback selection owners:** _(none)_
-- **Top fallback content owners:** _(none)_
+- **Top fallback selection owners:** `game.final_emission_gate` (1)
+- **Top fallback content owners:** `game.social_exchange_emission` (1)
 - **Top repair kinds:** _(none)_
 - **Top mutation kinds:** `fallback_mutation` (1); `response_type_repair_mutation` (1)
-- **Top gate paths:** `visibility_or_scene_replaced` (1)
+- **Top gate paths:** `strict_social_emergency` (1)
 
 ## Reproduce Locally
 
 ### Focused failing tests
 
 ```bash
-python -m pytest tests/test_golden_replay.py::test_golden_replay_vocative_override_after_prior_continuity_structural_invariants -q --tb=short
+python -m pytest tests/test_bx_speaker_identity_golden_replay.py::test_bx5_protected_golden_ambiguous_guard_no_false_parity -q --tb=short
 ```
 
 ### Protected replay lane

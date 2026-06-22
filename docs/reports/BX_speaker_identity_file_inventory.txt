@@ -1,0 +1,100 @@
+BX Speaker Identity End-to-End Parity - File Inventory
+Date: 2026-06-21
+
+SOURCE / RUNTIME
+game/interaction_context.py
+  canonical_scene_addressable_roster
+  resolve_authoritative_social_target
+  _compose_speaker_selection_contract
+  build_speaker_selection_contract
+game/dialogue_social_plan.py
+  _collect_declared_pregate_alias_fields
+  validate_dialogue_social_plan
+  pregate_attributed_label_matches_dialogue_social_plan
+game/emitted_speaker_signature.py
+  detect_emitted_speaker_signature
+game/speaker_contract_enforcement.py
+  get_speaker_selection_contract
+  validate_emitted_speaker_against_contract
+  _label_matches_primary_speaker
+  _label_in_allowed_speaker_ids
+  _apply_speaker_contract_repairs
+  enforce_emitted_speaker_with_contract
+game/final_emission_strict_social_stack.py
+  run_strict_social_stack
+game/final_emission_terminal_pipeline.py
+  run_gate_terminal_enforcement_pipeline
+game/final_emission_finalize.py
+  finalize_emission_output
+game/final_emission_meta.py
+  build_narration_constraint_debug
+game/final_emission_replay_projection.py
+  _fem_speaker_repair_projections
+  build_fem_runtime_lineage_events
+game/post_emission_speaker_adoption.py
+  _label_matches_npc_entry
+  _unique_addressable_npc_id_for_label
+  _resolve_visible_grounded_opening_speaker_canon
+  apply_post_emission_speaker_adoption
+game/api_turn_support.py
+  _visible_grounded_speaker_id
+  build_social_contract_turn_trace
+
+TEST / REPLAY HELPERS
+tests/helpers/post_speaker_finalize_probe.py
+  LayerTextDelta
+  install_post_speaker_text_probes
+  first_post_speaker_normalized_divergence
+tests/helpers/speaker_contract_risk.py
+  SpeakerCheckpoint
+  SpeakerContractObservation
+  SpeakerContractRiskScore
+  observe_speaker_contract
+  observe_final_to_replay_speaker_contract
+  score_speaker_contract_risk
+  speaker_contract_family_risk_rows
+tests/helpers/golden_replay_projection.py
+  _resolve_selected_speaker_id
+  project_turn_observation
+tests/helpers/golden_replay.py
+  protected_social_speaker_observation_expectation
+  compare_long_session_replay_runs
+  summarize_long_session_replay_observations
+tests/helpers/golden_replay_fixtures.py
+tests/helpers/transcript_runner.py
+tests/helpers/transcript_snapshots.py
+
+FOCUSED TESTS
+tests/test_speaker_contract_enforcement.py
+tests/test_speaker_contract_risk.py
+tests/test_block_s_speaker_local_rebind_equivalence.py
+tests/test_block_t_speaker_relocation_shadow_equivalence.py
+tests/test_block_u_finalize_stack_divergence.py
+tests/test_social_speaker_grounding.py
+tests/test_vocative_direct_address_recovery.py
+tests/test_transcript_gauntlet_actor_addressing.py
+tests/test_post_emission_speaker_adoption.py
+tests/test_golden_replay_projection.py
+tests/test_golden_replay_structural_invariants.py
+tests/test_golden_replay_helper_contracts.py
+tests/test_backfill_bug_recurrence_history.py
+
+DATA / GOLDEN / REPLAY FIXTURES
+data/scenes/frontier_gate.json
+data/world.json
+data/validation/scenario_spines/frontier_gate_long_session.json
+artifacts/scenario_spine_validation/20260621T123556Z/frontier_gate_long_session/branch_social_inquiry/transcript.json
+artifacts/golden_replay/trend_window/runs/run-001.json
+artifacts/golden_replay/trend_window/comparisons/run-001-vs-run-000.json
+
+MOST LIKELY BX CHANGE SET
+tests/helpers/speaker_contract_risk.py
+tests/test_speaker_contract_risk.py
+tests/helpers/golden_replay_projection.py
+tests/test_golden_replay_projection.py
+game/speaker_contract_enforcement.py
+game/final_emission_finalize.py
+game/final_emission_meta.py
+game/post_emission_speaker_adoption.py
+game/interaction_context.py
+data/scenes/frontier_gate.json (fixture authority; behavior edit not necessarily required)

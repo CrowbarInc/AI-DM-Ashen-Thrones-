@@ -211,6 +211,12 @@ def run_generic_accept_exit(
         fast_path=emission_finalize.final_emission_fast_path_eligible(out),
         scene_emit_integrity_bundle=scene_emit_integrity_bundle,
         accepted_scene_opening_text=accepted_scene_opening_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
     )
 
 
@@ -429,4 +435,10 @@ def run_generic_replace_exit(
         pre_gate_text=pre_gate_text,
         fast_path=emission_finalize.final_emission_fast_path_eligible(out),
         scene_emit_integrity_bundle=scene_emit_integrity_bundle,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=sid,
     )

@@ -27,6 +27,7 @@ from tests.helpers.golden_replay_projection import (
     extract_protected_observation_manifest_section,
     lookup_observation_path,
     project_replay_fallback_family_from_fem,
+    project_speaker_projection_parity,
     project_turn_observation,
     protected_observation_drift_bucket,
     protected_observation_extraction_registry,
@@ -36,6 +37,7 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_manifest_field_rows,
     protected_observation_manifest_section_is_current,
     protected_path_representation_errors,
+    read_final_speaker_observation_for_replay,
     render_protected_observation_manifest_section,
 )
 
@@ -697,6 +699,151 @@ def test_golden_observed_turn_projects_legacy_sanitizer_lineage():
 
     assert observed["sanitizer_lineage_mode"] == "legacy_sentence_rewrite"
     assert observed["sanitizer_lineage_legacy_rewrite_active"] is True
+
+
+def _speaker_parity_turn_payload(
+    *,
+    scenario_id: str,
+    selected_speaker_id: str | None,
+    final_speaker_observation: dict | None,
+    gm_text: str = "Guard Captain says, \"Posted at dawn.\"",
+) -> dict:
+    gm_output: dict = {
+        "player_facing_text": gm_text,
+        "_final_emission_meta": {"final_emitted_source": "generated_candidate"},
+    }
+    if final_speaker_observation is not None:
+        gm_output["metadata"] = {
+            "emission_debug": {"final_speaker_observation": final_speaker_observation}
+        }
+    social_trace: dict = {}
+    if selected_speaker_id:
+        social_trace["final_reply_owner"] = selected_speaker_id
+    return minimal_turn_payload(
+        scenario_id=scenario_id,
+        gm_text=gm_text,
+        resolution={"kind": "question", "social": {"npc_id": selected_speaker_id}},
+        payload={
+            "gm_output": gm_output,
+            "debug_traces": [
+                {
+                    "turn_trace": {
+                        "social_contract_trace": {
+                            "route_selected": "dialogue",
+                            **social_trace,
+                        }
+                    }
+                }
+            ],
+        },
+    )
+
+
+def test_bx3_speaker_projection_parity_resolved_aligned() -> None:
+    observed = project_turn_observation(
+        _speaker_parity_turn_payload(
+            scenario_id="bx3_parity_resolved_aligned",
+            selected_speaker_id="guard_captain",
+            final_speaker_observation={
+                "status": "resolved",
+                "canonical_speaker_id": "guard_captain",
+                "candidates": [],
+            },
+        )
+    )
+    parity = observed["speaker_projection_parity"]
+    assert parity["status"] == "aligned"
+    assert parity["selected_speaker_id"] == "guard_captain"
+    assert parity["final_observed_speaker_id"] == "guard_captain"
+    assert observed["selected_speaker_id"] == "guard_captain"
+
+
+def test_bx3_speaker_projection_parity_resolved_mismatch() -> None:
+    observed = project_turn_observation(
+        _speaker_parity_turn_payload(
+            scenario_id="bx3_parity_resolved_mismatch",
+            selected_speaker_id="guard_captain",
+            final_speaker_observation={
+                "status": "resolved",
+                "canonical_speaker_id": "gate_guard",
+                "candidates": [],
+            },
+        )
+    )
+    parity = observed["speaker_projection_parity"]
+    assert parity["status"] == "mismatch"
+    assert parity["selected_speaker_id"] == "guard_captain"
+    assert parity["final_observed_speaker_id"] == "gate_guard"
+    assert observed["selected_speaker_id"] == "guard_captain"
+
+
+def test_bx3_speaker_projection_parity_ambiguous_with_selected_candidate() -> None:
+    observed = project_turn_observation(
+        _speaker_parity_turn_payload(
+            scenario_id="bx3_parity_ambiguous_selected",
+            selected_speaker_id="guard_captain",
+            final_speaker_observation={
+                "status": "ambiguous",
+                "canonical_speaker_id": None,
+                "candidates": ["guard_captain", "gate_sentry"],
+                "notes": ["routing_unresolved_contract_primary_present"],
+            },
+        )
+    )
+    parity = observed["speaker_projection_parity"]
+    assert parity["status"] == "final_ambiguous"
+    assert parity["selected_speaker_id"] == "guard_captain"
+    assert parity["final_observed_speaker_id"] is None
+    assert parity["final_observed_status"] == "ambiguous"
+    assert observed["selected_speaker_id"] == "guard_captain"
+    assert "replay_selected_speaker_legacy_preserved" in parity["notes"]
+
+
+def test_bx3_speaker_projection_parity_unresolved_final_observation() -> None:
+    observed = project_turn_observation(
+        _speaker_parity_turn_payload(
+            scenario_id="bx3_parity_unresolved",
+            selected_speaker_id="guard_captain",
+            final_speaker_observation={
+                "status": "unresolved",
+                "canonical_speaker_id": None,
+                "candidates": [],
+            },
+        )
+    )
+    parity = observed["speaker_projection_parity"]
+    assert parity["status"] == "final_unresolved"
+    assert parity["final_observed_status"] == "unresolved"
+    assert observed["selected_speaker_id"] == "guard_captain"
+
+
+def test_bx3_speaker_projection_parity_missing_final_observation() -> None:
+    observed = project_turn_observation(
+        _speaker_parity_turn_payload(
+            scenario_id="bx3_parity_missing_stamp",
+            selected_speaker_id="guard_captain",
+            final_speaker_observation=None,
+        )
+    )
+    parity = observed["speaker_projection_parity"]
+    assert parity["status"] == "missing_final_observation"
+    assert parity["final_observed_status"] is None
+    assert observed["selected_speaker_id"] == "guard_captain"
+
+
+def test_bx3_project_speaker_projection_parity_unit_surface() -> None:
+    aligned = project_speaker_projection_parity(
+        selected_speaker_id="runner",
+        selected_speaker_source="turn_trace.social_contract_trace",
+        emission_debug_lane={
+            "final_speaker_observation": {
+                "status": "resolved",
+                "canonical_speaker_id": "runner",
+            }
+        },
+    )
+    assert aligned["status"] == "aligned"
+    assert read_final_speaker_observation_for_replay({}) is None
 
 
 def test_bl5_replay_projection_closeout_governance():

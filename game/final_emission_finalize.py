@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, MutableMapping
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from game.fallback_provenance_debug import (
     finalize_upstream_fallback_overwrite_containment,
@@ -22,6 +22,7 @@ from game.final_emission_meta import (
     patch_final_emission_meta,
     refresh_final_emission_mutation_lineage,
 )
+from game.final_emission_speaker_observation import stamp_final_speaker_observation
 from game.final_emission_text_formatting import (
     _normalize_text,
     _sanitize_output_text,
@@ -155,6 +156,12 @@ def finalize_emission_output(
     fast_path: bool = False,
     scene_emit_integrity_bundle: Dict[str, Any] | None = None,
     accepted_scene_opening_text: str | None = None,
+    resolution: Optional[Dict[str, Any]] = None,
+    eff_resolution: Optional[Dict[str, Any]] = None,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    scene: Optional[Dict[str, Any]] = None,
+    scene_id: str | None = None,
 ) -> Dict[str, Any]:
     if isinstance(out, dict):
         record_stage_snapshot(out, "final_emission_gate_exit")
@@ -242,6 +249,15 @@ def finalize_emission_output(
         source="gate._finalize_emission_output.scene_opening_candidate_reseal",
     )
     package_dead_turn_snapshot_into_final_emission_meta(out)
+    stamp_final_speaker_observation(
+        out,
+        resolution=resolution,
+        eff_resolution=eff_resolution,
+        session=session,
+        world=world,
+        scene_envelope=scene,
+        scene_id=scene_id,
+    )
     debug_lane = project_debug_payload(out)
     author_lane = project_author_payload(out)
     public_out = project_public_payload(out)

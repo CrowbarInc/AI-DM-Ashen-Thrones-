@@ -1762,6 +1762,17 @@ def _resolve_vocative_phrase_for_embedded_recovery(
     raw_matches = _all_npc_ids_matching_vocative_raw(raw, roster, addr_ids=addr_ids)
     if len(raw_matches) > 1:
         return ""
+    slug = _normalize_spoken_generic_role_slug(raw)
+    if slug:
+        role_hits = [
+            str(n.get("id") or "").strip()
+            for n in roster
+            if isinstance(n, dict)
+            and _npc_matches_normalized_generic_role(n, slug)
+            and str(n.get("id") or "").strip() in addr_ids
+        ]
+        if len(role_hits) > 1:
+            return ""
     if len(raw_matches) == 1:
         return raw_matches[0]
     return _resolve_vocative_phrase_to_roster_id(phrase, roster, addr_ids)
@@ -2975,6 +2986,50 @@ def match_generic_role_address(low: str, addressable_npcs: List[Dict[str, Any]])
     out["npc_id"] = tier[0]
     out["ambiguous"] = False
     return out
+
+
+def scene_roster_generic_role_label_ambiguous(
+    low: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str],
+) -> bool:
+    """True when a bare generic role label matches multiple scene-addressable roster rows."""
+    line = str(low or "").strip().lower()
+    if not line or not roster:
+        return False
+    lead = _explicit_addressed_npc_id_leading_or_directed(line, roster)
+    if lead and lead in addr_ids:
+        return False
+    gr = match_generic_role_address(line, roster)
+    if gr.get("ambiguous"):
+        return True
+    for phrase in _collect_embedded_direct_address_phrase_candidates(line):
+        if len(_all_npc_ids_matching_vocative_raw(phrase, roster, addr_ids=addr_ids)) > 1:
+            return True
+        slug = _normalize_spoken_generic_role_slug(phrase)
+        if slug:
+            role_hits = [
+                str(n.get("id") or "").strip()
+                for n in roster
+                if isinstance(n, dict)
+                and _npc_matches_normalized_generic_role(n, slug)
+                and str(n.get("id") or "").strip() in addr_ids
+            ]
+            if len(role_hits) > 1:
+                return True
+    role = _last_spoken_generic_role_slug(line)
+    if role:
+        slug = _normalize_spoken_generic_role_slug(role)
+        role_hits = [
+            str(n.get("id") or "").strip()
+            for n in roster
+            if isinstance(n, dict)
+            and _npc_matches_normalized_generic_role(n, slug)
+            and str(n.get("id") or "").strip() in addr_ids
+        ]
+        if len(role_hits) > 1:
+            return True
+    return False
 
 
 def npc_id_from_explicit_generic_role_address(low: str, addressable_npcs: List[Dict[str, Any]]) -> str:

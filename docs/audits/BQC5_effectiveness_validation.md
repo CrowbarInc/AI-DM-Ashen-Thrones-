@@ -1,12 +1,12 @@
 # BQ-C5 Effectiveness Outcome Validation
 
-**Date:** 2026-06-11T00:00:00Z
+**Date:** 2026-06-22T21:39:03Z
 **Protected replay only:** true
 
 # Outcome Evidence
 
-- Total keys: `1`
-- Active keys: `1`
+- Total keys: `6`
+- Active keys: `6`
 - Validated retired keys: `0`
 - Validated dormant keys: `0`
 - Validated outcome count: `0`
@@ -20,23 +20,23 @@
 
 # Effectiveness Confidence
 
-- Reported confidence: `0.31`
+- Reported confidence: `1.00`
 - Outcome evidence strength: `0.20`
-- Calibration gap: `0.11`
+- Calibration gap: `0.80`
 - Status: `overconfident`
 - Outcome supported: `false`
 
 # Calibration Recalculation
 
-- Calibration score: `88.7`
-- Largest calibration gap: `0.14`
+- Calibration score: `55.3`
+- Largest calibration gap: `0.80`
 - Graduation confidence ready: `false`
 - BQ-C4 effectiveness evidence: `0.18`
 - BQ-C5 effectiveness evidence: `0.20`
 - Evidence delta: `+0.02`
 - BQ-C4 calibration score: `61.3`
-- BQ-C5 calibration score: `88.7`
-- Calibration score delta: `+27.4`
+- BQ-C5 calibration score: `55.3`
+- Calibration score delta: `-6.0`
 
 # Graduation Impact
 

@@ -148,6 +148,78 @@ def protected_social_speaker_observation_expectation(
     )
 
 
+_BX_PARITY_ALLOW_UNAVAILABLE: tuple[str, ...] = (
+    "fallback_family",
+    "final_emitted_source",
+    "resolution_kind",
+    "route_kind",
+    "response_type_required",
+    "response_type_candidate_ok",
+    "response_type_repair_used",
+    "response_type_repair_kind",
+    "trace.canonical_entry",
+    "trace.turn_trace",
+    "trace.social_contract_trace",
+)
+
+
+def protected_bx_resolved_speaker_parity_expectation(
+    expected_speaker_id: str,
+    *,
+    allow_unavailable: tuple[str, ...] | list[str] = _BX_PARITY_ALLOW_UNAVAILABLE,
+) -> dict[str, Any]:
+    """Protected replay fragment for resolved BX guard speaker parity fields."""
+    return protected_structural_expectation(
+        require_present=(
+            "final_text",
+            "selected_speaker_id",
+            "selected_speaker_source",
+            "speaker_projection_parity",
+            "final_speaker_observation",
+        ),
+        allow_unavailable=allow_unavailable,
+        equals={
+            "selected_speaker_id": expected_speaker_id,
+            "speaker_projection_parity.status": "aligned",
+            "speaker_projection_parity.selected_speaker_id": expected_speaker_id,
+            "speaker_projection_parity.final_observed_speaker_id": expected_speaker_id,
+            "speaker_projection_parity.final_observed_status": "resolved",
+            "final_speaker_observation.status": "resolved",
+            "final_speaker_observation.canonical_speaker_id": expected_speaker_id,
+        },
+        no_scaffold=False,
+    )
+
+
+def protected_bx_ambiguous_guard_parity_expectation(
+    *,
+    allow_unavailable: tuple[str, ...] | list[str] = (
+        *_BX_PARITY_ALLOW_UNAVAILABLE,
+        "selected_speaker_id",
+    ),
+) -> dict[str, Any]:
+    """Protected replay fragment for ambiguous multi-guard roster (BX4 convergence)."""
+    return protected_structural_expectation(
+        require_present=(
+            "final_text",
+            "speaker_projection_parity",
+            "final_speaker_observation",
+        ),
+        allow_unavailable=allow_unavailable,
+        equals={
+            "selected_speaker_id": None,
+            "selected_speaker_source": None,
+            "speaker_projection_parity.status": "final_ambiguous",
+            "speaker_projection_parity.selected_speaker_id": None,
+            "speaker_projection_parity.final_observed_speaker_id": None,
+            "speaker_projection_parity.final_observed_status": "ambiguous",
+            "final_speaker_observation.status": "ambiguous",
+            "final_speaker_observation.canonical_speaker_id": None,
+        },
+        no_scaffold=False,
+    )
+
+
 def load_scenario_spine_fixture_json(path: Path | str) -> dict[str, Any]:
     """Read one scenario-spine JSON fixture from the repo."""
     fixture_path = Path(path)

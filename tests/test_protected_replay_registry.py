@@ -7,11 +7,14 @@ import sys
 from pathlib import Path
 
 from tests.helpers.protected_replay_registry import (
+    BX_SPEAKER_PARITY_MODULE,
     DIRECT_SEAM_MODULE,
     LONG_SESSION_MODULE,
     ProtectionStatus,
     SCENARIO_SPINE_MODULE,
     STRUCTURAL_INVARIANTS_MODULE,
+    bx_speaker_parity_corpus,
+    bx_speaker_parity_corpus_test_node_ids,
     protected_replay_corpus,
     protected_replay_corpus_test_node_ids,
     protected_replay_registry,
@@ -67,6 +70,41 @@ def test_diagnostic_replay_scenarios_are_not_promoted_to_protected_corpus() -> N
     assert LONG_SESSION_MODULE in supporting_modules
     assert DIRECT_SEAM_MODULE in supporting_modules
     assert SCENARIO_SPINE_MODULE in supporting_modules
+
+
+def test_bx_speaker_parity_corpus_contains_four_guard_matrix_scenarios() -> None:
+    corpus = bx_speaker_parity_corpus()
+
+    assert len(corpus) == 4
+    assert {entry.test_module for entry in corpus} == {BX_SPEAKER_PARITY_MODULE}
+    assert {entry.scenario_id for entry in corpus} == {
+        "bx5_guard_role_alias_guard_captain",
+        "bx5_guard_canonical_guard_captain",
+        "bx5_guard_gate_guard_distinct",
+        "bx5_guard_ambiguous_multi_guard",
+    }
+
+
+def test_bx_speaker_parity_marker_collects_registered_corpus_tests() -> None:
+    completed = subprocess.run(
+        [sys.executable, "-m", "pytest", "-m", "bx_speaker_parity", "--collect-only"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    output = f"{completed.stdout}\n{completed.stderr}"
+
+    assert completed.returncode == 0, output
+    collected_node_ids = {
+        line.strip()
+        for line in completed.stdout.splitlines()
+        if line.strip().startswith("tests/") and "::" in line
+    }
+    assert collected_node_ids >= set(bx_speaker_parity_corpus_test_node_ids()), (
+        f"collected={sorted(collected_node_ids)!r} "
+        f"expected_at_least={sorted(bx_speaker_parity_corpus_test_node_ids())!r}"
+    )
 
 
 def test_golden_replay_marker_collects_protected_corpus_tests() -> None:

@@ -2,9 +2,8 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-05-30T00:00:00Z`
-- Command: `pytest synthetic`
-- Total risk signals: `0`
+- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_bx_speaker_identity_end_to_end_parity.py tests/test_bx_speaker_identity_golden_replay.py tests/test_golden_replay.py tests/test_golden_replay_projection.py tests/test_golden_replay_trend.py tests/test_golden_replay_structural_invariants.py tests/test_speaker_contract_risk.py tests/test_social_interaction_authority.py -q --tb=line`
+- Total risk signals: `3`
 
 ## High Risk Drift
 
@@ -12,27 +11,36 @@ No drift risk signals in this band.
 
 ## Medium Risk Drift
 
-No drift risk signals in this band.
+- `speaker_drift` (source=`protected`, frequency=`1`, trend=`stable`)
 
 ## Low Risk Drift
 
-No drift risk signals in this band.
+- `game/speaker_contract_enforcement.py` (source=`advisory`, frequency=`1`, trend=`stable`)
+- `selected_speaker_source` (source=`advisory`, frequency=`1`, trend=`stable`)
 
 ## Top Risk Fields
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `selected_speaker_source` | `low` |
 
 ## Top Risk Owners
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `speaker_drift` | `medium` |
 
 ## Top Risk Investigation Targets
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `game/speaker_contract_enforcement.py` | `low` |
 
 ## Recommended Investigation Order
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `game/speaker_contract_enforcement.py` | `low` |
 
 ## Stability Ownership
 

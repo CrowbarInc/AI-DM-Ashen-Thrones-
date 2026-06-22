@@ -30,6 +30,7 @@ from tests.helpers.protected_replay_registry import (
     BW_DIMENSION_ROUTE,
     BW_DIMENSION_SOURCE,
     BW_DIMENSION_SPEAKER,
+    bx_speaker_parity_corpus,
     protected_replay_corpus,
 )
 
@@ -174,6 +175,11 @@ def protected_replay_scenario_specs() -> tuple[ProtectedReplayScenarioSpec, ...]
     return tuple(by_id[entry.scenario_id] for entry in protected_replay_corpus())
 
 
+def bx_speaker_parity_corpus_scenario_ids() -> tuple[str, ...]:
+    """BX guard speaker parity scenario IDs (registry authority; not executed in BW trend window)."""
+    return tuple(entry.scenario_id for entry in bx_speaker_parity_corpus())
+
+
 def _gpt_callback_from_lines(lines: tuple[str, ...]) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
     if not lines:
         raise ValueError("gpt_lines must not be empty")
@@ -287,7 +293,26 @@ def normalize_trend_observation(turn: Mapping[str, Any]) -> dict[str, Any]:
         "trace_route_selected": _trace_route_selected(turn),
         "resolution_kind": _field_state(turn, "resolution_kind"),
     }
-    speaker = {"selected_speaker_id": _field_state(turn, "selected_speaker_id")}
+    parity = turn.get("speaker_projection_parity")
+    parity_map = dict(parity) if isinstance(parity, Mapping) else {}
+    final_obs = turn.get("final_speaker_observation")
+    final_obs_map = dict(final_obs) if isinstance(final_obs, Mapping) else {}
+    speaker = {
+        "selected_speaker_id": _field_state(turn, "selected_speaker_id"),
+        "selected_speaker_source": _field_state(turn, "selected_speaker_source"),
+        "speaker_projection_parity_status": {
+            "status": "present" if parity_map else "absent",
+            "value": parity_map.get("status"),
+        },
+        "final_observed_speaker_id": {
+            "status": "present" if parity_map else "absent",
+            "value": parity_map.get("final_observed_speaker_id"),
+        },
+        "final_speaker_observation_status": {
+            "status": "present" if final_obs_map else "absent",
+            "value": final_obs_map.get("status"),
+        },
+    }
     source = {field: _field_state(turn, field) for field in SOURCE_ATTRIBUTION_FIELDS}
     owner = {field: _field_state(turn, field) for field in OWNER_BUCKET_FIELDS}
     mutation = {field: _field_state(turn, field) for field in MUTATION_FIELDS}

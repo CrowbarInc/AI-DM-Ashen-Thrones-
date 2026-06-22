@@ -1,14 +1,23 @@
 from __future__ import annotations
 
+from tests.helpers.bx_guard_speaker_parity import (
+    ambiguous_guard_parity_locked_fields,
+    resolved_guard_parity_locked_fields,
+)
 from tests.helpers.golden_replay import (
     PROTECTED_NO_SCAFFOLD_TERMS,
     assert_golden_turn_observation,
     frontier_gate_branch_replay_fixture,
     validate_scenario_spine_fixture_dict,
+    protected_bx_ambiguous_guard_parity_expectation,
+    protected_bx_resolved_speaker_parity_expectation,
     protected_social_speaker_observation_expectation,
     protected_structural_expectation,
     render_golden_replay_markdown_report,
 )
+
+BX_RESOLVED_MAX_RISK_TOTAL = 19
+BX_AMBIGUOUS_MIN_RISK_S = 20
 
 
 def test_frontier_gate_branch_replay_fixture_loads_validated_branch() -> None:
@@ -76,6 +85,48 @@ def test_protected_social_speaker_observation_expectation_allows_custom_optional
         "allow_unavailable": ["fallback_family"],
         "equals": {"selected_speaker_id": "runner"},
     }
+
+
+def test_protected_bx_resolved_speaker_parity_expectation_locks_required_fields() -> None:
+    speaker_id = "guard_captain"
+    expectation = protected_bx_resolved_speaker_parity_expectation(speaker_id)
+
+    assert expectation["require_present"] == [
+        "final_text",
+        "selected_speaker_id",
+        "selected_speaker_source",
+        "speaker_projection_parity",
+        "final_speaker_observation",
+    ]
+    assert expectation["equals"] == resolved_guard_parity_locked_fields(speaker_id)
+    assert "selected_speaker_id" not in expectation.get("allow_unavailable", [])
+    assert "scaffold_leakage" not in expectation
+
+
+def test_protected_bx_resolved_speaker_parity_expectation_risk_threshold_contract() -> None:
+    """Resolved guard parity gates require low band: S==0 and total<=19."""
+    assert BX_RESOLVED_MAX_RISK_TOTAL == 19
+    assert BX_AMBIGUOUS_MIN_RISK_S > BX_RESOLVED_MAX_RISK_TOTAL
+
+
+def test_protected_bx_ambiguous_guard_parity_expectation_locks_required_fields() -> None:
+    expectation = protected_bx_ambiguous_guard_parity_expectation()
+
+    assert expectation["require_present"] == [
+        "final_text",
+        "speaker_projection_parity",
+        "final_speaker_observation",
+    ]
+    assert expectation["equals"] == ambiguous_guard_parity_locked_fields()
+    assert "selected_speaker_id" in expectation.get("allow_unavailable", [])
+    assert "scaffold_leakage" not in expectation
+
+
+def test_protected_bx_ambiguous_guard_parity_expectation_risk_threshold_contract() -> None:
+    """Ambiguous multi-guard must not pass as low-risk aligned parity (S>=20)."""
+    assert BX_AMBIGUOUS_MIN_RISK_S == 20
+    assert ambiguous_guard_parity_locked_fields()["speaker_projection_parity.status"] == "final_ambiguous"
+    assert ambiguous_guard_parity_locked_fields()["speaker_projection_parity.status"] != "aligned"
 
 
 def test_protected_structural_expectation_preserves_unavailable_field_order() -> None:

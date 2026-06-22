@@ -222,6 +222,7 @@ def test_mismatch_without_checkpoint_localization_scores_d() -> None:
             enforcement_owner=None,
             replay_selected_speaker_id=None,
             replay_selected_speaker_source=None,
+            replay_speaker_projection_parity=None,
             first_text_divergence_checkpoint_id=None,
             first_speaker_divergence_checkpoint_id=None,
             first_divergence_checkpoint_id=None,
@@ -834,9 +835,15 @@ def test_bt3_family_risk_rows_summary_shape() -> None:
             "family": "baseline",
             "total": 0,
             "band": "low",
+            "risk_S": 0,
             "first_divergence": None,
             "speaker_status": "resolved",
             "text_parity": True,
             "attribution_score": 0,
+            "replay_selected_speaker_id": obs.replay_selected_speaker_id,
+            "replay_selected_speaker_source": obs.replay_selected_speaker_source,
+            "speaker_projection_parity_status": None,
+            "final_observed_speaker_id": None,
+            "final_observed_status": None,
         }
     ]

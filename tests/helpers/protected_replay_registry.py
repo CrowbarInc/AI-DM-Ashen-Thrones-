@@ -27,6 +27,7 @@ ALL_BW_DIMENSIONS: Final[tuple[str, ...]] = (
 )
 
 STRUCTURAL_INVARIANTS_MODULE: Final[str] = "tests/test_golden_replay_structural_invariants.py"
+BX_SPEAKER_PARITY_MODULE: Final[str] = "tests/test_bx_speaker_identity_golden_replay.py"
 LONG_SESSION_MODULE: Final[str] = "tests/test_golden_replay_long_session.py"
 DIRECT_SEAM_MODULE: Final[str] = "tests/test_golden_replay_direct_seam.py"
 SCENARIO_SPINE_MODULE: Final[str] = "tests/test_golden_replay_scenario_spine.py"
@@ -137,6 +138,54 @@ _REGISTRY: Final[tuple[ProtectedReplayScenarioEntry, ...]] = tuple(
                 category="END_TO_END_PROTECTED",
             ),
             ProtectedReplayScenarioEntry(
+                scenario_id="bx5_guard_role_alias_guard_captain",
+                test_module=BX_SPEAKER_PARITY_MODULE,
+                test_name="test_bx5_protected_golden_role_alias_guard_to_guard_captain",
+                protection_status=ProtectionStatus.PROTECTED,
+                bw_dimensions=(
+                    BW_DIMENSION_ROUTE,
+                    BW_DIMENSION_SPEAKER,
+                    BW_DIMENSION_FINAL_TEXT,
+                ),
+                sort_key="07_bx5_guard_role_alias_guard_captain",
+                category="BX_SPEAKER_PARITY_PROTECTED",
+            ),
+            ProtectedReplayScenarioEntry(
+                scenario_id="bx5_guard_canonical_guard_captain",
+                test_module=BX_SPEAKER_PARITY_MODULE,
+                test_name="test_bx5_protected_golden_canonical_guard_captain",
+                protection_status=ProtectionStatus.PROTECTED,
+                bw_dimensions=(
+                    BW_DIMENSION_ROUTE,
+                    BW_DIMENSION_SPEAKER,
+                    BW_DIMENSION_FINAL_TEXT,
+                ),
+                sort_key="08_bx5_guard_canonical_guard_captain",
+                category="BX_SPEAKER_PARITY_PROTECTED",
+            ),
+            ProtectedReplayScenarioEntry(
+                scenario_id="bx5_guard_gate_guard_distinct",
+                test_module=BX_SPEAKER_PARITY_MODULE,
+                test_name="test_bx5_protected_golden_gate_guard_distinct_from_guard_captain",
+                protection_status=ProtectionStatus.PROTECTED,
+                bw_dimensions=(
+                    BW_DIMENSION_ROUTE,
+                    BW_DIMENSION_SPEAKER,
+                    BW_DIMENSION_FINAL_TEXT,
+                ),
+                sort_key="09_bx5_guard_gate_guard_distinct",
+                category="BX_SPEAKER_PARITY_PROTECTED",
+            ),
+            ProtectedReplayScenarioEntry(
+                scenario_id="bx5_guard_ambiguous_multi_guard",
+                test_module=BX_SPEAKER_PARITY_MODULE,
+                test_name="test_bx5_protected_golden_ambiguous_guard_no_false_parity",
+                protection_status=ProtectionStatus.PROTECTED,
+                bw_dimensions=(BW_DIMENSION_SPEAKER, BW_DIMENSION_FINAL_TEXT),
+                sort_key="10_bx5_guard_ambiguous_multi_guard",
+                category="BX_SPEAKER_PARITY_PROTECTED",
+            ),
+            ProtectedReplayScenarioEntry(
                 scenario_id="declared_alias_dialogue_plan",
                 test_module=DIRECT_SEAM_MODULE,
                 test_name="test_golden_direct_seam_declared_alias_dialogue_plan_structural_invariants",
@@ -227,12 +276,32 @@ def protected_replay_registry() -> tuple[ProtectedReplayScenarioEntry, ...]:
 
 def protected_replay_corpus() -> tuple[ProtectedReplayScenarioEntry, ...]:
     """Return acceptance-blocking protected replay scenarios for BW corpus enumeration."""
-    return tuple(entry for entry in _REGISTRY if entry.protection_status is ProtectionStatus.PROTECTED)
+    return tuple(
+        entry
+        for entry in _REGISTRY
+        if entry.protection_status is ProtectionStatus.PROTECTED
+        and entry.category == "END_TO_END_PROTECTED"
+    )
+
+
+def bx_speaker_parity_corpus() -> tuple[ProtectedReplayScenarioEntry, ...]:
+    """Return acceptance-blocking BX guard speaker parity scenarios (separate from BW trend window)."""
+    return tuple(
+        entry
+        for entry in _REGISTRY
+        if entry.protection_status is ProtectionStatus.PROTECTED
+        and entry.category == "BX_SPEAKER_PARITY_PROTECTED"
+    )
 
 
 def protected_replay_corpus_test_node_ids() -> tuple[str, ...]:
-    """Return pytest node IDs for the protected replay corpus."""
+    """Return pytest node IDs for the BW protected replay corpus."""
     return tuple(entry.test_node_id for entry in protected_replay_corpus())
+
+
+def bx_speaker_parity_corpus_test_node_ids() -> tuple[str, ...]:
+    """Return pytest node IDs for the BX speaker parity protected corpus."""
+    return tuple(entry.test_node_id for entry in bx_speaker_parity_corpus())
 
 
 def protected_replay_registry_validation_errors() -> list[str]:
@@ -257,6 +326,12 @@ def protected_replay_registry_validation_errors() -> list[str]:
         errors.append(
             "protected replay corpus must contain exactly six short structural scenarios; "
             f"found {len(protected_replay_corpus())!r}"
+        )
+
+    if len(bx_speaker_parity_corpus()) != 4:
+        errors.append(
+            "BX speaker parity corpus must contain exactly four guard-matrix scenarios; "
+            f"found {len(bx_speaker_parity_corpus())!r}"
         )
 
     for entry in entries:

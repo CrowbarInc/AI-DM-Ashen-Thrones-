@@ -78,6 +78,65 @@ def test_reconcile_speaker_locks_to_active_when_not_contradicted_by_vocative():
     assert out["social"]["npc_id"] == "tavern_runner"
 
 
+def test_reconcile_preserves_ambiguous_generic_guard_without_promotion():
+    """BX4: bare ``guard`` with multiple roster guard rows must not promote to guard_captain."""
+    from game.interaction_context import rebuild_active_scene_entities, resolve_authoritative_social_target
+    from game.storage import load_scene
+    from copy import deepcopy
+
+    world = {"npcs": []}
+    session = default_session()
+    session["active_scene_id"] = "frontier_gate"
+    session["interaction_context"] = {}
+    scene = load_scene("frontier_gate")
+    st = dict(session["scene_state"])
+    st["active_scene_id"] = "frontier_gate"
+    st["active_entities"] = ["guard_captain", "tavern_runner", "refugee", "threadbare_watcher", "gate_sentry"]
+    st["entity_presence"] = {eid: "active" for eid in st["active_entities"]}
+    gate_sentry = {
+        "id": "gate_sentry",
+        "name": "Gate Sentry",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": True,
+        "address_priority": 0,
+        "address_roles": ["guard", "sentry"],
+        "aliases": [],
+    }
+    sc = deepcopy(scene.get("scene") or {})
+    addr = list(sc.get("addressables") or [])
+    addr.append(gate_sentry)
+    sc["addressables"] = addr
+    st["emergent_addressables"] = [gate_sentry]
+    scene = {"scene": sc, "scene_state": dict(st)}
+    rebuild_active_scene_entities(session, world, "frontier_gate", scene_envelope=scene)
+    st_live = session.setdefault("scene_state", {})
+    if isinstance(st_live, dict):
+        st_live["emergent_addressables"] = [gate_sentry]
+
+    player_text = "Tell me guard, who posted that notice?"
+    auth = resolve_authoritative_social_target(
+        session,
+        world,
+        "frontier_gate",
+        player_text=player_text,
+        merged_player_prompt=player_text,
+        scene_envelope=scene,
+        allow_first_roster_fallback=False,
+    )
+    assert auth.get("target_resolved") is False
+
+    res = {
+        "kind": "question",
+        "prompt": player_text,
+        "social": {"social_intent_class": "social_exchange"},
+    }
+    out = reconcile_strict_social_resolution_speaker(res, session, world, "frontier_gate")
+    assert out.get("social", {}).get("npc_id") in (None, "")
+    em = out.get("metadata", {}).get("emission_debug", {})
+    assert "speaker_selection_contract" not in em
+
+
 def test_final_gate_emits_social_minimal_not_ambient_scene_when_engaged():
     world = default_world()
     session = default_session()
