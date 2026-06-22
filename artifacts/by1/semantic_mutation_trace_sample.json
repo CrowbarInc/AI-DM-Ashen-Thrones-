@@ -1,0 +1,36 @@
+{
+  "first_semantic_mutation_bucket": "sanitizer",
+  "first_semantic_mutation_sequence": 2,
+  "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
+  "semantic_mutation_changed_count": 1,
+  "trace": [
+    {
+      "after_hash": "2cf24dba5fb0a30e",
+      "before_hash": "2cf24dba5fb0a30e",
+      "bucket": "policy",
+      "checkpoint_id": "policy_output",
+      "evidence": null,
+      "input_field": "player_facing_text",
+      "mutation_kind": null,
+      "normalized_changed": false,
+      "output_field": "player_facing_text",
+      "owner": "game.response_policy_enforcement",
+      "sequence": 1,
+      "source": "game.response_policy_enforcement.apply_response_policy_enforcement"
+    },
+    {
+      "after_hash": "83bd24e445c803fe",
+      "before_hash": "2cf24dba5fb0a30e",
+      "bucket": "sanitizer",
+      "checkpoint_id": "sanitizer_output",
+      "evidence": null,
+      "input_field": "player_facing_text",
+      "mutation_kind": null,
+      "normalized_changed": true,
+      "output_field": "player_facing_text",
+      "owner": "game.output_sanitizer",
+      "sequence": 2,
+      "source": "game.output_sanitizer.sanitize_player_facing_output"
+    }
+  ]
+}

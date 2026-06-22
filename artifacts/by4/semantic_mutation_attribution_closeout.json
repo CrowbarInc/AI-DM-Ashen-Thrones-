@@ -1,0 +1,152 @@
+{
+  "by1_synthetic_fixture_coverage": {
+    "attributable_first_mutations": 6,
+    "bucket_frequencies": {
+      "fallback": 1,
+      "final_emission": 1,
+      "policy": 2,
+      "repair": 1,
+      "sanitizer": 1
+    },
+    "buckets_covered": [
+      "fallback",
+      "final_emission",
+      "policy",
+      "repair",
+      "sanitizer"
+    ],
+    "first_source_coverage_rate": 1.0,
+    "fixture_source": "tests/helpers/semantic_mutation_attribution_closeout.py::build_by1_synthetic_fixture_corpus",
+    "mutated_turns": 6,
+    "total_turns": 7
+  },
+  "by2_protected_corpus_measurement": {
+    "attribution_gap_count": 0,
+    "corpus": "protected_replay",
+    "corpus_scenario_ids": [
+      "directed_npc_question",
+      "lead_followup_with_dialogue_lock",
+      "sanitizer_scaffold_leakage",
+      "thin_answer_action_outcome_final_emission",
+      "vocative_override_after_prior_continuity",
+      "wrong_speaker_strict_social_emission"
+    ],
+    "summary": {
+      "attributable_first_mutations": 3,
+      "bucket_distribution": {
+        "fallback": 1,
+        "policy": 1,
+        "sanitizer": 1
+      },
+      "first_source_coverage_rate": 1.0,
+      "mutated_turns": 3,
+      "representative_high_risk_turns": [],
+      "semantic_mutation_risk_max": 10,
+      "semantic_mutation_risk_mean": 3.33,
+      "top_mutation_sources": [
+        {
+          "count": 1,
+          "source": "game.response_policy_enforcement.apply_response_policy_enforcement"
+        },
+        {
+          "count": 1,
+          "source": "game.output_sanitizer.sanitize_player_facing_output"
+        },
+        {
+          "count": 1,
+          "source": "game.social_exchange_emission.build_final_strict_social_response"
+        }
+      ],
+      "total_turns": 8,
+      "unknown_first_source_count": 0
+    }
+  },
+  "by3_strict_social_gap_closure": {
+    "after_by3": {
+      "first_semantic_mutation_bucket": "fallback",
+      "first_semantic_mutation_checkpoint_id": "normalized_social_candidate",
+      "first_semantic_mutation_source": "game.social_exchange_emission.build_final_strict_social_response",
+      "post_gate_mutation_detected": true,
+      "semantic_mutation_changed_count": 1,
+      "trace_continuity": true
+    },
+    "before_by2": {
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_source": null,
+      "missing_checkpoint": "writer_or_pre_policy_checkpoint",
+      "post_gate_mutation_detected": true,
+      "semantic_mutation_changed_count": 0,
+      "trace_continuity": false
+    },
+    "checkpoints_added": [
+      "writer_raw_candidate",
+      "final_emission_gate_entry",
+      "strict_social_trunk_entry",
+      "normalized_social_candidate",
+      "speaker_contract_enforcement",
+      "strict_social_pre_terminal_pipeline"
+    ],
+    "gap_closed": true,
+    "remaining_by4_candidates": [],
+    "target_turn": "wrong_speaker_strict_social_emission|idx:0"
+  },
+  "closeout": "by4_semantic_mutation_attribution",
+  "final_measurement": {
+    "attributable_first_mutations": 3,
+    "attribution_gap_count": 0,
+    "attribution_gaps": [],
+    "bucket_distribution": {
+      "fallback": 1,
+      "policy": 1,
+      "sanitizer": 1
+    },
+    "first_source_coverage_rate": 1.0,
+    "mutated_turns": 3,
+    "semantic_mutation_risk_max": 10,
+    "semantic_mutation_risk_mean": 3.33,
+    "top_mutation_sources": [
+      {
+        "count": 1,
+        "source": "game.response_policy_enforcement.apply_response_policy_enforcement"
+      },
+      {
+        "count": 1,
+        "source": "game.output_sanitizer.sanitize_player_facing_output"
+      },
+      {
+        "count": 1,
+        "source": "game.social_exchange_emission.build_final_strict_social_response"
+      }
+    ],
+    "total_turns": 8,
+    "unknown_first_source_count": 0
+  },
+  "protected_replay_non_interference": {
+    "final_text_hash_stable": true,
+    "protected_fields_stable": true,
+    "verified": true
+  },
+  "remaining_risks": [
+    "Semantic mutation probes are test/replay-only; production runtime does not stamp ordered checkpoints.",
+    "Protected replay corpus covers 8 turns across 6 scenarios; live campaign paths may diverge.",
+    "Risk score measures attribution completeness, not semantic equivalence of before/after text."
+  ],
+  "schema_promotion_recommendation": {
+    "candidate_fields_if_promoted_later": [
+      "first_semantic_mutation_bucket",
+      "first_semantic_mutation_source",
+      "semantic_mutation_changed_count",
+      "semantic_mutation_risk_score",
+      "semantic_mutation_risk_band"
+    ],
+    "defer_fields": [
+      "semantic_mutation_trace",
+      "first_semantic_mutation_before_hash",
+      "first_semantic_mutation_after_hash"
+    ],
+    "measurement_ready_for_future_promotion": true,
+    "promote_to_protected_replay_schema_now": false,
+    "rationale": "Attribution measurement is stable on the protected corpus with zero gaps and full first-source coverage, but BY fields remain test-only diagnostics. Do not promote trace checkpoints or risk scores into protected golden replay schema until a dedicated cycle validates long-term non-interference, corpus breadth, and operational need for replay diffs."
+  },
+  "schema_version": 1
+}

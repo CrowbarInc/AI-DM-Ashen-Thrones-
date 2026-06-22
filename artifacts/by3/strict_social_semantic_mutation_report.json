@@ -1,0 +1,203 @@
+{
+  "attribution_gaps": [],
+  "before_after_coverage": {
+    "after_by3": {
+      "first_semantic_mutation_bucket": "fallback",
+      "first_semantic_mutation_checkpoint_id": "normalized_social_candidate",
+      "first_semantic_mutation_source": "game.social_exchange_emission.build_final_strict_social_response",
+      "post_gate_mutation_detected": true,
+      "semantic_mutation_changed_count": 1,
+      "trace_continuity": true
+    },
+    "before_by2": {
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_source": null,
+      "missing_checkpoint": "writer_or_pre_policy_checkpoint",
+      "post_gate_mutation_detected": true,
+      "semantic_mutation_changed_count": 0,
+      "trace_continuity": false
+    },
+    "gap_closed": true,
+    "target_turn": "wrong_speaker_strict_social_emission|idx:0"
+  },
+  "by3_instrumentation": {
+    "checkpoints_added": [
+      "writer_raw_candidate",
+      "final_emission_gate_entry",
+      "strict_social_trunk_entry",
+      "normalized_social_candidate",
+      "speaker_contract_enforcement",
+      "strict_social_pre_terminal_pipeline"
+    ]
+  },
+  "corpus": "protected_replay",
+  "remaining_by4_candidates": [],
+  "schema_version": 1,
+  "summary": {
+    "attributable_first_mutations": 3,
+    "bucket_distribution": {
+      "fallback": 1,
+      "policy": 1,
+      "sanitizer": 1
+    },
+    "first_source_coverage_rate": 1.0,
+    "mutated_turns": 3,
+    "representative_high_risk_turns": [],
+    "semantic_mutation_risk_max": 10,
+    "semantic_mutation_risk_mean": 3.33,
+    "top_mutation_sources": [
+      {
+        "count": 1,
+        "source": "game.response_policy_enforcement.apply_response_policy_enforcement"
+      },
+      {
+        "count": 1,
+        "source": "game.output_sanitizer.sanitize_player_facing_output"
+      },
+      {
+        "count": 1,
+        "source": "game.social_exchange_emission.build_final_strict_social_response"
+      }
+    ],
+    "total_turns": 8,
+    "unknown_first_source_count": 0
+  },
+  "turns": [
+    {
+      "final_text_hash": "852a600eeac26299",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": false,
+      "scenario_id": "directed_npc_question",
+      "semantic_mutation_changed_count": 0,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "directed_npc_question|idx:0",
+      "turn_index": 0
+    },
+    {
+      "final_text_hash": "753c3e3dfe4cddc7",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": false,
+      "scenario_id": "lead_followup_with_dialogue_lock",
+      "semantic_mutation_changed_count": 0,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "lead_followup_with_dialogue_lock|idx:0",
+      "turn_index": 0
+    },
+    {
+      "final_text_hash": "cbdfa417f88429cf",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": false,
+      "scenario_id": "lead_followup_with_dialogue_lock",
+      "semantic_mutation_changed_count": 0,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "lead_followup_with_dialogue_lock|idx:1",
+      "turn_index": 1
+    },
+    {
+      "final_text_hash": "35391543b1b96b61",
+      "first_semantic_mutation_bucket": "policy",
+      "first_semantic_mutation_checkpoint_id": "policy_output",
+      "first_semantic_mutation_source": "game.response_policy_enforcement.apply_response_policy_enforcement",
+      "post_gate_mutation_detected": true,
+      "scenario_id": "sanitizer_scaffold_leakage",
+      "semantic_mutation_changed_count": 2,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 10,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "sanitizer_scaffold_leakage|idx:0",
+      "turn_index": 0
+    },
+    {
+      "final_text_hash": "35391543b1b96b61",
+      "first_semantic_mutation_bucket": "sanitizer",
+      "first_semantic_mutation_checkpoint_id": "sanitizer_output",
+      "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
+      "post_gate_mutation_detected": true,
+      "scenario_id": "thin_answer_action_outcome_final_emission",
+      "semantic_mutation_changed_count": 1,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "thin_answer_action_outcome_final_emission|idx:0",
+      "turn_index": 0
+    },
+    {
+      "final_text_hash": "343a3ab4400975e2",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": false,
+      "scenario_id": "vocative_override_after_prior_continuity",
+      "semantic_mutation_changed_count": 0,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "vocative_override_after_prior_continuity|idx:0",
+      "turn_index": 0
+    },
+    {
+      "final_text_hash": "4a8943f6a5a5260c",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": false,
+      "scenario_id": "vocative_override_after_prior_continuity",
+      "semantic_mutation_changed_count": 0,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "vocative_override_after_prior_continuity|idx:1",
+      "turn_index": 1
+    },
+    {
+      "final_text_hash": "6d40a5a9fc370ed1",
+      "first_semantic_mutation_bucket": "fallback",
+      "first_semantic_mutation_checkpoint_id": "normalized_social_candidate",
+      "first_semantic_mutation_source": "game.social_exchange_emission.build_final_strict_social_response",
+      "post_gate_mutation_detected": true,
+      "scenario_id": "wrong_speaker_strict_social_emission",
+      "semantic_mutation_changed_count": 1,
+      "semantic_mutation_risk_band": "low",
+      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_trace_complete": true,
+      "semantic_mutation_unknown_count": 0,
+      "trace_continuity": true,
+      "turn_id": null,
+      "turn_identity": "wrong_speaker_strict_social_emission|idx:0",
+      "turn_index": 0
+    }
+  ]
+}

@@ -1543,6 +1543,36 @@ def _project_flat_protected_observed_fields(
     return out
 
 
+def project_semantic_mutation_summary(
+    semantic_mutation_trace: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Project optional BY1 semantic mutation trace into summary observation fields."""
+    if not isinstance(semantic_mutation_trace, Mapping):
+        return {}
+    summary_keys = (
+        "first_semantic_mutation_bucket",
+        "first_semantic_mutation_source",
+        "first_semantic_mutation_checkpoint_id",
+        "first_semantic_mutation_sequence",
+        "semantic_mutation_changed_count",
+        "semantic_mutation_unknown_count",
+        "semantic_mutation_risk_score",
+        "semantic_mutation_risk_band",
+        "semantic_mutation_trace_complete",
+        "trace_continuity",
+    )
+    out: dict[str, Any] = {}
+    for key in summary_keys:
+        if key in {"semantic_mutation_trace_complete", "trace_continuity"}:
+            if key in semantic_mutation_trace:
+                out[key] = semantic_mutation_trace.get(key)
+            continue
+        value = semantic_mutation_trace.get(key)
+        if value is not None:
+            out[key] = value
+    return out
+
+
 def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     """Project chat payload + snapshot into a golden replay observation dict.
 
@@ -1551,6 +1581,7 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     - ``snap`` (mapping, required)
     - ``payload`` (mapping, required)
     - ``replay_identity`` (optional mapping with source_path/branch_id/turn_id)
+    - ``semantic_mutation_trace`` (optional BY1 diagnostic record)
     """
     scenario_id = str(turn_payload.get("scenario_id") or "")
     snap_raw = turn_payload.get("snap")
@@ -1716,4 +1747,10 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
             if value is not None and str(value).strip():
                 observed[key] = str(value)
     observed["unavailable"] = projection_status.unavailable
+    semantic_trace = turn_payload.get("semantic_mutation_trace")
+    if not isinstance(semantic_trace, Mapping):
+        semantic_trace = payload.get("semantic_mutation_trace")
+    observed.update(project_semantic_mutation_summary(
+        semantic_trace if isinstance(semantic_trace, Mapping) else None
+    ))
     return observed
