@@ -7,6 +7,8 @@ Gate/fallback/sanitizer legality remains with owner suites.
 
 from __future__ import annotations
 
+import pytest
+
 from tests.helpers.golden_replay import (
     assert_protected_golden_turn_observation,
     format_golden_replay_debug,
@@ -23,6 +25,8 @@ from tests.helpers.golden_replay_fixtures import (
     seed_scene_object_investigation_world,
     seed_tavern_patrol_lead_world,
 )
+
+pytestmark = pytest.mark.golden_replay
 
 
 def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, monkeypatch):

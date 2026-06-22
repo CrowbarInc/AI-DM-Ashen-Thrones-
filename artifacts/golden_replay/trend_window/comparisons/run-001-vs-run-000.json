@@ -1,0 +1,104 @@
+{
+  "baseline_run_id": "run-000",
+  "current_run_id": "run-001",
+  "dimension_summary": {
+    "final_text": {
+      "affected_identities": [],
+      "drift_count": 0
+    },
+    "mutation": {
+      "affected_identities": [],
+      "drift_count": 0
+    },
+    "owner": {
+      "affected_identities": [],
+      "drift_count": 0
+    },
+    "route": {
+      "affected_identities": [],
+      "drift_count": 0
+    },
+    "source": {
+      "affected_identities": [],
+      "drift_count": 0
+    },
+    "speaker": {
+      "affected_identities": [],
+      "drift_count": 0
+    }
+  },
+  "golden_transcript_drift_count": 0,
+  "identity_alignment": {
+    "aligned_count": 8,
+    "missing_in_baseline": [],
+    "missing_in_current": []
+  },
+  "per_identity_comparisons": [
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "directed_npc_question|idx:0",
+      "scenario_id": "directed_npc_question",
+      "turn_id": null,
+      "turn_index": 0
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "lead_followup_with_dialogue_lock|idx:0",
+      "scenario_id": "lead_followup_with_dialogue_lock",
+      "turn_id": null,
+      "turn_index": 0
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "lead_followup_with_dialogue_lock|idx:1",
+      "scenario_id": "lead_followup_with_dialogue_lock",
+      "turn_id": null,
+      "turn_index": 1
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "sanitizer_scaffold_leakage|idx:0",
+      "scenario_id": "sanitizer_scaffold_leakage",
+      "turn_id": null,
+      "turn_index": 0
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "thin_answer_action_outcome_final_emission|idx:0",
+      "scenario_id": "thin_answer_action_outcome_final_emission",
+      "turn_id": null,
+      "turn_index": 0
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "vocative_override_after_prior_continuity|idx:0",
+      "scenario_id": "vocative_override_after_prior_continuity",
+      "turn_id": null,
+      "turn_index": 0
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "vocative_override_after_prior_continuity|idx:1",
+      "scenario_id": "vocative_override_after_prior_continuity",
+      "turn_id": null,
+      "turn_index": 1
+    },
+    {
+      "dimension_deltas": {},
+      "has_drift": false,
+      "identity": "wrong_speaker_strict_social_emission|idx:0",
+      "scenario_id": "wrong_speaker_strict_social_emission",
+      "turn_id": null,
+      "turn_index": 0
+    }
+  ],
+  "report_only": true,
+  "schema_version": 1
+}
