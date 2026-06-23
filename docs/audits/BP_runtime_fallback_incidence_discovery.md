@@ -57,7 +57,7 @@ Important vocabulary distinction:
 ### Static/audit-only metadata
 
 - `game/realization_authority.py::FALLBACK_FAMILIES` is the canonical governed realization-family registry, but the module is declarative and does not drive selection.
-- `docs/cycles/BK_fallback_inventory.md`, `BK_fallback_selection_audit.md`, `BK_fallback_ownership_map.md`, and `BK_fallback_projection_audit.md` describe fallback surface, selectors, ownership, and projection boundaries. They are audit-only.
+- `docs/audits/discovery/BK_fallback_inventory.md`, `BK_fallback_selection_audit.md`, `BK_fallback_ownership_map.md`, and `BK_fallback_projection_audit.md` describe fallback surface, selectors, ownership, and projection boundaries. They are audit-only.
 - `docs/testing/protected_replay_manifest.md` and `tests/replay_governance_registry.py` govern replay coverage/fields; they are not incidence stores.
 - `data/session.json` and `data/session_log.jsonl` contain examples of persisted runtime metadata, but are mutable samples, not canonical definitions.
 

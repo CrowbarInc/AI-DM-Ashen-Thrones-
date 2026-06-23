@@ -268,7 +268,7 @@ No audit scan logic changed in Block F. The split is documentation, docstrings, 
 
 ## Block G — Closeout
 
-Formal closeout lives at `docs/evaluator_convergence_closeout.md`.
+Formal closeout lives at `docs/audits/closeouts/evaluator_convergence_closeout.md`.
 
 Evaluator convergence status: **converged / maintenance-grade**. The evaluator layer is frozen as offline, read-only, artifact/telemetry-backed scoring and audit support with no runtime repairs, no gate legality authority, and no engine truth authority.
 

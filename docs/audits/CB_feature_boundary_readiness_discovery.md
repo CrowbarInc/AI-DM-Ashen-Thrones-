@@ -96,7 +96,7 @@ Get-Content docs\architecture_ownership_ledger.md -TotalCount 240
 Get-Content docs\system_overview.md -TotalCount 220
 Get-Content docs\testing\protected_replay_manifest.md -TotalCount 180
 Get-Content docs\audits\BV1_maintenance_cost_matrix.md -TotalCount 160
-Get-Content BZ_protected_replay_trend_window_2_discovery.md -TotalCount 180
+Get-Content docs/audits/discovery/docs\audits\discovery\BZ_protected_replay_trend_window_2_discovery.md -TotalCount 180
 ```
 
 ### Test discovery commands

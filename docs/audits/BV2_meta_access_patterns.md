@@ -132,5 +132,5 @@ Files importing **only** `FINAL_EMISSION_META_KEY` or bucket constants without c
 | Source | Path |
 |---|---|
 | Symbol frequency scan | BV2 analysis pass on 61 importers |
-| AS4/AS5 migration notes | `docs/cycles/cycle_as_block_as4_implementation_summary.md` |
+| AS4/AS5 migration notes | `docs/audits/closeouts/cycle_as_block_as4_implementation_summary.md` |
 | AO5 replay boundary | `tests/helpers/golden_replay_projection.py` docstring |

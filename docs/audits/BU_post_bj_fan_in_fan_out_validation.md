@@ -92,11 +92,11 @@ The exact file list, responsibility label, and import edges for every module are
 ### Relevant intent and audit records
 
 - BJ source of truth: commit `11ff282` (`BJ: Final Emission Gate Responsibility Extraction`).
-- Post-BJ topology baseline: `docs/cycles/BO_dependency_map.md` and
-  `docs/cycles/BO_hotspot_inventory.md`.
-- Fallback ownership: `docs/cycles/BK_fallback_ownership_map.md` and related BK audits.
-- Replay projection: BL closure/recon records and `docs/cycles/BO_dependency_map.md`.
-- Semantic attribution: `docs/BS_semantic_replacement_attribution_discovery.md`, `docs/BS2_attribution_gap_map.md`, and `docs/BS3_canonical_attribution_contract.md`.
+- Post-BJ topology baseline: `docs/audits/discovery/BO_dependency_map.md` and
+  `docs/audits/discovery/BO_hotspot_inventory.md`.
+- Fallback ownership: `docs/audits/discovery/BK_fallback_ownership_map.md` and related BK audits.
+- Replay projection: BL closure/recon records and `docs/audits/discovery/BO_dependency_map.md`.
+- Semantic attribution: `docs/BS_semantic_replacement_attribution_discovery.md`, `docs/audits/metrics/BS2_attribution_gap_map.md`, and `docs/audits/metrics/BS3_canonical_attribution_contract.md`.
 - Speaker finalization: `docs/audits/BT_speaker_finalization_divergence_discovery.md`.
 
 ## Import fan-in/fan-out table

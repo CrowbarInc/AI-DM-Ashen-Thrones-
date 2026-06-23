@@ -4,7 +4,7 @@ Branch context: `feature/failure-locality`
 
 This handoff reflects the **Block AO** advisory audit refresh (failure-locality
 closeout). Full milestone narrative and stopping-point guidance:
-`docs/realization_failure_locality_closeout.md`.
+`docs/audits/closeouts/realization_failure_locality_closeout.md`.
 
 - `tools/realization_layer_audit.py`: `HIGH=1261`, `REVIEW=710`, `INFO=8945`
 - `tools/realization_provenance_audit.py`: `HIGH=958`, `REVIEW=1280`, `INFO=738`

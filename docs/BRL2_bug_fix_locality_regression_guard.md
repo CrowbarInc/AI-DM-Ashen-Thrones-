@@ -8,7 +8,7 @@ Implementation: `tests/helpers/bug_fix_locality_regression_guard.py`
 
 Generator CLI: `tools/bug_fix_locality_regression_guard_report.py`
 
-Related: `docs/BRL1_bug_fix_locality_metric.md`, `tests/helpers/bug_fix_locality_metric.py`
+Related: `docs/audits/metrics/BRL1_bug_fix_locality_metric.md`, `tests/helpers/bug_fix_locality_metric.py`
 
 Artifact: `artifacts/bug_fix_locality_regression_guard_report.md`
 

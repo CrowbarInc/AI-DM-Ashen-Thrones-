@@ -89,7 +89,7 @@ See `docs/model_routing_architecture.md` for the current routing note.
 - `static/` browser UI
 - `docs/README.md` this file
 - `docs/convergence_ci_inventory.md` — **canonical governance discovery index** (convergence CI map, local command parity, [split-owner matrix governance](convergence_ci_inventory.md#split-owner-acceptance-matrix-governance); `.github/workflows/convergence-checks.yml`; planner convergence stays in `content-lint.yml`)
-- `docs/evaluator_convergence_closeout.md` — evaluator convergence freeze: offline/read-only invariants, intentional overlaps, and future maintenance test slice
+- `docs/audits/closeouts/evaluator_convergence_closeout.md` — evaluator convergence freeze: offline/read-only invariants, intentional overlaps, and future maintenance test slice
 - `docs/scenario_spine_validation.md` — scenario-spine JSON, `evaluate_scenario_spine_session`, CLI `tools/run_scenario_spine_validation.py`, artifacts under `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/` (plus `aggregate_session_health_summary.json` and `aggregate_operator_summary.md` at `…/<spine_id>/` when using `--all-branches`)
 - `docs/runtime_persistence_envelope.md` — **runtime persistence guarantees** (Objective #14): versioned on-disk envelopes, atomic saves, validate-first restores, rollback safety, coherency enforcement, and concurrency guard
 - `tools/validation_layer_audit.py` — optional heuristic drift check for Objective #11 validation-layer ownership (`docs/validation_layer_audit.md`)

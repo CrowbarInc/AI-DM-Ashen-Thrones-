@@ -31,7 +31,7 @@ the `_apply_narration_hub_policy_handoff` adapter, and **Block AN** as an
 explicit extraction stop point.
 
 **Block AO** re-ran advisory audits, refreshed this ledger and
-`docs/realization_cursor_handoff.md`, and added `docs/realization_failure_locality_closeout.md`
+`docs/realization_cursor_handoff.md`, and added `docs/audits/closeouts/realization_failure_locality_closeout.md`
 — **no production or prose changes.**
 
 Remaining risk sits in **large behavioral surfaces** (`apply_response_policy_enforcement`,
@@ -45,7 +45,7 @@ the seams already pinned. Further runtime refactors should be **evidence-driven*
 
 - Advisory audits re-run; totals updated in **Executive Summary** (this file) and
   `docs/realization_cursor_handoff.md`.
-- **`docs/realization_failure_locality_closeout.md`** records program summary, risks,
+- **`docs/audits/closeouts/realization_failure_locality_closeout.md`** records program summary, risks,
   boundaries, and recommended stop point. No runtime or prose changes.
 
 ## Upstream Prepared Emission
@@ -220,7 +220,7 @@ the seams already pinned. Further runtime refactors should be **evidence-driven*
 1. Re-run advisory audits and refresh docs when runtime changes land.
 2. Add narrow tests only when they freeze current behavior or metadata shape.
 3. Keep `docs/realization_cursor_handoff.md`,
-   `docs/realization_failure_locality_closeout.md`,
+   `docs/audits/closeouts/realization_failure_locality_closeout.md`,
    `docs/retry_fallback_selector_contract.md`, and
    `docs/response_policy_enforcement_split_plan.md` in sync.
 4. Do not wire the advisory audits into CI yet.

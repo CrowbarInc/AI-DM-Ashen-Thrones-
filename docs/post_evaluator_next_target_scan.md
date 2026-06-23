@@ -1,6 +1,6 @@
 # Post-Evaluator Next-Target Scan
 
-**Status:** Planning / assessment only. No runtime behavior, scoring behavior, or test code is changed by this document. **The Evaluator layer is not being reopened.** Evaluator convergence is closed at maintenance grade per `docs/evaluator_convergence_closeout.md` and `docs/evaluator_convergence_inventory.md`; future Evaluator changes remain bug-, audit-, or stale-doc driven only.
+**Status:** Planning / assessment only. No runtime behavior, scoring behavior, or test code is changed by this document. **The Evaluator layer is not being reopened.** Evaluator convergence is closed at maintenance grade per `docs/audits/closeouts/evaluator_convergence_closeout.md` and `docs/evaluator_convergence_inventory.md`; future Evaluator changes remain bug-, audit-, or stale-doc driven only.
 
 This document picks the next highest-value cleanup/convergence target after Evaluator closeout, given the current set of closed seams (Gate, Evaluator, Final-Emission C2, Validation-Layer Objective #11, World Simulation Backbone, Test Ownership Block D, Objective #7 referent seam).
 
@@ -46,7 +46,7 @@ GPT/expression-layer convergence is the obvious second-best long-term target (`g
 
 The Evaluator closeout explicitly names a recommended test slice:
 
-```56:57:docs/evaluator_convergence_closeout.md
+```56:57:docs/audits/closeouts/evaluator_convergence_closeout.md
 python -m pytest tests/test_evaluator_convergence_closeout.py -q
 python -m pytest tests/test_dead_turn_evaluation_threading.py tests/test_playability_eval.py tests/test_behavioral_gauntlet_eval.py tests/test_scenario_spine_eval.py tests/test_final_emission_meta.py tests/test_architecture_audit_tool.py tests/test_validation_layer_audit_smoke.py -q
 ```
@@ -113,7 +113,7 @@ Each of these has a guard test (`tests/test_architecture_audit_tool.py`, `tests/
 
 ### 3.4 Where docs already promise enforcement
 
-- `docs/evaluator_convergence_closeout.md` — names a recommended pytest slice to run for evaluator-boundary changes (no CI hook).
+- `docs/audits/closeouts/evaluator_convergence_closeout.md` — names a recommended pytest slice to run for evaluator-boundary changes (no CI hook).
 - `docs/validation_layer_audit.md` — `--strict` mode "exit with status 2 if any **likely_drift** finding is present (default exit 0 so benign within-layer splits do not fail CI unless you opt in)" — explicit CI opt-in language, never wired.
 - `docs/final_emission_ownership_convergence.md` (Block D2) — names `tests/test_final_emission_boundary_convergence.py` and `tools/final_emission_ownership_audit.py --strict` as the regression-lock + advisory drift scan; neither runs in CI.
 - `docs/validation_layer_separation.md` — "Verification: `tools/validation_layer_audit.py` (non-strict clean on `./game`; `--strict` for CI opt-in)" — explicit CI opt-in language, never wired.
@@ -160,7 +160,7 @@ Goals (Block A only — inventory + a single new workflow file; do not refactor 
    - **Hard fail (`continue-on-error: false`):** strict-mode audits that already promise CI-grade behavior (`validation_layer_audit --strict`, `final_emission_ownership_audit --strict`), Evaluator closeout pytest, FE-C2 boundary pytest.
    - **Soft / informational (`continue-on-error: true`):** broad heuristic audits that have known noise (architecture_audit summary, validation_coverage_audit). These can be promoted to hard-fail in a Block B.
 4. **Optionally** add a **thin meta-runner** `tools/run_governance_audits.py` that wraps the static audits into one process for local parity with CI. This is a *script, not a policy engine* — same exit codes, no aggregation logic.
-5. **Record the rollout** in `docs/convergence_ci_inventory.md` and a one-line pointer from each closeout doc (`docs/evaluator_convergence_closeout.md`, `docs/gate_convergence_closeout.md`, `docs/final_emission_ownership_convergence.md`, `docs/validation_layer_separation.md`) so future readers know enforcement is wired.
+5. **Record the rollout** in `docs/convergence_ci_inventory.md` and a one-line pointer from each closeout doc (`docs/audits/closeouts/evaluator_convergence_closeout.md`, `docs/gate_convergence_closeout.md`, `docs/final_emission_ownership_convergence.md`, `docs/validation_layer_separation.md`) so future readers know enforcement is wired.
 
 **Out of scope for Block A:**
 
@@ -183,7 +183,7 @@ Goals (Block A only — inventory + a single new workflow file; do not refactor 
 
 The block touches CI plumbing and a new docs page; existing tests are **invoked**, not changed. The following sets matter for verification (and are exactly the slices the new workflow runs):
 
-**Evaluator boundary slice (from `docs/evaluator_convergence_closeout.md`):**
+**Evaluator boundary slice (from `docs/audits/closeouts/evaluator_convergence_closeout.md`):**
 
 - `tests/test_evaluator_convergence_closeout.py`
 - `tests/test_dead_turn_evaluation_threading.py`
@@ -224,7 +224,7 @@ No test code is modified by Block A. Test code may only be modified in a later b
 
 **Evaluator is not being reopened.** This planning doc:
 
-- Treats `docs/evaluator_convergence_closeout.md` as authoritative (offline, read-only, no runtime repairs, no gate legality, no engine truth, no policy by JSON).
+- Treats `docs/audits/closeouts/evaluator_convergence_closeout.md` as authoritative (offline, read-only, no runtime repairs, no gate legality, no engine truth, no policy by JSON).
 - Does not propose changing any of `game/playability_eval.py`, `game/narrative_authenticity_eval.py`, `game/scenario_spine_eval.py`, `game/scenario_spine.py`, `game/telemetry_vocab.py`, `game/stage_diff_telemetry.py`, or evaluator-owned tests.
 - Does not propose merging playability and behavioral gauntlet scoring, collapsing scenario-spine transcript metadata into FEM correctness, or treating runner summaries / markdown / normalized telemetry bundles as canonical scoring.
 - Treats the Evaluator-closeout test slice as **artifact under enforcement**, not as a surface to extend.
