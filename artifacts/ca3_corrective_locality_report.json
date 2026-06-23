@@ -1,0 +1,269 @@
+{
+  "cohort_composition": {
+    "confidence_counts": {
+      "high": 8,
+      "medium": 2
+    },
+    "date_range": {
+      "end": "2026-05-20",
+      "start": "2026-03-21"
+    },
+    "exclusion_count": 1,
+    "exclusion_ids": [
+      "EX-01"
+    ],
+    "qualifying_count": 10
+  },
+  "files_touched_per_fix": {
+    "cohort_size": 10,
+    "maximum": 538,
+    "mean": 87.7,
+    "median": 12.5,
+    "minimum": 5,
+    "p75": 44.0,
+    "p90": 248.2
+  },
+  "generated_artifact_distortion": {
+    "by_commit": [
+      {
+        "cohort_id": "CA-01",
+        "commit_hash": "09863c6e54786678e69a8bd42887b2d04cd67777",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 7,
+        "generated_files_touched": 0,
+        "total_files_touched": 7
+      },
+      {
+        "cohort_id": "CA-02",
+        "commit_hash": "ceecc579da4211f45d57681d56c4e6fc9190cd10",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 20,
+        "generated_files_touched": 0,
+        "total_files_touched": 20
+      },
+      {
+        "cohort_id": "CA-03",
+        "commit_hash": "6351b333fc2adbae16f6305b805e1dcfe6d3856e",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 16,
+        "generated_files_touched": 0,
+        "total_files_touched": 16
+      },
+      {
+        "cohort_id": "CA-04",
+        "commit_hash": "2013258b0711906675639c712520a52728096f09",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 7,
+        "generated_files_touched": 0,
+        "total_files_touched": 7
+      },
+      {
+        "cohort_id": "CA-05",
+        "commit_hash": "9e8382042775efb14fbdc916a887a40095474ae4",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 7,
+        "generated_files_touched": 0,
+        "total_files_touched": 7
+      },
+      {
+        "cohort_id": "CA-06",
+        "commit_hash": "1b3b3ee0bef97447aeb52836779bcf543b6a73d7",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 5,
+        "generated_files_touched": 0,
+        "total_files_touched": 5
+      },
+      {
+        "cohort_id": "CA-07",
+        "commit_hash": "f487f4d74dab834bee1cdbb08f31f1ec311f37c5",
+        "distortion_pct": 97.22,
+        "effective_files_touched": 6,
+        "generated_files_touched": 210,
+        "total_files_touched": 216
+      },
+      {
+        "cohort_id": "CA-08",
+        "commit_hash": "f3fa4b110e0a0b1661ab2109d1c4d133fbf8428a",
+        "distortion_pct": 84.62,
+        "effective_files_touched": 8,
+        "generated_files_touched": 44,
+        "total_files_touched": 52
+      },
+      {
+        "cohort_id": "CA-09",
+        "commit_hash": "5cb8444d8f29a36d4d8e619aefe03c2be5be4add",
+        "distortion_pct": 99.26,
+        "effective_files_touched": 4,
+        "generated_files_touched": 534,
+        "total_files_touched": 538
+      },
+      {
+        "cohort_id": "CA-10",
+        "commit_hash": "6a402d264eec1bd4ef5be98407998ba105e30f52",
+        "distortion_pct": 0.0,
+        "effective_files_touched": 9,
+        "generated_files_touched": 0,
+        "total_files_touched": 9
+      }
+    ],
+    "effective_median": 7.0,
+    "median_distortion_pct": 44.0,
+    "polluted_fix_count": 3,
+    "polluted_fix_pct": 30.0,
+    "raw_median": 12.5
+  },
+  "primary_metric": "files_touched_per_fix",
+  "production_locality": {
+    "maximum": 9,
+    "mean": 3.6,
+    "median": 2.5,
+    "minimum": 1
+  },
+  "qualifying_fixes": [
+    {
+      "cohort_id": "CA-01",
+      "commit_hash": "09863c6e54786678e69a8bd42887b2d04cd67777",
+      "confidence": "medium",
+      "effective_files_touched": 7,
+      "generated_files_touched": 0,
+      "production_files_touched": 4,
+      "repair_family": "dialogue_routing",
+      "test_files_touched": 0,
+      "title": "Fix dialogue/adjudication routing and remove scaffold text leakage; improve follow-up response handling",
+      "total_files_touched": 7
+    },
+    {
+      "cohort_id": "CA-02",
+      "commit_hash": "ceecc579da4211f45d57681d56c4e6fc9190cd10",
+      "confidence": "medium",
+      "effective_files_touched": 20,
+      "generated_files_touched": 0,
+      "production_files_touched": 8,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 6,
+      "title": "Opening Scene Repair",
+      "total_files_touched": 20
+    },
+    {
+      "cohort_id": "CA-03",
+      "commit_hash": "6351b333fc2adbae16f6305b805e1dcfe6d3856e",
+      "confidence": "high",
+      "effective_files_touched": 16,
+      "generated_files_touched": 0,
+      "production_files_touched": 9,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 4,
+      "title": "Preserve curated opening facts through fallback",
+      "total_files_touched": 16
+    },
+    {
+      "cohort_id": "CA-04",
+      "commit_hash": "2013258b0711906675639c712520a52728096f09",
+      "confidence": "high",
+      "effective_files_touched": 7,
+      "generated_files_touched": 0,
+      "production_files_touched": 2,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 2,
+      "title": "Restrict journal seed facts to perceptual opening content",
+      "total_files_touched": 7
+    },
+    {
+      "cohort_id": "CA-05",
+      "commit_hash": "9e8382042775efb14fbdc916a887a40095474ae4",
+      "confidence": "high",
+      "effective_files_touched": 7,
+      "generated_files_touched": 0,
+      "production_files_touched": 3,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 1,
+      "title": "Preserve journal openings through selector fallback",
+      "total_files_touched": 7
+    },
+    {
+      "cohort_id": "CA-06",
+      "commit_hash": "1b3b3ee0bef97447aeb52836779bcf543b6a73d7",
+      "confidence": "high",
+      "effective_files_touched": 5,
+      "generated_files_touched": 0,
+      "production_files_touched": 1,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 1,
+      "title": "Preserve valid scene openings before deterministic fallback",
+      "total_files_touched": 5
+    },
+    {
+      "cohort_id": "CA-07",
+      "commit_hash": "f487f4d74dab834bee1cdbb08f31f1ec311f37c5",
+      "confidence": "high",
+      "effective_files_touched": 6,
+      "generated_files_touched": 210,
+      "production_files_touched": 2,
+      "repair_family": "opening_fallback",
+      "test_files_touched": 1,
+      "title": "Guard rich scene openings from post-gate shortening",
+      "total_files_touched": 216
+    },
+    {
+      "cohort_id": "CA-08",
+      "commit_hash": "f3fa4b110e0a0b1661ab2109d1c4d133fbf8428a",
+      "confidence": "high",
+      "effective_files_touched": 8,
+      "generated_files_touched": 44,
+      "production_files_touched": 2,
+      "repair_family": "replay_log",
+      "test_files_touched": 2,
+      "title": "Preserve player chat in replayed logs",
+      "total_files_touched": 52
+    },
+    {
+      "cohort_id": "CA-09",
+      "commit_hash": "5cb8444d8f29a36d4d8e619aefe03c2be5be4add",
+      "confidence": "high",
+      "effective_files_touched": 4,
+      "generated_files_touched": 534,
+      "production_files_touched": 2,
+      "repair_family": "routing",
+      "test_files_touched": 2,
+      "title": "Recover mixed investigation question routing",
+      "total_files_touched": 538
+    },
+    {
+      "cohort_id": "CA-10",
+      "commit_hash": "6a402d264eec1bd4ef5be98407998ba105e30f52",
+      "confidence": "high",
+      "effective_files_touched": 9,
+      "generated_files_touched": 0,
+      "production_files_touched": 3,
+      "repair_family": "ci_import",
+      "test_files_touched": 5,
+      "title": "config: lazy-load OpenAI API key for import-safe tests",
+      "total_files_touched": 9
+    }
+  ],
+  "repair_family_concentration": {
+    "concentration_ratio": 0.6,
+    "counts": {
+      "ci_import": 1,
+      "dialogue_routing": 1,
+      "opening_fallback": 6,
+      "replay_log": 1,
+      "routing": 1
+    },
+    "largest_repair_family": "opening_fallback",
+    "largest_repair_family_count": 6,
+    "percentages": {
+      "ci_import": 10.0,
+      "dialogue_routing": 10.0,
+      "opening_fallback": 60.0,
+      "replay_log": 10.0,
+      "routing": 10.0
+    }
+  },
+  "schema_version": 1,
+  "source": "docs/audits/CA_corrective_change_locality_cohort.csv",
+  "test_locality": {
+    "mean": 2.4,
+    "median": 2.0
+  }
+}

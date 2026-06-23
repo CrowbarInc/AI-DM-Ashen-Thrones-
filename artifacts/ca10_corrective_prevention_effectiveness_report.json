@@ -1,0 +1,214 @@
+{
+  "baseline_context": {
+    "baseline_cohort_size": 10,
+    "baseline_end_date": "2026-05-20",
+    "largest_repair_family": "opening_fallback"
+  },
+  "category_assessments": [
+    {
+      "category": "fallback_consolidation",
+      "classification": "likely_preventive",
+      "prevention_signals": {
+        "candidate_count": 3,
+        "category": "fallback_consolidation",
+        "governance_involvement_count": 0,
+        "ownership_involvement_count": 3,
+        "production_touching_count": 3,
+        "replay_involvement_count": 0,
+        "test_touching_count": 3,
+        "total_production_files_touched": 19,
+        "total_test_files_touched": 30
+      },
+      "rationale": "Authorship and metadata consolidation commits reduce ambiguous fallback routing and align with the CA4 baseline's dominant opening_fallback repair family; production and test co-change suggests structural hardening rather than one-off patches."
+    },
+    {
+      "category": "decomposition",
+      "classification": "likely_preventive",
+      "prevention_signals": {
+        "candidate_count": 3,
+        "category": "decomposition",
+        "governance_involvement_count": 0,
+        "ownership_involvement_count": 3,
+        "production_touching_count": 3,
+        "replay_involvement_count": 0,
+        "test_touching_count": 2,
+        "total_production_files_touched": 12,
+        "total_test_files_touched": 37
+      },
+      "rationale": "Adapter retirement, topology collapse, and extraction finalize steps shrink fallback surface area and gate complexity, which plausibly prevents repeat standalone repairs in the same subsystem."
+    },
+    {
+      "category": "ownership_compression",
+      "classification": "likely_preventive",
+      "prevention_signals": {
+        "candidate_count": 2,
+        "category": "ownership_compression",
+        "governance_involvement_count": 0,
+        "ownership_involvement_count": 2,
+        "production_touching_count": 2,
+        "replay_involvement_count": 0,
+        "test_touching_count": 2,
+        "total_production_files_touched": 14,
+        "total_test_files_touched": 15
+      },
+      "rationale": "Ownership compression and ambiguity collapse target the same fallback ownership confusion seen in historical corrective fixes; production edits with test backing indicate structural clarity work that can pre-empt future misattribution fixes."
+    },
+    {
+      "category": "replay_stabilization",
+      "classification": "unclear",
+      "prevention_signals": {
+        "candidate_count": 1,
+        "category": "replay_stabilization",
+        "governance_involvement_count": 0,
+        "ownership_involvement_count": 1,
+        "production_touching_count": 1,
+        "replay_involvement_count": 1,
+        "test_touching_count": 1,
+        "total_production_files_touched": 1,
+        "total_test_files_touched": 10
+      },
+      "rationale": "Only one replay ownership consolidation commit with minimal production footprint; insufficient volume to distinguish prevention from program-work masking."
+    }
+  ],
+  "conclusion": "Architectural programs are plausibly preventing standalone corrective fixes: all corrective activity is embedded (preventive absorption ratio 1.0), 3 categories assess as likely preventive, and zero explicit fixes persist after CA4. However, qualification rules and the short observation window prevent a definitive causal claim; programs may also be hiding corrective work that strict CA1 gates do not promote.",
+  "embedded_corrective_activity": {
+    "categories_analyzed": [
+      "fallback_consolidation",
+      "decomposition",
+      "ownership_compression",
+      "replay_stabilization"
+    ],
+    "category_concentration": {
+      "counts": {
+        "decomposition": 3,
+        "fallback_consolidation": 3,
+        "ownership_compression": 2,
+        "replay_stabilization": 1
+      },
+      "cumulative_top_categories": [
+        {
+          "categories": [
+            "decomposition"
+          ],
+          "count": 3,
+          "cumulative_share": 0.3333
+        },
+        {
+          "categories": [
+            "decomposition",
+            "fallback_consolidation"
+          ],
+          "count": 6,
+          "cumulative_share": 0.6667
+        },
+        {
+          "categories": [
+            "decomposition",
+            "fallback_consolidation",
+            "ownership_compression"
+          ],
+          "count": 8,
+          "cumulative_share": 0.8889
+        },
+        {
+          "categories": [
+            "decomposition",
+            "fallback_consolidation",
+            "ownership_compression",
+            "replay_stabilization"
+          ],
+          "count": 9,
+          "cumulative_share": 1.0
+        }
+      ],
+      "largest_category": "decomposition",
+      "largest_category_count": 3,
+      "largest_category_percentage": 33.33,
+      "percentages": {
+        "decomposition": 33.33,
+        "fallback_consolidation": 33.33,
+        "ownership_compression": 22.22,
+        "replay_stabilization": 11.11
+      }
+    },
+    "embedded_corrective_count": 9,
+    "embedded_share": 1.0,
+    "explicit_corrective_count": 0
+  },
+  "evidence_supporting_prevention": [
+    "Post-baseline explicit corrective fixes remain 0 while 9 embedded production-touching candidates were absorbed into structural programs (preventive absorption ratio 1.0).",
+    "3 of 4 analyzed categories classify as likely preventive based on production/test co-change and alignment with planned structural refactors.",
+    "CA8 reports 14 structural-prevention exclusions alongside embedded work, indicating companion test and instrumentation activity supporting prevention rather than isolated patches.",
+    "CA4 baseline largest repair family is opening_fallback, matching the fallback/ownership programs that dominate embedded corrective attribution.",
+    "CA7 validates zero explicit post-baseline fixes with complete exclusion accounting, consistent with corrective pressure being absorbed upstream of CA1 qualification."
+  ],
+  "prevention_signals_by_category": [
+    {
+      "candidate_count": 3,
+      "category": "fallback_consolidation",
+      "governance_involvement_count": 0,
+      "ownership_involvement_count": 3,
+      "production_touching_count": 3,
+      "replay_involvement_count": 0,
+      "test_touching_count": 3,
+      "total_production_files_touched": 19,
+      "total_test_files_touched": 30
+    },
+    {
+      "candidate_count": 3,
+      "category": "decomposition",
+      "governance_involvement_count": 0,
+      "ownership_involvement_count": 3,
+      "production_touching_count": 3,
+      "replay_involvement_count": 0,
+      "test_touching_count": 2,
+      "total_production_files_touched": 12,
+      "total_test_files_touched": 37
+    },
+    {
+      "candidate_count": 2,
+      "category": "ownership_compression",
+      "governance_involvement_count": 0,
+      "ownership_involvement_count": 2,
+      "production_touching_count": 2,
+      "replay_involvement_count": 0,
+      "test_touching_count": 2,
+      "total_production_files_touched": 14,
+      "total_test_files_touched": 15
+    },
+    {
+      "candidate_count": 1,
+      "category": "replay_stabilization",
+      "governance_involvement_count": 0,
+      "ownership_involvement_count": 1,
+      "production_touching_count": 1,
+      "replay_involvement_count": 1,
+      "test_touching_count": 1,
+      "total_production_files_touched": 1,
+      "total_test_files_touched": 10
+    }
+  ],
+  "preventive_absorption_ratio_analysis": {
+    "embedded_corrective_work": 9,
+    "embedded_share": 1.0,
+    "explicit_corrective_fixes": 0,
+    "preventive_absorption_ratio": 1.0,
+    "primary_metric": "preventive_absorption_ratio"
+  },
+  "primary_metric": "preventive_absorption_ratio",
+  "risks_and_alternative_explanations": [
+    "Preventive absorption ratio equals 1.0 whenever explicit fixes are zero; the metric shows dominance of embedded work, not proven prevention.",
+    "Category assessments infer intent from exclusion text and path counts; they are not defect-outcome measurements.",
+    "This analysis does not compare against CA4 baseline trends, join recurrence history, or forecast future fix rates.",
+    "CA7 relaxed qualification would promote 9 production-touching commits as explicit fixes, so zero-fix outcomes may partly reflect methodology rather than prevention.",
+    "Categories classified unclear (replay_stabilization) may be hiding corrective work rather than preventing it.",
+    "The post-baseline observation window spans only 27 days; longer horizons may surface standalone fixes."
+  ],
+  "schema_version": 1,
+  "sources": {
+    "baseline_json": "docs/baselines/ca_corrective_locality_baseline.json",
+    "ca7_report_json": "artifacts/ca7_corrective_fix_absence_report.json",
+    "ca8_report_json": "artifacts/ca8_corrective_fix_availability_report.json",
+    "ca9_report_json": "artifacts/ca9_embedded_corrective_attribution_report.json"
+  }
+}

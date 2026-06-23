@@ -1,0 +1,46 @@
+{
+  "baseline_version": 1,
+  "created_date": "2026-06-22",
+  "comparison_ready": true,
+  "primary_metric": "files_touched_per_fix",
+  "source_cohort": "docs/audits/CA_corrective_change_locality_cohort.csv",
+  "source_report": "artifacts/ca3_corrective_locality_report.json",
+  "cohort_boundaries": {
+    "start_date": "2026-03-21",
+    "end_date": "2026-05-20"
+  },
+  "cohort_size": 10,
+  "median_files_touched_raw": 12.5,
+  "median_files_touched_effective": 7.0,
+  "mean_files_touched": 87.7,
+  "p75_files_touched": 44.0,
+  "p90_files_touched": 248.2,
+  "max_files_touched": 538,
+  "median_production_files": 2.5,
+  "median_test_files": 2.0,
+  "generated_artifact_distortion": {
+    "raw_median": 12.5,
+    "effective_median": 7.0,
+    "median_distortion_pct": 44.0,
+    "polluted_fix_count": 3,
+    "polluted_fix_pct": 30.0
+  },
+  "repair_family_distribution": {
+    "counts": {
+      "ci_import": 1,
+      "dialogue_routing": 1,
+      "opening_fallback": 6,
+      "replay_log": 1,
+      "routing": 1
+    },
+    "percentages": {
+      "ci_import": 10.0,
+      "dialogue_routing": 10.0,
+      "opening_fallback": 60.0,
+      "replay_log": 10.0,
+      "routing": 10.0
+    },
+    "largest_repair_family": "opening_fallback",
+    "concentration_ratio": 0.6
+  }
+}

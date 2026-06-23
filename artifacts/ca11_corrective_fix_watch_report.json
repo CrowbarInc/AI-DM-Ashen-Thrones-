@@ -1,0 +1,43 @@
+{
+  "baseline_context": {
+    "baseline_cohort_size": 10,
+    "baseline_end_date": "2026-05-20",
+    "baseline_primary_metric": "files_touched_per_fix"
+  },
+  "cohort_readiness": {
+    "assessment": "No new CA1-qualifying fixes detected outside the frozen CA1 cohort; CA12 post-baseline comparison is not yet justified.",
+    "comparison_ready_threshold": 5,
+    "new_qualifying_fixes": 0,
+    "ready_for_ca12": false,
+    "state": "no_new_fixes"
+  },
+  "duplicate_suppression": {
+    "ca1_cohort_hash_count": 11,
+    "suppressed_qualifying_hashes": []
+  },
+  "emergence_analysis": {
+    "corrective_fix_emergence_rate": 0.0,
+    "new_qualifying_fixes": 0,
+    "primary_metric": "corrective_fix_emergence_rate",
+    "reviewed_candidates": 26
+  },
+  "prevention_context": {
+    "ca10_conclusion": "Architectural programs are plausibly preventing standalone corrective fixes: all corrective activity is embedded (preventive absorption ratio 1.0), 3 categories assess as likely preventive, and zero explicit fixes persist after CA4. However, qualification rules and the short observation window prevent a definitive causal claim; programs may also be hiding corrective work that strict CA1 gates do not promote.",
+    "preventive_absorption_ratio": 1.0
+  },
+  "primary_metric": "corrective_fix_emergence_rate",
+  "qualifying_fixes_detected": [],
+  "schema_version": 1,
+  "sources": {
+    "baseline_json": "docs/baselines/ca_corrective_locality_baseline.json",
+    "ca10_report_json": "artifacts/ca10_corrective_prevention_effectiveness_report.json",
+    "ca1_cohort_csv": "docs/audits/CA_corrective_change_locality_cohort.csv",
+    "review_queue_csv": "docs/audits/ca_review_queue.csv"
+  },
+  "watch_summary": {
+    "current_emergence_rate": 0.0,
+    "qualifying_fixes_detected": 0,
+    "qualifying_fixes_pending": 0,
+    "total_reviewed_candidates": 26
+  }
+}
