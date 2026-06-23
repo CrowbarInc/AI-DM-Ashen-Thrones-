@@ -1,0 +1,170 @@
+{
+  "baseline": "artifacts/golden_replay/trend_window/runs/run-000.json",
+  "baseline_scenario_ids": [
+    "directed_npc_question",
+    "lead_followup_with_dialogue_lock",
+    "sanitizer_scaffold_leakage",
+    "thin_answer_action_outcome_final_emission",
+    "vocative_override_after_prior_continuity",
+    "wrong_speaker_strict_social_emission"
+  ],
+  "corpus_match": true,
+  "current": "artifacts/golden_replay/trend_window_2/runs/run-000.json",
+  "current_scenario_ids": [
+    "directed_npc_question",
+    "lead_followup_with_dialogue_lock",
+    "sanitizer_scaffold_leakage",
+    "thin_answer_action_outcome_final_emission",
+    "vocative_override_after_prior_continuity",
+    "wrong_speaker_strict_social_emission"
+  ],
+  "dimensions": {
+    "mutation": {
+      "active_keys": [
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"finalize_packaging\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"response_type_repair\",\"prepared_emission_selection\",\"sealed_fallback_replacement\",\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"sealed_fallback_replacement\",\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"fallback_mutation\",\"response_type_repair_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"fallback_mutation\",\"sealed_replacement_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"final_emission_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[]}",
+        "mutation|post_gate_mutation_detected|{\"status\":\"present\",\"value\":false}",
+        "mutation|post_gate_mutation_detected|{\"status\":\"present\",\"value\":true}",
+        "mutation|sanitizer_lineage_changed_count|{\"status\":\"present\",\"value\":null}",
+        "mutation|sanitizer_lineage_dropped_count|{\"status\":\"present\",\"value\":null}"
+      ],
+      "new_keys": [],
+      "retired_keys": [],
+      "unchanged_keys": [
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"finalize_packaging\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"response_type_repair\",\"prepared_emission_selection\",\"sealed_fallback_replacement\",\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|final_emission_mutation_lineage|{\"status\":\"present\",\"value\":[\"sealed_fallback_replacement\",\"finalize_packaging\",\"post_gate_mutation_detected\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"fallback_mutation\",\"response_type_repair_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"fallback_mutation\",\"sealed_replacement_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[\"final_emission_mutation\"]}",
+        "mutation|lineage_mutation_kinds|{\"status\":\"present\",\"value\":[]}",
+        "mutation|post_gate_mutation_detected|{\"status\":\"present\",\"value\":false}",
+        "mutation|post_gate_mutation_detected|{\"status\":\"present\",\"value\":true}",
+        "mutation|sanitizer_lineage_changed_count|{\"status\":\"present\",\"value\":null}",
+        "mutation|sanitizer_lineage_dropped_count|{\"status\":\"present\",\"value\":null}"
+      ]
+    },
+    "owner": {
+      "active_keys": [
+        "owner|opening_fallback_owner_bucket|{\"status\":\"present\",\"value\":\"unknown-ambiguous\"}",
+        "owner|sanitizer_empty_fallback_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sanitizer_strict_social_prose_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sanitizer_strict_social_selection_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sealed_fallback_owner_bucket|{\"status\":\"present\",\"value\":\"sealed-gate\"}",
+        "owner|sealed_fallback_owner_bucket|{\"status\":\"present\",\"value\":null}",
+        "owner|visibility_fallback_owner_bucket|{\"status\":\"present\",\"value\":null}"
+      ],
+      "new_keys": [],
+      "retired_keys": [],
+      "unchanged_keys": [
+        "owner|opening_fallback_owner_bucket|{\"status\":\"present\",\"value\":\"unknown-ambiguous\"}",
+        "owner|sanitizer_empty_fallback_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sanitizer_strict_social_prose_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sanitizer_strict_social_selection_owner|{\"status\":\"present\",\"value\":null}",
+        "owner|sealed_fallback_owner_bucket|{\"status\":\"present\",\"value\":\"sealed-gate\"}",
+        "owner|sealed_fallback_owner_bucket|{\"status\":\"present\",\"value\":null}",
+        "owner|visibility_fallback_owner_bucket|{\"status\":\"present\",\"value\":null}"
+      ]
+    },
+    "route": {
+      "active_keys": [
+        "route|resolution_kind|{\"status\":\"present\",\"value\":\"question\"}",
+        "route|resolution_kind|{\"status\":\"present\",\"value\":null}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"action\"}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"dialogue\"}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"undecided\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"action\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"dialogue\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"undecided\"}"
+      ],
+      "new_keys": [],
+      "retired_keys": [],
+      "unchanged_keys": [
+        "route|resolution_kind|{\"status\":\"present\",\"value\":\"question\"}",
+        "route|resolution_kind|{\"status\":\"present\",\"value\":null}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"action\"}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"dialogue\"}",
+        "route|route_kind|{\"status\":\"present\",\"value\":\"undecided\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"action\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"dialogue\"}",
+        "route|trace_route_selected|{\"status\":\"present\",\"value\":\"undecided\"}"
+      ]
+    },
+    "source": {
+      "active_keys": [
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"generated_candidate\"}",
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"global_scene_fallback\"}",
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"normalized_social_candidate\"}",
+        "source|opening_fallback_authorship_source|{\"status\":\"present\",\"value\":null}",
+        "source|sanitizer_empty_fallback_source|{\"status\":\"present\",\"value\":null}",
+        "source|sanitizer_strict_social_source|{\"status\":\"present\",\"value\":null}",
+        "source|upstream_prepared_emission_source|{\"status\":\"present\",\"value\":\"upstream_prepared_emission.prepared_action_fallback_text\"}",
+        "source|upstream_prepared_emission_source|{\"status\":\"present\",\"value\":null}"
+      ],
+      "new_keys": [],
+      "retired_keys": [],
+      "unchanged_keys": [
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"generated_candidate\"}",
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"global_scene_fallback\"}",
+        "source|final_emitted_source|{\"status\":\"present\",\"value\":\"normalized_social_candidate\"}",
+        "source|opening_fallback_authorship_source|{\"status\":\"present\",\"value\":null}",
+        "source|sanitizer_empty_fallback_source|{\"status\":\"present\",\"value\":null}",
+        "source|sanitizer_strict_social_source|{\"status\":\"present\",\"value\":null}",
+        "source|upstream_prepared_emission_source|{\"status\":\"present\",\"value\":\"upstream_prepared_emission.prepared_action_fallback_text\"}",
+        "source|upstream_prepared_emission_source|{\"status\":\"present\",\"value\":null}"
+      ]
+    },
+    "speaker": {
+      "active_keys": [
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"guard\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"runner\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"tavern_runner\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":null}",
+        "speaker|final_speaker_observation_status|{\"status\":\"present\",\"value\":\"resolved\"}",
+        "speaker|final_speaker_observation_status|{\"status\":\"present\",\"value\":\"unattributed\"}",
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"guard\"}",
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"runner\"}",
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"tavern_runner\"}",
+        "speaker|selected_speaker_id|{\"status\":\"unavailable\"}",
+        "speaker|selected_speaker_source|{\"status\":\"present\",\"value\":\"turn_trace.social_contract_trace\"}",
+        "speaker|selected_speaker_source|{\"status\":\"present\",\"value\":null}",
+        "speaker|speaker_projection_parity_status|{\"status\":\"present\",\"value\":\"aligned\"}",
+        "speaker|speaker_projection_parity_status|{\"status\":\"present\",\"value\":\"mismatch\"}"
+      ],
+      "new_keys": [
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"guard\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"runner\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":\"tavern_runner\"}",
+        "speaker|final_observed_speaker_id|{\"status\":\"present\",\"value\":null}",
+        "speaker|final_speaker_observation_status|{\"status\":\"present\",\"value\":\"resolved\"}",
+        "speaker|final_speaker_observation_status|{\"status\":\"present\",\"value\":\"unattributed\"}",
+        "speaker|selected_speaker_source|{\"status\":\"present\",\"value\":\"turn_trace.social_contract_trace\"}",
+        "speaker|selected_speaker_source|{\"status\":\"present\",\"value\":null}",
+        "speaker|speaker_projection_parity_status|{\"status\":\"present\",\"value\":\"aligned\"}",
+        "speaker|speaker_projection_parity_status|{\"status\":\"present\",\"value\":\"mismatch\"}"
+      ],
+      "retired_keys": [],
+      "unchanged_keys": [
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"guard\"}",
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"runner\"}",
+        "speaker|selected_speaker_id|{\"status\":\"present\",\"value\":\"tavern_runner\"}",
+        "speaker|selected_speaker_id|{\"status\":\"unavailable\"}"
+      ]
+    }
+  },
+  "report_only": true,
+  "schema_version": 1,
+  "summary": {
+    "active_key_count": 49,
+    "new_key_count": 10,
+    "retired_key_count": 0,
+    "unchanged_key_count": 39
+  }
+}

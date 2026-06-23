@@ -107,6 +107,16 @@ BW_DIMENSIONS: Final[tuple[str, ...]] = (
     BW_DIMENSION_FINAL_TEXT,
 )
 
+BZ_REPLAY_KEY_DIMENSIONS: Final[tuple[str, ...]] = (
+    BW_DIMENSION_ROUTE,
+    BW_DIMENSION_SPEAKER,
+    BW_DIMENSION_SOURCE,
+    BW_DIMENSION_OWNER,
+    BW_DIMENSION_MUTATION,
+)
+
+BZ_REPLAY_KEY_MOVEMENT_FILENAME: Final[str] = "BZ_replay_key_movement.json"
+
 
 @dataclass(frozen=True)
 class ProtectedReplayScenarioSpec:
@@ -178,6 +188,11 @@ def protected_replay_scenario_specs() -> tuple[ProtectedReplayScenarioSpec, ...]
 def bx_speaker_parity_corpus_scenario_ids() -> tuple[str, ...]:
     """BX guard speaker parity scenario IDs (registry authority; not executed in BW trend window)."""
     return tuple(entry.scenario_id for entry in bx_speaker_parity_corpus())
+
+
+def protected_replay_corpus_scenario_ids() -> tuple[str, ...]:
+    """Ordered BW protected corpus scenario IDs (registry authority)."""
+    return tuple(entry.scenario_id for entry in protected_replay_corpus())
 
 
 def _gpt_callback_from_lines(lines: tuple[str, ...]) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
@@ -957,12 +972,240 @@ def write_deterministic_json(path: Path, payload: Mapping[str, Any]) -> None:
     path.write_text(f"{text}\n", encoding="utf-8")
 
 
+def validate_protected_replay_corpus_parity(
+    baseline_scenario_ids: Sequence[str],
+    current_scenario_ids: Sequence[str],
+) -> dict[str, Any]:
+    """Report-only corpus lock validation; never mutates corpus membership."""
+    baseline = list(baseline_scenario_ids)
+    current = list(current_scenario_ids)
+    corpus_match = baseline == current and len(baseline) == len(current)
+    return {
+        "corpus_match": corpus_match,
+        "baseline_scenario_ids": baseline,
+        "current_scenario_ids": current,
+        "scenario_count": len(baseline),
+        "ordered_corpus_identity": "|".join(baseline),
+    }
+
+
+def _replay_key_from_field(*, dimension: str, field: str, field_state: Mapping[str, Any]) -> str:
+    canonical = json.dumps(
+        _stable_json(dict(field_state)),
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    return f"{dimension}|{field}|{canonical}"
+
+
+def build_dimension_key_catalog(*, dimension: str, run_envelope: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Extract sorted replay-key entries for one BZ dimension from a run envelope."""
+    if dimension not in BZ_REPLAY_KEY_DIMENSIONS:
+        raise ValueError(
+            f"dimension {dimension!r} is not a BZ replay-key dimension; "
+            f"allowed={list(BZ_REPLAY_KEY_DIMENSIONS)!r}"
+        )
+    return [entry for entry in build_replay_key_catalog(run_envelope)["entries"] if entry["dimension"] == dimension]
+
+
+def build_replay_key_catalog(run_envelope: Mapping[str, Any]) -> dict[str, Any]:
+    """Build a deterministic replay-key catalog from normalized run observations."""
+    observations = [
+        row for row in (run_envelope.get("observations") or []) if isinstance(row, Mapping)
+    ]
+    entries_by_key: dict[str, dict[str, Any]] = {}
+
+    for observation in observations:
+        identity = str(observation.get("identity") or "")
+        for dimension in BZ_REPLAY_KEY_DIMENSIONS:
+            dimension_slice = _dimension_slices(observation).get(dimension, {})
+            if not isinstance(dimension_slice, Mapping):
+                continue
+            for field in sorted(dimension_slice):
+                raw_state = dimension_slice[field]
+                if isinstance(raw_state, Mapping):
+                    field_state = dict(raw_state)
+                else:
+                    field_state = {"status": "present", "value": _stable_json(raw_state)}
+                key = _replay_key_from_field(
+                    dimension=dimension,
+                    field=field,
+                    field_state=field_state,
+                )
+                if key in entries_by_key:
+                    entries_by_key[key]["contributing_identities"].append(identity)
+                    continue
+                entries_by_key[key] = {
+                    "key": key,
+                    "dimension": dimension,
+                    "field": field,
+                    "value": _stable_json(field_state),
+                    "contributing_identities": [identity],
+                }
+
+    entries: list[dict[str, Any]] = []
+    for entry in entries_by_key.values():
+        entry["contributing_identities"] = sorted(set(entry["contributing_identities"]))
+        entries.append(entry)
+    entries.sort(key=lambda row: str(row.get("key") or ""))
+
+    keys_by_dimension = {
+        dimension: sorted(entry["key"] for entry in entries if entry["dimension"] == dimension)
+        for dimension in BZ_REPLAY_KEY_DIMENSIONS
+    }
+    return {
+        "run_id": str(run_envelope.get("run_id") or ""),
+        "entry_count": len(entries),
+        "entries": entries,
+        "keys_by_dimension": keys_by_dimension,
+    }
+
+
+def _catalog_key_set(catalog: Mapping[str, Any]) -> set[str]:
+    entries = catalog.get("entries")
+    if not isinstance(entries, list):
+        return set()
+    return {
+        str(entry["key"])
+        for entry in entries
+        if isinstance(entry, Mapping) and entry.get("key") is not None
+    }
+
+
+def _dimension_key_subset(keys: Sequence[str], dimension: str) -> list[str]:
+    prefix = f"{dimension}|"
+    return sorted(key for key in keys if key.startswith(prefix))
+
+
+def compare_replay_key_catalogs(
+    baseline_catalog: Mapping[str, Any],
+    current_catalog: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Classify replay-key lifecycle: new, retired, unchanged, active (report-only)."""
+    baseline_keys = _catalog_key_set(baseline_catalog)
+    current_keys = _catalog_key_set(current_catalog)
+
+    new_keys = sorted(current_keys - baseline_keys)
+    retired_keys = sorted(baseline_keys - current_keys)
+    unchanged_keys = sorted(baseline_keys & current_keys)
+    active_keys = sorted(current_keys)
+
+    dimensions: dict[str, dict[str, list[str]]] = {}
+    for dimension in BZ_REPLAY_KEY_DIMENSIONS:
+        dimensions[dimension] = {
+            "new_keys": _dimension_key_subset(new_keys, dimension),
+            "retired_keys": _dimension_key_subset(retired_keys, dimension),
+            "unchanged_keys": _dimension_key_subset(unchanged_keys, dimension),
+            "active_keys": _dimension_key_subset(active_keys, dimension),
+        }
+
+    return {
+        "new_keys": new_keys,
+        "retired_keys": retired_keys,
+        "unchanged_keys": unchanged_keys,
+        "active_keys": active_keys,
+        "summary": {
+            "new_key_count": len(new_keys),
+            "active_key_count": len(active_keys),
+            "retired_key_count": len(retired_keys),
+            "unchanged_key_count": len(unchanged_keys),
+        },
+        "dimensions": dimensions,
+    }
+
+
+def _portable_artifact_path(path: Path | str) -> str:
+    """Return a repo-relative POSIX path when possible for deterministic artifacts."""
+    resolved = Path(path).resolve()
+    for parent in resolved.parents:
+        if (parent / "pyproject.toml").is_file() or (parent / ".git").is_dir():
+            try:
+                return resolved.relative_to(parent).as_posix()
+            except ValueError:
+                break
+    return resolved.as_posix()
+
+
+def build_bz_replay_key_movement_report(
+    *,
+    baseline_run_path: Path | str,
+    current_run_path: Path | str,
+    baseline_catalog: Mapping[str, Any],
+    current_catalog: Mapping[str, Any],
+    corpus_parity: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Build the BZ replay-key movement artifact payload."""
+    comparison = compare_replay_key_catalogs(baseline_catalog, current_catalog)
+    return {
+        "schema_version": TREND_SCHEMA_VERSION,
+        "report_only": True,
+        "baseline": _portable_artifact_path(baseline_run_path),
+        "current": _portable_artifact_path(current_run_path),
+        "corpus_match": bool(corpus_parity.get("corpus_match")),
+        "baseline_scenario_ids": list(corpus_parity.get("baseline_scenario_ids") or []),
+        "current_scenario_ids": list(corpus_parity.get("current_scenario_ids") or []),
+        "summary": comparison["summary"],
+        "dimensions": comparison["dimensions"],
+    }
+
+
+def write_bz_replay_key_movement_artifact(
+    *,
+    out_dir: Path,
+    run_envelopes: Sequence[Mapping[str, Any]],
+    manifest: Mapping[str, Any],
+    baseline_run_path: Path,
+    baseline_corpus_scenario_ids: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Write BZ_replay_key_movement.json comparing baseline run-000 to current run-000."""
+    if not run_envelopes:
+        raise ValueError("run_envelopes must not be empty for BZ replay-key movement")
+    if not baseline_run_path.is_file():
+        raise FileNotFoundError(f"BZ replay key baseline run not found: {baseline_run_path}")
+
+    baseline_envelope = json.loads(baseline_run_path.read_text(encoding="utf-8"))
+    if not isinstance(baseline_envelope, Mapping):
+        raise ValueError(f"BZ replay key baseline run must be a JSON object: {baseline_run_path}")
+
+    current_envelope = run_envelopes[0]
+    current_run_id = str(current_envelope.get("run_id") or "run-000")
+    current_run_path = out_dir / "runs" / f"{current_run_id}.json"
+
+    baseline_corpus = list(baseline_corpus_scenario_ids or protected_replay_corpus_scenario_ids())
+    manifest_corpus = manifest.get("corpus_scenario_ids")
+    current_corpus = (
+        list(manifest_corpus)
+        if isinstance(manifest_corpus, list)
+        else list(protected_replay_corpus_scenario_ids())
+    )
+    corpus_parity = validate_protected_replay_corpus_parity(baseline_corpus, current_corpus)
+
+    baseline_catalog = build_replay_key_catalog(baseline_envelope)
+    current_catalog = build_replay_key_catalog(current_envelope)
+    report = build_bz_replay_key_movement_report(
+        baseline_run_path=baseline_run_path,
+        current_run_path=current_run_path,
+        baseline_catalog=baseline_catalog,
+        current_catalog=current_catalog,
+        corpus_parity=corpus_parity,
+    )
+    write_deterministic_json(out_dir / BZ_REPLAY_KEY_MOVEMENT_FILENAME, report)
+    return report
+
+
 def run_protected_replay_trend_window(
     *,
     runs: int,
     out_dir: Path,
     append_history: bool = False,
     thresholds: Mapping[str, int | None] | None = None,
+    bz_replay_key_baseline_run: Path | None = None,
+    bz_corpus_baseline_scenario_ids: Sequence[str] | None = None,
+    bz_recurrence_baseline: Path | None = None,
+    bz_recurrence_current: Path | None = None,
+    bz_recurrence_event_log: Path | None = None,
+    write_bz_recurrence_movement: bool = False,
 ) -> dict[str, Any]:
     """Execute the protected replay corpus ``runs`` times and write trend artifacts."""
     if runs < 1:
@@ -1018,5 +1261,36 @@ def run_protected_replay_trend_window(
             out_dir=out_dir,
             drift_report=drift_report,
             thresholds=thresholds,
+        )
+    if bz_replay_key_baseline_run is not None:
+        bz_report = write_bz_replay_key_movement_artifact(
+            out_dir=out_dir,
+            run_envelopes=run_envelopes,
+            manifest=manifest,
+            baseline_run_path=bz_replay_key_baseline_run,
+            baseline_corpus_scenario_ids=bz_corpus_baseline_scenario_ids,
+        )
+        drift_report = dict(drift_report)
+        drift_report["bz_replay_key_movement"] = bz_report
+    if write_bz_recurrence_movement:
+        from tests.helpers.protected_replay_trend_movement import (
+            write_bz_recurrence_movement_artifact,
+            write_bz_window_summary_markdown,
+        )
+
+        bz_recurrence_report = write_bz_recurrence_movement_artifact(
+            out_dir=out_dir,
+            baseline_path=bz_recurrence_baseline,
+            current_path=bz_recurrence_current,
+            event_log_path=bz_recurrence_event_log,
+        )
+        drift_report = dict(drift_report)
+        drift_report["bz_recurrence_movement"] = bz_recurrence_report
+        write_bz_window_summary_markdown(
+            out_dir=out_dir,
+            replay_key_movement=drift_report.get("bz_replay_key_movement")
+            if isinstance(drift_report.get("bz_replay_key_movement"), Mapping)
+            else None,
+            recurrence_movement=bz_recurrence_report,
         )
     return drift_report
