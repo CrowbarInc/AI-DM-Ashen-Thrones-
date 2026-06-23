@@ -1016,6 +1016,28 @@ _CROSS_FILE_DUPLICATE_ALLOWLIST: Final[Mapping[str, str]] = {
     "test_tool_imports_successfully": (
         "Parallel realization audit import smoke in layer vs provenance audit modules."
     ),
+    "test_build_report_from_inputs": (
+        "Parallel CA corrective-report tool contract probes (absence vs availability); "
+        "distinct modules disambiguate report surface."
+    ),
+    "test_closeout_doc_states_six_scenario_protected_corpus": (
+        "Parallel BW/BZ protected-replay trend-window closeout doc locks; "
+        "distinct cycle closeout modules."
+    ),
+    "test_concentration_calculations": (
+        "Parallel CA corrective-prevention vs embedded-attribution report math smoke; "
+        "distinct audit modules."
+    ),
+    "test_deterministic_ordering": (
+        "Shared fallback portfolio report contract shape across economics/recurrence/ROI suites; "
+        "distinct modules disambiguate pytest -k."
+    ),
+    "test_empty_history": (
+        "Parallel empty-history edge probes in fallback maintenance economics vs remediation queue."
+    ),
+    "test_report_generation": (
+        "Parallel report-writer contract smoke across CA corrective and fallback portfolio audit modules."
+    ),
 }
 
 

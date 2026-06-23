@@ -110,6 +110,30 @@ def test_game_import_roots_dedupes(audit_mod) -> None:
     assert sorted(roots) == ["api", "final_emission_gate", "final_emission_repairs"]
 
 
+def test_summarize_architecture_layer_file_counts_groups_file_rows(audit_mod) -> None:
+    rows = [
+        {"path": "tests/a.py", "likely_architecture_layer": "gate"},
+        {"path": "tests/b.py", "likely_architecture_layer": "engine"},
+        {"path": "tests/c.py", "likely_architecture_layer": "gate"},
+        {"path": "tests/d.py"},
+    ]
+    assert audit_mod.summarize_architecture_layer_file_counts(rows) == {
+        "engine": 1,
+        "gate": 2,
+        "unknown": 1,
+    }
+    assert audit_mod.summarize_architecture_layer_file_counts([]) == {}
+    assert audit_mod.summarize_architecture_layer_file_counts("not-a-list") == {}
+
+
+def test_governance_payload_omits_architecture_layer_file_counts(audit_mod) -> None:
+    full = _minimal_full_inventory()
+    full["architecture_layer_file_counts"] = {"gate": 1, "engine": 1}
+    gov = audit_mod.build_governance_payload(full)
+    assert "architecture_layer_file_counts" not in gov
+    assert gov["summary"]["inventory_kind"] == "governance"
+
+
 def test_architecture_layer_prefers_transcript_signals(audit_mod) -> None:
     fp = "tests/test_mixed_state_recovery_regressions.py"
     src = "from tests.helpers.transcript_runner import run_transcript\n"

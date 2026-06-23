@@ -218,7 +218,14 @@ def test_cli_json_out_matches_canonical_as_dict(tmp_path: Path) -> None:
     written = json.loads(out.read_text(encoding="utf-8"))
     expected = _engine_report_for_runner_disk_state(sd)
     assert written == expected
-    assert set(written) == {"ok", "error_count", "warning_count", "messages", "scene_ids_checked"}
+    assert set(written) == {
+        "ok",
+        "error_count",
+        "warning_count",
+        "messages",
+        "scene_ids_checked",
+        "code_family_counts",
+    }
 
 
 def test_cli_quiet_prints_only_summary_line(tmp_path: Path) -> None:
@@ -235,6 +242,14 @@ def test_cli_quiet_prints_only_summary_line(tmp_path: Path) -> None:
     assert lines[0].startswith("scenes_checked=")
     assert "errors=" in lines[0] and "warnings=" in lines[0]
     assert "[" not in r.stdout
+
+
+def test_cli_summary_includes_code_family_metric_for_warnings(tmp_path: Path) -> None:
+    sd = _mk_scenes_dir(tmp_path)
+    _write_scene(sd, "lonely", _warning_only_scene("lonely"))
+    r = _run_cli("--scenes-dir", str(sd), "--quiet")
+    assert r.returncode == 0
+    assert "code_families=scene:2" in r.stdout
 
 
 def test_subset_cli_exit_to_unloaded_real_scene_not_unknown_target(tmp_path: Path) -> None:

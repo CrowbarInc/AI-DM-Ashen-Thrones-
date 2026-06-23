@@ -11,6 +11,8 @@ from game.content_lint import (
     lint_scene_graph_connectivity,
     lint_scene_heuristic_warnings,
     lint_scene_interactables,
+    message_code_family,
+    summarize_message_code_families,
 )
 
 
@@ -142,6 +144,21 @@ def test_report_as_dict_roundtrip_shape():
     assert d["ok"] is True
     assert "messages" in d
     assert all("severity" in m and "code" in m for m in d["messages"])
+    assert "code_family_counts" in d
+    assert isinstance(d["code_family_counts"], dict)
+
+
+def test_summarize_message_code_families_groups_by_first_segment():
+    from game.content_lint import ContentLintMessage
+
+    msgs = [
+        ContentLintMessage(severity="error", code="exit.unknown_target", message="a"),
+        ContentLintMessage(severity="warning", code="graph.unreachable_scene", message="b"),
+        ContentLintMessage(severity="warning", code="graph.scene_load_failed", message="c"),
+    ]
+    assert summarize_message_code_families(msgs) == {"exit": 1, "graph": 2}
+    assert message_code_family("clue.duplicate_id") == "clue"
+    assert message_code_family("") == "other"
 
 
 def test_subset_lint_resolves_world_npc_location_against_reference_registry():

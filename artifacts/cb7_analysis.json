@@ -1,0 +1,1132 @@
+{
+  "generated_at": "2026-06-23",
+  "python_files_parsed": 804,
+  "ecosystem_modules_bu_script": 236,
+  "domain_stats": {
+    "final_emission": {
+      "file_count": 52,
+      "prod_modules": 52,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 527,
+      "fan_out": 285,
+      "prod_fan_in": 527,
+      "top_hubs": [
+        {
+          "fi": 52,
+          "fo": 0,
+          "module": "game.final_emission_text_formatting"
+        },
+        {
+          "fi": 34,
+          "fo": 9,
+          "module": "game.final_emission_gate"
+        },
+        {
+          "fi": 32,
+          "fo": 20,
+          "module": "game.final_emission_visibility_fallback"
+        },
+        {
+          "fi": 26,
+          "fo": 8,
+          "module": "game.final_emission_meta"
+        },
+        {
+          "fi": 26,
+          "fo": 7,
+          "module": "game.final_emission_repairs"
+        },
+        {
+          "fi": 23,
+          "fo": 24,
+          "module": "game.final_emission_strict_social_stack"
+        },
+        {
+          "fi": 22,
+          "fo": 5,
+          "module": "game.final_emission_validators"
+        },
+        {
+          "fi": 22,
+          "fo": 5,
+          "module": "game.final_emission_replay_projection"
+        }
+      ],
+      "delta_vs_bv1_fi": 84,
+      "delta_vs_bv1_fo": 67,
+      "delta_vs_cb_fi": 0,
+      "delta_vs_cb_fo": 0
+    },
+    "fallback": {
+      "file_count": 9,
+      "prod_modules": 9,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 116,
+      "fan_out": 66,
+      "prod_fan_in": 116,
+      "top_hubs": [
+        {
+          "fi": 32,
+          "fo": 20,
+          "module": "game.final_emission_visibility_fallback"
+        },
+        {
+          "fi": 21,
+          "fo": 13,
+          "module": "game.upstream_response_repairs"
+        },
+        {
+          "fi": 14,
+          "fo": 8,
+          "module": "game.final_emission_opening_fallback"
+        },
+        {
+          "fi": 13,
+          "fo": 1,
+          "module": "game.diegetic_fallback_narration"
+        },
+        {
+          "fi": 10,
+          "fo": 14,
+          "module": "game.final_emission_sealed_fallback"
+        },
+        {
+          "fi": 10,
+          "fo": 3,
+          "module": "game.fallback_provenance_debug"
+        },
+        {
+          "fi": 9,
+          "fo": 5,
+          "module": "game.output_sanitizer"
+        },
+        {
+          "fi": 6,
+          "fo": 2,
+          "module": "game.opening_deterministic_fallback"
+        }
+      ],
+      "delta_vs_bv1_fi": 13,
+      "delta_vs_bv1_fo": -127,
+      "delta_vs_cb_fi": 13,
+      "delta_vs_cb_fo": -127
+    },
+    "speaker": {
+      "file_count": 3,
+      "prod_modules": 3,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 29,
+      "fan_out": 16,
+      "prod_fan_in": 29,
+      "top_hubs": [
+        {
+          "fi": 17,
+          "fo": 7,
+          "module": "game.speaker_contract_enforcement"
+        },
+        {
+          "fi": 8,
+          "fo": 4,
+          "module": "game.emitted_speaker_signature"
+        },
+        {
+          "fi": 4,
+          "fo": 5,
+          "module": "game.post_emission_speaker_adoption"
+        }
+      ],
+      "delta_vs_bv1_fi": -51,
+      "delta_vs_bv1_fo": -109,
+      "delta_vs_cb_fi": 0,
+      "delta_vs_cb_fo": 0
+    },
+    "response_policy": {
+      "file_count": 3,
+      "prod_modules": 3,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 26,
+      "fan_out": 13,
+      "prod_fan_in": 26,
+      "top_hubs": [
+        {
+          "fi": 21,
+          "fo": 4,
+          "module": "game.response_policy_contracts"
+        },
+        {
+          "fi": 4,
+          "fo": 9,
+          "module": "game.response_policy_enforcement"
+        },
+        {
+          "fi": 1,
+          "fo": 0,
+          "module": "game.response_policy_enforcement_manifest"
+        }
+      ],
+      "delta_vs_bv1_fi": -3,
+      "delta_vs_bv1_fo": -5,
+      "delta_vs_cb_fi": -9,
+      "delta_vs_cb_fo": -9
+    },
+    "replay_governance": {
+      "file_count": 45,
+      "prod_modules": 1,
+      "test_modules": 42,
+      "tool_modules": 2,
+      "fan_in": 222,
+      "fan_out": 155,
+      "prod_fan_in": 22,
+      "top_hubs": [
+        {
+          "fi": 60,
+          "fo": 1,
+          "module": "tests.helpers.replay_fem_read_smoke"
+        },
+        {
+          "fi": 22,
+          "fo": 5,
+          "module": "game.final_emission_replay_projection"
+        },
+        {
+          "fi": 17,
+          "fo": 7,
+          "module": "tests.helpers.golden_replay_projection"
+        },
+        {
+          "fi": 16,
+          "fo": 3,
+          "module": "tests.helpers.replay_drift_taxonomy"
+        },
+        {
+          "fi": 16,
+          "fo": 3,
+          "module": "tests.helpers.golden_replay_fixtures"
+        },
+        {
+          "fi": 12,
+          "fo": 2,
+          "module": "tests.helpers.replay_bug_recurrence"
+        },
+        {
+          "fi": 11,
+          "fo": 2,
+          "module": "tests.helpers.replay_observed_row_fixtures"
+        },
+        {
+          "fi": 10,
+          "fo": 13,
+          "module": "tests.helpers.golden_replay"
+        }
+      ],
+      "delta_vs_bv1_fi": 136,
+      "delta_vs_bv1_fo": 75,
+      "delta_vs_cb_fi": 22,
+      "delta_vs_cb_fo": 5
+    },
+    "api_orchestration": {
+      "file_count": 7,
+      "prod_modules": 6,
+      "test_modules": 0,
+      "tool_modules": 1,
+      "fan_in": 156,
+      "fan_out": 102,
+      "prod_fan_in": 156,
+      "top_hubs": [
+        {
+          "fi": 65,
+          "fo": 48,
+          "module": "game.api"
+        },
+        {
+          "fi": 62,
+          "fo": 18,
+          "module": "game.gm"
+        },
+        {
+          "fi": 15,
+          "fo": 15,
+          "module": "game.gm_retry"
+        },
+        {
+          "fi": 7,
+          "fo": 2,
+          "module": "game.api_upstream_preflight"
+        },
+        {
+          "fi": 6,
+          "fo": 17,
+          "module": "game.api_turn_support"
+        },
+        {
+          "fi": 1,
+          "fo": 1,
+          "module": "game.api_ui_mode"
+        },
+        {
+          "fi": 0,
+          "fo": 1,
+          "module": "run"
+        }
+      ],
+      "delta_vs_bv1_fi": 0,
+      "delta_vs_bv1_fo": 1,
+      "delta_vs_cb_fi": 0,
+      "delta_vs_cb_fo": 1
+    },
+    "prompt_ctir": {
+      "file_count": 20,
+      "prod_modules": 20,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 236,
+      "fan_out": 94,
+      "prod_fan_in": 236,
+      "top_hubs": [
+        {
+          "fi": 38,
+          "fo": 34,
+          "module": "game.prompt_context"
+        },
+        {
+          "fi": 33,
+          "fo": 2,
+          "module": "game.ctir_runtime"
+        },
+        {
+          "fi": 23,
+          "fo": 10,
+          "module": "game.narration_plan_bundle"
+        },
+        {
+          "fi": 22,
+          "fo": 2,
+          "module": "game.narration_visibility"
+        },
+        {
+          "fi": 19,
+          "fo": 3,
+          "module": "game.narrative_planning"
+        },
+        {
+          "fi": 15,
+          "fo": 3,
+          "module": "game.narrative_mode_contract"
+        },
+        {
+          "fi": 13,
+          "fo": 0,
+          "module": "game.turn_packet"
+        },
+        {
+          "fi": 12,
+          "fo": 3,
+          "module": "game.narrative_authenticity_eval"
+        }
+      ],
+      "delta_vs_bv1_fi": 52,
+      "delta_vs_bv1_fo": 21,
+      "delta_vs_cb_fi": 52,
+      "delta_vs_cb_fo": 21
+    },
+    "state_storage": {
+      "file_count": 8,
+      "prod_modules": 8,
+      "test_modules": 0,
+      "tool_modules": 0,
+      "fan_in": 284,
+      "fan_out": 16,
+      "prod_fan_in": 284,
+      "top_hubs": [
+        {
+          "fi": 125,
+          "fo": 7,
+          "module": "game.storage"
+        },
+        {
+          "fi": 105,
+          "fo": 1,
+          "module": "game.defaults"
+        },
+        {
+          "fi": 20,
+          "fo": 2,
+          "module": "game.campaign_state"
+        },
+        {
+          "fi": 9,
+          "fo": 5,
+          "module": "game.campaign_reset"
+        },
+        {
+          "fi": 9,
+          "fo": 0,
+          "module": "game.state_channels"
+        },
+        {
+          "fi": 9,
+          "fo": 0,
+          "module": "game.state_authority"
+        },
+        {
+          "fi": 4,
+          "fo": 1,
+          "module": "game.session"
+        },
+        {
+          "fi": 3,
+          "fo": 0,
+          "module": "game.persistence_contract"
+        }
+      ],
+      "delta_vs_bv1_fi": 0,
+      "delta_vs_bv1_fo": 0,
+      "delta_vs_cb_fi": 0,
+      "delta_vs_cb_fo": 0
+    }
+  },
+  "ownership_refs_by_domain": {
+    "replay_governance": 781,
+    "final_emission": 622,
+    "fallback": 115,
+    "api_orchestration": 10,
+    "speaker": 6,
+    "response_policy": 3,
+    "prompt_ctir": 3,
+    "state_storage": 1
+  },
+  "dual_owned_heuristic_files": {
+    "game/acceptance_quality.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/anti_reset_emission_guard.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/api.py": [
+      "final_emission",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/api_turn_support.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/attribution_read_views.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/behavioral_evaluators/intent_fulfillment.py": [
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/campaign_reset.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/clues.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/config.py": [
+      "api_orchestration",
+      "state_storage"
+    ],
+    "game/contract_registry.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/conversational_memory_window.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/ctir.py": [
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/ctir_runtime.py": [
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/dead_turn_report_visibility.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/dialogue_social_plan.py": [
+      "final_emission",
+      "speaker",
+      "prompt_ctir"
+    ],
+    "game/diegetic_fallback_narration.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/emitted_speaker_signature.py": [
+      "final_emission",
+      "fallback",
+      "speaker"
+    ],
+    "game/exploration.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/fallback_behavior.py": [
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/fallback_provenance_debug.py": [
+      "final_emission",
+      "fallback",
+      "api_orchestration",
+      "prompt_ctir"
+    ],
+    "game/final_emission_acceptance_quality.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_answer_shape_primacy.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_anti_railroading.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_boundary_contract.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_context_separation.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_contract.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_fast_fallback_composition.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_fem_assembly.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_finalize.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_first_mention_composition.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_gate.py": [
+      "final_emission",
+      "fallback",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_gate_context.py": [
+      "final_emission",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_gate_preflight_branch_flags.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_gate_preflight_defaults.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_gate_preflight_interaction.py": [
+      "final_emission",
+      "state_storage"
+    ],
+    "game/final_emission_gate_preflight_strict_social.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_gate_preflight_telemetry.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_gate_preflight_turn_packet.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_gate_preflight_upstream.py": [
+      "final_emission",
+      "fallback",
+      "state_storage"
+    ],
+    "game/final_emission_generic_exit.py": [
+      "final_emission",
+      "fallback",
+      "state_storage"
+    ],
+    "game/final_emission_meta.py": [
+      "final_emission",
+      "fallback",
+      "api_orchestration",
+      "prompt_ctir"
+    ],
+    "game/final_emission_meta_read.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_narration_constraint_debug.py": [
+      "final_emission",
+      "speaker",
+      "state_storage"
+    ],
+    "game/final_emission_narrative_authority.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_narrative_mode_output.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/final_emission_non_strict_stack.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_opening_fallback.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_opening_mode.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_owner_bucket_views.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_ownership_schema.py": [
+      "final_emission",
+      "fallback",
+      "replay_governance",
+      "prompt_ctir"
+    ],
+    "game/final_emission_passive_scene_pressure.py": [
+      "final_emission",
+      "fallback",
+      "state_storage"
+    ],
+    "game/final_emission_player_facing_narration_purity.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_referential_clarity.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_repairs.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_replay_projection.py": [
+      "final_emission",
+      "fallback",
+      "replay_governance"
+    ],
+    "game/final_emission_response_type.py": [
+      "final_emission",
+      "fallback",
+      "response_policy"
+    ],
+    "game/final_emission_runtime.py": [
+      "final_emission",
+      "api_orchestration",
+      "state_storage"
+    ],
+    "game/final_emission_scene_emit_integrity.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_scene_facts.py": [
+      "final_emission",
+      "fallback",
+      "state_storage"
+    ],
+    "game/final_emission_scene_state_anchor.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/final_emission_sealed_fallback.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/final_emission_speaker_observation.py": [
+      "final_emission",
+      "speaker",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/final_emission_strict_social_stack.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_terminal_pipeline.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "prompt_ctir"
+    ],
+    "game/final_emission_text.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/final_emission_text_formatting.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/final_emission_text_policy.py": [
+      "final_emission",
+      "response_policy"
+    ],
+    "game/final_emission_tone_escalation.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/final_emission_validators.py": [
+      "final_emission",
+      "fallback",
+      "response_policy"
+    ],
+    "game/final_emission_visibility_fallback.py": [
+      "final_emission",
+      "fallback",
+      "state_storage"
+    ],
+    "game/gm.py": [
+      "fallback",
+      "speaker",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/gm_retry.py": [
+      "final_emission",
+      "fallback",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/intent_parser.py": [
+      "fallback",
+      "state_storage"
+    ],
+    "game/interaction_context.py": [
+      "api_orchestration",
+      "state_storage"
+    ],
+    "game/interaction_continuity.py": [
+      "final_emission",
+      "speaker",
+      "response_policy",
+      "state_storage"
+    ],
+    "game/interaction_routing.py": [
+      "speaker",
+      "api_orchestration"
+    ],
+    "game/journal.py": [
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/narration_plan_bundle.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/narration_seam_guards.py": [
+      "fallback",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/narration_visibility.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/narrative_authenticity.py": [
+      "final_emission",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/narrative_authenticity_eval.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/narrative_mode_contract.py": [
+      "final_emission",
+      "fallback",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/narrative_plan_upstream.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/narrative_planning.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/noncombat_resolution.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/npc_promotion.py": [
+      "fallback",
+      "api_orchestration"
+    ],
+    "game/observability_attribution_read.py": [
+      "final_emission",
+      "prompt_ctir"
+    ],
+    "game/opening_deterministic_fallback.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/output_sanitizer.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/ownership_projection_views.py": [
+      "final_emission",
+      "fallback",
+      "speaker"
+    ],
+    "game/planner_convergence.py": [
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/planner_ctir_projection.py": [
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/planner_head_state.py": [
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/planner_input_manifest.py": [
+      "fallback",
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/planner_seam_fencing.py": [
+      "fallback",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/post_emission_speaker_adoption.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "prompt_ctir"
+    ],
+    "game/prompt_context.py": [
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/prompt_context_leads.py": [
+      "fallback",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/realization_authority.py": [
+      "fallback",
+      "speaker",
+      "prompt_ctir"
+    ],
+    "game/realization_provenance.py": [
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/response_policy_contracts.py": [
+      "final_emission",
+      "fallback",
+      "response_policy",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/response_policy_enforcement.py": [
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/response_policy_enforcement_manifest.py": [
+      "fallback",
+      "response_policy",
+      "api_orchestration"
+    ],
+    "game/runtime_lineage_telemetry.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "replay_governance"
+    ],
+    "game/scenario_spine.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/scenario_spine_eval.py": [
+      "final_emission",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/scenario_spine_opening_convergence.py": [
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/scenario_spine_transition_convergence.py": [
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/scene_state_anchoring.py": [
+      "speaker",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/social.py": [
+      "fallback",
+      "state_storage"
+    ],
+    "game/social_exchange_emission.py": [
+      "fallback",
+      "speaker",
+      "response_policy",
+      "state_storage"
+    ],
+    "game/social_exchange_fallback_catalog.py": [
+      "fallback",
+      "speaker",
+      "response_policy",
+      "prompt_ctir"
+    ],
+    "game/social_exchange_policy.py": [
+      "speaker",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/social_exchange_projection.py": [
+      "final_emission",
+      "fallback"
+    ],
+    "game/speaker_contract_enforcement.py": [
+      "final_emission",
+      "fallback",
+      "speaker",
+      "api_orchestration"
+    ],
+    "game/stage_diff_telemetry.py": [
+      "final_emission",
+      "fallback",
+      "prompt_ctir"
+    ],
+    "game/state_channels.py": [
+      "final_emission",
+      "api_orchestration",
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/storage.py": [
+      "api_orchestration",
+      "state_storage"
+    ],
+    "game/telemetry_vocab.py": [
+      "api_orchestration",
+      "prompt_ctir"
+    ],
+    "game/tone_escalation.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/turn_packet.py": [
+      "prompt_ctir",
+      "state_storage"
+    ],
+    "game/ui_mode_policy.py": [
+      "api_orchestration",
+      "state_storage"
+    ],
+    "game/upstream_response_repairs.py": [
+      "final_emission",
+      "fallback",
+      "response_policy"
+    ],
+    "game/world_progression.py": [
+      "prompt_ctir",
+      "state_storage"
+    ]
+  },
+  "dual_owned_count": 125,
+  "untagged_game_files_sample": [
+    "game/anti_railroading.py",
+    "game/combat.py",
+    "game/conditions.py",
+    "game/content_lint.py",
+    "game/context_separation.py",
+    "game/importers/pf_json_importer.py",
+    "game/narration_state_consistency.py",
+    "game/projects.py",
+    "game/response_type_gating.py",
+    "game/scene_destination_binding.py",
+    "game/scene_lint.py",
+    "game/skill_checks.py",
+    "game/social_exchange_validation.py",
+    "game/utils.py"
+  ],
+  "untagged_game_count": 14,
+  "key_module_deltas": [
+    {
+      "module": "game.final_emission_gate",
+      "bv1_fi": 28,
+      "current_fi": 34,
+      "delta_fi": 6,
+      "bv1_fo": 7,
+      "current_fo": 9,
+      "delta_fo": 2
+    },
+    {
+      "module": "game.final_emission_meta",
+      "bv1_fi": 61,
+      "current_fi": 24,
+      "delta_fi": -37,
+      "bv1_fo": 6,
+      "current_fo": 8,
+      "delta_fo": 2
+    },
+    {
+      "module": "game.final_emission_replay_projection",
+      "bv1_fi": 15,
+      "current_fi": 15,
+      "delta_fi": 0,
+      "bv1_fo": 4,
+      "current_fo": 5,
+      "delta_fo": 1
+    },
+    {
+      "module": "tests.helpers.golden_replay_projection",
+      "bv1_fi": 18,
+      "current_fi": 16,
+      "delta_fi": -2,
+      "bv1_fo": 7,
+      "current_fo": 7,
+      "delta_fo": 0
+    },
+    {
+      "module": "game.final_emission_visibility_fallback",
+      "bv1_fi": 17,
+      "current_fi": 32,
+      "delta_fi": 15,
+      "bv1_fo": 17,
+      "current_fo": 20,
+      "delta_fo": 3
+    },
+    {
+      "module": "game.speaker_contract_enforcement",
+      "bv1_fi": 15,
+      "current_fi": 17,
+      "delta_fi": 2,
+      "bv1_fo": 4,
+      "current_fo": 7,
+      "delta_fo": 3
+    },
+    {
+      "module": "game.final_emission_finalize",
+      "bv1_fi": 11,
+      "current_fi": 12,
+      "delta_fi": 1,
+      "bv1_fo": 8,
+      "current_fo": 9,
+      "delta_fo": 1
+    },
+    {
+      "module": "game.final_emission_terminal_pipeline",
+      "bv1_fi": 26,
+      "current_fi": 12,
+      "delta_fi": -14,
+      "bv1_fo": 13,
+      "current_fo": 15,
+      "delta_fo": 2
+    },
+    {
+      "module": "tests.helpers.emission_smoke_assertions",
+      "bv1_fi": 70,
+      "current_fi": 15,
+      "delta_fi": -55,
+      "bv1_fo": 5,
+      "current_fo": 5,
+      "delta_fo": 0
+    },
+    {
+      "module": "tests.test_ownership_registry",
+      "bv1_fi": 0,
+      "current_fi": 0,
+      "delta_fi": 0,
+      "bv1_fo": 57,
+      "current_fo": 57,
+      "delta_fo": 0
+    }
+  ],
+  "governance_drift": {
+    "added_test_files": 19,
+    "removed_test_files": 0,
+    "root_cause": "BW/BZ closeout + fallback portfolio + golden replay structural suites added without governance JSON regen"
+  }
+}

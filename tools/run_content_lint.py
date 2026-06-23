@@ -22,7 +22,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from game.content_lint import ContentLintMessage, ContentLintReport, lint_all_content  # noqa: E402
+from game.content_lint import (  # noqa: E402
+    ContentLintMessage,
+    ContentLintReport,
+    lint_all_content,
+    message_code_family,
+    summarize_message_code_families,
+)
 from game.storage import SCENES_DIR  # noqa: E402
 
 
@@ -101,17 +107,24 @@ def _parse_scene_id_args(values: Optional[Sequence[str]]) -> Optional[List[str]]
     return out or None
 
 
-def _message_code_family(code: str) -> str:
-    """First dot-separated segment of a stable lint code (used for CLI grouping only)."""
-    return code.split(".", 1)[0] if code else "other"
+def _format_code_family_counts(report: ContentLintReport) -> str:
+    """Compact CLI metric: ``graph:2,scene:1`` (sorted families, author-time diagnostic only)."""
+    counts = summarize_message_code_families(report.messages)
+    if not counts:
+        return ""
+    return "code_families=" + ",".join(f"{k}:{v}" for k, v in counts.items())
 
 
 def _render_cli_report(report: ContentLintReport, *, quiet: bool) -> None:
     out = sys.stdout
-    out.write(
+    family_metric = _format_code_family_counts(report)
+    summary = (
         f"scenes_checked={len(report.scene_ids_checked)} "
-        f"errors={report.error_count} warnings={report.warning_count}\n"
+        f"errors={report.error_count} warnings={report.warning_count}"
     )
+    if family_metric:
+        summary = f"{summary} {family_metric}"
+    out.write(summary + "\n")
     if quiet:
         return
     by_scene: Dict[str, List[ContentLintMessage]] = defaultdict(list)
@@ -125,12 +138,12 @@ def _render_cli_report(report: ContentLintReport, *, quiet: bool) -> None:
     for sid in sorted(by_scene.keys()):
         out.write(f"\n[{sid}]\n")
         for m in by_scene[sid]:
-            fam = _message_code_family(m.code)
+            fam = message_code_family(m.code)
             out.write(f"  {m.severity} [{fam}]: {m.code}: {m.message}\n")
     if unscoped:
         out.write("\n[global]\n")
         for m in unscoped:
-            fam = _message_code_family(m.code)
+            fam = message_code_family(m.code)
             out.write(f"  {m.severity} [{fam}]: {m.code}: {m.message}\n")
 
 

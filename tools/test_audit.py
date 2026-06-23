@@ -687,6 +687,20 @@ def governance_committed_file_paths(full_payload: dict) -> set[str]:
     return paths
 
 
+def summarize_architecture_layer_file_counts(file_rows: object) -> dict[str, int]:
+    """Count test modules per heuristic architecture layer (author-time audit statistic only)."""
+    counts: dict[str, int] = {}
+    if not isinstance(file_rows, list):
+        return counts
+    for row in file_rows:
+        if not isinstance(row, dict):
+            continue
+        layer = row.get("likely_architecture_layer")
+        key = str(layer).strip() if isinstance(layer, str) and str(layer).strip() else "unknown"
+        counts[key] = counts.get(key, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def build_governance_summary(full_payload: dict) -> dict[str, object]:
     """Stable metadata retained in committed governance JSON (counts derived at --check)."""
     full_summary = full_payload.get("summary")
@@ -1553,6 +1567,7 @@ def build_inventory_payload() -> dict:
 
     payload: dict[str, object] = {
         "summary": summary,
+        "architecture_layer_file_counts": summarize_architecture_layer_file_counts(file_rows),
         "counts_by_majority_file_bucket": dict(Counter(file_bucket_majority.values())),
         "top_high_brittleness_files": brittle_by_file.most_common(15),
         "cross_file_same_base_name_count": len(overlap_clusters),
@@ -1599,6 +1614,10 @@ def write_full_inventory(full_payload: dict, path: Path) -> None:
 
     path.write_text(json.dumps(full_payload, indent=2, sort_keys=True), encoding="utf-8")
     print(f"Wrote {path} (full diagnostic: {test_count} tests, {file_count} files)")
+    layer_counts = full_payload.get("architecture_layer_file_counts")
+    if isinstance(layer_counts, dict) and layer_counts:
+        parts = [f"{layer}: {count}" for layer, count in layer_counts.items()]
+        print("Architecture layer file counts (heuristic): " + "; ".join(parts))
     top_spread = spread_ranked[:8]
     if top_spread:
         parts = [f"{row['area']}: {row['distinct_files']} files" for row in top_spread]

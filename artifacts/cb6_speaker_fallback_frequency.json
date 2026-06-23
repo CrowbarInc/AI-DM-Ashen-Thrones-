@@ -1,0 +1,144 @@
+{
+  "advisory_only": true,
+  "confidence_assessment": {
+    "fallback_runtime_incidence": "medium",
+    "rationale": {
+      "fallback": "BV1B/BV3D agree at 1.05% on scoped corpus; legacy BV1 snapshot remains 69.16% on wider artifact set \u2014 scope dominates rate.",
+      "speaker": "BV3D corpus shows 0 speaker_repair events across 95 FEM turns; recurrence history is protected-replay-only and backfill-inflated."
+    },
+    "replay_recurrence_separation": "high",
+    "speaker_runtime_incidence": "low"
+  },
+  "fallback_frequency": {
+    "bv1_legacy_snapshot": {
+      "eligible_fem_turns": 107,
+      "fallback_event_count": 74,
+      "fallback_trigger_rate_pct": 69.1589,
+      "fallback_turns": 74,
+      "family_counts": {
+        "opening_fallback": 31,
+        "repair_triggered_fallback": 4,
+        "sealed_fallback": 1,
+        "visibility_fallback": 38
+      }
+    },
+    "bv1b_bv3d_snapshot": {
+      "eligible_fem_turns": 95,
+      "fallback_event_count": 1,
+      "fallback_trigger_rate_pct": 1.0526,
+      "fallback_turns": 1,
+      "family_counts": {
+        "visibility_fallback": 1
+      }
+    },
+    "bv3d_live_rescan": {
+      "eligible_fem_turns": 95,
+      "fallback_family_counts": {
+        "visibility_fallback": 1
+      },
+      "fallback_kind_raw": {
+        "referential_clarity_hard_replacement": 1
+      },
+      "fallback_trigger_rate_pct": 1.0526,
+      "fallback_turns": 1,
+      "lineage_by_event_kind": {
+        "fallback_selected": 1,
+        "gate_outcome": 64,
+        "mutation": 54
+      },
+      "lineage_total_events": 119,
+      "measurement_scope": "BV3D",
+      "speaker_repair_events": 0,
+      "speaker_repair_kinds": {},
+      "speaker_repair_rate_pct": 0.0
+    },
+    "event_definitions": {
+      "deterministic_fallback": "opening_deterministic_fallback content owner or upstream_prepared opening.",
+      "opening_fallback": "fallback_kind scene_opening or diegetic scene_opening family.",
+      "repair_triggered_fallback": "response_type_prepared_emission, gate_terminal_repair realization family, repair-triggered replacements.",
+      "sanitizer_triggered_fallback": "sanitizer_* protected fields or sanitizer stage lineage (sparse in artifact corpus).",
+      "sealed_fallback": "sealed_passive_scene_pressure_fallback or sealed-gate owner bucket.",
+      "visibility_fallback": "referential_clarity_hard_replacement / visibility selection owner paths."
+    }
+  },
+  "generated_at": "2026-06-23T21:23:31.850191+00:00",
+  "measurement_sources": [
+    "artifacts\\bv1_fallback_summary.json",
+    "artifacts\\bv1b_fallback_summary.json",
+    "artifacts\\golden_replay\\bug_recurrence_history.json",
+    "tools/bv3d_measurement_scope.py (live rescan)"
+  ],
+  "replay_vs_runtime_comparison": {
+    "interpretation": "Protected replay recurrence measures acceptance failures and governance keys, not turn-level incidence. Runtime artifact incidence varies sharply by corpus scope (legacy 69% vs BV3D 1%).",
+    "observed_runtime_fallback_trigger_rate_pct_bv1_legacy": 69.1589,
+    "observed_runtime_fallback_trigger_rate_pct_bv3d": 1.0526,
+    "observed_runtime_speaker_repair_rate_pct_bv3d": 0.0,
+    "protected_replay_speaker_recurrence": {
+      "note": "BV8A: 8 raw projection-key rows collapse to 1 historical defect (vocative_override_after_prior_continuity backfill duplication).",
+      "raw_projection_row_count": 8,
+      "unique_historical_defects": 1
+    }
+  },
+  "report_only": true,
+  "schema_version": 1,
+  "speaker_frequency": {
+    "bv3d_corpus": {
+      "eligible_fem_turns": 95,
+      "repair_kinds": {},
+      "speaker_repair_events": 0,
+      "speaker_repair_rate_pct": 0.0
+    },
+    "event_definitions": {
+      "speaker_adoption": "Post-emission speaker identity accepted without repair (inferred: no speaker_repair lineage event on turn).",
+      "speaker_correction": "Lineage event_kind=speaker_repair with repair_kind token (e.g. canonical_rewrite, narrator_neutral).",
+      "speaker_finalize_divergence": "Finalize stack divergence between dialogue plan and emitted speaker (BX/BT parity probes; not separately counted in BV3D corpus).",
+      "speaker_mismatch": "Protected replay field drift on selected_speaker_id or strict-social wrong-speaker scenario failure.",
+      "speaker_override": "Vocative/direct-address override scenarios (protected: vocative_override_after_prior_continuity).",
+      "speaker_relocation": "Route/target change with selected_speaker_id movement (protected: trace.canonical_entry.*, route_kind)."
+    },
+    "protected_replay_recurrence": {
+      "dedupe_note": "BV8A: 8 raw projection-key rows collapse to 1 historical defect (vocative_override_after_prior_continuity backfill duplication).",
+      "highest_governance_load_owner": null,
+      "protected_replay_regression_recurrence_rate": {
+        "advisory_only": true,
+        "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
+        "denominator": 6,
+        "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
+        "metric": "regression_recurrence_rate",
+        "numerator": 3,
+        "population": "protected_replay_history",
+        "rate": 0.5,
+        "report_only": true,
+        "schema_version": 1
+      },
+      "raw_projection_key_row_count": 8,
+      "speaker_recurrence_key_count": 3,
+      "speaker_recurrence_rows": [
+        {
+          "category": null,
+          "field_path": null,
+          "occurrence_count": 8,
+          "owner_drift_bucket": null,
+          "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+          "source_section": "recurrence_forecast.key_forecasts"
+        },
+        {
+          "category": null,
+          "field_path": null,
+          "occurrence_count": 2,
+          "owner_drift_bucket": null,
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_id|game/speaker_contract_enforcement.py",
+          "source_section": "recurrence_forecast.key_forecasts"
+        },
+        {
+          "category": null,
+          "field_path": null,
+          "occurrence_count": 1,
+          "owner_drift_bucket": null,
+          "recurrence_key": "recurrence:v1:speaker_drift|speaker|selected_speaker_source|game/speaker_contract_enforcement.py",
+          "source_section": "recurrence_forecast.key_forecasts"
+        }
+      ]
+    }
+  }
+}

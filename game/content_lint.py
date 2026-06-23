@@ -68,7 +68,24 @@ class ContentLintReport:
             "warning_count": self.warning_count,
             "messages": [m.as_dict() for m in self.messages],
             "scene_ids_checked": list(self.scene_ids_checked),
+            "code_family_counts": summarize_message_code_families(self.messages),
         }
+
+
+def message_code_family(code: str) -> str:
+    """First dot-separated segment of a stable lint code (author-time grouping only)."""
+    return code.split(".", 1)[0] if code else "other"
+
+
+def summarize_message_code_families(
+    messages: Sequence[ContentLintMessage],
+) -> Dict[str, int]:
+    """Count lint messages by code family (first segment of ``code``), sorted keys in output."""
+    counts: Dict[str, int] = {}
+    for m in messages:
+        fam = message_code_family(m.code)
+        counts[fam] = counts.get(fam, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 # ---------------------------------------------------------------------------

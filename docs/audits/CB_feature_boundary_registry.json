@@ -1,0 +1,531 @@
+{
+  "version": 1,
+  "generated_from": "CB_feature_boundary_readiness_discovery",
+  "generated_at": "2026-06-23",
+  "domains": [
+    {
+      "id": "content_lint_validation",
+      "name": "Content lint and validation tooling",
+      "classification": "safe",
+      "paths": [
+        "game/content_lint.py",
+        "game/scene_lint.py",
+        "game/validation.py",
+        "tools/run_content_lint.py"
+      ],
+      "owners": [
+        "game/validation.py",
+        "game/content_lint.py",
+        "tests/test_content_lint.py",
+        "tests/test_scene_validation.py"
+      ],
+      "guardrails": ["SAFE_G1", "SAFE_G2"],
+      "required_evidence": [
+        "PR states author-time / CLI scope only",
+        "No new runtime consumers on emit path"
+      ],
+      "required_tests": [
+        "tests/test_content_lint.py",
+        "tests/test_content_lint_tool.py",
+        "tests/test_scene_validation.py",
+        "tests/test_validation_coverage_*.py"
+      ],
+      "notes": "Acceptable for author-time diagnostics and scene lint rules. Do not wire findings into final emission, sanitizer, or policy enforcement."
+    },
+    {
+      "id": "behavioral_playability_evaluators",
+      "name": "Behavioral and playability evaluators",
+      "classification": "safe",
+      "paths": [
+        "game/behavioral_evaluators/**",
+        "game/playability_eval.py",
+        "tools/run_playability_validation.py"
+      ],
+      "owners": [
+        "game/playability_eval.py",
+        "game/behavioral_evaluators/",
+        "docs/validation_layer_separation.md"
+      ],
+      "guardrails": ["SAFE_G1", "SAFE_G2"],
+      "required_evidence": [
+        "Outputs remain advisory / offline scoring",
+        "No evaluator judgments promoted to gate or fallback behavior"
+      ],
+      "required_tests": [
+        "tests/test_playability_eval.py",
+        "tests/test_behavioral_gauntlet_*.py",
+        "tests/test_intent_fulfillment_evaluator.py",
+        "tests/test_player_agency_evaluator.py",
+        "tests/test_session_cohesion_evaluator.py"
+      ],
+      "notes": "Extend metrics and reporting only. Offline scoring lane is distinct from runtime policy per ownership docs."
+    },
+    {
+      "id": "ui_mode_frontend",
+      "name": "UI mode policy and frontend shell",
+      "classification": "safe",
+      "paths": [
+        "static/**",
+        "game/ui_mode_policy.py",
+        "game/api_ui_mode.py"
+      ],
+      "owners": [
+        "game/ui_mode_policy.py",
+        "game/api_ui_mode.py",
+        "tests/test_ui_mode_policy.py"
+      ],
+      "guardrails": ["SAFE_G1", "SAFE_G2"],
+      "required_evidence": [
+        "API response contracts preserved",
+        "UI-mode changes isolated from emit-path orchestration"
+      ],
+      "required_tests": [
+        "tests/test_ui_mode_policy.py",
+        "tests/test_ui_mode_backend_integration.py",
+        "tests/test_ui_mode_regression_matrix_objective15.py",
+        "tests/test_frontend_ui_mode_hardening_objective15.py"
+      ],
+      "notes": "Low fan-in domain (FI 4). Safe for frontend and display policy behind existing API contracts."
+    },
+    {
+      "id": "model_config_routing",
+      "name": "Model, config, and upstream availability routing",
+      "classification": "safe",
+      "paths": [
+        "game/config.py",
+        "game/models.py",
+        "game/model_routing.py",
+        "game/api_upstream_preflight.py",
+        "game/upstream_dependent_run_gate*.py"
+      ],
+      "owners": [
+        "game/config.py",
+        "game/model_routing.py",
+        "game/api_upstream_preflight.py",
+        "tests/test_model_routing_*.py"
+      ],
+      "guardrails": ["SAFE_G1", "SAFE_G2"],
+      "required_evidence": [
+        "Configuration or presentation scope documented",
+        "Fallback-trigger semantics unchanged or escalated to caution review"
+      ],
+      "required_tests": [
+        "tests/test_model_routing_*.py",
+        "tests/test_api_upstream_preflight.py",
+        "tests/test_upstream_dependent_run_*.py",
+        "tests/test_startup_and_timestamps.py"
+      ],
+      "notes": "Safe for config and upstream availability presentation. Upstream failure paths that trigger fast fallback lanes are outside the safe boundary—use caution guardrails if touched."
+    },
+    {
+      "id": "combat_checks_adjudication",
+      "name": "Combat, conditions, skill checks, and adjudication",
+      "classification": "safe",
+      "paths": [
+        "game/combat.py",
+        "game/conditions.py",
+        "game/skill_checks.py",
+        "game/noncombat_resolution.py",
+        "game/adjudication.py"
+      ],
+      "owners": [
+        "game/combat.py",
+        "game/skill_checks.py",
+        "game/adjudication.py",
+        "tests/test_combat_resolution.py",
+        "tests/test_skill_checks.py"
+      ],
+      "guardrails": ["SAFE_G1", "SAFE_G2"],
+      "required_evidence": [
+        "Localized engine-resolution scope",
+        "CTIR/prompt impact noted when resolved-turn meaning changes"
+      ],
+      "required_tests": [
+        "tests/test_combat_resolution.py",
+        "tests/test_exploration_skill_checks.py",
+        "tests/test_skill_checks.py",
+        "tests/test_noncombat_resolution.py",
+        "tests/test_ctir_noncombat_consumption.py"
+      ],
+      "notes": "New gameplay mechanics acceptable with focused engine tests. Add CTIR/prompt probes when turn meaning changes."
+    },
+    {
+      "id": "world_scenes_affordances",
+      "name": "World, scenes, affordances, clues, and leads",
+      "classification": "caution",
+      "paths": [
+        "game/world*.py",
+        "game/scene_*.py",
+        "game/affordances.py",
+        "game/exploration.py",
+        "game/clues.py",
+        "game/leads.py",
+        "game/clocks.py",
+        "data/scenes/**",
+        "data/world.json"
+      ],
+      "owners": [
+        "game/world.py",
+        "game/affordances.py",
+        "game/exploration.py",
+        "tests/test_world_state.py",
+        "tests/test_affordance_*.py"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G2", "CAUTION_G3"],
+      "required_evidence": [
+        "Narrow data-backed change description",
+        "Replay-smoke decision when player-visible choices change",
+        "World progression seam framing per architecture ledger"
+      ],
+      "required_tests": [
+        "tests/test_world_*.py",
+        "tests/test_scene_*.py",
+        "tests/test_affordance_*.py",
+        "tests/test_clue_*.py",
+        "tests/test_lead_*.py",
+        "tests/test_exploration_resolution.py"
+      ],
+      "notes": "High fan-in (FI 179). Scene/world state affects replay observations and prompt context. Include replay smoke when choices change."
+    },
+    {
+      "id": "state_storage_persistence",
+      "name": "State authority, storage, persistence, and session reset",
+      "classification": "caution",
+      "paths": [
+        "game/state_authority.py",
+        "game/state_channels.py",
+        "game/storage.py",
+        "game/session.py",
+        "game/campaign_state.py",
+        "game/campaign_reset.py",
+        "game/defaults.py",
+        "game/persistence_contract.py",
+        "data/*.json"
+      ],
+      "path_exclusions": [
+        "data/world.json",
+        "data/scenes/**"
+      ],
+      "owners": [
+        "game/state_authority.py",
+        "docs/architecture_ownership_ledger.md#unified-state-authority-model",
+        "game/storage.py",
+        "tests/test_state_authority.py",
+        "tests/test_save_load.py"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G2", "CAUTION_G3"],
+      "required_evidence": [
+        "Rollback and replay-harness awareness note",
+        "No broad schema or default-state churn without audit",
+        "Guard adoption for authoritative domain mutations"
+      ],
+      "required_tests": [
+        "tests/test_state_authority.py",
+        "tests/test_state_channels.py",
+        "tests/test_save_load.py",
+        "tests/test_snapshots.py",
+        "tests/test_campaign_*.py",
+        "tests/test_runtime_persistence_regression_suite_obj14.py"
+      ],
+      "notes": "state_authority is registry + guard owner only (FI 284 bucket). Replay harnesses depend on stable reset/storage semantics."
+    },
+    {
+      "id": "prompt_ctir_planning",
+      "name": "Prompt, CTIR, narrative planning, and turn packet",
+      "classification": "caution",
+      "paths": [
+        "game/prompt_context*.py",
+        "game/ctir*.py",
+        "game/narrative_*.py",
+        "game/planner_*.py",
+        "game/turn_packet.py",
+        "game/narration_*.py"
+      ],
+      "owners": [
+        "game/prompt_context.py",
+        "game/ctir.py",
+        "game/ctir_runtime.py",
+        "game/turn_packet.py",
+        "docs/architecture_ownership_ledger.md#prompt-contracts",
+        "docs/architecture_ownership_ledger.md#ctir-resolved-turn-meaning-and-prompt-adapter"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G2", "CAUTION_G3"],
+      "required_evidence": [
+        "Contract test map for touched seams",
+        "No silent semantic rewrite at prompt/final-emission boundary",
+        "CTIR vs prompt-context adapter framing documented"
+      ],
+      "required_tests": [
+        "tests/test_prompt_context*.py",
+        "tests/test_ctir_*.py",
+        "tests/test_narrative_*.py",
+        "tests/test_planner_*.py",
+        "tests/test_turn_packet_*.py",
+        "tests/test_prompt_context_ctir_boundary.py"
+      ],
+      "notes": "FI 184 / FO 73. CTIR and prompt changes can shift replay output and trend windows."
+    },
+    {
+      "id": "social_interaction_routing",
+      "name": "Social and interaction routing",
+      "classification": "caution",
+      "paths": [
+        "game/social*.py",
+        "game/interaction_*.py",
+        "game/dialogue_*.py"
+      ],
+      "owners": [
+        "game/social_exchange_emission.py",
+        "game/interaction_context.py",
+        "docs/architecture_ownership_ledger.md#strict-social-exchange-emission-seam",
+        "tests/test_social_exchange_emission.py"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G2", "CAUTION_G3"],
+      "required_evidence": [
+        "Route/speaker/fallback field impact assessment",
+        "Protected replay probe plan when strict-social outcomes may move",
+        "Ledger ownership framing for social emission seam"
+      ],
+      "required_tests": [
+        "tests/test_social*.py",
+        "tests/test_interaction_*.py",
+        "tests/test_dialogue_*.py",
+        "tests/test_broadcast_open_call_social.py",
+        "tests/test_directed_social_routing.py"
+      ],
+      "notes": "FI 260. interaction_context FI 84. High speaker/policy/fallback adjacency; protected observation families include route and selected_speaker_id."
+    },
+    {
+      "id": "api_turn_orchestration",
+      "name": "API and turn pipeline orchestration",
+      "classification": "caution",
+      "paths": [
+        "game/api.py",
+        "game/api_turn_support.py",
+        "game/gm.py",
+        "game/gm_retry.py",
+        "run.py"
+      ],
+      "owners": [
+        "game/api.py",
+        "game/gm.py",
+        "docs/architecture_ownership_ledger.md#ctir-resolved-turn-meaning-and-prompt-adapter",
+        "tests/test_turn_pipeline_shared.py"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G2", "CAUTION_G3"],
+      "required_evidence": [
+        "Prefer leaf-module behavior over broad orchestration edits",
+        "Downstream integration test plan",
+        "Emit-path entrypoints unchanged or escalated to prohibited review"
+      ],
+      "required_tests": [
+        "tests/test_start_campaign_api.py",
+        "tests/test_api_*.py",
+        "tests/test_turn_pipeline_shared.py"
+      ],
+      "notes": "api FI 65, gm FI 62. Routes through storage, prompt, finalization, retry, fallback, and model calls. E2E replay flows through this lane."
+    },
+    {
+      "id": "telemetry_diagnostics_audit",
+      "name": "Telemetry, diagnostics, attribution, and audit tooling",
+      "classification": "caution",
+      "paths": [
+        "game/stage_diff_telemetry.py",
+        "game/runtime_lineage_telemetry.py",
+        "game/observability_attribution_read.py",
+        "tools/**",
+        "scripts/**",
+        "docs/audits/**",
+        "artifacts/**"
+      ],
+      "owners": [
+        "game/stage_diff_telemetry.py",
+        "docs/architecture_ownership_ledger.md#stage-diff-telemetry",
+        "tools/test_audit.py",
+        "tests/TEST_AUDIT.md"
+      ],
+      "guardrails": ["CAUTION_G1", "CAUTION_G3"],
+      "required_evidence": [
+        "Additive vs schema-changing classification",
+        "Append-only / trend-window impact note for metric history",
+        "Report-only scope for audit artifacts"
+      ],
+      "required_tests": [
+        "tests/test_runtime_lineage_telemetry.py",
+        "tests/test_stage_diff_telemetry.py",
+        "tests/test_attribution_*.py",
+        "tests/test_*report*.py"
+      ],
+      "notes": "Mostly report-only. CAUTION_G2 applies when metrics feed protected replay trend windows or recurrence history. Safe for additive reports."
+    },
+    {
+      "id": "replay_governance",
+      "name": "Golden replay, protected replay, recurrence, and drift governance",
+      "classification": "prohibited",
+      "paths": [
+        "tests/helpers/golden_replay*.py",
+        "tests/helpers/protected_replay_registry.py",
+        "tests/helpers/replay_*.py",
+        "tests/test_golden_replay*.py",
+        "tests/test_replay_*.py",
+        "docs/testing/protected_replay_manifest.md",
+        "tools/refresh_protected_replay_manifest.py",
+        "tools/run_protected_replay_trend.py"
+      ],
+      "owners": [
+        "tests/helpers/protected_replay_registry.py",
+        "docs/testing/protected_replay_manifest.md",
+        "tests/test_protected_replay_registry.py",
+        "docs/convergence_ci_inventory.md"
+      ],
+      "guardrails": ["PROHIBITED_G1", "PROHIBITED_G2", "PROHIBITED_G3"],
+      "required_evidence": [
+        "Named audit approval (CB4 stabilization block)",
+        "Before/after protected replay command output",
+        "Manifest or trend-window impact note",
+        "Ownership review for acceptance authority changes"
+      ],
+      "required_tests": [
+        "python -m pytest -m golden_replay -q",
+        "tests/test_golden_replay*.py",
+        "tests/test_protected_replay_registry.py",
+        "tests/test_replay_*.py"
+      ],
+      "notes": "Acceptance authority. 41 protected observation fields. Block normal feature work; only audit-approved stabilization or manifest-governed changes."
+    },
+    {
+      "id": "final_emission_core",
+      "name": "Final emission core, metadata, runtime projection, and terminal pipeline",
+      "classification": "prohibited",
+      "paths": [
+        "game/final_emission*.py"
+      ],
+      "path_exclusions": [
+        "game/final_emission_visibility_fallback.py",
+        "game/final_emission_sealed_fallback.py",
+        "game/final_emission_opening_fallback.py",
+        "game/final_emission_fast_fallback_composition.py"
+      ],
+      "owners": [
+        "game/final_emission_gate.py",
+        "game/final_emission_meta.py",
+        "game/final_emission_repairs.py",
+        "docs/architecture_ownership_ledger.md#final-emission-gate-orchestration",
+        "tests/test_final_emission_gate_orchestration_order.py"
+      ],
+      "guardrails": ["PROHIBITED_G1", "PROHIBITED_G2", "PROHIBITED_G3"],
+      "required_evidence": [
+        "Named audit approval for stabilization-only change",
+        "Protected replay evidence",
+        "Ownership review per final-emission ledger seams",
+        "BA-7 test-magnet compliance"
+      ],
+      "required_tests": [
+        "tests/test_final_emission*.py",
+        "tests/test_emission_smoke_assertions_contract.py",
+        "tests/test_ownership_registry.py",
+        "python -m pytest -m golden_replay -q"
+      ],
+      "notes": "FI 527 / FO 285 hub. Owns gate ordering, validators, repairs orchestration, sanitizer calls, metadata packaging. Fallback-named final_emission modules are owned by fallback_sanitizer_repairs."
+    },
+    {
+      "id": "fallback_sanitizer_repairs",
+      "name": "Fallback, sanitizer, and upstream repairs",
+      "classification": "prohibited",
+      "paths": [
+        "game/fallback_behavior.py",
+        "game/fallback_provenance_debug.py",
+        "game/output_sanitizer.py",
+        "game/upstream_response_repairs.py",
+        "game/opening_deterministic_fallback.py",
+        "game/final_emission_visibility_fallback.py",
+        "game/final_emission_sealed_fallback.py",
+        "game/final_emission_opening_fallback.py",
+        "game/final_emission_fast_fallback_composition.py"
+      ],
+      "owners": [
+        "game/fallback_behavior.py",
+        "game/upstream_response_repairs.py",
+        "game/output_sanitizer.py",
+        "game/final_emission_repairs.py",
+        "tests/test_fallback_behavior_repairs.py",
+        "tests/test_output_sanitizer.py"
+      ],
+      "guardrails": ["PROHIBITED_G1", "PROHIBITED_G2", "PROHIBITED_G3"],
+      "required_evidence": [
+        "Named audit approval",
+        "Before/after fallback incidence or owner-bucket metrics (BV1 lineage)",
+        "Protected replay evidence for fallback/sanitizer observation families"
+      ],
+      "required_tests": [
+        "tests/test_fallback_*.py",
+        "tests/test_output_sanitizer.py",
+        "tests/test_upstream_response_repairs.py",
+        "python -m pytest -m golden_replay -q"
+      ],
+      "notes": "BV1: 69.16% fallback incidence on FEM artifacts; incomplete owner buckets. Fallback, sanitizer, and repair fields are protected observations."
+    },
+    {
+      "id": "speaker_identity_adoption",
+      "name": "Speaker identity and post-emission adoption",
+      "classification": "prohibited",
+      "paths": [
+        "game/speaker_contract_enforcement.py",
+        "game/emitted_speaker_signature.py",
+        "game/post_emission_speaker_adoption.py"
+      ],
+      "owners": [
+        "game/speaker_contract_enforcement.py",
+        "game/emitted_speaker_signature.py",
+        "game/post_emission_speaker_adoption.py",
+        "tests/test_speaker_contract_*.py",
+        "tests/test_bx_speaker_identity_*.py"
+      ],
+      "guardrails": ["PROHIBITED_G1", "PROHIBITED_G2", "PROHIBITED_G3"],
+      "required_evidence": [
+        "Named speaker-identity audit approval (BX/BT lineage)",
+        "Parity and golden replay evidence",
+        "Protected selected_speaker_id field impact note"
+      ],
+      "required_tests": [
+        "tests/test_speaker_contract_*.py",
+        "tests/test_bx_speaker_identity_*.py",
+        "tests/test_block_s_*.py",
+        "tests/test_block_t_*.py",
+        "python -m pytest -m golden_replay -q"
+      ],
+      "notes": "BV1: speaker projection drift on 8 protected rows. selected_speaker_id and social trace route/speaker fields are protected."
+    },
+    {
+      "id": "response_policy_contracts",
+      "name": "Response policy contracts, enforcement, and policy mutation",
+      "classification": "prohibited",
+      "paths": [
+        "game/response_policy_contracts.py",
+        "game/response_policy_enforcement.py",
+        "game/response_policy_enforcement_manifest.py"
+      ],
+      "owners": [
+        "game/response_policy_contracts.py",
+        "game/response_policy_enforcement.py",
+        "docs/architecture_ownership_ledger.md#response-policy-contracts",
+        "docs/architecture_ownership_ledger.md#response-policy-enforcement-post-gpt-orchestration",
+        "tests/test_response_policy_contracts.py",
+        "tests/test_response_policy_enforcement_mutation.py"
+      ],
+      "guardrails": ["PROHIBITED_G1", "PROHIBITED_G2", "PROHIBITED_G3"],
+      "required_evidence": [
+        "Named audit approval for policy block",
+        "Mutation snapshots before/after",
+        "Protected replay probes for response-type and mutation lineage fields"
+      ],
+      "required_tests": [
+        "tests/test_response_policy_contracts.py",
+        "tests/test_response_policy_enforcement_mutation.py",
+        "tests/test_response_delta_requirement.py",
+        "python -m pytest -m golden_replay -q"
+      ],
+      "notes": "Enforcement owns post-GPT mutation and strict-social bypass routing. Policy changes can mutate player-visible meaning and drive fallback/repair."
+    }
+  ]
+}
