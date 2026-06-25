@@ -41,7 +41,41 @@ Lightweight retention index for `artifacts/golden_replay/`. Machine authority:
 | `protected_replay_trend_window_bz` | canonical_versioned_evidence | `tests.helpers.protected_replay_trend_movement` | commit | BZ lane — outputs under `trend_window_2/` |
 | `fallback_governance_reports` | canonical_versioned_evidence | `tests.helpers.runtime_lineage_reporting` | commit | report-family specific refresh |
 | `fallback_incidence_baselines` | historical_baseline | `tests.helpers.runtime_lineage_reporting` | baseline_freeze | BV baselines incl. `.baseline.json` |
-| `projection_governance_reports` | canonical_versioned_evidence | `tests.helpers.golden_replay_projection` | commit | projection governance refresh |
+| `projection_coverage_report` | canonical_versioned_evidence | `tests.helpers.golden_replay_projection` | commit | `python tools/fallback_projection_coverage_audit.py` |
+| `projection_gap_reality_report` | canonical_versioned_evidence | `tests.helpers.golden_replay_projection` | commit | `python tools/fallback_projection_gap_reality_audit.py` |
+| `projection_drift_watch_report` | canonical_versioned_evidence | `tests.helpers.golden_replay_projection` | commit | `python tools/projection_drift_watch.py` |
+| `failure_dashboard_latest` | temporary_session_output | `tests.helpers.failure_dashboard_report` | commit (high-churn) | `ASHEN_WRITE_FAILURE_DASHBOARD=1 pytest` |
+
+## CF6 artifact importance (projection governance)
+
+Machine authority: `tests/helpers/golden_replay_artifact_manifest.py` (`importance`, `generator`, `ci_required`).
+
+| Importance | Meaning | Review on semantic projection change? |
+|---|---|---|
+| `acceptance-critical` | CI-gated acceptance contract | **Yes** — manifest field-path section only |
+| `governance` | Frozen or intentional governance evidence | Only when governance lane explicitly changes |
+| `diagnostic` | Operational failure/recurrence/drift snapshots | No — refresh deliberately |
+| `advisory` | Read-only audit scans and portfolio reports | No — optional closeout refresh |
+| `developer_convenience` | Local-only regenerable diagnostics | Never commit |
+| `ephemeral` | Session scratch / CI upload | Never commit |
+
+**Acceptance-critical generated artifacts (CI):**
+
+- `docs/testing/protected_replay_manifest.md` generated field-path section — `python tools/refresh_protected_replay_manifest.py --check`
+
+**Not acceptance-critical:** pytest golden replay assertions (no committed artifact), advisory projection reports, diagnostic dashboard outputs, trend-window baselines (governance lane).
+
+## Regeneration boundaries (CF6)
+
+| Bundle | Artifacts | Trigger | Intentional? |
+|---|---|---|---|
+| CI manifest check | protected replay manifest generated section | registry / drift-bucket edit | Yes |
+| BV3F/BV3B `refresh_projection_artifacts()` | gap reality JSON, drift watch JSON+MD | corpus refresh closeout | Yes — **excludes** coverage report |
+| Failure dashboard cascade | failure report, bug recurrence, owner drift families | `ASHEN_WRITE_FAILURE_DASHBOARD=1 pytest` | Yes — coupled diagnostic bundle |
+| Coverage audit (standalone) | `projection_coverage_report.json` | registry or shape catalog edit | Yes — manual / closeout only |
+| Trend window tool | `trend_window/` or `trend_window_2/` tree | explicit BW/BZ closeout | Yes — not ordinary projection edits |
+
+**Churn reduction:** semantic projection changes should require manifest refresh (if field registry changes) and pytest assertion updates — not automatic refresh of advisory scans or diagnostic snapshots.
 
 ## High-churn families (watch list)
 

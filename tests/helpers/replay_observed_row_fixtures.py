@@ -83,6 +83,11 @@ def observed_dashboard_probe_row(**overrides: Any) -> dict[str, Any]:
     return synthetic_observed_replay_row(profile="dashboard_probe", **overrides)
 
 
+def synthetic_classifier_probe_overlay_paths() -> frozenset[str]:
+    """Return top-level keys injected by the classifier probe overlay (CF7 registry)."""
+    return frozenset(_CLASSIFIER_PROBE_OVERLAY)
+
+
 def synthetic_rerun_turn(
     *,
     turn_index: int = 0,

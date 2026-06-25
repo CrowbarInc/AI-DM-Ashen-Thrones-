@@ -13,6 +13,8 @@ This directory holds replay diagnostic outputs, governance snapshots, and protec
 | Operational paired snapshots | Yes — refresh deliberately | `bug_recurrence_*`, `owner_drift_*` JSON+Markdown pairs |
 | Local regenerable outputs | **No** — gitignored | `replay_maintenance_metrics.*`, `rerun_drift_scorecard.*`, `long_session_stability_scorecard.*` |
 
+Acceptance-critical projection contract: `docs/testing/protected_replay_manifest.md` (generated section, CI `--check`).
+
 ## Regeneration (common)
 
 ```bash
