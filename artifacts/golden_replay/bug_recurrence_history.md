@@ -1,7 +1,7 @@
 # Bug-Class Recurrence History
 
-- Generated at: `2026-06-22T21:39:03Z`
-- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_bx_speaker_identity_end_to_end_parity.py tests/test_bx_speaker_identity_golden_replay.py tests/test_golden_replay.py tests/test_golden_replay_projection.py tests/test_golden_replay_trend.py tests/test_golden_replay_structural_invariants.py tests/test_speaker_contract_risk.py tests/test_social_interaction_authority.py -q --tb=line`
+- Generated at: `2026-06-25T22:58:10Z`
+- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_golden_replay_artifact_manifest.py tests/test_failure_dashboard_paths.py tests/test_replay_maintenance_metrics.py -q --tb=short`
 - Report only: `true`
 - Advisory only: `true`
 - Total recurrence keys: `6`
