@@ -12,6 +12,7 @@ from tests.helpers.ck_hotspot_compression_report import (
     T_TOUCH,
     aggregate_touches_from_commit_paths,
     assess_measurement_readiness,
+    build_ck_baseline_draft,
     compute_ck_git_metrics,
     compute_concentration_shares,
     is_ck_git_population_path,
@@ -205,3 +206,49 @@ def test_report_generation_empty_watch_window(tmp_path):
     assert report["data_sufficient"] is False
     assert report["ck_git"]["total_touches"] == 0
     assert report["ck_git"]["hci"] == 0.0
+
+
+def test_ck_baseline_draft_from_metrics():
+    touches = aggregate_touches_from_commit_paths(_synthetic_commit_paths())
+    ck_git = compute_ck_git_metrics(touches)
+    baseline = build_ck_baseline_draft(ck_git)
+
+    assert baseline["hci_headline"] == 80.0
+    assert baseline["hotspot_threshold_t_touch"] == T_TOUCH
+    assert len(baseline["top_10_most_touched_files"]) == 7
+
+
+def test_report_provenance_and_ledger_snippet(tmp_path):
+    output_md = tmp_path / "ck1_hotspot_compression_report.md"
+    output_json = tmp_path / "ck1_hotspot_compression_report.json"
+    command = (
+        "python tools/ck_hotspot_compression_report.py "
+        "--measurement-commit bbb0000 --cycle-label CI_8 test"
+    )
+
+    report, markdown = write_ck_hotspot_compression_report(
+        md_output_path=output_md,
+        json_output_path=output_json,
+        bu_csv_path=BU_CSV,
+        commit_paths=_synthetic_commit_paths(),
+        commit_count=5,
+        cycle_label="CI_8 test",
+        watch_start_full="aaa00000000000000000000000000000000000000",
+        watch_start_short="aaa0000",
+        measurement_full="bbb00000000000000000000000000000000000000",
+        measurement_short="bbb0000",
+        measurement_date="2026-06-26",
+        invocation_command=command,
+        generated_at="2026-06-26T12:00:00Z",
+        repo_root=REPO_ROOT,
+    )
+
+    provenance = report["report_provenance"]
+    assert provenance["command"] == command
+    assert provenance["generated_at"] == "2026-06-26T12:00:00Z"
+    assert report["schema_version"] == 2
+    assert "ck_baseline_draft" in report
+    assert "ck_ledger_snippet_md" in report
+    assert "Measurement Log row" in report["ck_ledger_snippet_md"]
+    assert "CK Ledger Snippet" in markdown
+    assert report["ck_baseline_draft"]["hci_headline"] == report["ck_git"]["hci"]

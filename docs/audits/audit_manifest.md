@@ -19,6 +19,21 @@ pinned paths. Status values are `active`, `closed`, `historical`, `generated`, o
 | CA | `CA_corrective_change_locality_cohort_discovery.md` | discovery | `docs/audits/CA_corrective_change_locality_cohort_discovery.md` | needs review | Flat path retained pending generator/reference audit |
 | CA | `CA_program_closeout.md` | closeout | `docs/audits/CA_program_closeout.md` | needs review | Flat path retained pending generator/reference audit |
 | CA | `ca12_program_closeout_report.md` | generated report | `artifacts/ca12_program_closeout_report.md` | generated | Retained at artifact-writer path |
+| CI | `CI_corrective_cohort_validation_2_discovery.md` | discovery | `CI_corrective_cohort_validation_2_discovery.md` | closed | Post-CA strict corrective-fix screening (`5f0ad53..HEAD`) |
+| CI | `CI_corrective_cohort_validation_2_closeout.md` | closeout | `docs/audits/CI_corrective_cohort_validation_2_closeout.md` | closed | Null cohort closeout; baseline retained; FTPF not measurable |
+| CJ | `CJ_corrective_cohort_watch.md` | rolling evidence collection | `docs/audits/CJ_corrective_cohort_watch.md` | active | Corrective Cohort Watch #3; post-CI qualifying-fix ledger (`85855df..`) |
+| CK | `CK_hotspot_compression_watch.md` | longitudinal maintenance metric | `docs/audits/CK_hotspot_compression_watch.md` | active | Hotspot Compression Watch #1; HCI rolling ledger (`85855df..`); no pre-watch backfill |
+| CI_2 | `CI_2_hotspot_compression_measurement_standard_discovery.md` | discovery | `CI_2_hotspot_compression_measurement_standard_discovery.md` | closed | Hotspot measurement lane inventory; CK-GIT/CK-FI dual-lane recommendation |
+| CI_2 | `hotspot_compression_measurement_standard.md` | measurement standard | `docs/processes/hotspot_compression_measurement_standard.md` | active | Adopted CK measurement authority (v1); HCI = Top 5 Share % |
+| CI_2 | `CI_2_hotspot_compression_measurement_standard_closeout.md` | closeout | `docs/audits/CI_2_hotspot_compression_measurement_standard_closeout.md` | closed | Measurement Standard Adopted; CK integrated; repeatability STABLE_WITH_EXEMPT_FIELDS |
+| CI_4 | `CI_4_hotspot_compression_operational_readiness_discovery.md` | discovery | `CI_4_hotspot_compression_operational_readiness_discovery.md` | closed | Operational readiness assessment; CK-GIT tooling gap identified (Partially Ready) |
+| CI_5 | `ck_hotspot_compression_report.py` | tool | `tools/ck_hotspot_compression_report.py` | active | CK-GIT + CK-FI report generator; writes `artifacts/ck1_hotspot_compression_report.*` |
+| CI_6 | `CI_6_hotspot_compression_operational_readiness_closeout.md` | closeout | `CI_6_hotspot_compression_operational_readiness_closeout.md` | closed | Operational Measurement Readiness: Ready; CI_4 blocker resolved; no CK log backfill |
+| CI_7 | `CI_7_first_measurement_integration_validation.md` | discovery | `CI_7_first_measurement_integration_validation.md` | closed | First-measurement integration validation; ready_with_notes |
+| CI_8 | `CI_8_hotspot_compression_measurement_workflow_refinement.md` | refinement | `CI_8_hotspot_compression_measurement_workflow_refinement.md` | closed | Workflow runbook, provenance, ledger snippet; routine-use ready |
+| CI_8 | `hotspot_compression_watch_process.md` | operator runbook | `docs/processes/hotspot_compression_watch_process.md` | active | CK measurement operator procedure (CI_8) |
+| CK | `ck1_hotspot_compression_report.json` | generated report | `artifacts/ck1_hotspot_compression_report.json` | generated | CK-GIT primary + CK-FI supplementary machine report |
+| CK | `ck1_hotspot_compression_report.md` | generated report | `artifacts/ck1_hotspot_compression_report.md` | generated | CK-GIT primary + CK-FI supplementary human report |
 | CB | `CB_feature_boundary_readiness_discovery.md` | discovery | `docs/audits/CB_feature_boundary_readiness_discovery.md` | needs review | Operational references remain flat |
 | CB | `CB_CLOSE_feature_boundary_readiness.md` | closeout | `docs/audits/CB_CLOSE_feature_boundary_readiness.md` | needs review | Operational references remain flat |
 | CC | `CC_feature_readiness_closeout_discovery.md` | discovery | `docs/audits/discovery/CC_feature_readiness_closeout_discovery.md` | active | User-authored discovery preserved and relocated |

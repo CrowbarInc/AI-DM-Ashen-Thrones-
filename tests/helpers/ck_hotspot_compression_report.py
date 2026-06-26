@@ -10,6 +10,7 @@ import json
 import subprocess
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Mapping, Sequence
 
@@ -19,7 +20,7 @@ STANDARD_VERSION = 1
 T_TOUCH = 3
 T_FI = 10
 PRIMARY_METRIC = "hotspot_concentration_index"
-REPORT_SCHEMA_VERSION = 1
+REPORT_SCHEMA_VERSION = 2
 
 POPULATION_PREFIXES: tuple[str, ...] = ("game/", "tests/", "scripts/")
 EXCLUDED_PREFIXES: tuple[str, ...] = (
@@ -305,6 +306,72 @@ def format_ck_log_notes(
     return "; ".join(parts)
 
 
+def build_ck_baseline_draft(ck_git: Mapping[str, Any]) -> dict[str, Any]:
+    """Baseline-section values for first CK measurement row."""
+    top_10 = ck_git.get("top_10_paths") or []
+    largest = ck_git.get("largest_hotspot") or {}
+    return {
+        "top_10_most_touched_files": [
+            {
+                "path": row["path"],
+                "touch_count": row["touch_count"],
+                "share_pct": row["share_pct"],
+                "display": f"{row['path']} ({row['touch_count']} touches, {row['share_pct']}%)",
+            }
+            for row in top_10
+        ],
+        "top_5_touch_share_pct": ck_git["top5_share_pct"],
+        "top_10_touch_share_pct": ck_git["top10_share_pct"],
+        "largest_single_hotspot": largest.get("display", "(none)"),
+        "files_above_hotspot_threshold": ck_git["files_above_threshold"],
+        "hotspot_threshold_t_touch": ck_git["t_touch"],
+        "hci_headline": ck_git["hci"],
+    }
+
+
+def render_ck_ledger_snippet_md(report: Mapping[str, Any]) -> str:
+    """Copy-paste markdown for CK watch Measurement Log and baseline section."""
+    draft = report["ck_log_draft"]
+    baseline = report["ck_baseline_draft"]
+    lines = [
+        "<!-- CK ledger snippet — append Measurement Log row; on first measurement replace baseline placeholders -->",
+        "",
+        "### Measurement Log row",
+        "",
+        "| Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |",
+        "|---|---|---|---:|---:|---|---:|---|",
+        (
+            f"| {draft['measurement']} | `{draft['commit']}` | {draft['date']} | "
+            f"{draft['top_5_pct']} | {draft['top_10_pct']} | {draft['largest_hotspot']} | "
+            f"{draft['files_above_threshold']} | `{draft['notes']}` |"
+        ),
+        "",
+        "### Baseline section (first measurement only)",
+        "",
+        "| Baseline field | Value |",
+        "|---|---|",
+    ]
+    top_10_display = baseline["top_10_most_touched_files"]
+    if top_10_display:
+        top_10_value = "; ".join(item["display"] for item in top_10_display)
+    else:
+        top_10_value = "(none)"
+    lines.extend(
+        [
+            f"| Top 10 most-touched files | {top_10_value} |",
+            f"| Top 5 touch share (% of repository touches) | {baseline['top_5_touch_share_pct']} |",
+            f"| Top 10 touch share (% of repository touches) | {baseline['top_10_touch_share_pct']} |",
+            f"| Largest single hotspot (file + touch share) | {baseline['largest_single_hotspot']} |",
+            f"| Files above hotspot threshold | {baseline['files_above_hotspot_threshold']} |",
+            f"| Hotspot threshold (touch count) | T_touch={baseline['hotspot_threshold_t_touch']} |",
+            "",
+            f"**HCI headline:** {baseline['hci_headline']}",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def build_ck_hotspot_compression_report(
     *,
     watch_start_full: str,
@@ -333,7 +400,7 @@ def build_ck_hotspot_compression_report(
         ck_fi=ck_fi,
         cycle_label=cycle_label,
     )
-    return {
+    report: dict[str, Any] = {
         "schema_version": REPORT_SCHEMA_VERSION,
         "primary_metric": PRIMARY_METRIC,
         "standard_version": STANDARD_VERSION,
@@ -369,6 +436,31 @@ def build_ck_hotspot_compression_report(
             "notes": notes,
         },
     }
+    report["ck_baseline_draft"] = build_ck_baseline_draft(ck_git)
+    report["ck_ledger_snippet_md"] = render_ck_ledger_snippet_md(report)
+    return report
+
+
+def enrich_ck_report_provenance(
+    report: dict[str, Any],
+    *,
+    invocation_command: str | None,
+    bu_csv_path: str,
+    output_json_path: str,
+    output_md_path: str,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
+    """Attach invocation metadata (generated_at is stability-exempt per CI_2)."""
+    timestamp = generated_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    report["report_provenance"] = {
+        **report["report_provenance"],
+        "command": invocation_command or "",
+        "generated_at": timestamp,
+        "bu_csv_path": bu_csv_path,
+        "output_json": output_json_path,
+        "output_md": output_md_path,
+    }
+    return report
 
 
 def render_ck_hotspot_compression_report_md(report: Mapping[str, Any]) -> str:
@@ -391,6 +483,20 @@ def render_ck_hotspot_compression_report_md(report: Mapping[str, Any]) -> str:
         f"- **Data sufficient for HCI headline:** {report['data_sufficient']}",
         f"- **Standard version:** {report['standard_version']}",
         "",
+    ]
+    provenance = report.get("report_provenance") or {}
+    if provenance.get("command"):
+        lines.extend(
+            [
+                "## Provenance",
+                "",
+                f"- **Command:** `{provenance['command']}`",
+                f"- **Generated at:** {provenance.get('generated_at', '(none)')} _(stability-exempt)_",
+                "",
+            ]
+        )
+    lines.extend(
+        [
         "## Measurement Window",
         "",
         f"- **Watch start (W):** `{window['watch_start_commit']}`",
@@ -411,7 +517,8 @@ def render_ck_hotspot_compression_report_md(report: Mapping[str, Any]) -> str:
         "",
         "## Hotspot Rankings (Top 10)",
         "",
-    ]
+        ]
+    )
     top_10 = ck_git.get("top_10_paths") or []
     if top_10:
         lines.extend(["| Rank | Path | Touches | Share % |", "|---:|---|---:|---:|"])
@@ -456,6 +563,14 @@ def render_ck_hotspot_compression_report_md(report: Mapping[str, Any]) -> str:
                 f"{draft['files_above_threshold']} | `{draft['notes']}` |"
             ),
             "",
+            "## CK Ledger Snippet",
+            "",
+            "_Copy-paste into `docs/audits/CK_hotspot_compression_watch.md` (Measurement Log + baseline on first row)._",
+            "",
+            "```markdown",
+            report.get("ck_ledger_snippet_md", ""),
+            "```",
+            "",
         ]
     )
     return "\n".join(lines)
@@ -477,6 +592,8 @@ def write_ck_hotspot_compression_report(
     measurement_full: str | None = None,
     measurement_short: str | None = None,
     measurement_date: str | None = None,
+    invocation_command: str | None = None,
+    generated_at: str | None = None,
 ) -> tuple[dict[str, Any], str]:
     root = _repo_root(repo_root)
     if (
@@ -523,7 +640,6 @@ def write_ck_hotspot_compression_report(
         ck_fi=ck_fi,
         cycle_label=cycle_label,
     )
-    markdown = render_ck_hotspot_compression_report_md(report)
 
     md_target = Path(md_output_path or DEFAULT_MD_OUTPUT_PATH)
     json_target = Path(json_output_path or DEFAULT_JSON_OUTPUT_PATH)
@@ -531,6 +647,33 @@ def write_ck_hotspot_compression_report(
         md_target = root / md_target
     if not json_target.is_absolute():
         json_target = root / json_target
+
+    bu_csv_display = DEFAULT_BU_CSV_PATH
+    if bu_csv_path:
+        bu_target = Path(bu_csv_path)
+        if not bu_target.is_absolute():
+            bu_target = root / bu_target
+        try:
+            bu_csv_display = bu_target.relative_to(root).as_posix()
+        except ValueError:
+            bu_csv_display = bu_target.as_posix()
+
+    def _relative_output(path: Path) -> str:
+        try:
+            return path.relative_to(root).as_posix()
+        except ValueError:
+            return path.as_posix()
+
+    report = enrich_ck_report_provenance(
+        report,
+        invocation_command=invocation_command,
+        bu_csv_path=bu_csv_display,
+        output_json_path=_relative_output(json_target),
+        output_md_path=_relative_output(md_target),
+        generated_at=generated_at,
+    )
+    markdown = render_ck_hotspot_compression_report_md(report)
+
     md_target.parent.mkdir(parents=True, exist_ok=True)
     json_target.parent.mkdir(parents=True, exist_ok=True)
     md_target.write_text(markdown, encoding="utf-8")

@@ -1,4 +1,26 @@
 {
+  "ck_baseline_draft": {
+    "files_above_hotspot_threshold": 0,
+    "hci_headline": 100.0,
+    "hotspot_threshold_t_touch": 3,
+    "largest_single_hotspot": "tests/helpers/ck_hotspot_compression_report.py (50.0%)",
+    "top_10_most_touched_files": [
+      {
+        "display": "tests/helpers/ck_hotspot_compression_report.py (1 touches, 50.0%)",
+        "path": "tests/helpers/ck_hotspot_compression_report.py",
+        "share_pct": 50.0,
+        "touch_count": 1
+      },
+      {
+        "display": "tests/test_ck_hotspot_compression_report.py (1 touches, 50.0%)",
+        "path": "tests/test_ck_hotspot_compression_report.py",
+        "share_pct": 50.0,
+        "touch_count": 1
+      }
+    ],
+    "top_10_touch_share_pct": 100.0,
+    "top_5_touch_share_pct": 100.0
+  },
   "ck_fi": {
     "available": true,
     "csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
@@ -69,47 +91,82 @@
     "total_fi": 1044
   },
   "ck_git": {
-    "distinct_paths": 0,
+    "distinct_paths": 2,
     "files_above_threshold": 0,
-    "hci": 0.0,
-    "hotspot_rankings": [],
-    "largest_hotspot": null,
+    "hci": 100.0,
+    "hotspot_rankings": [
+      {
+        "path": "tests/helpers/ck_hotspot_compression_report.py",
+        "rank": 1,
+        "share_pct": 50.0,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_ck_hotspot_compression_report.py",
+        "rank": 2,
+        "share_pct": 50.0,
+        "touch_count": 1
+      }
+    ],
+    "largest_hotspot": {
+      "display": "tests/helpers/ck_hotspot_compression_report.py (50.0%)",
+      "path": "tests/helpers/ck_hotspot_compression_report.py",
+      "share_pct": 50.0,
+      "touch_count": 1
+    },
     "t_touch": 3,
-    "top10_share_pct": 0.0,
-    "top5_share_pct": 0.0,
-    "top_10_paths": [],
-    "total_touches": 0
+    "top10_share_pct": 100.0,
+    "top5_share_pct": 100.0,
+    "top_10_paths": [
+      {
+        "path": "tests/helpers/ck_hotspot_compression_report.py",
+        "share_pct": 50.0,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_ck_hotspot_compression_report.py",
+        "share_pct": 50.0,
+        "touch_count": 1
+      }
+    ],
+    "total_touches": 2
   },
+  "ck_ledger_snippet_md": "<!-- CK ledger snippet \u2014 append Measurement Log row; on first measurement replace baseline placeholders -->\n\n### Measurement Log row\n\n| Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |\n|---|---|---|---:|---:|---|---:|---|\n| CI_8 workflow dry-run | `3709523` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..3709523; total_touches=2; FI top5=20.79% top10=32.76% above_T10=39; cycle=CI_8 workflow dry-run` |\n\n### Baseline section (first measurement only)\n\n| Baseline field | Value |\n|---|---|\n| Top 10 most-touched files | tests/helpers/ck_hotspot_compression_report.py (1 touches, 50.0%); tests/test_ck_hotspot_compression_report.py (1 touches, 50.0%) |\n| Top 5 touch share (% of repository touches) | 100.0 |\n| Top 10 touch share (% of repository touches) | 100.0 |\n| Largest single hotspot (file + touch share) | tests/helpers/ck_hotspot_compression_report.py (50.0%) |\n| Files above hotspot threshold | 0 |\n| Hotspot threshold (touch count) | T_touch=3 |\n\n**HCI headline:** 100.0\n",
   "ck_log_draft": {
-    "commit": "85855df",
+    "commit": "3709523",
     "date": "2026-06-26",
     "files_above_threshold": 0,
-    "hci": 0.0,
-    "largest_hotspot": "(none)",
-    "measurement": "scheduled measurement",
-    "notes": "std=v1; REV_RANGE=85855df..85855df; total_touches=0; FI top5=20.79% top10=32.76% above_T10=39",
-    "top_10_pct": 0.0,
-    "top_5_pct": 0.0
+    "hci": 100.0,
+    "largest_hotspot": "tests/helpers/ck_hotspot_compression_report.py (50.0%)",
+    "measurement": "CI_8 workflow dry-run",
+    "notes": "std=v1; REV_RANGE=85855df..3709523; total_touches=2; FI top5=20.79% top10=32.76% above_T10=39; cycle=CI_8 workflow dry-run",
+    "top_10_pct": 100.0,
+    "top_5_pct": 100.0
   },
-  "data_sufficient": false,
+  "data_sufficient": true,
   "generation_status": "success",
-  "measurement_readiness": "empty_window",
+  "measurement_readiness": "measurement_ready",
   "measurement_window": {
-    "commit_count": 0,
-    "measurement_commit": "85855df",
-    "measurement_commit_full": "85855df00ebdee20a33c0ada447c178bf1f49820",
+    "commit_count": 1,
+    "measurement_commit": "3709523",
+    "measurement_commit_full": "37095232a3a0f09096ac5654c0059ca53cde0a56",
     "measurement_date": "2026-06-26",
-    "rev_range": "85855df..85855df",
+    "rev_range": "85855df..3709523",
     "watch_start_commit": "85855df",
     "watch_start_commit_full": "85855df00ebdee20a33c0ada447c178bf1f49820"
   },
   "primary_metric": "hotspot_concentration_index",
   "report_provenance": {
+    "bu_csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
+    "command": "python tools/ck_hotspot_compression_report.py --cycle-label 'CI_8 workflow dry-run'",
+    "generated_at": "2026-06-26T18:40:19Z",
     "generator": "tools/ck_hotspot_compression_report.py",
     "helper": "tests/helpers/ck_hotspot_compression_report.py",
     "lane_primary": "CK-GIT",
-    "lane_supplementary": "CK-FI"
+    "lane_supplementary": "CK-FI",
+    "output_json": "artifacts/ck1_hotspot_compression_report.json",
+    "output_md": "artifacts/ck1_hotspot_compression_report.md"
   },
-  "schema_version": 1,
+  "schema_version": 2,
   "standard_version": 1
 }

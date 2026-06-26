@@ -1,6 +1,7 @@
 """CK1 hotspot compression report generator — CK-GIT primary + CK-FI supplementary."""
 from __future__ import annotations
 
+import shlex
 import sys
 from pathlib import Path
 
@@ -15,6 +16,31 @@ from tests.helpers.ck_hotspot_compression_report import (  # noqa: E402
     WATCH_START_COMMIT,
     write_ck_hotspot_compression_report,
 )
+
+
+def format_invocation_command(args: object) -> str:
+    """Reconstruct argv for report provenance."""
+    parts = ["python", "tools/ck_hotspot_compression_report.py"]
+    watch_start = getattr(args, "watch_start", WATCH_START_COMMIT)
+    measurement_commit = getattr(args, "measurement_commit", "HEAD")
+    cycle_label = getattr(args, "cycle_label", None)
+    bu_csv = getattr(args, "bu_csv", ROOT / DEFAULT_BU_CSV_PATH)
+    output_md = getattr(args, "output_md", ROOT / DEFAULT_MD_OUTPUT_PATH)
+    output_json = getattr(args, "output_json", ROOT / DEFAULT_JSON_OUTPUT_PATH)
+
+    if watch_start != WATCH_START_COMMIT:
+        parts.extend(["--watch-start", watch_start])
+    if measurement_commit != "HEAD":
+        parts.extend(["--measurement-commit", measurement_commit])
+    if cycle_label:
+        parts.extend(["--cycle-label", cycle_label])
+    if Path(bu_csv) != ROOT / DEFAULT_BU_CSV_PATH:
+        parts.extend(["--bu-csv", str(bu_csv)])
+    if Path(output_md) != ROOT / DEFAULT_MD_OUTPUT_PATH:
+        parts.extend(["--output-md", str(output_md)])
+    if Path(output_json) != ROOT / DEFAULT_JSON_OUTPUT_PATH:
+        parts.extend(["--output-json", str(output_json)])
+    return shlex.join(parts)
 
 
 def main() -> int:
@@ -42,7 +68,7 @@ def main() -> int:
     parser.add_argument(
         "--cycle-label",
         default=None,
-        help="Optional maintenance cycle label for CK log draft Notes.",
+        help="Maintenance cycle label for Measurement Log and Notes (required for production rows).",
     )
     parser.add_argument(
         "--output-md",
@@ -56,6 +82,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    invocation_command = format_invocation_command(args)
     report, markdown = write_ck_hotspot_compression_report(
         md_output_path=args.output_md,
         json_output_path=args.output_json,
@@ -64,6 +91,7 @@ def main() -> int:
         bu_csv_path=args.bu_csv,
         cycle_label=args.cycle_label,
         repo_root=ROOT,
+        invocation_command=invocation_command,
     )
     ck_git = report["ck_git"]
     readiness = report["measurement_readiness"]
