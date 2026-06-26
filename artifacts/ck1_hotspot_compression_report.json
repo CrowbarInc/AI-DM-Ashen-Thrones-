@@ -1,0 +1,115 @@
+{
+  "ck_fi": {
+    "available": true,
+    "csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
+    "distinct_modules": 236,
+    "files_above_threshold": 39,
+    "largest_hotspot": {
+      "display": "tests.helpers.replay_fem_read_smoke (5.56%)",
+      "fan_in_total": 58,
+      "module": "tests.helpers.replay_fem_read_smoke",
+      "share_pct": 5.56
+    },
+    "notes_string": "FI top5=20.79% top10=32.76% above_T10=39",
+    "t_fi": 10,
+    "top10_share_pct": 32.76,
+    "top5_share_pct": 20.79,
+    "top_10_modules": [
+      {
+        "fan_in_total": 58,
+        "module": "tests.helpers.replay_fem_read_smoke",
+        "share_pct": 5.56
+      },
+      {
+        "fan_in_total": 52,
+        "module": "game.final_emission_text_formatting",
+        "share_pct": 4.98
+      },
+      {
+        "fan_in_total": 41,
+        "module": "tests.helpers.gate_orchestration_smoke",
+        "share_pct": 3.93
+      },
+      {
+        "fan_in_total": 34,
+        "module": "game.final_emission_gate",
+        "share_pct": 3.26
+      },
+      {
+        "fan_in_total": 32,
+        "module": "game.final_emission_visibility_fallback",
+        "share_pct": 3.07
+      },
+      {
+        "fan_in_total": 29,
+        "module": "game.realization_provenance",
+        "share_pct": 2.78
+      },
+      {
+        "fan_in_total": 26,
+        "module": "game.final_emission_repairs",
+        "share_pct": 2.49
+      },
+      {
+        "fan_in_total": 24,
+        "module": "game.final_emission_meta",
+        "share_pct": 2.3
+      },
+      {
+        "fan_in_total": 23,
+        "module": "game.final_emission_strict_social_stack",
+        "share_pct": 2.2
+      },
+      {
+        "fan_in_total": 23,
+        "module": "tests.helpers.opening_fallback_evidence",
+        "share_pct": 2.2
+      }
+    ],
+    "total_fi": 1044
+  },
+  "ck_git": {
+    "distinct_paths": 0,
+    "files_above_threshold": 0,
+    "hci": 0.0,
+    "hotspot_rankings": [],
+    "largest_hotspot": null,
+    "t_touch": 3,
+    "top10_share_pct": 0.0,
+    "top5_share_pct": 0.0,
+    "top_10_paths": [],
+    "total_touches": 0
+  },
+  "ck_log_draft": {
+    "commit": "85855df",
+    "date": "2026-06-26",
+    "files_above_threshold": 0,
+    "hci": 0.0,
+    "largest_hotspot": "(none)",
+    "measurement": "scheduled measurement",
+    "notes": "std=v1; REV_RANGE=85855df..85855df; total_touches=0; FI top5=20.79% top10=32.76% above_T10=39",
+    "top_10_pct": 0.0,
+    "top_5_pct": 0.0
+  },
+  "data_sufficient": false,
+  "generation_status": "success",
+  "measurement_readiness": "empty_window",
+  "measurement_window": {
+    "commit_count": 0,
+    "measurement_commit": "85855df",
+    "measurement_commit_full": "85855df00ebdee20a33c0ada447c178bf1f49820",
+    "measurement_date": "2026-06-26",
+    "rev_range": "85855df..85855df",
+    "watch_start_commit": "85855df",
+    "watch_start_commit_full": "85855df00ebdee20a33c0ada447c178bf1f49820"
+  },
+  "primary_metric": "hotspot_concentration_index",
+  "report_provenance": {
+    "generator": "tools/ck_hotspot_compression_report.py",
+    "helper": "tests/helpers/ck_hotspot_compression_report.py",
+    "lane_primary": "CK-GIT",
+    "lane_supplementary": "CK-FI"
+  },
+  "schema_version": 1,
+  "standard_version": 1
+}
