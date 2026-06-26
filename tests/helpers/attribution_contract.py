@@ -1,7 +1,19 @@
 """BS3 canonical semantic replacement attribution contract.
 
-Single source of truth for attribution field taxonomies, normalization rules,
-and read-side validation. Does not modify runtime replacement behavior.
+**Authority (CG-5):** attribution-contract-owned replacement paths, repair-kind
+union/aliases, mutation-classification core union/aliases, normalization helpers,
+and attribution record validation.
+
+**Imports for validation (does not own):** repair-kind runtime/producer subsets,
+emission sublayers, source-family tags, and owner-bucket mirrors from
+``tests.failure_classification_contract`` (those subsets remain replay-contract-owned).
+
+**Does not own:** failure categories, drift buckets, investigation routing,
+dashboard evidence, recurrence key formula, or runtime FEM/lineage emission.
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md`` (attribution boundary),
+``docs/audits/CG_failure_classification_authority_registry.md`` (failure vs runtime).
 """
 from __future__ import annotations
 
@@ -519,7 +531,8 @@ def calculate_attribution_maturity_scores(
 
     contract_compliance_pct = round(100.0 * compliant / populated, 2) if populated else 0.0
 
-    # Taxonomy consistency: shared contract module owns unions; failure contract re-exports buckets.
+    # Taxonomy consistency: attribution contract owns unions; failure contract
+    # owns imported subsets (repair kinds, emission sublayers, bucket mirrors).
     consistency_checks = [
         ALLOWED_OWNER_BUCKETS
         == (

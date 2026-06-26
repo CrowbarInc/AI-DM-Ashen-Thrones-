@@ -1,5 +1,18 @@
 """Read-side FEM replay/runtime-lineage projection helpers.
 
+**Authority (CG-5):** runtime-owned **emission** of diagnostic lineage vocabulary
+from finalized FEM (``repair_kind``, ``mutation_kind``, ``fallback_kind``,
+split-owner fields on events). Projection maps **derive** mutation/source labels;
+attribution contract **validates** emitted core tokens against its union.
+
+**Does not own:** protected golden-replay acceptance schema
+(``tests.helpers.golden_replay_projection``), attribution unions/aliases, or
+failure-classification categories.
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
 This module must not select fallbacks, mutate output, or stamp write-time FEM.
 
 **Cycle AO5 boundary — runtime lineage only (do not merge with acceptance projection):**

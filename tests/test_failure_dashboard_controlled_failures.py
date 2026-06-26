@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import pytest
 
+from tests.helpers.failure_classification_builders import classify_replay_probe_row
 from tests.helpers.failure_classification_sync import (
+    assert_classifier_routing_parity,
     assert_contract_classifier_alignment,
     assert_split_owner_matrix_dashboard_case_id_parity,
     assert_split_owner_matrix_dashboard_expected,
@@ -16,10 +18,10 @@ from tests.helpers.failure_classification_sync import (
     known_failure_categories,
     known_owner_buckets,
     split_owner_acceptance_matrix_rows,
-    split_owner_lineage_event_from_matrix_row,
     SPLIT_OWNER_DASHBOARD_CASE_ID_ALIASES,
     split_owner_expected_dashboard_case_id,
     split_owner_matrix_legacy,
+    split_owner_matrix_classifier_drift_row,
     split_owner_observed_row_from_matrix_row,
     split_owner_sealed_matrix_rows_requiring_dashboard_probe,
 )
@@ -58,12 +60,10 @@ _CONTROLLED_PROBE_EXTENSION_FIELD_PATHS = frozenset(
     }
 )
 
-# Ownership note:
-# Controlled probes own dashboard/classifier behavior on known-bad replay-shaped
-# rows. They intentionally duplicate projection fields to preserve triage
-# locality; runtime prose and routing behavior stay with their direct owners.
-# Cycle F.I: controlled opening-fallback rows preserve taxonomy while allowing
-# symptom-specific ``investigate_first`` routing for classifier-owned triage.
+# CG-3 grouping:
+# - Group A (behavior probes): parametrize cases below; routing derived from classifier.
+# - Group B (presentation goldens): _CONTROLLED_PROBE_EVIDENCE_CELLS and report shape test.
+# - Group C (compatibility): export parity and split-owner case-id alias guards.
 
 
 
@@ -309,13 +309,21 @@ def test_controlled_failure_dashboard_summary_matches_sync_helpers():
 
 @pytest.mark.parametrize(("case_id", "observed", "drift_row", "expected"), CONTROLLED_FAILURE_CASES)
 def test_controlled_failure_probe_classifies_known_bad_case(case_id, observed, drift_row, expected):
+    case_observed = {**observed, "scenario_id": case_id}
     row = build_classified_dashboard_row(
-        observed_turn={**observed, "scenario_id": case_id},
+        observed_turn=case_observed,
         drift_row=drift_row,
         scenario_id=case_id,
         turn_index=0,
     )
+    classifier_row = classify_replay_probe_row(
+        scenario_id=case_id,
+        turn_index=0,
+        observed_turn=case_observed,
+        drift_row=drift_row,
+    )
 
+    assert_classifier_routing_parity(row, classifier_row)
     for key, value in expected.items():
         assert row.get(key) == value
 
@@ -415,20 +423,24 @@ def test_sealed_subkind_matrix_rows_have_dashboard_parity_except_legacy() -> Non
 
 def test_split_owner_acceptance_matrix_controlled_probe_owners_match_canonical_literals() -> None:
     """BU15: dashboard controlled split-owner probes stay aligned with the canonical matrix."""
-    dashboard_expected_by_id = {
-        case_id: expected for case_id, _observed, _drift, expected in CONTROLLED_FAILURE_CASES
-    }
+    dashboard_case_ids = {case_id for case_id, _observed, _drift, _expected in CONTROLLED_FAILURE_CASES}
     matrix_dashboard_ids = {
         row.dashboard_case_id
         for row in split_owner_acceptance_matrix_rows()
         if row.dashboard_case_id is not None
     }
-    assert matrix_dashboard_ids <= set(dashboard_expected_by_id)
+    assert matrix_dashboard_ids <= dashboard_case_ids
 
     for row in split_owner_acceptance_matrix_rows():
         if row.dashboard_case_id is None:
             continue
-        assert_split_owner_matrix_dashboard_expected(row, dashboard_expected_by_id[row.dashboard_case_id])
         observed = split_owner_observed_row_from_matrix_row(row, profile="dashboard_probe")
+        classified = build_classified_dashboard_row(
+            observed_turn={**observed, "scenario_id": row.dashboard_case_id},
+            drift_row=split_owner_matrix_classifier_drift_row(row),
+            scenario_id=row.dashboard_case_id,
+            turn_index=0,
+        )
+        assert_split_owner_matrix_dashboard_expected(row, classified)
         embedded = observed["runtime_lineage_events"][0]
         assert_split_owner_matrix_lineage_event(row, embedded)

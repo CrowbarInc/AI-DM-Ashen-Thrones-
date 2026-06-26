@@ -1,4 +1,17 @@
-"""Program effectiveness, maturity, roadmap, completion, and graduation analytics."""
+"""Program effectiveness, maturity, roadmap, completion, and graduation analytics.
+
+**Owns (CG-4):** maturity level bands, program-effectiveness policy constants,
+roadmap/completion assessments, graduation audit builders, trajectory snapshot
+schema, and cross-taxonomy alignment maps (``RECURRENCE_FORECAST_LIFECYCLE_ALIGNMENT``).
+
+**Consumes:** trend/forecast/lifecycle/governance classifiers from
+``replay_bug_recurrence_history``; events aggregation via compatibility re-exports.
+
+**Does not own:** trend/forecast/governance/lifecycle allowed-values, confidence
+calibration, graduation threshold validation statuses, or outcome signal vocabulary.
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
+"""
 from __future__ import annotations
 
 import json

@@ -1,33 +1,27 @@
-"""Shared failure-dashboard controlled probe fixtures (Cycle AL1b).
+"""Shared failure-dashboard controlled probe fixtures (Cycle AL1b / CG-3).
 
 Support residue for controlled failure probes and classification contract checks.
 Probe test assertions stay in ``tests/test_failure_dashboard_controlled_failures.py``.
+
+CG-3: base probe tuples omit manually duplicated classifier routing literals; routing
+expected values are derived via ``controlled_failure_probe_case``. Presentation goldens
+(evidence cells, report shape) remain explicit in the probe test module.
 """
 from __future__ import annotations
 
 from typing import Any
 
 from game.attribution_read_views import (
-    OPENING_FALLBACK_CONTENT_OWNER,
-    OPENING_FALLBACK_SELECTION_OWNER,
-    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_FALLBACK_SELECTION_OWNER,
     SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
-    SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD,
-    SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_TRACE_SELECTION_OWNER_SHORT,
     SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
-    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
-    SEALED_FALLBACK_SELECTION_OWNER,
-    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
-    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
-    VISIBILITY_FALLBACK_SELECTION_OWNER,
-)
-from game.final_emission_replay_projection import (
-    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
-    VISIBILITY_HARD_REPLACEMENT,
 )
 from game.attribution_read_views import SEALED_FALLBACK_OWNER_SEALED_GATE
+from tests.helpers.failure_classification_dashboard_expectations import (
+    controlled_failure_probe_case,
+    split_owner_matrix_controlled_failure_cases,
+)
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
     global_fallback_source_drift_row,
@@ -51,14 +45,13 @@ from tests.helpers.failure_classification_sync import (
     scaffold_leakage_drift_row,
     semantic_text_fragment_drift_row,
     speaker_mismatch_drift_row,
-    split_owner_matrix_controlled_failure_cases,
 )
 from tests.helpers.failure_dashboard_report import build_classified_dashboard_row, record_protected_replay_assertion_failure
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+    OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
 )
-from tests.helpers.opening_fallback_evidence import OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
 from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
 
 SYNTHETIC_PROTECTED_BRIDGE_SCENARIO_ID = "synthetic_protected_bridge"
@@ -66,36 +59,18 @@ SYNTHETIC_PROTECTED_BRIDGE_TEST_NODE_ID = "tests/test_golden_replay.py::syntheti
 
 _DASHBOARD_PROFILE = "dashboard_probe"
 
-_BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (
+# Group A behavior probes: (case_id, observed, drift_row) — routing expected derived at build.
+_BASE_CONTROLLED_FAILURE_PROBE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any]], ...] = (
     (
         "wrong_speaker",
         observed_speaker_mismatch_observed_row(profile=_DASHBOARD_PROFILE),
         speaker_mismatch_drift_row(),
-        {
-            "category": "speaker",
-            "primary_owner": "speaker",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/speaker_contract_enforcement.py",
-        },
     ),
     (
         "forced_fallback_source",
         observed_global_replacement_row(profile=_DASHBOARD_PROFILE),
         global_fallback_source_drift_row(),
-        {
-            "category": "fallback",
-            "primary_owner": "fallback",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "terminal_fallback",
-        },
     ),
-    # Opening fallback owner-bucket rows intentionally duplicate projection
-    # fields for dashboard/triage contracts, not deterministic prose ownership.
-    # Owner-bucket mapping now routes to FEM metadata; gate selection/final
-    # source symptoms remain final-gate-owned.
     (
         "opening_fallback_owner_bucket",
         observed_opening_fallback_row(owner_bucket=True, profile=_DASHBOARD_PROFILE),
@@ -104,15 +79,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected="sealed-gate",
             actual=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         ),
-        {
-            "category": "fallback",
-            "primary_owner": "fallback",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/final_emission_meta.py",
-            "emission_sublayer": "opening_fallback",
-            "opening_fallback_owner_bucket": OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
-        },
     ),
     (
         "opening_fallback_authorship_source",
@@ -122,14 +88,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
             actual=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
         ),
-        {
-            "category": "fallback",
-            "primary_owner": "fallback",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/upstream_response_repairs.py",
-            "emission_sublayer": "opening_fallback",
-        },
     ),
     (
         "opening_fallback_basis",
@@ -139,14 +97,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected=["journal seed"],
             actual=["visible fact"],
         ),
-        {
-            "category": "replay_drift",
-            "primary_owner": "replay",
-            "secondary_owner": "emission",
-            "severity": "medium",
-            "investigate_first": "game/opening_deterministic_fallback.py",
-            "emission_sublayer": "opening_fallback",
-        },
     ),
     (
         "opening_fallback_projection_missing",
@@ -155,17 +105,7 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             "opening_fallback_owner_bucket",
             expected=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
         ),
-        {
-            "category": "projection",
-            "primary_owner": "projection",
-            "secondary_owner": None,
-            "severity": "medium",
-            "investigate_first": "tests/helpers/golden_replay.py",
-            "missing_source_kind": "projection_missing_raw_present",
-        },
     ),
-    # Sealed fallback rows intentionally repeat final source and owner bucket as
-    # dashboard/triage projection locks, not sealed helper prose ownership.
     (
         "sealed_fallback_owner_bucket",
         observed_sealed_replacement_row(profile=_DASHBOARD_PROFILE),
@@ -174,15 +114,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected="strict-social-sealed",
             actual=SEALED_FALLBACK_OWNER_SEALED_GATE,
         ),
-        {
-            "category": "fallback",
-            "primary_owner": "fallback",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "terminal_fallback",
-            "sealed_fallback_owner_bucket": SEALED_FALLBACK_OWNER_SEALED_GATE,
-        },
     ),
     (
         "visibility_fallback_owner_bucket",
@@ -192,33 +123,11 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected="strict-social-visibility",
             actual="sealed-gate",
         ),
-        {
-            "category": "fallback",
-            "primary_owner": "fallback",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "visibility_fallback_owner_bucket": "sealed-gate",
-            "visibility_replacement_applied": True,
-            "visibility_fallback_pool": "global_scene_narrative",
-            "visibility_fallback_kind": "narrative_safe_fallback",
-        },
     ),
     (
         "sanitizer_leakage",
         observed_sanitizer_leakage_dashboard_row(),
         scaffold_leakage_drift_row(),
-        {
-            "category": "sanitizer",
-            "primary_owner": "sanitizer",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/output_sanitizer.py",
-            "emission_sublayer": "sanitizer",
-            "sanitizer_lineage_mode": "strip_only",
-            "sanitizer_lineage_changed_count": 1,
-            "sanitizer_lineage_dropped_count": 1,
-        },
     ),
     (
         "sanitizer_empty_fallback",
@@ -241,21 +150,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             actual=True,
             reason="sanitizer empty fallback selected",
         ),
-        {
-            "category": "sanitizer",
-            "primary_owner": "sanitizer",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/output_sanitizer.py",
-            "emission_sublayer": "sanitizer",
-            "sanitizer_empty_fallback_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
-            "sanitizer_lineage_empty_fallback_used": True,
-            "final_emission_mutation_lineage": [
-                "pre_gate_sanitizer",
-                "sanitizer_empty_fallback",
-                "finalize_packaging",
-            ],
-        },
     ),
     (
         "strict_social_sanitizer_fallback",
@@ -277,33 +171,11 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             actual=True,
             reason="sanitizer selected strict-social fallback",
         ),
-        {
-            "category": "sanitizer",
-            "primary_owner": "sanitizer",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/output_sanitizer.py",
-            "emission_sublayer": "strict_social_replacement",
-            "sanitizer_strict_social_selection_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
-            "sanitizer_strict_social_prose_owner": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
-            "sanitizer_strict_social_source": "social_fallback_line_for_sanitizer.empty_output",
-            "prepared_emission_owner": None,
-            "sanitizer_empty_fallback_used": None,
-        },
     ),
     (
         "legacy_sanitizer_rewrite_diagnostic",
         observed_sanitizer_legacy_rewrite_row(profile=_DASHBOARD_PROFILE),
         scaffold_leakage_drift_row(reason="legacy sentence rewrite diagnostic evidence"),
-        {
-            "category": "sanitizer",
-            "primary_owner": "sanitizer",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/output_sanitizer.py",
-            "emission_sublayer": "sanitizer",
-            "sanitizer_lineage_legacy_rewrite_active": True,
-        },
     ),
     (
         "response_type_repair_unexpected",
@@ -318,21 +190,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             ],
         ),
         response_type_repair_drift_row(),
-        {
-            "category": "emission",
-            "primary_owner": "upstream_prepared_emission",
-            "secondary_owner": "emission",
-            "severity": "medium",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "upstream_prepared_emission",
-            "repair_kind": "action_outcome_upstream_prepared_repair",
-            "prepared_emission_owner": "upstream_prepared_emission",
-            "final_emission_mutation_lineage": [
-                "response_type_repair",
-                "prepared_emission_selection",
-                "finalize_packaging",
-            ],
-        },
     ),
     (
         "prepared_emission_rejected",
@@ -349,42 +206,16 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             actual=False,
             reason="malformed prepared emission rejected",
         ),
-        {
-            "category": "emission",
-            "primary_owner": "upstream_prepared_emission",
-            "secondary_owner": "emission",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "upstream_prepared_emission",
-            "prepared_emission_owner": "upstream_prepared_emission",
-            "upstream_prepared_emission_reject_reason": "missing_answer_specificity",
-        },
     ),
     (
         "missing_route_metadata_raw_absent",
         _observed(route_kind=None, unavailable=["route_kind"], raw_signal_presence={"route_kind": False}),
         projection_unavailable_drift_row("route_kind", expected="present"),
-        {
-            "category": "route",
-            "primary_owner": "route",
-            "secondary_owner": "projection",
-            "severity": "medium",
-            "investigate_first": "game/interaction_context.py",
-            "missing_source_kind": "runtime_missing_raw_absent",
-        },
     ),
     (
         "missing_route_metadata_raw_present",
         _observed(route_kind=None, unavailable=["route_kind"], raw_signal_presence={"route_kind": True}),
         projection_unavailable_drift_row("route_kind", expected="present"),
-        {
-            "category": "projection",
-            "primary_owner": "projection",
-            "secondary_owner": None,
-            "severity": "medium",
-            "investigate_first": "tests/helpers/golden_replay.py",
-            "missing_source_kind": "projection_missing_raw_present",
-        },
     ),
     (
         "semantic_mutation",
@@ -393,28 +224,11 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             expected="include 'east-road talk'",
             actual="The answer changed.",
         ),
-        {
-            "category": "semantic_mutation",
-            "primary_owner": "semantic_mutation",
-            "secondary_owner": "emission",
-            "severity": "critical",
-            "investigate_first": "game/stage_diff_telemetry.py",
-        },
     ),
     (
         "post_gate_unknown_mutation",
         observed_post_gate_mutation_row(profile=_DASHBOARD_PROFILE, final_emission_mutation_lineage=None),
         post_gate_mutation_drift_row(),
-        {
-            "category": "emission",
-            "primary_owner": "emission",
-            "secondary_owner": "validator",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "emission.post_gate_mutation_unknown",
-            "mutation_source": "emission.post_gate_mutation_unknown",
-            "final_emission_mutation_lineage": None,
-        },
     ),
     (
         "post_gate_route_illegal_strip_reduced",
@@ -423,16 +237,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             final_emission_mutation_lineage=["finalize_route_illegal_strip", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
-        {
-            "category": "emission",
-            "primary_owner": "emission",
-            "secondary_owner": "validator",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "final_emission.finalize_route_illegal_strip",
-            "mutation_source": "final_emission.finalize_route_illegal_strip",
-            "final_emission_mutation_lineage": ["finalize_route_illegal_strip", "finalize_packaging"],
-        },
     ),
     (
         "post_gate_sanitizer_empty_reduced",
@@ -441,16 +245,6 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             final_emission_mutation_lineage=["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
-        {
-            "category": "emission",
-            "primary_owner": "emission",
-            "secondary_owner": "validator",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "sanitizer.empty_fallback",
-            "mutation_source": "sanitizer.empty_fallback",
-            "final_emission_mutation_lineage": ["pre_gate_sanitizer", "sanitizer_empty_fallback", "finalize_packaging"],
-        },
     ),
     (
         "post_gate_response_type_reduced",
@@ -459,17 +253,12 @@ _BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any],
             final_emission_mutation_lineage=["response_type_repair", "finalize_packaging"],
         ),
         post_gate_mutation_drift_row(),
-        {
-            "category": "emission",
-            "primary_owner": "emission",
-            "secondary_owner": "validator",
-            "severity": "high",
-            "investigate_first": "game/final_emission_gate.py",
-            "emission_sublayer": "response_type",
-            "mutation_source": "response_type",
-            "final_emission_mutation_lineage": ["response_type_repair", "finalize_packaging"],
-        },
     ),
+)
+
+_BASE_CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = tuple(
+    controlled_failure_probe_case(case_id, observed, drift_row)
+    for case_id, observed, drift_row in _BASE_CONTROLLED_FAILURE_PROBE_CASES
 )
 
 CONTROLLED_FAILURE_CASES: tuple[tuple[str, dict[str, Any], dict[str, Any], dict[str, Any]], ...] = (

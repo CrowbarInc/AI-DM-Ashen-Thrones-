@@ -1,7 +1,7 @@
 # Bug-Class Recurrence History
 
-- Generated at: `2026-06-25T22:58:10Z`
-- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_golden_replay_artifact_manifest.py tests/test_failure_dashboard_paths.py tests/test_replay_maintenance_metrics.py -q --tb=short`
+- Generated at: `2026-05-30T00:00:00Z`
+- Command: `pytest synthetic`
 - Report only: `true`
 - Advisory only: `true`
 - Total recurrence keys: `6`

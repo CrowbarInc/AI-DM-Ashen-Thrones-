@@ -1,5 +1,16 @@
 """FEM packaging, read-side normalization, and FEM-centric observational projections.
 
+**Authority (CG-5):** runtime-owned FEM dict shapes, merges, read helpers, and
+registry consumption for fallback owner buckets (vocabulary sourced from
+``final_emission_ownership_schema``). BS4 producer attribution **stamps**
+(``producer_repair_kind``, owner-bucket fields) are runtime facts; attribution
+contract **validates** stamped tokens when building inventory records.
+
+**Does not own:** replay failure taxonomy, attribution unions/aliases, protected
+observation paths, or recurrence keys. Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
 Canonical metadata-only owner.
 
 :func:`game.final_emission_gate.apply_final_emission_gate` owns **orchestration** (layer order,

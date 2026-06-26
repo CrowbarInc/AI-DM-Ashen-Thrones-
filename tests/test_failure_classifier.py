@@ -1893,9 +1893,7 @@ def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
     from game.runtime_lineage_telemetry import summarize_runtime_lineage_events
     from tests.helpers.failure_dashboard_fixtures import CONTROLLED_FAILURE_CASES
 
-    dashboard_expected_by_id = {
-        case_id: expected for case_id, _observed, _drift, expected in CONTROLLED_FAILURE_CASES
-    }
+    dashboard_case_ids = {case_id for case_id, _observed, _drift, _expected in CONTROLLED_FAILURE_CASES}
     lineage_events: list[dict] = []
 
     for row in split_owner_acceptance_matrix_rows():
@@ -1918,11 +1916,8 @@ def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
         assert_failure_dashboard_row_shape(classified)
 
         if row.dashboard_case_id is not None:
-            assert row.dashboard_case_id in dashboard_expected_by_id
-            assert_split_owner_matrix_dashboard_expected(
-                row,
-                dashboard_expected_by_id[row.dashboard_case_id],
-            )
+            assert row.dashboard_case_id in dashboard_case_ids
+            assert_split_owner_matrix_dashboard_expected(row, classified)
 
     summary = summarize_runtime_lineage_events(lineage_events)
     assert summary["total_events"] == len(lineage_events)

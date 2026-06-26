@@ -3,8 +3,13 @@
 Consumes existing FEM metadata, runtime lineage events, golden replay projection
 rows, and failure classification output without modifying runtime behavior.
 
+**Authority (CG-5):** record construction and completeness metrics only.
+Taxonomy unions, paths, and validators are imported from
+``tests.helpers.attribution_contract`` (does not own vocabulary).
+
 The five-field completeness contract mirrors
 ``docs/BS_semantic_replacement_attribution_discovery.md`` Section D.
+Registry: ``docs/audits/CG_attribution_contract_registry.md``
 """
 from __future__ import annotations
 

@@ -1,10 +1,14 @@
 """Report-only recurrence keys for replay bug-class diagnostics.
 
-This helper derives stable identities from existing replay classification rows
-and supports append-only event-log persistence for cross-run recurrence history.
-It does not change governance decisions or affect replay pass/fail behavior.
+Compatibility facade (CE3/CG-4): re-exports focused modules without owning any
+taxonomy. Import from the authority module when adding or editing allowed-values:
 
-CE3 facade: re-exports recurrence analytics from focused helper modules.
+- ``replay_bug_recurrence_events`` — identity, input/summary status
+- ``replay_bug_recurrence_history`` — trend, forecast, governance, lifecycle, remediation
+- ``replay_bug_recurrence_statistics`` — maturity, completion, graduation audit builders
+- ``replay_bug_recurrence_serialization`` — confidence, outcome, report rendering
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
 """
 from __future__ import annotations
 

@@ -1,8 +1,14 @@
 """Replay-side deterministic failure classification.
 
-The classifier consumes golden replay observation/drift rows and emits
-dashboard-ready diagnostics.  It is intentionally read-only: no runtime
-systems are imported, called, or mutated here.
+**Authority (CG-1):** classification *behavior* — rule tables, owner/severity
+routing, row construction, investigation-target overrides, owner-drift assignment.
+
+**Consumes (does not own):** allowed values and row schema from
+``tests.failure_classification_contract``; drift bucket classification from
+``tests.helpers.replay_drift_taxonomy``; runtime bucket mappers from
+``game.attribution_read_views`` (read-only).
+
+Registry: ``docs/audits/CG_failure_classification_authority_registry.md``
 """
 from __future__ import annotations
 

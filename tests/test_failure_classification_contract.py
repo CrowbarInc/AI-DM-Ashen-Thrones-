@@ -492,3 +492,25 @@ def test_owner_matrix_and_schema_docs_cover_contract_taxonomy():
     for owner, target in MAJOR_OWNER_INVESTIGATION_TARGETS.items():
         assert owner
         assert target
+
+
+def test_failure_classification_authority_registry_documents_key_authorities():
+    root = Path(__file__).resolve().parents[1]
+    registry_path = root / "docs" / "audits" / "CG_failure_classification_authority_registry.md"
+    registry = registry_path.read_text(encoding="utf-8")
+
+    for authority_file in (
+        "tests/failure_classification_contract.py",
+        "tests/helpers/failure_classifier.py",
+        "tests/helpers/attribution_contract.py",
+        "tests/helpers/replay_drift_taxonomy.py",
+        "tests/helpers/replay_bug_recurrence_events.py",
+        "tests/helpers/replay_bug_recurrence_history.py",
+        "tests/helpers/golden_replay_projection.py",
+        "game/final_emission_ownership_schema.py",
+    ):
+        assert authority_file in registry
+
+    for identity_field in ("owner_bucket", "category", "field_path", "investigate_first"):
+        assert identity_field in registry
+    assert "recurrence:v1" in registry

@@ -5,48 +5,48 @@
 
 ## Summary
 
-- Calibration score: `66.0`
-- Interpretation: `Needs monitoring`
-- Largest calibration gap: `0.47`
+- Calibration score: `84.0`
+- Interpretation: `Acceptable`
+- Largest calibration gap: `0.29`
 - Graduation confidence ready: `false`
 
 # Forecast Confidence
 
-- Reported confidence: `0.00`
-- Evidence strength: `0.10`
-- Calibration gap: `-0.10`
+- Reported confidence: `0.20`
+- Evidence strength: `0.28`
+- Calibration gap: `-0.08`
 - Status: `calibrated`
-- Forecast accuracy: `0.00`
-- Observations: `0`
-- Keys: `0`
+- Forecast accuracy: `1.00`
+- Observations: `1`
+- Keys: `1`
 - Trajectory available: `false`
 
 # Governance Confidence
 
-- Reported confidence: `0.00`
-- Evidence strength: `0.45`
-- Calibration gap: `-0.45`
+- Reported confidence: `0.18`
+- Evidence strength: `0.47`
+- Calibration gap: `-0.29`
 - Status: `underconfident`
-- Watchlist size: `0`
-- Governance health: `100.0`
+- Watchlist size: `1`
+- Governance health: `65.5`
 
 # Effectiveness Confidence
 
-- Reported confidence: `0.00`
-- Evidence strength: `0.47`
-- Calibration gap: `-0.47`
+- Reported confidence: `0.14`
+- Evidence strength: `0.25`
+- Calibration gap: `-0.11`
 - Status: `underconfident`
 - Trajectory available: `false`
-- Remediation effectiveness: `0.50`
+- Remediation effectiveness: `0.00`
 - Closure rate: `0.00`
 
 # Graduation Threshold Validation
 
-- `forecast_confidence`: current `0.0`, target `0.75`, status `unsupported` — Forecast confidence remains below graduation threshold.
-- `effectiveness_confidence`: current `0.0`, target `0.75`, status `unsupported` — Effectiveness confidence remains below graduation threshold.
-- `operational_readiness`: current `0.0`, target `80.0`, status `unsupported` — Operational readiness remains materially below graduation threshold.
+- `forecast_confidence`: current `0.2`, target `0.75`, status `unsupported` — Forecast confidence remains below graduation threshold.
+- `effectiveness_confidence`: current `0.14`, target `0.75`, status `unsupported` — Effectiveness confidence remains below graduation threshold.
+- `operational_readiness`: current `11.7`, target `80.0`, status `unsupported` — Operational readiness remains materially below graduation threshold.
 - `trajectory_available`: current `False`, target `True`, status `optimistic` — Trajectory baseline exists but trajectory_available remains false until snapshot #2 is captured.
-- `governance_confidence`: current `0.0`, target `0.75`, status `unsupported` — Governance confidence remains below graduation threshold.
+- `governance_confidence`: current `0.18`, target `0.75`, status `unsupported` — Governance confidence remains below graduation threshold.
 
 # Blind Spot Reassessment
 

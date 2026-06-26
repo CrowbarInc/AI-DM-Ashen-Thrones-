@@ -1,7 +1,14 @@
 """Recurrence report rendering and artifact orchestration for replay diagnostics.
 
-Consumes recurrence analytics from replay_bug_recurrence.py and paths from
-failure_dashboard_paths.py. Does not own session buffers or generic dashboard rendering.
+**Owns:** dashboard markdown layout and section ordering for recurrence reports.
+
+**Consumes:** all recurrence analytics via ``replay_bug_recurrence`` facade and
+paths from ``failure_dashboard_paths.py``.
+
+**Does not own:** any recurrence taxonomy allowed-values, classifier thresholds,
+or recurrence:v1 key generation.
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
 """
 from __future__ import annotations
 

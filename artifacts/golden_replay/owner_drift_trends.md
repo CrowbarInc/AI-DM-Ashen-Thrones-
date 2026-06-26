@@ -2,6 +2,8 @@
 
 - Advisory only: `true`
 - Report only: `true`
+- Generated at: `2026-05-30T00:00:00Z`
+- Command: `pytest synthetic`
 
 ## Drift Trend Summary
 

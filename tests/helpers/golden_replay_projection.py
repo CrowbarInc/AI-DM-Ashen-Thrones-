@@ -1,5 +1,12 @@
 """Golden replay turn-observation projection adapter (Cycle T1).
 
+**Authority (CG-1):** protected observation field paths, acceptance projection,
+and derived classifier-evidence overlap inputs. Test-only CI acceptance schema.
+
+**Does not own:** failure row taxonomy, recurrence keys, or runtime FEM lineage
+(see ``game.final_emission_replay_projection``). Registry:
+``docs/audits/CG_failure_classification_authority_registry.md``
+
 Centralizes payload/snapshot → observation dict projection and protected
 field-path enumeration. Test-only; no runtime behavior changes.
 

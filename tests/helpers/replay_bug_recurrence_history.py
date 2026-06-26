@@ -1,4 +1,17 @@
-"""Trend, forecast, portfolio, remediation, governance, and lifecycle analytics."""
+"""Trend, forecast, portfolio, remediation, governance, and lifecycle analytics.
+
+**Owns (CG-4):** trend, forecast, remediation cost, remediation priority,
+governance status/action, lifecycle stage classifications and their thresholds.
+
+**Consumes:** protected event log and events-module row projection; re-exports
+events symbols for compatibility only (``import *``).
+
+**Does not own:** recurrence identity keys, input/summary status (events module),
+program maturity, confidence calibration, graduation threshold validation, or outcome
+signals (statistics/serialization modules).
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
+"""
 from __future__ import annotations
 
 import json

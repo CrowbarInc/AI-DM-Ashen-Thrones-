@@ -1,11 +1,23 @@
 """Canonical replay failure classification contract.
 
-This module is the public taxonomy lock for the replay-side failure dashboard.
-Classifier rules may evolve, but new categories, owners, severities, tags, or
-row fields should be added here deliberately with tests.
+**Authority (CG-1):** replay-contract-owned vocabulary for failure categories,
+primary/secondary owners, severities, replay tags, source-family tags, row
+schema, dashboard evidence manifest, investigation-target defaults, and
+repair-kind runtime/producer subsets.
 
-Alignment with classifier rule tables is enforced by
-``tests.helpers.failure_classification_sync``.
+**Derives (does not own):** owner-drift allowed set from
+``tests.helpers.replay_drift_taxonomy``; protected evidence overlap from
+``tests.helpers.golden_replay_projection``; fallback bucket strings from
+``game.attribution_read_views`` / ``game.final_emission_ownership_schema``.
+
+**Does not own:** classification behavior (``failure_classifier``), drift
+bucket rules, attribution unions/aliases/paths, recurrence keys, or runtime FEM logic.
+
+Registries:
+``docs/audits/CG_failure_classification_authority_registry.md`` (this doc's index),
+``docs/audits/CG_attribution_contract_registry.md`` (attribution boundary, CG-5).
+Alignment with classifier rule tables: ``tests.helpers.failure_classification_sync`` (facade) /
+``tests.helpers.failure_classification_alignment`` (implementation).
 """
 from __future__ import annotations
 
@@ -150,9 +162,9 @@ ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset(
 
 LEGACY_RESPONSE_TYPE_REPAIR_KINDS: frozenset[str] = frozenset({"thin_answer"})
 
-# BS4 — deterministic producer-side repair kinds stamped at replacement origin.
-# Full repair_kind union (runtime + producer + opening + legacy) lives in
-# ``tests.helpers.attribution_contract.ALLOWED_REPAIR_KINDS``.
+# BS4 — replay-contract-owned producer-side repair subsets (stamped at origin).
+# Attribution contract imports these into ``ALLOWED_REPAIR_KINDS`` for validation;
+# edit both modules when adding a new producer kind.
 ALLOWED_PRODUCER_REPAIR_KINDS: frozenset[str] = frozenset(
     {
         "visibility_enforcement",

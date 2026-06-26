@@ -33,7 +33,7 @@ Sealed subkind dashboard parity: 6/6 non-legacy rows
 
 ## Split-owner matrix change workflow (BU22)
 
-Canonical source: `SPLIT_OWNER_ACCEPTANCE_MATRIX` in `tests/helpers/failure_classification_sync.py`. Full checklist: `docs/audits/README.md`.
+Canonical source: `SPLIT_OWNER_ACCEPTANCE_MATRIX` in `tests/helpers/failure_classification_split_owner.py`. Full checklist: `docs/audits/README.md`.
 
 1. Update `SPLIT_OWNER_ACCEPTANCE_MATRIX` (no production emission changes for matrix-only edits).
 2. Update dashboard evidence cells only if dashboard strings changed (`tests/test_failure_dashboard_controlled_failures.py`).

@@ -1,4 +1,16 @@
-"""Confidence calibration, outcome validation, and markdown report rendering."""
+"""Confidence calibration, outcome validation, and markdown report rendering.
+
+**Owns (CG-4):** confidence calibration status, graduation threshold validation
+status, blind-spot status change, outcome signal/rejection vocabularies, final
+graduation recommendation, and recurrence markdown/JSON report serialization.
+
+**Consumes/displays:** trend, forecast, governance, lifecycle, maturity, and
+remediation payloads from history/statistics — does not own those classifiers.
+
+**Does not own:** any recurrence classifier thresholds or recurrence:v1 identity.
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
+"""
 from __future__ import annotations
 
 import json

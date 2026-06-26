@@ -1,4 +1,18 @@
-"""Recurrence key derivation, event persistence, and history aggregation foundations."""
+"""Recurrence key derivation, event persistence, and history aggregation foundations.
+
+**Owns (CG-4):** recurrence identity key (``build_recurrence_key``, ``recurrence:v1``),
+input status (``ALLOWED_RECURRENCE_STATUSES``), summary status
+(``SUMMARY_RECURRENCE_STATUSES``, ``classify_recurrence_status``), event source buckets,
+persistence lanes, commit-worthiness policy.
+
+**Consumes:** ``owner_drift_bucket``, ``category``, ``field_path``, ``investigate_first``
+from classification rows — all four are key-sensitive.
+
+**Does not own:** trend, forecast, governance, lifecycle, maturity, confidence, graduation,
+or outcome taxonomies (see ``replay_bug_recurrence_history.py`` and downstream modules).
+
+Registry: ``docs/audits/CG_recurrence_taxonomy_registry.md``
+"""
 from __future__ import annotations
 
 import json
