@@ -7,10 +7,13 @@ from pathlib import Path
 import pytest
 
 import tests.helpers.golden_replay_projection as facade
+import tests.helpers.golden_replay_projection_engine as engine
 import tests.helpers.golden_replay_projection_extractors as extractors
 import tests.helpers.golden_replay_projection_fallbacks as fallbacks
 import tests.helpers.golden_replay_projection_fields as fields
 import tests.helpers.golden_replay_projection_manifest as manifest
+import tests.helpers.golden_replay_projection_registry as registry
+import tests.helpers.golden_replay_projection_semantic as semantic
 import tests.helpers.golden_replay_projection_speaker as speaker
 
 BACKUP_PATH = Path(__file__).resolve().parents[1] / "tests" / "helpers" / "golden_replay_projection.py.bak"
@@ -18,8 +21,12 @@ BACKUP_PATH = Path(__file__).resolve().parents[1] / "tests" / "helpers" / "golde
 PROJECTION_MODULES: tuple[str, ...] = (
     "tests.helpers.golden_replay_projection_fields",
     "tests.helpers.golden_replay_projection_manifest",
+    "tests.helpers.golden_replay_projection_registry",
+    "tests.helpers.golden_replay_projection_engine",
     "tests.helpers.golden_replay_projection_extractors",
     "tests.helpers.golden_replay_projection_fallbacks",
+    "tests.helpers.golden_replay_projection_presence",
+    "tests.helpers.golden_replay_projection_semantic",
     "tests.helpers.golden_replay_projection_speaker",
     "tests.helpers.golden_replay_projection",
 )
@@ -152,5 +159,8 @@ def test_submodule_identity_matches_facade_for_registry_and_manifest() -> None:
     assert facade.PROTECTED_OBSERVATION_FIELDS is fields.PROTECTED_OBSERVATION_FIELDS
     assert facade.render_protected_observation_manifest_section is manifest.render_protected_observation_manifest_section
     assert facade.project_replay_fallback_family_from_fem is fallbacks.project_replay_fallback_family_from_fem
+    assert facade.project_semantic_mutation_summary is semantic.project_semantic_mutation_summary
     assert facade.project_speaker_projection_parity is speaker.project_speaker_projection_parity
     assert facade.protected_observation_extraction_registry is extractors.protected_observation_extraction_registry
+    assert extractors.protected_observation_extraction_registry is registry.protected_observation_extraction_registry
+    assert extractors._project_flat_protected_observed_fields is engine._project_flat_protected_observed_fields

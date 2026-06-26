@@ -8,8 +8,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from tests.helpers.golden_replay_projection_extractors import (
+from tests.helpers.golden_replay_projection_registry import (
     _PROTECTED_EXTRACTION_SPECS,
+)
+from tests.helpers.golden_replay_projection_presence import (
     _TRACE_CONTAINER_RAW_PRESENCE,
     _TRACE_CONTAINER_UNAVAILABLE_KEYS,
 )
@@ -27,9 +29,9 @@ TracePathClassification = Literal[
 
 _TRACE_ASSEMBLY_OWNER = "tests.helpers.golden_replay_projection.project_turn_observation"
 _TRACE_SOURCE_OWNER = "tests.helpers.golden_replay_projection_extractors._trace_from_payload_or_snapshot"
-_LOOKUP_OWNER = "tests.helpers.golden_replay_projection_extractors.lookup_observation_path"
-_UNAVAILABLE_OWNER = "tests.helpers.golden_replay_projection_extractors._unavailable_paths_for_projection"
-_REPRESENTATION_OWNER = "tests.helpers.golden_replay_projection_extractors.protected_path_is_represented_in_observed_turn"
+_LOOKUP_OWNER = "tests.helpers.golden_replay_projection_presence.lookup_observation_path"
+_UNAVAILABLE_OWNER = "tests.helpers.golden_replay_projection_presence._unavailable_paths_for_projection"
+_REPRESENTATION_OWNER = "tests.helpers.golden_replay_projection_presence.protected_path_is_represented_in_observed_turn"
 
 
 @dataclass(frozen=True)
@@ -93,7 +95,11 @@ def build_dotted_path_matrix() -> tuple[DottedProtectedPathRow, ...]:
                 parent_container=parent,
                 source_path=source.format(leaf=leaf),
                 projection_owner=_TRACE_ASSEMBLY_OWNER,
-                extraction_owner=f"_PROTECTED_EXTRACTION_SPECS[{path!r}] trace_container={container!r}",
+                extraction_owner=(
+                    "extractor spec owner: "
+                    f"tests.helpers.golden_replay_projection_registry._PROTECTED_EXTRACTION_SPECS[{path!r}] "
+                    f"trace_container={container!r}"
+                ),
                 test_owner="test_cf4_trace_nest_dotted_path_contract.py",
                 classification=classification,
                 projection_rule=rule,
@@ -118,7 +124,11 @@ def build_trace_container_matrix() -> tuple[TraceContainerRow, ...]:
                 observed_key=container_key,
                 projection_owner=_TRACE_ASSEMBLY_OWNER,
                 extraction_owner=_TRACE_SOURCE_OWNER,
-                unavailable_when=f"observed.trace.{container_key} is empty/falsy",
+                unavailable_when=(
+                    f"observed.trace.{container_key} is empty/falsy; "
+                    f"unavailable policy owner: {_UNAVAILABLE_OWNER}; "
+                    f"presence policy owner: tests.helpers.golden_replay_projection_presence._build_projection_status"
+                ),
                 raw_presence_key=presence_key,
                 protected_leaf_paths=tuple(sorted(dotted_by_container.get(container_key, []))),
                 diagnostic_keys=_diagnostic_keys_for_container(container_key),

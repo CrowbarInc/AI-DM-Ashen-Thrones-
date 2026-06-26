@@ -41,7 +41,7 @@ Legend: **shared** = same key in live projection and synthetic defaults; **overl
 | `trace` | payload/snap debug assembly | overlay canonical_entry + social_contract_trace | speaker/route investigation | **overlay_derived** |
 | `scenario_id` | replay runner stamp | `probe` / `controlled_probe` | classification row | **synthetic_only** |
 | `final_text_hash` | `golden_text_hash(final_text)` | `hash123` / `probehash` | classification row | **synthetic_only** |
-| `raw_signal_presence`, `normalized_signal_presence` | `_build_projection_status` | dashboard profile `{}` | dashboard evidence column | **synthetic_only** (dashboard profile) |
+| `raw_signal_presence`, `normalized_signal_presence` | `golden_replay_projection_presence._build_projection_status` | dashboard profile `{}` | dashboard evidence column | **synthetic_only** (dashboard profile) |
 | `fallback_selection_owner`, `repair_kind`, … (16 extension fields) | runtime lineage on live projection | specialty `observed_*` / matrix overlays | optional classifier evidence | **overlay_derived** |
 | `category`, `severity`, `primary_owner`, … | N/A (classifier output) | `classify_replay_failure` | dashboard markdown | **diagnostic_only** |
 

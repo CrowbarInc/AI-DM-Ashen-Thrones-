@@ -12,7 +12,7 @@ from tests.helpers.golden_replay_projection import (
     protected_observation_field_registry,
     protected_observation_flat_field_paths,
 )
-from tests.helpers.golden_replay_projection_extractors import (
+from tests.helpers.golden_replay_projection_presence import (
     _missing_source_by_field_from_presence,
     protected_path_covered_by_unavailable,
     protected_path_representation_errors,
@@ -54,6 +54,79 @@ def test_cf2_routing_matrix_covers_every_protected_field() -> None:
 
 def test_cf2_extraction_registry_and_routing_matrix_aligned() -> None:
     assert set(protected_observation_extraction_registry()) == set(_MATRIX)
+
+
+def test_cf2_routing_matrix_rows_have_machine_readable_ownership_metadata() -> None:
+    for path, row in _MATRIX.items():
+        assert row.field == path
+        assert row.field_name == path
+        assert row.source_family
+        assert row.source_path
+        assert row.field_owner_group
+        assert row.default_behavior in {
+            "flat_default_none",
+            "flat_default_empty_string",
+            "flat_default_false",
+            "nested_trace_no_flat_default",
+        }
+        assert row.unavailable_behavior in {
+            "projected_none",
+            "trace_container_empty",
+            "covered_by_trace_container",
+            "represented_when_null",
+        }
+        assert row.raw_presence_expectation in {
+            "not_tracked",
+            "route",
+            "speaker",
+            "fem_key",
+            "fem_dual_family",
+        }
+        assert row.normalized_presence_expectation in {"tracked", "not_tracked"}
+        assert row.projection_owner.startswith("extractor spec owner:")
+        assert row.extractor_spec_owner.endswith("golden_replay_projection_registry._PROTECTED_EXTRACTION_SPECS")
+        assert "golden_replay_projection_presence._build_projection_status" in row.presence_policy_owner
+        assert "golden_replay_projection_presence._unavailable_paths_for_projection" in row.unavailable_policy_owner
+        assert "golden_replay_projection_presence.protected_path_is_represented" in row.representation_policy_owner
+        assert row.test_owner.endswith(".py")
+
+
+def test_cf2_presence_expectation_keys_are_machine_readable() -> None:
+    for row in _MATRIX.values():
+        if row.raw_presence_expectation == "not_tracked":
+            assert row.raw_presence_key is None
+            assert row.missing_source_rule == "not tracked"
+        else:
+            assert row.raw_presence_key
+            assert row.missing_source_rule != "not tracked"
+
+        if row.normalized_presence_expectation == "tracked":
+            assert row.normalized_source is not None
+            assert row.normalized_presence_key == row.field
+        else:
+            assert row.normalized_presence_key is None
+
+
+def test_cf2_unavailable_behavior_is_machine_readable() -> None:
+    for row in _MATRIX.values():
+        if row.unavailable_behavior in {"projected_none", "trace_container_empty"}:
+            assert row.unavailable_key
+            assert "unavailable" in row.unavailable_rule
+        elif row.unavailable_behavior == "covered_by_trace_container":
+            assert row.unavailable_key is None
+            assert row.field.startswith("trace.")
+        else:
+            assert row.unavailable_behavior == "represented_when_null"
+            assert row.unavailable_key is None
+
+
+def test_cf2_known_owner_groups_are_declared_for_ambiguous_field_families() -> None:
+    assert _MATRIX["fallback_family"].field_owner_group == "replay_fallback_family_projection"
+    assert _MATRIX["opening_fallback_owner_bucket"].field_owner_group == "owner_bucket_read_views"
+    assert _MATRIX["selected_speaker_id"].field_owner_group == "replay_speaker_projection"
+    assert _MATRIX["trace.canonical_entry.target_actor_id"].field_owner_group == "replay_trace_projection"
+    assert _MATRIX["response_type_required"].field_owner_group == "response_type_metadata"
+    assert _MATRIX["upstream_prepared_emission_source"].field_owner_group == "upstream_prepared_emission_metadata"
 
 
 @pytest.mark.parametrize("path", protected_observation_flat_field_paths())

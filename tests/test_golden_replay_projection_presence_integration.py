@@ -5,6 +5,10 @@ import pytest
 
 from tests.helpers.golden_replay_fixtures import fem_payload, minimal_gm_output_payload, minimal_turn_payload, project_synthetic_turn
 from tests.helpers.golden_replay_projection import project_turn_observation
+from tests.helpers.golden_replay_projection_presence import (
+    _missing_source_by_field_from_presence,
+    protected_path_covered_by_unavailable,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -103,3 +107,42 @@ def test_bl3_trace_fixture_presence_pipeline_locked():
     assert "trace.canonical_entry" not in observed["unavailable"]
     assert "trace.social_contract_trace" not in observed["unavailable"]
     assert observed["missing_source_by_field"]["trace.canonical_entry"] == "projection_missing_raw_present"
+
+
+@pytest.mark.parametrize(
+    "raw_signal,normalized_signal,field,expected",
+    [
+        (
+            {"final_emitted_source": False},
+            {},
+            "final_emitted_source",
+            "runtime_missing_raw_absent",
+        ),
+        (
+            {"final_emitted_source": True},
+            {"final_emitted_source": True},
+            "final_emitted_source",
+            "projection_missing_raw_present",
+        ),
+        (
+            {"final_emitted_source": True},
+            {"final_emitted_source": False},
+            "final_emitted_source",
+            "normalized_view_missing_raw_present",
+        ),
+    ],
+)
+def test_cl2_presence_missing_source_labels_locked(
+    raw_signal: dict[str, bool],
+    normalized_signal: dict[str, bool],
+    field: str,
+    expected: str,
+) -> None:
+    result = _missing_source_by_field_from_presence(raw_signal, normalized_signal)
+    assert result[field] == expected
+
+
+def test_cl2_parent_trace_container_unavailable_covers_dotted_paths() -> None:
+    unavailable = frozenset({"trace.canonical_entry"})
+    assert protected_path_covered_by_unavailable("trace.canonical_entry.reason", unavailable) is True
+    assert protected_path_covered_by_unavailable("trace.social_contract_trace.route_selected", unavailable) is False

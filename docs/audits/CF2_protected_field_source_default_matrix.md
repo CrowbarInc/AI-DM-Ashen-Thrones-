@@ -4,6 +4,10 @@
 
 Every protected replay observation field (41 paths) now has an explicit **source/default/unavailable routing row** derived from the canonical extraction registry (`_PROTECTED_EXTRACTION_SPECS`) and schema defaults (`protected_observation_default_row`). A read-side contract builder (`tests/helpers/protected_field_routing_contract.py`) generates one row per field; **49 new unit tests** in `tests/test_cf2_protected_field_routing.py` lock defaults, unavailable routing, missing-source distinction, and synthetic-row risk.
 
+**CL1 update (2026-06-26):** the routing rows now also expose machine-readable `field_name`, `source_family`, `field_owner_group`, `default_behavior`, `unavailable_behavior`, `unavailable_key`, `raw_presence_expectation`, `raw_presence_key`, `normalized_presence_expectation`, and `normalized_presence_key`. CF2 tests now fail locally if any protected field lacks this ownership/source/default/unavailable metadata.
+
+**CL3 update (2026-06-26):** diagnostic ownership labels now distinguish the extractor spec owner (`tests.helpers.golden_replay_projection_extractors._PROTECTED_EXTRACTION_SPECS`) from the presence policy owner (`tests.helpers.golden_replay_projection_presence._build_projection_status`), unavailable policy owner (`tests.helpers.golden_replay_projection_presence._unavailable_paths_for_projection`), and protected-path representation owner (`tests.helpers.golden_replay_projection_presence.protected_path_is_represented_in_observed_turn`). Extractor compatibility wrappers remain, but conceptual ownership for presence/unavailable policy lives in the presence helper.
+
 **Protected Field Routing Clarity (primary metric):** Before CF2, routing policy was embedded in the 978-line extractor module and partially locked by three BL3 integration tests. After CF2, each field declares source path, normalized source (when tracked), default, unavailable rule, missing-source rule, drift bucket, classification, and first-line test owner in one contract matrix. Failures in defaults or unavailable routing now localize to `test_cf2_protected_field_routing.py` instead of broad golden replay suites.
 
 **Runtime behavior unchanged.** No projection, default, or unavailable logic was modified.
@@ -17,6 +21,7 @@ Legend:
 - **Unavailable rule:** when the field path appears in `observed["unavailable"]`
 - **Missing-source rule:** values in `observed["missing_source_by_field"]` (only fields with `raw_presence` tracking)
 - **Default:** flat-path schema default from `protected_observation_default_row()`; dotted trace paths have no flat default
+- **Owner labels:** extraction specs remain owned by `_PROTECTED_EXTRACTION_SPECS`; raw/normalized presence, missing-source labels, unavailable routing, and protected-path representation coverage are owned by `golden_replay_projection_presence.py`
 
 | Field | Source Path | Normalized Source | Default | Unavailable Rule | Missing-Source Rule | Drift Bucket | Owner Test |
 |-------|-------------|-------------------|---------|------------------|---------------------|--------------|------------|
@@ -135,7 +140,7 @@ Synthetic/default-only usage applies to **`observed_projection_schema_defaults()
 | Supporting delta keys | FEM key presence | normalized FEM key presence | Non-protected; classifier routing | — |
 | Fields without `raw_presence` | not in map | not in map | No missing-source entry | Cannot distinguish raw absence via missing_source for sanitizer-only fields |
 
-**Failure locality:** A failure in `missing_source_by_field` now localizes to `_missing_source_by_field_from_presence` (CF2 matrix test) or `_build_projection_status` (BL3 integration). Normalization gaps localize to `normalize_fem_for_replay_acceptance` / `test_final_emission_meta.py`.
+**Failure locality:** A failure in `missing_source_by_field` now localizes to `tests.helpers.golden_replay_projection_presence._missing_source_by_field_from_presence` (CF2 matrix test) or `tests.helpers.golden_replay_projection_presence._build_projection_status` (BL3 integration). Unavailable-list and parent-prefix representation failures localize to `tests.helpers.golden_replay_projection_presence._unavailable_paths_for_projection` / `protected_path_is_represented_in_observed_turn`. Normalization gaps localize to `normalize_fem_for_replay_acceptance` / `test_final_emission_meta.py`.
 
 ---
 
@@ -164,7 +169,7 @@ Existing tests retained as integration owners: `test_ak5_*`, `test_bl2_*`, `test
 
 3. **`normalized_view_missing_raw_present` under-exercised in integration** — Routing is locked at unit level; end-to-end normalization stripping scenarios remain thin.
 
-4. **Contract helper vs extraction registry drift** — If `_PROTECTED_EXTRACTION_SPECS` changes without updating `_SOURCE_PATH_BY_EXTRACTION_SOURCE` in the contract helper, documentation strings may lag (registry parity tests catch path count; source descriptions are manual).
+4. **Contract helper vs extraction registry drift** — CL1 reduced this by deriving source family, owner group, presence expectations, default behavior, and unavailable behavior from the extraction specs and schema defaults. CL3 makes the ownership split explicit: extraction-spec metadata comes from the extractor registry, while presence/unavailable/representation policy belongs to the presence helper. Human-readable `source_path` text can still lag if a new extraction source is added without a descriptive mapping.
 
 5. **Dotted trace paths have no flat defaults** — `observed_projection_schema_defaults()` supplies empty trace containers; leaves are absent until projection or overlay.
 
@@ -175,7 +180,7 @@ Existing tests retained as integration owners: `test_ak5_*`, `test_bl2_*`, `test
 **Proceed with CF3 unchanged** (raw/normalized FEM field-family matrix per CF discovery), with these priorities:
 
 1. Add one integration case that produces `normalized_view_missing_raw_present` through live FEM normalization if a realistic scenario exists in `normalize_final_emission_meta_for_observability`.
-2. Extend the contract helper with `raw_presence` / `unavailable_key` / `normalized_presence` booleans exported from extraction specs (machine-readable) to eliminate manual doc duplication.
+2. Continue reducing manual doc duplication by rendering future audit tables directly from `build_protected_field_routing_matrix()`.
 3. Do **not** collapse `None`-represented fields into unavailable without an explicit schema promotion — that would change drift semantics.
 
 CF2 acceptance criteria met:

@@ -11,7 +11,7 @@ from typing import Literal
 from game.final_emission_replay_projection import normalize_fem_for_replay_acceptance
 from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
 
-from tests.helpers.golden_replay_projection_extractors import _PROTECTED_EXTRACTION_SPECS
+from tests.helpers.golden_replay_projection_registry import _PROTECTED_EXTRACTION_SPECS
 
 FEMBackedClassification = Literal[
     "raw_projected",
@@ -21,8 +21,8 @@ FEMBackedClassification = Literal[
 
 _NORMALIZATION_OWNER = "game.final_emission_meta.normalize_final_emission_meta_for_observability"
 _REPLAY_NORMALIZATION_ADAPTER = "game.final_emission_replay_projection.normalize_fem_for_replay_acceptance"
-_PROJECTION_OWNER = "tests.helpers.golden_replay_projection_extractors._extract_fem_flat_observed_fields"
-_PRESENCE_OWNER = "tests.helpers.golden_replay_projection_extractors._build_projection_status"
+_PROJECTION_OWNER = "tests.helpers.golden_replay_projection_engine._extract_fem_flat_observed_fields"
+_PRESENCE_OWNER = "tests.helpers.golden_replay_projection_presence._build_projection_status"
 
 
 @dataclass(frozen=True)
