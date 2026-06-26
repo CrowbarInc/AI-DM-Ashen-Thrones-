@@ -32,6 +32,8 @@ _BV2C_META_WRITE_OWNER_GAME_MODULES: Final[frozenset[str]] = frozenset(
         "game.final_emission_narration_constraint_debug",
         "game.final_emission_narrative_mode_output",
         "game.final_emission_opening_fallback",
+        "game.final_emission_passive_scene_pressure",
+        "game.final_emission_referential_clarity",
         "game.final_emission_repairs",
         "game.final_emission_response_type",
         "game.final_emission_sealed_fallback",
@@ -50,6 +52,7 @@ _BV2C_META_DIRECT_IMPORT_TEST_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/ownership_closeout_delegate_locks.py": (
         "BJ delegate closeout lock helpers extracted from governance owner (CH11/CH13 KEEP)"
     ),
+    "tests/test_cf3_raw_normalized_fem_field_matrix.py": "CF3 raw/normalized FEM field matrix owner (CF3 KEEP)",
 }
 _BV2C_META_READ_FACADE: Final[str] = "game.final_emission_meta_read"
 _BV2C_OWNER_BUCKET_VIEWS_FACADE: Final[str] = "game.final_emission_owner_bucket_views"
@@ -402,6 +405,7 @@ _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] =
     "tests/test_social_exchange_emission.py": "BD-2 strict-social emission legality owner",
     "tests/test_social_speaker_grounding.py": "composition regression consumer",
     "tests/test_social_target_authority_regressions.py": "composition regression consumer",
+    "tests/ownership_closeout_delegate_locks.py": "BJ-115/116 delegate introspection for composition authority seams (CH11 KEEP)",
 }
 _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
     {
@@ -410,13 +414,13 @@ _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozens
         "tests/test_bv14a_social_exchange_emission_facade_delegates.py",
         "tests/test_narration_transcript_regressions.py",
         "tests/test_output_sanitizer.py",
-        "tests/test_ownership_registry.py",
         "tests/test_realization_provenance.py",
         "tests/test_social_answer_candidate.py",
         "tests/test_social_emission_quality.py",
         "tests/test_social_exchange_emission.py",
         "tests/test_social_speaker_grounding.py",
         "tests/test_social_target_authority_regressions.py",
+        "tests/ownership_closeout_delegate_locks.py",
     }
 )
 _BV14C_SOCIAL_EXCHANGE_COMPAT_FI_CAP: Final[int] = 12

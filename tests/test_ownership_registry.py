@@ -52,7 +52,10 @@ Design notes (read before extending):
   ``replay_smoke_assertions`` or ``gate_integration_smoke`` directly; route through
   ``replay_fem_read_smoke``, ``gate_orchestration_smoke``, or ``fallback_bridge_smoke``.
   Compat barrel FI capped at 2 each (delegate verification residual only). Enforced by
-  ``test_bv12c_compat_barrel_*``.
+  ``test_bv12c_compat_barrel_*``. Intentional domain hubs:
+  ``tests.helpers.replay_fem_read_smoke`` (FEM read + debug notes),
+  ``tests.helpers.gate_orchestration_smoke`` (gate consumer + HTTP stub),
+  ``tests.helpers.fallback_bridge_smoke`` (dual-bridge fallback suites).
 - **BV13A final-emission text extraction** (Cycle BV13A): formatting primitives live in
   ``final_emission_text_formatting``; validator policy vocabulary in ``final_emission_text_policy``;
   legacy semantic repair in ``final_emission_text_legacy_semantic_repair``. Compatibility barrel
@@ -65,7 +68,10 @@ Design notes (read before extending):
   ``game.final_emission_text`` for formatting or policy symbols; route through
   ``final_emission_text_formatting`` or ``final_emission_text_policy``. Compat barrel FI capped at
   8 (fallback wrapper + delegate verification residual only). Enforced by
-  ``test_bv13c_text_compat_*``.
+  ``test_bv13c_text_compat_*``. Intentional text domain hubs:
+  ``game.final_emission_text_formatting`` (text normalization/sanitization primitives),
+  ``game.final_emission_text_policy`` (validator policy vocabulary tuples),
+  ``game.final_emission_text_legacy_semantic_repair`` (test-only legacy semantic repair).
 - **BV14A social-exchange emission extraction** (Cycle BV14A): fallback catalog, policy, validation,
   and projection live in ``social_exchange_fallback_catalog``, ``social_exchange_policy``,
   ``social_exchange_validation``, and ``social_exchange_projection``. Compatibility barrel
@@ -80,7 +86,11 @@ Design notes (read before extending):
   symbols; route through ``social_exchange_fallback_catalog``, ``social_exchange_policy``,
   ``social_exchange_validation``, or ``social_exchange_projection``. Compat barrel FI capped at 12
   (composition authority + BD-2 legality + delegate verification residual only). Enforced by
-  ``test_bv14c_social_exchange_compat_*``.
+  ``test_bv14c_social_exchange_compat_*``. Intentional social-exchange domain hubs:
+  ``game.social_exchange_fallback_catalog`` (strict-social fallback phrase catalog),
+  ``game.social_exchange_policy`` (strict-social routing/policy predicates),
+  ``game.social_exchange_validation`` (route legality + interruption shape validators),
+  ``game.social_exchange_projection`` (final-emission logging/trace projection).
 - **BV2C meta import lockdown** (Cycle BV2C): non-owner ``game/`` and ``tests/`` modules must not
   import ``game.final_emission_meta`` directly except production write owners and the FEM owner /
   governance suites. Read traffic routes through ``final_emission_meta_read``,
@@ -163,6 +173,7 @@ import ast
 import importlib.util
 import json
 import types
+from dataclasses import replace
 from pathlib import Path
 from typing import AbstractSet, Final, Mapping, Tuple
 

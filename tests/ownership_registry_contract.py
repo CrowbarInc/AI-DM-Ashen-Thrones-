@@ -278,6 +278,10 @@ _CROSS_FILE_DUPLICATE_ALLOWLIST: Final[Mapping[str, str]] = {
     "test_report_generation": (
         "Parallel report-writer contract smoke across CA corrective and fallback portfolio audit modules."
     ),
+    "test_compatibility_wrappers_reference_same_functions": (
+        "Parallel failure-dashboard suite compatibility-wrapper delegate checks after CE dashboard module split; "
+        "distinct drift/orchestration/recurrence/stability owner files."
+    ),
 }
 
 

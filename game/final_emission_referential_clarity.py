@@ -976,6 +976,7 @@ def apply_observe_referential_clarity_upstream_repair(
         PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION,
         ensure_final_emission_meta_dict,
         stamp_producer_repair_kind,
+        stamp_visibility_fallback_owner_bucket_from_fields,
     )
 
     meta = ensure_final_emission_meta_dict(out)
@@ -1037,6 +1038,7 @@ def apply_observe_referential_clarity_upstream_repair(
     meta["referential_clarity_unrepaired_violation_count"] = 0
     meta["referential_clarity_checked_entities"] = validation.get("checked_entities") or []
     stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
+    stamp_visibility_fallback_owner_bucket_from_fields(meta)
     return out
 
 

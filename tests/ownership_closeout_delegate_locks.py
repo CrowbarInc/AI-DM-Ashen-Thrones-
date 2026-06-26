@@ -113,6 +113,7 @@ BJ127_GLOBAL_SCAN_EXCLUDE: Final[frozenset[str]] = frozenset(
     {
         "tests/test_ownership_registry.py",
         "tests/test_final_emission_gate.py",
+        "tests/test_final_emission_gate_delegator_regression.py",
         "tests/test_architecture_audit_tool.py",
         "tests/ownership_closeout_delegate_locks.py",
     }

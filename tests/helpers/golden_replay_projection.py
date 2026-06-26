@@ -53,10 +53,29 @@ from __future__ import annotations
 from typing import Any, Mapping
 
 from game.final_emission_replay_projection import (
+    FIRST_MENTION_HARD_REPLACEMENT,
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    SEALED_REPLACEMENT_SUBKINDS,
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+    SEALED_REPLACEMENT_SUBKIND_OPENING,
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    VISIBILITY_HARD_REPLACEMENT,
+    build_fem_runtime_lineage_events,
+    is_sealed_replacement_lineage_kind,
     normalize_fem_for_replay_acceptance,
+    project_mutation_classification_from_fallback_kind,
+    project_sealed_replacement_subkind_from_fem,
+    project_source_family_from_fallback_kind,
     read_emission_debug_lane_for_replay,
     read_fem_from_turn_for_replay,
+    read_opening_fallback_owner_bucket_for_replay,
 )
+
+build_runtime_lineage_events_from_fem = build_fem_runtime_lineage_events
 
 from tests.helpers.transcript_runner import compact_snapshot_summary
 

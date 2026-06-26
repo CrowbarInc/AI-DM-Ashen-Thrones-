@@ -11,6 +11,9 @@ Practical direct-owner coverage now lives in:
 Run the focused files above (or the combined gate suite) instead of this stub.
 """
 
+# Registry direct-owner redirect stub retains gate inventory layer signal (BM decomposition).
+_GATE_ORCHESTRATION_REGISTRY_OWNER = "game.final_emission_gate"
+
 
 def test_final_emission_gate_decomposed_redirect_stub():
     import tests.test_final_emission_gate as stub

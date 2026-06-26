@@ -131,15 +131,15 @@
     ],
     "total_touches": 4
   },
-  "ck_ledger_snippet_md": "<!-- CK ledger snippet \u2014 append Measurement Log row; on first measurement replace baseline placeholders -->\n\n### Measurement Log row\n\n| Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |\n|---|---|---|---:|---:|---|---:|---|\n| CJ3 operational verification | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 operational verification` |\n\n### Baseline section (first measurement only)\n\n| Baseline field | Value |\n|---|---|\n| Top 10 most-touched files | tests/helpers/ck_hotspot_compression_report.py (2 touches, 50.0%); tests/test_ck_hotspot_compression_report.py (2 touches, 50.0%) |\n| Top 5 touch share (% of repository touches) | 100.0 |\n| Top 10 touch share (% of repository touches) | 100.0 |\n| Largest single hotspot (file + touch share) | tests/helpers/ck_hotspot_compression_report.py (50.0%) |\n| Files above hotspot threshold | 0 |\n| Hotspot threshold (touch count) | T_touch=3 |\n\n**HCI headline:** 100.0\n",
+  "ck_ledger_snippet_md": "<!-- CK ledger snippet \u2014 append Measurement Log row; on first measurement replace baseline placeholders -->\n\n### Measurement Log row\n\n| Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |\n|---|---|---|---:|---:|---|---:|---|\n| CJ3 repeat B | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 repeat B` |\n\n### Baseline section (first measurement only)\n\n| Baseline field | Value |\n|---|---|\n| Top 10 most-touched files | tests/helpers/ck_hotspot_compression_report.py (2 touches, 50.0%); tests/test_ck_hotspot_compression_report.py (2 touches, 50.0%) |\n| Top 5 touch share (% of repository touches) | 100.0 |\n| Top 10 touch share (% of repository touches) | 100.0 |\n| Largest single hotspot (file + touch share) | tests/helpers/ck_hotspot_compression_report.py (50.0%) |\n| Files above hotspot threshold | 0 |\n| Hotspot threshold (touch count) | T_touch=3 |\n\n**HCI headline:** 100.0\n",
   "ck_log_draft": {
     "commit": "1f3899b",
     "date": "2026-06-26",
     "files_above_threshold": 0,
     "hci": 100.0,
     "largest_hotspot": "tests/helpers/ck_hotspot_compression_report.py (50.0%)",
-    "measurement": "CJ3 operational verification",
-    "notes": "std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 operational verification",
+    "measurement": "CJ3 repeat B",
+    "notes": "std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 repeat B",
     "top_10_pct": 100.0,
     "top_5_pct": 100.0
   },
@@ -158,14 +158,14 @@
   "primary_metric": "hotspot_concentration_index",
   "report_provenance": {
     "bu_csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
-    "command": "python tools/ck_hotspot_compression_report.py --measurement-commit 1f3899b --cycle-label 'CJ3 operational verification'",
-    "generated_at": "2026-06-26T19:52:56Z",
+    "command": "python tools/ck_hotspot_compression_report.py --measurement-commit 1f3899b --cycle-label 'CJ3 repeat B' --output-md 'artifacts\\ck1_repeat_b.md' --output-json 'artifacts\\ck1_repeat_b.json'",
+    "generated_at": "2026-06-26T19:52:30Z",
     "generator": "tools/ck_hotspot_compression_report.py",
     "helper": "tests/helpers/ck_hotspot_compression_report.py",
     "lane_primary": "CK-GIT",
     "lane_supplementary": "CK-FI",
-    "output_json": "artifacts/ck1_hotspot_compression_report.json",
-    "output_md": "artifacts/ck1_hotspot_compression_report.md"
+    "output_json": "artifacts/ck1_repeat_b.json",
+    "output_md": "artifacts/ck1_repeat_b.md"
   },
   "schema_version": 2,
   "standard_version": 1

@@ -13,8 +13,8 @@ _Primary metric: **hotspot_concentration_index** (HCI = Top 5 Share %)._
 
 ## Provenance
 
-- **Command:** `python tools/ck_hotspot_compression_report.py --measurement-commit 1f3899b --cycle-label 'CJ3 operational verification'`
-- **Generated at:** 2026-06-26T19:52:56Z _(stability-exempt)_
+- **Command:** `python tools/ck_hotspot_compression_report.py --measurement-commit 1f3899b --cycle-label 'CJ3 repeat A' --output-md 'artifacts\ck1_repeat_a.md' --output-json 'artifacts\ck1_repeat_a.json'`
+- **Generated at:** 2026-06-26T19:52:30Z _(stability-exempt)_
 
 ## Measurement Window
 
@@ -53,7 +53,7 @@ _Primary metric: **hotspot_concentration_index** (HCI = Top 5 Share %)._
 
 | Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |
 |---|---|---|---:|---:|---|---:|---|
-| CJ3 operational verification | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 operational verification` |
+| CJ3 repeat A | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 repeat A` |
 
 ## CK Ledger Snippet
 
@@ -66,7 +66,7 @@ _Copy-paste into `docs/audits/CK_hotspot_compression_watch.md` (Measurement Log 
 
 | Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |
 |---|---|---|---:|---:|---|---:|---|
-| CJ3 operational verification | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 operational verification` |
+| CJ3 repeat A | `1f3899b` | 2026-06-26 | 100.0 | 100.0 | tests/helpers/ck_hotspot_compression_report.py (50.0%) | 0 | `std=v1; REV_RANGE=85855df..1f3899b; total_touches=4; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 repeat A` |
 
 ### Baseline section (first measurement only)
 
