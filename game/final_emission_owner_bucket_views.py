@@ -100,9 +100,12 @@ def opening_fallback_owner_bucket_from_fields(
     """Map existing opening fallback telemetry to one conservative owner bucket.
 
     Read-side only: this does not select, repair, or authorize fallback text.
-    Legacy compatibility-local authorship tokens (see
-    ``OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES``) are never
-    emitted by production; when present in evidence they map to unknown-ambiguous.
+
+    Retired compatibility-local authorship (``OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES``):
+    production must not emit it; read-side handling exists only for legacy/test/replay evidence
+    via the canonical token ``compatibility_local_opening_deterministic``; any injected legacy
+    token maps to ``unknown-ambiguous`` by design. The shorter ``compatibility_local`` token was
+    retired from this registry (CK Block 5) because it overlaps non-opening bucket vocabulary.
     """
     del fallback_temporal_frame  # Family/timeframe are insufficient ownership signals by themselves.
 

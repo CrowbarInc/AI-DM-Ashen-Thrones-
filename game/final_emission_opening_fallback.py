@@ -8,6 +8,14 @@ Success-path ``opening_fallback_authorship_source`` is written once upstream by
 :func:`game.upstream_response_repairs.build_upstream_prepared_opening_fallback_payload`
 and mirrored here from ``opening_fallback_composition_meta`` when a prepared
 payload is selected. Fail-closed paths leave authorship absent or ``None``.
+
+Telemetry-only keys (CK Block 6/9): ``opening_fallback_compatibility_local_disabled`` and the
+additive alias ``opening_fallback_local_composition_disabled`` record that retired gate-local
+opening composition did not run. Both are stamped together on ``composition_meta``; only
+``opening_fallback_compatibility_local_disabled`` is RTD-merged into FEM (see
+``OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS``). The alias is composition-meta /
+RTD-debug only. They are **not** authorship sources and must never be confused with
+``opening_fallback_authorship_source``.
 """
 from __future__ import annotations
 
@@ -41,6 +49,25 @@ _OPENING_SCENE_SAFE_FALLBACK_KIND = "opening_deterministic_fallback"
 _OPENING_SCENE_SAFE_FALLBACK_SOURCE = "opening_deterministic_fallback"
 _OPENING_SCENE_SAFE_FALLBACK_STRATEGY = "opening_scene_safe_fallback"
 _OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE = "opening_deterministic_fallback"
+
+# CK Block 7/9: out-of-band telemetry keys are stamped alongside composition_meta but are not part
+# of the canonical ``OPENING_FALLBACK_PROJECTION_FIELDS`` contract (see final_emission_meta).
+# Only ``OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY`` is RTD-merged into FEM.
+OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY = "opening_fallback_compatibility_local_disabled"
+OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY = "opening_fallback_local_composition_disabled"
+
+# CK Block 8: fail-closed diagnostic keys reach FEM via response-type debug merge but are outside
+# ``OPENING_FALLBACK_PROJECTION_FIELDS`` (see ``OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS``).
+OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY = "opening_fallback_missing_upstream_prepared_payload"
+OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY = "opening_fallback_missing_curated_facts"
+OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY = "opening_fallback_upstream_payload_unusable"
+OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY = "opening_fallback_upstream_payload_recovered"
+
+
+def _stamp_gate_local_composition_disabled_telemetry(target: Dict[str, Any]) -> None:
+    """Stamp telemetry proving retired gate-local opening composition did not run."""
+    target[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] = True
+    target[OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY] = True
 
 
 def build_opening_fallback_result_meta(
@@ -172,10 +199,12 @@ def _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
     gm_output: Mapping[str, Any] | None,
 ) -> Dict[str, Any]:
     """Meta for the sealed opening marker when an upstream payload cannot be selected."""
-    block_h = {
-        "opening_fallback_compatibility_local_disabled": True,
-        "opening_fallback_missing_upstream_prepared_payload": True,
+    # Negative invariant: gate-local opening composition is retired; fail-closed paths stamp
+    # telemetry-only disabled flags and leave authorship absent (never legacy compat-local tokens).
+    block_h: Dict[str, Any] = {
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: True,
     }
+    _stamp_gate_local_composition_disabled_telemetry(block_h)
     if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
@@ -185,11 +214,11 @@ def _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
             opening_fallback_failed_closed=True,
             force_fail_closed_context_source=True,
         )
-        meta["opening_fallback_missing_curated_facts"] = False
+        meta[OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY] = False
         meta.update(block_h)
         return meta
     meta = build_opening_fallback_result_meta(context=None)
-    meta["opening_fallback_missing_curated_facts"] = True
+    meta[OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY] = True
     meta.update(block_h)
     return meta
 
@@ -216,9 +245,9 @@ def _recover_upstream_opening_fallback_stub_payload(
         return usable, patch
     if UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output:
         return None, patch
-    patch["opening_fallback_upstream_payload_unusable"] = True
-    patch["opening_fallback_upstream_payload_recovered"] = False
-    patch["opening_fallback_compatibility_local_disabled"] = True
+    patch[OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY] = True
+    patch[OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY] = False
+    _stamp_gate_local_composition_disabled_telemetry(patch)
     return None, patch
 
 
@@ -241,10 +270,10 @@ def _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(
     """Sealed marker meta when upstream attach was attempted but failed."""
     out: Dict[str, Any] = {
         "opening_fallback_failed_closed": True,
-        "opening_fallback_compatibility_local_disabled": True,
-        "opening_fallback_missing_upstream_prepared_payload": True,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: True,
         "blocked_repair_kind": "opening_upstream_prepare_attach_failed",
     }
+    _stamp_gate_local_composition_disabled_telemetry(out)
     if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
@@ -265,11 +294,11 @@ def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
     """Sealed marker meta when an unusable upstream stub reaches the gate."""
     out: Dict[str, Any] = {
         "opening_fallback_failed_closed": True,
-        "opening_fallback_compatibility_local_disabled": True,
-        "opening_fallback_upstream_payload_unusable": True,
-        "opening_fallback_upstream_payload_recovered": False,
-        "opening_fallback_missing_upstream_prepared_payload": False,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY: True,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY: False,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: False,
     }
+    _stamp_gate_local_composition_disabled_telemetry(out)
     if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
         ctx = _opening_context_from_gm_output(gm_output)
         facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
@@ -378,8 +407,8 @@ def select_opening_fallback_for_response_type_contract(
             True,
             upstream,
         )
-    if stub_patch.get("opening_fallback_upstream_payload_unusable") and stub_patch.get(
-        "opening_fallback_upstream_payload_recovered"
+    if stub_patch.get(OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY) and stub_patch.get(
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY
     ) is False:
         return (
             OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,

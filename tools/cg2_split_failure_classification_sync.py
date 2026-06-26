@@ -1,4 +1,8 @@
-"""One-shot CG-2 extraction: split failure_classification_sync into focused modules."""
+"""One-shot CG-2 extraction: split failure_classification_sync into focused modules.
+
+Historical / non-runtime: retained for audit archaeology only; do not run against current helpers.
+References removed CK Block 3–5 alias and compat-local token paths.
+"""
 from __future__ import annotations
 
 from pathlib import Path

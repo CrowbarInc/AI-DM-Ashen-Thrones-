@@ -53,7 +53,7 @@ from tests.helpers.failure_classification_sync import (
     observed_fail_closed_opening_fallback_row,
     observed_failure_row as _observed,
     observed_global_replacement_row,
-    observed_legacy_opening_fallback_row,
+    legacy_compatibility_local_opening_classifier_row,
     observed_opening_fallback_row,
     observed_opening_family_split_owner_row,
     observed_opening_projection_missing_row,
@@ -400,7 +400,7 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
         ),
         (
             "legacy_compatibility_local_unknown_ambiguous",
-            observed_legacy_opening_fallback_row(),
+            legacy_compatibility_local_opening_classifier_row(),
             OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
         ),
     ],
@@ -441,17 +441,115 @@ def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstrea
     row = classify_replay_probe_row(
         scenario_id="opening_authorship_payload",
         turn_index=0,
-        observed_turn=observed_legacy_opening_fallback_row(),
+        observed_turn=legacy_compatibility_local_opening_classifier_row(),
         drift_row=exact_value_drift_row(
             "opening_fallback_authorship_source",
             expected="upstream_prepared_opening_fallback",
-            actual="compatibility_local_opening_deterministic",
+            actual=legacy_compatibility_local_opening_classifier_row()[
+                "opening_fallback_authorship_source"
+            ],
         ),
     )
 
     assert row["category"] == "fallback"
     assert row["source_family"] == "opening_fallback"
     assert row["investigate_first"] == "game/upstream_response_repairs.py"
+
+
+def test_ordinary_classifier_opening_builders_never_emit_compat_local_authorship() -> None:
+    """Current-path opening classifier rows must use upstream-prepared authorship or omit authorship."""
+    from game.attribution_read_views import OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+
+    ordinary_builders = (
+        observed_opening_fallback_row,
+        observed_fail_closed_opening_fallback_row,
+        observed_opening_family_split_owner_row,
+    )
+    for builder in ordinary_builders:
+        if builder is observed_opening_family_split_owner_row:
+            row = builder(
+                fallback_kind="scene_opening",
+                fallback_content_owner=OPENING_FALLBACK_CONTENT_OWNER,
+                opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+            )
+        else:
+            row = builder()
+        authorship = row.get("opening_fallback_authorship_source")
+        if authorship is not None:
+            assert authorship not in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+
+
+def test_only_legacy_named_helpers_emit_compat_local_opening_authorship() -> None:
+    """Retired authorship must be reachable only through explicit legacy-evidence helpers."""
+    import importlib
+
+    from tests.helpers.opening_fallback_evidence import (
+        build_legacy_compatibility_local_opening_fallback_evidence,
+        legacy_compatibility_local_opening_authorship_meta,
+        legacy_compatibility_local_opening_authorship_source,
+    )
+    from tests.helpers.failure_classification_builders import (
+        legacy_compatibility_local_opening_authorship_classifier_row,
+    )
+
+    for deprecated in (
+        "observed_legacy_opening_fallback_row",
+        "observed_opening_authorship_compat_row",
+    ):
+        assert not hasattr(importlib.import_module("tests.helpers.failure_classification_builders"), deprecated)
+
+    legacy_token = legacy_compatibility_local_opening_authorship_source()
+    legacy_row = legacy_compatibility_local_opening_classifier_row()
+    assert legacy_row["opening_fallback_authorship_source"] == legacy_token
+    authorship_row = legacy_compatibility_local_opening_authorship_classifier_row()
+    assert authorship_row["opening_fallback_authorship_source"] == legacy_token
+    assert (
+        build_legacy_compatibility_local_opening_fallback_evidence()["opening_fallback_authorship_source"]
+        == legacy_token
+    )
+    assert (
+        legacy_compatibility_local_opening_authorship_meta()["opening_fallback_authorship_source"]
+        == legacy_token
+    )
+
+
+def test_failure_classification_builders_compat_local_literals_only_in_legacy_helpers() -> None:
+    """Static lock: compat-local authorship literals only in legacy_compatibility_local_* builders."""
+    import ast
+    from pathlib import Path
+
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    )
+
+    path = Path(__file__).resolve().parent / "helpers" / "failure_classification_builders.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    legacy_tokens = frozenset(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    deprecated_aliases = frozenset(
+        {
+            "observed_legacy_opening_fallback_row",
+            "observed_opening_authorship_compat_row",
+        }
+    )
+
+    defined_names = {node.name for node in tree.body if isinstance(node, ast.FunctionDef)}
+    assert deprecated_aliases.isdisjoint(defined_names), (
+        f"deprecated aliases remain: {sorted(deprecated_aliases & defined_names)}"
+    )
+
+    offenders: list[str] = []
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            if node.name.startswith("legacy_compatibility_local_"):
+                continue
+            scope = node.name
+        else:
+            scope = "module"
+        for child in ast.walk(node):
+            if isinstance(child, ast.Constant) and isinstance(child.value, str):
+                if child.value in legacy_tokens:
+                    offenders.append(f"{scope}:{child.lineno}:{child.value!r}")
+    assert offenders == []
 
 
 def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_composer():

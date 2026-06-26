@@ -20,7 +20,10 @@ import pytest
 from game.final_emission_meta_read import (
     final_emission_meta_read_side_surface,
 )
+from game.final_emission_meta import OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS
 from game.final_emission_owner_bucket_views import (
+    OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES,
+    OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
     OPENING_FALLBACK_OWNER_BUCKETS,
     OPENING_FALLBACK_OWNER_RETRY,
     OPENING_FALLBACK_OWNER_SEALED_GATE,
@@ -35,9 +38,10 @@ from game.final_emission_owner_bucket_views import (
 )
 from tests.helpers.opening_fallback_evidence import (
     OPENING_FAILED_CLOSED_REPAIR_KIND,
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     assert_fallback_owner_bucket,
+    build_legacy_compatibility_local_opening_fallback_evidence,
     fail_closed_opening_observed_fields,
+    legacy_compatibility_local_opening_authorship_source,
     successful_opening_observed_fields,
 )
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
@@ -83,13 +87,90 @@ def test_fail_closed_repair_kind_maps_to_sealed_gate() -> None:
 
 def test_injected_legacy_compatibility_local_authorship_maps_to_unknown_ambiguous() -> None:
     """Injected legacy token maps to unknown-ambiguous; production never emits it."""
-    assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
+    legacy_meta = build_legacy_compatibility_local_opening_fallback_evidence()
+    assert legacy_meta["opening_fallback_authorship_source"] != OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
     assert_fallback_owner_bucket(
         OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
-        meta=successful_opening_observed_fields(
-            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-        ),
+        meta=legacy_meta,
     )
+
+
+@pytest.mark.parametrize(
+    "legacy_token",
+    sorted(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES),
+)
+def test_canonical_legacy_compat_local_authorship_token_maps_to_unknown_ambiguous(
+    legacy_token: str,
+) -> None:
+    """The canonical legacy inject/read token maps to unknown-ambiguous."""
+    assert legacy_token == legacy_compatibility_local_opening_authorship_source()
+    assert_fallback_owner_bucket(
+        OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        meta=successful_opening_observed_fields(opening_fallback_authorship_source=legacy_token),
+    )
+
+
+def test_retired_short_compat_local_authorship_not_in_legacy_registry() -> None:
+    """Short token was retired from active legacy opening-authorship read vocabulary (CK Block 5)."""
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+        OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
+    )
+
+    assert OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP == "compatibility_local"
+    assert OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP not in (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+    )
+    assert OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES == frozenset(
+        {legacy_compatibility_local_opening_authorship_source()}
+    )
+
+
+def test_upstream_prepared_authorship_sources_disjoint_from_legacy_compatibility_local() -> None:
+    assert OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES.isdisjoint(
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+    )
+    assert OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED in OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES
+    assert OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED not in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+
+
+def test_legacy_evidence_helper_maps_compat_local_authorship_to_unknown_ambiguous() -> None:
+    """Explicit legacy inject helper still maps to unknown-ambiguous via read-side mapper."""
+    assert_fallback_owner_bucket(
+        OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
+        meta=build_legacy_compatibility_local_opening_fallback_evidence(),
+    )
+
+
+def test_opening_fallback_owner_bucket_ignores_disabled_telemetry_fields() -> None:
+    """Out-of-band disabled telemetry must not influence owner-bucket read mapping."""
+    from game.final_emission_opening_fallback import (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+    )
+
+    legacy_meta = build_legacy_compatibility_local_opening_fallback_evidence()
+    legacy_meta[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] = True
+    legacy_meta[OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY] = True
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS, meta=legacy_meta)
+
+    upstream_meta = successful_opening_observed_fields()
+    upstream_meta[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] = True
+    upstream_meta[OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY] = True
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=upstream_meta)
+
+
+def test_opening_fallback_owner_bucket_ignores_fail_closed_diagnostic_fields() -> None:
+    """Fail-closed diagnostic telemetry must not influence owner-bucket read mapping."""
+    upstream_meta = successful_opening_observed_fields()
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        upstream_meta[key] = True
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, meta=upstream_meta)
+
+    fail_closed_meta = fail_closed_opening_observed_fields()
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        fail_closed_meta[key] = not fail_closed_meta.get(key, False)
+    assert_fallback_owner_bucket(OPENING_FALLBACK_OWNER_SEALED_GATE, meta=fail_closed_meta)
 
 
 def test_missing_metadata_maps_to_unknown_ambiguous() -> None:

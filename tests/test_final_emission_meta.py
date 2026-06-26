@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from game.final_emission_ownership_schema import (
     VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
     VISIBILITY_FALLBACK_SELECTION_OWNER,
@@ -65,7 +67,13 @@ from game.final_emission_meta import (
     OPENING_FALLBACK_OWNER_SEALED_GATE,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
     OPENING_FALLBACK_PROJECTION_FIELDS,
+    OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
+    OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS,
+    OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+    OPENING_FALLBACK_FAIL_CLOSED_RELATED_RESPONSE_TYPE_DEBUG_FIELDS,
+    OPENING_FALLBACK_EMITTED_METADATA_FIELDS,
     OPENING_FALLBACK_RESULT_META_FIELDS,
+    opening_fallback_metadata_classification_parity_errors,
     opening_fallback_metadata_field_registry_parity_errors,
     opening_fallback_metadata_field_registry_surface,
     UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
@@ -697,9 +705,142 @@ def test_opening_fallback_projection_field_helper_preserves_raw_and_fem_shapes()
 
 def test_opening_fallback_metadata_field_registry_surface_matches_canonical_constants() -> None:
     assert opening_fallback_metadata_field_registry_parity_errors() == []
+    assert opening_fallback_metadata_classification_parity_errors() == []
     surface = opening_fallback_metadata_field_registry_surface()
     assert tuple(surface["opening_fallback_projection_fields"]) == OPENING_FALLBACK_PROJECTION_FIELDS
     assert tuple(surface["opening_fallback_result_meta_fields"]) == OPENING_FALLBACK_RESULT_META_FIELDS
+    assert tuple(surface["opening_fallback_out_of_band_telemetry_fields"]) == (
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS
+    )
+    assert tuple(surface["opening_fallback_fail_closed_diagnostic_fields"]) == (
+        OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS
+    )
+    assert tuple(surface["opening_fallback_emitted_metadata_fields"]) == OPENING_FALLBACK_EMITTED_METADATA_FIELDS
+
+
+def test_opening_fallback_emitted_metadata_fields_partition_is_complete_and_disjoint() -> None:
+    """Every emitted opening_fallback_* key belongs to exactly one primary registry."""
+    projection = frozenset(OPENING_FALLBACK_PROJECTION_FIELDS)
+    telemetry = frozenset(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS)
+    diagnostics = frozenset(OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS)
+    assert projection.isdisjoint(telemetry)
+    assert projection.isdisjoint(diagnostics)
+    assert telemetry.isdisjoint(diagnostics)
+    assert projection | telemetry | diagnostics == frozenset(OPENING_FALLBACK_EMITTED_METADATA_FIELDS)
+    assert len(OPENING_FALLBACK_EMITTED_METADATA_FIELDS) == len(projection | telemetry | diagnostics)
+
+
+def test_opening_fallback_out_of_band_telemetry_excluded_from_projection_registry() -> None:
+    """Disabled telemetry fields are intentionally outside the canonical projection contract."""
+    from game.final_emission_opening_fallback import (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+    )
+
+    assert OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS == (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+    )
+    assert frozenset(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS).isdisjoint(
+        OPENING_FALLBACK_PROJECTION_FIELDS
+    )
+    assert frozenset(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS).isdisjoint(
+        OPENING_FALLBACK_RESULT_META_FIELDS
+    )
+
+
+def test_opening_fallback_local_composition_disabled_is_composition_meta_only_not_rtd_merged() -> None:
+    """CK Block 9: alias is out-of-band telemetry but intentionally absent from RTD→FEM merge."""
+    from game.final_emission_opening_fallback import (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+    )
+
+    assert OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS == (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+    )
+    assert OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS
+    assert OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY not in (
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS
+    )
+
+    dbg = default_response_type_debug({"required_response_type": "scene_opening"}, "resolution.metadata")
+    assert OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY in dbg
+    assert dbg[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] is False
+    assert OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY not in dbg
+
+    dbg[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] = True
+    dbg[OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY] = True
+    fem: dict = {}
+    merge_response_type_meta(fem, dbg)
+    assert fem[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] is True
+    assert OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY not in fem
+
+
+def test_opening_fallback_rtd_merge_quarantine_parity_errors_empty() -> None:
+    """Registry parity locks composition-meta-only alias outside RTD merge defaults."""
+    assert opening_fallback_metadata_classification_parity_errors() == []
+    surface = opening_fallback_metadata_field_registry_surface()
+    assert tuple(surface["opening_fallback_out_of_band_telemetry_rtd_merge_fields"]) == (
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS
+    )
+
+
+def test_apply_opening_fallback_projection_fields_omits_out_of_band_telemetry() -> None:
+    """Projection copy helpers must not absorb telemetry-only disabled flags."""
+    source = {
+        "opening_fallback_context_source": "opening_curated_facts",
+        "opening_fallback_basis_count": 1,
+        "opening_fallback_context_missing": False,
+        "opening_fallback_failed_closed": True,
+        "opening_curated_facts_present": True,
+        "opening_curated_facts_count": 1,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "selector",
+        "opening_selector_selected_facts": ["gate"],
+        "opening_curated_facts": ["gate"],
+        "opening_final_fallback_basis": ["gate"],
+        "opening_final_basis_matches_selector": True,
+        "opening_fallback_authorship_source": None,
+        "opening_fallback_compatibility_local_disabled": True,
+        "opening_fallback_local_composition_disabled": True,
+    }
+    projected = opening_fallback_projection_fields(source)
+    for key in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS:
+        assert key not in projected
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        assert key not in projected
+
+
+def test_apply_opening_fallback_projection_fields_omits_fail_closed_diagnostics() -> None:
+    """Projection helpers must not absorb fail-closed diagnostic-only fields."""
+    source = dict.fromkeys(OPENING_FALLBACK_EMITTED_METADATA_FIELDS, True)
+    projected = opening_fallback_projection_fields(source)
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        assert key not in projected
+    for key in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS:
+        assert key not in projected
+    assert set(projected.keys()) == set(OPENING_FALLBACK_PROJECTION_FIELDS)
+
+
+def test_merge_response_type_meta_preserves_fail_closed_diagnostic_defaults() -> None:
+    """Response-type debug merge remains backward compatible for fail-closed diagnostics."""
+    dbg = default_response_type_debug({"required_response_type": "scene_opening"}, "resolution.metadata")
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        assert dbg.get(key) is False
+    for key in OPENING_FALLBACK_FAIL_CLOSED_RELATED_RESPONSE_TYPE_DEBUG_FIELDS:
+        assert dbg.get(key) is None
+
+    dbg["opening_fallback_failed_closed"] = True
+    dbg["opening_fallback_missing_upstream_prepared_payload"] = True
+    dbg["opening_fallback_missing_curated_facts"] = True
+    dbg["blocked_repair_kind"] = "opening_missing_curated_facts"
+    fem: dict = {}
+    merge_response_type_meta(fem, dbg)
+    assert fem["opening_fallback_failed_closed"] is True
+    assert fem["opening_fallback_missing_upstream_prepared_payload"] is True
+    assert fem["opening_fallback_missing_curated_facts"] is True
+    assert fem["blocked_repair_kind"] == "opening_missing_curated_facts"
 
 
 def test_build_opening_fallback_result_meta_keys_match_registry() -> None:
@@ -1872,6 +2013,206 @@ def test_upstream_opening_authorship_constant_matches_ownership_schema() -> None
     from game.final_emission_ownership_schema import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED as SCHEMA_AUTH
 
     assert OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED == SCHEMA_AUTH
+
+
+def test_ownership_schema_partitions_legacy_compatibility_local_authorship_as_read_only() -> None:
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES,
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+        OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
+        ownership_schema_registry_surface,
+    )
+    from tests.helpers.opening_fallback_evidence import legacy_compatibility_local_opening_authorship_source
+
+    surface = ownership_schema_registry_surface()
+    assert surface["opening_fallback_legacy_compatibility_local_read_only"] is True
+    legacy = frozenset(surface["opening_fallback_legacy_compatibility_local_authorship_sources"])
+    assert legacy == OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+    assert legacy == frozenset({legacy_compatibility_local_opening_authorship_source()})
+    assert OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP not in legacy
+    upstream_sources = frozenset(surface["opening_fallback_authorship_upstream_prepared_sources"])
+    assert upstream_sources == OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES
+    assert upstream_sources.isdisjoint(legacy)
+
+
+def test_production_game_modules_never_assign_compatibility_local_opening_authorship() -> None:
+    """Static lock: live ``game/`` writers must not stamp retired compatibility-local authorship."""
+    import re
+    from pathlib import Path
+
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    )
+
+    repo = Path(__file__).resolve().parents[1]
+    assign_re = re.compile(
+        r"""opening_fallback_authorship_source["']?\s*=\s*["']([^"']+)["']"""
+    )
+    legacy_tokens = frozenset(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    offenders: list[str] = []
+    for path in sorted((repo / "game").rglob("*.py")):
+        if path.name == "final_emission_ownership_schema.py":
+            continue
+        for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            match = assign_re.search(line)
+            if match and match.group(1) in legacy_tokens:
+                offenders.append(f"{path.relative_to(repo)}:{lineno}:{match.group(1)}")
+    assert offenders == []
+
+
+def test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only() -> None:
+    """Static lock: raw compat-local authorship string literals and constant imports stay in evidence boundary."""
+    import ast
+    from pathlib import Path
+
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    )
+
+    repo = Path(__file__).resolve().parents[1]
+    legacy_tokens = frozenset(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    evidence_boundary = repo / "tests" / "helpers" / "opening_fallback_evidence.py"
+    allowed_production_schema = repo / "game" / "final_emission_ownership_schema.py"
+    const_symbol = "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL"
+
+    literal_offenders: list[str] = []
+    for path in sorted((repo / "tests").rglob("*.py")):
+        if path == evidence_boundary:
+            continue
+        rel = path.relative_to(repo)
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                if node.value in legacy_tokens:
+                    literal_offenders.append(f"{rel}:{node.lineno}:{node.value!r}")
+
+    import_offenders: list[str] = []
+    for path in sorted((repo / "tests").rglob("*.py")):
+        if path == evidence_boundary:
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module:
+                for alias in node.names:
+                    if alias.name == const_symbol:
+                        import_offenders.append(
+                            f"{path.relative_to(repo)}:{node.lineno}:import {const_symbol}"
+                        )
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == const_symbol:
+                        import_offenders.append(
+                            f"{path.relative_to(repo)}:{node.lineno}:import {const_symbol}"
+                        )
+
+    assert literal_offenders == [], literal_offenders
+    assert import_offenders == [], import_offenders
+    assert allowed_production_schema.exists()
+
+
+def _compat_local_string_literal_offenders(source: str, *, legacy_tokens: frozenset[str]) -> list[str]:
+    import ast
+
+    tree = ast.parse(source)
+    return [
+        f"{node.lineno}:{node.value!r}"
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str) and node.value in legacy_tokens
+    ]
+
+
+def _compat_local_constant_import_offenders(source: str, *, const_symbol: str) -> list[str]:
+    import ast
+
+    tree = ast.parse(source)
+    offenders: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            for alias in node.names:
+                if alias.name == const_symbol:
+                    offenders.append(f"import:{alias.name}")
+    return offenders
+
+
+def test_failure_classification_builders_access_compat_local_only_via_legacy_helpers() -> None:
+    """Static lock: classifier builders delegate compat-local evidence to legacy helpers only."""
+    from pathlib import Path
+
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    )
+
+    path = Path(__file__).resolve().parent / "helpers" / "failure_classification_builders.py"
+    source = path.read_text(encoding="utf-8")
+    legacy_tokens = frozenset(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    const_symbol = "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL"
+
+    assert _compat_local_string_literal_offenders(source, legacy_tokens=legacy_tokens) == []
+    assert _compat_local_constant_import_offenders(source, const_symbol=const_symbol) == []
+    assert "legacy_compatibility_local_opening_classifier_row" in source
+    assert "build_legacy_compatibility_local_opening_fallback_evidence" in source
+
+
+def test_failure_dashboard_fixtures_access_compat_local_only_via_legacy_helpers() -> None:
+    """Static lock: dashboard fixtures inject compat-local authorship only through legacy helpers."""
+    from pathlib import Path
+
+    from game.final_emission_ownership_schema import (
+        OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    )
+
+    path = Path(__file__).resolve().parent / "helpers" / "failure_dashboard_fixtures.py"
+    source = path.read_text(encoding="utf-8")
+    legacy_tokens = frozenset(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    const_symbol = "OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL"
+
+    assert _compat_local_string_literal_offenders(source, legacy_tokens=legacy_tokens) == []
+    assert _compat_local_constant_import_offenders(source, const_symbol=const_symbol) == []
+    assert "legacy_compatibility_local_opening_authorship_classifier_row" in source
+    assert "legacy_compatibility_local_opening_authorship_meta" in source
+
+
+def test_opening_fallback_compatibility_local_disabled_defaults_false_not_active_path() -> None:
+    """Telemetry disabled flags default False; fail-closed paths stamp both legacy and alias keys."""
+    from game.final_emission_opening_fallback import (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+        _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts,
+    )
+
+    dbg = default_response_type_debug({"required_response_type": "scene_opening"}, "resolution.metadata")
+    assert dbg.get(OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY) is False
+    assert dbg.get(OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY) is None
+
+    meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
+        {"opening_curated_facts": []},
+    )
+    assert meta.get(OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY) is True
+    assert meta.get(OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY) is True
+    assert meta.get("opening_fallback_authorship_source") is None
+
+
+def test_compose_opening_fallback_compatibility_local_is_boundary_taxonomy_only() -> None:
+    """Retired mutation kind is SEMANTIC_DISALLOWED registry residue with no production dispatch."""
+    import ast
+    from pathlib import Path
+
+    from game import final_emission_boundary_contract as contract
+
+    kind = "compose_opening_fallback_compatibility_local"
+    repo = Path(__file__).resolve().parents[1]
+    literal_sites: list[str] = []
+    for path in sorted((repo / "game").rglob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and node.value == kind:
+                literal_sites.append(path.relative_to(repo).as_posix())
+    assert literal_sites == ["game/final_emission_boundary_contract.py"], literal_sites
+    assert contract.is_semantic_disallowed(kind)
+    with pytest.raises(AssertionError, match="SEMANTIC_DISALLOWED"):
+        contract.assert_final_emission_mutation_allowed(kind, source="test.static_guard")
+    assert kind not in OPENING_FALLBACK_PROJECTION_FIELDS
+    assert kind not in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS
 
 
 def test_normalize_sanitizer_trace_owner_to_lineage_owner_maps_short_and_preserves_canonical() -> None:

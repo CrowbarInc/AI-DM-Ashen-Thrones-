@@ -25,8 +25,8 @@ from tests.helpers.failure_classification_dashboard_expectations import (
 from tests.helpers.failure_classification_sync import (
     exact_value_drift_row,
     global_fallback_source_drift_row,
+    legacy_compatibility_local_opening_authorship_classifier_row,
     observed_global_replacement_row,
-    observed_opening_authorship_compat_row,
     observed_opening_basis_row,
     observed_opening_fallback_row,
     observed_opening_projection_missing_row,
@@ -48,9 +48,9 @@ from tests.helpers.failure_classification_sync import (
 )
 from tests.helpers.failure_dashboard_report import build_classified_dashboard_row, record_protected_replay_assertion_failure
 from tests.helpers.opening_fallback_evidence import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+    legacy_compatibility_local_opening_authorship_meta,
 )
 from tests.helpers.replay_observed_row_fixtures import observed_dashboard_probe_row as _observed
 
@@ -82,11 +82,11 @@ _BASE_CONTROLLED_FAILURE_PROBE_CASES: tuple[tuple[str, dict[str, Any], dict[str,
     ),
     (
         "opening_fallback_authorship_source",
-        observed_opening_authorship_compat_row(profile=_DASHBOARD_PROFILE),
+        legacy_compatibility_local_opening_authorship_classifier_row(profile=_DASHBOARD_PROFILE),
         exact_value_drift_row(
             "opening_fallback_authorship_source",
             expected=OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
-            actual=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+            actual=legacy_compatibility_local_opening_authorship_meta()["opening_fallback_authorship_source"],
         ),
     ),
     (

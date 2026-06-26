@@ -692,6 +692,56 @@ OPENING_FALLBACK_PROJECTION_FIELDS: tuple[str, ...] = (
     "opening_fallback_authorship_source",
 )
 
+# Out-of-band opening fallback telemetry (CK Block 7/9): fail-closed selection stamps both keys on
+# ``composition_meta`` (and ``response_type_debug`` via ``debug.update(fallback_meta)``). Only
+# ``OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS`` reach FEM via
+# ``merge_response_type_meta``; the additive alias ``opening_fallback_local_composition_disabled``
+# is composition-meta / RTD-debug only and is intentionally **not** RTD-merged. Both are excluded
+# from ``OPENING_FALLBACK_PROJECTION_FIELDS``. Observability/negative-invariant only — not
+# authorship, not owner-bucket inputs, not golden replay protected observation paths. Key strings
+# align with ``game.final_emission_opening_fallback.OPENING_FALLBACK_*_DISABLED_KEY`` constants.
+OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS: tuple[str, ...] = (
+    "opening_fallback_compatibility_local_disabled",
+    "opening_fallback_local_composition_disabled",
+)
+
+# Canonical RTD→FEM merge subset (CK Block 9 quarantine: alias stays composition_meta-only).
+OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS: tuple[str, ...] = (
+    "opening_fallback_compatibility_local_disabled",
+)
+
+# Fail-closed opening fallback diagnostics (CK Block 8): negative-invariant keys stamped on
+# composition_meta fail-closed paths and merged into FEM via ``merge_response_type_meta``.
+# Not projection fields, not owner-bucket inputs, not golden replay protected paths.
+# Key strings align with ``game.final_emission_opening_fallback.OPENING_FALLBACK_*`` constants.
+OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS: tuple[str, ...] = (
+    "opening_fallback_missing_upstream_prepared_payload",
+    "opening_fallback_missing_curated_facts",
+    "opening_fallback_upstream_payload_unusable",
+    "opening_fallback_upstream_payload_recovered",
+)
+
+# Response-type debug merge field co-stamped by opening fail-closed paths (not ``opening_fallback_*``).
+OPENING_FALLBACK_FAIL_CLOSED_RELATED_RESPONSE_TYPE_DEBUG_FIELDS: tuple[str, ...] = (
+    "blocked_repair_kind",
+)
+
+# Union of every ``opening_fallback_*`` metadata key emitted on opening fallback paths.
+OPENING_FALLBACK_EMITTED_METADATA_FIELDS: tuple[str, ...] = tuple(
+    sorted(
+        set(OPENING_FALLBACK_PROJECTION_FIELDS)
+        | set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS)
+        | set(OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS)
+    )
+)
+
+# Primary classification registries (mutually disjoint partition of emitted keys).
+_OPENING_FALLBACK_METADATA_CLASSIFICATION_REGISTRIES: tuple[tuple[str, ...], ...] = (
+    OPENING_FALLBACK_PROJECTION_FIELDS,
+    OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
+    OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+)
+
 # Canonical write-time result meta keys (authorship stamped separately by upstream/gate).
 OPENING_FALLBACK_RESULT_META_FIELDS: tuple[str, ...] = tuple(
     key for key in OPENING_FALLBACK_PROJECTION_FIELDS if key != "opening_fallback_authorship_source"
@@ -763,9 +813,22 @@ def default_opening_fallback_fail_closed_result_meta() -> Dict[str, Any]:
 
 
 def opening_fallback_metadata_field_registry_surface() -> dict[str, object]:
-    """Diagnostic registry surface for opening fallback metadata field lists (BK5)."""
+    """Diagnostic registry surface for opening fallback metadata field lists (BK5/CK8)."""
     return {
         "opening_fallback_projection_fields": list(OPENING_FALLBACK_PROJECTION_FIELDS),
+        "opening_fallback_out_of_band_telemetry_fields": list(
+            OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS
+        ),
+        "opening_fallback_out_of_band_telemetry_rtd_merge_fields": list(
+            OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS
+        ),
+        "opening_fallback_fail_closed_diagnostic_fields": list(
+            OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS
+        ),
+        "opening_fallback_fail_closed_related_response_type_debug_fields": list(
+            OPENING_FALLBACK_FAIL_CLOSED_RELATED_RESPONSE_TYPE_DEBUG_FIELDS
+        ),
+        "opening_fallback_emitted_metadata_fields": list(OPENING_FALLBACK_EMITTED_METADATA_FIELDS),
         "opening_fallback_result_meta_fields": list(OPENING_FALLBACK_RESULT_META_FIELDS),
         "opening_fallback_context_mirror_fields": list(OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS),
         "opening_fallback_selector_debug_fields": list(OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS),
@@ -774,12 +837,107 @@ def opening_fallback_metadata_field_registry_surface() -> dict[str, object]:
     }
 
 
+def opening_fallback_metadata_classification_parity_errors() -> list[str]:
+    """Return parity errors when opening fallback metadata classification registries drift."""
+    errors: list[str] = []
+    union: set[str] = set()
+    for index, registry in enumerate(_OPENING_FALLBACK_METADATA_CLASSIFICATION_REGISTRIES):
+        keys = set(registry)
+        if not keys:
+            errors.append(f"opening fallback classification registry[{index}] must not be empty")
+            continue
+        overlap = union & keys
+        if overlap:
+            errors.append(
+                "opening fallback metadata classification registries overlap: "
+                + ", ".join(sorted(overlap))
+            )
+        union |= keys
+    if union != set(OPENING_FALLBACK_EMITTED_METADATA_FIELDS):
+        missing = sorted(set(OPENING_FALLBACK_EMITTED_METADATA_FIELDS) - union)
+        extra = sorted(union - set(OPENING_FALLBACK_EMITTED_METADATA_FIELDS))
+        if missing:
+            errors.append(
+                "opening fallback emitted metadata fields missing from classification registries: "
+                + ", ".join(missing)
+            )
+        if extra:
+            errors.append(
+                "opening fallback classification registries contain non-emitted keys: "
+                + ", ".join(extra)
+            )
+    from game.final_emission_opening_fallback import (
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY,
+        OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY,
+    )
+
+    constant_map = {
+        OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY: OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
+        OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY: OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+        OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY: OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY: OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY: OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+    }
+    for constant, registry in constant_map.items():
+        if constant not in registry:
+            errors.append(
+                f"opening fallback writer constant {constant!r} missing from canonical registry"
+            )
+    dbg = default_response_type_debug({}, None)
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        if key not in dbg:
+            errors.append(
+                f"response-type debug defaults missing fail-closed diagnostic key: {key}"
+            )
+    for key in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS:
+        if key not in dbg:
+            errors.append(
+                f"response-type debug defaults missing out-of-band telemetry key: {key}"
+            )
+    alias_only = set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS) - set(
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS
+    )
+    if alias_only != {OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY}:
+        errors.append(
+            "opening fallback out-of-band telemetry RTD merge quarantine drift: "
+            f"expected alias-only keys {OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY!r}, "
+            f"got {sorted(alias_only)!r}"
+        )
+    if OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY in dbg:
+        errors.append(
+            "opening_fallback_local_composition_disabled must not appear in response-type debug "
+            "defaults (composition-meta-only quarantine)"
+        )
+    for key in OPENING_FALLBACK_FAIL_CLOSED_RELATED_RESPONSE_TYPE_DEBUG_FIELDS:
+        if key not in dbg:
+            errors.append(
+                f"response-type debug defaults missing related fail-closed debug key: {key}"
+            )
+    return errors
+
+
 def opening_fallback_metadata_field_registry_parity_errors() -> list[str]:
     """Return internal parity errors when derived opening field registries drift."""
     errors: list[str] = []
+    errors.extend(opening_fallback_metadata_classification_parity_errors())
     surface = opening_fallback_metadata_field_registry_surface()
     if tuple(surface["opening_fallback_projection_fields"]) != OPENING_FALLBACK_PROJECTION_FIELDS:
         errors.append("opening_fallback_projection_fields registry surface drift")
+    if tuple(surface["opening_fallback_out_of_band_telemetry_fields"]) != OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS:
+        errors.append("opening_fallback_out_of_band_telemetry_fields registry surface drift")
+    if tuple(surface["opening_fallback_out_of_band_telemetry_rtd_merge_fields"]) != (
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS
+    ):
+        errors.append("opening_fallback_out_of_band_telemetry_rtd_merge_fields registry surface drift")
+    if tuple(surface["opening_fallback_fail_closed_diagnostic_fields"]) != OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        errors.append("opening_fallback_fail_closed_diagnostic_fields registry surface drift")
+    if tuple(surface["opening_fallback_emitted_metadata_fields"]) != OPENING_FALLBACK_EMITTED_METADATA_FIELDS:
+        errors.append("opening_fallback_emitted_metadata_fields registry surface drift")
     if tuple(surface["opening_fallback_result_meta_fields"]) != OPENING_FALLBACK_RESULT_META_FIELDS:
         errors.append("opening_fallback_result_meta_fields registry surface drift")
     if tuple(surface["opening_fallback_context_mirror_fields"]) != OPENING_FALLBACK_CONTEXT_MIRROR_FIELDS:
@@ -794,6 +952,22 @@ def opening_fallback_metadata_field_registry_parity_errors() -> list[str]:
         errors.append("OPENING_FALLBACK_SELECTOR_DEBUG_FIELDS must be subset of OPENING_FALLBACK_PROJECTION_FIELDS")
     if not set(OPENING_FALLBACK_RESULT_META_FIELDS).issubset(set(OPENING_FALLBACK_PROJECTION_FIELDS)):
         errors.append("OPENING_FALLBACK_RESULT_META_FIELDS must be subset of OPENING_FALLBACK_PROJECTION_FIELDS")
+    overlap = set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS) & set(OPENING_FALLBACK_PROJECTION_FIELDS)
+    if overlap:
+        errors.append(
+            "OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS must be disjoint from OPENING_FALLBACK_PROJECTION_FIELDS"
+        )
+    if set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS) & set(OPENING_FALLBACK_RESULT_META_FIELDS):
+        errors.append(
+            "OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS must be disjoint from OPENING_FALLBACK_RESULT_META_FIELDS"
+        )
+    if not set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS).issubset(
+        set(OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS)
+    ):
+        errors.append(
+            "OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS must be subset of "
+            "OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS"
+        )
     return errors
 
 

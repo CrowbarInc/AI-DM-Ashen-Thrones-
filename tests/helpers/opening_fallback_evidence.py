@@ -33,11 +33,19 @@ from tests.helpers.response_type_smoke import response_type_contract
 
 from game.upstream_response_repairs import OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED
 
-# Cycle AP1: retired gate-local composer authorship — test inject vocabulary only.
+# Cycle AP1 / CK Block 1–5: retired gate-local composer authorship — legacy/test inject only.
 # Production ``game/`` never writes these tokens; canonical paths use
 # ``OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED`` from upstream packaging.
+# Import compat-local authorship only via ``legacy_compatibility_local_*`` helpers below.
+# The shorter ``compatibility_local`` token was retired from read mapping (see
+# ``OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP`` in ownership schema).
 OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL = "compatibility_local_opening_deterministic"
 assert OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+
+
+def legacy_compatibility_local_opening_authorship_source() -> str:
+    """Read-only accessor for the retired compat-local authorship token (sole raw-token boundary)."""
+    return OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL
 
 OPENING_FALLBACK_FAMILY = "scene_opening"
 OPENING_SUCCESS_SOURCE = "opening_deterministic_fallback"
@@ -222,6 +230,23 @@ def opening_upstream_composition_meta_slice(**overrides: Any) -> dict[str, Any]:
     }
     evidence.update(overrides)
     return evidence
+
+
+def legacy_compatibility_local_opening_authorship_meta(**overrides: Any) -> dict[str, Any]:
+    """Return meta slice with retired compatibility-local authorship (legacy/test/replay inject only)."""
+    meta: dict[str, Any] = {
+        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+    }
+    meta.update(overrides)
+    return meta
+
+
+def build_legacy_compatibility_local_opening_fallback_evidence(**overrides: Any) -> dict[str, Any]:
+    """Return replay/classifier-shaped successful opening evidence with legacy compat-local authorship."""
+    return successful_opening_observed_fields(
+        opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
+        **overrides,
+    )
 
 
 def opening_owner_bucket_projection_fields(

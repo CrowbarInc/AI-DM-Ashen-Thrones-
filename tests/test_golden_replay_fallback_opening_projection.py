@@ -69,6 +69,14 @@ from tests.helpers.golden_replay_fixtures import (
 from tests.helpers.opening_fallback_evidence import (
     fail_closed_opening_fem_meta,
     successful_opening_fem_meta,
+    build_legacy_compatibility_local_opening_fallback_evidence,
+)
+from game.attribution_read_views import (
+    OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
+    opening_fallback_owner_bucket_from_meta,
+)
+from game.final_emission_ownership_schema import (
+    OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
 )
 
 from tests.helpers.golden_replay_fallback_projection_helpers import (
@@ -251,3 +259,60 @@ def test_golden_projection_observed_turn_passes_classifier_contract_for_opening_
     assert row["fallback_content_owner"] == OPENING_FALLBACK_CONTENT_OWNER
     assert row["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
     assert validate_failure_classification_row(row) == []
+
+
+@pytest.mark.parametrize(
+    "fem_meta",
+    [
+        successful_opening_fem_meta(
+            response_type_repair_kind="opening_deterministic_fallback",
+            fallback_temporal_frame="first_impression",
+        ),
+        fail_closed_opening_fem_meta(
+            opening_recovered_via_fallback=True,
+            fallback_family_used="scene_opening",
+        ),
+    ],
+)
+def test_golden_projection_canonical_opening_never_observes_compat_local_authorship(
+    fem_meta: dict,
+) -> None:
+    """Canonical opening FEM/replay paths must not surface retired compatibility-local authorship."""
+    observed = project_synthetic_turn(
+        scenario_id="canonical_opening_no_compat_local",
+        gm_text="The road opens.",
+        fem_meta=fem_meta,
+    )
+    authorship = observed.get("opening_fallback_authorship_source")
+    if authorship is not None:
+        assert authorship not in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+        assert authorship != OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP
+
+
+def test_golden_projection_legacy_compat_local_evidence_maps_to_unknown_ambiguous() -> None:
+    """Injected legacy evidence remains readable and maps to unknown-ambiguous owner bucket."""
+    legacy_meta = build_legacy_compatibility_local_opening_fallback_evidence()
+    observed = project_synthetic_turn(
+        scenario_id="legacy_compat_local_projection",
+        gm_text="The road opens.",
+        fem_meta=legacy_meta,
+    )
+    assert observed["opening_fallback_authorship_source"] in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+    from game.attribution_read_views import OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+    assert opening_fallback_owner_bucket_from_meta(observed) == OPENING_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS
+
+
+def test_protected_replay_observation_excludes_out_of_band_disabled_telemetry() -> None:
+    """Golden replay protected paths omit out-of-band local-composition disabled telemetry."""
+    from game.final_emission_meta import (
+        OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
+        OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
+    )
+    from tests.helpers.golden_replay_projection_fields import protected_observation_field_paths
+
+    paths = frozenset(protected_observation_field_paths())
+    for key in OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS:
+        assert key not in paths
+    for key in OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS:
+        assert key not in paths

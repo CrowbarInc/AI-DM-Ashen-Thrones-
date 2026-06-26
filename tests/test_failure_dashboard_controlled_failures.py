@@ -46,6 +46,7 @@ from tests.helpers.failure_dashboard_fixtures import (
     classified_rows,
     _observed,
 )
+from tests.helpers.opening_fallback_evidence import legacy_compatibility_local_opening_authorship_source
 
 pytestmark = pytest.mark.failure_dashboard_probe
 
@@ -106,7 +107,8 @@ _CONTROLLED_PROBE_EVIDENCE_CELLS: dict[str, str] = {
         "fallback_content_owner=game.final_emission_gate; mutation=opening_fallback"
     ),
     "opening_fallback_authorship_source": (
-        "sublayer=opening_fallback; opening_authorship=compatibility_local_opening_deterministic; "
+        "sublayer=opening_fallback; "
+        f"opening_authorship={legacy_compatibility_local_opening_authorship_source()}; "
         "opening_owner=unknown-ambiguous; mutation=opening_fallback"
     ),
     "opening_fallback_basis": "sublayer=opening_fallback; opening_owner=unknown-ambiguous; mutation=opening_fallback",

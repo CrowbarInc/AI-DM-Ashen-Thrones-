@@ -30,11 +30,12 @@ from game.final_emission_replay_projection import (
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import FailureClassification, classify_replay_failure
 from tests.helpers.opening_fallback_evidence import (
-    OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     OPENING_FALLBACK_FAMILY,
     OPENING_SUCCESS_REPAIR_KIND,
+    build_legacy_compatibility_local_opening_fallback_evidence,
     fail_closed_opening_observed_fields,
+    legacy_compatibility_local_opening_authorship_meta,
     successful_opening_observed_fields,
 )
 from tests.helpers.replay_observed_row_fixtures import (
@@ -79,31 +80,28 @@ def observed_fail_closed_opening_fallback_row(
     )
 
 
-def observed_legacy_opening_fallback_row(
+def legacy_compatibility_local_opening_classifier_row(
     *,
     profile: SyntheticObservedRowProfile = "classifier_probe",
     **overrides: Any,
 ) -> dict[str, Any]:
-    """Return observed-row evidence for legacy compatibility-local opening fallback."""
+    """Legacy/read-only observed row injecting retired compatibility-local opening authorship."""
     return _observed_row(
         profile=profile,
-        **successful_opening_observed_fields(
-            opening_fallback_authorship_source=OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
-            **overrides,
-        ),
+        **build_legacy_compatibility_local_opening_fallback_evidence(**overrides),
     )
 
 
-def observed_opening_authorship_compat_row(
+def legacy_compatibility_local_opening_authorship_classifier_row(
     *,
     profile: SyntheticObservedRowProfile = "classifier_probe",
     **overrides: Any,
 ) -> dict[str, Any]:
-    """Return minimal observed-row evidence for compatibility-local opening authorship probes."""
-    fields = {
+    """Minimal legacy observed row for compatibility-local opening authorship drift probes."""
+    fields: dict[str, Any] = {
         "opening_recovered_via_fallback": True,
-        "opening_fallback_authorship_source": OPENING_FALLBACK_AUTHORSHIP_COMPATIBILITY_LOCAL,
         "fallback_family": OPENING_FALLBACK_FAMILY,
+        **legacy_compatibility_local_opening_authorship_meta(),
     }
     fields.update(overrides)
     return _observed_row(profile=profile, **fields)

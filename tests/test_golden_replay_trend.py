@@ -174,7 +174,7 @@ def test_synthetic_source_drift() -> None:
 
 def test_synthetic_owner_bucket_drift() -> None:
     baseline = _raw_turn(sealed_fallback_owner_bucket="upstream_prepared_emission")
-    current = _raw_turn(sealed_fallback_owner_bucket="compatibility_local")
+    current = _raw_turn(sealed_fallback_owner_bucket="unknown-none")
     comparison = compare_trend_runs(_envelope_from_turns(0, [baseline]), _envelope_from_turns(1, [current]))
     assert comparison["dimension_summary"][BW_DIMENSION_OWNER]["drift_count"] == 1
 
