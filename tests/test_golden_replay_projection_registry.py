@@ -106,20 +106,8 @@ def test_bl2_every_protected_field_has_registry_or_special_case_handling():
     registry_paths = {field.path for field in protected_observation_field_registry()}
     assert set(sources_by_path) == registry_paths
 
-    flat_sources = {
-        "resolution",
-        "route",
-        "speaker",
-        "fem_flat",
-        "sanitizer_trace",
-        "sanitizer_lineage",
-        "sanitizer_lineage_legacy",
-        "fem_opening_bucket",
-        "fallback_family",
-        "final_text",
-        "scaffold",
-    }
-    trace_sources = {"trace_leaf"}
+    flat_sources = registry_module.protected_flat_extraction_sources()
+    trace_sources = registry_module.protected_trace_extraction_sources()
     for path, source in sources_by_path.items():
         if "." in path:
             assert source in trace_sources, f"{path!r} must use trace_leaf source, got {source!r}"

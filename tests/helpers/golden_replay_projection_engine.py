@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from tests.helpers.golden_replay_projection import read_opening_fallback_owner_bucket_for_replay
+from game.final_emission_replay_projection import read_opening_fallback_owner_bucket_for_replay
 
 from tests.helpers.golden_replay_projection_fields import (
     _first_present,
@@ -15,6 +15,8 @@ from tests.helpers.golden_replay_projection_registry import (
     _SANITIZER_LINEAGE_OBSERVED_EXTRACTORS,
     _SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS,
     _flat_extractor_source_keys,
+    protected_flat_extraction_sources,
+    protected_trace_extraction_sources,
 )
 
 
@@ -91,36 +93,17 @@ def _resolve_route_kind(
     return route_kind
 
 
-# Flat protected paths projected by :func:`_project_flat_protected_observed_fields`.
-_HANDLED_FLAT_PROTECTED_SOURCES: frozenset[str] = frozenset(
-    {
-        "resolution",
-        "route",
-        "speaker",
-        "fem_flat",
-        "sanitizer_trace",
-        "sanitizer_lineage",
-        "sanitizer_lineage_legacy",
-        "fem_opening_bucket",
-        "fallback_family",
-        "final_text",
-        "scaffold",
-    }
-)
-
-# Dotted protected paths nested under ``observed["trace"]`` (not flat keys).
-_TRACE_NEST_PROTECTED_SOURCES: frozenset[str] = frozenset({"trace_leaf"})
-
-
 def _validate_protected_projection_sources() -> None:
+    flat_sources = protected_flat_extraction_sources()
+    trace_sources = protected_trace_extraction_sources()
     for path, spec in _PROTECTED_EXTRACTION_SPECS.items():
-        if spec.source in _HANDLED_FLAT_PROTECTED_SOURCES:
+        if spec.source in flat_sources:
             if "." in path:
                 raise AssertionError(
                     f"flat protected projection source {spec.source!r} must not use dotted path {path!r}"
                 )
             continue
-        if spec.source in _TRACE_NEST_PROTECTED_SOURCES:
+        if spec.source in trace_sources:
             if not spec.trace_container:
                 raise AssertionError(
                     f"trace_leaf protected path {path!r} must declare trace_container"

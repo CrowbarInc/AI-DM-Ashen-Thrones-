@@ -116,34 +116,6 @@ def protected_observation_flat_field_paths() -> tuple[str, ...]:
     return tuple(path for path in protected_observation_field_paths() if "." not in path)
 
 
-def _neutral_default_for_flat_protected_path(path: str) -> Any:
-    if path == "scaffold_leakage":
-        return False
-    if path == "final_text":
-        return ""
-    return None
-
-
-def protected_observation_default_row() -> dict[str, Any]:
-    """Neutral defaults for every flat protected observation registry path."""
-    return {
-        path: _neutral_default_for_flat_protected_path(path)
-        for path in protected_observation_flat_field_paths()
-    }
-
-
-def observed_projection_schema_defaults() -> dict[str, Any]:
-    """Schema-aligned defaults for synthetic observed replay rows."""
-    return {
-        **protected_observation_default_row(),
-        "trace": {
-            "canonical_entry": {},
-            "turn_trace": {},
-            "social_contract_trace": {},
-        },
-        "unavailable": [],
-    }
-
 def protected_observation_drift_bucket(path: str) -> str:
     """Map a protected observation field path to its drift bucket."""
     bucket = _DRIFT_BUCKET_BY_PATH.get(path)
@@ -196,3 +168,28 @@ def _first_present(mapping: Mapping[str, Any], keys: tuple[str, ...]) -> Any:
         if value is not None:
             return value
     return None
+
+
+def _validate_protected_extraction_registry_parity() -> None:
+    """Ensure observation field paths match the canonical extraction registry."""
+    from tests.helpers.golden_replay_projection_registry import protected_observation_extraction_registry
+
+    registry_paths = {field.path for field in PROTECTED_OBSERVATION_FIELDS}
+    spec_paths = set(protected_observation_extraction_registry())
+    if registry_paths != spec_paths:
+        missing = sorted(registry_paths - spec_paths)
+        extra = sorted(spec_paths - registry_paths)
+        raise AssertionError(
+            "Protected extraction registry must cover every PROTECTED_OBSERVATION_FIELDS path; "
+            f"missing={missing!r} extra={extra!r}"
+        )
+
+
+_validate_protected_extraction_registry_parity()
+
+
+# Compatibility re-exports: defaults are owned by the extraction registry (CO1).
+from tests.helpers.golden_replay_projection_registry import (  # noqa: E402
+    observed_projection_schema_defaults,
+    protected_observation_default_row,
+)

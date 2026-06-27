@@ -12,8 +12,6 @@ from tests.helpers.golden_replay_projection_fallbacks import (
     _fem_has_any_key,
 )
 from tests.helpers.golden_replay_projection_engine import (
-    _HANDLED_FLAT_PROTECTED_SOURCES,
-    _TRACE_NEST_PROTECTED_SOURCES,
     _extract_fem_flat_observed_fields,
     _extract_sanitizer_lineage_observed_fields,
     _extract_sanitizer_trace_flat_observed_fields,
@@ -22,6 +20,22 @@ from tests.helpers.golden_replay_projection_engine import (
     _resolve_route_kind,
     _sanitizer_lineage_field,
     _validate_protected_projection_sources,
+)
+from tests.helpers.golden_replay_projection_registry import (
+    _FEM_FLAT_OBSERVED_EXTRACTORS,
+    _HANDLED_FLAT_PROTECTED_SOURCES,
+    _PROTECTED_EXTRACTION_SPECS,
+    _SANITIZER_LINEAGE_OBSERVED_EXTRACTORS,
+    _SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS,
+    _TRACE_CONTAINER_RAW_PRESENCE,
+    _TRACE_CONTAINER_UNAVAILABLE_KEYS,
+    _TRACE_NEST_PROTECTED_SOURCES,
+    _FlatObservedFieldExtractor,
+    _ProtectedExtractionSpec,
+    _SanitizerLineageObservedExtractor,
+    _flat_extractor_source_keys,
+    protected_observation_extraction_registry,
+    protected_observation_extraction_source_by_path,
 )
 from tests.helpers.golden_replay_projection_fields import (
     MISSING,
@@ -33,8 +47,6 @@ from tests.helpers.golden_replay_projection_fields import (
 )
 from tests.helpers.golden_replay_projection_presence import (
     _ProjectionStatus,
-    _TRACE_CONTAINER_RAW_PRESENCE,
-    _TRACE_CONTAINER_UNAVAILABLE_KEYS,
     _build_projection_status as _build_projection_status_from_presence,
     _missing_source_by_field_from_presence,
     _unavailable_paths_for_projection as _unavailable_paths_for_projection_from_presence,
@@ -42,18 +54,6 @@ from tests.helpers.golden_replay_projection_presence import (
     protected_path_covered_by_unavailable,
     protected_path_is_represented_in_observed_turn,
     protected_path_representation_errors,
-)
-from tests.helpers.golden_replay_projection_registry import (
-    _FEM_FLAT_OBSERVED_EXTRACTORS,
-    _PROTECTED_EXTRACTION_SPECS,
-    _SANITIZER_LINEAGE_OBSERVED_EXTRACTORS,
-    _SANITIZER_TRACE_FLAT_OBSERVED_EXTRACTORS,
-    _FlatObservedFieldExtractor,
-    _ProtectedExtractionSpec,
-    _SanitizerLineageObservedExtractor,
-    _flat_extractor_source_keys,
-    protected_observation_extraction_registry,
-    protected_observation_extraction_source_by_path,
 )
 from tests.helpers.golden_replay_projection_semantic import project_semantic_mutation_summary
 

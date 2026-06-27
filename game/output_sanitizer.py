@@ -15,25 +15,8 @@ import json
 import re
 from typing import Any, Dict
 
-from game.final_emission_meta import (
-    PRODUCER_REPAIR_KIND_FIELD,
-    PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
-    PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
-)
-from game.attribution_read_views import (
-    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
-)
-from game.ownership_projection_views import (
-    SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
-    SANITIZER_FALLBACK_SELECTION_OWNER,
-    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
-    SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD,
-    SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD,
-    SANITIZER_TRACE_SELECTION_OWNER_SHORT,
-    SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
-    normalize_sanitizer_trace_owner_to_lineage_owner,
-)
+from game.attribution_read_views import SEALED_FALLBACK_OWNER_UNKNOWN_NONE
+from game.final_emission_meta import PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY
 from game.social_exchange_fallback_catalog import (
     select_strict_social_emergency_fallback_line,
     social_fallback_line_for_sanitizer,
@@ -42,6 +25,17 @@ from game.social_exchange_policy import (
     effective_strict_social_resolution_for_emission,
     strict_social_emission_will_apply,
 )
+
+from game.output_sanitizer_lineage import (
+    SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE,
+    _ensure_sanitizer_lineage_trace,
+    _log_sanitizer_event,
+    _mark_sanitizer_empty_fallback,
+    _mark_sanitizer_strict_social_fallback,
+    _record_sanitizer_lineage_event,
+    _stamp_sanitizer_producer_attribution,
+)
+
 
 # Centralized exact phrases that must never leak as-is.
 DISALLOWED_EXACT_PHRASES: tuple[str, ...] = (
@@ -200,8 +194,6 @@ _FINAL_INTERNAL_STYLE_PATTERNS: tuple[re.Pattern[str], ...] = (
 )
 
 # Explicit opt-in for the historical sentence-atomic rewrite pipeline (tests only by default).
-SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE = "legacy_sentence_rewrite"
-
 _RESPONSE_SCHEMA_KEYS: tuple[str, ...] = (
     "player_facing_text",
     "tags",
@@ -557,45 +549,6 @@ def _split_consecutive_attributed_quote_chunks(sentence: str) -> list[str]:
 def _conjunction_collision_hits(sentence: str) -> bool:
     scrubbed = _text_outside_double_quotes(sentence)
     return any(p.search(scrubbed) for p in _CONJUNCTION_COLLISION_PATTERNS)
-
-
-def _log_sanitizer_event(context: Dict[str, Any], event: str, sentence: str) -> None:
-    if not isinstance(context, dict):
-        return
-    debug_log = context.setdefault("sanitizer_debug", [])
-    if isinstance(debug_log, list):
-        debug_log.append({"event": event, "sentence": sentence[:240]})
-    _record_sanitizer_lineage_event(context, event)
-
-
-def _ensure_sanitizer_lineage_trace(context: Dict[str, Any], *, mode: str | None) -> Dict[str, Any] | None:
-    if not isinstance(context, dict):
-        return None
-    trace = context.setdefault("sanitizer_trace", {})
-    if not isinstance(trace, dict):
-        return None
-    normalized_mode = str(mode or "").strip().lower() or "strip_only"
-    trace["sanitizer_boundary_mode"] = normalized_mode
-    trace["sanitizer_lineage_mode"] = normalized_mode
-    trace["sanitizer_lineage_legacy_rewrite_active"] = normalized_mode == SANITIZER_BOUNDARY_LEGACY_SENTENCE_REWRITE
-    trace.setdefault("sanitizer_lineage_changed_count", 0)
-    trace.setdefault("sanitizer_lineage_dropped_count", 0)
-    trace.setdefault("sanitizer_lineage_empty_fallback_used", False)
-    return trace
-
-
-def _record_sanitizer_lineage_event(context: Dict[str, Any], event: str) -> None:
-    trace = _ensure_sanitizer_lineage_trace(
-        context,
-        mode=str(context.get("sanitizer_boundary_mode") or "").strip().lower() or "strip_only",
-    )
-    if not isinstance(trace, dict):
-        return
-    event_s = str(event or "").strip().lower()
-    if any(token in event_s for token in ("dropped", "drop", "rewritten", "rewrite", "strip")):
-        trace["sanitizer_lineage_changed_count"] = int(trace.get("sanitizer_lineage_changed_count") or 0) + 1
-    if "dropped" in event_s or "drop" in event_s:
-        trace["sanitizer_lineage_dropped_count"] = int(trace.get("sanitizer_lineage_dropped_count") or 0) + 1
 
 
 def _contains_template_fragment(sentence: str) -> bool:
@@ -1329,78 +1282,6 @@ def _prepared_upstream_empty_fallback_text(context: Dict[str, Any] | None) -> st
         if isinstance(t, str) and t.strip():
             return t.strip()
     return ""
-
-
-def _stamp_sanitizer_producer_attribution(
-    context: Dict[str, Any],
-    *,
-    repair_kind: str,
-    owner_bucket: str | None = None,
-) -> None:
-    trace = context.setdefault("sanitizer_trace", {})
-    if not isinstance(trace, dict):
-        return
-    kind = str(repair_kind or "").strip()
-    if kind:
-        trace[PRODUCER_REPAIR_KIND_FIELD] = kind
-    bucket = str(owner_bucket or "").strip()
-    if bucket:
-        trace["sealed_fallback_owner_bucket"] = bucket
-
-
-def _mark_sanitizer_empty_fallback(
-    context: Dict[str, Any],
-    *,
-    used: bool,
-    source: str | None = None,
-    owner: str = SANITIZER_TRACE_SELECTION_OWNER_SHORT,
-) -> None:
-    trace = context.setdefault("sanitizer_trace", {})
-    if not isinstance(trace, dict):
-        return
-    trace["sanitizer_empty_fallback_used"] = bool(used)
-    trace["sanitizer_empty_fallback_source"] = source
-    trace["sanitizer_empty_fallback_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
-        owner,
-        default=SANITIZER_FALLBACK_SELECTION_OWNER,
-    )
-    trace[SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_SELECTION_OWNER_SHORT
-    trace["sanitizer_lineage_empty_fallback_used"] = bool(used)
-    if used:
-        _stamp_sanitizer_producer_attribution(
-            context,
-            repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
-            owner_bucket=SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
-        )
-
-
-def _mark_sanitizer_strict_social_fallback(
-    context: Dict[str, Any],
-    *,
-    used: bool,
-    source: str | None = None,
-) -> None:
-    trace = context.setdefault("sanitizer_trace", {})
-    if not isinstance(trace, dict):
-        return
-    trace["sanitizer_strict_social_fallback_used"] = bool(used)
-    trace["sanitizer_strict_social_selection_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
-        SANITIZER_TRACE_SELECTION_OWNER_SHORT,
-        default=SANITIZER_FALLBACK_SELECTION_OWNER,
-    )
-    trace["sanitizer_strict_social_prose_owner"] = normalize_sanitizer_trace_owner_to_lineage_owner(
-        SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT,
-        default=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
-    )
-    trace[SANITIZER_STRICT_SOCIAL_SELECTION_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_SELECTION_OWNER_SHORT
-    trace[SANITIZER_STRICT_SOCIAL_PROSE_OWNER_TRACE_SHORT_FIELD] = SANITIZER_TRACE_STRICT_SOCIAL_PROSE_OWNER_SHORT
-    trace["sanitizer_strict_social_source"] = source
-    if used:
-        _stamp_sanitizer_producer_attribution(
-            context,
-            repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
-            owner_bucket=SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
-        )
 
 
 def _sanitizer_must_rewrite_sentence(sentence: str, *, has_previous_kept_sentence: bool) -> bool:

@@ -10,10 +10,8 @@ from typing import Literal
 
 from tests.helpers.golden_replay_projection_registry import (
     _PROTECTED_EXTRACTION_SPECS,
-)
-from tests.helpers.golden_replay_projection_presence import (
-    _TRACE_CONTAINER_RAW_PRESENCE,
-    _TRACE_CONTAINER_UNAVAILABLE_KEYS,
+    protected_trace_container_raw_presence,
+    protected_trace_container_unavailable_keys,
 )
 from tests.helpers.golden_replay_projection_fields import (
     protected_observation_field_paths,
@@ -117,7 +115,7 @@ def build_trace_container_matrix() -> tuple[TraceContainerRow, ...]:
         dotted_by_container.setdefault(container, []).append(path)
 
     rows: list[TraceContainerRow] = []
-    for presence_key, container_key in _TRACE_CONTAINER_RAW_PRESENCE:
+    for presence_key, container_key in protected_trace_container_raw_presence():
         rows.append(
             TraceContainerRow(
                 container_key=presence_key,
@@ -165,4 +163,4 @@ def trace_diagnostic_only_observed_keys() -> frozenset[str]:
 
 
 def trace_container_unavailable_keys() -> frozenset[str]:
-    return frozenset(_TRACE_CONTAINER_UNAVAILABLE_KEYS)
+    return protected_trace_container_unavailable_keys()

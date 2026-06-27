@@ -57,6 +57,86 @@ from game.final_emission_boundary_contract import assert_final_emission_mutation
 from game.turn_packet import TURN_PACKET_METADATA_KEY, resolve_turn_packet_for_gate
 
 
+def _layer_return(
+    text: str,
+    meta: Dict[str, Any],
+    extra: List[str] | None = None,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    """Canonical ``(text, meta, extra)`` return for repair-layer orchestration."""
+    return text, meta, list(extra or [])
+
+
+def _validator_result_unchecked(v0: Dict[str, Any]) -> bool:
+    return not v0.get("checked")
+
+
+def _validator_result_passed(v0: Dict[str, Any]) -> bool:
+    return bool(v0.get("passed"))
+
+
+def _validator_unchecked_or_passed(v0: Dict[str, Any]) -> bool:
+    return _validator_result_unchecked(v0) or _validator_result_passed(v0)
+
+
+def _stamp_validation_failure(
+    meta: Dict[str, Any],
+    v0: Dict[str, Any],
+    *,
+    failed_key: str,
+    reasons_key: str,
+) -> None:
+    meta[failed_key] = True
+    meta[reasons_key] = list(v0.get("failure_reasons") or [])
+
+
+def _boundary_unsatisfied_extra(strict_social_path: bool, tag: str) -> List[str]:
+    if strict_social_path:
+        return []
+    return [tag]
+
+
+def _validation_only_boundary_failure(
+    text: str,
+    meta: Dict[str, Any],
+    v0: Dict[str, Any],
+    *,
+    failed_key: str,
+    reasons_key: str,
+    boundary_tag: str,
+    strict_social_path: bool,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    """Record validator failure at the boundary without mutating emitted text."""
+    _stamp_validation_failure(meta, v0, failed_key=failed_key, reasons_key=reasons_key)
+    return _layer_return(text, meta, _boundary_unsatisfied_extra(strict_social_path, boundary_tag))
+
+
+def _record_social_response_structure_boundary_failure(
+    meta: Dict[str, Any],
+    v0: Dict[str, Any],
+) -> None:
+    meta["social_response_structure_boundary_semantic_repair_disabled"] = True
+    meta["social_response_structure_passed"] = False
+    meta["social_response_structure_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    meta["social_response_structure_repair_applied"] = False
+    meta["social_response_structure_repair_changed_text"] = False
+    meta["social_response_structure_repair_passed"] = False
+    meta["social_response_structure_repair_mode"] = None
+    meta["social_response_structure_inspect"] = inspect_social_response_structure(v0)
+
+
+def _referent_clarity_skip(
+    text: str,
+    meta: Dict[str, Any],
+    reason: str,
+    *,
+    boundary_semantic_disabled: bool = False,
+) -> tuple[str, Dict[str, Any], List[str]]:
+    if boundary_semantic_disabled:
+        meta["referent_boundary_semantic_repair_disabled"] = True
+    meta["referent_repair_skipped_reason"] = reason
+    return _layer_return(text, meta)
+
+
 def _skip_answer_completeness_layer(
     *,
     strict_social_details: Dict[str, Any] | None,
@@ -117,25 +197,25 @@ def _apply_answer_completeness_layer(
         "answer_completeness_boundary_semantic_repair_disabled": True,
     }
     if skip or not isinstance(contract, dict):
-        return text, meta, []
+        return _layer_return(text, meta)
 
     v0 = validate_answer_completeness(text, contract, resolution=resolution)
     meta["answer_completeness_checked"] = bool(v0.get("checked"))
     meta["answer_completeness_expected_voice"] = v0.get("answer_completeness_expected_voice")
-    if not v0.get("checked"):
-        return text, meta, []
+    if _validator_result_unchecked(v0):
+        return _layer_return(text, meta)
+    if _validator_result_passed(v0):
+        return _layer_return(text, meta)
 
-    if v0.get("passed"):
-        return text, meta, []
-
-    meta["answer_completeness_failed"] = True
-    meta["answer_completeness_failure_reasons"] = list(v0.get("failure_reasons") or [])
-
-    extra: List[str] = []
-    if not strict_social_path:
-        extra.append("answer_completeness_unsatisfied_at_boundary_no_reorder")
-    meta["answer_completeness_failed"] = True
-    return text, meta, extra
+    return _validation_only_boundary_failure(
+        text,
+        meta,
+        v0,
+        failed_key="answer_completeness_failed",
+        reasons_key="answer_completeness_failure_reasons",
+        boundary_tag="answer_completeness_unsatisfied_at_boundary_no_reorder",
+        strict_social_path=strict_social_path,
+    )
 
 
 def _merge_answer_completeness_meta(meta: Dict[str, Any], ac_dbg: Dict[str, Any]) -> None:
@@ -388,23 +468,24 @@ def _apply_response_delta_layer(
     )
     meta["response_delta_skip_reason"] = skip
     if skip:
-        return text, meta, []
+        return _layer_return(text, meta)
 
     v0 = validate_response_delta(text, contract)
     meta["response_delta_checked"] = bool(v0.get("checked"))
     meta["response_delta_kind_detected"] = v0.get("delta_kind_detected")
     meta["response_delta_echo_overlap_ratio"] = v0.get("echo_overlap_ratio")
-    if not v0.get("checked") or v0.get("passed"):
-        return text, meta, []
+    if _validator_unchecked_or_passed(v0):
+        return _layer_return(text, meta)
 
-    meta["response_delta_failed"] = True
-    meta["response_delta_failure_reasons"] = list(v0.get("failure_reasons") or [])
-
-    extra: List[str] = []
-    if not strict_social_path:
-        extra.append("response_delta_unsatisfied_at_boundary_no_reorder")
-    meta["response_delta_failed"] = True
-    return text, meta, extra
+    return _validation_only_boundary_failure(
+        text,
+        meta,
+        v0,
+        failed_key="response_delta_failed",
+        reasons_key="response_delta_failure_reasons",
+        boundary_tag="response_delta_unsatisfied_at_boundary_no_reorder",
+        strict_social_path=strict_social_path,
+    )
 
 
 def _merge_response_delta_meta(meta: Dict[str, Any], rd_dbg: Dict[str, Any]) -> None:
@@ -561,7 +642,7 @@ def _apply_social_response_structure_layer(
     )
     meta["social_response_structure_skip_reason"] = skip
     if skip:
-        return text, meta, []
+        return _layer_return(text, meta)
 
     v0 = validate_social_response_structure(text, None, gm_output=gm_output)
     meta["social_response_structure_checked"] = bool(v0.get("checked"))
@@ -570,22 +651,15 @@ def _apply_social_response_structure_layer(
     meta["social_response_structure_failure_reasons"] = list(v0.get("failure_reasons") or [])
 
     if not v0.get("checked") or not v0.get("applicable"):
-        return text, meta, []
+        return _layer_return(text, meta)
 
     if v0.get("passed"):
-        return text, meta, []
+        return _layer_return(text, meta)
 
     # Block C: list→prose / cadence / structural dialogue repairs are SEMANTIC_DISALLOWED at final emission;
     # record validation only — upstream (``upstream_response_repairs``, social emission) owns repairs.
-    meta["social_response_structure_boundary_semantic_repair_disabled"] = True
-    meta["social_response_structure_passed"] = False
-    meta["social_response_structure_failure_reasons"] = list(v0.get("failure_reasons") or [])
-    meta["social_response_structure_repair_applied"] = False
-    meta["social_response_structure_repair_changed_text"] = False
-    meta["social_response_structure_repair_passed"] = False
-    meta["social_response_structure_repair_mode"] = None
-    meta["social_response_structure_inspect"] = inspect_social_response_structure(v0)
-    return text, meta, []
+    _record_social_response_structure_boundary_failure(meta, v0)
+    return _layer_return(text, meta)
 
 
 def _merge_social_response_structure_meta(meta: Dict[str, Any], srs_dbg: Dict[str, Any]) -> None:
@@ -943,19 +1017,23 @@ def _apply_fallback_behavior_layer(
     tag_set = {str(t) for t in tags if isinstance(t, str)}
     if "known_fact_guard" in tag_set and "question_retry_fallback" in tag_set:
         meta["fallback_behavior_skip_reason"] = "deterministic_known_fact_retry_answer"
-        return text, meta, []
+        return _layer_return(text, meta)
 
     v0 = validate_fallback_behavior(text, contract, resolution=resolution)
     meta["fallback_behavior_checked"] = bool(v0.get("checked"))
     meta["fallback_behavior_skip_reason"] = v0.get("skip_reason")
     meta["fallback_behavior_uncertainty_active"] = bool(v0.get("uncertainty_active"))
-    if not v0.get("checked"):
-        return text, meta, []
-    if v0.get("passed"):
-        return text, meta, []
+    if _validator_result_unchecked(v0):
+        return _layer_return(text, meta)
+    if _validator_result_passed(v0):
+        return _layer_return(text, meta)
 
-    meta["fallback_behavior_failed"] = True
-    meta["fallback_behavior_failure_reasons"] = list(v0.get("failure_reasons") or [])
+    _stamp_validation_failure(
+        meta,
+        v0,
+        failed_key="fallback_behavior_failed",
+        reasons_key="fallback_behavior_failure_reasons",
+    )
 
     repaired_text, repair_meta, _ = repair_fallback_behavior(
         text,
@@ -976,16 +1054,17 @@ def _apply_fallback_behavior_layer(
     if v1.get("passed"):
         meta["fallback_behavior_failed"] = False
         meta["fallback_behavior_failure_reasons"] = []
-        return candidate, meta, []
+        return _layer_return(candidate, meta)
 
     meta["fallback_behavior_failed"] = bool(v1.get("checked") and not v1.get("passed"))
     meta["fallback_behavior_failure_reasons"] = list(v1.get("failure_reasons") or v0.get("failure_reasons") or [])
     if _normalize_text(candidate) != _normalize_text(text):
-        return candidate, meta, []
-    extra: List[str] = []
-    if not strict_social_path:
-        extra.append("fallback_behavior_unsatisfied_after_repair")
-    return text, meta, extra
+        return _layer_return(candidate, meta)
+    return _layer_return(
+        text,
+        meta,
+        _boundary_unsatisfied_extra(strict_social_path, "fallback_behavior_unsatisfied_after_repair"),
+    )
 
 
 def merge_fallback_behavior_into_emission_debug(
@@ -1239,28 +1318,27 @@ def _apply_referent_clarity_emission_layer(
 
     src = str(v0.get("referent_validation_input_source") or "")
     if src == "missing":
-        meta["referent_repair_skipped_reason"] = "no_referent_inputs"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "no_referent_inputs")
     if src == "packet_compact":
-        meta["referent_repair_skipped_reason"] = "limited_input_no_full_artifact"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "limited_input_no_full_artifact")
 
     if not isinstance(full, dict):
-        meta["referent_repair_skipped_reason"] = "no_full_artifact"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "no_full_artifact")
 
     if not v0.get("referent_violation_categories"):
-        return text, meta, []
+        return _layer_return(text, meta)
 
     if not allow_semantic_text_repair:
-        meta["referent_boundary_semantic_repair_disabled"] = True
-        meta["referent_repair_skipped_reason"] = "semantic_repair_must_occur_upstream"
-        return text, meta, []
+        return _referent_clarity_skip(
+            text,
+            meta,
+            "semantic_repair_must_occur_upstream",
+            boundary_semantic_disabled=True,
+        )
 
     repaired, mode = _repair_referent_clarity_minimal(text, v0, full)
     if not repaired or not mode:
-        meta["referent_repair_skipped_reason"] = "no_safe_deterministic_repair"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "no_safe_deterministic_repair")
 
     v1 = validate_referent_clarity(
         repaired,
@@ -1269,13 +1347,11 @@ def _apply_referent_clarity_emission_layer(
     )
     v1_cats = set(v1.get("referent_violation_categories") or [])
     if "disallowed_named_reference_in_text" in v1_cats:
-        meta["referent_repair_skipped_reason"] = "repair_introduced_or_retained_forbidden_reference"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "repair_introduced_or_retained_forbidden_reference")
     forb = _referent_forbidden_name_lc_set(full)
     if forb and _text_mentions_forbidden_name(repaired, forb):
-        meta["referent_repair_skipped_reason"] = "post_repair_forbidden_name_signal"
-        return text, meta, []
+        return _referent_clarity_skip(text, meta, "post_repair_forbidden_name_signal")
 
     meta["referent_repair_applied"] = _normalize_text(repaired) != _normalize_text(text)
     meta["referent_repair_strategy"] = mode
-    return repaired, meta, []
+    return _layer_return(repaired, meta)

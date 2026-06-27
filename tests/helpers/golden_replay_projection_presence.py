@@ -12,6 +12,10 @@ from tests.helpers.golden_replay_projection_fields import (
     MISSING,
     protected_observation_field_registry,
 )
+from tests.helpers.golden_replay_projection_registry import (
+    _TRACE_CONTAINER_RAW_PRESENCE,
+    _TRACE_CONTAINER_UNAVAILABLE_KEYS,
+)
 
 
 @dataclass(frozen=True)
@@ -31,17 +35,6 @@ class _ProjectionStatus:
     missing_source_by_field: dict[str, str]
     unavailable: list[str]
 
-
-# Parent trace containers tracked for raw presence and unavailable handling.
-_TRACE_CONTAINER_RAW_PRESENCE: tuple[tuple[str, str], ...] = (
-    ("trace.canonical_entry", "canonical_entry"),
-    ("trace.turn_trace", "turn_trace"),
-    ("trace.social_contract_trace", "social_contract_trace"),
-)
-
-_TRACE_CONTAINER_UNAVAILABLE_KEYS: frozenset[str] = frozenset(
-    key for key, _container in _TRACE_CONTAINER_RAW_PRESENCE
-)
 
 # Supporting (non-protected) keys in raw_signal_presence for classifier missing-source routing.
 _SUPPORTING_RAW_PRESENCE_SPECS: tuple[_SupportingRawPresenceSpec, ...] = (

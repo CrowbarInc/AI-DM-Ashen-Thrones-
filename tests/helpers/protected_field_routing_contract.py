@@ -6,122 +6,21 @@ extraction registry and schema defaults. Diagnostic only; does not project turns
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any
 
 from tests.helpers.golden_replay_projection_registry import (
+    FieldClassification,
     _PROTECTED_EXTRACTION_SPECS,
-)
-from tests.helpers.golden_replay_projection_presence import (
     _TRACE_CONTAINER_UNAVAILABLE_KEYS,
+    protected_extraction_source_ownership,
+    protected_field_owner_group,
 )
+
 from tests.helpers.golden_replay_projection_fields import (
     protected_observation_default_row,
     protected_observation_drift_bucket,
     protected_observation_field_registry,
 )
-
-FieldClassification = Literal[
-    "direct_runtime_fem",
-    "derived_runtime_fem",
-    "snapshot_transcript",
-    "trace_debug",
-    "derived_text",
-    "synthetic_default_only",
-]
-
-_SOURCE_PATH_BY_EXTRACTION_SOURCE: dict[str, str] = {
-    "resolution": "payload.resolution.kind",
-    "route": "trace.social_contract_trace.route_selected -> snap.debug.resolution_compact.kind -> payload.resolution.kind",
-    "speaker": "social_contract_trace speaker keys -> transcript snapshot -> resolution.social.npc_id",
-    "fem_flat": "FEM sidecar (read_fem_from_turn_for_replay)",
-    "sanitizer_trace": "payload.metadata.sanitizer_trace",
-    "sanitizer_lineage": "sanitizer_trace key -> sanitizer lineage context fallback",
-    "sanitizer_lineage_legacy": "sanitizer_trace key -> derived from sanitizer_lineage_mode",
-    "fem_opening_bucket": "read_opening_fallback_owner_bucket_for_replay(FEM)",
-    "fallback_family": "project_replay_fallback_family_from_fem -> lineage bridge",
-    "final_text": "snap.gm_text",
-    "scaffold": "final_text_has_scaffold_leakage(final_text)",
-    "trace_leaf": "debug trace container leaf",
-}
-
-_SOURCE_FAMILY_BY_EXTRACTION_SOURCE: dict[str, str] = {
-    "resolution": "payload_resolution",
-    "route": "trace_or_snapshot_route",
-    "speaker": "trace_or_snapshot_speaker",
-    "fem_flat": "fem_metadata",
-    "sanitizer_trace": "sanitizer_trace",
-    "sanitizer_lineage": "sanitizer_lineage",
-    "sanitizer_lineage_legacy": "sanitizer_lineage",
-    "fem_opening_bucket": "fem_owner_bucket_read_view",
-    "fallback_family": "fem_fallback_family_compatibility",
-    "final_text": "snapshot_text",
-    "scaffold": "derived_text_quality",
-    "trace_leaf": "debug_trace",
-}
-
-_FIELD_OWNER_GROUP_BY_SOURCE: dict[str, str] = {
-    "resolution": "runtime_resolution_payload",
-    "route": "replay_route_projection",
-    "speaker": "replay_speaker_projection",
-    "fem_flat": "final_emission_metadata",
-    "sanitizer_trace": "sanitizer_projection",
-    "sanitizer_lineage": "sanitizer_projection",
-    "sanitizer_lineage_legacy": "sanitizer_projection",
-    "fem_opening_bucket": "owner_bucket_read_views",
-    "fallback_family": "replay_fallback_family_projection",
-    "final_text": "replay_snapshot_text_projection",
-    "scaffold": "replay_text_quality_projection",
-    "trace_leaf": "replay_trace_projection",
-}
-
-_FIELD_OWNER_GROUP_BY_PATH: dict[str, str] = {
-    "response_type_required": "response_type_metadata",
-    "response_type_candidate_ok": "response_type_metadata",
-    "response_type_repair_used": "response_type_metadata",
-    "response_type_repair_kind": "response_type_metadata",
-    "upstream_prepared_emission_used": "upstream_prepared_emission_metadata",
-    "upstream_prepared_emission_valid": "upstream_prepared_emission_metadata",
-    "upstream_prepared_emission_source": "upstream_prepared_emission_metadata",
-    "upstream_prepared_emission_reject_reason": "upstream_prepared_emission_metadata",
-    "opening_recovered_via_fallback": "opening_fallback_metadata",
-    "opening_fallback_authorship_source": "opening_fallback_metadata",
-    "opening_fallback_owner_bucket": "owner_bucket_read_views",
-    "sealed_fallback_owner_bucket": "sealed_fallback_metadata",
-    "visibility_fallback_owner_bucket": "visibility_fallback_metadata",
-    "visibility_replacement_applied": "visibility_fallback_metadata",
-    "visibility_fallback_pool": "visibility_fallback_metadata",
-    "visibility_fallback_kind": "visibility_fallback_metadata",
-}
-
-_CLASSIFICATION_BY_SOURCE: dict[str, FieldClassification] = {
-    "resolution": "direct_runtime_fem",
-    "route": "snapshot_transcript",
-    "speaker": "snapshot_transcript",
-    "fem_flat": "direct_runtime_fem",
-    "sanitizer_trace": "direct_runtime_fem",
-    "sanitizer_lineage": "derived_runtime_fem",
-    "sanitizer_lineage_legacy": "derived_runtime_fem",
-    "fem_opening_bucket": "derived_runtime_fem",
-    "fallback_family": "derived_runtime_fem",
-    "final_text": "snapshot_transcript",
-    "scaffold": "derived_text",
-    "trace_leaf": "trace_debug",
-}
-
-_TEST_OWNER_BY_SOURCE: dict[str, str] = {
-    "resolution": "test_golden_replay_projection.py",
-    "route": "test_cf1_route_and_trace_precedence.py",
-    "speaker": "test_cf1_speaker_projection_precedence.py",
-    "fem_flat": "test_final_emission_meta.py",
-    "sanitizer_trace": "test_golden_replay_fallback_sanitizer_projection.py",
-    "sanitizer_lineage": "test_golden_replay_fallback_sanitizer_projection.py",
-    "sanitizer_lineage_legacy": "test_golden_replay_fallback_sanitizer_projection.py",
-    "fem_opening_bucket": "test_golden_replay_fallback_opening_projection.py",
-    "fallback_family": "test_cf1_fallback_family_precedence.py",
-    "final_text": "test_golden_replay_projection.py",
-    "scaffold": "test_golden_replay_projection.py",
-    "trace_leaf": "test_golden_replay_projection.py",
-}
 
 _EXTRACTOR_SPEC_OWNER = "extractor spec owner: tests.helpers.golden_replay_projection_registry._PROTECTED_EXTRACTION_SPECS"
 _PRESENCE_POLICY_OWNER = "presence policy owner: tests.helpers.golden_replay_projection_presence._build_projection_status"
@@ -175,11 +74,12 @@ def _source_path_for_spec(path: str, source: str, fem_keys: tuple[str, ...], tra
     if source == "trace_leaf" and trace_container:
         leaf = path.split(".")[-1]
         return f"trace.{trace_container}.{leaf}"
-    return _SOURCE_PATH_BY_EXTRACTION_SOURCE[source]
+    return protected_extraction_source_ownership(source).source_path
 
 
 def _field_owner_group(path: str, source: str) -> str:
-    return _FIELD_OWNER_GROUP_BY_PATH.get(path, _FIELD_OWNER_GROUP_BY_SOURCE[source])
+    _ = source
+    return protected_field_owner_group(path)
 
 
 def _default_behavior(path: str) -> str:
@@ -263,13 +163,14 @@ def build_protected_field_routing_matrix() -> tuple[ProtectedFieldRoutingRow, ..
         path = field.path
         spec = _PROTECTED_EXTRACTION_SPECS[path]
         source = spec.source
+        ownership = protected_extraction_source_ownership(source)
         flat_default = defaults.get(path) if "." not in path else None
         raw_presence_key = _raw_presence_key_for_contract(path, spec.raw_presence)
         rows.append(
             ProtectedFieldRoutingRow(
                 field_name=path,
                 field=path,
-                source_family=_SOURCE_FAMILY_BY_EXTRACTION_SOURCE[source],
+                source_family=ownership.source_family,
                 source_path=_source_path_for_spec(path, source, spec.fem_source_keys, spec.trace_container),
                 field_owner_group=_field_owner_group(path, source),
                 normalized_source=_normalized_source(source, spec.fem_source_keys, spec.normalized_presence),
@@ -284,13 +185,13 @@ def build_protected_field_routing_matrix() -> tuple[ProtectedFieldRoutingRow, ..
                 normalized_presence_key=path if spec.normalized_presence else None,
                 missing_source_rule=_missing_source_rule(spec.raw_presence, spec.normalized_presence),
                 drift_bucket=protected_observation_drift_bucket(path),
-                classification=_CLASSIFICATION_BY_SOURCE[source],
+                classification=ownership.classification,
                 projection_owner=f"extractor spec owner: _PROTECTED_EXTRACTION_SPECS[{path!r}].source={source!r}",
                 extractor_spec_owner=_EXTRACTOR_SPEC_OWNER,
                 presence_policy_owner=_PRESENCE_POLICY_OWNER,
                 unavailable_policy_owner=_UNAVAILABLE_POLICY_OWNER,
                 representation_policy_owner=_REPRESENTATION_POLICY_OWNER,
-                test_owner=_TEST_OWNER_BY_SOURCE[source],
+                test_owner=ownership.test_owner,
             )
         )
     return tuple(rows)
