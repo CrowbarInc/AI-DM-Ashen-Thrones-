@@ -261,7 +261,7 @@ def test_opening_fallback_fail_closed_paths_never_stamp_compatibility_local_auth
 
 def test_canonical_opening_paths_never_emit_either_legacy_compat_local_authorship_token() -> None:
     """Production canonical opening paths must not stamp either legacy compat-local authorship token."""
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
         OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
     )
@@ -291,7 +291,7 @@ def test_canonical_opening_paths_never_emit_either_legacy_compat_local_authorshi
 
 def test_opening_fallback_compatibility_local_disabled_is_telemetry_not_authorship() -> None:
     """Disabled flags are telemetry-only; they must not co-occur with legacy compat-local authorship."""
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
         OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
     )
@@ -314,7 +314,7 @@ def test_opening_fallback_compatibility_local_disabled_is_telemetry_not_authorsh
 
 def test_opening_fallback_fail_closed_diagnostic_keys_are_classified_and_constant_aligned() -> None:
     """Fail-closed diagnostic keys are explicitly registered and writer constants stay aligned."""
-    from game.final_emission_meta import (
+    from game.observability_attribution_read import (
         OPENING_FALLBACK_EMITTED_METADATA_FIELDS,
         OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
         opening_fallback_metadata_classification_parity_errors,
@@ -347,10 +347,9 @@ def test_opening_fallback_fail_closed_diagnostic_keys_are_classified_and_constan
 
 def test_opening_fallback_local_composition_disabled_quarantined_from_fem_rtd_merge() -> None:
     """Both disabled keys co-stamp composition_meta; only canonical key RTD-merges into FEM."""
-    from game.final_emission_meta import (
+    from game.observability_attribution_read import (
         OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS,
         merge_response_type_meta,
-        read_final_emission_meta_dict,
     )
     from game.final_emission_opening_fallback import (
         OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY,

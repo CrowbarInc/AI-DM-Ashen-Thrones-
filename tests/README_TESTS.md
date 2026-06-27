@@ -12,10 +12,24 @@ These rules keep the suite maintainable without turning CI into a heavy transcri
 - **Downstream consumer suites** — Verify that a consumer **observes or ships** behavior through an owner boundary; they are **not** alternate homes for canonical invariants.
 - **Compatibility residue suites** — Intentionally preserved historical coverage; **not** canonical ownership.
 - **`general` in inventory** — `likely_architecture_layer: general` is a **weak heuristic bucket**, not a validation layer. Direct owners with a declared validation layer must not rest on `general` in the inventory (enforced by `tests/test_ownership_registry.py`).
-- **New validation rules** — Before adding **broad** coverage across many files, add or extend **one canonical owner** for the new rule, then optional smoke elsewhere. `tests/test_ownership_registry.py` locks the responsibility registry (exactly one **direct_owner** path per governed slice, inventory presence, layer alignment, and **no transcript/gauntlet/playability/evaluator** module as direct owner for **live legality** groups). Cross-file duplicate `test_*` **base names** stay **heuristic** triage (derived at `py -3 tools/test_audit.py --check`; allowlisted pairs require reasons in `test_ownership_registry.py`); see `tests/TEST_AUDIT.md`.
-- **Gate magnet guard (BA-7)** — Gate-layer **direct-owner** suites (for example `tests/test_final_emission_gate.py`) must not import replay read-side projection helpers (`tests/helpers/golden_replay_projection.py`, classifier, or dashboard helpers) or grow golden-replay/dashboard/classifier ownership assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors keep those contracts. Enforced by `test_ba7_gate_direct_owners_*` in `tests/test_ownership_registry.py`.
+- **New validation rules** — Before adding **broad** coverage across many files, add or extend **one canonical owner** for the new rule, then optional smoke elsewhere. `tests/test_ownership_registry.py` locks registry identity (required groups, derived index, inventory integration, governance errors, allowlist reasons, stable neighbor relationships). Cross-file duplicate `test_*` **base names** stay **heuristic** triage (derived at `py -3 tools/test_audit.py --check`; allowlisted pairs require reasons in `tests/ownership_registry_contract.py`); see `tests/TEST_AUDIT.md`.
+- **Governance suite placement (CM8)** — Do **not** add structural import guards, gate magnet checks, replay projection policy, smoke-facade locks, or write-path parity tests to `tests/test_ownership_registry.py` by default. Use the focused owner module instead:
 
-**Quick maintenance loop (local, low noise):** `py -3 tools/test_audit.py` → `py -3 -m pytest tests/test_ownership_registry.py -q` → `python scripts/check_split_owner_acceptance_matrix.py` → `py -3 -m pytest --collect-only -q` → day-to-day `py -3 -m pytest -m "not transcript and not slow" -q`. Details: *Command cheat sheet* below and `tests/TEST_AUDIT.md`.
+  | Policy domain | Owner test module |
+  |---|---|
+  | Registry identity + inventory integration | `tests/test_ownership_registry.py` |
+  | Committed inventory JSON shape | `tests/test_inventory_governance.py` |
+  | Gate magnet / smoke facade / downstream neighbor locks | `tests/test_gate_boundary_governance.py` |
+  | Replay bridge / protected manifest / projection split | `tests/test_replay_boundary_governance.py` |
+  | BU4 CSV / producer-stamp write-path parity | `tests/test_ownership_write_path_governance.py` |
+  | BD/BV compat barrel / import-cap guards | `tests/test_compat_import_governance.py` |
+  | BN gate-context / preflight import guards | `tests/test_gate_context_ownership_guards.py` |
+  | BJ delegate closeout / thin-boundary locks | `tests/test_gate_delegate_closeout_locks.py` |
+
+  The registry file includes `test_registry_module_scope_guard_identity_only` to reject accidental re-bloat.
+- **Gate magnet guard (BA-7)** — Gate-layer **direct-owner** suites (for example `tests/test_final_emission_gate.py`) must not import replay read-side projection helpers (`tests/helpers/golden_replay_projection.py`, classifier, or dashboard helpers) or grow golden-replay/dashboard/classifier ownership assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors keep those contracts. Enforced by `tests/test_gate_boundary_governance.py` (`test_ba7_gate_direct_owners_*`).
+
+**Quick maintenance loop (local, low noise):** `py -3 tools/test_audit.py` → `py -3 -m pytest tests/test_ownership_registry.py tests/test_inventory_governance.py tests/test_gate_boundary_governance.py tests/test_replay_boundary_governance.py tests/test_ownership_write_path_governance.py -q` → `python scripts/check_split_owner_acceptance_matrix.py` → `py -3 -m pytest --collect-only -q` → day-to-day `py -3 -m pytest -m "not transcript and not slow" -q`. Details: *Command cheat sheet* below and `tests/TEST_AUDIT.md`.
 
 **Block C prompt / strict-social split (final):** strict-social **first-sentence** and **question-resolution** legality matrices live in `tests/test_social_exchange_emission.py`. `tests/test_prompt_and_guard.py` keeps **retry prompt text** for unresolved-question / social-contract failures, **`enforce_question_resolution_rule` prepend** behavior, **validator-voice detect/rewrite** at the GM layer, and thin smoke near the prompt stack for that boundary. **`apply_final_emission_gate` orchestration** remains owned by `tests/test_final_emission_gate.py`.
 
@@ -472,7 +486,7 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 | Goal | Command |
 |------|---------|
 | **Test audit (regenerate inventory)** | `py -3 tools/test_audit.py` |
-| **Ownership registry governance** | `py -3 -m pytest tests/test_ownership_registry.py -q` |
+| **Ownership registry governance** | `py -3 -m pytest tests/test_ownership_registry.py tests/test_inventory_governance.py tests/test_gate_boundary_governance.py tests/test_replay_boundary_governance.py tests/test_ownership_write_path_governance.py -q` |
 | **Split-owner matrix refresh (BU24, Windows-native)** | `python scripts/refresh_split_owner_acceptance_matrix.py` |
 | **Split-owner matrix report only** | `python scripts/refresh_split_owner_acceptance_matrix.py --write-report-only` |
 | **Split-owner matrix refresh (Make)** | `make split-owner-matrix-refresh` |

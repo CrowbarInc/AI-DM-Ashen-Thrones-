@@ -2,7 +2,7 @@
 
 Runtime gate-entry seam (BN1), lazy gate namespace locks (BN2), and gate-context
 preflight import regrowth policies (BN3–BN11). Enforced by ``test_bn*_*`` in
-``tests/test_ownership_registry.py``.
+``tests/test_gate_context_ownership_guards.py``.
 """
 from __future__ import annotations
 

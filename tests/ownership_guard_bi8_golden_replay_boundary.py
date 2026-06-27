@@ -2,7 +2,7 @@
 
 Golden replay is a consumer/bridge, not a subsystem legality owner. Enforced by
 ``test_bi8_golden_replay_ownership_boundary_is_locked`` in
-``tests/test_ownership_registry.py``.
+``tests/test_replay_boundary_governance.py``.
 """
 from __future__ import annotations
 

@@ -107,7 +107,7 @@ BJ129_ORCHESTRATION_CALL_MARKERS: Final[tuple[str, ...]] = (
 )
 
 # Cycle BV13C — production must not regrow compat-barrel text imports (registry guard owner:
-# ``tests/test_ownership_registry.py`` ``collect_bv13c_text_compat_import_guard_violations``).
+# ``tests/test_compat_import_governance.py`` ``collect_bv13c_text_compat_import_guard_violations``).
 BV13C_FORBIDDEN_TEXT_COMPAT_BARREL_IMPORT_MARKERS: Final[tuple[str, ...]] = (
     "from game.final_emission_text import _normalize_text",
     "from game.final_emission_text import _normalize_text_preserve_paragraphs",
@@ -117,7 +117,7 @@ BV13C_FORBIDDEN_TEXT_COMPAT_BARREL_IMPORT_MARKERS: Final[tuple[str, ...]] = (
 )
 
 # Cycle BV14C — production must not regrow compat-barrel social-exchange imports (registry guard owner:
-# ``tests/test_ownership_registry.py`` ``collect_bv14c_social_exchange_compat_import_guard_violations``).
+# ``tests/test_compat_import_governance.py`` ``collect_bv14c_social_exchange_compat_import_guard_violations``).
 BV14C_FORBIDDEN_SOCIAL_EXCHANGE_COMPAT_BARREL_IMPORT_MARKERS: Final[tuple[str, ...]] = (
     "from game.social_exchange_emission import strict_social_emission_will_apply",
     "from game.social_exchange_emission import minimal_social_emergency_fallback_line",

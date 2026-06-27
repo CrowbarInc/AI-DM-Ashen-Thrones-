@@ -6,7 +6,7 @@ HTTP fixture stubs. Downstream tests should import this module instead of
 
 Compatibility re-export: ``tests.helpers.gate_integration_smoke``.
 
-Registry reference: ``tests/test_ownership_registry.py`` (Cycle BV12A).
+Registry reference: ``tests/test_gate_boundary_governance.py`` (Cycle BV12A).
 """
 from __future__ import annotations
 

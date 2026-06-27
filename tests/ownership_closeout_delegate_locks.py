@@ -1,8 +1,7 @@
 """BJ delegate-collapse closeout lock helpers (import-light; no pytest).
 
 Delegate-collapse closeout locks (cycles BJ-70–BJ-129) verify that ``final_emission_gate``
-orchestration delegates to owner modules rather than retaining gate wrappers. Enforced by
-``test_bj*`` functions in ``tests/test_ownership_registry.py``.
+orchestration delegates to owner modules rather than retaining gate wrappers. Enforced by ``test_bj*`` functions in ``tests/test_gate_delegate_closeout_locks.py``.
 """
 from __future__ import annotations
 
@@ -111,7 +110,7 @@ BJ124_DEAD_GATE_IMPORT_MARKERS: Final[tuple[str, ...]] = (
 # Cycle BJ-127 — global stale gate harness scan (extends BJ-123 fragment/allowlist locks).
 BJ127_GLOBAL_SCAN_EXCLUDE: Final[frozenset[str]] = frozenset(
     {
-        "tests/test_ownership_registry.py",
+        "tests/test_gate_delegate_closeout_locks.py",
         "tests/test_final_emission_gate.py",
         "tests/test_final_emission_gate_delegator_regression.py",
         "tests/test_architecture_audit_tool.py",
@@ -122,7 +121,7 @@ BJ127_FEG_ALIAS_IMPORT_ALLOWLIST: Final[frozenset[str]] = frozenset(
     {
         "tests/helpers/gate_equivalence_monkeypatch.py",
         "tests/test_final_emission_gate.py",
-        "tests/test_ownership_registry.py",
+        "tests/test_gate_delegate_closeout_locks.py",
         "tests/test_speaker_contract_enforcement_extraction.py",
         "tests/test_diegetic_fallback_narration.py",
         "tests/test_final_emission_acceptance_quality.py",
@@ -144,7 +143,7 @@ BJ127_FEG_ALIAS_IMPORT_MARKERS: Final[tuple[str, ...]] = (
 )
 
 
-_OWNERSHIP_REGISTRY_PATH = _REPO_ROOT / "tests/test_ownership_registry.py"
+_DELEGATE_CLOSEOUT_LOCKS_TEST_PATH = _REPO_ROOT / "tests/test_gate_delegate_closeout_locks.py"
 
 
 def repo_root() -> Path:
@@ -156,8 +155,8 @@ def get_repo_root() -> Path:
 
 
 def ownership_registry_doc() -> str:
-    """Return central ownership registry source (enforcement hub docstring corpus)."""
-    return _OWNERSHIP_REGISTRY_PATH.read_text(encoding="utf-8")
+    """Return delegate closeout lock test source (BJ-123–BJ-129 corpus anchor)."""
+    return _DELEGATE_CLOSEOUT_LOCKS_TEST_PATH.read_text(encoding="utf-8")
 
 
 def collect_stale_feg_patch_fragment_violations(

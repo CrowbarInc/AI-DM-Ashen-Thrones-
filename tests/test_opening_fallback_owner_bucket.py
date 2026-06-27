@@ -20,7 +20,7 @@ import pytest
 from game.final_emission_meta_read import (
     final_emission_meta_read_side_surface,
 )
-from game.final_emission_meta import OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS
+from game.observability_attribution_read import OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS
 from game.final_emission_owner_bucket_views import (
     OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES,
     OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
@@ -112,7 +112,7 @@ def test_canonical_legacy_compat_local_authorship_token_maps_to_unknown_ambiguou
 
 def test_retired_short_compat_local_authorship_not_in_legacy_registry() -> None:
     """Short token was retired from active legacy opening-authorship read vocabulary (CK Block 5)."""
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
         OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
     )

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.final_emission_replay_projection import read_opening_fallback_owner_bucket_for_replay
+from tests.helpers.golden_replay_projection import read_opening_fallback_owner_bucket_for_replay
 
 from tests.helpers.golden_replay_projection_fields import (
     _first_present,

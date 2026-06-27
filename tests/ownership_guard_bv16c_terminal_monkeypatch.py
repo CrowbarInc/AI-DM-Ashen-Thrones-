@@ -2,7 +2,7 @@
 
 Tests must monkeypatch finalize-tail owner modules, not ``terminal_pipeline`` delegate
 symbols. Enforced by ``test_bv16c_ownership_registry_terminal_pipeline_delegate_monkeypatch_governance``
-in ``tests/test_ownership_registry.py``.
+in ``tests/test_compat_import_governance.py``.
 """
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ BV16C_FORBIDDEN_TERMINAL_DELEGATE_MONKEYPATCH_MARKERS: Final[tuple[str, ...]] = 
 )
 BV16C_TERMINAL_MONKEYPATCH_SCAN_ALLOWLIST: Final[frozenset[str]] = frozenset(
     {
-        "tests/test_ownership_registry.py",
+        "tests/test_compat_import_governance.py",
         "tests/ownership_guard_bv16c_terminal_monkeypatch.py",
         "tools/bv16c_migrate_monkeypatches.py",
         "tools/bv16_generate_audit_docs.py",

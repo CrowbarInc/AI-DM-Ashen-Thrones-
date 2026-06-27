@@ -2,7 +2,8 @@
 
 Committed governance inventory schema validation, registry/inventory parity checks,
 and ``collect_ownership_governance_errors``. Enforced by governance tests in
-``tests/test_ownership_registry.py``. Canonical registry data is sourced from
+``tests/test_inventory_governance.py`` (registry/inventory integration in
+``tests/test_ownership_registry.py``). Canonical registry data is sourced from
 ``tests/ownership_registry_contract.py``.
 """
 from __future__ import annotations

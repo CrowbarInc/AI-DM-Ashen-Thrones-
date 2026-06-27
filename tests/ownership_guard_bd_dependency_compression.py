@@ -1,7 +1,7 @@
 """BD-6 gate dependency compression guards (import-light; no pytest).
 
 Pure validation logic for non-owner test import compression during BD-2–BD-5 facade migration.
-Enforced by ``test_bd6_gate_dependency_compression_*`` in ``tests/test_ownership_registry.py``.
+Enforced by ``test_bd6_gate_dependency_compression_*`` in ``tests/test_compat_import_governance.py``.
 """
 from __future__ import annotations
 
@@ -94,7 +94,7 @@ _BD6_GATE_DEPENDENCY_COMPRESSION_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/test_test_audit_tool.py": "Inventory audit fixture strings embed gate-import examples",
     "tests/test_realization_layer_audit.py": "Realization audit fixture strings embed gate-import examples",
     "tests/test_run_scenario_spine_validation.py": "Scenario-spine validation; canonical FEM/lineage read for opening attribution diagnostics (BL1)",
-    "tests/test_ownership_registry.py": "Governance module; AO5 runtime vs acceptance boundary check imports replay projection",
+    "tests/test_replay_boundary_governance.py": "Governance module; AO5 runtime vs acceptance boundary check imports replay projection",
     # BD-6 facade sub-delegates and authority helpers (CE/CF/CG cycles).
     "tests/helpers/golden_replay_projection_extractors.py": "Golden replay projection internal extractor delegate (CE5/BD-4)",
     "tests/helpers/golden_replay_projection_fallbacks.py": "Golden replay projection internal fallback delegate (CE5/BD-4)",

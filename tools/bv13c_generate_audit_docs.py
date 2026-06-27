@@ -30,7 +30,7 @@ ALLOWLIST = frozenset(
         "game/final_emission_scene_emit_integrity.py",
         "tests/test_bv13a_final_emission_text_facade_delegates.py",
         "tests/test_diegetic_fallback_block4.py",
-        "tests/test_ownership_registry.py",
+        "tests/test_compat_import_governance.py",
     }
 )
 FALLBACK_WRAPPER = frozenset(

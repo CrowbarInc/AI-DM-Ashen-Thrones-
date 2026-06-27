@@ -3,7 +3,7 @@
 Gate-layer direct-owner suites must not import replay/dashboard/classifier read-side
 projection helpers or accumulate read-side projection assertion creep. Enforced by
 ``test_ba7_*`` and ``test_final_emission_gate_does_not_accumulate_*`` in
-``tests/test_ownership_registry.py``.
+``tests/test_gate_boundary_governance.py``.
 """
 from __future__ import annotations
 

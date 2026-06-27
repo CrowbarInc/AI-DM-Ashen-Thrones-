@@ -23,7 +23,7 @@ python -m pytest tests/test_dead_turn_evaluation_threading.py tests/test_playabi
 python -m pytest tests/test_final_emission_boundary_contract.py tests/test_final_emission_boundary_convergence.py -q
 python -m pytest tests/test_gate_convergence_closeout.py -q
 python -m pytest tests/test_validation_coverage_audit.py -q
-python -m pytest tests/test_ownership_registry.py -q
+python -m pytest tests/test_ownership_registry.py tests/test_inventory_governance.py tests/test_gate_boundary_governance.py tests/test_replay_boundary_governance.py tests/test_ownership_write_path_governance.py -q
 python scripts/check_split_owner_acceptance_matrix.py
 python tools/test_audit.py --check
 ```
@@ -71,7 +71,7 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 | **Gate convergence** | `docs/gate_convergence_closeout.md`, `docs/gate_cleanup_inventory.md` | `tests/test_gate_convergence_closeout.py` | — (gate boundary also covered indirectly by FE-C2 tests and audits) | No | **Hard-fail** | Formal closeout regression slice for gate maintenance grade. |
 | **Validation layer (Objective #11)** | `docs/validation_layer_separation.md`, `docs/validation_layer_audit.md` | `tests/test_validation_layer_audit_smoke.py` (also in evaluator boundary bundle) | `tools/validation_layer_audit.py` | No | **Hard-fail (`--strict`)** | Strict mode fails on `likely_drift`; aligns with doc “CI opt-in” language. |
 | **Validation coverage registry (Objective #12)** | `docs/validation_layer_separation.md`, `tests/TEST_AUDIT.md` | `tests/test_validation_coverage_audit.py` | `tools/validation_coverage_audit.py` | No | **Hard-fail (`--strict`)** | Guard tests lock tool behavior; `--strict` fails on registry validation errors (non-strict CLI exits 0 even when errors print). |
-| **Test ownership / inventory** | `docs/architecture_ownership_ledger.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `docs/audits/closeouts/cycle_bf_test_inventory_de_amplification_closeout.md` | `tests/test_ownership_registry.py` | `tools/test_audit.py --check` | Yes (`convergence-checks.yml` only) | **Hard-fail** | Registry map + committed `tests/test_inventory_governance.json` drift gate. **Do not duplicate** in `content-lint.yml` (Cycle BF8). |
+| **Test ownership / inventory** | `docs/architecture_ownership_ledger.md`, `tests/TEST_CONSOLIDATION_PLAN.md`, `docs/audits/closeouts/cycle_bf_test_inventory_de_amplification_closeout.md` | `tests/test_ownership_registry.py`, `tests/test_inventory_governance.py`, `tests/test_gate_boundary_governance.py`, `tests/test_replay_boundary_governance.py`, `tests/test_ownership_write_path_governance.py` | `tools/test_audit.py --check` | Yes (`convergence-checks.yml` only) | **Hard-fail** | Registry map + committed `tests/test_inventory_governance.json` drift gate. **Do not duplicate** in `content-lint.yml` (Cycle BF8). |
 | **Split-owner acceptance matrix (BU20–BU25)** | [`docs/audits/README.md`](audits/README.md), [`docs/audits/BU15_split_owner_acceptance_matrix.md`](audits/BU15_split_owner_acceptance_matrix.md) | `tests/test_split_owner_acceptance_matrix_contract.py`, `tests/test_refresh_split_owner_acceptance_matrix.py` (`-m split_owner_matrix_contract`) | **`python scripts/check_split_owner_acceptance_matrix.py`** (CI canonical); local refresh: `python scripts/refresh_split_owner_acceptance_matrix.py` | Yes | **Hard-fail** | Locks canonical split-owner literals, dashboard `{matrix_id}_split_owner` parity, checked-in audit report text, and classifier/dashboard builder surfaces. See [Split-owner acceptance matrix governance](#split-owner-acceptance-matrix-governance). |
 | **Architecture governance (broad)** | `docs/architecture_ownership_ledger.md`, `docs/narrative_integrity_architecture.md` | `tests/test_architecture_audit_tool.py` (included in evaluator boundary bundle) | `tools/architecture_audit.py --print-summary` | No | **Informational** | Heuristic breadth; summary keeps artifacts warm without noisy hard-fail until signals stabilize. |
 | **Narrative realization / failure locality** | `docs/audits/closeouts/realization_failure_locality_closeout.md` | Guard tests exist (`tests/test_realization_*`) but not part of this minimal CI slice | **`tools/realization_layer_audit.py`** (maps *realization surface* intent), **`tools/realization_provenance_audit.py`** (maps *failure locality / provenance* intent). Repo does **not** ship `realization_surface_audit.py` or `realization_failure_locality_audit.py` under those names. | No | **Informational** | Advisory-only exit 0; large lexical counts—observe drift, do not gate merges yet. |
@@ -158,6 +158,10 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 - `python tools/validation_coverage_audit.py --strict`
 - `pytest tests/test_validation_coverage_audit.py`
 - `pytest tests/test_ownership_registry.py`
+- `pytest tests/test_inventory_governance.py`
+- `pytest tests/test_gate_boundary_governance.py`
+- `pytest tests/test_replay_boundary_governance.py`
+- `pytest tests/test_ownership_write_path_governance.py`
 - `python scripts/check_split_owner_acceptance_matrix.py` — split-owner matrix/report/dashboard parity (canonical CI entrypoint; see [Split-owner acceptance matrix governance](#split-owner-acceptance-matrix-governance))
 - `python tools/test_audit.py --check`
 
@@ -173,7 +177,24 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 
 - **`tools/run_governance_audits.py`** — Thin local runner for informational audits only (`python tools/run_governance_audits.py`). Strict audits and pytest remain separate commands.
 
-**Test inventory (wired in CI):** `python tools/test_audit.py --check` validates committed `tests/test_inventory_governance.json` drift in `convergence-checks.yml` (alongside `tests/test_ownership_registry.py`). Regenerate governance with `py -3 tools/test_audit.py`; full diagnostic via `--full` → `artifacts/test_inventory_full.json`. See `tests/TEST_AUDIT.md`.
+**Test inventory (wired in CI):** `python tools/test_audit.py --check` validates committed `tests/test_inventory_governance.json` drift in `convergence-checks.yml` (alongside registry and governance suites in `tests/test_ownership_registry.py`, `tests/test_inventory_governance.py`, `tests/test_gate_boundary_governance.py`, `tests/test_replay_boundary_governance.py`, and `tests/test_ownership_write_path_governance.py`). Regenerate governance with `py -3 tools/test_audit.py`; full diagnostic via `--full` → `artifacts/test_inventory_full.json`. See `tests/TEST_AUDIT.md`.
+
+### Governance suite placement (CM8)
+
+`tests/test_ownership_registry.py` is **registry identity only** — required groups, derived index, inventory integration, governance errors, allowlist contract, and stable neighbor relationships. **Do not** add gate magnet guards, replay projection policy, smoke-facade locks, import-cap guards, or write-path parity tests there by default.
+
+| Policy domain | Owner test module |
+|---|---|
+| Registry identity + inventory integration | `tests/test_ownership_registry.py` |
+| Committed inventory JSON shape | `tests/test_inventory_governance.py` |
+| Gate magnet / smoke facade / downstream neighbor locks | `tests/test_gate_boundary_governance.py` |
+| Replay bridge / protected manifest / projection split | `tests/test_replay_boundary_governance.py` |
+| BU4 CSV / producer-stamp write-path parity | `tests/test_ownership_write_path_governance.py` |
+| BD/BV compat barrel / import-cap guards | `tests/test_compat_import_governance.py` |
+| BN gate-context / preflight import guards | `tests/test_gate_context_ownership_guards.py` |
+| BJ delegate closeout / thin-boundary locks | `tests/test_gate_delegate_closeout_locks.py` |
+
+Anti-regression: `test_registry_module_scope_guard_identity_only` in the registry file rejects accidental re-bloat via an explicit test-name allowlist.
 
 ---
 

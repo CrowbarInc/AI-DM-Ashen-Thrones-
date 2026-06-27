@@ -10,7 +10,7 @@ identified in BV12 discovery.
 Compatibility: consumers may continue importing ``replay_smoke_assertions`` and
 ``gate_integration_smoke`` until Phase 2 migration.
 
-Registry reference: ``tests/test_ownership_registry.py`` (Cycle BV12A).
+Registry reference: ``tests/test_gate_boundary_governance.py`` (Cycle BV12A).
 """
 from __future__ import annotations
 

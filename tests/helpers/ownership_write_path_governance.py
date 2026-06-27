@@ -1,4 +1,7 @@
-"""BU8/BU9/BU10 — BU4 ownership write-path parity and producer-stamp pairing governance (tests only)."""
+"""BU8/BU9/BU10 — BU4 ownership write-path parity and producer-stamp pairing governance (tests only).
+
+Enforced by ``tests/test_ownership_write_path_governance.py``.
+"""
 from __future__ import annotations
 
 import ast

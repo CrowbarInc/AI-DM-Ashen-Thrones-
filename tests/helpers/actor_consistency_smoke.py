@@ -5,7 +5,7 @@ Owns consumer-layer AC validator and repair seams. Delegates to
 
 Compatibility re-export: ``tests.helpers.emission_smoke_assertions``.
 
-Registry reference: ``tests/test_ownership_registry.py`` (Cycle BV7B).
+Registry reference: ``tests/test_gate_boundary_governance.py`` (Cycle BV7B).
 """
 from __future__ import annotations
 

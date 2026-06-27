@@ -46,7 +46,7 @@ Future assertion-economy work must **not** collapse these layers into a single s
 phrase list or helper. Overlap in banned *words* is intentional; each layer guards a
 different failure surface (legality vs integration smoke vs protected replay drift).
 
-Registry lock: ``tests/test_ownership_registry.py`` (``test_be6_scaffold_phrase_triple_layer_split_locked``).
+Registry lock: ``tests/test_gate_boundary_governance.py`` (``test_be6_scaffold_phrase_triple_layer_split_locked``).
 
 Cycle AS2 — downstream consumer suites should import gate integration from
 ``tests/helpers/gate_integration_smoke.py`` (re-exported here) instead of
@@ -63,7 +63,7 @@ Cycle BV7B — AC/RD/RT consumer seams → ``actor_consistency_smoke.py``,
 ``route_determinism_smoke.py``, ``response_type_smoke.py``. This module remains the
 compatibility barrel for phrase/route/speaker smoke.
 
-Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick reference).
+Registry reference: ``tests/test_ownership_registry.py`` (Cycle AL4 quick reference); smoke-facade lock: ``tests/test_gate_boundary_governance.py``.
 
 Normal full-emission consumer execution delegates through ``game.final_emission_runtime``.
 Private layer seams below delegate to their narrower validator/repair owners while

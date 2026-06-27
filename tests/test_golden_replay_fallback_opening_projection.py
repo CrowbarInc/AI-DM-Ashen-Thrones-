@@ -73,10 +73,8 @@ from tests.helpers.opening_fallback_evidence import (
 )
 from game.attribution_read_views import (
     OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
-    opening_fallback_owner_bucket_from_meta,
-)
-from game.final_emission_ownership_schema import (
     OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
+    opening_fallback_owner_bucket_from_meta,
 )
 
 from tests.helpers.golden_replay_fallback_projection_helpers import (
@@ -305,7 +303,7 @@ def test_golden_projection_legacy_compat_local_evidence_maps_to_unknown_ambiguou
 
 def test_protected_replay_observation_excludes_out_of_band_disabled_telemetry() -> None:
     """Golden replay protected paths omit out-of-band local-composition disabled telemetry."""
-    from game.final_emission_meta import (
+    from game.observability_attribution_read import (
         OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS,
         OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_FIELDS,
     )

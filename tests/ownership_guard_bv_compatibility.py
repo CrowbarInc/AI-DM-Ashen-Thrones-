@@ -2,7 +2,7 @@
 
 Pure validation logic for read-cluster facade routing, compat-barrel regrowth lockdown, and
 smoke-monolith import routing. Enforced by ``test_bv2c_*``, ``test_bv10_*``, ``test_bv7c_*``,
-``test_bv12c_*``, ``test_bv13c_*``, and ``test_bv14c_*`` in ``tests/test_ownership_registry.py``.
+``test_bv12c_*``, ``test_bv13c_*``, and ``test_bv14c_*`` in ``tests/test_compat_import_governance.py``.
 """
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ _BV2C_META_WRITE_OWNER_GAME_MODULES: Final[frozenset[str]] = frozenset(
 )
 _BV2C_META_DIRECT_IMPORT_TEST_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/test_final_emission_meta.py": "Canonical FEM owner regression suite (BV2C KEEP)",
-    "tests/test_ownership_registry.py": "Import governance / boundary enforcement owner (BV2C KEEP)",
+    "tests/test_compat_import_governance.py": "Import governance / compatibility guard entrypoint owner (BV2C KEEP)",
     "tests/ownership_closeout_delegate_locks.py": (
         "BJ delegate closeout lock helpers extracted from governance owner (CH11/CH13 KEEP)"
     ),
@@ -89,7 +89,7 @@ _BV10C_READ_CLUSTER_GAME_ALLOWLIST: Final[frozenset[str]] = frozenset(
 _BV10C_READ_CLUSTER_TEST_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/test_final_emission_meta.py": "FEM / schema owner regression suite (BV10C KEEP)",
     "tests/test_opening_fallback_owner_bucket.py": "Opening fallback owner-bucket mapping owner (BV10C KEEP)",
-    "tests/test_ownership_registry.py": "Import governance / boundary enforcement owner (BV10C KEEP)",
+    "tests/test_compat_import_governance.py": "Import governance / compatibility guard entrypoint owner (BV10C KEEP)",
     "tests/test_bv10a_read_facade_delegates.py": "BV10 facade delegate verification owner (BV10C KEEP)",
     "tests/helpers/replay_smoke_assertions.py": "Replay FEM read bridge facade (BV7A/BV10C KEEP)",
     "tests/helpers/replay_fem_read_smoke.py": "Replay FEM read domain facade owner (BV12A KEEP)",
@@ -326,7 +326,7 @@ _BV7C_ALLOWED_MONOLITH_STATIC_IMPORTERS: Final[frozenset[str]] = frozenset(
 )
 _BV7C_ALLOWED_MONOLITH_DYNAMIC_IMPORTERS: Final[frozenset[str]] = frozenset(
     {
-        "tests/test_ownership_registry.py",
+        "tests/test_compat_import_governance.py",
         "tests/test_final_emission_gate_delegator_regression.py",
     }
 )
@@ -340,7 +340,7 @@ _BV12C_COMPAT_BARREL_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
     "tests/helpers/gate_integration_smoke.py": "compat barrel re-exports gate orchestration domain facade",
     "tests/test_bv12a_smoke_bridge_facade_delegates.py": "BV12A/BV12C delegate verification owner",
     "tests/test_bv13a_final_emission_text_facade_delegates.py": "BV13A text compat delegate verification owner",
-    "tests/test_ownership_registry.py": "Governance module; synthetic violation fixtures",
+    "tests/test_compat_import_governance.py": "Governance module; synthetic violation fixtures",
 }
 _BV12C_ALLOWED_REPLAY_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
     {"tests/test_bv12a_smoke_bridge_facade_delegates.py"}
@@ -367,7 +367,7 @@ _BV13C_TEXT_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] = {
     "game/final_emission_scene_emit_integrity.py": "fallback wrapper consumer (_global_narrative_fallback_stock_line)",
     "tests/test_bv13a_final_emission_text_facade_delegates.py": "BV13A/BV13C delegate verification owner",
     "tests/test_diegetic_fallback_block4.py": "fallback wrapper test consumer",
-    "tests/test_ownership_registry.py": "Governance module; synthetic violation fixtures",
+    "tests/test_compat_import_governance.py": "Governance module; synthetic violation fixtures",
 }
 _BV13C_ALLOWED_TEXT_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
     {
@@ -398,7 +398,7 @@ _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] =
     "tests/test_bv14a_social_exchange_emission_facade_delegates.py": "BV14A/BV14C delegate verification owner",
     "tests/test_narration_transcript_regressions.py": "composition regression consumer",
     "tests/test_output_sanitizer.py": "sanitizer integration consumer (composition filter monkeypatch)",
-    "tests/test_ownership_registry.py": "Governance module; BJ-115/116 delegate introspection + synthetic fixtures",
+    "tests/test_compat_import_governance.py": "Governance module; synthetic violation fixtures",
     "tests/test_realization_provenance.py": "composition regression consumer",
     "tests/test_social_answer_candidate.py": "composition regression consumer",
     "tests/test_social_emission_quality.py": "composition regression consumer",

@@ -518,7 +518,7 @@ def test_failure_classification_builders_compat_local_literals_only_in_legacy_he
     import ast
     from pathlib import Path
 
-    from game.final_emission_ownership_schema import (
+    from game.attribution_read_views import (
         OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES,
     )
 

@@ -530,7 +530,11 @@ def test_content_lint_workflow_does_not_rerun_ownership_registry() -> None:
 
 
 def test_convergence_checks_workflow_owns_inventory_governance() -> None:
-    """BF8/BF9: convergence-checks remains the sole CI owner for registry + drift gate."""
+    """BF8/BF9/CM7: convergence-checks remains the sole CI owner for registry + governance suites."""
     workflow = (ROOT / ".github/workflows/convergence-checks.yml").read_text(encoding="utf-8")
     assert "tests/test_ownership_registry.py" in workflow
+    assert "tests/test_inventory_governance.py" in workflow
+    assert "tests/test_gate_boundary_governance.py" in workflow
+    assert "tests/test_replay_boundary_governance.py" in workflow
+    assert "tests/test_ownership_write_path_governance.py" in workflow
     assert "tools/test_audit.py --check" in workflow
