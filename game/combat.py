@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 
 from game.models import CombatEngineResult
 from game.utils import roll_die, int_mod, slugify
-from game.conditions import current_ac, add_condition, remove_condition, has_condition, can_take_actions, can_attack, can_cast, cleanup_player_turn
+from game.conditions import current_ac, add_condition, remove_condition, has_condition, can_take_actions, can_attack, can_cast, cleanup_player_turn, get_effect_value
 
 
 def alive_enemies(scene: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -76,6 +76,13 @@ def risky_strike_values(bab: int) -> Dict[str, int]:
 def defensive_stance_values(bab: int) -> Dict[str, int]:
     tier = bab // 4
     return {'attack_penalty': -(1 + tier), 'ac_bonus': 1 + tier}
+
+
+def _condition_definitions(conditions: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if conditions is not None:
+        return conditions
+    from game import storage
+    return storage.load_conditions()
 
 
 def player_can_act(character: Dict[str, Any], combat: Dict[str, Any], conditions: Dict[str, Any]) -> bool:
@@ -213,6 +220,10 @@ def resolve_attack(character: Dict[str, Any], scene: Dict[str, Any], attack_id: 
         remove_condition(character, 'defensive_stance')
         add_condition(character, {'name': 'defensive_stance', 'ac_bonus': ds['ac_bonus'], 'expires': 'start_of_next_player_turn'})
 
+    attack_penalty = get_effect_value(character, conditions, 'attack_penalty')
+    damage_penalty = get_effect_value(character, conditions, 'damage_penalty')
+    attack_bonus -= attack_penalty
+
     d20 = roll_die(20)
     total = d20 + attack_bonus
     target_ac = current_ac(enemy, conditions)
@@ -222,7 +233,13 @@ def resolve_attack(character: Dict[str, Any], scene: Dict[str, Any], attack_id: 
         for _ in range(attack['damage']['dice_count']):
             damage += roll_die(attack['damage']['dice_sides'])
         damage += damage_bonus
+        damage = max(0, damage - damage_penalty)
         enemy['hp']['current'] = max(0, enemy['hp']['current'] - damage)
+    rolls: Dict[str, Any] = {'attack_roll': d20, 'attack_total': total, 'target_ac': target_ac}
+    if attack_penalty:
+        rolls['condition_attack_penalty'] = attack_penalty
+    if damage_penalty:
+        rolls['condition_damage_penalty'] = damage_penalty
     hint = (
         f"Player hit {enemy['name']} for {damage} damage with {attack['name']}."
         if hit else f"Player missed {enemy['name']} with {attack['name']} (roll {total} vs AC {target_ac})."
@@ -239,7 +256,7 @@ def resolve_attack(character: Dict[str, Any], scene: Dict[str, Any], attack_id: 
             'actor': {'id': character['id'], 'name': character['name']},
             'target': {'id': enemy['id'], 'name': enemy['name']},
             'weapon_name': attack['name'],
-            'rolls': {'attack_roll': d20, 'attack_total': total, 'target_ac': target_ac},
+            'rolls': rolls,
             'hit': hit,
             'damage_dealt': damage,
             'healing_applied': 0,
@@ -257,24 +274,31 @@ def resolve_attack(character: Dict[str, Any], scene: Dict[str, Any], attack_id: 
     return result.to_dict()
 
 
-def resolve_skill(character: Dict[str, Any], skill_id: str, intent: str) -> Dict[str, Any]:
+def resolve_skill(character: Dict[str, Any], skill_id: str, intent: str, conditions: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     bonus = character.get('skills', {}).get(skill_id)
     if bonus is None:
         raise ValueError(f'Unknown skill: {skill_id}')
+    cond_defs = _condition_definitions(conditions)
+    skill_penalty = get_effect_value(character, cond_defs, 'skill_penalty')
+    net_bonus = bonus - skill_penalty
     d20 = roll_die(20)
-    total = d20 + bonus
+    total = d20 + net_bonus
+    rolls: Dict[str, Any] = {'roll': d20, 'modifier': net_bonus, 'total': total}
+    if skill_penalty:
+        rolls['base_modifier'] = bonus
+        rolls['condition_skill_penalty'] = skill_penalty
     result = CombatEngineResult(
         kind='skill_check',
         action_id=skill_id,
         label=f'Use {skill_id}',
         prompt=intent or f'Use {skill_id}',
         success=None,
-        hint=f"Player rolled {skill_id} (d20={d20}+{bonus}={total}). Narrate the outcome.",
+        hint=f"Player rolled {skill_id} (d20={d20}+{net_bonus}={total}). Narrate the outcome.",
         combat={
             'combat_phase': 'skill_check',
             'actor': {'id': character['id'], 'name': character['name']},
             'target': None,
-            'rolls': {'roll': d20, 'modifier': bonus, 'total': total},
+            'rolls': rolls,
             'hit': None,
             'damage_dealt': 0,
             'healing_applied': 0,
@@ -340,7 +364,9 @@ def resolve_spell(character: Dict[str, Any], scene: Dict[str, Any], spell_id: st
         enemy = get_enemy(scene, target_id)
         dc = 10 + 0 + int_mod(character['ability_scores']['int'])
         roll = roll_die(20)
-        total = roll + enemy.get('saves', {}).get('will', 0)
+        save_bonus = enemy.get('saves', {}).get('will', 0)
+        save_penalty = get_effect_value(enemy, conditions, 'save_penalty')
+        total = roll + save_bonus - save_penalty
         applied = False
         if enemy.get('creature_type', '').lower() == 'humanoid' and enemy.get('hd', 99) <= 4 and total < dc:
             remove_condition(enemy, 'dazed')
@@ -364,7 +390,13 @@ def resolve_spell(character: Dict[str, Any], scene: Dict[str, Any], spell_id: st
                 'actor': {'id': character['id'], 'name': character['name']},
                 'target': {'id': enemy['id'], 'name': enemy['name']},
                 'weapon_name': spell['name'],
-                'rolls': {'save_roll': roll, 'save_total': total, 'dc': dc, 'save_type': 'Will'},
+                'rolls': {
+                    'save_roll': roll,
+                    'save_total': total,
+                    'dc': dc,
+                    'save_type': 'Will',
+                    **({'condition_save_penalty': save_penalty} if save_penalty else {}),
+                },
                 'hit': None,
                 'damage_dealt': 0,
                 'healing_applied': 0,
@@ -449,8 +481,10 @@ def enemy_take_turn(character: Dict[str, Any], scene: Dict[str, Any], combat: Di
         )
         return result.to_dict()
     attack = enemy['attacks'][0]
+    attack_penalty = get_effect_value(enemy, conditions, 'attack_penalty')
+    damage_penalty = get_effect_value(enemy, conditions, 'damage_penalty')
     d20 = roll_die(20)
-    total = d20 + attack['attack_bonus']
+    total = d20 + attack['attack_bonus'] - attack_penalty
     target_ac = current_ac(character, conditions)
     hit = total >= target_ac
     damage = 0
@@ -458,7 +492,13 @@ def enemy_take_turn(character: Dict[str, Any], scene: Dict[str, Any], combat: Di
         for _ in range(attack['damage']['dice_count']):
             damage += roll_die(attack['damage']['dice_sides'])
         damage += attack['damage']['bonus']
+        damage = max(0, damage - damage_penalty)
         character['hp']['current'] = max(0, character['hp']['current'] - damage)
+    rolls: Dict[str, Any] = {'attack_roll': d20, 'attack_total': total, 'target_ac': target_ac}
+    if attack_penalty:
+        rolls['condition_attack_penalty'] = attack_penalty
+    if damage_penalty:
+        rolls['condition_damage_penalty'] = damage_penalty
     hint = (
         f"{enemy['name']} hit {character['name']} for {damage} damage with {attack['name']}."
         if hit else f"{enemy['name']} missed {character['name']} with {attack['name']} (roll {total} vs AC {target_ac})."
@@ -475,7 +515,7 @@ def enemy_take_turn(character: Dict[str, Any], scene: Dict[str, Any], combat: Di
             'actor': {'id': enemy['id'], 'name': enemy['name']},
             'target': {'id': character['id'], 'name': character['name']},
             'weapon_name': attack['name'],
-            'rolls': {'attack_roll': d20, 'attack_total': total, 'target_ac': target_ac},
+            'rolls': rolls,
             'hit': hit,
             'damage_dealt': damage,
             'healing_applied': 0,

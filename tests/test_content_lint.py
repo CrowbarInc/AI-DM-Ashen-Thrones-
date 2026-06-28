@@ -6,6 +6,7 @@ import pytest
 from game import content_lint
 from game import validation
 from game.content_lint import (
+    GLOBAL_SCENE_FINDING_KEY,
     lint_all_content,
     lint_scene_clue_integrity,
     lint_scene_graph_connectivity,
@@ -13,6 +14,7 @@ from game.content_lint import (
     lint_scene_interactables,
     message_code_family,
     summarize_message_code_families,
+    summarize_scene_finding_counts,
 )
 
 
@@ -146,6 +148,8 @@ def test_report_as_dict_roundtrip_shape():
     assert all("severity" in m and "code" in m for m in d["messages"])
     assert "code_family_counts" in d
     assert isinstance(d["code_family_counts"], dict)
+    assert "scene_finding_counts" in d
+    assert isinstance(d["scene_finding_counts"], dict)
 
 
 def test_summarize_message_code_families_groups_by_first_segment():
@@ -159,6 +163,22 @@ def test_summarize_message_code_families_groups_by_first_segment():
     assert summarize_message_code_families(msgs) == {"exit": 1, "graph": 2}
     assert message_code_family("clue.duplicate_id") == "clue"
     assert message_code_family("") == "other"
+
+
+def test_summarize_scene_finding_counts_groups_by_scene_id():
+    from game.content_lint import ContentLintMessage
+
+    msgs = [
+        ContentLintMessage(severity="error", code="exit.unknown_target", message="a", scene_id="hub"),
+        ContentLintMessage(severity="warning", code="graph.unreachable_scene", message="b", scene_id="island"),
+        ContentLintMessage(severity="warning", code="bundle.reference.missing", message="c", scene_id=None),
+        ContentLintMessage(severity="warning", code="scene.missing_player_anchor", message="d", scene_id="island"),
+    ]
+    assert summarize_scene_finding_counts(msgs) == {
+        GLOBAL_SCENE_FINDING_KEY: 1,
+        "hub": 1,
+        "island": 2,
+    }
 
 
 def test_subset_lint_resolves_world_npc_location_against_reference_registry():

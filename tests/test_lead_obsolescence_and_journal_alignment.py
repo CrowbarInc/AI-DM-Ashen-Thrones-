@@ -347,6 +347,8 @@ def test_journal_lead_without_clue_knowledge_still_bucketed_by_registry():
             "related_location_ids": [],
             "parent_lead_id": None,
             "superseded_by": None,
+            "last_touched_turn": None,
+            "last_updated_turn": None,
         }
     ]
     assert journal["unresolved_leads"] == ["Registry only"]

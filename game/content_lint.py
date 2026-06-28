@@ -69,7 +69,11 @@ class ContentLintReport:
             "messages": [m.as_dict() for m in self.messages],
             "scene_ids_checked": list(self.scene_ids_checked),
             "code_family_counts": summarize_message_code_families(self.messages),
+            "scene_finding_counts": summarize_scene_finding_counts(self.messages),
         }
+
+
+GLOBAL_SCENE_FINDING_KEY = "_global"
 
 
 def message_code_family(code: str) -> str:
@@ -85,6 +89,17 @@ def summarize_message_code_families(
     for m in messages:
         fam = message_code_family(m.code)
         counts[fam] = counts.get(fam, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def summarize_scene_finding_counts(
+    messages: Sequence[ContentLintMessage],
+) -> Dict[str, int]:
+    """Count lint messages by ``scene_id``; unscoped messages use :data:`GLOBAL_SCENE_FINDING_KEY`."""
+    counts: Dict[str, int] = {}
+    for m in messages:
+        key = m.scene_id if m.scene_id else GLOBAL_SCENE_FINDING_KEY
+        counts[key] = counts.get(key, 0) + 1
     return dict(sorted(counts.items()))
 
 

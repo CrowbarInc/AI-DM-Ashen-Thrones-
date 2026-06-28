@@ -292,7 +292,15 @@ def test_lint_all_content_mixed_scene_error_and_bundle_error():
 def test_lint_all_content_merges_bundle_passes_without_changing_report_shape():
     report = lint_all_content({"x": _minimal_envelope("x")}, world=None, campaign=None)
     d = report.as_dict()
-    assert set(d) == {"ok", "error_count", "warning_count", "messages", "scene_ids_checked"}
+    assert set(d) == {
+        "ok",
+        "error_count",
+        "warning_count",
+        "messages",
+        "scene_ids_checked",
+        "code_family_counts",
+        "scene_finding_counts",
+    }
 
 
 def test_lint_bundle_governance_merge_is_stable():

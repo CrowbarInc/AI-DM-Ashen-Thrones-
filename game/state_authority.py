@@ -127,6 +127,8 @@ _CROSS_DOMAIN_WRITE_ALLOWLIST: Final[Tuple[CrossDomainWriteSpec, ...]] = (
             {
                 # Runtime revealed-hidden facts merged into player journal ``known_facts`` (derived view only).
                 "journal_merge_revealed_hidden_facts",
+                # Earned scene-runtime suspicion flags published in the player journal (derived view only).
+                "journal_merge_suspicion_flags",
             }
         ),
     ),

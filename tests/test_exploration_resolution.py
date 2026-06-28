@@ -1,7 +1,7 @@
 """Tests for deterministic exploration action resolution and /api/action exploration path."""
 from game import storage
 from game.api import app
-from game.exploration import resolve_exploration_action, parse_exploration_intent, EXPLORATION_KINDS
+from game.exploration import resolve_exploration_action, parse_exploration_intent, EXPLORATION_KINDS, resolve_interactable_hidden_fact_text
 from game.scene_actions import normalize_scene_action
 from game.storage import get_scene_runtime
 from game.defaults import default_scene, default_session, default_world, default_character, default_campaign, default_combat, default_conditions
@@ -159,6 +159,45 @@ def test_discover_clue_engine_result_map_fragment_interactable():
     assert resolution["discovered_clues"] == ["A torn map fragment"]
     assert resolution["state_changes"].get("clue_revealed") is True
     assert resolution.get("interactable_id") == "maps"
+
+
+def test_resolve_interactable_hidden_fact_text_matches_scene_hidden_facts():
+    scene = {
+        "hidden_facts": [
+            "The patrol's fate is tied to ancient forces.",
+            "A second secret.",
+        ]
+    }
+    interactable = {"reveals_hidden_fact": "The patrol's fate is tied to ancient forces."}
+    assert resolve_interactable_hidden_fact_text(scene, interactable) == "The patrol's fate is tied to ancient forces."
+    assert resolve_interactable_hidden_fact_text(scene, {"reveals_hidden_fact": "unknown"}) is None
+    assert resolve_interactable_hidden_fact_text(scene, {}) is None
+
+
+def test_discover_clue_includes_hidden_fact_metadata_when_interactable_configured():
+    hidden_line = "The missing patrol's fate is tied to forces far greater than mere political intrigue."
+    scene = {
+        "scene": {
+            "id": "meeting_room",
+            "discoverable_clues": [{"id": "map-clue", "text": "A torn map fragment"}],
+            "hidden_facts": [hidden_line, "Unrelated secret."],
+            "interactables": [
+                {
+                    "id": "maps",
+                    "type": "investigate",
+                    "reveals_clue": "map-clue",
+                    "reveals_hidden_fact": hidden_line,
+                }
+            ],
+        }
+    }
+    action = normalize_scene_action(
+        {"id": "inv-maps", "label": "Investigate the maps", "type": "investigate", "prompt": "I investigate the maps"}
+    )
+    resolution = resolve_exploration_action(scene, {}, {}, action, raw_player_text="I investigate the maps", list_scene_ids=lambda: [])
+    assert resolution["kind"] == "discover_clue"
+    assert resolution["metadata"]["hidden_fact_revealed"] == hidden_line
+    assert resolution["state_changes"]["hidden_fact_revealed"] is True
 
 
 def test_scene_transition_engine_result_north_room_exit():

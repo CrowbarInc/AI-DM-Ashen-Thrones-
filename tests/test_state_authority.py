@@ -166,6 +166,11 @@ def test_cross_domain_block_b_operations_allow_listed():
         PLAYER_VISIBLE_STATE,
         operation="journal_merge_revealed_hidden_facts",
     )
+    assert_cross_domain_write_allowed(
+        HIDDEN_STATE,
+        PLAYER_VISIBLE_STATE,
+        operation="journal_merge_suspicion_flags",
+    )
 
 
 def test_cross_domain_allowlist_nonempty_and_json_friendly_ops():

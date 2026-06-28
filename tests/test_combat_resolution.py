@@ -193,3 +193,35 @@ def test_resolve_spell_magic_missile_returns_canonical_engine_result(tmp_path, m
     assert resolution["combat"]["combat_phase"] == "spell"
     assert resolution["combat"]["damage_dealt"] >= 0
     assert resolution["success"] is True
+
+
+def test_shaken_condition_reduces_attack_total_and_can_flip_hit(monkeypatch):
+    """Shaken applies attack_penalty from condition templates into resolve_attack totals."""
+    monkeypatch.setattr("game.combat.roll_die", lambda sides: 11 if sides == 20 else 1)
+
+    character = default_character()
+    character["conditions"] = [{"name": "shaken"}]
+    scene = {"scene": _scene_with_goblin()["scene"]}
+    conditions = default_conditions()
+
+    resolution = resolve_attack(
+        character, scene, "quarterstaff", "goblin_1", [], conditions
+    )
+    rolls = resolution["combat"]["rolls"]
+    assert rolls["attack_roll"] == 11
+    assert rolls["condition_attack_penalty"] == 2
+    assert rolls["attack_total"] == 9
+    assert resolution["combat"]["hit"] is False
+
+
+def test_shaken_condition_reduces_combat_skill_check_modifier():
+    """Combat-local resolve_skill applies skill_penalty from condition templates."""
+    character = default_character()
+    character["conditions"] = [{"name": "shaken"}]
+    character["skills"]["perception"] = 4
+
+    resolution = resolve_skill(character, "perception", "Listen", conditions=default_conditions())
+    rolls = resolution["combat"]["rolls"]
+    assert rolls["base_modifier"] == 4
+    assert rolls["condition_skill_penalty"] == 2
+    assert rolls["modifier"] == 2

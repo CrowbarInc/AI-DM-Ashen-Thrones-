@@ -31,6 +31,36 @@ from game.scene_destination_binding import (
 EXPLORATION_KINDS = ("scene_transition", "travel", "observe", "investigate", "interact", "custom", "discover_clue", "already_searched")
 
 
+def _norm_hidden_fact_lines(values: Any) -> List[str]:
+    if not isinstance(values, list):
+        return []
+    return [str(x).strip() for x in values if isinstance(x, str) and str(x).strip()]
+
+
+def resolve_interactable_hidden_fact_text(
+    scene: Dict[str, Any],
+    interactable: Dict[str, Any],
+) -> Optional[str]:
+    """Match ``interactable.reveals_hidden_fact`` against ``scene.hidden_facts`` (author-time lookup only).
+
+    Returns the canonical hidden-fact line when matched exactly or case-insensitively; otherwise ``None``.
+    Side-effect free — callers persist via :func:`game.storage.mark_hidden_fact_revealed`.
+    """
+    ref = interactable.get("reveals_hidden_fact")
+    if not isinstance(ref, str) or not ref.strip():
+        return None
+    ref = ref.strip()
+    hidden = _norm_hidden_fact_lines(scene.get("hidden_facts"))
+    for fact in hidden:
+        if fact == ref:
+            return fact
+    ref_lower = ref.lower()
+    for fact in hidden:
+        if fact.lower() == ref_lower:
+            return fact
+    return None
+
+
 def _infer_transition_target_from_prompt(
     prompt: str,
     exits: List[Dict[str, Any]],
@@ -355,6 +385,12 @@ def resolve_exploration_action(
                             metadata[key] = am[key]
                 if check_result:
                     metadata["skill_check"] = check_result
+                hidden_fact = resolve_interactable_hidden_fact_text(scene, i)
+                if hidden_fact:
+                    metadata["hidden_fact_revealed"] = hidden_fact
+                state_changes: Dict[str, Any] = {"clue_revealed": True, "interactable_id": i_id}
+                if hidden_fact:
+                    state_changes["hidden_fact_revealed"] = True
                 result = ExplorationEngineResult(
                     kind="discover_clue",
                     action_id=action_id,
@@ -366,7 +402,7 @@ def resolve_exploration_action(
                     clue_id=reveals_clue,
                     discovered_clues=[clue_text],
                     world_updates=world_updates_val,
-                    state_changes={"clue_revealed": True, "interactable_id": i_id},
+                    state_changes=state_changes,
                     hint=f"Player investigated [{i_id}] and discovered clue [{reveals_clue}]. Narrate the discovery and its significance.",
                     interactable_id=i_id,
                     clue_text=clue_text,
