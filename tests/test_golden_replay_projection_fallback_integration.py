@@ -3,6 +3,10 @@ from __future__ import annotations
 
 import pytest
 
+from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD, STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+from game.social_exchange_emission import build_final_strict_social_response
+
+from tests.helpers.golden_replay_api import NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
 from tests.helpers.golden_replay_fixtures import (
     fem_payload,
     minimal_gm_output_payload,
@@ -21,6 +25,61 @@ from tests.helpers.golden_replay_projection import (
 from tests.helpers.opening_fallback_evidence import opening_dual_family_fem_meta
 
 pytestmark = pytest.mark.unit
+
+
+def test_golden_replay_bridge_projection_prefers_emission_source_over_realization_stamp() -> None:
+    """Runtime bridge FEM carries generic strict-social realization provenance; replay observes bridge family."""
+    fem = fem_payload(
+        final_route="replaced",
+        final_emitted_source=NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+        fallback_kind="neutral_speaker_grounding_bridge",
+        used_internal_fallback=True,
+        **{REALIZATION_FALLBACK_FAMILY_FIELD: STRICT_SOCIAL_DETERMINISTIC_FALLBACK},
+    )
+    assert project_replay_fallback_family_from_fem(fem) == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+
+    turn = project_turn_observation(
+        minimal_turn_payload(
+            scenario_id="bridge_realization_stamp_projection",
+            gm_text="The moment passes without anyone stepping forward to own that thread.",
+            fem_meta=fem,
+        )
+    )
+    assert turn["fallback_family"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    assert turn["final_emitted_source"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    assert "fallback_family" not in turn["unavailable"]
+
+
+def test_golden_replay_bridge_runtime_meta_projects_observed_family() -> None:
+    """End-to-end bridge emission meta from strict-social builder matches replay projection."""
+    _text, meta = build_final_strict_social_response(
+        "Some illegal scene holds stillness.",
+        resolution={
+            "kind": "question",
+            "prompt": "test",
+            "social": {
+                "social_intent_class": "social_exchange",
+                "reply_speaker_grounding_neutral_bridge": True,
+                "npc_reply_expected": False,
+            },
+        },
+        tags=[],
+        session=None,
+        scene_id="frontier_gate",
+        world=None,
+    )
+    assert meta.get("final_emitted_source") == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    assert meta.get(REALIZATION_FALLBACK_FAMILY_FIELD) == STRICT_SOCIAL_DETERMINISTIC_FALLBACK
+
+    turn = project_turn_observation(
+        minimal_turn_payload(
+            scenario_id="bridge_runtime_meta_projection",
+            gm_text=_text,
+            fem_meta=dict(meta),
+        )
+    )
+    assert turn["fallback_family"] == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    assert "fallback_family" not in turn["unavailable"]
 
 
 def test_golden_replay_dual_family_projection_prefers_diegetic_fallback_family_used() -> None:

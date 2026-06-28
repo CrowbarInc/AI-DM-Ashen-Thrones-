@@ -1428,12 +1428,18 @@ def npc_id_from_vocative_line(text: str, roster: List[Dict[str, Any]]) -> str:
 # Discourse-softened spoken vocatives:
 # - ``Well, Captain, …`` — discourse word + comma, then ``Name, …``
 # - ``Alright Runner, …`` — discourse word + space + ``Name, …`` (no comma after discourse)
+# - ``Hey guard - …`` / ``Listen guard what …`` — dash or bare question after role/name
 _DISCOURSE_VOCATIVE_PREFIX_RE = re.compile(
     r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s*,\s*",
     re.IGNORECASE,
 )
-_DISCOURSE_SPACE_THEN_NAME_COMMA_RE = re.compile(
-    r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s+([^,:\n]{1,64}?)\s*,",
+_DISCOURSE_SPACE_THEN_NAME_SEP_RE = re.compile(
+    r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s+([^,:\n]{1,64}?)\s*[,—–-]",
+    re.IGNORECASE,
+)
+_DISCOURSE_SPACE_THEN_NAME_BEFORE_QUESTION_RE = re.compile(
+    r"^\s*(?:alright|all\s*right|well|ok|okay|look|listen|now\s+then|so|hey)\s+([^,:\n]{1,64}?)\s+"
+    r"(?:what|who|where|when|why|how|do|does|did|can|could|would|will|is|are)\b",
     re.IGNORECASE,
 )
 
@@ -1478,9 +1484,15 @@ def _extract_comma_vocative_phrase_after_discourse(sentence: str) -> Optional[st
     if m_d:
         s = s[m_d.end() :].lstrip()
     else:
-        m_sp = _DISCOURSE_SPACE_THEN_NAME_COMMA_RE.match(s)
+        m_sp = _DISCOURSE_SPACE_THEN_NAME_SEP_RE.match(s)
         if m_sp:
             raw = m_sp.group(1).strip()
+            if _is_plausible_spoken_vocative_label(raw):
+                return raw
+            return None
+        m_q = _DISCOURSE_SPACE_THEN_NAME_BEFORE_QUESTION_RE.match(s)
+        if m_q:
+            raw = m_q.group(1).strip()
             if _is_plausible_spoken_vocative_label(raw):
                 return raw
             return None
@@ -2885,6 +2897,12 @@ _GENERIC_ADDRESS_PATTERNS: Tuple[re.Pattern[str], ...] = (
     re.compile(rf"\bto\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
     re.compile(rf"\btowards?\s+the\s+({_GENERIC_ADDRESS_ROLE_ALT})\b"),
     re.compile(rf"^\s*({_GENERIC_ADDRESS_ROLE_ALT})\b(?:\s*[,:?!]|\s+)"),
+    # Role-in-perception/knowledge questions (e.g. "What does the guard see?") — not local observation.
+    re.compile(
+        rf"\bwhat\s+(?:does|did)\s+(?:the\s+|a\s+|an\s+)?({_GENERIC_ADDRESS_ROLE_ALT})\s+"
+        rf"(?:see|know|notice|hear|say|tell|spot|make\s+out|witness|observe)\b",
+        re.IGNORECASE,
+    ),
 )
 
 _SPOKEN_ROLE_TO_CANONICAL: Dict[str, str] = {

@@ -55,12 +55,20 @@ def dual_fallback_family_replay_precedence_surface() -> dict[str, object]:
 def project_replay_fallback_family_from_fem(fem: Mapping[str, Any]) -> str | None:
     """Project golden replay ``fallback_family`` from FEM with diegetic-first preference.
 
-    Read-side only: prefers ``fallback_family_used`` (diegetic/template taxonomy)
-    and uses ``realization_fallback_family`` (governed provenance) only when the
-    diegetic key is absent or null. Returns ``None`` when neither field is present.
+    Read-side only: prefers ``fallback_family_used`` (diegetic/template taxonomy).
+    When diegetic is absent, ``final_emitted_source`` for the neutral speaker
+    grounding bridge beats generic ``realization_fallback_family`` stamps that
+    strict-social paths attach for provenance. Governed realization is used only
+    when neither diegetic nor bridge emission source applies.
     See :func:`dual_fallback_family_replay_precedence_surface`.
     """
-    return _first_present(fem, REPLAY_FALLBACK_FAMILY_FEM_PRECEDENCE_KEYS)
+    diegetic = _first_present(fem, ("fallback_family_used",))
+    if diegetic is not None:
+        return diegetic
+    final_source = str(fem.get("final_emitted_source") or "").strip()
+    if final_source == NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY:
+        return NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
+    return _first_present(fem, (REALIZATION_FALLBACK_FAMILY_FIELD,))
 
 
 def _fem_has_any_key(fem: Mapping[str, Any], keys: tuple[str, ...]) -> bool:

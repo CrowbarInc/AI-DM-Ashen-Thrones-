@@ -53,6 +53,15 @@ pytestmark = pytest.mark.unit
             "scene_opening",
             id="conflicting_diegetic_always_wins",
         ),
+        pytest.param(
+            {
+                "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+                "realization_fallback_family": "strict_social_deterministic_fallback",
+                "fallback_kind": "neutral_speaker_grounding_bridge",
+            },
+            NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            id="bridge_emission_source_beats_generic_realization",
+        ),
     ],
 )
 def test_project_replay_fallback_family_from_fem_precedence_matrix(
@@ -90,8 +99,8 @@ def _sealed_fallback_selected_event() -> dict[str, object]:
                 "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
             },
             [],
-            None,
-            id="bridge_not_inferred_without_sealed_lineage_event",
+            NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            id="bridge_from_emission_source_without_lineage",
         ),
         pytest.param(
             {
@@ -109,8 +118,8 @@ def _sealed_fallback_selected_event() -> dict[str, object]:
                 "final_emitted_source": NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
             },
             [_sealed_fallback_selected_event()],
-            None,
-            id="bridge_requires_replaced_route",
+            NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY,
+            id="bridge_from_emission_source_without_replaced_route",
         ),
     ],
 )

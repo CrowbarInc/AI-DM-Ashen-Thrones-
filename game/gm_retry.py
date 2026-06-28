@@ -1936,6 +1936,25 @@ def _player_facing_text_same_line(a: str, b: str) -> bool:
     return _norm(a) == _norm(b)
 
 
+def _first_scene_repair_anchor_detail(env: Dict[str, Any]) -> str:
+    """Safe scene anchor for minimal repair phrasing: visible_facts, then location, then summary."""
+    if not isinstance(env, dict):
+        return ""
+    visible = _scene_visible_facts(env)
+    raw_first = visible[0] if visible else ""
+    detail = _clean_scene_detail(raw_first) if raw_first else ""
+    if detail:
+        return detail
+    scene = env.get("scene") if isinstance(env.get("scene"), dict) else env
+    if not isinstance(scene, dict):
+        return ""
+    for key in ("location", "summary"):
+        candidate = _clean_scene_detail(str(scene.get(key) or ""))
+        if candidate:
+            return candidate
+    return ""
+
+
 def _minimal_repair_context(
     *,
     gm: Dict[str, Any] | None,
@@ -1967,9 +1986,7 @@ def _minimal_repair_context(
                 env = {**env, "scene": {**inner, "visible_facts": curated}}
         except Exception:
             pass
-    visible = _scene_visible_facts(env)
-    raw_first = visible[0] if visible else ""
-    first_visible = _clean_scene_detail(raw_first) if raw_first else ""
+    first_visible = _first_scene_repair_anchor_detail(env)
 
     meta = read_final_emission_meta_dict(gm_d)
     ic = inspect_interaction_context(sess) if sess else {}
@@ -2398,7 +2415,7 @@ def ensure_minimal_social_resolution(
 
 
 def _nonsocial_minimal_resolution_line(*, session: Dict[str, Any] | None) -> str:
-    """Conservative forward beat for empty non-social GM text; may anchor to on-disk scene visible_facts only."""
+    """Conservative forward beat for empty non-social GM text; may anchor to on-disk scene template facts."""
     sess = session if isinstance(session, dict) else None
     if not sess:
         return _ensure_terminal_punctuation(str(_NONSOCIAL_EMPTY_REPAIR_HARD_LINE).strip())
@@ -2421,14 +2438,12 @@ def _nonsocial_minimal_resolution_line(*, session: Dict[str, Any] | None) -> str
                 env = {**env, "scene": {**inner, "visible_facts": curated}}
         except Exception:
             pass
-    visible = _scene_visible_facts(env)
-    if visible:
-        detail = _clean_scene_detail(visible[0])
-        if detail:
-            lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
-            return _ensure_terminal_punctuation(
-                f"{lead} still frames what you can see; the moment invites your next move."
-            )
+    detail = _first_scene_repair_anchor_detail(env)
+    if detail:
+        lead = detail[0].upper() + (detail[1:] if len(detail) > 1 else "")
+        return _ensure_terminal_punctuation(
+            f"{lead} still frames what you can see; the moment invites your next move."
+        )
     seed = f"{sid}|nonsocial_empty_resolution_repair"
     idx = _stable_u32_from_seed(seed) % 2
     alts = (
