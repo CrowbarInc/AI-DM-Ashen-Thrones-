@@ -3,11 +3,22 @@
 Runtime gate-entry seam (BN1), lazy gate namespace locks (BN2), and gate-context
 preflight import regrowth policies (BN3–BN11). Enforced by ``test_bn*_*`` in
 ``tests/test_gate_context_ownership_guards.py``.
+
+Helper surface (CO67–CO70):
+- BN1/BN2 live-scan orchestration: ``assert_bn_live_scan_paths_clean``
+- BN3–BN10 test orchestration: ``assert_bn_owner_entrypoint_callable``,
+  ``assert_bn_synthetic_violation``, ``assert_bn_live_gate_context_clean``
+- BN4–BN10 helper collectors: shared internal gate-import / marker scans behind
+  stable public ``collect_bn*`` wrappers (CO69)
+
+This lane is separate from BJ delegate-closeout guards.
 """
 from __future__ import annotations
 
 import ast
+import importlib
 import re
+from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Final, Mapping
 
@@ -377,20 +388,36 @@ def collect_bn4_gate_context_telemetry_import_violations(source: str) -> list[st
     return violations
 
 
-def collect_bn4_preflight_telemetry_helper_gate_import_violations(source: str) -> list[str]:
-    """BN4: preflight telemetry helper must not import the gate orchestration owner."""
+def _collect_preflight_helper_forbidden_gate_import_violations(
+    source: str,
+    *,
+    preflight_module: str,
+    forbidden_from_import: str,
+    forbidden_import_alt: str,
+) -> list[str]:
+    """Shared BN4–BN7 gate-import scan for preflight helper modules."""
     violations: list[str] = []
-    if BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER in source:
+    if forbidden_from_import in source:
         violations.append(
-            f"{BN4_GATE_CONTEXT_PREFLIGHT_TELEMETRY_MODULE}: forbidden gate owner import "
-            f"{BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER!r}",
+            f"{preflight_module}: forbidden gate owner import "
+            f"{forbidden_from_import!r}",
         )
-    if BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER_ALT in source:
+    if forbidden_import_alt in source:
         violations.append(
-            f"{BN4_GATE_CONTEXT_PREFLIGHT_TELEMETRY_MODULE}: forbidden gate owner import "
-            f"{BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER_ALT!r}",
+            f"{preflight_module}: forbidden gate owner import "
+            f"{forbidden_import_alt!r}",
         )
     return violations
+
+
+def collect_bn4_preflight_telemetry_helper_gate_import_violations(source: str) -> list[str]:
+    """BN4: preflight telemetry helper must not import the gate orchestration owner."""
+    return _collect_preflight_helper_forbidden_gate_import_violations(
+        source,
+        preflight_module=BN4_GATE_CONTEXT_PREFLIGHT_TELEMETRY_MODULE,
+        forbidden_from_import=BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER,
+        forbidden_import_alt=BN4_FORBIDDEN_GATE_IMPORT_IN_TELEMETRY_HELPER_ALT,
+    )
 
 
 def collect_bn5_gate_context_upstream_import_violations(source: str) -> list[str]:
@@ -412,18 +439,12 @@ def collect_bn5_gate_context_upstream_import_violations(source: str) -> list[str
 
 def collect_bn5_preflight_upstream_helper_gate_import_violations(source: str) -> list[str]:
     """BN5: preflight upstream helper must not import the gate orchestration owner."""
-    violations: list[str] = []
-    if BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER in source:
-        violations.append(
-            f"{BN5_GATE_CONTEXT_PREFLIGHT_UPSTREAM_MODULE}: forbidden gate owner import "
-            f"{BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER!r}",
-        )
-    if BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER_ALT in source:
-        violations.append(
-            f"{BN5_GATE_CONTEXT_PREFLIGHT_UPSTREAM_MODULE}: forbidden gate owner import "
-            f"{BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER_ALT!r}",
-        )
-    return violations
+    return _collect_preflight_helper_forbidden_gate_import_violations(
+        source,
+        preflight_module=BN5_GATE_CONTEXT_PREFLIGHT_UPSTREAM_MODULE,
+        forbidden_from_import=BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER,
+        forbidden_import_alt=BN5_FORBIDDEN_GATE_IMPORT_IN_UPSTREAM_HELPER_ALT,
+    )
 
 
 def collect_bn6_gate_context_turn_packet_import_violations(source: str) -> list[str]:
@@ -445,18 +466,12 @@ def collect_bn6_gate_context_turn_packet_import_violations(source: str) -> list[
 
 def collect_bn6_preflight_turn_packet_helper_gate_import_violations(source: str) -> list[str]:
     """BN6: preflight turn-packet helper must not import the gate orchestration owner."""
-    violations: list[str] = []
-    if BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER in source:
-        violations.append(
-            f"{BN6_GATE_CONTEXT_PREFLIGHT_TURN_PACKET_MODULE}: forbidden gate owner import "
-            f"{BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER!r}",
-        )
-    if BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER_ALT in source:
-        violations.append(
-            f"{BN6_GATE_CONTEXT_PREFLIGHT_TURN_PACKET_MODULE}: forbidden gate owner import "
-            f"{BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER_ALT!r}",
-        )
-    return violations
+    return _collect_preflight_helper_forbidden_gate_import_violations(
+        source,
+        preflight_module=BN6_GATE_CONTEXT_PREFLIGHT_TURN_PACKET_MODULE,
+        forbidden_from_import=BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER,
+        forbidden_import_alt=BN6_FORBIDDEN_GATE_IMPORT_IN_TURN_PACKET_HELPER_ALT,
+    )
 
 
 def collect_bn7_gate_context_interaction_import_violations(source: str) -> list[str]:
@@ -478,18 +493,12 @@ def collect_bn7_gate_context_interaction_import_violations(source: str) -> list[
 
 def collect_bn7_preflight_interaction_helper_gate_import_violations(source: str) -> list[str]:
     """BN7: preflight interaction helper must not import the gate orchestration owner."""
-    violations: list[str] = []
-    if BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER in source:
-        violations.append(
-            f"{BN7_GATE_CONTEXT_PREFLIGHT_INTERACTION_MODULE}: forbidden gate owner import "
-            f"{BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER!r}",
-        )
-    if BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER_ALT in source:
-        violations.append(
-            f"{BN7_GATE_CONTEXT_PREFLIGHT_INTERACTION_MODULE}: forbidden gate owner import "
-            f"{BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER_ALT!r}",
-        )
-    return violations
+    return _collect_preflight_helper_forbidden_gate_import_violations(
+        source,
+        preflight_module=BN7_GATE_CONTEXT_PREFLIGHT_INTERACTION_MODULE,
+        forbidden_from_import=BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER,
+        forbidden_import_alt=BN7_FORBIDDEN_GATE_IMPORT_IN_INTERACTION_HELPER_ALT,
+    )
 
 
 def collect_bn8_gate_context_strict_social_import_violations(source: str) -> list[str]:
@@ -509,15 +518,34 @@ def collect_bn8_gate_context_strict_social_import_violations(source: str) -> lis
     return violations
 
 
-def collect_bn8_preflight_strict_social_helper_import_violations(source: str) -> list[str]:
-    """BN8: preflight strict-social helper must not import gate/FEM/replay/terminal modules."""
+    return violations
+
+
+def _collect_preflight_helper_forbidden_marker_violations(
+    source: str,
+    *,
+    preflight_module: str,
+    cycle_tag: str,
+    forbidden_markers: tuple[str, ...],
+) -> list[str]:
+    """Shared BN8–BN10 marker scan for preflight helper modules."""
     violations: list[str] = []
-    for marker in BN8_FORBIDDEN_STRICT_SOCIAL_HELPER_IMPORT_MARKERS:
+    for marker in forbidden_markers:
         if marker in source:
             violations.append(
-                f"{BN8_GATE_CONTEXT_PREFLIGHT_STRICT_SOCIAL_MODULE}: forbidden BN8 helper import {marker!r}",
+                f"{preflight_module}: forbidden {cycle_tag} helper import {marker!r}",
             )
     return violations
+
+
+def collect_bn8_preflight_strict_social_helper_import_violations(source: str) -> list[str]:
+    """BN8: preflight strict-social helper must not import gate/FEM/replay/terminal modules."""
+    return _collect_preflight_helper_forbidden_marker_violations(
+        source,
+        preflight_module=BN8_GATE_CONTEXT_PREFLIGHT_STRICT_SOCIAL_MODULE,
+        cycle_tag='BN8',
+        forbidden_markers=BN8_FORBIDDEN_STRICT_SOCIAL_HELPER_IMPORT_MARKERS,
+    )
 
 
 def collect_bn9_gate_context_pregate_text_import_violations(source: str) -> list[str]:
@@ -539,13 +567,12 @@ def collect_bn9_gate_context_pregate_text_import_violations(source: str) -> list
 
 def collect_bn9_preflight_pregate_text_helper_import_violations(source: str) -> list[str]:
     """BN9: preflight pregate text helper must not import gate/FEM/replay/terminal modules."""
-    violations: list[str] = []
-    for marker in BN9_FORBIDDEN_PREGATE_TEXT_HELPER_IMPORT_MARKERS:
-        if marker in source:
-            violations.append(
-                f"{BN9_GATE_CONTEXT_PREFLIGHT_PREGATE_TEXT_MODULE}: forbidden BN9 helper import {marker!r}",
-            )
-    return violations
+    return _collect_preflight_helper_forbidden_marker_violations(
+        source,
+        preflight_module=BN9_GATE_CONTEXT_PREFLIGHT_PREGATE_TEXT_MODULE,
+        cycle_tag='BN9',
+        forbidden_markers=BN9_FORBIDDEN_PREGATE_TEXT_HELPER_IMPORT_MARKERS,
+    )
 
 
 def collect_bn10_gate_context_branch_flags_violations(source: str) -> list[str]:
@@ -572,13 +599,12 @@ def collect_bn10_gate_context_branch_flags_violations(source: str) -> list[str]:
 
 def collect_bn10_preflight_branch_flags_helper_import_violations(source: str) -> list[str]:
     """BN10: preflight branch-flags helper must not import gate/FEM/replay/terminal modules."""
-    violations: list[str] = []
-    for marker in BN10_FORBIDDEN_BRANCH_FLAGS_HELPER_IMPORT_MARKERS:
-        if marker in source:
-            violations.append(
-                f"{BN10_GATE_CONTEXT_PREFLIGHT_BRANCH_FLAGS_MODULE}: forbidden BN10 helper import {marker!r}",
-            )
-    return violations
+    return _collect_preflight_helper_forbidden_marker_violations(
+        source,
+        preflight_module=BN10_GATE_CONTEXT_PREFLIGHT_BRANCH_FLAGS_MODULE,
+        cycle_tag='BN10',
+        forbidden_markers=BN10_FORBIDDEN_BRANCH_FLAGS_HELPER_IMPORT_MARKERS,
+    )
 
 
 def gate_context_import_modules(source: str) -> frozenset[str]:
@@ -668,3 +694,87 @@ def collect_bn11_scan_logic_runtime_gate_import_violations(source: str) -> list[
                 f"{func_name}: {stripped!r}",
             )
     return violations
+
+
+def assert_bn_cycle_documented(registry_doc: str, cycle_tag: str) -> None:
+    """Assert gate-context guard module doc documents a BN cycle tag (e.g. ``BN3``)."""
+    tag = cycle_tag.strip()
+    assert tag in registry_doc, (
+        f"tests/test_gate_context_ownership_guards.py module doc must document cycle {tag!r}"
+    )
+
+
+def assert_bn_live_scan_paths_clean(
+    scan_paths: Iterable[str],
+    collector: Callable[[str, str], list[str]],
+    *,
+    cycle_tag: str,
+    violation_label: str,
+    repo_root: Path | None = None,
+) -> None:
+    """Assert live BN1/BN2 scan paths pass a rel-path + source collector."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    violations: list[str] = []
+    for rel in scan_paths:
+        path = root / rel
+        assert path.is_file(), f'missing {cycle_tag} scan path: {rel}'
+        source = path.read_text(encoding='utf-8')
+        violations.extend(collector(rel, source))
+    assert not violations, f'{violation_label}:\n' + '\n'.join(violations)
+
+
+def assert_bn_owner_entrypoint_callable(module_name: str, *symbols: str) -> None:
+    """Assert a preflight helper module exposes callable owner entrypoints."""
+    mod = importlib.import_module(module_name)
+    for symbol in symbols:
+        assert callable(getattr(mod, symbol, None)), (
+            f"{module_name}.{symbol} must be a callable owner entrypoint"
+        )
+
+
+def assert_bn_synthetic_violation(
+    collector: Callable[[str], list[str]],
+    synthetic: str,
+    *expected_substrings: str,
+) -> None:
+    """Assert a BN gate-context collector flags synthetic source with expected markers."""
+    violations = collector(synthetic)
+    joined = '\n'.join(violations)
+    assert violations, f'expected synthetic violation from {collector.__name__}'
+    for substring in expected_substrings:
+        assert substring in joined, (
+            f'expected {substring!r} in synthetic violations from {collector.__name__}: {joined!r}'
+        )
+
+
+def assert_bn_live_gate_context_clean(
+    *,
+    cycle_tag: str,
+    gate_context_collector: Callable[[str], list[str]],
+    gate_context_violation_label: str,
+    registry_doc: str,
+    repo_root: Path | None = None,
+    gate_context_module: str = BN3_GATE_CONTEXT_OWNER_MODULE,
+    preflight_module: str | None = None,
+    helper_collector: Callable[[str], list[str]] | None = None,
+    helper_violation_label: str | None = None,
+) -> None:
+    """Assert live gate_context (and optional preflight helper) sources pass BN collectors."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+
+    path = root / gate_context_module
+    assert path.is_file(), f'missing {cycle_tag} scan path: {gate_context_module}'
+    source = path.read_text(encoding='utf-8')
+    violations = gate_context_collector(source)
+    assert not violations, f'{gate_context_violation_label}:\n' + '\n'.join(violations)
+
+    if preflight_module is not None:
+        preflight_path = root / preflight_module
+        assert preflight_path.is_file(), f'missing {cycle_tag} helper: {preflight_module}'
+        if helper_collector is not None:
+            helper_source = preflight_path.read_text(encoding='utf-8')
+            helper_violations = helper_collector(helper_source)
+            label = helper_violation_label or f'{cycle_tag} preflight helper violations'
+            assert not helper_violations, f'{label}:\n' + '\n'.join(helper_violations)
+
+    assert_bn_cycle_documented(registry_doc, cycle_tag)

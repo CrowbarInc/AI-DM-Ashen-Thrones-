@@ -21,9 +21,11 @@ Owner vocabulary contract:
   silently reinterpreting ``owner``.
 
 H2/H3 wire finalized fallback/gate-outcome/speaker-repair/mutation FEM reads through
-``game.final_emission_meta.build_fem_runtime_lineage_events``. Future read-side
-consumers may derive additional events from stage-diff, post-emission state, or
-state-mutation metadata after those owners have already recorded decisions.
+``game.final_emission_meta.build_fem_runtime_lineage_events``. ``gate_outcome`` intentionally
+omits ``mutation_kind``; sibling ``mutation`` events carry text-mutation classification
+(CO94 lineage contract). Future read-side consumers may derive additional events from
+stage-diff, post-emission state, or state-mutation metadata after those owners have
+already recorded decisions.
 """
 
 from __future__ import annotations

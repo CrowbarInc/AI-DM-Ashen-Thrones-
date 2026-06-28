@@ -9,12 +9,20 @@ dict shapes for orchestration and wiring tests.
 ``build_retry_prompt_for_failure`` retry_debug sink assertions for downstream
 fallback-consumer tests.
 
+CO19 gate-integration helpers (``fallback_gate_emission_debug``, ``assert_fallback_gate_metadata``,
+``assert_fallback_gate_propagation``, ``assert_fallback_gate_repair_evidence``) absorb repeated
+``apply_final_emission_gate`` FEM/debug propagation locks from ``tests/test_fallback_behavior_gate.py``
+separately from validator predicate helpers and opening/visibility ownership helpers.
+
 Import from here — not from ``tests/test_fallback_behavior_gate.py`` or other test modules.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from typing import Any
+
+from tests.helpers.opening_fallback_evidence import assert_final_emission_meta_contains
+from tests.helpers.replay_fem_read_smoke import final_emission_meta_from_output
 
 
 def fallback_contract(**overrides: object) -> dict:
@@ -131,3 +139,82 @@ def assert_retry_debug_fallback_contract(
             f"retry_debug 'retry_fallback_behavior_skip_reason': "
             f"expected {skip_reason!r}, got {actual!r}"
         )
+
+
+def fallback_gate_emission_debug(out: Mapping[str, Any]) -> dict[str, Any]:
+    """Return ``metadata.emission_debug.fallback_behavior`` slice from gate output."""
+    metadata = out.get("metadata") if isinstance(out.get("metadata"), Mapping) else {}
+    emission_debug = metadata.get("emission_debug") if isinstance(metadata.get("emission_debug"), Mapping) else {}
+    fb = emission_debug.get("fallback_behavior")
+    return dict(fb) if isinstance(fb, Mapping) else {}
+
+
+def assert_fallback_gate_metadata(
+    meta: Mapping[str, Any] | None,
+    *,
+    checked: bool | None = None,
+    repaired: bool | None = None,
+    uncertainty_active: bool | None = None,
+    **extra: Any,
+) -> dict[str, Any]:
+    """Assert FEM fallback-behavior propagation stamps (gate integration, not validator predicates)."""
+    fem = dict(meta) if isinstance(meta, Mapping) else {}
+    if checked is not None:
+        assert fem.get("fallback_behavior_checked") is checked
+    if repaired is not None:
+        assert fem.get("fallback_behavior_repaired") is repaired
+    if uncertainty_active is not None:
+        assert fem.get("fallback_behavior_uncertainty_active") is uncertainty_active
+    if extra:
+        assert_final_emission_meta_contains(fem, **extra)
+    return fem
+
+
+def assert_fallback_gate_propagation(
+    out: Mapping[str, Any],
+    *,
+    validation_checked: bool | None = None,
+    checked: bool | None = None,
+    repaired: bool | None = None,
+    uncertainty_active: bool | None = None,
+    repair_mode_matches_fem: bool = False,
+    **extra_fem: Any,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Assert gate output propagated FEM fallback metadata and optional emission_debug validation."""
+    meta = final_emission_meta_from_output(out) or {}
+    emission_debug = fallback_gate_emission_debug(out)
+    assert_fallback_gate_metadata(
+        meta,
+        checked=checked,
+        repaired=repaired,
+        uncertainty_active=uncertainty_active,
+        **extra_fem,
+    )
+    if validation_checked is not None:
+        assert (emission_debug.get("validation") or {}).get("checked") is validation_checked
+    if repair_mode_matches_fem:
+        assert emission_debug.get("repair_mode") == meta.get("fallback_behavior_repair_mode")
+    return meta, emission_debug
+
+
+def assert_fallback_gate_repair_evidence(
+    out: Mapping[str, Any],
+    *,
+    forbidden_phrases: Sequence[str] = (),
+    required_phrases: Sequence[str] = (),
+    require_non_empty: bool = False,
+) -> str:
+    """Assert gate repair rewrote player-facing text away from meta-voice leaks."""
+    text = str(out.get("player_facing_text") or "")
+    low = text.lower()
+    for phrase in forbidden_phrases:
+        assert phrase.lower() not in low, (
+            f"expected forbidden phrase absent from player-facing text: {phrase!r}"
+        )
+    for phrase in required_phrases:
+        assert phrase.lower() in low, (
+            f"expected required phrase in player-facing text: {phrase!r}"
+        )
+    if require_non_empty:
+        assert text.strip(), "expected non-empty repaired player-facing text"
+    return text

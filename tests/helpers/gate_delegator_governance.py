@@ -3,6 +3,13 @@
 Consolidates game-module imports used by delegator/ownership governance locks so
 test routers can use path/AST source inspection and lazy importlib instead of
 per-test direct production imports.
+
+BJ ownership assertion helpers (CO34–CO49): ``assert_dual_stacks_call_owner_directly``,
+``assert_callers_call_owner_directly``, ``assert_gate_entrypoint_calls_owners_directly``,
+``assert_repairs_dual_stack_calls_owner_directly``, ``assert_repairs_dual_stack_count_owner_calls``,
+``assert_repairs_callers_call_owner_directly``, ``assert_bu2a_debug_merge_consolidated_on_fem_assembly``,
+``assert_inspect_callers_call_owner_directly``. BJ-115–119 use source primitives;
+BJ-120+ harness/structural cycles remain direct in ``tests/ownership_closeout_delegate_locks.py``.
 """
 from __future__ import annotations
 
@@ -174,6 +181,14 @@ def assert_gate_lacks(*names: str) -> None:
         assert not hasattr(feg, name), f"gate still exposes forbidden delegator/re-export: {name!r}"
 
 
+def assert_module_private_lacks(module_name: str, *names: str) -> None:
+    mod = load_game_module(module_name)
+    for name in names:
+        assert not hasattr(mod, name), (
+            f"{module_name} still exposes forbidden private delegator: {name!r}"
+        )
+
+
 def owner_callable(module_name: str, attr: str) -> bool:
     return callable(getattr(load_game_module(module_name), attr, None))
 
@@ -205,6 +220,238 @@ def assert_function_source_contains(
         assert marker not in src, f"{module_name}.{function_name} forbidden marker: {marker!r}"
 
 
+def assert_dual_stacks_call_owner_directly(
+    *,
+    owner_module: str,
+    owner_attr: str,
+    gate_private_attr: str,
+) -> None:
+    """Both layer stacks call owner entrypoint directly; gate lacks stale feg wrapper."""
+    owner_call = f"{owner_attr}("
+    feg_forbidden = f"feg.{gate_private_attr}"
+    assert_function_source_contains(
+        NON_STRICT_STACK,
+        "run_non_strict_layer_stack",
+        owner_call,
+        forbidden=(feg_forbidden,),
+    )
+    assert_function_source_contains(
+        STRICT_SOCIAL_STACK,
+        "run_strict_social_composition_trunk",
+        owner_call,
+        forbidden=(feg_forbidden,),
+    )
+    assert_gate_lacks(gate_private_attr)
+    assert_owner_callable(owner_module, owner_attr)
+
+
+def assert_callers_call_owner_directly(
+    *,
+    owner_module: str,
+    owner_attr: str,
+    gate_private_attr: str,
+    callers: tuple[tuple[str, str], ...],
+    forbidden_markers: tuple[str, ...] | None = None,
+) -> None:
+    """Named caller functions call owner entrypoint directly; gate lacks private delegator.
+
+    By default forbids stale ``feg.<gate_private_attr>`` wrappers in caller sources.
+    Pass ``forbidden_markers`` to override (e.g. bare ``_<private>`` gate entrypoint aliases).
+    """
+    owner_call = f"{owner_attr}("
+    if forbidden_markers is None:
+        forbidden_markers = (f"feg.{gate_private_attr}",)
+    for module_name, function_name in callers:
+        assert_function_source_contains(
+            module_name,
+            function_name,
+            owner_call,
+            forbidden=forbidden_markers,
+        )
+    assert_gate_lacks(gate_private_attr)
+    assert_owner_callable(owner_module, owner_attr)
+
+
+def assert_gate_entrypoint_calls_owners_directly(
+    *,
+    entrypoint_function: str = "apply_final_emission_gate",
+    owners: tuple[tuple[str, str, str, str], ...],
+) -> None:
+    """Gate entrypoint calls multiple owner entrypoints; gate lacks bare private delegators.
+
+    Each owner spec is ``(owner_module, owner_attr, required_marker, forbidden_marker)``.
+    """
+    required_markers = tuple(spec[2] for spec in owners)
+    forbidden_markers = tuple(spec[3] for spec in owners)
+    assert_function_source_contains(
+        GATE,
+        entrypoint_function,
+        *required_markers,
+        forbidden=forbidden_markers,
+    )
+    assert_gate_lacks(*forbidden_markers)
+    for owner_module, owner_attr, _, _ in owners:
+        assert_owner_callable(owner_module, owner_attr)
+
+
+def assert_repairs_dual_stack_calls_owner_directly(
+    *,
+    layer_attr: str,
+) -> None:
+    """NSS/SS stacks call final_emission_repairs layer via inspect; gate lacks stale feg wrapper.
+
+    Non-strict stack uses bare ``_<layer>(``; strict-social uses qualified
+    ``emission_repairs._<layer>(``.
+    """
+    nss_src = inspect_function_source(NON_STRICT_STACK, "run_non_strict_layer_stack")
+    ss_src = inspect_function_source(STRICT_SOCIAL_STACK, "run_strict_social_composition_trunk")
+    nss_call = f"{layer_attr}("
+    ss_call = f"emission_repairs.{layer_attr}("
+    feg_forbidden = f"feg.{layer_attr}"
+    assert nss_call in nss_src, (
+        f"{NON_STRICT_STACK}.run_non_strict_layer_stack missing marker: {nss_call!r}"
+    )
+    assert feg_forbidden not in nss_src, (
+        f"{NON_STRICT_STACK}.run_non_strict_layer_stack forbidden marker: {feg_forbidden!r}"
+    )
+    assert ss_call in ss_src, (
+        f"{STRICT_SOCIAL_STACK}.run_strict_social_composition_trunk missing marker: {ss_call!r}"
+    )
+    assert feg_forbidden not in ss_src, (
+        f"{STRICT_SOCIAL_STACK}.run_strict_social_composition_trunk forbidden marker: {feg_forbidden!r}"
+    )
+    assert_gate_lacks(layer_attr)
+    assert_owner_callable(REPAIRS, layer_attr)
+
+
+def assert_repairs_dual_stack_count_owner_calls(
+    *,
+    layer_attr: str,
+    strict_social_qualified_call_count: int,
+) -> None:
+    """Repairs dual-stack variant: SS module source must contain exact qualified call count."""
+    nss_src = inspect_function_source(NON_STRICT_STACK, "run_non_strict_layer_stack")
+    ss_src = inspect_module_source(STRICT_SOCIAL_STACK)
+    nss_call = f"{layer_attr}("
+    ss_call = f"emission_repairs.{layer_attr}("
+    feg_forbidden = f"feg.{layer_attr}"
+    assert nss_call in nss_src, (
+        f"{NON_STRICT_STACK}.run_non_strict_layer_stack missing marker: {nss_call!r}"
+    )
+    assert feg_forbidden not in nss_src, (
+        f"{NON_STRICT_STACK}.run_non_strict_layer_stack forbidden marker: {feg_forbidden!r}"
+    )
+    assert ss_src.count(ss_call) == strict_social_qualified_call_count, (
+        f"{STRICT_SOCIAL_STACK} expected {strict_social_qualified_call_count} occurrences of "
+        f"{ss_call!r}, got {ss_src.count(ss_call)}"
+    )
+    assert feg_forbidden not in ss_src, (
+        f"{STRICT_SOCIAL_STACK} forbidden marker: {feg_forbidden!r}"
+    )
+    assert_gate_lacks(layer_attr)
+    assert_owner_callable(REPAIRS, layer_attr)
+
+
+def assert_repairs_callers_call_owner_directly(
+    *,
+    layer_attr: str,
+    callers: tuple[tuple[str, str], ...],
+) -> None:
+    """Named callers invoke final_emission_repairs layer via bare inspect markers."""
+    bare_call = f"{layer_attr}("
+    feg_forbidden = f"feg.{layer_attr}"
+    for module_name, function_name in callers:
+        src = inspect_function_source(module_name, function_name)
+        label = f"{module_name}.{function_name}"
+        assert bare_call in src, f"{label} missing marker: {bare_call!r}"
+        assert feg_forbidden not in src, f"{label} forbidden marker: {feg_forbidden!r}"
+    assert_gate_lacks(layer_attr)
+    assert_owner_callable(REPAIRS, layer_attr)
+
+
+def assert_inspect_callers_call_owner_directly(
+    *,
+    owner_module: str,
+    owner_attr: str,
+    callers: tuple[tuple[str, str], ...],
+    gate_private_attr: str | None = None,
+    owner_call: str | None = None,
+    forbidden_markers: tuple[str, ...] | None = None,
+    caller_owner_call_counts: dict[tuple[str, str], int] | None = None,
+    module_private_lacks: tuple[tuple[str, str], ...] | None = None,
+) -> None:
+    """Named callers invoke owner entrypoint via inspect; gate lacks stale feg wrapper.
+
+    Optional ``forbidden_markers`` names extra source fragments that must be absent
+    from each caller (e.g. bare ``_gate_private`` aliases), so ownership-collapse
+    locks can reuse this helper instead of repeated inline ``inspect.getsource`` checks.
+
+    Optional ``caller_owner_call_counts`` maps ``(module_name, function_name)`` to
+    the exact number of ``owner_call`` occurrences required in that caller's source,
+    for ownership-collapse tests where one caller must prove exact delegation multiplicity.
+    Callers omitted from the map keep the default presence check (at least one match).
+
+    Optional ``module_private_lacks`` lists ``(module_name, private_attr)`` pairs that
+    must not exist on non-gate modules (e.g. obsolete caller-module wrappers), using
+    the same hasattr semantics as ``assert_gate_lacks``.
+    """
+    if gate_private_attr is None:
+        gate_private_attr = owner_attr
+    if owner_call is None:
+        owner_call = f"{owner_attr}("
+    feg_forbidden = f"feg.{gate_private_attr}"
+    counts = caller_owner_call_counts or {}
+    for module_name, function_name in callers:
+        src = inspect_function_source(module_name, function_name)
+        label = f"{module_name}.{function_name}"
+        caller_key = (module_name, function_name)
+        if caller_key in counts:
+            expected = counts[caller_key]
+            actual = src.count(owner_call)
+            assert actual == expected, (
+                f"{label} expected {expected} occurrences of {owner_call!r}, got {actual}"
+            )
+        else:
+            assert owner_call in src, f"{label} missing marker: {owner_call!r}"
+        assert feg_forbidden not in src, f"{label} forbidden marker: {feg_forbidden!r}"
+        if forbidden_markers:
+            for marker in forbidden_markers:
+                assert marker not in src, f"{label} forbidden marker: {marker!r}"
+    assert_gate_lacks(gate_private_attr)
+    if module_private_lacks:
+        for mod_name, attr_name in module_private_lacks:
+            assert_module_private_lacks(mod_name, attr_name)
+    assert_owner_callable(owner_module, owner_attr)
+
+
+def assert_bu2a_debug_merge_consolidated_on_fem_assembly(
+    *,
+    owner_module: str,
+    owner_attr: str,
+    gate_private_attr: str,
+    stack_forbidden_merge_call: str,
+    fem_assembly_merge_call: str,
+) -> None:
+    """Stacks route debug merge through fem_assembly; layer merge lives in pre-terminal helper."""
+    nss_src = inspect_function_source(NON_STRICT_STACK, "run_non_strict_layer_stack")
+    ss_src = inspect_function_source(STRICT_SOCIAL_STACK, "run_strict_social_composition_trunk")
+    fa_src = inspect_function_source(FEM_ASSEMBLY, "merge_pre_terminal_layer_debug")
+    stack_route = "fem_assembly.merge_pre_terminal_layer_debug("
+    for label, src in (
+        (f"{NON_STRICT_STACK}.run_non_strict_layer_stack", nss_src),
+        (f"{STRICT_SOCIAL_STACK}.run_strict_social_composition_trunk", ss_src),
+    ):
+        assert stack_route in src, f"{label} missing marker: {stack_route!r}"
+        assert stack_forbidden_merge_call not in src, (
+            f"{label} forbidden direct merge call: {stack_forbidden_merge_call!r}"
+        )
+    assert fem_assembly_merge_call in fa_src, (
+        f"{FEM_ASSEMBLY}.merge_pre_terminal_layer_debug missing marker: {fem_assembly_merge_call!r}"
+    )
+    assert_gate_lacks(gate_private_attr)
+    assert_owner_callable(owner_module, owner_attr)
+
+
 def assert_module_source_contains(
     module_name: str,
     *markers: str,
@@ -222,6 +469,11 @@ def inspect_function_source(module_name: str, function_name: str) -> str:
     mod = load_game_module(module_name)
     obj = getattr(mod, function_name)
     return inspect.getsource(obj)
+
+
+def inspect_module_source(module_name: str) -> str:
+    """Runtime inspect.getsource for an entire production module."""
+    return inspect.getsource(load_game_module(module_name))
 
 
 def game_import_fan_out_from_source(source: str) -> frozenset[str]:

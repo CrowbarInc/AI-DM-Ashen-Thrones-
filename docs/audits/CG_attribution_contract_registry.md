@@ -1,10 +1,16 @@
 # CG-5 — Attribution Contract Registry
 
-**Date:** 2026-06-25  
+**Date:** 2026-06-27 (CO97 governance sync)  
 **Scope:** Documentation and comment-clarity only. No runtime attribution behavior, taxonomy rename, replacement logic, mutation semantics, repair-kind semantics, emitted lineage, validation weakening, or artifact regeneration.
+
+**Governing authority:** [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) — attribution maturity program is **closed**; normative policy lives in `tests/helpers/attribution_contract.py` (`ATTRIBUTION_GOVERNANCE_RULES`, `ATTRIBUTION_PROGRAM_CLOSEOUT`).
 
 **Related:**
 
+- [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) (program closeout and governance lock — **canonical policy authority**)
+- [`CO91_attribution_maturity_plateau_audit.md`](CO91_attribution_maturity_plateau_audit.md) (read-side projection plateau)
+- [`CO94_gate_outcome_mutation_classification_audit.md`](CO94_gate_outcome_mutation_classification_audit.md) (`gate_outcome` mutation-free lineage contract)
+- [`CO95_strict_completeness_production_eligibility_audit.md`](CO95_strict_completeness_production_eligibility_audit.md) (strict-direct production eligibility; strict frozen at 0%)
 - [`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CG-1 failure vs runtime boundaries)
 - [`CG_recurrence_taxonomy_registry.md`](CG_recurrence_taxonomy_registry.md) (CG-4 recurrence identity)
 - [`metrics/BS3_canonical_attribution_contract.md`](metrics/BS3_canonical_attribution_contract.md) (BS3 contract definition)
@@ -14,6 +20,37 @@
 Attribution vocabulary intentionally spans failure classification, runtime lineage emission, and replay governance. This registry records **which module owns each attribution concept**, what **imports vs validates vs derives**, and where **intentional overlaps** remain.
 
 Use this document before editing repair kinds, mutation classifications, replacement paths, owner-bucket validation, or attribution inventory logic.
+
+**Attribution maturity program:** closed (CO96). Do not reopen completeness work to raise strict % or resolved % beyond architectural constraints documented below.
+
+## Attribution program governance (CO96)
+
+| Item | Value | Authority |
+|---|---|---|
+| Program status | **Closed** | `ATTRIBUTION_MATURITY_PROGRAM_STATUS` |
+| Primary production KPI | **Resolved completeness** (`resolved_completeness_pct`) | `ATTRIBUTION_MATURITY_PRIMARY_KPI` |
+| Strict completeness role | **Architectural diagnostic only** — not a graduation gate or production-stamp target | `ATTRIBUTION_STRICT_COMPLETENESS_ROLE` |
+| Closeout resolved completeness | 48/56 (85.71%) | `BS5_MATURITY_SNAPSHOT`, `ATTRIBUTION_PROGRAM_CLOSEOUT` |
+| Closeout strict completeness | 0/56 (0.0%) | By architecture (CO95), not a defect |
+| Intentional unresolved gaps | 8 × `gate_outcome` `mutation_classification` | CO94 lineage contract — **architectural constraint, not backlog** |
+
+### Normative governance rules (`ATTRIBUTION_GOVERNANCE_RULES`)
+
+1. Resolved completeness is the primary production KPI.
+2. Strict completeness is an architectural diagnostic only.
+3. Replay-derived fields are not production-stamp candidates.
+4. Production stamps must never duplicate replay semantics solely to improve metrics.
+5. Read-side projection remains bounded by existing production evidence.
+
+### Production vs replay ownership (summary)
+
+| Layer | Owns | Does not own |
+|---|---|---|
+| **Production (FEM write time)** | Producer repair kinds, owner buckets, replacement-applied flags | `source_family`, lineage `recurrence_key`, `mutation_kind` on non-mutation events |
+| **Replay projection** | Lineage events, recurrence keys, mutation classification on `mutation` events, fallback_kind → source_family maps | Completeness scoring, strict-direct origin labels |
+| **Attribution inventory (read-side)** | Record construction, origin labeling, resolved/strict scoring | Taxonomy authority, production stamps |
+
+Replay-derived fields (`source_family`, lineage-scoped `recurrence_key` and `mutation_classification`) are **intentionally projection-based** on FEM-metadata inventory records. Strict completeness remains 0% on the baseline corpus because every resolved record includes at least one projected or classifier-inferred field (CO95).
 
 ## Contract boundary summary
 
@@ -89,7 +126,7 @@ Columns: **Owner** · **Imported authorities** · **Consumers** · **Runtime?** 
 | **Owning module** | `tests/failure_classification_contract.py` |
 | **Imported authorities** | none at authority source |
 | **Downstream consumers** | `attribution_contract.validate_source_family`, classifier routing, inventory `_infer_source_family_*`, `final_emission_replay_projection.FALLBACK_KIND_SOURCE_FAMILY_MAP` (projection derives tags from `fallback_kind`) |
-| **Runtime-owned** | no (runtime emits `fallback_kind`; projection maps to family) |
+| **Runtime-owned** | no (runtime emits `fallback_kind`; projection maps to family — **not a production-stamp candidate**, CO96) |
 | **Replay-contract-owned** | **yes** |
 | **Attribution-owned** | validates imported set only |
 | **Compatibility-only** | no |
@@ -154,7 +191,7 @@ Columns: **Owner** · **Imported authorities** · **Consumers** · **Runtime?** 
 | **Owning module** | `tests/helpers/attribution_contract.py` |
 | **Imported authorities** | none for core tokens |
 | **Downstream consumers** | `validate_mutation_classification`, inventory, replay projection emission maps |
-| **Runtime-owned** | emits via `mutation_kind` on lineage events |
+| **Runtime-owned** | emits via `mutation_kind` on **`mutation` lineage events only**; `gate_outcome` intentionally omits `mutation_kind` (CO94) |
 | **Replay-contract-owned** | no |
 | **Attribution-owned** | **yes** (validation union core) |
 | **Compatibility-only** | no |
@@ -205,7 +242,7 @@ Columns: **Owner** · **Imported authorities** · **Consumers** · **Runtime?** 
 | **Allowed values** | `direct`, `projected`, `classifier_inferred` (`ALLOWED_ATTRIBUTION_ORIGINS`) |
 | **Owning module** | `tests/helpers/attribution_contract.py` |
 | **Imported authorities** | none |
-| **Downstream consumers** | Inventory record construction, strict vs resolved completeness scoring |
+| **Downstream consumers** | Inventory record construction, strict vs resolved completeness scoring (CO96: resolved = primary KPI; strict = diagnostic) |
 | **Runtime-owned** | no |
 | **Replay-contract-owned** | no |
 | **Attribution-owned** | **yes** |
@@ -220,7 +257,7 @@ Columns: **Owner** · **Imported authorities** · **Consumers** · **Runtime?** 
 | **Owning module (shape check)** | `tests/helpers/attribution_contract.py` |
 | **Imported authorities** | none |
 | **Downstream consumers** | `validate_recurrence_key`, lineage inventory |
-| **Runtime-owned** | emits lineage recurrence keys (distinct from bug-recurrence v1 key) |
+| **Runtime-owned** | emits lineage recurrence keys at event creation (`make_runtime_lineage_event`); **not FEM-stamped** (CO96: replay-derived, not production-stamp candidate) |
 | **Replay-contract-owned** | no |
 | **Attribution-owned** | shape validation only |
 | **Compatibility-only** | no |
@@ -364,7 +401,7 @@ Failure classifier row.repair_kind ──► inventory (classifier_inferred)
 | **Read facade** | `attribution_read_views.py` | Re-exports runtime bucket vocabulary |
 | **FEM packaging** | `final_emission_meta.py` | Producer stamps and registry consumption |
 | **Ownership schema** | `final_emission_ownership_schema.py` | Canonical bucket and split-owner strings |
-| **Completeness metric** | `attribution_completeness_metric.py` | Consumes contract fields |
+| **Completeness metric** | `attribution_completeness_metric.py` | Consumes contract fields; BR1 reports resolved as primary KPI (CO96) |
 
 ---
 
@@ -380,15 +417,22 @@ Failure classifier row.repair_kind ──► inventory (classifier_inferred)
 | Core mutation classifications | 22 |
 | Imported emission sublayers | 15 |
 | Repair-kind union members | runtime (4) + producer (8) + legacy (1) + opening (2) = 15 unique |
-| Remaining ambiguous concepts | 5 (see below) |
+| Attribution program status | **Closed** (CO96) |
+| Closeout resolved completeness | 48/56 (85.71%) |
+| Closeout strict completeness | 0/56 (0.0%) — architectural diagnostic |
+| Intentional unresolved gaps | 8 (`gate_outcome` `mutation_classification`, CO94) |
 
-### Remaining ambiguous concepts
+### Architectural constraints (not backlog)
+
+These are **settled design boundaries**, not open attribution work items (CO91 plateau, CO94–CO96 closeout):
 
 1. **Dual mutation vocabulary** — classifier uses `emission_sublayer` strings while lineage emits `mutation_kind` tokens; attribution union accepts both by design.
-2. **Repair kind split** — failure contract subsets vs attribution union; both must change together for new producer kinds.
+2. **Repair kind split** — failure contract subsets vs attribution union; both must change together for new producer kinds (when legitimately adding producer semantics, not for metric inflation).
 3. **Lineage-only repair kinds** — runtime-emitted but intentionally excluded from BS3 union (speaker paths).
-4. **Source family derivation** — failure contract owns tags; replay projection and inventory **derive** values from `fallback_kind` (not authoritative emission).
-5. **Recurrence key namespaces** — lineage `recurrence_key` shape vs bug-recurrence `recurrence:v1:…` formula are distinct authorities.
+4. **Source family derivation** — failure contract owns tags; replay projection and inventory **derive** values from `fallback_kind`; no FEM stamp surface (CO96 rule 3).
+5. **Recurrence key namespaces** — lineage `recurrence_key` is event-scoped (`runtime_lineage_telemetry`); bug-recurrence `recurrence:v1:…` is a distinct authority; neither is a strict-direct FEM stamp target (CO95–CO96).
+6. **`gate_outcome` mutation gap** — eight baseline inventory records intentionally lack `mutation_classification`; sibling `mutation` events carry it (CO94).
+7. **Strict completeness at 0%** — every resolved record includes replay-derived or projection-only fields; not unfinished production work (CO95).
 
 ### Remaining cross-contract dependencies
 
@@ -399,6 +443,7 @@ Failure classifier row.repair_kind ──► inventory (classifier_inferred)
 | Runtime buckets → owner validation | ownership schema → failure contract mirror → attribution | Edit schema + contract mirror |
 | Projection maps → mutation union | replay projection emits; attribution validates | Align maps when adding core mutation tokens |
 | Classifier evidence → inventory | classifier rows → inventory `classifier_inferred` origin | Fixture + inventory tests |
+| CO96 governance → registry | `attribution_contract` constants → this document | Documentation sync only |
 
 ---
 
@@ -414,6 +459,7 @@ Failure classifier row.repair_kind ──► inventory (classifier_inferred)
 | Owner bucket string | `final_emission_ownership_schema.py` + contract mirror | Runtime + replay + attribution |
 | Fallback-kind legacy alias | `attribution_contract.py` + projection legacy token | Normalization + projection compat |
 | Lineage-only repair kind | Document in `LINEAGE_ONLY_REPAIR_KINDS`; do not add to union unless promoting | Speaker/continuity paths |
+| Attribution governance policy | CO96 closeout + `ATTRIBUTION_GOVERNANCE_RULES` + this registry | Documentation only; requires explicit cycle — program is closed |
 
 ---
 
@@ -421,10 +467,12 @@ Failure classifier row.repair_kind ──► inventory (classifier_inferred)
 
 | File | Owns | Imports / validates |
 |---|---|---|
-| `tests/helpers/attribution_contract.py` | Paths, unions, aliases, normalization, record validation, maturity audit | Failure contract subsets, bucket mirrors, source families, emission sublayers |
+| `tests/helpers/attribution_contract.py` | Paths, unions, aliases, normalization, record validation, maturity audit, **CO96 governance constants** | Failure contract subsets, bucket mirrors, source families, emission sublayers |
 | `tests/helpers/replacement_attribution_inventory.py` | Record construction, baseline corpus, BS1–BS5 reports | Entire attribution contract surface |
 | `tests/failure_classification_contract.py` | Source families, repair subsets, emission sublayers, bucket mirrors | Runtime ownership schema via read facade |
 | `game/final_emission_ownership_schema.py` | Bucket strings, split-owner tokens | — |
 | `game/attribution_read_views.py` | Re-export facade | Ownership schema + bucket views |
 | `game/final_emission_meta.py` | FEM shapes, producer stamps | Ownership schema registries |
 | `game/final_emission_replay_projection.py` | Lineage derivation maps, event emission | Ownership schema owners; aligns with attribution core |
+| `docs/audits/CO96_attribution_program_closeout.md` | Program closeout narrative and cycle arc | References `attribution_contract` governance constants |
+| `docs/audits/CG_attribution_contract_registry.md` | Vocabulary ownership map (this document) | Synchronized with CO96 (CO97) |

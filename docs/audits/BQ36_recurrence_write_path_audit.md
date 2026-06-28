@@ -152,3 +152,36 @@ This cycle **classifies only** — it does not rewrite the committed 43-event lo
 **BQ3.6** adds commit-worthiness filtering and persistence lanes so session/test noise no longer inflates protected history on new writes. See [BQ3.6 recurrence write path audit](./BQ36_recurrence_write_path_audit.md).
 
 **BQ5 — Protected Replay Recurrence Trends** can proceed once migration repopulates a clean protected lane. Trend buckets should use `calculate_protected_replay_regression_recurrence_rate()` and protected event log only.
+
+---
+
+## Operational Workflow Audit (CO100)
+
+**Date:** 2026-06-27  
+**Scope:** Documentation audit only. No write-path, lane-routing, or artifact changes.
+
+**Authoritative operator guide:** [`docs/runbooks/protected_replay_observation_collection.md`](../runbooks/protected_replay_observation_collection.md)
+
+### Already defined (prior audits / code)
+
+| Stage | Where defined | Notes |
+|---|---|---|
+| Protected replay execution | `docs/testing/protected_replay_manifest.md`, CI convergence workflow, `golden_replay.py` | `-m golden_replay` marker; scenario catalog |
+| Recurrence event generation | BQ35 source audit; `record_protected_replay_assertion_failure` | Classification rows → recurrence projection |
+| Recurrence event logging | This audit (write-path inventory); `write_bug_recurrence_history_artifacts` | Single persistence entry point |
+| Replay artifact preservation | `BQ_recurrence_history_discovery.md` §Summarization; protected failure cascade | Report + hotspot + risk + history on session fail |
+| Failure triage | `replay_failure_report.md` structure (Failure Locator, focused tests) | Reproduction commands embedded in report |
+| Commit-worthiness routing | BQ3.6 §Implementation; `is_commit_worthy_recurrence_event()` | Protected vs session-diagnostic lanes |
+| Backfill path | `tools/backfill_bug_recurrence_history.py` | Idempotent parse of committed failure report |
+| Graduation evidence targets | BQ16 §Operational graduation baseline (CO99); BQC4 blockers | Volume, trajectory, confidence |
+
+### Missing guidance (addressed by CO100 runbook)
+
+| Gap | Resolution |
+|---|---|
+| End-to-end observation lifecycle in one document | CO100 runbook §Observation lifecycle |
+| Operator steps from failure → committed evidence | CO100 runbook §Failure triage |
+| Acceptable vs invalid observations | CO100 runbook §Observation quality requirements |
+| Authority chain (taxonomy vs operational vs graduation) | CO100 runbook §Authority chain |
+| Duplicate / integrity expectations without new policy | CO100 runbook §Duplicate handling, §Replay integrity |
+| Explicit CO99 alignment for evidence collection | CO100 runbook purpose + BQ16 cross-reference |

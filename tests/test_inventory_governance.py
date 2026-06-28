@@ -14,7 +14,6 @@ Implementation helpers live in ``tests/ownership_inventory_governance.py``.
 from __future__ import annotations
 
 import importlib.util
-import json
 import types
 from dataclasses import replace
 from pathlib import Path
@@ -25,6 +24,9 @@ from tests.ownership_inventory_governance import (
     CANONICAL_VALIDATION_LAYERS,
     DEFAULT_GOVERNANCE_INVENTORY_PATH,
     LIVE_LEGALITY_GROUP_IDS,
+    assert_governance_rejects_stored_derived_field,
+    assert_registry_files_roles_present_in_inventory,
+    assert_registry_paths_have_derived_inventory_field,
     collect_ownership_governance_errors,
     direct_owner_inventory_layer_ok,
     full_inventory_by_path,
@@ -35,7 +37,6 @@ from tests.ownership_registry_contract import (
     RESPONSIBILITY_REGISTRY,
     ResponsibilityRecord,
     _CROSS_FILE_DUPLICATE_ALLOWLIST,
-    build_ownership_registry_index,
 )
 
 try:
@@ -108,77 +109,107 @@ def test_governance_omits_cross_file_duplicate_test_names(inventory: dict) -> No
     """AQ9: cross-file duplicate rows are derived from full audit, not committed."""
     assert 'cross_file_duplicate_test_names' not in inventory
 
-def test_governance_rejects_stored_cross_file_duplicate_test_names(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ9: committed governance must not embed derived duplicate-name rows."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['cross_file_duplicate_test_names'] = [{'base_name': 'test_x', 'files': ['tests/test_a.py']}]
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store cross_file_duplicate_test_names' in e for e in errs))
+
+_STORED_DERIVED_FIELD_REJECTION_CASES = (
+    pytest.param(
+        lambda inv: inv.__setitem__(
+            'cross_file_duplicate_test_names',
+            [{'base_name': 'test_x', 'files': ['tests/test_a.py']}],
+        ),
+        'must not store cross_file_duplicate_test_names',
+        id='cross-file-duplicate-test-names',
+    ),
+    pytest.param(
+        lambda inv: inv.__setitem__(
+            'tests',
+            [{'nodeid': 'tests/test_x.py::test_y', 'marker_set': ['unit']}],
+        ),
+        'must not store tests[]',
+        id='stored-tests-list',
+    ),
+    pytest.param(
+        lambda inv: inv['files'][0].__setitem__('marker_set', ['unit']),
+        'must not store marker_set',
+        id='marker-set',
+    ),
+    pytest.param(
+        lambda inv: inv['files'][0].__setitem__('likely_architecture_layer', 'gate'),
+        'must not store likely_architecture_layer',
+        id='architecture-layer',
+    ),
+    pytest.param(
+        lambda inv: inv['files'][0].__setitem__('collected_duplicate_base_names', ['test_dup']),
+        'must not store collected_duplicate_base_names',
+        id='duplicate-base-names',
+    ),
+    pytest.param(
+        lambda inv: inv['files'][0].__setitem__('pytest_collected', 99),
+        'must not store pytest_collected',
+        id='pytest-collected',
+    ),
+    pytest.param(
+        lambda inv: inv['files'][0].__setitem__(
+            'ownership_registry_positions',
+            [{'group_id': 'x', 'role': 'direct_owner'}],
+        ),
+        'must not store ownership_registry_positions',
+        id='registry-positions',
+    ),
+    pytest.param(
+        lambda inv: inv.__setitem__(
+            'block_b_overlap_clusters',
+            [{'kind': 'dense_ownership_theme_by_architecture_layer', 'cells': []}],
+        ),
+        'must not store block_b_overlap_clusters',
+        id='block-overlap-clusters',
+    ),
+    pytest.param(
+        lambda inv: inv['files'].append({'path': 'tests/test_non_registry_module.py'}),
+        'must not store non-governance path',
+        id='non-registry-file-row',
+    ),
+)
+
+
+@pytest.mark.parametrize(('mutate', 'error_substring'), _STORED_DERIVED_FIELD_REJECTION_CASES)
+def test_governance_rejects_stored_derived_fields(
+    inventory: dict,
+    mutate,
+    error_substring: str,
+) -> None:
+    """AQ5–AQ9 / BF4–BF7: committed governance must not embed derived diagnostic fields."""
+    assert_governance_rejects_stored_derived_field(
+        inventory,
+        mutate=mutate,
+        error_substring=error_substring,
+        registry=RESPONSIBILITY_REGISTRY,
+        cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,
+    )
+
 
 def test_governance_file_rows_omit_committed_per_test_rows(inventory: dict) -> None:
     """AQ6: per-test marker rows are derived at check time, not committed."""
     assert 'tests' not in inventory
-
-def test_governance_rejects_stored_per_test_rows(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ6: committed governance must not embed derived per-test marker rows."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['tests'] = [{'nodeid': 'tests/test_x.py::test_y', 'marker_set': ['unit']}]
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store tests[]' in e for e in errs))
 
 def test_governance_file_rows_omit_marker_set(inventory: dict) -> None:
     """BF7: per-file marker sets are derived at check time, not committed."""
     with_markers = [row.get('path') for row in inventory.get('files', []) if isinstance(row, dict) and 'marker_set' in row]
     assert not with_markers, f'governance files must not store marker_set: {with_markers[:3]!r}'
 
-def test_governance_rejects_stored_marker_set(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """BF7: committed governance must not embed derived per-file marker sets."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'][0]['marker_set'] = ['unit']
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store marker_set' in e for e in errs))
-
 def test_governance_file_rows_omit_likely_architecture_layer(inventory: dict) -> None:
     """BF6: architecture-layer heuristics are derived at check time, not committed."""
     with_layers = [row.get('path') for row in inventory.get('files', []) if isinstance(row, dict) and 'likely_architecture_layer' in row]
     assert not with_layers, f'governance files must not store likely_architecture_layer: {with_layers[:3]!r}'
-
-def test_governance_rejects_stored_likely_architecture_layer(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """BF6: committed governance must not embed derived architecture-layer heuristics."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'][0]['likely_architecture_layer'] = 'gate'
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store likely_architecture_layer' in e for e in errs))
 
 def test_governance_file_rows_omit_collected_duplicate_base_names(inventory: dict) -> None:
     """BF5: in-file duplicate base names are derived at check time, not committed."""
     with_dups = [row.get('path') for row in inventory.get('files', []) if isinstance(row, dict) and 'collected_duplicate_base_names' in row]
     assert not with_dups, f'governance files must not store collected_duplicate_base_names: {with_dups[:3]!r}'
 
-def test_governance_rejects_stored_collected_duplicate_base_names(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """BF5: committed governance must not embed derived in-file duplicate-base-name lists."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'][0]['collected_duplicate_base_names'] = ['test_dup']
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store collected_duplicate_base_names' in e for e in errs))
-
 def test_governance_file_rows_omit_pytest_collected(inventory: dict) -> None:
     """BF4: per-file collect counts are derived at check time, not committed."""
     with_counts = [row.get('path') for row in inventory.get('files', []) if isinstance(row, dict) and 'pytest_collected' in row]
     assert not with_counts, f'governance files must not store pytest_collected: {with_counts[:3]!r}'
-
-def test_governance_rejects_stored_pytest_collected(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """BF4: committed governance must not embed derived per-file collect counts."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'][0]['pytest_collected'] = 99
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store pytest_collected' in e for e in errs))
 
 def test_governance_file_rows_omit_registry_positions(inventory: dict) -> None:
     """AQ5: per-file registry positions are derived, not committed."""
@@ -192,26 +223,10 @@ def test_governance_committed_files_exclude_non_registry_paths(inventory: dict, 
     extra = sorted(committed - allowed)
     assert not extra, f'governance files[] includes non-governance paths: {extra[:5]!r}'
 
-def test_governance_rejects_non_registry_committed_file_row(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ8: committed governance must not embed non-registry file rows."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'] = list(polluted.get('files', [])) + [{'path': 'tests/test_non_registry_module.py'}]
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store non-governance path' in e for e in errs))
-
 def test_governance_omits_triage_aggregates(inventory: dict) -> None:
     """AQ7: diagnostic triage aggregates are full-only, not committed."""
     assert 'block_b_overlap_clusters' not in inventory
     assert 'import_hub_modules' not in inventory
-
-def test_governance_rejects_stored_triage_aggregates(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ7: committed governance must not embed full-only triage aggregates."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['block_b_overlap_clusters'] = [{'kind': 'dense_ownership_theme_by_architecture_layer', 'cells': []}]
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store block_b_overlap_clusters' in e for e in errs))
 
 def test_inventory_block_b_schema_v2_coherence(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
     """AQ7: triage aggregates and registry paths are validated; clusters/hubs derived from full audit."""
@@ -221,10 +236,12 @@ def test_inventory_block_b_schema_v2_coherence(inventory_by_path: dict[str, dict
     assert 'dense_ownership_theme_by_architecture_layer' in kinds
     hubs = full_inventory.get('import_hub_modules')
     assert isinstance(hubs, list)
-    files_roles = build_ownership_registry_index().get('files_roles', {})
-    assert isinstance(files_roles, dict)
+    files_roles = assert_registry_files_roles_present_in_inventory(
+        inventory_by_path,
+        missing_path_error='derived registry path not in inventory: ',
+        require_non_empty=False,
+    )
     for fp, roles in files_roles.items():
-        assert fp in inventory_by_path, f'derived registry path not in inventory: {fp}'
         assert isinstance(roles, list) and roles
 
 def test_evaluator_neighbor_may_have_general_inventory_layer(inventory: dict, inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
@@ -235,14 +252,6 @@ def test_evaluator_neighbor_may_have_general_inventory_layer(inventory: dict, in
     assert full_row is not None and full_row.get('likely_architecture_layer') == 'general'
     errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, inventory, inventory_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=LIVE_LEGALITY_GROUP_IDS, full_inventory_by_path=full_inventory_by_path(full_inventory))
     assert not any((p in e for e in errs))
-
-def test_governance_rejects_stored_registry_positions(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
-    """AQ5: committed governance rows must not embed derived registry positions."""
-    polluted = json.loads(json.dumps(inventory))
-    polluted['files'][0]['ownership_registry_positions'] = [{'group_id': 'x', 'role': 'direct_owner'}]
-    polluted_by_path = inventory_paths(polluted)
-    errs = collect_ownership_governance_errors(RESPONSIBILITY_REGISTRY, polluted, polluted_by_path, cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST, live_legality_group_ids=frozenset())
-    assert any(('must not store ownership_registry_positions' in e for e in errs))
 
 def test_governance_rejects_duplicate_direct_owner(inventory: dict, inventory_by_path: dict[str, dict]) -> None:
     owner = 'tests/test_save_load.py'
@@ -274,32 +283,41 @@ def test_inventory_per_test_rows_include_marker_set(test_audit_module: types.Mod
     missing = [r.get('nodeid') for r in rows if not isinstance(r, dict) or 'marker_set' not in r]
     assert not missing, f'missing marker_set on {len(missing)} derived rows (first: {missing[:3]!r})'
 
-def test_governance_registry_paths_have_derived_marker_sets(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
-    """BF7: registry-owned paths retain marker_set data in derived full audit."""
-    full_by_path = full_inventory_by_path(full_inventory)
-    for fp in inventory_by_path:
-        frow = full_by_path.get(fp)
-        assert frow is not None, f'{fp} missing from full inventory'
-        marker_set = frow.get('marker_set')
-        assert isinstance(marker_set, list)
 
-def test_governance_registry_paths_have_derived_architecture_layers(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
-    """BF6: registry-owned paths retain architecture-layer heuristics in derived full audit."""
-    full_by_path = full_inventory_by_path(full_inventory)
-    for fp in inventory_by_path:
-        frow = full_by_path.get(fp)
-        assert frow is not None, f'{fp} missing from full inventory'
-        layer = frow.get('likely_architecture_layer')
-        assert isinstance(layer, str) and layer.strip()
+_REGISTRY_DERIVED_INVENTORY_FIELD_CASES = (
+    pytest.param(
+        'marker_set',
+        lambda value: isinstance(value, list),
+        id='marker-set',
+    ),
+    pytest.param(
+        'likely_architecture_layer',
+        lambda value: isinstance(value, str) and bool(value.strip()),
+        id='architecture-layer',
+    ),
+    pytest.param(
+        'collected_duplicate_base_names',
+        lambda value: isinstance(value, list),
+        id='duplicate-base-names',
+    ),
+)
 
-def test_governance_registry_paths_have_derived_duplicate_base_names(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
-    """BF5: registry-owned paths retain in-file duplicate-base-name data in derived full audit."""
-    full_by_path = full_inventory_by_path(full_inventory)
-    for fp in inventory_by_path:
-        frow = full_by_path.get(fp)
-        assert frow is not None, f'{fp} missing from full inventory'
-        dup_bases = frow.get('collected_duplicate_base_names')
-        assert isinstance(dup_bases, list)
+
+@pytest.mark.parametrize(('field', 'validator'), _REGISTRY_DERIVED_INVENTORY_FIELD_CASES)
+def test_governance_registry_paths_have_derived_inventory_fields(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+    field: str,
+    validator,
+) -> None:
+    """BF5–BF7: registry-owned paths retain derived full-audit field data."""
+    assert_registry_paths_have_derived_inventory_field(
+        inventory_by_path,
+        full_inventory,
+        field,
+        validator,
+    )
+
 
 def test_governance_registry_paths_have_live_collected_counts(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
     """BF4: registry-owned paths retain live per-file collect counts in derived full audit."""

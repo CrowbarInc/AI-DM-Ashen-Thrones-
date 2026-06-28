@@ -1320,11 +1320,44 @@ def render_recurrence_final_graduation_decision_report_markdown(
     else:
         recommendation_label = "C. Recurrence program remains operationally immature"
 
+    program_graduated = bool(readiness.get("program_graduated"))
     lines = [
         "# BQ-C4 Final Graduation Decision",
         "",
         f"**Date:** {generated_at_s}",
         "**Protected replay only:** true",
+        "",
+        "## Governance context (CO99)",
+        "",
+        "| Program | Status | Governing document |",
+        "|---|---|---|",
+        "| **Failure-classification taxonomy (CG-1)** | **Closed** | "
+        "[`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CO98) |",
+        "| **Attribution maturity (CO96)** | **Closed** | "
+        "[`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) |",
+        "| **Recurrence operational graduation (BQ-C4)** | "
+        f"{'**Graduated**' if program_graduated else '**Not graduated**'} — this document | "
+        "[`BQ16_recurrence_graduation_audit.md`](BQ16_recurrence_graduation_audit.md) |",
+        "",
+        "**Scope of this artifact:** Recurrence **operational** graduation readiness only "
+        "(protected-replay volume, trajectory, confidence calibration, blind spots). It does **not** "
+        "reopen attribution completeness work (CO96) or failure-classification taxonomy governance "
+        "(CG-1 closeout).",
+        "",
+        "**Classifier architecture:** Unchanged. Row vocabulary authority remains "
+        "`tests/failure_classification_contract.py`; behavior remains `tests/helpers/failure_classifier.py`.",
+        "",
+        "**Verdict summary:** "
+        + (
+            "Recommendation **A** — recurrence program graduated."
+            if recommendation == RECURRENCE_FINAL_GRADUATION_RECOMMENDATION_GRADUATE
+            else "Recommendation **B** below — one final targeted validation cycle required; "
+            "the program remains operationally immature until graduation confidence is ready."
+            if recommendation == RECURRENCE_FINAL_GRADUATION_RECOMMENDATION_VALIDATION_CYCLE
+            else "Recommendation **C** below — recurrence program remains operationally immature."
+        ),
+        "",
+        "---",
         "",
         "# Trajectory Activation",
         "",

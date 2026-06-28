@@ -15,6 +15,7 @@ from typing import Any, Dict, List
 from game.final_emission_meta import (
     default_response_type_debug as _default_response_type_debug,
     stamp_opening_fallback_owner_bucket,
+    stamp_response_type_prepared_repair_owner_bucket,
 )
 from game.final_emission_opening_fallback import (
     _gm_output_normalized_for_opening_context,
@@ -482,6 +483,7 @@ def enforce_response_type_contract(
                     upstream_src_label=upstream_src_label,
                 )
                 attach_realization_fallback_family(debug, UPSTREAM_PREPARED_EMISSION)
+                stamp_response_type_prepared_repair_owner_bucket(debug)
             else:
                 debug["upstream_prepared_emission_used"] = False
                 debug["upstream_prepared_emission_valid"] = False

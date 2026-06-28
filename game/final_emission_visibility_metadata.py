@@ -9,7 +9,7 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Dict, Literal
 
-from game.final_emission_owner_bucket_views import visibility_fallback_owner_bucket_from_fields
+from game.attribution_read_views import visibility_fallback_owner_bucket_from_fields
 
 _UNSET = object()
 

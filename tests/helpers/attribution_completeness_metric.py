@@ -3,6 +3,10 @@
 Consumes BS1 inventory scoring, BS3 contract maturity scores, and frozen BS1
 baseline snapshots. Does not modify attribution behavior, producers, projection,
 classification, or recurrence generation.
+
+CO96 governance: resolved completeness is the primary production KPI; strict
+completeness is reported as an architectural diagnostic only (see
+``ATTRIBUTION_GOVERNANCE_RULES`` in ``attribution_contract``).
 """
 from __future__ import annotations
 
@@ -10,7 +14,9 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from tests.helpers.attribution_contract import (
+    ATTRIBUTION_MATURITY_PRIMARY_KPI,
     ATTRIBUTION_ORIGIN_DIRECT,
+    ATTRIBUTION_STRICT_COMPLETENESS_ROLE,
     BS1_MATURITY_SNAPSHOT,
     REPLACEMENT_PATHS,
     REQUIRED_ATTRIBUTION_FIELDS,
@@ -30,11 +36,11 @@ BR1_BASELINE_PATH_RESOLVED: dict[str, tuple[int, int]] = {
     "first mention replacement": (0, 5),
     "referential replacement": (0, 5),
     "sealed replacement": (0, 5),
-    "response type replacement": (0, 7),
-    "sanitizer replacement": (0, 7),
-    "repair mutation": (0, 4),
+    "response type replacement": (0, 6),
+    "sanitizer replacement": (0, 10),
+    "repair mutation": (0, 7),
     "opening fallback": (3, 7),
-    "strict social replacement": (0, 7),
+    "strict social replacement": (0, 6),
 }
 
 DEFAULT_OUTPUT_PATH = "artifacts/attribution_completeness_report.md"
@@ -289,6 +295,10 @@ def render_attribution_completeness_report_md(report: Mapping[str, Any]) -> str:
         "# Attribution Completeness Report",
         "",
         "> BR1 repository metric — read-side attribution completeness over the deterministic baseline corpus.",
+        "",
+        f"> **CO96 governance:** primary KPI is `{ATTRIBUTION_MATURITY_PRIMARY_KPI}`; "
+        f"strict completeness is `{ATTRIBUTION_STRICT_COMPLETENESS_ROLE}` only "
+        "(not a production-stamp target).",
         "",
         "## Overall Completeness",
         "",

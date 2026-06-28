@@ -36,11 +36,34 @@ from tests.helpers.opening_fallback_evidence import (
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure, validate_failure_classification_row
 from tests.helpers.failure_classification_sync import (
+    assert_classification_owner_mapping,
+    assert_classification_contract_categories_contain,
+    assert_classification_contract_summary,
+    assert_compact_evidence_field,
     assert_contract_classifier_alignment,
+    assert_dashboard_evidence_cell,
+    assert_dashboard_evidence_column_present,
+    assert_failure_classification_row,
     assert_failure_dashboard_row_shape,
+    assert_fallback_authorship_evidence,
+    assert_lineage_aggregation_parity,
+    assert_lineage_matrix_row_aggregated,
+    assert_lineage_summary_counts,
+    assert_owner_buckets_contain,
+    assert_prepared_emission_evidence,
+    assert_registry_contract_fields,
+    assert_registry_summary_contains,
+    assert_registry_summary_counts,
+    assert_runtime_lineage_source_counts,
+    assert_runtime_lineage_summary_absent,
+    assert_runtime_lineage_summary_contains,
+    assert_sanitizer_empty_fallback_evidence,
+    assert_sanitizer_lineage_evidence,
+    assert_split_owner_classification,
     assert_split_owner_matrix_classifier_row,
     assert_split_owner_matrix_dashboard_expected,
     assert_split_owner_matrix_lineage_event,
+    assert_strict_social_sanitizer_evidence,
     classification_contract_summary,
     classify_replay_probe_row,
     expected_failure_classification_row_fields,
@@ -106,6 +129,18 @@ from tests.helpers.failure_dashboard_report import (
 # Cycle F.H: opening-fallback routing is intentionally still gate-biased in the
 # current classifier contract; symptom-specific first-fault routing is future
 # reviewed policy work, not behavior asserted in this file today.
+#
+# CO13 lock classification (residual direct asserts after CO4–CO8):
+# - scenario-specific classifier parity: canonical routing, symptom routing, precision evidence
+# - row-field / lineage-event parity: split-owner projection fields + embedded lineage mirrors
+# - matrix governance report prose: BU15 acceptance-matrix report anchors
+# - dashboard shape / empty-dashboard markdown: columns, empty state, report fragments
+# - validation error lock: invalid buckets, short owner names, unknown split owners
+# - static/AST structural lock: compat-local literal scan, deprecated alias guards
+# Repeated row/lineage literals across families are intentional parity locks unless noted.
+
+
+# --- Registry/sync parity locks ------------------------------------------------
 
 
 def test_classifier_tables_stay_aligned_with_contract():
@@ -117,27 +152,35 @@ def test_classifier_consumer_reads_taxonomy_from_sync_helpers():
     categories = known_failure_categories()
     buckets = known_owner_buckets()
     registry_summary = protected_observation_registry_summary()
-
-    assert summary["failure_category_count"] == len(categories)
-    assert summary["opening_owner_bucket_count"] == len(buckets["opening"])
-    assert summary["sealed_owner_bucket_count"] == len(buckets["sealed"])
-    assert summary["visibility_owner_bucket_count"] == len(buckets["visibility"])
-    assert OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED in buckets["opening"]
-    assert OPENING_FALLBACK_OWNER_SEALED_GATE in buckets["opening"]
-    assert SEALED_FALLBACK_OWNER_SEALED_GATE in buckets["sealed"]
-    assert "speaker" in categories
-    assert "fallback" in categories
-    assert registry_summary["protected_field_count"] == (
-        registry_summary["structural_field_count"] + registry_summary["semantic_field_count"]
-    )
-    assert registry_summary["paths_unique"] is True
-    assert registry_summary["paths_sorted"] is True
-    assert registry_summary["fallback_family_bucket"] == "structural_drift"
-    assert registry_summary["scaffold_leakage_bucket"] == "semantic_drift"
     row_fields = expected_failure_classification_row_fields()
-    assert len(row_fields["required"]) == summary["required_field_count"]
-    assert "category" in row_fields["required"]
-    assert "fallback_family" in row_fields["optional_evidence"]
+
+    assert_classification_contract_summary(
+        summary,
+        categories=categories,
+        owner_buckets=buckets,
+    )
+    assert_classification_contract_categories_contain(categories, "speaker", "fallback")
+    assert_owner_buckets_contain(
+        buckets,
+        opening=(OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED, OPENING_FALLBACK_OWNER_SEALED_GATE),
+        sealed=(SEALED_FALLBACK_OWNER_SEALED_GATE,),
+    )
+    assert_registry_summary_counts(registry_summary)
+    assert_registry_summary_contains(
+        registry_summary,
+        fallback_family_bucket="structural_drift",
+        scaffold_leakage_bucket="semantic_drift",
+    )
+    assert_registry_contract_fields(
+        summary,
+        row_fields,
+        required_contains=("category",),
+        optional_evidence_contains=("fallback_family",),
+    )
+
+
+# --- Scenario-specific classifier parity (canonical routing) -------------------
+
 
 @pytest.mark.parametrize(
     ("case", "observed", "drift_row", "expected"),
@@ -229,10 +272,16 @@ def test_failure_classifier_routes_canonical_failure_cases(case, observed, drift
         observed_turn=observed,
         drift_row=drift_row,
     )
-    assert row["category"] == category
-    assert row["primary_owner"] == owner
-    assert row["severity"] == severity
-    assert row["investigate_first"] == target
+    assert_classification_owner_mapping(
+        row,
+        category=category,
+        primary_owner=owner,
+        severity=severity,
+        investigate_first=target,
+    )
+
+
+# --- Dashboard shape / empty-dashboard markdown --------------------------------
 
 
 def test_failure_dashboard_report_includes_required_replay_columns():
@@ -264,7 +313,6 @@ def test_failure_dashboard_row_shape_accepts_classified_row():
         turn_index=0,
     )
 
-    assert failure_dashboard_row_shape_errors(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
 
 
@@ -342,16 +390,19 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
         ),
     ]
     summary = build_runtime_lineage_summary(events)
-    assert summary["total_events"] == 5
-    assert summary["fallback_frequency"] == {"scene_opening": 2}
-    assert summary["fallback_authorship_frequency"] == {"upstream_prepared_opening_fallback": 2}
-    assert summary["fallback_owner_bucket_frequency"] == {"upstream-prepared": 2}
-    assert summary["fallback_selection_owner_frequency"] == {"game.final_emission_gate": 2}
-    assert summary["fallback_content_owner_frequency"] == {"game.opening_deterministic_fallback": 2}
-    assert summary["speaker_repair_frequency"] == {"local_rebind": 1}
-    assert summary["mutation_kind_frequency"] == {"fallback_mutation": 1}
-    assert summary["gate_path_frequency"] == {"opening_fallback": 1}
-    assert summary["recurring_events"][0]["count"] == 2
+    assert_lineage_aggregation_parity(
+        summary,
+        total_events=5,
+        fallback_frequency={"scene_opening": 2},
+        fallback_authorship_frequency={"upstream_prepared_opening_fallback": 2},
+        fallback_owner_bucket_frequency={"upstream-prepared": 2},
+        fallback_selection_owner_frequency={"game.final_emission_gate": 2},
+        fallback_content_owner_frequency={"game.opening_deterministic_fallback": 2},
+        speaker_repair_frequency={"local_rebind": 1},
+        mutation_kind_frequency={"fallback_mutation": 1},
+        gate_path_frequency={"opening_fallback": 1},
+        first_recurring_count=2,
+    )
 
     ordinary = render_failure_dashboard_markdown(rows, generated_at="2026-05-11T00:00:00Z", command_used="pytest")
     report = render_failure_dashboard_markdown(
@@ -360,21 +411,26 @@ def test_failure_dashboard_renders_optional_runtime_lineage_summary_without_chan
         command_used="pytest",
         runtime_lineage_events=events,
     )
-    assert "Runtime Lineage Summary" not in ordinary
-    assert "## Runtime Lineage Summary" in report
-    assert "**Total lineage events:** 5" in report
-    assert "**Fallback selected:** 2" in report
-    assert "`scene_opening` (2)" in report
-    assert "`upstream_prepared_opening_fallback` (2)" in report
-    assert "`upstream-prepared` (2)" in report
-    assert "`game.final_emission_gate` (2)" in report
-    assert "`game.opening_deterministic_fallback` (2)" in report
-    assert "`local_rebind` (1)" in report
-    assert "`fallback_mutation` (1)" in report
-    assert "`opening_fallback` (1)" in report
+    assert_runtime_lineage_summary_absent(ordinary)
+    assert_runtime_lineage_summary_contains(
+        report,
+        total_events=5,
+        fallback_selected=2,
+        frequency_rows={
+            "scene_opening": 2,
+            "upstream_prepared_opening_fallback": 2,
+            "upstream-prepared": 2,
+            "game.final_emission_gate": 2,
+            "game.opening_deterministic_fallback": 2,
+            "local_rebind": 1,
+            "fallback_mutation": 1,
+            "opening_fallback": 1,
+        },
+    )
     assert rows[0]["category"] == "fallback"
 
 
+# --- Scenario-specific classifier parity (opening fallback projection) -----------
 # Opening fallback owner-bucket assertions here are classifier projection locks,
 # not duplicate ownership of gate selection or deterministic opening prose.
 # Gate behavior/selection remains in test_final_emission_gate.py, FEM projection
@@ -413,11 +469,14 @@ def test_failure_classifier_rows_split_canonical_legacy_and_sealed_opening_owner
         drift_row=opening_recovered_drift_row(),
     )
 
-    assert row["category"] == "fallback"
-    assert row["source_family"] == "opening_fallback"
-    assert row["emission_sublayer"] == "opening_fallback"
-    assert row["opening_fallback_owner_bucket"] == expected_bucket
-    assert row["opening_fallback_authorship_source"] == observed.get("opening_fallback_authorship_source")
+    assert_failure_classification_row(
+        row,
+        category="fallback",
+        source_family="opening_fallback",
+        emission_sublayer="opening_fallback",
+        opening_fallback_owner_bucket=expected_bucket,
+        opening_fallback_authorship_source=observed.get("opening_fallback_authorship_source"),
+    )
 
 
 def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
@@ -432,9 +491,12 @@ def test_failure_classifier_preserves_projected_opening_owner_bucket_evidence():
         ),
     )
 
-    assert row["opening_fallback_owner_bucket"] == OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED
-    assert row["source_family"] == "opening_fallback"
-    assert row["investigate_first"] == "game/final_emission_meta.py"
+    assert_failure_classification_row(
+        row,
+        opening_fallback_owner_bucket=OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED,
+        source_family="opening_fallback",
+        investigate_first="game/final_emission_meta.py",
+    )
 
 
 def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstream_repairs():
@@ -451,9 +513,12 @@ def test_failure_classifier_routes_opening_authorship_payload_symptom_to_upstrea
         ),
     )
 
-    assert row["category"] == "fallback"
-    assert row["source_family"] == "opening_fallback"
-    assert row["investigate_first"] == "game/upstream_response_repairs.py"
+    assert_classification_owner_mapping(
+        row,
+        category="fallback",
+        investigate_first="game/upstream_response_repairs.py",
+    )
+    assert_failure_classification_row(row, source_family="opening_fallback")
 
 
 def test_ordinary_classifier_opening_builders_never_emit_compat_local_authorship() -> None:
@@ -477,6 +542,9 @@ def test_ordinary_classifier_opening_builders_never_emit_compat_local_authorship
         authorship = row.get("opening_fallback_authorship_source")
         if authorship is not None:
             assert authorship not in OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+
+
+# --- Static/AST structural lock (compat-local authorship literals) -------------
 
 
 def test_only_legacy_named_helpers_emit_compat_local_opening_authorship() -> None:
@@ -552,6 +620,9 @@ def test_failure_classification_builders_compat_local_literals_only_in_legacy_he
     assert offenders == []
 
 
+# --- Scenario-specific classifier parity (opening symptom routing) -------------
+
+
 def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_composer():
     row = classify_replay_probe_row(
         scenario_id="opening_basis_divergence",
@@ -564,7 +635,7 @@ def test_failure_classifier_routes_opening_basis_symptom_to_deterministic_compos
         ),
     )
 
-    assert row["investigate_first"] == "game/opening_deterministic_fallback.py"
+    assert_classification_owner_mapping(row, investigate_first="game/opening_deterministic_fallback.py")
 
 
 def test_failure_classifier_routes_opening_projection_omission_to_golden_replay():
@@ -578,8 +649,11 @@ def test_failure_classifier_routes_opening_projection_omission_to_golden_replay(
         ),
     )
 
-    assert row["category"] == "projection"
-    assert row["investigate_first"] == "tests/helpers/golden_replay.py"
+    assert_classification_owner_mapping(
+        row,
+        category="projection",
+        investigate_first="tests/helpers/golden_replay.py",
+    )
 
 
 def test_failure_classifier_keeps_opening_gate_selection_symptom_gate_routed():
@@ -593,8 +667,14 @@ def test_failure_classifier_keeps_opening_gate_selection_symptom_gate_routed():
         ),
     )
 
-    assert row["category"] == "fallback"
-    assert row["investigate_first"] == "game/final_emission_gate.py"
+    assert_classification_owner_mapping(
+        row,
+        category="fallback",
+        investigate_first="game/final_emission_gate.py",
+    )
+
+
+# --- Validation error lock (invalid fallback owner buckets) --------------------
 
 
 def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
@@ -610,9 +690,10 @@ def test_failure_classification_contract_rejects_invalid_opening_owner_bucket():
     )
 
     assert "invalid opening_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
-    assert row["investigate_first"] == "game/final_emission_meta.py"
+    assert_classification_owner_mapping(row, investigate_first="game/final_emission_meta.py")
 
 
+# --- Scenario-specific classifier parity (sealed/visibility projection) --------
 # Sealed owner-bucket evidence is intentionally preserved as classifier
 # projection; it does not re-own sealed helper prose/output behavior.
 def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
@@ -627,8 +708,11 @@ def test_failure_classifier_preserves_projected_sealed_owner_bucket_evidence():
         ),
     )
 
-    assert row["category"] == "fallback"
-    assert row["sealed_fallback_owner_bucket"] == SEALED_FALLBACK_OWNER_SEALED_GATE
+    assert_failure_classification_row(
+        row,
+        category="fallback",
+        sealed_fallback_owner_bucket=SEALED_FALLBACK_OWNER_SEALED_GATE,
+    )
 
 
 def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
@@ -643,11 +727,14 @@ def test_failure_classifier_preserves_projected_visibility_fallback_evidence():
         ),
     )
 
-    assert row["category"] == "fallback"
-    assert row["visibility_fallback_owner_bucket"] == "sealed-gate"
-    assert row["visibility_replacement_applied"] is True
-    assert row["visibility_fallback_pool"] == "global_scene_narrative"
-    assert row["visibility_fallback_kind"] == "narrative_safe_fallback"
+    assert_failure_classification_row(
+        row,
+        category="fallback",
+        visibility_fallback_owner_bucket="sealed-gate",
+        visibility_replacement_applied=True,
+        visibility_fallback_pool="global_scene_narrative",
+        visibility_fallback_kind="narrative_safe_fallback",
+    )
 
 
 def test_failure_classification_contract_rejects_invalid_visibility_owner_bucket():
@@ -663,6 +750,9 @@ def test_failure_classification_contract_rejects_invalid_visibility_owner_bucket
     )
 
     assert "invalid visibility_fallback_owner_bucket: 'not-a-bucket'" in validate_failure_classification_row(row)
+
+
+# --- Dashboard shape / empty-dashboard markdown --------------------------------
 
 
 def test_failure_dashboard_markdown_renders_empty_state():
@@ -695,9 +785,12 @@ def test_failure_dashboard_markdown_renders_one_failure_with_required_fields():
         turn_index=7,
     )
 
-    assert rows[0]["primary_owner"] == "route"
-    assert rows[0]["severity"] == "medium"
-    assert rows[0]["investigate_first"] == "game/interaction_context.py"
+    assert_classification_owner_mapping(
+        rows[0],
+        primary_owner="route",
+        severity="medium",
+        investigate_first="game/interaction_context.py",
+    )
     assert rows[0]["unavailable_fields"] == ["route_kind", "trace.social_contract_trace"]
 
     report = render_failure_dashboard_markdown(
@@ -743,6 +836,9 @@ def test_failure_dashboard_artifact_generation_is_opt_in(tmp_path):
     text = path.read_text(encoding="utf-8")
     assert "opt_in_probe" in text
     assert "pytest written" in text
+
+
+# --- Scenario-specific classifier parity (precision evidence) ------------------
 
 
 @pytest.mark.parametrize(
@@ -841,14 +937,17 @@ def test_failure_classifier_uses_precision_evidence_for_ambiguous_locality(case,
         drift_row=drift_row,
     )
 
-    assert row["category"] == category
-    assert row["primary_owner"] == primary
-    assert row["secondary_owner"] == secondary
-    assert row["severity"] == severity
-    assert row["investigate_first"] == target
-    assert row["emission_sublayer"] == sublayer
-    assert row["repair_kind"] == repair_kind
-    assert row["missing_source_kind"] == missing_kind
+    assert_failure_classification_row(
+        row,
+        category=category,
+        primary_owner=primary,
+        secondary_owner=secondary,
+        severity=severity,
+        investigate_first=target,
+        emission_sublayer=sublayer,
+        repair_kind=repair_kind,
+        missing_source_kind=missing_kind,
+    )
 
 
 @pytest.mark.parametrize(
@@ -867,10 +966,13 @@ def test_failure_classifier_reduces_post_gate_unknown_from_final_emission_lineag
         drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
-    assert row["category"] == "emission"
-    assert row["emission_sublayer"] == expected_source
-    assert row["mutation_source"] == expected_source
-    assert row["final_emission_mutation_lineage"] == lineage
+    assert_failure_classification_row(
+        row,
+        category="emission",
+        emission_sublayer=expected_source,
+        mutation_source=expected_source,
+        final_emission_mutation_lineage=lineage,
+    )
 
 
 def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_evidence():
@@ -881,8 +983,14 @@ def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_
         drift_rows=[post_gate_mutation_drift_row()],
     )[0]
 
-    assert row["emission_sublayer"] == "emission.post_gate_mutation_unknown"
-    assert row["mutation_source"] == "emission.post_gate_mutation_unknown"
+    assert_failure_classification_row(
+        row,
+        emission_sublayer="emission.post_gate_mutation_unknown",
+        mutation_source="emission.post_gate_mutation_unknown",
+    )
+
+
+# --- Scenario-specific classifier parity (prepared emission routing) -----------
 
 
 @pytest.mark.parametrize(
@@ -903,16 +1011,19 @@ def test_failure_classifier_maps_valid_prepared_answer_action_repairs_to_upstrea
         drift_rows=[response_type_repair_drift_row()],
     )[0]
 
-    assert row["category"] == "emission"
-    assert row["primary_owner"] == "upstream_prepared_emission"
-    assert row["secondary_owner"] == "emission"
-    assert row["source_family"] == "upstream_prepared_emission"
-    assert row["investigate_first"] == "game/final_emission_gate.py"
-    assert row["emission_sublayer"] == "upstream_prepared_emission"
-    assert row["prepared_emission_owner"] == "upstream_prepared_emission"
-    assert row["upstream_prepared_emission_used"] is True
-    assert row["upstream_prepared_emission_valid"] is True
-    assert row["upstream_prepared_emission_source"] == source_field
+    assert_split_owner_classification(
+        row,
+        category="emission",
+        primary_owner="upstream_prepared_emission",
+        secondary_owner="emission",
+        source_family="upstream_prepared_emission",
+        investigate_first="game/final_emission_gate.py",
+        emission_sublayer="upstream_prepared_emission",
+        prepared_emission_owner="upstream_prepared_emission",
+        upstream_prepared_emission_used=True,
+        upstream_prepared_emission_valid=True,
+        upstream_prepared_emission_source=source_field,
+    )
 
 
 def test_failure_classifier_preserves_rejected_prepared_emission_reason():
@@ -933,10 +1044,13 @@ def test_failure_classifier_preserves_rejected_prepared_emission_reason():
         ),
     )
 
-    assert row["primary_owner"] == "upstream_prepared_emission"
-    assert row["prepared_emission_owner"] == "upstream_prepared_emission"
-    assert row["upstream_prepared_emission_valid"] is False
-    assert row["upstream_prepared_emission_reject_reason"] == "missing_concrete_action_outcome"
+    assert_failure_classification_row(
+        row,
+        primary_owner="upstream_prepared_emission",
+        prepared_emission_owner="upstream_prepared_emission",
+        upstream_prepared_emission_valid=False,
+        upstream_prepared_emission_reject_reason="missing_concrete_action_outcome",
+    )
 
 
 def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
@@ -968,7 +1082,11 @@ def test_failure_dashboard_evidence_shows_rejected_prepared_emission_reason():
 
     assert rows[0]["primary_owner"] == "upstream_prepared_emission"
     assert rows[0]["upstream_prepared_emission_reject_reason"] == "action_outcome_missing_result"
-    assert "prepared_emission=rejected reason=action_outcome_missing_result" in report
+    assert_prepared_emission_evidence(
+        report,
+        status="rejected",
+        reject_reason="action_outcome_missing_result",
+    )
 
 
 def test_failure_classifier_absent_prepared_emission_telemetry_does_not_assign_upstream_owner():
@@ -991,11 +1109,14 @@ def test_failure_classifier_absent_prepared_emission_telemetry_does_not_assign_u
         ),
     )
 
-    assert row["category"] == "emission"
-    assert row["primary_owner"] == "emission"
-    assert row["secondary_owner"] == "validator"
-    assert row["source_family"] == "upstream_prepared_emission"
-    assert row["prepared_emission_owner"] is None
+    assert_split_owner_classification(
+        row,
+        category="emission",
+        primary_owner="emission",
+        secondary_owner="validator",
+        source_family="upstream_prepared_emission",
+        prepared_emission_owner=None,
+    )
 
 
 def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prepared_answer_action():
@@ -1016,14 +1137,17 @@ def test_failure_classifier_sanitizer_empty_fallback_is_sanitizer_owned_not_prep
         ],
     )[0]
 
-    assert row["category"] == "sanitizer"
-    assert row["primary_owner"] == "sanitizer"
-    assert row["secondary_owner"] == "emission"
-    assert row["source_family"] == "output_sanitizer"
-    assert row["emission_sublayer"] == "sanitizer"
-    assert row["prepared_emission_owner"] is None
-    assert row["sanitizer_empty_fallback_owner"] == "game.output_sanitizer"
-    assert row["sanitizer_empty_fallback_source"] == "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text"
+    assert_split_owner_classification(
+        row,
+        category="sanitizer",
+        primary_owner="sanitizer",
+        secondary_owner="emission",
+        source_family="output_sanitizer",
+        emission_sublayer="sanitizer",
+        prepared_emission_owner=None,
+        sanitizer_empty_fallback_owner="game.output_sanitizer",
+        sanitizer_empty_fallback_source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+    )
 
 
 @pytest.mark.parametrize("repair_kind", ["strict_social_dialogue_repair", "dialogue_minimal_repair"])
@@ -1035,10 +1159,13 @@ def test_failure_classifier_keeps_dialogue_repairs_separate_from_prepared_emissi
         drift_rows=[response_type_repair_drift_row()],
     )[0]
 
-    assert row["primary_owner"] == "emission"
-    assert row["source_family"] == "final_emission_gate"
-    assert row["emission_sublayer"] == "response_type"
-    assert row["prepared_emission_owner"] is None
+    assert_split_owner_classification(
+        row,
+        primary_owner="emission",
+        source_family="final_emission_gate",
+        emission_sublayer="response_type",
+        prepared_emission_owner=None,
+    )
 
 
 def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly():
@@ -1064,10 +1191,11 @@ def test_failure_dashboard_evidence_renders_sanitizer_empty_fallback_distinctly(
 
     assert rows[0]["primary_owner"] == "sanitizer"
     assert rows[0]["prepared_emission_owner"] is None
-    assert "sanitizer_empty=True" in report
-    assert "sanitizer_empty_source=upstream_prepared_emission.prepared_sanitizer_empty_fallback_text" in report
-    assert "sanitizer_empty_owner=game.output_sanitizer" in report
-    assert "prepared_emission=used" not in report
+    assert_sanitizer_empty_fallback_evidence(
+        report,
+        source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        owner="game.output_sanitizer",
+    )
 
 
 def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy_owner():
@@ -1078,11 +1206,14 @@ def test_failure_classifier_missing_prepared_emission_telemetry_preserves_legacy
         drift_rows=[response_type_repair_drift_row()],
     )[0]
 
-    assert row["primary_owner"] == "emission"
-    assert row["secondary_owner"] == "validator"
-    assert row["source_family"] == "final_emission_gate"
-    assert row["emission_sublayer"] == "response_type"
-    assert row["prepared_emission_owner"] is None
+    assert_split_owner_classification(
+        row,
+        primary_owner="emission",
+        secondary_owner="validator",
+        source_family="final_emission_gate",
+        emission_sublayer="response_type",
+        prepared_emission_owner=None,
+    )
 
 
 def test_failure_dashboard_evidence_column_compacts_precision_fields():
@@ -1115,18 +1246,30 @@ def test_failure_dashboard_evidence_column_compacts_precision_fields():
         command_used="pytest evidence",
     )
 
-    assert "Evidence" in report
-    assert "prepared_emission=used valid=True source=prepared_action_fallback_text" in report
-    assert "sublayer=upstream_prepared_emission" in report
-    assert "repair=action_outcome_upstream_prepared_repair" in report
-    assert "lineage=pre_gate_sanitizer>response_type_repair>prepared_emission_selection>finalize_packaging" in report
-    assert "sanitizer_mode=strip_only" in report
-    assert "sanitizer_events=2" in report
-    assert "sanitizer_lineage_mode=strip_only" in report
-    assert "sanitizer_lineage_changed=2" in report
-    assert "sanitizer_lineage_dropped=1" in report
-    assert "sanitizer_lineage_empty=False" in report
-    assert "sanitizer_lineage_legacy=False" in report
+    assert_dashboard_evidence_column_present(report)
+    assert_prepared_emission_evidence(
+        report,
+        status="used",
+        valid=True,
+        source="prepared_action_fallback_text",
+    )
+    assert_compact_evidence_field(report, "sublayer", "upstream_prepared_emission")
+    assert_compact_evidence_field(report, "repair", "action_outcome_upstream_prepared_repair")
+    assert_compact_evidence_field(
+        report,
+        "lineage",
+        "pre_gate_sanitizer>response_type_repair>prepared_emission_selection>finalize_packaging",
+    )
+    assert_compact_evidence_field(report, "sanitizer_mode", "strip_only")
+    assert_compact_evidence_field(report, "sanitizer_events", 2)
+    assert_sanitizer_lineage_evidence(
+        report,
+        mode="strip_only",
+        changed=2,
+        dropped=1,
+        empty=False,
+        legacy=False,
+    )
 
 
 def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_compatible_label():
@@ -1145,7 +1288,7 @@ def test_failure_dashboard_evidence_preserves_legacy_thin_answer_as_backward_com
 
     assert rows[0]["repair_kind"] == "thin_answer"
     assert "legacy_thin_answer_probe" in report
-    assert "repair=thin_answer" in report
+    assert_compact_evidence_field(report, "repair", "thin_answer")
 
 
 def test_failure_classifier_legacy_sanitizer_rewrite_is_diagnostic_output_sanitizer_evidence():
@@ -1162,14 +1305,20 @@ def test_failure_classifier_legacy_sanitizer_rewrite_is_diagnostic_output_saniti
         command_used="pytest legacy sanitizer evidence",
     )
 
-    assert rows[0]["category"] == "sanitizer"
-    assert rows[0]["primary_owner"] == "sanitizer"
-    assert rows[0]["secondary_owner"] == "emission"
-    assert rows[0]["source_family"] == "output_sanitizer"
-    assert rows[0]["emission_sublayer"] == "sanitizer"
-    assert rows[0]["sanitizer_lineage_legacy_rewrite_active"] is True
-    assert "sanitizer_lineage_mode=legacy_sentence_rewrite" in report
-    assert "sanitizer_lineage_legacy=legacy_diagnostic" in report
+    assert_split_owner_classification(
+        rows[0],
+        category="sanitizer",
+        primary_owner="sanitizer",
+        secondary_owner="emission",
+        source_family="output_sanitizer",
+        emission_sublayer="sanitizer",
+        sanitizer_lineage_legacy_rewrite_active=True,
+    )
+    assert_sanitizer_lineage_evidence(
+        report,
+        mode="legacy_sentence_rewrite",
+        legacy="legacy_diagnostic",
+    )
 
 
 def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and_prose_owners_split():
@@ -1202,17 +1351,27 @@ def test_failure_classifier_strict_social_sanitizer_fallback_keeps_selection_and
         command_used="pytest strict social sanitizer split",
     )
 
-    assert rows[0]["category"] == "sanitizer"
-    assert rows[0]["primary_owner"] == "sanitizer"
-    assert rows[0]["source_family"] == "output_sanitizer"
-    assert rows[0]["emission_sublayer"] == "strict_social_replacement"
-    assert rows[0]["prepared_emission_owner"] is None
-    assert rows[0]["sanitizer_empty_fallback_used"] is None
-    assert rows[0]["sanitizer_strict_social_selection_owner"] == "game.output_sanitizer"
-    assert rows[0]["sanitizer_strict_social_prose_owner"] == "game.social_exchange_emission"
-    assert "strict_social_selection_owner=game.output_sanitizer" in report
-    assert "strict_social_prose_owner=game.social_exchange_emission" in report
-    assert "strict_social_source=social_fallback_line_for_sanitizer.empty_output" in report
+    assert_split_owner_classification(
+        rows[0],
+        category="sanitizer",
+        primary_owner="sanitizer",
+        source_family="output_sanitizer",
+        emission_sublayer="strict_social_replacement",
+        prepared_emission_owner=None,
+        sanitizer_empty_fallback_used=None,
+        sanitizer_strict_social_selection_owner="game.output_sanitizer",
+        sanitizer_strict_social_prose_owner="game.social_exchange_emission",
+    )
+    assert_strict_social_sanitizer_evidence(
+        report,
+        selection_owner="game.output_sanitizer",
+        prose_owner="game.social_exchange_emission",
+        source="social_fallback_line_for_sanitizer.empty_output",
+    )
+
+
+# --- Row-field / lineage-event parity (split-owner runtime lineage) --------------
+# Direct row-field and embedded-event asserts lock classifier projection against lineage.
 
 
 @pytest.mark.parametrize(
@@ -1272,13 +1431,14 @@ def test_failure_classifier_accepts_opening_family_runtime_lineage_split_owners(
     assert rows[0]["opening_fallback_owner_bucket"] == opening_fallback_owner_bucket
     if repair_kind is not None:
         assert rows[0]["repair_kind"] == repair_kind
-    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert f"fallback_selection_owner={OPENING_FALLBACK_SELECTION_OWNER}" in report
-    assert f"fallback_content_owner={fallback_content_owner}" in report
-    assert f"opening_owner={opening_fallback_owner_bucket}" in report
-    if repair_kind is not None:
-        assert f"repair={repair_kind}" in report
+    assert_fallback_authorship_evidence(
+        report,
+        selection_owner=OPENING_FALLBACK_SELECTION_OWNER,
+        content_owner=fallback_content_owner,
+        opening_owner=opening_fallback_owner_bucket,
+        repair=repair_kind,
+    )
     fallback = next(
         event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
     )
@@ -1398,12 +1558,14 @@ def test_failure_classifier_accepts_visibility_family_runtime_lineage_split_owne
     assert rows[0]["fallback_content_owner"] == expected_content_owner
     assert rows[0]["visibility_fallback_owner_bucket"] == expected_bucket
     assert rows[0]["repair_kind"] == repair_kind
-    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert f"fallback_selection_owner={VISIBILITY_FALLBACK_SELECTION_OWNER}" in report
-    assert f"fallback_content_owner={expected_content_owner}" in report
-    assert f"visibility_owner={expected_bucket}" in report
-    assert f"repair={repair_kind}" in report
+    assert_fallback_authorship_evidence(
+        report,
+        selection_owner=VISIBILITY_FALLBACK_SELECTION_OWNER,
+        content_owner=expected_content_owner,
+        visibility_owner=expected_bucket,
+        repair=repair_kind,
+    )
     fallback = next(
         event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
     )
@@ -1470,11 +1632,13 @@ def test_failure_classifier_accepts_sanitizer_runtime_lineage_split_owners(
     assert rows[0]["fallback_selection_owner"] == SANITIZER_FALLBACK_SELECTION_OWNER
     assert rows[0]["fallback_content_owner"] == expected_content_owner
     assert rows[0]["repair_kind"] == repair_kind
-    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert f"fallback_selection_owner={SANITIZER_FALLBACK_SELECTION_OWNER}" in report
-    assert f"fallback_content_owner={expected_content_owner}" in report
-    assert f"repair={repair_kind}" in report
+    assert_fallback_authorship_evidence(
+        report,
+        selection_owner=SANITIZER_FALLBACK_SELECTION_OWNER,
+        content_owner=expected_content_owner,
+        repair=repair_kind,
+    )
     fallback = next(
         event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
     )
@@ -1502,10 +1666,12 @@ def test_failure_classifier_accepts_upstream_fast_runtime_lineage_split_owners()
 
     assert rows[0]["fallback_selection_owner"] == UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
     assert rows[0]["fallback_content_owner"] == UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
-    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert f"fallback_selection_owner={UPSTREAM_FAST_FALLBACK_SELECTION_OWNER}" in report
-    assert f"fallback_content_owner={UPSTREAM_FAST_FALLBACK_CONTENT_OWNER}" in report
+    assert_fallback_authorship_evidence(
+        report,
+        selection_owner=UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        content_owner=UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    )
     fallback = next(
         event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
     )
@@ -1604,11 +1770,13 @@ def test_failure_classifier_accepts_sealed_family_runtime_lineage_split_owners(
     assert rows[0]["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
     assert rows[0]["fallback_content_owner"] == expected_content_owner
     assert rows[0]["sealed_fallback_owner_bucket"] == expected_bucket
-    assert validate_failure_classification_row(rows[0]) == []
     assert_failure_dashboard_row_shape(rows[0])
-    assert f"fallback_selection_owner={SEALED_FALLBACK_SELECTION_OWNER}" in report
-    assert f"fallback_content_owner={expected_content_owner}" in report
-    assert f"sealed_owner={expected_bucket}" in report
+    assert_fallback_authorship_evidence(
+        report,
+        selection_owner=SEALED_FALLBACK_SELECTION_OWNER,
+        content_owner=expected_content_owner,
+        sealed_owner=expected_bucket,
+    )
     fallback = next(
         event for event in observed["runtime_lineage_events"] if event.get("event_kind") == "fallback_selected"
     )
@@ -1616,6 +1784,9 @@ def test_failure_classifier_accepts_sealed_family_runtime_lineage_split_owners(
     assert fallback["fallback_owner_bucket"] == expected_bucket
     assert fallback["fallback_selection_owner"] == SEALED_FALLBACK_SELECTION_OWNER
     assert fallback["fallback_content_owner"] == expected_content_owner
+
+
+# --- Row-field / lineage-event parity (lineage summary trifecta) ----------------
 
 
 def test_failure_dashboard_runtime_lineage_summary_counts_sanitizer_upstream_fast_owner_trifecta() -> None:
@@ -1647,22 +1818,25 @@ def test_failure_dashboard_runtime_lineage_summary_counts_sanitizer_upstream_fas
     events = [sanitizer_strict, sanitizer_empty, upstream_fast, upstream_fast]
     summary = build_runtime_lineage_summary(events)
 
-    assert summary["total_events"] == 4
-    assert summary["fallback_frequency"] == {
-        "sanitizer_strict_social": 1,
-        "sanitizer_empty_output": 1,
-        "upstream_fast_fallback": 2,
-    }
-    assert summary["fallback_owner_bucket_frequency"] == {"retry": 2}
-    assert summary["fallback_selection_owner_frequency"] == {
-        SANITIZER_FALLBACK_SELECTION_OWNER: 2,
-        UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: 2,
-    }
-    assert summary["fallback_content_owner_frequency"] == {
-        SANITIZER_FALLBACK_SELECTION_OWNER: 1,
-        SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: 1,
-        UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: 2,
-    }
+    assert_lineage_aggregation_parity(
+        summary,
+        total_events=4,
+        fallback_frequency={
+            "sanitizer_strict_social": 1,
+            "sanitizer_empty_output": 1,
+            "upstream_fast_fallback": 2,
+        },
+        fallback_owner_bucket_frequency={"retry": 2},
+        fallback_selection_owner_frequency={
+            SANITIZER_FALLBACK_SELECTION_OWNER: 2,
+            UPSTREAM_FAST_FALLBACK_SELECTION_OWNER: 2,
+        },
+        fallback_content_owner_frequency={
+            SANITIZER_FALLBACK_SELECTION_OWNER: 1,
+            SANITIZER_STRICT_SOCIAL_CONTENT_OWNER: 1,
+            UPSTREAM_FAST_FALLBACK_CONTENT_OWNER: 2,
+        },
+    )
 
     report = render_failure_dashboard_markdown(
         [],
@@ -1670,11 +1844,16 @@ def test_failure_dashboard_runtime_lineage_summary_counts_sanitizer_upstream_fas
         command_used="pytest sanitizer-upstream-lineage-summary",
         runtime_lineage_events=events,
     )
-    assert "`game.output_sanitizer` (2)" in report
-    assert "`game.social_exchange_emission` (1)" in report
-    assert "`game.api` (2)" in report
-    assert "`game.gm_retry` (2)" in report
-    assert "`retry` (2)" in report
+    assert_runtime_lineage_source_counts(
+        report,
+        {
+            "game.output_sanitizer": 2,
+            "game.social_exchange_emission": 1,
+            "game.api": 2,
+            "game.gm_retry": 2,
+            "retry": 2,
+        },
+    )
 
 
 def test_failure_dashboard_runtime_lineage_summary_counts_sealed_family_split_owner_trifecta() -> None:
@@ -1708,23 +1887,26 @@ def test_failure_dashboard_runtime_lineage_summary_counts_sealed_family_split_ow
     events = [global_scene, social_interlocutor, unknown_replacement, global_scene]
     summary = build_runtime_lineage_summary(events)
 
-    assert summary["total_events"] == 4
-    assert summary["fallback_frequency"] == {
-        SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: 2,
-        SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: 1,
-        SEALED_REPLACEMENT_SUBKIND_UNKNOWN: 1,
-    }
-    assert summary["fallback_owner_bucket_frequency"] == {
-        SEALED_FALLBACK_OWNER_SEALED_GATE: 2,
-        "strict-social-sealed": 1,
-        "unknown-none": 1,
-    }
-    assert summary["fallback_selection_owner_frequency"] == {SEALED_FALLBACK_SELECTION_OWNER: 4}
-    assert summary["fallback_content_owner_frequency"] == {
-        SEALED_FALLBACK_MODULE_CONTENT_OWNER: 2,
-        STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: 1,
-        SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: 1,
-    }
+    assert_lineage_aggregation_parity(
+        summary,
+        total_events=4,
+        fallback_frequency={
+            SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: 2,
+            SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: 1,
+            SEALED_REPLACEMENT_SUBKIND_UNKNOWN: 1,
+        },
+        fallback_owner_bucket_frequency={
+            SEALED_FALLBACK_OWNER_SEALED_GATE: 2,
+            "strict-social-sealed": 1,
+            "unknown-none": 1,
+        },
+        fallback_selection_owner_frequency={SEALED_FALLBACK_SELECTION_OWNER: 4},
+        fallback_content_owner_frequency={
+            SEALED_FALLBACK_MODULE_CONTENT_OWNER: 2,
+            STRICT_SOCIAL_FALLBACK_CONTENT_OWNER: 1,
+            SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER: 1,
+        },
+    )
 
     report = render_failure_dashboard_markdown(
         [],
@@ -1732,12 +1914,17 @@ def test_failure_dashboard_runtime_lineage_summary_counts_sealed_family_split_ow
         command_used="pytest sealed-family-lineage-summary",
         runtime_lineage_events=events,
     )
-    assert "`game.final_emission_gate` (4)" in report
-    assert "`game.final_emission_sealed_fallback` (2)" in report
-    assert "`game.social_exchange_emission` (1)" in report
-    assert "`sealed-gate` (2)" in report
-    assert "`strict-social-sealed` (1)" in report
-    assert "`unknown-none` (1)" in report
+    assert_runtime_lineage_source_counts(
+        report,
+        {
+            "game.final_emission_gate": 4,
+            "game.final_emission_sealed_fallback": 2,
+            "game.social_exchange_emission": 1,
+            "sealed-gate": 2,
+            "strict-social-sealed": 1,
+            "unknown-none": 1,
+        },
+    )
 
 
 def test_failure_dashboard_runtime_lineage_summary_counts_opening_family_split_owner_trifecta() -> None:
@@ -1765,17 +1952,20 @@ def test_failure_dashboard_runtime_lineage_summary_counts_opening_family_split_o
     events = [scene_opening, opening_failed_closed, scene_opening]
     summary = build_runtime_lineage_summary(events)
 
-    assert summary["total_events"] == 3
-    assert summary["fallback_frequency"] == {"scene_opening": 2, "opening_failed_closed": 1}
-    assert summary["fallback_owner_bucket_frequency"] == {
-        OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED: 2,
-        OPENING_FALLBACK_OWNER_SEALED_GATE: 1,
-    }
-    assert summary["fallback_selection_owner_frequency"] == {OPENING_FALLBACK_SELECTION_OWNER: 3}
-    assert summary["fallback_content_owner_frequency"] == {
-        OPENING_FALLBACK_CONTENT_OWNER: 2,
-        OPENING_FAIL_CLOSED_CONTENT_OWNER: 1,
-    }
+    assert_lineage_aggregation_parity(
+        summary,
+        total_events=3,
+        fallback_frequency={"scene_opening": 2, "opening_failed_closed": 1},
+        fallback_owner_bucket_frequency={
+            OPENING_FALLBACK_OWNER_UPSTREAM_PREPARED: 2,
+            OPENING_FALLBACK_OWNER_SEALED_GATE: 1,
+        },
+        fallback_selection_owner_frequency={OPENING_FALLBACK_SELECTION_OWNER: 3},
+        fallback_content_owner_frequency={
+            OPENING_FALLBACK_CONTENT_OWNER: 2,
+            OPENING_FAIL_CLOSED_CONTENT_OWNER: 1,
+        },
+    )
 
     report = render_failure_dashboard_markdown(
         [],
@@ -1783,10 +1973,67 @@ def test_failure_dashboard_runtime_lineage_summary_counts_opening_family_split_o
         command_used="pytest opening-family-lineage-summary",
         runtime_lineage_events=events,
     )
-    assert "`game.final_emission_gate` (3)" in report
-    assert "`game.opening_deterministic_fallback` (2)" in report
-    assert "`upstream-prepared` (2)" in report
-    assert "`sealed-gate` (1)" in report
+    assert_runtime_lineage_source_counts(
+        report,
+        {
+            "game.final_emission_gate": 3,
+            "game.opening_deterministic_fallback": 2,
+            "upstream-prepared": 2,
+            "sealed-gate": 1,
+        },
+    )
+
+
+def test_failure_classifier_accepts_sanitizer_strip_only_producer_repair_kind() -> None:
+    observed = {
+        "final_route": "accept_candidate",
+        "sanitizer_mode": "strip_only",
+        "sanitizer_lineage_mode": "strip_only",
+        "sanitizer_event_count": 1,
+        "sanitizer_changed_count": 1,
+        "sanitizer_lineage_changed_count": 1,
+        "producer_repair_kind": "sanitizer_strip_only",
+        "sealed_fallback_owner_bucket": "unknown-none",
+    }
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "producer_repair_kind",
+                expected=None,
+                actual="sanitizer_strip_only",
+                reason="sanitizer strip-only producer stamp",
+            )
+        ],
+        scenario_id="sanitizer_strip_only_classifier_probe",
+        turn_index=0,
+    )
+    assert rows[0]["repair_kind"] == "sanitizer_strip_only"
+    assert_failure_dashboard_row_shape(rows[0])
+
+
+def test_failure_classifier_accepts_passive_scene_concrete_beat_producer_repair_kind() -> None:
+    observed = {
+        "final_route": "accept_candidate",
+        "passive_scene_concrete_beat_satisfier_applied": True,
+        "passive_scene_pressure_fallback_avoided": True,
+        "producer_repair_kind": "passive_scene_concrete_beat",
+    }
+    rows = build_failure_dashboard_rows(
+        observed_turn=observed,
+        drift_rows=[
+            exact_value_drift_row(
+                "producer_repair_kind",
+                expected=None,
+                actual="passive_scene_concrete_beat",
+                reason="passive scene upstream satisfier producer stamp",
+            )
+        ],
+        scenario_id="passive_scene_concrete_beat_classifier_probe",
+        turn_index=0,
+    )
+    assert rows[0]["repair_kind"] == "passive_scene_concrete_beat"
+    assert_failure_dashboard_row_shape(rows[0])
 
 
 def test_failure_classifier_accepts_referential_local_substitution_producer_bucket_without_short_owner_names() -> None:
@@ -1810,10 +2057,16 @@ def test_failure_classifier_accepts_referential_local_substitution_producer_buck
     assert rows[0]["repair_kind"] == "referential_clarity_local_substitution"
     assert rows[0]["fallback_selection_owner"] is None
     assert rows[0]["fallback_content_owner"] is None
-    assert validate_failure_classification_row(rows[0]) == []
-    assert "visibility_owner=strict-social-visibility" in report
-    assert "repair=referential_clarity_local_substitution" in report
-    assert "fallback_selection_owner=" not in report
+    assert_failure_dashboard_row_shape(rows[0])
+    assert_fallback_authorship_evidence(
+        report,
+        visibility_owner="strict-social-visibility",
+        repair="referential_clarity_local_substitution",
+    )
+    assert_dashboard_evidence_cell(report, "fallback_selection_owner=", present=False)
+
+
+# --- Validation error lock (short owner names and unknown split owners) --------
 
 
 def test_failure_classification_contract_rejects_short_names_on_visibility_family_split_owner_fields() -> None:
@@ -1842,7 +2095,7 @@ def test_failure_classification_contract_rejects_short_names_on_visibility_famil
 
     row["fallback_selection_owner"] = VISIBILITY_FALLBACK_SELECTION_OWNER
     row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
 def test_failure_classification_contract_rejects_short_names_on_sanitizer_upstream_split_owner_fields() -> None:
@@ -1871,7 +2124,7 @@ def test_failure_classification_contract_rejects_short_names_on_sanitizer_upstre
 
     row["fallback_selection_owner"] = SANITIZER_FALLBACK_SELECTION_OWNER
     row["fallback_content_owner"] = SANITIZER_STRICT_SOCIAL_CONTENT_OWNER
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     upstream_row = build_failure_dashboard_rows(
         observed_turn=observed_upstream_fast_split_owner_row(),
@@ -1894,7 +2147,7 @@ def test_failure_classification_contract_rejects_short_names_on_sanitizer_upstre
 
     upstream_row["fallback_selection_owner"] = UPSTREAM_FAST_FALLBACK_SELECTION_OWNER
     upstream_row["fallback_content_owner"] = UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
-    assert validate_failure_classification_row(upstream_row) == []
+    assert_failure_dashboard_row_shape(upstream_row)
 
 
 def test_failure_classification_contract_rejects_short_names_on_sealed_family_split_owner_fields() -> None:
@@ -1923,7 +2176,7 @@ def test_failure_classification_contract_rejects_short_names_on_sealed_family_sp
 
     row["fallback_selection_owner"] = SEALED_FALLBACK_SELECTION_OWNER
     row["fallback_content_owner"] = SEALED_FALLBACK_MODULE_CONTENT_OWNER
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
 def test_failure_classification_contract_rejects_short_names_on_opening_family_split_owner_fields() -> None:
@@ -1952,7 +2205,7 @@ def test_failure_classification_contract_rejects_short_names_on_opening_family_s
 
     row["fallback_selection_owner"] = OPENING_FALLBACK_SELECTION_OWNER
     row["fallback_content_owner"] = OPENING_FALLBACK_CONTENT_OWNER
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
 def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_owner():
@@ -1986,6 +2239,9 @@ def test_failure_classification_contract_rejects_unknown_runtime_lineage_split_o
     assert "invalid fallback_content_owner: 'game.unknown_content_owner'" in errors
 
 
+# --- Matrix governance report prose (BU15 acceptance matrix) --------------------
+
+
 def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
     """BU15: one matrix drives classifier, dashboard, lineage, and observed-row builders."""
     from game.runtime_lineage_telemetry import summarize_runtime_lineage_events
@@ -2010,7 +2266,6 @@ def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
             turn_index=0,
         )[0]
         assert_split_owner_matrix_classifier_row(row, classified)
-        assert validate_failure_classification_row(classified) == []
         assert_failure_dashboard_row_shape(classified)
 
         if row.dashboard_case_id is not None:
@@ -2018,16 +2273,26 @@ def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
             assert_split_owner_matrix_dashboard_expected(row, classified)
 
     summary = summarize_runtime_lineage_events(lineage_events)
-    assert summary["total_events"] == len(lineage_events)
+    assert_lineage_summary_counts(summary, total_events=len(lineage_events))
     for row in split_owner_acceptance_matrix_rows():
-        if row.event_kind == "mutation":
-            assert summary["by_event_kind"].get("mutation", 0) >= 1
-            continue
-        assert summary["fallback_frequency"].get(str(row.fallback_kind), 0) >= 1
-        assert summary["fallback_selection_owner_frequency"].get(str(row.fallback_selection_owner), 0) >= 1
-        assert summary["fallback_content_owner_frequency"].get(str(row.fallback_content_owner), 0) >= 1
+        assert_lineage_matrix_row_aggregated(
+            summary,
+            event_kind=row.event_kind,
+            fallback_kind=str(row.fallback_kind) if row.fallback_kind is not None else None,
+            fallback_selection_owner=(
+                str(row.fallback_selection_owner)
+                if row.fallback_selection_owner is not None
+                else None
+            ),
+            fallback_content_owner=(
+                str(row.fallback_content_owner)
+                if row.fallback_content_owner is not None
+                else None
+            ),
+        )
 
     report = render_split_owner_acceptance_matrix_report()
+    # Matrix report prose anchors are governance locks, not runtime behavior checks.
     assert "scene_opening" in report
     assert "referential_local_substitution" in report
     assert "Legacy matrix rows (BU17 synthetic-only)" in report

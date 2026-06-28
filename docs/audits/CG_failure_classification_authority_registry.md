@@ -1,15 +1,61 @@
 # CG-1 — Failure Classification Authority Registry
 
-**Date:** 2026-06-25  
+**Date:** 2026-06-27 (CO98 governance handoff)  
 **Scope:** Documentation and reviewer orientation only. No taxonomy rename, classifier behavior change, recurrence-key change, or generated-artifact refresh.
 
-**Related discovery:** [`CG_failure_classification_synchronization_discovery.md`](CG_failure_classification_synchronization_discovery.md)
+**Governing authority:** `tests/failure_classification_contract.py` — replay-contract-owned classifier vocabulary, row schema, dashboard evidence manifest, and repair-kind **runtime/producer subsets**. Classification **behavior** is owned by `tests/helpers/failure_classifier.py`.
+
+**Program status:** **CG failure-classification governance program — closed** (CG-7, 2026-06-25). Taxonomy authority is documented and independently governed. **Recurrence operational graduation** is a separate track — **not graduated** per [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md). **Attribution maturity program — closed** per [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md); see [`CG_attribution_contract_registry.md`](CG_attribution_contract_registry.md) (CO97 sync).
+
+**Related:**
+
+- [`CG_failure_classification_cost_closeout.md`](CG_failure_classification_cost_closeout.md) (CG-7 program closeout — **CG governance authority narrative**)
+- [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md) (recurrence operational graduation verdict — **not** taxonomy graduation)
+- [`BQ16_recurrence_graduation_audit.md`](BQ16_recurrence_graduation_audit.md) (recurrence graduation audit inputs)
+- [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) (closed attribution program — separate from CG-1)
+- [`CG_attribution_contract_registry.md`](CG_attribution_contract_registry.md) (CG-5 attribution boundary; CO97 synchronized with CO96)
+- [`CG_recurrence_taxonomy_registry.md`](CG_recurrence_taxonomy_registry.md) (CG-4 recurrence taxonomy)
+- [`CG_failure_classification_synchronization_discovery.md`](CG_failure_classification_synchronization_discovery.md) (CG discovery baseline)
 
 ## Purpose
 
 Failure classification is intentionally partitioned across multiple authorities. This registry records **which file owns each concept**, which files **derive or consume** it, and what **change cost** to expect (fixtures, generated artifacts, recurrence identity).
 
 Use this document before editing any failure-classification vocabulary, recurrence analytics class, or cross-layer contract.
+
+**Do not conflate programs:** CG-1 governs classifier taxonomy and replay-contract vocabulary. CO96 governs attribution completeness (closed). BQC4 governs recurrence **operational** graduation readiness (open constraints documented below).
+
+## Failure-classification governance (CO98)
+
+| Item | Value | Authority |
+|---|---|---|
+| CG governance program status | **Closed** (CG-7) | [`CG_failure_classification_cost_closeout.md`](CG_failure_classification_cost_closeout.md) |
+| Classifier vocabulary authority | `tests/failure_classification_contract.py` | This registry §Field-level |
+| Classifier behavior authority | `tests/helpers/failure_classifier.py` | Rule tables, row builder, investigation overrides |
+| Producer repair-kind subset authority | `tests/failure_classification_contract.py` (`ALLOWED_PRODUCER_REPAIR_KINDS`, 10 kinds) | Runtime FEM stamps; union validation in `attribution_contract` |
+| Runtime repair-kind / response-type subsets | `tests/failure_classification_contract.py` | `ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS`, `LEGACY_RESPONSE_TYPE_REPAIR_KINDS` |
+| Repair-kind full union + aliases | `tests/helpers/attribution_contract.py` | Attribution program closed (CO96); edit both layers for new producer kinds |
+| Source-family tag authority | `tests/failure_classification_contract.py` (`ALLOWED_SOURCE_FAMILY_TAGS`, 21 tags) | Classifier routing; attribution validates imported set |
+| Emission sublayer authority | `tests/failure_classification_contract.py` (`ALLOWED_EMISSION_SUBLAYERS`) | Classifier `mutation_source` / `emission_sublayer` evidence |
+| Recurrence operational graduation | **Not graduated** (`program_graduated: false`) | BQC4 / BQ16; builder in `replay_bug_recurrence_serialization.py` |
+| Attribution maturity program | **Closed** (separate) | CO96 — does not block CG-1 independence |
+
+### Production vs replay vs classifier boundaries
+
+| Layer | Owns | Consumes from replay contract |
+|---|---|---|
+| **Production (runtime FEM)** | Owner bucket strings, producer repair stamps, split-owner tokens | Contract **mirrors** bucket allowed sets; does not own category/severity taxonomy |
+| **Replay projection** | Lineage event emission (`game/final_emission_replay_projection.py`) | Validates against repair subsets and projection parity via sync matrix |
+| **Failure classifier** | Row construction from drift observations | **Must** conform to `failure_classification_contract` allowed values |
+| **Attribution inventory** | Five-field completeness records (program closed) | Imports source families, repair subsets, emission sublayers from failure contract |
+
+### Architectural constraints (not backlog)
+
+1. **Repair kind split** — failure contract owns runtime/producer **subsets**; attribution contract owns **union** — both must change together for new producer kinds (not attribution maturity work; CO96 closed).
+2. **Recurrence operational immaturity** — BQC4 verdict C: insufficient protected-replay volume and trajectory for operational graduation; does not imply classifier taxonomy is incomplete.
+3. **`recurrence:v1` path mutability** — investigation target and field_path participate in recurrence identity; documentation-only renames are key migrations.
+4. **Dual mutation vocabulary** — classifier `emission_sublayer` vs lineage `mutation_kind`; attribution union accepts both (CO94 `gate_outcome` constraint is attribution/lineage, not classifier vocabulary).
+5. **Attribution strict completeness** — frozen at 0% by architecture (CO95–CO96); unrelated to failure-classification taxonomy graduation.
 
 ## Authority kinds
 
@@ -35,7 +81,7 @@ Columns: **Authority file** (single owner) · **Derived/consumer files** · **Ki
 | **secondary owner** | `tests/failure_classification_contract.py` (`ALLOWED_SECONDARY_OWNERS`) | `tests/helpers/failure_classifier.py` (`SECONDARY_OWNER_RULES`), dashboard columns, optional row evidence | replay-contract-owned | yes | no | no |
 | **owner drift bucket** | `tests/helpers/replay_drift_taxonomy.py` (`ALLOWED_OWNER_DRIFT_BUCKETS`, `classify_owner_drift_bucket`) | `tests/failure_classification_contract.py` (re-export for contract consumers), `tests/helpers/failure_classifier.py` (row field + validation), sync/matrix fixtures, all recurrence modules (key prefix), drift report helpers | replay-contract-owned (allowed set mirrored in contract) / drift taxonomy authority | yes | drift reports if bucket labels exposed | **yes** — first component of `recurrence:v1` |
 | **source family** | `tests/failure_classification_contract.py` (`ALLOWED_SOURCE_FAMILY_TAGS`) | `tests/helpers/failure_classifier.py` (rule routing), `tests/helpers/attribution_contract.py` (union validation), attribution inventory/tests | replay-contract-owned | yes | no | no |
-| **repair kind** | Split: runtime kinds in `tests/failure_classification_contract.py` (`ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS`, `ALLOWED_PRODUCER_REPAIR_KINDS`, `LEGACY_RESPONSE_TYPE_REPAIR_KINDS`); full union + aliases in `tests/helpers/attribution_contract.py` (`ALLOWED_REPAIR_KINDS`, `REPAIR_KIND_ALIASES`) | Classifier optional evidence, `game/final_emission_replay_projection.py` (lineage emission), sync split-owner matrix, attribution inventory | attribution-contract-owned (union/aliases); replay-contract-owned (runtime/producer subsets) | yes | no | no |
+| **repair kind** | Split: runtime kinds in `tests/failure_classification_contract.py` (`ALLOWED_RUNTIME_RESPONSE_TYPE_REPAIR_KINDS`, `ALLOWED_PRODUCER_REPAIR_KINDS` [10 kinds incl. `passive_scene_pressure_fallback`], `LEGACY_RESPONSE_TYPE_REPAIR_KINDS`); full union + aliases in `tests/helpers/attribution_contract.py` (`ALLOWED_REPAIR_KINDS`, `REPAIR_KIND_ALIASES`) | Classifier optional evidence, `game/final_emission_replay_projection.py` (lineage emission), sync split-owner matrix, attribution inventory (CO96 closed) | replay-contract-owned (runtime/producer subsets); attribution-contract-owned (union) | yes | no | no |
 | **mutation classification** | `tests/helpers/attribution_contract.py` (`ALLOWED_MUTATION_CLASSIFICATION_CORE`, `ALLOWED_MUTATION_CLASSIFICATIONS`, `MUTATION_CLASSIFICATION_ALIASES`); emission sublayers imported from `tests/failure_classification_contract.py` (`ALLOWED_EMISSION_SUBLAYERS`) | Classifier `mutation_source`/sublayer evidence, `game/final_emission_replay_projection.py`, replacement attribution inventory | attribution-contract-owned | yes | no | no |
 | **investigation target** | Split: default map in `tests/failure_classification_contract.py` (`MAJOR_OWNER_INVESTIGATION_TARGETS`); per-category overrides in `tests/helpers/failure_classifier.py` (`INVESTIGATION_TARGETS`, builder logic); drift fixtures in `tests/helpers/replay_drift_taxonomy.py` (`*_INVESTIGATION_TARGET`) | Dashboard **Investigate First** column, sync exact-string tests, `tests/helpers/replay_bug_recurrence_events.py` (key component) | replay-contract-owned defaults; classifier-owned behavioral overrides | yes | no | **yes** — `investigate_first` in `recurrence:v1`; path changes are key migrations |
 | **dashboard evidence field** | `tests/failure_classification_contract.py` (`FAILURE_DASHBOARD_EVIDENCE_MANIFEST`, labels/row keys) | `tests/helpers/failure_classification_sync.py` (delegating accessors), `tests/helpers/failure_dashboard_report.py` (re-export + render), contract/dashboard tests | dashboard-owned (manifest authority in contract) | yes (evidence cell strings) | dashboard markdown if checked in | no |
@@ -153,13 +199,17 @@ recurrence:v1:<owner_bucket>|<category>|<field_path>|<investigate_first>
 | `game/final_emission_meta.py` | FEM shapes and runtime registry consumption |
 | `game/final_emission_replay_projection.py` | Runtime lineage read projection (diagnostic vocabulary emission) |
 
-## Remaining ambiguities
+## Remaining cross-contract dependencies (architectural, not open programs)
 
-1. **Repair kind** is deliberately split between failure-contract subsets and attribution-contract union — both must be updated together; neither file alone is the full authority.
-2. **Investigation target** has three surfaces (contract defaults, classifier overrides, drift taxonomy fixture constants) — all must stay coherent; only classifier output feeds recurrence keys.
-3. Split-owner matrix authority now lives in `failure_classification_split_owner.py`; `failure_classification_sync.py` re-exports for compatibility.
-4. Recurrence modules use broad `import *` re-exports — consumers may import from the facade (`replay_bug_recurrence.py`) and appear to "own" constants they only mirror.
-5. **Emission sublayer** values live in the failure contract but participate in the attribution mutation union — boundary is documented but still cross-file.
+| Dependency | Direction | Change cost |
+|---|---|---|
+| Repair subsets → attribution union | failure contract → attribution | Edit both for new producer kinds |
+| Emission sublayers → mutation union | failure contract → attribution | Edit both for new sublayer evidence |
+| Runtime buckets → owner validation | ownership schema → failure contract mirror → attribution | Edit schema + contract mirror |
+| Projection maps → mutation union | replay projection emits; attribution validates | Align maps when adding core mutation tokens |
+| Classifier evidence → inventory | classifier rows → inventory `classifier_inferred` origin | Fixture + inventory tests |
+| CO96 attribution closeout → CG-1 | Independent programs | Attribution changes do not require reopening CG-1 |
+| BQC4 recurrence graduation → CG-1 | Separate operational track | Recurrence maturity gaps are not classifier taxonomy backlog |
 
 ## CG-2 synchronization module layout
 
@@ -235,10 +285,10 @@ When classifier routing rules change, editors update ``failure_classifier.py`` a
 
 ## CG-5 attribution contract boundary tightening
 
-**Date:** 2026-06-25  
+**Date:** 2026-06-25 (updated CO97 / CO98)  
 **Change:** Explicit attribution contract registry; module authority headers updated to distinguish **imports**, **validation**, **normalization**, **compatibility**, and **runtime emission**; no behavioral changes.
 
-**Registry:** [`CG_attribution_contract_registry.md`](CG_attribution_contract_registry.md)
+**Registry:** [`CG_attribution_contract_registry.md`](CG_attribution_contract_registry.md) — **CO97 synchronized** with [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) (attribution program **closed**).
 
 **Summary:**
 
@@ -248,11 +298,13 @@ When classifier routing rules change, editors update ``failure_classifier.py`` a
 | Mutation vocabulary | Emission **sublayers** (classifier evidence) | Core **union**, aliases, assembled validation set | `mutation_kind` **emission** + projection maps |
 | Owner buckets | Mirror for classifier validation | Validation union for records | Canonical **strings** + mappers |
 | Source family | Allowed **tag set** | Validates imported set | Projection **derives** from `fallback_kind` |
-| Replacement semantics | — | **Paths**, record shape, origins | FEM flags as inputs only |
+| Replacement semantics | — | **Paths**, record shape, origins (program closed) | FEM flags as inputs only |
 
-**Governance snapshot:** 18 vocabulary families · 1 attribution authority module · 2 imported authority modules · 4 compatibility layers · 5 remaining ambiguous concepts · 5 cross-contract dependencies (documented in registry).
+**Governance snapshot (attribution — see CG-5 registry for current):** 18 vocabulary families · attribution program **closed** · resolved completeness 85.71% · strict completeness diagnostic-only at 0% · 8 intentional `gate_outcome` gaps (CO94).
 
 **Intentional overlaps preserved:** repair-kind split, dual mutation vocabulary (`mutation_kind` vs `emission_sublayer`), lineage-only repair kinds outside BS3 union.
+
+**Relationship to CG-1:** Failure classification taxonomy authority is **independent** of the closed attribution maturity program. CG-1 remains authoritative for classifier vocabulary; CO96 is authoritative for attribution completeness policy only.
 
 **Files touched (comments/docs only):** `attribution_contract.py`, `replacement_attribution_inventory.py`, `failure_classification_contract.py`, `final_emission_replay_projection.py`, `final_emission_ownership_schema.py`, `attribution_read_views.py`, `final_emission_meta.py`, `CG_attribution_contract_registry.md`, this section.
 
@@ -266,3 +318,5 @@ When classifier routing rules change, editors update ``failure_classifier.py`` a
 **Verdict:** **IMPROVED_GOVERNANCE** — Failure Classification Cost is now measurable; sync hub largest module −59%; dashboard fixtures −44%; routing edit fanout reduced ~40–50% for classifier-only changes; total governance LOC +7% due to explicit module boundaries and registries.
 
 **Audit status:** CG program **formally closed**. Taxonomy synchronization remains a hotspot but is documented with named owners. No architectural blocker before feature development.
+
+**CO98 handoff:** CG-1 registry updated to cross-reference CO96/CO97 (closed attribution) and BQC4 (recurrence operational graduation not met). Failure-classification governance stands independently.

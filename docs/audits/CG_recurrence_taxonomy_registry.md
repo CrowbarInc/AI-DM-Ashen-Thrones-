@@ -1,15 +1,47 @@
 # CG-4 — Recurrence Taxonomy Registry
 
-**Date:** 2026-06-25  
+**Date:** 2026-06-27 (CO99 operational graduation baseline)  
 **Scope:** Documentation and import-clarity only. No recurrence behavior, key formula, classification rename, threshold, or artifact regeneration changes.
 
-**Related:** [`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CG-1 recurrence section)
+**Governing authority (taxonomy):** This document + module owners listed below. **Operational graduation authority:** [`BQ16_recurrence_graduation_audit.md`](BQ16_recurrence_graduation_audit.md) (audit builder) and [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md) (final recommendation).
+
+**Program status:** Recurrence **taxonomy governance — closed** (CG-4/CG-6 documented). Recurrence **operational graduation — active, not graduated** (BQ-C4 verdict C). **Only remaining active graduation track** in the CG/CO program family.
+
+**Related:**
+
+- [`BQ16_recurrence_graduation_audit.md`](BQ16_recurrence_graduation_audit.md) (operational graduation audit — **CO99 baseline**)
+- [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md) (final graduation recommendation)
+- [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) (attribution program **closed** — independent)
+- [`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CG-1 **closed** — CO98 handoff)
+- [`CG_attribution_contract_registry.md`](CG_attribution_contract_registry.md) (CG-5 / CO97)
+- [`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CG-1 recurrence identity section)
 
 ## Purpose
 
 Recurrence analytics use many overlapping status words (`watch`, `emerging`, `retired`, …) across input rows, aggregated summaries, trend buckets, governance funnels, lifecycle stages, and graduation audits. This registry records **which module owns each taxonomy**, what consumes it, and what each taxonomy is **not**.
 
 Use this document before adding a recurrence status value, editing classifier thresholds, or importing recurrence constants.
+
+**Do not conflate programs:** CG-4 governs recurrence **vocabulary**. BQ16/BQC4 govern recurrence **operational graduation**. CO96 and CG-1 are **closed** — recurrence graduation depends on protected-replay observation volume, not taxonomy or attribution work.
+
+## Recurrence operational graduation (CO99)
+
+| Item | Value | Authority |
+|---|---|---|
+| Taxonomy program status | **Closed** (CG-4/CG-6) | This registry |
+| Operational graduation status | **Active — not graduated** | BQ16 + BQC4 |
+| Protected replay model | `event_source=protected_replay_failure`; `protected_replay_only=true` on audit artifacts | `replay_bug_recurrence_events.py` |
+| Graduation audit artifact | `docs/audits/BQ16_recurrence_graduation_audit.md` | `replay_bug_recurrence_statistics.py` |
+| Final recommendation artifact | `docs/audits/BQC4_final_graduation_decision.md` | `replay_bug_recurrence_serialization.py` |
+| Primary operational gap | Low protected-replay observation volume + single trajectory snapshot | BQ16 blind spots |
+| CG-1 / CO96 relationship | **Independent** — closed; do not reopen for recurrence graduation | CO98, CO96 |
+
+### Remaining operational evidence (not taxonomy backlog)
+
+1. Protected replay observation and key volume above maturity confidence thresholds.
+2. Trajectory history with ≥ 2 snapshots (`trajectory_available=true`).
+3. Effectiveness outcomes with evidence-backed closure signals (not synthetic).
+4. Critical blind spot resolution: `recurrence_data_quality`, `recurrence_trajectory_history`.
 
 ## Authority module map
 
@@ -371,6 +403,8 @@ Columns: **Identity?** · **Dashboard render?** · **Serialized artifacts?**
 | Remaining ambiguous ownership areas | Graduation audit builder (statistics) vs graduation threshold vocabulary (serialization); maturity dimension scores (derived metrics, not closed enums) |
 | Wildcard/compatibility `import *` edges | 5 (`history→events`, `statistics→events+history`, `serialization→events+history+statistics`, `facade→all four`, `failure_classification_sync` unrelated) |
 | Largest recurrence governance hotspot | `replay_bug_recurrence_history.py` (~3,077 LOC — owns 6 taxonomy families plus timeline builders) |
+| Operational graduation program status | **Active — not graduated** (BQ-C4); taxonomy closed |
+| Closed sibling programs | CG-1 (CO98), attribution CO96 |
 
 ## Change checklist
 
@@ -394,3 +428,9 @@ Columns: **Identity?** · **Dashboard render?** · **Serialized artifacts?**
 **Review:** [`CG_recurrence_key_stability_review.md`](CG_recurrence_key_stability_review.md)
 
 **Summary:** `recurrence:v1` embeds two high-mutation components (`field_path`, `investigate_first`). One key producer, nine consumer modules, five persistence locations, ~15 exact-key test literals. **Recommendation:** defer v2; keep v1 for advisory report-only identity; revisit if recurrence becomes gating or refactor churn exceeds manual retirement tolerance. Hybrid v2 (Option C) preferred if migration is ever required.
+
+## CO99 documentation handoff
+
+- BQ16 and this registry synchronized for operational graduation baseline.
+- Recurrence remains the **only active graduation track**; CG taxonomy and CO96 attribution are closed.
+- See [`BQ16_recurrence_graduation_audit.md`](BQ16_recurrence_graduation_audit.md) §Operational graduation baseline for evidence requirements.

@@ -6,37 +6,37 @@
 
 | Cycle | Coverage | Contract compliance | Taxonomy consistency | Resolved complete |
 |---|---:|---:|---:|---:|
-| BS1 | 5.77% | 40.3% | 72.0% | 3/52 |
-| BS5 | 10.2% | 55.6% | 85.0% | 5/52 |
-| BS4 | 32.65% | 68.0% | 90.0% | 16/49 |
-| BS3 (live) | 32.65% | 100.0% | 100.0% | 16/49 |
+| BS1 | 5.36% | 40.3% | 72.0% | 3/56 |
+| BS5 | 85.71% | 100.0% | 100.0% | 48/56 |
+| BS4 | 50.0% | 100.0% | 100.0% | 28/56 |
+| BS3 (live) | 85.71% | 100.0% | 100.0% | 48/56 |
 
 ## Layer Compliance Summary
 
 ### inventory_corpus
 
-- `owner_bucket`: 19 compliant, 0 non-compliant
-- `source_family`: 41 compliant, 0 non-compliant
-- `repair_kind`: 29 compliant, 0 non-compliant
-- `recurrence_key`: 49 compliant, 0 non-compliant
-- `mutation_classification`: 41 compliant, 0 non-compliant
+- `owner_bucket`: 56 compliant, 0 non-compliant
+- `source_family`: 56 compliant, 0 non-compliant
+- `repair_kind`: 56 compliant, 0 non-compliant
+- `recurrence_key`: 56 compliant, 0 non-compliant
+- `mutation_classification`: 48 compliant, 0 non-compliant
 
 ### lineage_projection
 
 - Deprecated fallback kind aliases: `['visibility_or_scene_replacement']`
 - Observed normalized fallback kinds: `['first_mention_hard_replacement', 'referential_clarity_hard_replacement', 'response_type_prepared_emission', 'sanitizer_empty_output', 'scene_opening', 'sealed_passive_scene_pressure_fallback', 'strict_social_fallback', 'visibility_hard_replacement']`
 
-- `repair_kind`: 7 compliant, 0 non-compliant
-- `recurrence_key`: 25 compliant, 0 non-compliant
-- `mutation_classification`: 9 compliant, 0 non-compliant
+- `repair_kind`: 8 compliant, 0 non-compliant
+- `recurrence_key`: 26 compliant, 0 non-compliant
+- `mutation_classification`: 10 compliant, 0 non-compliant
 - `owner_bucket`: 5 compliant, 0 non-compliant
 
 ### failure_classifier
 
-- `source_family`: 5 compliant, 0 non-compliant
-- `repair_kind`: 5 compliant, 0 non-compliant
-- `owner_bucket`: 1 compliant, 0 non-compliant
-- `mutation_classification`: 5 compliant, 0 non-compliant
+- `source_family`: 7 compliant, 0 non-compliant
+- `repair_kind`: 7 compliant, 0 non-compliant
+- `owner_bucket`: 4 compliant, 0 non-compliant
+- `mutation_classification`: 6 compliant, 0 non-compliant
 
 ## Deprecated Values
 

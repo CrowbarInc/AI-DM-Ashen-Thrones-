@@ -721,3 +721,502 @@ def write_protected_replay_failure_report_if_present(
         ),
     )
     return out_path
+
+
+# Report assertion helpers (CO1) ----------------------------------------------
+
+_PROTECTED_REPLAY_FAILURE_REPORT_TITLE = "# Protected Replay Failure Report"
+_FAILURE_LOCATOR_HEADER = "## Failure Locator"
+_FAILURE_LOCATOR_TABLE_HEADER = (
+    "| Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |"
+)
+_OWNER_DRIFT_BREAKDOWN_HEADER = "## Owner Drift Breakdown"
+_OWNER_DRIFT_BUCKET_COLUMN = "| Owner Drift Bucket |"
+_SANITIZER_SUMMARY_HEADER = "## Sanitizer Summary"
+_RUNTIME_LINEAGE_SUMMARY_HEADER = "## Runtime Lineage Summary"
+_FOCUSED_FAILING_TESTS_HEADER = "### Focused failing tests"
+_PROTECTED_REPLAY_LANE_HEADER = "### Protected replay lane"
+_GOLDEN_REPLAY_COMMAND = "python -m pytest -m golden_replay -q --tb=short"
+
+_RERUN_DRIFT_SCORECARD_TITLE = "# Golden Rerun Drift Scorecard"
+_OWNER_DRIFT_SUMMARY_HEADER = "## Owner Drift Summary"
+_SEMANTIC_DELTA_FREQUENCY_HEADER = "## Semantic Delta Frequency"
+_RERUN_DRIFT_TURN_TABLE_HEADER = (
+    "| Turn | Previous Turn ID | Current Turn ID | Drift Fields | Details |"
+)
+
+_BUG_RECURRENCE_HISTORY_TITLE = "# Bug-Class Recurrence History"
+_REGRESSION_RECURRENCE_RATE_HEADER = "## Regression Recurrence Rate"
+_RECURRENCE_EMPTY_STATE = "No recurrence history recorded."
+
+
+def _assert_report_contains(report: str, *needles: str) -> None:
+    for needle in needles:
+        assert needle in report, f"expected {needle!r} in report"
+
+
+def assert_report_sections_present(
+    report: str,
+    *,
+    title: str | None = None,
+    failure_locator: bool = False,
+    owner_drift_breakdown: bool = False,
+    sanitizer_summary: bool = False,
+    lineage_summary: bool = False,
+    focused_failing_tests: bool = False,
+    protected_replay_lane: bool = False,
+    command_guidance: bool = False,
+) -> None:
+    """Assert canonical protected replay failure report section headers are present."""
+    if title is not None:
+        _assert_report_contains(report, title)
+    if failure_locator:
+        assert_report_has_failure_locator(report)
+    if owner_drift_breakdown:
+        _assert_report_contains(report, _OWNER_DRIFT_BREAKDOWN_HEADER, _OWNER_DRIFT_BUCKET_COLUMN)
+    if sanitizer_summary:
+        _assert_report_contains(report, _SANITIZER_SUMMARY_HEADER)
+    if lineage_summary:
+        assert_report_has_lineage_summary(report)
+    if focused_failing_tests:
+        _assert_report_contains(report, _FOCUSED_FAILING_TESTS_HEADER)
+    if protected_replay_lane:
+        _assert_report_contains(report, _PROTECTED_REPLAY_LANE_HEADER)
+    if command_guidance:
+        assert_report_has_command_guidance(report)
+
+
+def assert_report_has_failure_locator(
+    report: str,
+    *,
+    table_row: str | None = None,
+) -> None:
+    """Assert the failure locator section and table header are present."""
+    _assert_report_contains(report, _FAILURE_LOCATOR_HEADER, _FAILURE_LOCATOR_TABLE_HEADER)
+    if table_row is not None:
+        _assert_report_contains(report, table_row)
+
+
+def assert_report_has_owner_drift(
+    report: str,
+    *,
+    bucket: str | None = None,
+    breakdown: bool = False,
+    summary: bool = False,
+    empty_summary: bool = False,
+    summary_row: str | None = None,
+) -> None:
+    """Assert owner drift breakdown or rerun scorecard summary semantics."""
+    if breakdown:
+        _assert_report_contains(report, _OWNER_DRIFT_BREAKDOWN_HEADER, _OWNER_DRIFT_BUCKET_COLUMN)
+    if summary:
+        _assert_report_contains(report, _OWNER_DRIFT_SUMMARY_HEADER)
+        if empty_summary:
+            _assert_report_contains(report, "No owner drift classifications.")
+        if summary_row is not None:
+            _assert_report_contains(report, summary_row)
+    if bucket is not None:
+        _assert_report_contains(report, bucket)
+
+
+def assert_report_has_command_guidance(report: str) -> None:
+    """Assert protected replay lane pytest command guidance is present."""
+    _assert_report_contains(report, _GOLDEN_REPLAY_COMMAND)
+
+
+def assert_report_has_lineage_summary(report: str) -> None:
+    """Assert runtime lineage summary section is present."""
+    _assert_report_contains(report, _RUNTIME_LINEAGE_SUMMARY_HEADER)
+
+
+def assert_report_has_rerun_scorecard_summary(
+    report: str,
+    *,
+    turns_compared: int | None = None,
+    speaker_deltas: int | None = None,
+    route_deltas: int | None = None,
+    fallback_deltas: int | None = None,
+    text_fingerprint_deltas: int | None = None,
+    runtime_lineage_deltas: int | None = None,
+    semantic_delta_frequency_deltas: int | None = None,
+    owner_drift_bucket: str | None = None,
+    owner_drift_summary_row: str | None = None,
+    empty_owner_drift: bool = False,
+    drift_turn_table: bool = False,
+    text_hash: bool = False,
+) -> None:
+    """Assert rerun drift scorecard summary sections and optional delta counts."""
+    _assert_report_contains(report, _RERUN_DRIFT_SCORECARD_TITLE)
+    if turns_compared is not None:
+        _assert_report_contains(report, f"- Total turns compared: `{turns_compared}`")
+    if speaker_deltas is not None:
+        _assert_report_contains(report, f"- Speaker deltas: `{speaker_deltas}`")
+    if route_deltas is not None:
+        _assert_report_contains(report, f"- Route deltas: `{route_deltas}`")
+    if fallback_deltas is not None:
+        _assert_report_contains(report, f"- Fallback deltas: `{fallback_deltas}`")
+    if text_fingerprint_deltas is not None:
+        _assert_report_contains(report, f"- Text fingerprint deltas: `{text_fingerprint_deltas}`")
+    if runtime_lineage_deltas is not None:
+        _assert_report_contains(report, f"- Runtime-lineage deltas: `{runtime_lineage_deltas}`")
+    if semantic_delta_frequency_deltas is not None:
+        _assert_report_contains(
+            report,
+            _SEMANTIC_DELTA_FREQUENCY_HEADER,
+            f"- Semantic delta frequency deltas: `{semantic_delta_frequency_deltas}`",
+        )
+    if owner_drift_bucket is not None or owner_drift_summary_row is not None or empty_owner_drift:
+        assert_report_has_owner_drift(
+            report,
+            bucket=owner_drift_bucket,
+            summary=True,
+            empty_summary=empty_owner_drift,
+            summary_row=owner_drift_summary_row,
+        )
+    if drift_turn_table:
+        _assert_report_contains(report, _RERUN_DRIFT_TURN_TABLE_HEADER)
+    if text_hash:
+        _assert_report_contains(report, "text_hash")
+
+
+def assert_report_has_recurrence_summary(
+    report: str,
+    *,
+    empty: bool = False,
+    total_keys: int | None = None,
+    total_events: int | None = None,
+    regression_rate: str | None = None,
+    advisory_only: bool = False,
+    report_only: bool = False,
+    status_markers: tuple[str, ...] = (),
+) -> None:
+    """Assert bug-class recurrence history header and summary semantics."""
+    _assert_report_contains(report, _BUG_RECURRENCE_HISTORY_TITLE)
+    if empty:
+        if total_keys is not None:
+            _assert_report_contains(report, f"- Total recurrence keys: `{total_keys}`")
+        if total_events is not None:
+            _assert_report_contains(report, f"- Total recurrence events: `{total_events}`")
+        _assert_report_contains(
+            report,
+            _REGRESSION_RECURRENCE_RATE_HEADER,
+            "does not gate protected replay.",
+            _RECURRENCE_EMPTY_STATE,
+        )
+    if regression_rate is not None:
+        _assert_report_contains(report, _REGRESSION_RECURRENCE_RATE_HEADER, regression_rate)
+    if report_only:
+        _assert_report_contains(report, "- Report only: `true`")
+    if advisory_only:
+        _assert_report_contains(report, "- Advisory only: `true`")
+    for marker in status_markers:
+        _assert_report_contains(report, f" | {marker} | ")
+
+
+def assert_recurrence_report_section(
+    report: str,
+    section: str,
+    *required_substrings: str,
+) -> None:
+    """Assert a recurrence report section header and required detail substrings."""
+    _assert_report_contains(report, section, *required_substrings)
+
+
+def assert_dashboard_recurrence_sections(
+    report: str,
+    payload: Mapping[str, Any] | None,
+    *,
+    section: str,
+    required_substrings: tuple[str, ...] = (),
+    summary_key: str | None = None,
+    protected_replay_only: bool | None = True,
+    schema_version: int | None = None,
+) -> None:
+    """Assert a bug-recurrence markdown section and optional payload summary scope."""
+    assert_recurrence_report_section(report, section, *required_substrings)
+    if summary_key is None:
+        return
+    assert payload is not None, "payload is required when summary_key is set"
+    assert_recurrence_payload_summary_scope(
+        payload,
+        summary_key,
+        protected_replay_only=protected_replay_only,
+        schema_version=schema_version,
+    )
+
+
+def assert_dashboard_recurrence_payload(
+    payload: Mapping[str, Any],
+    *,
+    required_keys: tuple[str, ...] = (),
+    schema_version: int | None = None,
+    report_only: bool | None = None,
+    unique_recurrence_count: int | None = None,
+    regression_rate_metric: str | None = None,
+    summary_key: str | None = None,
+    summary_schema_version: int | None = None,
+    summary_protected_replay_only: bool | None = None,
+) -> None:
+    """Assert recurrence history JSON contract fields and optional embedded summary scope."""
+    assert_recurrence_history_payload_shape(
+        payload,
+        schema_version=schema_version,
+        report_only=report_only,
+        unique_recurrence_count=unique_recurrence_count,
+        required_keys=required_keys,
+        regression_rate_metric=regression_rate_metric,
+    )
+    if summary_key is not None:
+        assert_recurrence_payload_summary_scope(
+            payload,
+            summary_key,
+            schema_version=summary_schema_version,
+            protected_replay_only=summary_protected_replay_only,
+        )
+
+
+# Long-session replay summary assertion helpers (CO2) -------------------------
+
+_LONG_SESSION_TURN_TABLE_HEADER = (
+    "| Turn | Route | Speaker | Fallback | Owner | Mutation | Unavailable | Lineage |"
+)
+
+
+def _assert_report_lacks(report: str, *needles: str) -> None:
+    for needle in needles:
+        assert needle not in report, f"expected {needle!r} not in report"
+
+
+def _format_report_mapping(value: Mapping[str, Any] | str) -> str:
+    return value if isinstance(value, str) else str(dict(value))
+
+
+def assert_long_session_summary_sections_present(
+    report: str,
+    *,
+    title: str | None = None,
+    scenario_id: str | None = None,
+    turn_count: int | None = None,
+    turn_table: bool = False,
+) -> None:
+    """Assert long-session replay summary title and structural sections."""
+    if title is not None:
+        _assert_report_contains(report, f"# {title}")
+    if scenario_id is not None:
+        _assert_report_contains(report, f"- Scenario: `{scenario_id}`")
+    if turn_count is not None:
+        _assert_report_contains(report, f"- Turns: `{turn_count}`")
+    if turn_table:
+        _assert_report_contains(report, _LONG_SESSION_TURN_TABLE_HEADER)
+
+
+def assert_long_session_operator_metrics(
+    report: str,
+    *,
+    route_changes: int | None = None,
+    speaker_changes: int | None = None,
+    speaker_missing: int | None = None,
+    continuity_classification: str | None = None,
+    fallback_total_count: int | None = None,
+    fallback_lineage_kinds: Mapping[str, Any] | str | None = None,
+    mutation_turn_count: int | None = None,
+    response_delta_checked: int | None = None,
+    response_delta_failed: int | None = None,
+    response_delta_repaired: int | None = None,
+    response_delta_kinds: Mapping[str, Any] | str | None = None,
+    response_delta_unknown_count: int | None = None,
+    echo_overlap_bands: Mapping[str, Any] | str | None = None,
+    unavailable_counts: Mapping[str, Any] | str | None = None,
+    lineage_recurrence_present: bool = False,
+    absent_labels: tuple[str, ...] = (),
+) -> None:
+    """Assert operator-readable long-session replay summary metric bullets."""
+    if route_changes is not None:
+        _assert_report_contains(report, f"- Route changes: `{route_changes}`")
+    if speaker_changes is not None and speaker_missing is not None:
+        _assert_report_contains(
+            report,
+            f"- Speaker changes / missing: `{speaker_changes}` / `{speaker_missing}`",
+        )
+    if continuity_classification is not None:
+        _assert_report_contains(
+            report,
+            f"- Continuity classification: `{continuity_classification}`",
+        )
+    if fallback_total_count is not None:
+        _assert_report_contains(report, f"- Fallback total count: `{fallback_total_count}`")
+    if fallback_lineage_kinds is not None:
+        _assert_report_contains(
+            report,
+            f"- Fallback lineage kinds: `{_format_report_mapping(fallback_lineage_kinds)}`",
+        )
+    if mutation_turn_count is not None:
+        _assert_report_contains(report, f"- Mutation turn count: `{mutation_turn_count}`")
+    if (
+        response_delta_checked is not None
+        and response_delta_failed is not None
+        and response_delta_repaired is not None
+    ):
+        _assert_report_contains(
+            report,
+            "- Response-delta checked / failed / repaired: "
+            f"`{response_delta_checked}` / `{response_delta_failed}` / `{response_delta_repaired}`",
+        )
+    if response_delta_kinds is not None:
+        _assert_report_contains(
+            report,
+            f"- Response-delta kinds: `{_format_report_mapping(response_delta_kinds)}`",
+        )
+    if response_delta_unknown_count is not None:
+        _assert_report_contains(
+            report,
+            f"- Response-delta unknown count: `{response_delta_unknown_count}`",
+        )
+    if echo_overlap_bands is not None:
+        _assert_report_contains(
+            report,
+            f"- Echo-overlap bands: `{_format_report_mapping(echo_overlap_bands)}`",
+        )
+    if unavailable_counts is not None:
+        _assert_report_contains(
+            report,
+            f"- Unavailable counts: `{_format_report_mapping(unavailable_counts)}`",
+        )
+    if lineage_recurrence_present:
+        _assert_report_contains(report, "- Lineage recurrence: `[")
+    if absent_labels:
+        _assert_report_lacks(report, *absent_labels)
+
+
+# Recurrence payload assertion helpers (CO3) ------------------------------------
+# Distinct from markdown/report rendering helpers above.
+
+
+def _assert_payload_value(payload: Mapping[str, Any], key: str, expected: Any) -> None:
+    assert payload.get(key) == expected, f"payload[{key!r}]: expected {expected!r}, got {payload.get(key)!r}"
+
+
+def _assert_payload_has_keys(payload: Mapping[str, Any], *keys: str) -> None:
+    for key in keys:
+        assert key in payload, f"payload missing key {key!r}"
+
+
+def assert_recurrence_payload_counts(
+    payload: Mapping[str, Any],
+    *,
+    total_rows: int | None = None,
+    unique_recurrence_count: int | None = None,
+    summary_empty: bool = False,
+    persistence_population: str | None = None,
+) -> None:
+    """Assert recurrence history aggregate row/key counts."""
+    if total_rows is not None:
+        _assert_payload_value(payload, "total_rows", total_rows)
+    if unique_recurrence_count is not None:
+        _assert_payload_value(payload, "unique_recurrence_count", unique_recurrence_count)
+    if summary_empty:
+        _assert_payload_value(payload, "summary", [])
+    if persistence_population is not None:
+        _assert_payload_value(payload, "persistence_population", persistence_population)
+
+
+def assert_recurrence_payload_status(
+    payload: Mapping[str, Any],
+    *,
+    index: int = 0,
+    occurrence_count: int | None = None,
+    status: str | None = None,
+) -> None:
+    """Assert recurrence summary entry status fields."""
+    summary = payload.get("summary")
+    assert isinstance(summary, list), "payload['summary'] must be a list"
+    assert len(summary) > index, f"payload['summary'] missing index {index}"
+    entry = summary[index]
+    assert isinstance(entry, Mapping), f"payload['summary'][{index}] must be a mapping"
+    if occurrence_count is not None:
+        _assert_payload_value(entry, "occurrence_count", occurrence_count)
+    if status is not None:
+        _assert_payload_value(entry, "status", status)
+
+
+def assert_recurrence_payload_regression_rate(
+    payload: Mapping[str, Any],
+    *,
+    numerator: int | None = None,
+    rate: float | None = None,
+    metric: str | None = None,
+) -> None:
+    """Assert protected or core regression recurrence rate payload fields."""
+    if metric is not None:
+        regression = payload.get("regression_recurrence_rate")
+        assert isinstance(regression, Mapping), "payload['regression_recurrence_rate'] must be a mapping"
+        _assert_payload_value(regression, "metric", metric)
+    if numerator is not None or rate is not None:
+        protected_rate = payload.get("protected_replay_regression_recurrence_rate")
+        assert isinstance(protected_rate, Mapping), (
+            "payload['protected_replay_regression_recurrence_rate'] must be a mapping"
+        )
+        if numerator is not None:
+            _assert_payload_value(protected_rate, "numerator", numerator)
+        if rate is not None:
+            _assert_payload_value(protected_rate, "rate", rate)
+
+
+def assert_recurrence_history_payload_shape(
+    payload: Mapping[str, Any],
+    *,
+    schema_version: int | None = None,
+    report_only: bool | None = None,
+    unique_recurrence_count: int | None = None,
+    required_keys: tuple[str, ...] = (),
+    regression_rate_metric: str | None = None,
+) -> None:
+    """Assert core recurrence history JSON payload contract fields."""
+    if schema_version is not None:
+        _assert_payload_value(payload, "schema_version", schema_version)
+    if report_only is not None:
+        _assert_payload_value(payload, "report_only", report_only)
+    if unique_recurrence_count is not None:
+        _assert_payload_value(payload, "unique_recurrence_count", unique_recurrence_count)
+    if required_keys:
+        _assert_payload_has_keys(payload, *required_keys)
+    if regression_rate_metric is not None:
+        assert_recurrence_payload_regression_rate(payload, metric=regression_rate_metric)
+
+
+def assert_recurrence_payload_entry(
+    entry: Mapping[str, Any],
+    *,
+    event_source: str | None = None,
+    artifact_source: str | None = None,
+    test_node_id: str | None = None,
+    command: str | None = None,
+    recorded_at: str | None = None,
+) -> None:
+    """Assert one recurrence event-log entry field contract."""
+    if event_source is not None:
+        _assert_payload_value(entry, "event_source", event_source)
+    if artifact_source is not None:
+        _assert_payload_value(entry, "artifact_source", artifact_source)
+    if test_node_id is not None:
+        _assert_payload_value(entry, "test_node_id", test_node_id)
+    if command is not None:
+        _assert_payload_value(entry, "command", command)
+    if recorded_at is not None:
+        _assert_payload_value(entry, "recorded_at", recorded_at)
+
+
+def assert_recurrence_payload_summary_scope(
+    payload: Mapping[str, Any],
+    summary_key: str,
+    *,
+    protected_replay_only: bool | None = None,
+    schema_version: int | None = None,
+) -> None:
+    """Assert recurrence subsection summary scope metadata."""
+    summary = payload.get(summary_key)
+    assert isinstance(summary, Mapping), f"payload[{summary_key!r}] must be a mapping"
+    if protected_replay_only is not None:
+        _assert_payload_value(summary, "protected_replay_only", protected_replay_only)
+    if schema_version is not None:
+        _assert_payload_value(summary, "schema_version", schema_version)

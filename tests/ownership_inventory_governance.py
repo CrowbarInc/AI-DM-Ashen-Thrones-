@@ -9,6 +9,7 @@ and ``collect_ownership_governance_errors``. Enforced by governance tests in
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from pathlib import Path
 from typing import AbstractSet, Final, Mapping
 
@@ -324,3 +325,71 @@ def collect_ownership_governance_errors(
             )
 
     return errors
+
+
+def assert_governance_rejects_stored_derived_field(
+    inventory: dict,
+    *,
+    mutate: Callable[[dict], None],
+    error_substring: str,
+    registry: Mapping[str, ResponsibilityRecord],
+    cross_file_allowlist: Mapping[str, str],
+    live_legality_group_ids: AbstractSet[str] = frozenset(),
+) -> None:
+    """Assert polluting committed governance inventory with a derived field yields a specific error."""
+    polluted = json.loads(json.dumps(inventory))
+    mutate(polluted)
+    polluted_by_path = inventory_paths(polluted)
+    errs = collect_ownership_governance_errors(
+        registry,
+        polluted,
+        polluted_by_path,
+        cross_file_allowlist=cross_file_allowlist,
+        live_legality_group_ids=live_legality_group_ids,
+    )
+    assert any(error_substring in e for e in errs), (
+        f"expected governance error containing {error_substring!r}; got:\n" + "\n".join(errs)
+    )
+
+
+def assert_registry_files_roles_present_in_inventory(
+    inventory_by_path: Mapping[str, dict],
+    *,
+    missing_paths_error: str | None = None,
+    missing_path_error: str | None = None,
+    require_non_empty: bool = True,
+) -> dict[str, object]:
+    """Assert derived registry ``files_roles`` paths exist in committed inventory_by_path."""
+    if (missing_paths_error is None) == (missing_path_error is None):
+        raise ValueError('exactly one of missing_paths_error or missing_path_error is required')
+
+    files_roles = build_ownership_registry_index().get('files_roles', {})
+    if require_non_empty:
+        assert isinstance(files_roles, dict) and files_roles
+    else:
+        assert isinstance(files_roles, dict)
+
+    if missing_paths_error is not None:
+        missing = sorted(fp for fp in files_roles if fp not in inventory_by_path)
+        assert not missing, f'{missing_paths_error}{missing[:5]!r}'
+    else:
+        assert missing_path_error is not None
+        for fp in files_roles:
+            assert fp in inventory_by_path, f'{missing_path_error}{fp}'
+
+    return files_roles
+
+
+def assert_registry_paths_have_derived_inventory_field(
+    inventory_by_path: dict[str, dict],
+    full_inventory: dict,
+    field: str,
+    validator: Callable[[object], bool],
+) -> None:
+    """Assert every registry-owned path retains ``field`` in derived full audit output."""
+    full_by_path = full_inventory_by_path(full_inventory)
+    for fp in inventory_by_path:
+        frow = full_by_path.get(fp)
+        assert frow is not None, f"{fp} missing from full inventory"
+        value = frow.get(field)
+        assert validator(value), f"{fp}: invalid derived {field!r}: {value!r}"

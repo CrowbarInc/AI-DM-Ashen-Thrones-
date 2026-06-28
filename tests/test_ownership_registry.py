@@ -86,6 +86,7 @@ from tests.ownership_registry_contract import (
 from tests.ownership_inventory_governance import (
     DEFAULT_GOVERNANCE_INVENTORY_PATH,
     LIVE_LEGALITY_GROUP_IDS,
+    assert_registry_files_roles_present_in_inventory,
     collect_ownership_governance_errors,
     full_inventory_by_path,
     inventory_paths,
@@ -146,18 +147,18 @@ def test_registry_defines_all_required_groups() -> None:
 
 def test_governance_committed_files_include_all_registry_paths(inventory_by_path: dict[str, dict]) -> None:
     """AQ8: every registry-owned path appears in committed governance files[]."""
-    files_roles = build_ownership_registry_index().get('files_roles', {})
-    assert isinstance(files_roles, dict) and files_roles
-    missing = sorted((fp for fp in files_roles if fp not in inventory_by_path))
-    assert not missing, f'registry-owned paths missing from committed governance: {missing[:5]!r}'
+    assert_registry_files_roles_present_in_inventory(
+        inventory_by_path,
+        missing_paths_error='registry-owned paths missing from committed governance: ',
+    )
 
 
 def test_derived_registry_paths_present_in_inventory(inventory_by_path: dict[str, dict], full_inventory: dict) -> None:
     """AQ5: derived files_roles paths remain inventory-backed for direct-owner/neighbor checks."""
-    files_roles = build_ownership_registry_index().get('files_roles', {})
-    assert isinstance(files_roles, dict) and files_roles
-    missing = sorted((fp for fp in files_roles if fp not in inventory_by_path))
-    assert not missing, f'derived registry paths missing from inventory: {missing[:5]!r}'
+    files_roles = assert_registry_files_roles_present_in_inventory(
+        inventory_by_path,
+        missing_paths_error='derived registry paths missing from inventory: ',
+    )
     gate = 'tests/test_final_emission_gate.py'
     assert gate in files_roles
     assert files_roles[gate] == [{'group_id': 'final_emission_gate_orchestration', 'role': 'direct_owner'}]

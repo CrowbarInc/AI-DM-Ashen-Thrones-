@@ -3228,6 +3228,188 @@ RECURRENCE_GRADUATION_AUDIT_READINESS_DEFINITION = (
     "<50 major gaps."
 )
 RECURRENCE_GRADUATION_AUDIT_DOC_PATH = Path("docs/audits/BQ16_recurrence_graduation_audit.md")
+RECURRENCE_GRADUATION_AUDIT_GOVERNANCE_RUNBOOK_PATH = (
+    "docs/runbooks/protected_replay_observation_collection.md"
+)
+
+
+def _completion_criterion_current(
+    audit: Mapping[str, Any],
+    requirement: str,
+    *,
+    default: str = "unknown",
+) -> str:
+    """Return the current value string for one completion criterion row."""
+    for row in audit.get("completion_criteria_validation") or ():
+        if isinstance(row, Mapping) and row.get("requirement") == requirement:
+            return str(row.get("current_value") if row.get("current_value") is not None else default)
+    return default
+
+
+def _critical_blind_spot_count(audit: Mapping[str, Any]) -> int:
+    return sum(
+        1
+        for row in audit.get("blind_spots") or ()
+        if isinstance(row, Mapping) and str(row.get("severity") or "").lower() == "critical"
+    )
+
+
+def _critical_blind_spot_ids(audit: Mapping[str, Any]) -> list[str]:
+    return [
+        str(row.get("blind_spot_id") or "")
+        for row in audit.get("blind_spots") or ()
+        if isinstance(row, Mapping) and str(row.get("severity") or "").lower() == "critical"
+    ]
+
+
+def render_recurrence_graduation_audit_governance_preamble_markdown(
+    audit: Mapping[str, Any] | None,
+    *,
+    summary: Mapping[str, Any] | None = None,
+) -> list[str]:
+    """Render stable CO99/CO100 governance preamble lines for BQ16 audit markdown."""
+    payload = audit if isinstance(audit, Mapping) else {}
+    active_summary = summary if isinstance(summary, Mapping) else {}
+    if not active_summary:
+        nested = payload.get("recurrence_graduation_audit_summary")
+        active_summary = nested if isinstance(nested, Mapping) else summarize_recurrence_graduation_audit(payload)
+    readiness = payload.get("graduation_readiness")
+    if not isinstance(readiness, Mapping):
+        readiness = {}
+    program_graduated = bool(active_summary.get("program_graduated"))
+    graduation_status = "**Graduated**" if program_graduated else "**Active — not graduated**"
+    critical_ids = _critical_blind_spot_ids(payload)
+    critical_blind_spots = _critical_blind_spot_count(payload)
+    protected_observations = int(
+        payload.get("protected_observation_count") or payload.get("total_rows") or 0
+    )
+    unique_recurrence_keys = int(
+        payload.get("unique_recurrence_keys") or payload.get("unique_recurrence_count") or 0
+    )
+    trajectory_available = _completion_criterion_current(payload, "trajectory_available", default="False")
+    readiness_score = float(active_summary.get("graduation_readiness_score") or 0.0)
+    operational_readiness = float(
+        readiness.get("operational_readiness_score")
+        or _completion_criterion_current(payload, "operational_readiness_target_met", default="0.0")
+    )
+    overall_maturity = float(
+        readiness.get("overall_maturity_score")
+        or _completion_criterion_current(payload, "overall_maturity_target_met", default="0.0")
+    )
+    forecast_confidence = _completion_criterion_current(payload, "forecast_confidence_target_met", default="0.0")
+    effectiveness_confidence = _completion_criterion_current(
+        payload, "effectiveness_confidence_target_met", default="0.0"
+    )
+    governance_confidence = _completion_criterion_current(
+        payload, "governance_confidence_target_met", default="0.0"
+    )
+    governance_health = _completion_criterion_current(payload, "governance_health_target_met", default="0.0")
+    blind_spot_summary = ", ".join(critical_ids) if critical_ids else "none"
+    volume_status = (
+        "Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy)"
+        if protected_observations >= RECURRENCE_MATURITY_MIN_OBSERVATIONS
+        and unique_recurrence_keys >= RECURRENCE_MATURITY_MIN_KEYS
+        else "Low volume (`recurrence_data_quality` critical)"
+    )
+    trajectory_status = (
+        f"≥ 2 snapshots (`trajectory_available: {str(trajectory_available).lower()}`)"
+        if str(trajectory_available).lower() == "true"
+        else "`1` (`trajectory_available: false`)"
+    )
+    recommendation_note = (
+        "**Graduated**"
+        if program_graduated
+        else "**C — Recurrence program remains operationally immature** (`recurrence_program_remains_operationally_immature`)"
+        if readiness_score < 90.0
+        else "**B — One final targeted validation cycle required** (confidence/outcome evidence pending)"
+    )
+    return [
+        "## Governance context (CO99)",
+        "",
+        "| Program | Status | Governing document |",
+        "|---|---|---|",
+        "| **Failure-classification taxonomy (CG-1)** | **Closed** | "
+        "[`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CO98) |",
+        "| **Attribution maturity (CO96)** | **Closed** | "
+        "[`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md) |",
+        "| **Recurrence taxonomy (CG-4)** | **Closed** — vocabulary documented | "
+        "[`CG_recurrence_taxonomy_registry.md`](CG_recurrence_taxonomy_registry.md) |",
+        f"| **Recurrence operational graduation** | {graduation_status} | "
+        "This document + [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md) |",
+        "",
+        "**Operational graduation authority:** Graduation audit builder — "
+        "`tests/helpers/replay_bug_recurrence_statistics.py` (`RECURRENCE_GRADUATION_AUDIT_DOC_PATH`). "
+        "Final recommendation — `tests/helpers/replay_bug_recurrence_serialization.py` "
+        "(`RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH`).",
+        "",
+        "**Scope:** Recurrence **operational** graduation only. Remaining work requires "
+        "**protected replay observation volume and trajectory evidence** — not additional classifier "
+        "taxonomy (CG closed) or attribution completeness (CO96 closed).",
+        "",
+        "### Operational graduation baseline (CO99)",
+        "",
+        "Evidence required before formal graduation (aligned with BQ-C4 blockers and "
+        "`RECURRENCE_FINAL_GRADUATION_DECISION_DEFINITION`):",
+        "",
+        "| Requirement | Current (BQ-C4) | Target | Category |",
+        "|---|---|---|---|",
+        f"| Protected replay observations | {volume_status} | "
+        "Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | "
+        "**Observation volume** |",
+        "| Unique recurrence keys | "
+        f"{unique_recurrence_keys} keys | "
+        "Coverage supporting forecast/governance validation | **Observation volume** |",
+        f"| Trajectory snapshots | {trajectory_status} | ≥ 2 snapshots for change detection | **Trajectory** |",
+        f"| Graduation readiness score | `{readiness_score:.1f}` | ≥ `90.0` | **Graduation gate** |",
+        "| Calibration score | See BQC4 | ≥ `70.0` | **Confidence** |",
+        "| Largest calibration gap | See BQC4 | ≤ `0.20` | **Confidence** |",
+        "| `graduation_confidence_ready` | See BQC4 | `true` | **Confidence** |",
+        f"| Forecast confidence | `{forecast_confidence}` | ≥ `0.75` | **Operational readiness** |",
+        f"| Effectiveness confidence | `{effectiveness_confidence}` | ≥ `0.75` | **Operational readiness** |",
+        f"| Governance confidence | `{governance_confidence}` | ≥ `0.75` | **Operational readiness** |",
+        f"| Operational readiness score | `{operational_readiness:.1f}` | ≥ `80.0` | **Operational readiness** |",
+        f"| Overall maturity score | `{overall_maturity:.1f}` | ≥ `80.0` | **Program maturity** |",
+        f"| Critical blind spots | `{critical_blind_spots}` ({blind_spot_summary}) | `0` | "
+        "**Architectural constraint** |",
+        f"| Program graduated | `{str(program_graduated).lower()}` | `true` | **Verdict** |",
+        "",
+        "**Stability / regression posture:** Trajectory tracks `stability_score` and "
+        "`regression_recurrence_rate` for longitudinal comparison. Graduation is **not** blocked by a "
+        "single regression-rate tolerance constant; insufficient protected-replay volume prevents "
+        "meaningful stability and effectiveness validation (see Effectiveness Validation below).",
+        "",
+        f"**Graduation recommendation (BQ-C4):** {recommendation_note}.",
+        "",
+        "**Remaining operational evidence needed:**",
+        "",
+        "1. Additional **protected replay failure observations** committed to the protected event log "
+        "(`event_source=protected_replay_failure`).",
+        "2. **Trajectory baseline** with multiple snapshots (`bug_recurrence_trajectory_history.json`) "
+        f"so `trajectory_available={str(trajectory_available).lower()}`.",
+        "3. **Validated effectiveness outcomes** (retired keys, measurable recurrence reduction, confirmed "
+        "remediation impact) — see Effectiveness Validation below.",
+        "4. Resolution of **critical blind spots** before `graduation_confidence_ready` can become true.",
+        "",
+        "---",
+        "",
+    ]
+
+
+def render_recurrence_graduation_audit_governance_cross_references_markdown() -> list[str]:
+    """Render stable CO99/CO100 cross-reference footer for BQ16 audit markdown."""
+    return [
+        "---",
+        "",
+        "## Cross-references (CO99)",
+        "",
+        "- Final graduation verdict: [`BQC4_final_graduation_decision.md`](BQC4_final_graduation_decision.md)",
+        "- Recurrence taxonomy authority: [`CG_recurrence_taxonomy_registry.md`](CG_recurrence_taxonomy_registry.md)",
+        "- Closed programs: [`CO96_attribution_program_closeout.md`](CO96_attribution_program_closeout.md), "
+        "[`CG_failure_classification_authority_registry.md`](CG_failure_classification_authority_registry.md) (CO98)",
+        f"- Protected replay observation collection (CO100): [`{RECURRENCE_GRADUATION_AUDIT_GOVERNANCE_RUNBOOK_PATH}`]"
+        f"({RECURRENCE_GRADUATION_AUDIT_GOVERNANCE_RUNBOOK_PATH})",
+        "",
+    ]
 
 
 def _audit_capability_row(
@@ -4195,6 +4377,8 @@ def build_recurrence_graduation_audit(
         "report_only": RECURRENCE_REPORT_ONLY,
         "advisory_only": RECURRENCE_ADVISORY_ONLY,
         "protected_replay_only": True,
+        "protected_observation_count": int(history.get("total_rows") or 0),
+        "unique_recurrence_keys": int(history.get("unique_recurrence_count") or 0),
         "capability_coverage": capability_coverage,
         "completion_criteria_validation": completion_criteria_validation,
         "roadmap_validation": roadmap_validation,
@@ -4233,6 +4417,7 @@ def render_recurrence_graduation_audit_report_markdown(
         f"**Date:** {generated_at_s}",
         f"**Protected replay only:** true",
         "",
+        *render_recurrence_graduation_audit_governance_preamble_markdown(payload, summary=summary),
         "## Graduation Readiness",
         "",
         f"- Graduation readiness score: `{float(summary.get('graduation_readiness_score') or 0.0):.1f}`",
@@ -4301,6 +4486,7 @@ def render_recurrence_graduation_audit_report_markdown(
             "",
         ]
     )
+    lines.extend(render_recurrence_graduation_audit_governance_cross_references_markdown())
     return "\n".join(lines)
 
 

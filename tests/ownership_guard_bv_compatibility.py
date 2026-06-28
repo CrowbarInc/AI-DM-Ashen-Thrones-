@@ -3,12 +3,16 @@
 Pure validation logic for read-cluster facade routing, compat-barrel regrowth lockdown, and
 smoke-monolith import routing. Enforced by ``test_bv2c_*``, ``test_bv10_*``, ``test_bv7c_*``,
 ``test_bv12c_*``, ``test_bv13c_*``, and ``test_bv14c_*`` in ``tests/test_compat_import_governance.py``.
+
+Compat-governance test orchestration helpers (CO73+): ``assert_compat_allowlist_entries_have_reasons``,
+``assert_compat_synthetic_violation``, ``assert_compat_live_scan_paths_clean``.
 """
 from __future__ import annotations
 
 import ast
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
-from typing import Final, Mapping
+from typing import Final
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DOWNSTREAM_SMOKE_FACADE: Final[str] = "tests/helpers/emission_smoke_assertions.py"
@@ -405,7 +409,6 @@ _BV14C_SOCIAL_EXCHANGE_COMPAT_IMPORT_GUARD_ALLOWLIST: Final[Mapping[str, str]] =
     "tests/test_social_exchange_emission.py": "BD-2 strict-social emission legality owner",
     "tests/test_social_speaker_grounding.py": "composition regression consumer",
     "tests/test_social_target_authority_regressions.py": "composition regression consumer",
-    "tests/ownership_closeout_delegate_locks.py": "BJ-115/116 delegate introspection for composition authority seams (CH11 KEEP)",
 }
 _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozenset(
     {
@@ -420,7 +423,6 @@ _BV14C_ALLOWED_SOCIAL_EXCHANGE_COMPAT_IMPORTERS: Final[frozenset[str]] = frozens
         "tests/test_social_exchange_emission.py",
         "tests/test_social_speaker_grounding.py",
         "tests/test_social_target_authority_regressions.py",
-        "tests/ownership_closeout_delegate_locks.py",
     }
 )
 _BV14C_SOCIAL_EXCHANGE_COMPAT_FI_CAP: Final[int] = 12
@@ -801,3 +803,56 @@ def collect_bv14c_social_exchange_compat_static_importers(
 def bv_governance_documentation_corpus(*, ownership_registry_source: str) -> str:
     """Documentation corpus for BV cycle lock tests (central registry doc + guard module)."""
     return ownership_registry_source + "\n" + Path(__file__).read_text(encoding="utf-8")
+
+
+def assert_compat_allowlist_entries_have_reasons(
+    allowlist: Mapping[str, str],
+    *,
+    path_prefix: str | tuple[str, ...],
+    empty_reason_label: str,
+) -> None:
+    """Assert compat-governance allowlist paths use allowed prefixes and document reasons."""
+    for path, reason in allowlist.items():
+        assert path.startswith(path_prefix), path
+        assert reason.strip(), f'empty {empty_reason_label} allowlist reason for {path!r}'
+
+
+def assert_compat_synthetic_violation(
+    collector: Callable[[str, str], list[str]],
+    rel: str,
+    synthetic: str,
+    *,
+    expected_in_violation_lines: tuple[str, ...] = (),
+    expected_in_joined: tuple[str, ...] = (),
+) -> None:
+    """Assert a compat import-guard collector flags synthetic source with expected markers."""
+    violations = collector(rel, synthetic)
+    joined = '\n'.join(violations)
+    assert violations, f'expected synthetic violation from {collector.__name__}'
+    for substring in expected_in_violation_lines:
+        assert any(substring in v for v in violations), (
+            f'expected {substring!r} in a violation from {collector.__name__}: {violations!r}'
+        )
+    for substring in expected_in_joined:
+        assert substring in joined, (
+            f'expected {substring!r} in synthetic violations from {collector.__name__}: {joined!r}'
+        )
+
+
+def assert_compat_live_scan_paths_clean(
+    scan_paths: Iterable[str],
+    collector: Callable[[str, str], list[str]],
+    *,
+    cycle_tag: str,
+    violation_label: str,
+    repo_root: Path | None = None,
+) -> None:
+    """Assert live compat-governance scan paths pass a rel-path + source collector."""
+    root = _REPO_ROOT if repo_root is None else repo_root
+    violations: list[str] = []
+    for rel in scan_paths:
+        path = root / rel
+        assert path.is_file(), f'missing {cycle_tag} scan path: {rel}'
+        source = path.read_text(encoding='utf-8')
+        violations.extend(collector(rel, source))
+    assert not violations, f'{violation_label}:\n' + '\n'.join(violations)

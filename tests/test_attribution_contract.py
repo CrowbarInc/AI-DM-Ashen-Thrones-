@@ -7,6 +7,12 @@ from tests.helpers.attribution_contract import (
     ALLOWED_OWNER_BUCKETS,
     ALLOWED_REPAIR_KINDS,
     ALLOWED_SOURCE_FAMILY_TAGS,
+    ATTRIBUTION_GOVERNANCE_RULES,
+    ATTRIBUTION_MATURITY_PRIMARY_KPI,
+    ATTRIBUTION_MATURITY_PROGRAM_STATUS,
+    ATTRIBUTION_PROGRAM_CLOSEOUT,
+    ATTRIBUTION_STRICT_COMPLETENESS_ROLE,
+    BS5_MATURITY_SNAPSHOT,
     DEPRECATED_FALLBACK_KIND_ALIASES,
     DEPRECATED_REPAIR_KINDS,
     REPAIR_KIND_ALIASES,
@@ -26,9 +32,11 @@ from tests.helpers.attribution_contract import (
 from tests.helpers.failure_classifier import classify_replay_failure
 from tests.helpers.replacement_attribution_inventory import (
     BS1_BASELINE_COMPLETENESS,
+    BS5_BASELINE_COMPLETENESS,
     attribution_record_from_fem,
     baseline_attribution_classifier_inputs,
     build_baseline_attribution_corpus,
+    calculate_attribution_completeness,
 )
 
 
@@ -104,6 +112,25 @@ def test_projection_lineage_output_conforms_to_contract():
             assert validate_mutation_classification(event["mutation_kind"]).valid
         if event.get("fallback_owner_bucket"):
             assert validate_owner_bucket(event["fallback_owner_bucket"]).valid
+        if event.get("event_kind") == "gate_outcome":
+            assert event.get("mutation_kind") is None
+
+
+def test_co94_gate_outcome_and_mutation_events_are_semantically_distinct():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "visibility_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "visibility_enforcement",
+    }
+    events = build_fem_runtime_lineage_events(fem)
+    gate_outcome = next(event for event in events if event.get("event_kind") == "gate_outcome")
+    mutation = next(event for event in events if event.get("event_kind") == "mutation")
+    assert gate_outcome.get("gate_path") == "visibility_hard_replaced"
+    assert gate_outcome.get("mutation_kind") is None
+    assert mutation.get("mutation_kind") == "visibility_replacement_mutation"
 
 
 def test_classifier_output_conforms_to_contract():
@@ -154,3 +181,50 @@ def test_bs3_contract_compliance_report_generation():
     _audit, maturity, markdown = write_bs3_contract_compliance_report()
     assert "BS3 Contract Compliance Report" in markdown
     assert maturity["contract_compliance_score_pct"] > 0
+
+
+def test_co96_attribution_maturity_program_is_closed():
+    assert ATTRIBUTION_MATURITY_PROGRAM_STATUS == "closed"
+    assert ATTRIBUTION_PROGRAM_CLOSEOUT["program_status"] == "closed"
+
+
+def test_co96_strict_completeness_is_architectural_diagnostic_only():
+    assert ATTRIBUTION_STRICT_COMPLETENESS_ROLE == "architectural_diagnostic"
+    assert ATTRIBUTION_MATURITY_PRIMARY_KPI == "resolved_completeness_pct"
+    assert ATTRIBUTION_MATURITY_PRIMARY_KPI != "strict_completeness_pct"
+
+
+def test_co96_governance_rules_are_locked():
+    assert len(ATTRIBUTION_GOVERNANCE_RULES) == 5
+    assert "Resolved completeness is the primary production KPI." in ATTRIBUTION_GOVERNANCE_RULES
+    assert "Strict completeness is an architectural diagnostic only." in ATTRIBUTION_GOVERNANCE_RULES
+    assert "Replay-derived fields are not production-stamp candidates." in ATTRIBUTION_GOVERNANCE_RULES
+
+
+def test_co96_closeout_metrics_match_live_corpus():
+    maturity = calculate_attribution_maturity_scores()
+    completeness = calculate_attribution_completeness(build_baseline_attribution_corpus())
+    assert maturity["coverage_score_pct"] == BS5_MATURITY_SNAPSHOT["coverage_score_pct"]
+    assert maturity["resolved_complete_records"] == BS5_MATURITY_SNAPSHOT["resolved_complete_records"]
+    assert completeness["resolved_completeness_pct"] == BS5_BASELINE_COMPLETENESS["resolved_completeness_pct"]
+    assert completeness["strict_completeness_pct"] == ATTRIBUTION_PROGRAM_CLOSEOUT["strict_completeness_pct"]
+    assert ATTRIBUTION_PROGRAM_CLOSEOUT["intentional_gap_mutation_classification_gate_outcome"] == 8
+
+
+def test_co97_cg_registry_documents_co96_governing_authority():
+    from pathlib import Path
+
+    registry = Path("docs/audits/CG_attribution_contract_registry.md").read_text(encoding="utf-8")
+    closeout_audit = ATTRIBUTION_PROGRAM_CLOSEOUT["closeout_audit"]
+    assert closeout_audit in registry
+    assert "Governing authority" in registry
+    assert ATTRIBUTION_MATURITY_PROGRAM_STATUS in registry
+    assert ATTRIBUTION_MATURITY_PRIMARY_KPI in registry
+    assert "ATTRIBUTION_STRICT_COMPLETENESS_ROLE" in registry
+    assert "Architectural diagnostic" in registry
+    assert str(int(ATTRIBUTION_PROGRAM_CLOSEOUT["resolved_completeness_pct"])) in registry
+    assert ATTRIBUTION_GOVERNANCE_RULES[0] in registry
+    assert "CO91_attribution_maturity_plateau_audit.md" in registry
+    assert "CO94_gate_outcome_mutation_classification_audit.md" in registry
+    assert "CO95_strict_completeness_production_eligibility_audit.md" in registry
+    assert "Architectural constraints (not backlog)" in registry

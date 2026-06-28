@@ -11,6 +11,8 @@ import game.final_emission_ownership_schema as ownership_schema
 import game.observability_attribution_read as observability_attribution_read
 import game.ownership_projection_views as ownership_projection_views
 
+from tests.failure_classification_contract import ALLOWED_PRODUCER_REPAIR_KINDS
+
 ROOT = Path(__file__).resolve().parents[1]
 _FACADE_PATHS = (
     ROOT / "game" / "attribution_read_views.py",
@@ -96,6 +98,26 @@ def test_bv10a_facade_registry_surfaces_are_diagnostic_only() -> None:
     assert "bucket_mappers" in attr_surface
     assert "lineage_owner_vocabulary" in proj_surface
     assert "observability_symbols" in obs_surface
+    assert "producer_repair_kind_constants" in obs_surface
+
+
+def test_bv10a_observability_producer_repair_kind_constants_match_classifier_vocabulary() -> None:
+    """CO79: facade producer-repair-kind surface stays parity-locked to classifier vocabulary."""
+    obs_surface = observability_attribution_read.observability_attribution_read_surface()
+    constant_names = obs_surface["producer_repair_kind_constants"]
+    facade_values = frozenset(
+        getattr(observability_attribution_read, name) for name in constant_names
+    )
+    assert facade_values == ALLOWED_PRODUCER_REPAIR_KINDS, (
+        "observability facade producer repair kind values "
+        f"{sorted(facade_values)!r} must match classifier "
+        f"ALLOWED_PRODUCER_REPAIR_KINDS {sorted(ALLOWED_PRODUCER_REPAIR_KINDS)!r}; "
+        f"extra={sorted(facade_values - ALLOWED_PRODUCER_REPAIR_KINDS)!r}, "
+        f"missing={sorted(ALLOWED_PRODUCER_REPAIR_KINDS - facade_values)!r}"
+    )
+    assert len(constant_names) == len(ALLOWED_PRODUCER_REPAIR_KINDS), (
+        "observability facade must expose one constant name per classifier producer repair kind"
+    )
 
 
 def test_bv10a_facade_modules_contain_no_write_authority_symbols() -> None:

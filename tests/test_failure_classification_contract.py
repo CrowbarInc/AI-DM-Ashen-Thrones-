@@ -34,14 +34,14 @@ from tests.failure_classification_contract import (
 from tests.helpers.failure_classifier import FailureClassification
 from tests.helpers.failure_classification_sync import (
     assert_classifier_evidence_manifest_locked,
+    assert_classification_contract_summary,
     assert_contract_classifier_alignment,
     assert_failure_classification_row_contract_locked,
+    assert_failure_dashboard_row_shape,
     classification_contract_summary,
-    classifier_evidence_manifest_misalignments,
     contract_classifier_misalignments,
     dashboard_evidence_manifest_misalignments,
     failure_classification_row_contract_fields,
-    failure_classification_row_contract_misalignments,
     failure_classification_typeddict_field_sets,
     known_failure_categories,
     known_owner_buckets,
@@ -58,6 +58,17 @@ from tests.helpers.failure_dashboard_fixtures import classified_rows
 # This file owns the failure-classification schema and taxonomy contract.
 # Dashboard rendering assertions here validate contract enforcement, not runtime
 # fallback, route, speaker, or visibility behavior.
+#
+# CO12 lock classification (dense clusters below):
+# - registry/sync parity: alignment helpers + drift misalignment probes
+# - manifest/evidence row-key: dashboard evidence manifest counts and re-exports
+# - schema/TypedDict contract: row field sets, TypedDict annotations, drift row shape
+# - validation error message: exact validator strings for invalid/missing fields
+# - allowed-value taxonomy: fallback buckets, split-owner families, sublayer enums
+# Repeated literals after helper calls are intentional contract locks unless noted.
+
+
+# --- Registry/sync parity locks ------------------------------------------------
 
 
 def test_contract_classifier_alignment_is_locked():
@@ -66,11 +77,11 @@ def test_contract_classifier_alignment_is_locked():
 
 def test_classifier_evidence_manifest_matches_optional_contract_fields():
     assert_classifier_evidence_manifest_locked()
+    # AK2 field-set/count locks retained for visible contract ownership in this file.
     assert CLASSIFIER_EVIDENCE_FIELDS == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     assert len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) == 32
     assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 16
     assert not (PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)
-    assert classifier_evidence_manifest_misalignments() == []
 
 
 def test_ao2_protected_classifier_evidence_derived_from_observation_registry():
@@ -87,6 +98,9 @@ def test_ao2_protected_classifier_evidence_derived_from_observation_registry():
     assert derived <= set(OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS)
 
 
+# --- Manifest/evidence row-key locks -------------------------------------------
+
+
 def test_dashboard_evidence_keys_are_subset_of_classifier_evidence_fields():
     assert set(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) <= CLASSIFIER_EVIDENCE_FIELDS
     assert dashboard_evidence_manifest_misalignments() == []
@@ -101,11 +115,15 @@ def test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract():
     from tests.failure_classification_contract import failure_dashboard_evidence_manifest
 
     contract_manifest = failure_dashboard_evidence_manifest()
+    # AO3 manifest count and cross-module re-export locks; labels/order differ per probe.
     assert len(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) == 29
     assert dashboard_manifest == contract_manifest == FAILURE_DASHBOARD_EVIDENCE_MANIFEST
     assert dashboard_row_keys == FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
     assert dashboard_labels == FAILURE_DASHBOARD_EVIDENCE_LABELS
     assert tuple(label for label, _row_key in contract_manifest) == FAILURE_DASHBOARD_EVIDENCE_LABELS
+
+
+# --- Registry/sync parity locks (synthetic row authority) ----------------------
 
 
 def test_ao4_synthetic_observed_row_factory_is_single_authority():
@@ -138,6 +156,9 @@ def test_ao4_synthetic_observed_row_factory_is_single_authority():
     assert classifier_row["route_kind"] == "dialogue"
 
 
+# --- Schema/TypedDict contract locks ---------------------------------------------
+
+
 def test_failure_classification_row_contract_helper_matches_contract_constants():
     fields = failure_classification_row_contract_fields()
     assert fields["required"] == REQUIRED_CLASSIFICATION_FIELDS
@@ -148,11 +169,14 @@ def test_failure_classification_row_contract_helper_matches_contract_constants()
 
 def test_failure_classification_typeddict_matches_row_contract():
     assert_failure_classification_row_contract_locked()
-    assert failure_classification_row_contract_misalignments() == []
+    # TypedDict field-set locks retained alongside helper for schema ownership visibility.
     typed_required, typed_optional = failure_classification_typeddict_field_sets()
     assert typed_required == REQUIRED_CLASSIFICATION_FIELDS
     assert typed_optional == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     assert set(FailureClassification.__annotations__) == ALLOWED_CLASSIFICATION_ROW_FIELDS
+
+
+# --- Validation error message locks --------------------------------------------
 
 
 def test_unknown_classification_field_validation_message_unchanged():
@@ -161,14 +185,22 @@ def test_unknown_classification_field_validation_message_unchanged():
     assert validate_failure_classification_row(row) == ["unknown classification field: unexpected_probe_field"]
 
 
+# --- Allowed-value taxonomy locks (contract summary) ---------------------------
+
+
 def test_classification_contract_summary_matches_known_taxonomy():
     summary = classification_contract_summary()
-    assert summary["failure_category_count"] == len(known_failure_categories())
+    categories = known_failure_categories()
     buckets = known_owner_buckets()
-    assert summary["opening_owner_bucket_count"] == len(buckets["opening"])
-    assert summary["sealed_owner_bucket_count"] == len(buckets["sealed"])
-    assert summary["visibility_owner_bucket_count"] == len(buckets["visibility"])
+    assert_classification_contract_summary(
+        summary,
+        categories=categories,
+        owner_buckets=buckets,
+    )
     assert summary["category_rule_count"] > 0
+
+
+# --- Registry/sync parity locks (misalignment probe helpers) -------------------
 
 
 def test_sync_helper_reports_category_rule_category_drift():
@@ -198,6 +230,9 @@ def _valid_sample_row() -> dict[str, Any]:
     )
 
 
+# --- Schema/TypedDict contract locks (drift row probe shape) -------------------
+
+
 def test_replay_drift_row_helpers_preserve_probe_shapes() -> None:
     assert speaker_mismatch_drift_row() == {
         "field_path": "selected_speaker_id",
@@ -212,11 +247,14 @@ def test_controlled_probe_rows_validate_against_contract():
     rows = classified_rows()
     assert rows
     for row in rows:
-        assert validate_failure_classification_row(row) == []
+        assert_failure_dashboard_row_shape(row)
 
 
 def test_sample_classifier_row_validates_against_contract():
-    assert validate_failure_classification_row(_valid_sample_row()) == []
+    assert_failure_dashboard_row_shape(_valid_sample_row())
+
+
+# --- Validation error message locks (core field and replay_tag) ------------------
 
 
 @pytest.mark.parametrize(
@@ -243,9 +281,10 @@ def test_unknown_replay_tag_fails_unless_experimental():
     assert any("invalid replay_tag" in error for error in validate_failure_classification_row(row))
 
     row["replay_tags"] = ["structural_drift", "experimental:new_unreviewed_tag"]
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
+# --- Allowed-value taxonomy locks (fallback owner buckets) ---------------------
 # Opening fallback owner buckets are cross-layer contract values; runtime
 # selection and prose behavior remain owned by the gate and opening fallback tests.
 def test_allowed_fallback_owner_buckets_match_canonical_meta_registry() -> None:
@@ -258,7 +297,7 @@ def test_opening_fallback_owner_bucket_values_are_contract_locked():
     row = _valid_sample_row()
     row["opening_fallback_owner_bucket"] = "upstream-prepared"
     assert row["opening_fallback_owner_bucket"] in ALLOWED_OPENING_FALLBACK_OWNER_BUCKETS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["opening_fallback_owner_bucket"] = "mystery-owner"
     assert "invalid opening_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
@@ -270,7 +309,7 @@ def test_sealed_fallback_owner_bucket_values_are_contract_locked():
     row = _valid_sample_row()
     row["sealed_fallback_owner_bucket"] = "sealed-gate"
     assert row["sealed_fallback_owner_bucket"] in ALLOWED_SEALED_FALLBACK_OWNER_BUCKETS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["sealed_fallback_owner_bucket"] = "mystery-owner"
     assert "invalid sealed_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
@@ -283,10 +322,14 @@ def test_visibility_fallback_owner_bucket_values_are_contract_locked():
     row["visibility_fallback_pool"] = "strict_social_visibility_minimal"
     row["visibility_fallback_kind"] = "visibility_minimal_social_fallback"
     assert row["visibility_fallback_owner_bucket"] in ALLOWED_VISIBILITY_FALLBACK_OWNER_BUCKETS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["visibility_fallback_owner_bucket"] = "mystery-owner"
     assert "invalid visibility_fallback_owner_bucket: 'mystery-owner'" in validate_failure_classification_row(row)
+
+
+# --- Allowed-value taxonomy locks (split-owner family matrices) ----------------
+# Per-family owner literals and invalid-selection messages are intentionally repeated.
 
 
 def test_visibility_family_split_owner_fields_are_contract_locked():
@@ -304,7 +347,7 @@ def test_visibility_family_split_owner_fields_are_contract_locked():
     row["repair_kind"] = "first_mention_enforcement"
     assert VISIBILITY_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
     assert SEALED_FALLBACK_MODULE_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_selection_owner"] = "final_emission_visibility_fallback"
     assert "invalid fallback_selection_owner: 'final_emission_visibility_fallback'" in validate_failure_classification_row(row)
@@ -326,17 +369,17 @@ def test_sealed_family_split_owner_fields_are_contract_locked():
     row["sealed_fallback_owner_bucket"] = "sealed-gate"
     assert SEALED_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
     assert SEALED_FALLBACK_MODULE_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_content_owner"] = STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
     row["sealed_fallback_owner_bucket"] = "strict-social-sealed"
     assert STRICT_SOCIAL_FALLBACK_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_content_owner"] = SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER
     row["sealed_fallback_owner_bucket"] = "unknown-none"
     assert SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_selection_owner"] = "final_emission_gate"
     assert "invalid fallback_selection_owner: 'final_emission_gate'" in validate_failure_classification_row(row)
@@ -358,20 +401,24 @@ def test_opening_family_split_owner_fields_are_contract_locked():
     row["repair_kind"] = "opening_deterministic_fallback"
     assert OPENING_FALLBACK_SELECTION_OWNER in ALLOWED_FALLBACK_SELECTION_OWNERS
     assert OPENING_FALLBACK_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_content_owner"] = OPENING_FAIL_CLOSED_CONTENT_OWNER
     row["opening_fallback_owner_bucket"] = "sealed-gate"
     row["repair_kind"] = "opening_deterministic_fallback_failed_closed"
     assert OPENING_FAIL_CLOSED_CONTENT_OWNER in ALLOWED_FALLBACK_CONTENT_OWNERS
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["fallback_selection_owner"] = "final_emission_gate"
     assert "invalid fallback_selection_owner: 'final_emission_gate'" in validate_failure_classification_row(row)
 
 
 def test_runtime_response_type_repair_kind_taxonomy_is_contract_locked():
+    # Named taxonomy sub-lock; delegates to the same registry/sync parity helper.
     assert_contract_classifier_alignment()
+
+
+# --- Allowed-value taxonomy locks (owner/source family projections) ------------
 
 
 def test_upstream_prepared_emission_owner_and_source_family_are_contract_locked():
@@ -385,7 +432,7 @@ def test_upstream_prepared_emission_owner_and_source_family_are_contract_locked(
     row["upstream_prepared_emission_source"] = "prepared_answer_fallback_text"
     row["upstream_prepared_emission_reject_reason"] = None
 
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
 def test_strict_social_from_sanitizer_owner_split_fields_are_contract_locked():
@@ -401,12 +448,12 @@ def test_strict_social_from_sanitizer_owner_split_fields_are_contract_locked():
     row["sanitizer_strict_social_source"] = "social_fallback_line_for_sanitizer.empty_output"
     row["prepared_emission_owner"] = None
 
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["sanitizer_empty_fallback_owner"] = "game.output_sanitizer"
     row["sanitizer_strict_social_selection_owner"] = "game.output_sanitizer"
     row["sanitizer_strict_social_prose_owner"] = "game.social_exchange_emission"
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
     row["sanitizer_strict_social_prose_owner"] = "output_sanitizer"
     assert "invalid sanitizer_strict_social_prose_owner: 'output_sanitizer'" in validate_failure_classification_row(row)
@@ -432,7 +479,7 @@ def test_post_gate_mutation_reduction_sublayers_are_contract_locked(sublayer):
     row["emission_sublayer"] = sublayer
     row["mutation_source"] = sublayer
 
-    assert validate_failure_classification_row(row) == []
+    assert_failure_dashboard_row_shape(row)
 
 
 def test_missing_primary_owner_fails_validation():
@@ -443,6 +490,9 @@ def test_missing_primary_owner_fails_validation():
 
     assert "missing required field: primary_owner" in errors
     assert any("invalid primary_owner" in error for error in errors)
+
+
+# --- Manifest/presentation locks (dashboard markdown shape) --------------------
 
 
 def test_dashboard_renderer_rejects_invalid_classification_rows():
@@ -460,6 +510,7 @@ def test_dashboard_markdown_keeps_diagnostic_headers():
         command_used="pytest contract",
     )
 
+    # Triage table column headers are contract-locked presentation anchors.
     for header in (
         "Scenario",
         "Turn",
@@ -472,6 +523,9 @@ def test_dashboard_markdown_keeps_diagnostic_headers():
         "Evidence",
     ):
         assert header in report
+
+
+# --- Registry/sync parity locks (audit doc coverage) ---------------------------
 
 
 def test_owner_matrix_and_schema_docs_cover_contract_taxonomy():
@@ -514,3 +568,26 @@ def test_failure_classification_authority_registry_documents_key_authorities():
     for identity_field in ("owner_bucket", "category", "field_path", "investigate_first"):
         assert identity_field in registry
     assert "recurrence:v1" in registry
+
+
+def test_co98_failure_classification_registry_documents_governing_authority():
+    root = Path(__file__).resolve().parents[1]
+    registry = (root / "docs" / "audits" / "CG_failure_classification_authority_registry.md").read_text(
+        encoding="utf-8"
+    )
+    bqc4 = (root / "docs" / "audits" / "BQC4_final_graduation_decision.md").read_text(encoding="utf-8")
+
+    assert "Governing authority" in registry
+    assert "tests/failure_classification_contract.py" in registry
+    assert "formally closed" in registry.lower() or "CG program" in registry
+    assert "CO96_attribution_program_closeout.md" in registry
+    assert "CG_attribution_contract_registry.md" in registry
+    assert "BQC4_final_graduation_decision.md" in registry
+    assert "Architectural constraints (not backlog)" in registry
+    assert "ALLOWED_PRODUCER_REPAIR_KINDS" in registry
+
+    assert "Governance context (CO98)" in bqc4
+    assert "CO96_attribution_program_closeout.md" in bqc4
+    assert "CG_failure_classification_authority_registry.md" in bqc4
+    assert "does **not** reopen attribution" in bqc4 or "does not reopen attribution" in bqc4.lower()
+    assert "program_graduated: false" in bqc4 or "Not graduated" in bqc4

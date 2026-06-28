@@ -2,22 +2,25 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-05-30T00:00:00Z`
-- Command: `pytest synthetic`
-- Total classifications: `0`
+- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_co102_live_protected_replay_pipeline.py -q --tb=short`
+- Total classifications: `1`
 
 ## Top Drift Fields
 
-No drift fields recorded.
+1. fallback_family
+   Count: 1
+   Trend: stable
 
 ## Top Investigation Targets
 
-No investigation targets recorded.
+1. tests/helpers/golden_replay.py (1)
 
 ## Top Owner Drift Buckets
 
-No owner drift buckets recorded.
+1. fallback_drift (1)
 
 ## Owner Drift Buckets By Field
 
-No field/bucket pairings recorded.
+| Field | Owner Drift Bucket | Count |
+|---|---|---:|
+| `fallback_family` | `fallback_drift` | `1` |

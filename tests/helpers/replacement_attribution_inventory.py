@@ -72,34 +72,34 @@ __all__ = [
 ]
 
 BS1_BASELINE_COMPLETENESS: dict[str, Any] = {
-    "total_records": 52,
+    "total_records": 56,
     "strict_complete_records": 0,
     "resolved_complete_records": 3,
     "strict_completeness_pct": 0.0,
-    "resolved_completeness_pct": 5.77,
+    "resolved_completeness_pct": 5.36,
 }
 
 BS1_BASELINE_MISSING_FIELD_TOTALS: dict[str, int] = {
-    "repair_kind": 44,
-    "owner_bucket": 43,
+    "repair_kind": 45,
+    "owner_bucket": 44,
     "mutation_classification": 16,
     "source_family": 8,
     "recurrence_key": 5,
 }
 
 BS5_BASELINE_COMPLETENESS: dict[str, Any] = {
-    "total_records": 52,
+    "total_records": 56,
     "strict_complete_records": 0,
-    "resolved_complete_records": 5,
+    "resolved_complete_records": 48,
     "strict_completeness_pct": 0.0,
-    "resolved_completeness_pct": 10.2,
+    "resolved_completeness_pct": 85.71,
 }
 
 BS5_BASELINE_MISSING_FIELD_TOTALS: dict[str, int] = {
-    "repair_kind": 37,
-    "owner_bucket": 38,
+    "repair_kind": 0,
+    "owner_bucket": 0,
     "mutation_classification": 8,
-    "source_family": 8,
+    "source_family": 0,
     "recurrence_key": 0,
 }
 
@@ -214,10 +214,13 @@ def detect_replacement_path_from_fem(fem: Mapping[str, Any]) -> str | None:
         fem.get("sanitizer_empty_fallback_used") is True
         or fem.get("sanitizer_lineage_empty_fallback_used") is True
         or fem.get("sanitizer_strict_social_fallback_used") is True
+        or _non_empty(fem.get("producer_repair_kind")) == "sanitizer_strip_only"
     ):
         return REPLACEMENT_PATH_SANITIZER
     if fem.get("response_type_repair_used") is True:
         return REPLACEMENT_PATH_RESPONSE_TYPE
+    if fem.get("passive_scene_concrete_beat_satisfier_applied") is True:
+        return REPLACEMENT_PATH_REPAIR_MUTATION
     if fem.get("opening_recovered_via_fallback") is True or fem.get("opening_fallback_failed_closed") is True:
         return REPLACEMENT_PATH_OPENING_FALLBACK
     final_source = _non_empty(fem.get("final_emitted_source")) or ""
@@ -245,6 +248,8 @@ def detect_replacement_path_from_fem(fem: Mapping[str, Any]) -> str | None:
 
 
 def _infer_source_family_from_fem(fem: Mapping[str, Any], replacement_path: str) -> str | None:
+    if fem.get("passive_scene_concrete_beat_satisfier_applied") is True:
+        return "final_emission_gate"
     if replacement_path == REPLACEMENT_PATH_OPENING_FALLBACK:
         return "opening_fallback"
     if replacement_path == REPLACEMENT_PATH_SANITIZER:
@@ -270,11 +275,14 @@ def _infer_source_family_from_lineage(event: Mapping[str, Any]) -> str | None:
     projected = project_source_family_from_fallback_kind(fallback_kind)
     if projected:
         return projected
+    if event.get("event_kind") == "gate_outcome":
+        stage = _non_empty(event.get("stage")) or ""
+        owner = _non_empty(event.get("owner")) or ""
+        if stage == "sanitizer" or owner == "game.output_sanitizer":
+            return "output_sanitizer"
+        if stage == "gate" or owner == "game.final_emission_gate":
+            return "final_emission_gate"
     mutation_kind = _non_empty(event.get("mutation_kind")) or ""
-    if mutation_kind.endswith("_repair_mutation"):
-        return "fallback_behavior"
-    if mutation_kind in {"sanitizer_mutation"}:
-        return "output_sanitizer"
     if mutation_kind in {
         "response_type_repair_mutation",
         "fallback_mutation",
@@ -285,6 +293,10 @@ def _infer_source_family_from_lineage(event: Mapping[str, Any]) -> str | None:
         "sealed_replacement_mutation",
     }:
         return "final_emission_gate"
+    if mutation_kind.endswith("_repair_mutation"):
+        return "fallback_behavior"
+    if mutation_kind in {"sanitizer_mutation"}:
+        return "output_sanitizer"
     if mutation_kind == "repair_only_mutation":
         return "fallback_behavior"
     return None
@@ -343,6 +355,261 @@ def _recurrence_key_from_lineage_events(events: list[dict[str, Any]]) -> tuple[s
     return None, None
 
 
+_PASSIVE_SCENE_CONCRETE_BEAT_MUTATION_KIND: str = "final_emission_mutation"
+_PASSIVE_SCENE_CONCRETE_BEAT_GATE_OWNER: str = "game.final_emission_gate"
+_PASSIVE_SCENE_CONCRETE_BEAT_OWNER_BUCKET: str = "sealed-gate"
+_REPAIR_MUTATION_GATE_OWNER_BUCKET: str = "sealed-gate"
+_SANITIZER_PRODUCER_REPAIR_KINDS: frozenset[str] = frozenset(
+    {
+        "sanitizer_empty_output",
+        "sanitizer_strip_only",
+    }
+)
+
+
+def _projected_passive_scene_concrete_beat_attribution(
+    fem: Mapping[str, Any],
+) -> dict[str, tuple[str, str]] | None:
+    """Project passive-scene upstream satisfier attribution from contract FEM evidence."""
+    if fem.get("passive_scene_concrete_beat_satisfier_applied") is not True:
+        return None
+    repair_kind = _non_empty(fem.get("producer_repair_kind"))
+    if repair_kind != "passive_scene_concrete_beat":
+        return None
+    from game.runtime_lineage_telemetry import build_recurrence_key
+
+    recurrence_key = build_recurrence_key(
+        event_kind="mutation",
+        stage="gate",
+        owner=_PASSIVE_SCENE_CONCRETE_BEAT_GATE_OWNER,
+        repair_kind=repair_kind,
+        mutation_kind=_PASSIVE_SCENE_CONCRETE_BEAT_MUTATION_KIND,
+    )
+    return {
+        "owner_bucket": (_PASSIVE_SCENE_CONCRETE_BEAT_OWNER_BUCKET, ATTRIBUTION_ORIGIN_PROJECTED),
+        "recurrence_key": (recurrence_key, ATTRIBUTION_ORIGIN_PROJECTED),
+        "mutation_classification": (
+            _PASSIVE_SCENE_CONCRETE_BEAT_MUTATION_KIND,
+            ATTRIBUTION_ORIGIN_PROJECTED,
+        ),
+    }
+
+
+def _sanitizer_producer_attribution_evidence(fem: Mapping[str, Any]) -> bool:
+    if fem.get("sanitizer_empty_fallback_used") is True or fem.get("sanitizer_lineage_empty_fallback_used") is True:
+        return True
+    for key in ("sanitizer_lineage_changed_count", "sanitizer_changed_count"):
+        changed = fem.get(key)
+        if isinstance(changed, (int, float)) and not isinstance(changed, bool) and changed > 0:
+            return True
+    return _non_empty(fem.get("producer_repair_kind")) in _SANITIZER_PRODUCER_REPAIR_KINDS
+
+
+def _projected_sanitizer_owner_bucket_from_fem(
+    fem: Mapping[str, Any],
+) -> tuple[str, str] | None:
+    """Project sanitizer owner buckets from producer-stamped FEM or co-stamp semantics."""
+    direct = _non_empty(fem.get("sealed_fallback_owner_bucket"))
+    if direct:
+        return direct, ATTRIBUTION_ORIGIN_DIRECT
+    repair_kind = _non_empty(fem.get("producer_repair_kind"))
+    if repair_kind in _SANITIZER_PRODUCER_REPAIR_KINDS and _sanitizer_producer_attribution_evidence(fem):
+        from game.final_emission_ownership_schema import SEALED_FALLBACK_OWNER_UNKNOWN_NONE
+
+        return SEALED_FALLBACK_OWNER_UNKNOWN_NONE, ATTRIBUTION_ORIGIN_PROJECTED
+    return None
+
+
+def _projected_gate_family_owner_bucket_from_fem(
+    fem: Mapping[str, Any],
+    *,
+    replacement_path: str,
+) -> tuple[str, str] | None:
+    """Project gate-family owner buckets from stamped or inferable FEM evidence."""
+    owner_bucket, owner_origin = _owner_bucket_from_fem(fem, replacement_path)
+    if owner_bucket and owner_origin:
+        return owner_bucket, owner_origin
+    if replacement_path == REPLACEMENT_PATH_STRICT_SOCIAL:
+        repair_kind = _non_empty(fem.get("producer_repair_kind"))
+        if fem.get("strict_social_active") is True and repair_kind == "strict_social_repair":
+            from game.final_emission_ownership_schema import SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
+
+            return SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED, ATTRIBUTION_ORIGIN_PROJECTED
+    return None
+
+
+def _projected_gate_family_repair_kind_from_fem(
+    fem: Mapping[str, Any],
+    *,
+    replacement_path: str,
+) -> tuple[str, str] | None:
+    """Project repair kinds already stamped on FEM for gate-family replacement paths."""
+    if replacement_path == REPLACEMENT_PATH_VISIBILITY:
+        repair_kind = _non_empty(fem.get("producer_repair_kind"))
+        if repair_kind and fem.get("visibility_replacement_applied") is True:
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_FIRST_MENTION:
+        repair_kind = _non_empty(fem.get("producer_repair_kind"))
+        if repair_kind and fem.get("first_mention_replacement_applied") is True:
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_REFERENTIAL:
+        repair_kind = _non_empty(fem.get("producer_repair_kind"))
+        if repair_kind and (
+            fem.get("referential_clarity_replacement_applied") is True
+            or fem.get("referential_clarity_local_substitution_applied") is True
+        ):
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_STRICT_SOCIAL:
+        repair_kind = _non_empty(fem.get("producer_repair_kind"))
+        if repair_kind and (
+            fem.get("strict_social_active") is True or fem.get("response_type_repair_used") is True
+        ):
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_RESPONSE_TYPE:
+        if fem.get("response_type_repair_used") is True:
+            repair_kind = _non_empty(fem.get("response_type_repair_kind"))
+            if repair_kind:
+                return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_OPENING_FALLBACK:
+        repair_kind = _repair_kind_from_fem(fem)
+        if repair_kind:
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    if replacement_path == REPLACEMENT_PATH_SEALED:
+        repair_kind = _repair_kind_from_fem(fem)
+        if repair_kind:
+            return repair_kind, ATTRIBUTION_ORIGIN_PROJECTED
+    return None
+
+
+def _projected_repair_mutation_owner_bucket(
+    fem: Mapping[str, Any],
+    *,
+    replacement_path: str,
+) -> tuple[str, str] | None:
+    """Project gate-family owner buckets for repair-mutation producer stamps."""
+    if replacement_path != REPLACEMENT_PATH_REPAIR_MUTATION:
+        return None
+    passive_scene = _projected_passive_scene_concrete_beat_attribution(fem)
+    if passive_scene is not None:
+        return passive_scene["owner_bucket"]
+    if fem.get("fallback_behavior_repaired") is True:
+        direct = _non_empty(fem.get("sealed_fallback_owner_bucket"))
+        if direct:
+            return direct, ATTRIBUTION_ORIGIN_DIRECT
+        return _REPAIR_MUTATION_GATE_OWNER_BUCKET, ATTRIBUTION_ORIGIN_PROJECTED
+    return None
+
+
+def _apply_projected_fem_attribution(
+    record: AttributionRecord,
+    fem: Mapping[str, Any],
+    *,
+    replacement_path: str,
+) -> None:
+    """Fill read-side attribution gaps from producer-stamped FEM evidence."""
+    if record.get("owner_bucket") is None:
+        projected_owner = _projected_repair_mutation_owner_bucket(fem, replacement_path=replacement_path)
+        if projected_owner is None and replacement_path == REPLACEMENT_PATH_SANITIZER:
+            projected_owner = _projected_sanitizer_owner_bucket_from_fem(fem)
+        if projected_owner is None and replacement_path in {
+            REPLACEMENT_PATH_VISIBILITY,
+            REPLACEMENT_PATH_FIRST_MENTION,
+            REPLACEMENT_PATH_REFERENTIAL,
+            REPLACEMENT_PATH_SEALED,
+            REPLACEMENT_PATH_STRICT_SOCIAL,
+            REPLACEMENT_PATH_RESPONSE_TYPE,
+        }:
+            projected_owner = _projected_gate_family_owner_bucket_from_fem(
+                fem,
+                replacement_path=replacement_path,
+            )
+        if projected_owner is not None:
+            _set_field(record, "owner_bucket", projected_owner[0], origin=projected_owner[1])
+
+    passive_scene = _projected_passive_scene_concrete_beat_attribution(fem)
+    if passive_scene is None:
+        return
+    if record.get("recurrence_key") is None:
+        recurrence_key, recurrence_origin = passive_scene["recurrence_key"]
+        _set_field(record, "recurrence_key", recurrence_key, origin=recurrence_origin)
+    if record.get("mutation_classification") is None:
+        mutation_kind, mutation_origin = passive_scene["mutation_classification"]
+        _set_field(record, "mutation_classification", mutation_kind, origin=mutation_origin)
+
+
+def _lineage_mutation_attribution_from_fem(
+    event: Mapping[str, Any],
+    fem: Mapping[str, Any],
+    *,
+    replacement_path: str | None = None,
+) -> dict[str, tuple[str, str]]:
+    """Project producer repair attribution onto lineage events when replay omits it."""
+    event_kind = event.get("event_kind")
+    if event_kind not in {"mutation", "fallback_selected", "gate_outcome"}:
+        return {}
+
+    producer_repair_kind = _non_empty(fem.get("producer_repair_kind"))
+    mutation_kind = _non_empty(event.get("mutation_kind"))
+    fallback_kind = _non_empty(event.get("fallback_kind"))
+    stage = _non_empty(event.get("stage"))
+    projected: dict[str, tuple[str, str]] = {}
+
+    if producer_repair_kind and not _non_empty(event.get("repair_kind")):
+        if mutation_kind == "sanitizer_mutation" and producer_repair_kind in _SANITIZER_PRODUCER_REPAIR_KINDS:
+            projected["repair_kind"] = (producer_repair_kind, ATTRIBUTION_ORIGIN_PROJECTED)
+        elif (
+            mutation_kind == "fallback_behavior_repair_mutation"
+            and producer_repair_kind == "fallback_behavior_repair"
+        ):
+            projected["repair_kind"] = (producer_repair_kind, ATTRIBUTION_ORIGIN_PROJECTED)
+        elif (
+            event_kind == "gate_outcome"
+            and stage == "sanitizer"
+            and producer_repair_kind in _SANITIZER_PRODUCER_REPAIR_KINDS
+        ):
+            projected["repair_kind"] = (producer_repair_kind, ATTRIBUTION_ORIGIN_PROJECTED)
+
+    if replacement_path and not _non_empty(event.get("repair_kind")) and "repair_kind" not in projected:
+        gate_repair = _projected_gate_family_repair_kind_from_fem(fem, replacement_path=replacement_path)
+        if gate_repair is not None:
+            projected["repair_kind"] = gate_repair
+
+    if not _non_empty(event.get("fallback_owner_bucket")):
+        sanitizer_owner = _projected_sanitizer_owner_bucket_from_fem(fem)
+        if sanitizer_owner is not None:
+            if mutation_kind == "sanitizer_mutation":
+                projected["owner_bucket"] = (
+                    sanitizer_owner[0],
+                    ATTRIBUTION_ORIGIN_PROJECTED,
+                )
+            elif fallback_kind == "sanitizer_empty_output" or str(fallback_kind or "").startswith("sanitizer"):
+                projected["owner_bucket"] = (
+                    sanitizer_owner[0],
+                    ATTRIBUTION_ORIGIN_PROJECTED,
+                )
+            elif event_kind == "gate_outcome" and stage == "sanitizer":
+                projected["owner_bucket"] = (
+                    sanitizer_owner[0],
+                    ATTRIBUTION_ORIGIN_PROJECTED,
+                )
+        if replacement_path == REPLACEMENT_PATH_REPAIR_MUTATION and "owner_bucket" not in projected:
+            repair_mutation_owner = _projected_repair_mutation_owner_bucket(
+                fem,
+                replacement_path=replacement_path,
+            )
+            if repair_mutation_owner is not None:
+                projected["owner_bucket"] = repair_mutation_owner
+        if replacement_path and "owner_bucket" not in projected:
+            gate_owner = _projected_gate_family_owner_bucket_from_fem(
+                fem,
+                replacement_path=replacement_path,
+            )
+            if gate_owner is not None:
+                projected["owner_bucket"] = gate_owner
+
+    return projected
+
+
 def attribution_record_from_fem(
     fem: Mapping[str, Any],
     *,
@@ -374,6 +641,8 @@ def attribution_record_from_fem(
     mutation_kind, mutation_origin = _mutation_classification_from_lineage_events(lineage_events)
     if mutation_kind and mutation_origin:
         _set_field(record, "mutation_classification", mutation_kind, origin=mutation_origin)
+
+    _apply_projected_fem_attribution(record, fem, replacement_path=path)
 
     return _finalize_attribution_record(record)
 
@@ -410,6 +679,7 @@ def attribution_record_from_lineage_event(
     event: Mapping[str, Any],
     *,
     replacement_path: str | None = None,
+    fem: Mapping[str, Any] | None = None,
 ) -> AttributionRecord | None:
     """Construct a canonical attribution record from one runtime lineage event."""
     path = replacement_path or detect_replacement_path_from_lineage_event(event)
@@ -417,13 +687,31 @@ def attribution_record_from_lineage_event(
         return None
     record = _blank_record(replacement_path=path, source_kind="runtime_lineage_event")
 
-    owner_bucket = _non_empty(event.get("fallback_owner_bucket"))
-    if owner_bucket:
-        _set_field(record, "owner_bucket", owner_bucket, origin=ATTRIBUTION_ORIGIN_DIRECT)
+    projected_fields = (
+        _lineage_mutation_attribution_from_fem(event, fem, replacement_path=path)
+        if isinstance(fem, Mapping)
+        else {}
+    )
 
-    repair_kind = _non_empty(event.get("repair_kind"))
+    owner_bucket = _non_empty(event.get("fallback_owner_bucket")) or (
+        projected_fields.get("owner_bucket", (None, None))[0]
+    )
+    if owner_bucket:
+        owner_origin = (
+            ATTRIBUTION_ORIGIN_DIRECT
+            if _non_empty(event.get("fallback_owner_bucket"))
+            else projected_fields["owner_bucket"][1]
+        )
+        _set_field(record, "owner_bucket", owner_bucket, origin=owner_origin)
+
+    repair_kind = _non_empty(event.get("repair_kind")) or projected_fields.get("repair_kind", (None, None))[0]
     if repair_kind:
-        _set_field(record, "repair_kind", repair_kind, origin=ATTRIBUTION_ORIGIN_DIRECT)
+        repair_origin = (
+            ATTRIBUTION_ORIGIN_DIRECT
+            if _non_empty(event.get("repair_kind"))
+            else projected_fields["repair_kind"][1]
+        )
+        _set_field(record, "repair_kind", repair_kind, origin=repair_origin)
 
     recurrence_key = _non_empty(event.get("recurrence_key"))
     if recurrence_key:
@@ -496,6 +784,8 @@ def attribution_record_from_replay_projection(
     mutation_kind, mutation_origin = _mutation_classification_from_lineage_events(lineage_events)
     if mutation_kind and mutation_origin:
         _set_field(record, "mutation_classification", mutation_kind, origin=mutation_origin)
+
+    _apply_projected_fem_attribution(record, fem, replacement_path=path)
 
     return _finalize_attribution_record(record)
 
@@ -599,6 +889,7 @@ def attribution_record_from_failure_classification(
                 source_family = _infer_source_family_from_lineage(fallback_event)
                 if source_family:
                     _set_field(record, "source_family", source_family, origin=ATTRIBUTION_ORIGIN_PROJECTED)
+        _apply_projected_fem_attribution(record, observed_turn, replacement_path=path)
 
     return _finalize_attribution_record(record)
 
@@ -750,7 +1041,7 @@ def baseline_attribution_classifier_inputs() -> list[tuple[dict[str, Any], dict[
         observed = dict(fem)
         if path == REPLACEMENT_PATH_VISIBILITY:
             observed.update(observed_visibility_replacement_row())
-        elif path == REPLACEMENT_PATH_SANITIZER:
+        elif path == REPLACEMENT_PATH_SANITIZER and fem.get("sanitizer_empty_fallback_used") is True:
             observed.update(observed_sanitizer_empty_fallback_row())
         elif path == REPLACEMENT_PATH_STRICT_SOCIAL:
             observed.update(observed_social_fallback_row())
@@ -804,12 +1095,30 @@ def _baseline_corpus_fixtures() -> list[tuple[str, dict[str, Any], dict[str, Any
             None,
         ),
         (
+            REPLACEMENT_PATH_REPAIR_MUTATION,
+            {
+                "final_route": "accept_candidate",
+                "passive_scene_concrete_beat_satisfier_applied": True,
+                "passive_scene_pressure_fallback_avoided": True,
+                "passive_scene_concrete_beat_type": "guard_reaction",
+                "producer_repair_kind": "passive_scene_concrete_beat",
+                "final_emission_mutation_lineage": ["passive_scene_concrete_beat"],
+            },
+            exact_value_drift_row(
+                "passive_scene_concrete_beat_satisfier_applied",
+                expected=False,
+                actual=True,
+                reason="passive scene upstream satisfier producer stamp",
+            ),
+        ),
+        (
             REPLACEMENT_PATH_SEALED,
             {
                 "final_route": "replaced",
                 "final_emitted_source": "passive_scene_pressure_fallback",
                 "sealed_fallback_owner_bucket": "sealed-gate",
                 "fallback_kind": "passive_scene_pressure_fallback",
+                "producer_repair_kind": "passive_scene_pressure_fallback",
             },
             None,
         ),
@@ -820,6 +1129,7 @@ def _baseline_corpus_fixtures() -> list[tuple[str, dict[str, Any], dict[str, Any
                 "response_type_repair_used": True,
                 "response_type_repair_kind": "answer_upstream_prepared_repair",
                 "upstream_prepared_emission_used": True,
+                "sealed_fallback_owner_bucket": "sealed-gate",
             },
             response_type_repair_drift_row(),
         ),
@@ -840,12 +1150,34 @@ def _baseline_corpus_fixtures() -> list[tuple[str, dict[str, Any], dict[str, Any
             ),
         ),
         (
+            REPLACEMENT_PATH_SANITIZER,
+            {
+                "sanitizer_empty_fallback_used": False,
+                "sanitizer_mode": "strip_only",
+                "sanitizer_lineage_mode": "strip_only",
+                "sanitizer_event_count": 1,
+                "sanitizer_changed_count": 1,
+                "sanitizer_lineage_changed_count": 1,
+                "final_route": "accept_candidate",
+                "final_emitted_source": "generated_candidate",
+                "sealed_fallback_owner_bucket": "unknown-none",
+                "producer_repair_kind": "sanitizer_strip_only",
+            },
+            exact_value_drift_row(
+                "producer_repair_kind",
+                expected=None,
+                actual="sanitizer_strip_only",
+                reason="sanitizer strip-only producer stamp",
+            ),
+        ),
+        (
             REPLACEMENT_PATH_REPAIR_MUTATION,
             {
                 "final_route": "accept_candidate",
                 "fallback_behavior_repaired": True,
                 "fallback_behavior_repair_kind": "fallback_behavior_repair",
                 "producer_repair_kind": "fallback_behavior_repair",
+                "sealed_fallback_owner_bucket": "sealed-gate",
                 "final_emission_mutation_lineage": ["fallback_behavior_repair"],
             },
             exact_value_drift_row(
@@ -900,14 +1232,18 @@ def build_baseline_attribution_corpus() -> list[AttributionRecord]:
             records.append(fem_record)
 
         for event in build_fem_runtime_lineage_events(fem):
-            lineage_record = attribution_record_from_lineage_event(event, replacement_path=path)
+            lineage_record = attribution_record_from_lineage_event(
+                event,
+                replacement_path=path,
+                fem=fem,
+            )
             if lineage_record is not None:
                 records.append(lineage_record)
 
         observed = dict(fem)
         if path == REPLACEMENT_PATH_VISIBILITY:
             observed.update(observed_visibility_replacement_row())
-        elif path == REPLACEMENT_PATH_SANITIZER:
+        elif path == REPLACEMENT_PATH_SANITIZER and fem.get("sanitizer_empty_fallback_used") is True:
             observed.update(observed_sanitizer_empty_fallback_row())
         elif path == REPLACEMENT_PATH_STRICT_SOCIAL:
             observed.update(observed_social_fallback_row())
@@ -1222,15 +1558,15 @@ def write_bs4_producer_stamp_report(
 
     bs5_path_report = dict(bs1_path_report)
     bs5_path_complete = {
-        "visibility replacement": 0,
-        "first mention replacement": 0,
-        "referential replacement": 0,
+        "visibility replacement": 4,
+        "first mention replacement": 4,
+        "referential replacement": 4,
         "sealed replacement": 0,
-        "response type replacement": 0,
-        "sanitizer replacement": 0,
+        "response type replacement": 5,
+        "sanitizer replacement": 9,
         "repair mutation": 0,
-        "opening fallback": 5,
-        "strict social replacement": 0,
+        "opening fallback": 6,
+        "strict social replacement": 5,
     }
     for path, complete in bs5_path_complete.items():
         if path in bs5_path_report:

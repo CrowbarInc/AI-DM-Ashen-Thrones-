@@ -14,8 +14,8 @@ repair-kind runtime/producer subsets.
 bucket rules, attribution unions/aliases/paths, recurrence keys, or runtime FEM logic.
 
 Registries:
-``docs/audits/CG_failure_classification_authority_registry.md`` (this doc's index),
-``docs/audits/CG_attribution_contract_registry.md`` (attribution boundary, CG-5).
+``docs/audits/CG_failure_classification_authority_registry.md`` (this doc's index; CO98 governance handoff),
+``docs/audits/CG_attribution_contract_registry.md`` (attribution boundary, CG-5; program closed CO96).
 Alignment with classifier rule tables: ``tests.helpers.failure_classification_sync`` (facade) /
 ``tests.helpers.failure_classification_alignment`` (implementation).
 """
@@ -171,6 +171,8 @@ ALLOWED_PRODUCER_REPAIR_KINDS: frozenset[str] = frozenset(
         "first_mention_enforcement",
         "referential_clarity_enforcement",
         "referential_clarity_local_substitution",
+        "passive_scene_concrete_beat",
+        "passive_scene_pressure_fallback",
         "sanitizer_empty_output",
         "sanitizer_strip_only",
         "strict_social_repair",

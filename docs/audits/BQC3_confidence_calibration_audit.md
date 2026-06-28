@@ -1,6 +1,6 @@
 # BQ-C3 Confidence Calibration Audit
 
-**Date:** 2026-06-26T22:36:35Z
+**Date:** 2026-06-04T22:31:59Z
 **Protected replay only:** true
 
 ## Summary

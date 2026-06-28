@@ -1043,6 +1043,7 @@ PRODUCER_REPAIR_KIND_FIRST_MENTION_ENFORCEMENT: str = "first_mention_enforcement
 PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT: str = "referential_clarity_enforcement"
 PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION: str = "referential_clarity_local_substitution"
 PRODUCER_REPAIR_KIND_PASSIVE_SCENE_CONCRETE_BEAT: str = "passive_scene_concrete_beat"
+PRODUCER_REPAIR_KIND_PASSIVE_SCENE_PRESSURE_FALLBACK: str = "passive_scene_pressure_fallback"
 PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT: str = "sanitizer_empty_output"
 PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY: str = "sanitizer_strip_only"
 PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR: str = "strict_social_repair"
@@ -1066,6 +1067,14 @@ def stamp_producer_repair_kind(
     meta[PRODUCER_REPAIR_KIND_FIELD] = kind
 
 
+_RESPONSE_TYPE_PREPARED_REPAIR_KINDS: frozenset[str] = frozenset(
+    {
+        "answer_upstream_prepared_repair",
+        "action_outcome_upstream_prepared_repair",
+    }
+)
+
+
 def stamp_opening_fallback_owner_bucket(meta: MutableMapping[str, Any]) -> None:
     """Stamp opening owner bucket when authorship/repair signals are already on *meta*."""
     if not isinstance(meta, MutableMapping):
@@ -1075,6 +1084,32 @@ def stamp_opening_fallback_owner_bucket(meta: MutableMapping[str, Any]) -> None:
     bucket = _opening_fallback_owner_bucket_from_meta(meta)
     if bucket:
         meta["opening_fallback_owner_bucket"] = bucket
+
+
+def stamp_passive_scene_pressure_fallback_producer_metadata(meta: MutableMapping[str, Any]) -> None:
+    """Stamp producer repair kind when sealed terminal replace emits passive-scene pressure fallback."""
+    if not isinstance(meta, MutableMapping):
+        return
+    src = str(meta.get("final_emitted_source") or "").strip()
+    if src != "passive_scene_pressure_fallback":
+        return
+    stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_PASSIVE_SCENE_PRESSURE_FALLBACK)
+
+
+def stamp_response_type_prepared_repair_owner_bucket(meta: MutableMapping[str, Any]) -> None:
+    """Stamp gate owner bucket when upstream prepared answer/action repair succeeds."""
+    if not isinstance(meta, MutableMapping):
+        return
+    if str(meta.get("sealed_fallback_owner_bucket") or "").strip():
+        return
+    if meta.get("response_type_repair_used") is not True:
+        return
+    if meta.get("upstream_prepared_emission_used") is not True:
+        return
+    repair_kind = str(meta.get("response_type_repair_kind") or "").strip()
+    if repair_kind not in _RESPONSE_TYPE_PREPARED_REPAIR_KINDS:
+        return
+    meta["sealed_fallback_owner_bucket"] = SEALED_FALLBACK_OWNER_SEALED_GATE
 
 
 def stamp_retry_terminal_fallback_producer_metadata(meta: MutableMapping[str, Any]) -> None:

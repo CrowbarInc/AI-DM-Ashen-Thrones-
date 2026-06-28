@@ -11,7 +11,7 @@ from game.attribution_read_views import (
     SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
 )
-from game.final_emission_meta import (
+from game.observability_attribution_read import (
     PRODUCER_REPAIR_KIND_FIELD,
     PRODUCER_REPAIR_KIND_SANITIZER_EMPTY_OUTPUT,
 )

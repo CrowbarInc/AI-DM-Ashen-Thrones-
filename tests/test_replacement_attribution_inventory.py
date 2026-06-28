@@ -31,8 +31,12 @@ from tests.helpers.replacement_attribution_inventory import (
     ATTRIBUTION_ORIGIN_PROJECTED,
     REPLACEMENT_PATH_FIRST_MENTION,
     REPLACEMENT_PATH_OPENING_FALLBACK,
+    REPLACEMENT_PATH_REPAIR_MUTATION,
     REPLACEMENT_PATH_RESPONSE_TYPE,
     REPLACEMENT_PATH_REFERENTIAL,
+    REPLACEMENT_PATH_SANITIZER,
+    REPLACEMENT_PATH_SEALED,
+    REPLACEMENT_PATH_STRICT_SOCIAL,
     REPLACEMENT_PATH_VISIBILITY,
     REQUIRED_ATTRIBUTION_FIELDS,
     attribution_record_from_failure_classification,
@@ -503,6 +507,71 @@ def test_bs4_projection_preserves_producer_repair_kind():
     assert fallback["recurrence_key"] == "fallback_selected:gate:game.final_emission_gate:visibility_hard_replacement"
 
 
+def test_bs4_passive_scene_concrete_beat_attribution_is_resolved_complete():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "passive_scene_concrete_beat_satisfier_applied": True,
+        "passive_scene_pressure_fallback_avoided": True,
+        "passive_scene_concrete_beat_type": "guard_reaction",
+        "producer_repair_kind": "passive_scene_concrete_beat",
+        "final_emission_mutation_lineage": ["passive_scene_concrete_beat"],
+    }
+    record = attribution_record_from_fem(fem, replacement_path=REPLACEMENT_PATH_REPAIR_MUTATION)
+    assert record is not None
+    assert record["repair_kind"] == "passive_scene_concrete_beat"
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["mutation_classification"] == "final_emission_mutation"
+    assert record["recurrence_key"] == (
+        "mutation:gate:game.final_emission_gate:passive_scene_concrete_beat"
+    )
+    assert record["missing_fields"] == []
+
+
+def test_bs4_sanitizer_strip_only_lineage_projects_producer_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "sanitizer_empty_fallback_used": False,
+        "sanitizer_mode": "strip_only",
+        "sanitizer_lineage_mode": "strip_only",
+        "sanitizer_event_count": 1,
+        "sanitizer_changed_count": 1,
+        "sanitizer_lineage_changed_count": 1,
+        "final_route": "accept_candidate",
+        "final_emitted_source": "generated_candidate",
+        "sealed_fallback_owner_bucket": "unknown-none",
+        "producer_repair_kind": "sanitizer_strip_only",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_SANITIZER,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "sanitizer_strip_only"
+    assert record["owner_bucket"] == "unknown-none"
+    assert record["missing_fields"] == []
+
+
+def test_bs4_repair_mutation_path_baseline_records_are_resolved_complete():
+    from tests.helpers.replacement_attribution_inventory import (
+        build_replacement_path_attribution_report,
+        build_baseline_attribution_corpus,
+    )
+
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    repair_stats = path_report[REPLACEMENT_PATH_REPAIR_MUTATION]
+    assert repair_stats["total"] == 7
+    assert repair_stats["complete"] == 7
+
+
 def test_bs4_opening_owner_bucket_direct_stamp():
     fem = successful_opening_fem_meta(
         final_route="replaced",
@@ -513,6 +582,788 @@ def test_bs4_opening_owner_bucket_direct_stamp():
     assert record is not None
     assert record["owner_bucket"] == "upstream-prepared"
     assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_DIRECT
+
+
+def test_co84_sanitizer_empty_fallback_lineage_projects_owner_bucket():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "sanitizer_empty_fallback_used": True,
+        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "sealed_fallback_owner_bucket": "unknown-none",
+        "producer_repair_kind": "sanitizer_empty_output",
+    }
+    fallback = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "fallback_selected"
+    )
+    record = attribution_record_from_lineage_event(
+        fallback,
+        replacement_path=REPLACEMENT_PATH_SANITIZER,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "unknown-none"
+    assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_PROJECTED
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co84_sanitizer_gate_outcome_projects_repair_owner_and_source_family():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "sanitizer_empty_fallback_used": True,
+        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "sealed_fallback_owner_bucket": "unknown-none",
+        "producer_repair_kind": "sanitizer_empty_output",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_SANITIZER,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "sanitizer_empty_output"
+    assert record["owner_bucket"] == "unknown-none"
+    assert record["source_family"] == "output_sanitizer"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co84_sanitizer_replay_projection_projects_owner_when_sealed_wiped():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+    from tests.helpers.failure_classification_sync import observed_sanitizer_empty_fallback_row
+
+    fem = {
+        "sanitizer_empty_fallback_used": True,
+        "sanitizer_empty_fallback_source": "upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "sealed_fallback_owner_bucket": "unknown-none",
+        "producer_repair_kind": "sanitizer_empty_output",
+    }
+    observed = dict(fem)
+    observed.update(observed_sanitizer_empty_fallback_row())
+    observed["fem_runtime_lineage_events"] = build_fem_runtime_lineage_events(fem)
+    record = attribution_record_from_replay_projection(observed, replacement_path=REPLACEMENT_PATH_SANITIZER)
+    assert record is not None
+    assert record["owner_bucket"] == "unknown-none"
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co84_sanitizer_path_baseline_resolved_completeness():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    sanitizer_stats = path_report[REPLACEMENT_PATH_SANITIZER]
+    assert sanitizer_stats["total"] == 10
+    assert sanitizer_stats["complete"] == 9
+    assert sanitizer_stats["missing_owner_bucket"] == 0
+    assert sanitizer_stats["missing_mutation_classification"] == 1
+
+
+def test_co85_visibility_mutation_lineage_projects_producer_attribution():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "visibility_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "visibility_fallback_pool": "global_scene_narrative",
+        "visibility_fallback_kind": "narrative_safe_fallback",
+        "producer_repair_kind": "visibility_enforcement",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_VISIBILITY,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["repair_kind"] == "visibility_enforcement"
+    assert record["missing_fields"] == []
+
+
+def test_co85_visibility_gate_outcome_projects_repair_owner_and_source_family():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "visibility_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "visibility_enforcement",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_VISIBILITY,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "visibility_enforcement"
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["source_family"] == "final_emission_gate"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co85_sealed_mutation_lineage_projects_owner_and_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fallback_kind": "passive_scene_pressure_fallback",
+        "producer_repair_kind": "passive_scene_pressure_fallback",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_SEALED,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["repair_kind"] == "passive_scene_pressure_fallback"
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_co85_response_type_mutation_lineage_projects_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "answer_upstream_prepared_repair"
+    assert "owner_bucket" in record["missing_fields"]
+
+
+def test_co85_target_path_baseline_resolved_completeness():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    visibility_stats = path_report[REPLACEMENT_PATH_VISIBILITY]
+    sealed_stats = path_report[REPLACEMENT_PATH_SEALED]
+    response_stats = path_report[REPLACEMENT_PATH_RESPONSE_TYPE]
+    assert visibility_stats["total"] == 5
+    assert visibility_stats["complete"] == 4
+    assert visibility_stats["missing_owner_bucket"] == 0
+    assert visibility_stats["missing_repair_kind"] == 0
+    assert visibility_stats["missing_mutation_classification"] == 1
+    assert sealed_stats["total"] == 5
+    assert sealed_stats["complete"] == 4
+    assert sealed_stats["missing_owner_bucket"] == 0
+    assert sealed_stats["missing_repair_kind"] == 0
+    assert response_stats["total"] == 6
+    assert response_stats["complete"] == 5
+    assert response_stats["missing_repair_kind"] == 0
+    assert response_stats["missing_owner_bucket"] == 0
+
+
+def test_co86_first_mention_mutation_lineage_projects_producer_attribution():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "first_mention_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "first_mention_enforcement",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_FIRST_MENTION,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["repair_kind"] == "first_mention_enforcement"
+    assert record["missing_fields"] == []
+
+
+def test_co86_referential_gate_outcome_projects_repair_and_owner():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "global_scene_fallback",
+        "referential_clarity_replacement_applied": True,
+        "visibility_fallback_owner_bucket": "sealed-gate",
+        "producer_repair_kind": "referential_clarity_enforcement",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_REFERENTIAL,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "referential_clarity_enforcement"
+    assert record["owner_bucket"] == "sealed-gate"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co86_referential_local_substitution_fem_projects_repair_kind():
+    fem = {
+        "final_route": "accept_candidate",
+        "referential_clarity_local_substitution_applied": True,
+        "visibility_fallback_owner_bucket": "strict-social-visibility",
+        "producer_repair_kind": "referential_clarity_local_substitution",
+    }
+    record = attribution_record_from_fem(fem)
+    assert record is not None
+    assert record["repair_kind"] == "referential_clarity_local_substitution"
+    assert record["owner_bucket"] == "strict-social-visibility"
+
+
+def test_co86_strict_social_replay_projection_projects_owner_when_sealed_wiped():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+    from tests.helpers.failure_classification_sync import observed_social_fallback_row
+
+    fem = {
+        "final_route": "replaced",
+        "strict_social_active": True,
+        "final_emitted_source": "strict_social_replacement",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "strict_social_dialogue_repair",
+        "sealed_fallback_owner_bucket": "strict-social-sealed",
+        "producer_repair_kind": "strict_social_repair",
+    }
+    observed = dict(fem)
+    observed.update(observed_social_fallback_row())
+    observed["fem_runtime_lineage_events"] = build_fem_runtime_lineage_events(fem)
+    record = attribution_record_from_replay_projection(
+        observed,
+        replacement_path=REPLACEMENT_PATH_STRICT_SOCIAL,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "strict-social-sealed"
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co86_gate_family_path_baseline_resolved_completeness():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    first_mention_stats = path_report[REPLACEMENT_PATH_FIRST_MENTION]
+    referential_stats = path_report[REPLACEMENT_PATH_REFERENTIAL]
+    strict_stats = path_report[REPLACEMENT_PATH_STRICT_SOCIAL]
+    assert first_mention_stats["total"] == 5
+    assert first_mention_stats["complete"] == 4
+    assert first_mention_stats["missing_owner_bucket"] == 0
+    assert first_mention_stats["missing_repair_kind"] == 0
+    assert first_mention_stats["missing_mutation_classification"] == 1
+    assert referential_stats["total"] == 5
+    assert referential_stats["complete"] == 4
+    assert referential_stats["missing_owner_bucket"] == 0
+    assert referential_stats["missing_repair_kind"] == 0
+    assert strict_stats["total"] == 6
+    assert strict_stats["complete"] == 5
+    assert strict_stats["missing_owner_bucket"] == 0
+    assert strict_stats["missing_repair_kind"] == 0
+
+
+def test_co87_opening_mutation_lineage_projects_preserved_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = successful_opening_fem_meta(
+        final_route="replaced",
+        response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+        opening_fallback_owner_bucket="upstream-prepared",
+    )
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_OPENING_FALLBACK,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == OPENING_SUCCESS_REPAIR_KIND
+    assert record["attribution_origin"]["repair_kind"] == ATTRIBUTION_ORIGIN_PROJECTED
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_co87_opening_gate_outcome_projects_repair_and_owner():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = successful_opening_fem_meta(
+        final_route="replaced",
+        response_type_repair_kind=OPENING_SUCCESS_REPAIR_KIND,
+        opening_fallback_owner_bucket="upstream-prepared",
+    )
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_OPENING_FALLBACK,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == OPENING_SUCCESS_REPAIR_KIND
+    assert record["owner_bucket"] == "upstream-prepared"
+    assert record["source_family"] == "final_emission_gate"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co87_opening_gate_outcome_without_fem_repair_kind_stays_unresolved():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "opening_deterministic_fallback",
+        "opening_recovered_via_fallback": True,
+        "opening_fallback_authorship_source": "upstream_prepared_opening_fallback",
+        "fallback_family_used": "scene_opening",
+        "opening_fallback_owner_bucket": "upstream-prepared",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_OPENING_FALLBACK,
+        fem=fem,
+    )
+    assert record is not None
+    assert "repair_kind" in record["missing_fields"]
+
+
+def test_co87_opening_path_baseline_resolved_completeness():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    opening_stats = path_report[REPLACEMENT_PATH_OPENING_FALLBACK]
+    assert opening_stats["total"] == 7
+    assert opening_stats["complete"] == 6
+    assert opening_stats["missing_owner_bucket"] == 0
+    assert opening_stats["missing_repair_kind"] == 0
+    assert opening_stats["missing_recurrence_key"] == 0
+    assert opening_stats["missing_mutation_classification"] == 1
+
+
+def test_co93_sealed_passive_baseline_resolved_repair_kind():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    sealed_stats = path_report[REPLACEMENT_PATH_SEALED]
+    assert sealed_stats["total"] == 5
+    assert sealed_stats["complete"] == 4
+    assert sealed_stats["missing_owner_bucket"] == 0
+    assert sealed_stats["missing_repair_kind"] == 0
+    assert sealed_stats["missing_mutation_classification"] == 1
+
+
+def test_co88_sealed_mutation_projects_preserved_fem_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fallback_kind": "passive_scene_pressure_fallback",
+        "producer_repair_kind": "passive_scene_pressure_fallback",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_SEALED,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "passive_scene_pressure_fallback"
+    assert record["attribution_origin"]["repair_kind"] == ATTRIBUTION_ORIGIN_PROJECTED
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_co88_sealed_gate_outcome_projects_preserved_fem_repair_kind():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fallback_kind": "passive_scene_pressure_fallback",
+        "producer_repair_kind": "passive_scene_pressure_fallback",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_SEALED,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["repair_kind"] == "passive_scene_pressure_fallback"
+    assert record["owner_bucket"] == "sealed-gate"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co93_sealed_passive_producer_stamp_is_direct_on_fem():
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fallback_kind": "passive_scene_pressure_fallback",
+        "producer_repair_kind": "passive_scene_pressure_fallback",
+    }
+    record = attribution_record_from_fem(fem, replacement_path=REPLACEMENT_PATH_SEALED)
+    assert record is not None
+    assert record["repair_kind"] == "passive_scene_pressure_fallback"
+    assert record["attribution_origin"]["repair_kind"] == ATTRIBUTION_ORIGIN_DIRECT
+    assert "repair_kind" not in record["missing_fields"]
+
+
+def test_co94_gate_outcome_events_omit_mutation_kind_by_lineage_contract() -> None:
+    """CO94: gate_outcome records routing (gate_path); mutation_kind belongs on mutation events only."""
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+    from tests.helpers.replacement_attribution_inventory import _baseline_corpus_fixtures
+
+    for path, fem, _drift in _baseline_corpus_fixtures():
+        events = build_fem_runtime_lineage_events(fem)
+        gate_outcomes = [event for event in events if event.get("event_kind") == "gate_outcome"]
+        if not gate_outcomes:
+            continue
+        for gate_outcome in gate_outcomes:
+            assert gate_outcome.get("mutation_kind") is None
+            assert gate_outcome.get("gate_path")
+            record = attribution_record_from_lineage_event(
+                gate_outcome,
+                replacement_path=path,
+                fem=fem,
+            )
+            assert record is not None
+            assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co94_baseline_gate_outcome_mutation_gap_matches_sibling_mutation_coverage() -> None:
+    """CO94: every baseline gate_outcome gap has a sibling mutation event carrying classification."""
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+    from tests.helpers.replacement_attribution_inventory import _baseline_corpus_fixtures
+
+    gap_count = 0
+    for path, fem, _drift in _baseline_corpus_fixtures():
+        events = build_fem_runtime_lineage_events(fem)
+        mutations = [event for event in events if event.get("event_kind") == "mutation"]
+        for gate_outcome in (event for event in events if event.get("event_kind") == "gate_outcome"):
+            gate_record = attribution_record_from_lineage_event(
+                gate_outcome,
+                replacement_path=path,
+                fem=fem,
+            )
+            assert gate_record is not None
+            if "mutation_classification" not in gate_record["missing_fields"]:
+                continue
+            gap_count += 1
+            assert mutations, f"{path} gate_outcome gap requires sibling mutation event"
+            mutation_record = attribution_record_from_lineage_event(
+                mutations[0],
+                replacement_path=path,
+                fem=fem,
+            )
+            assert mutation_record is not None
+            assert "mutation_classification" not in mutation_record["missing_fields"]
+    assert gap_count == 8
+
+
+def test_co94_bs5_mutation_classification_gap_is_gate_outcome_only() -> None:
+    records = build_baseline_attribution_corpus()
+    missing_mutation = [
+        record
+        for record in records
+        if "mutation_classification" in (record.get("missing_fields") or [])
+    ]
+    assert len(missing_mutation) == 8
+    assert all(record.get("source_kind") == "runtime_lineage_event" for record in missing_mutation)
+
+
+def test_co88_sealed_passive_without_preserved_repair_stays_unresolved():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fallback_kind": "passive_scene_pressure_fallback",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_SEALED,
+        fem=fem,
+    )
+    assert record is not None
+    assert "repair_kind" in record["missing_fields"]
+
+
+def test_co89_response_type_passive_baseline_resolved_owner_bucket():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    response_stats = path_report[REPLACEMENT_PATH_RESPONSE_TYPE]
+    assert response_stats["total"] == 6
+    assert response_stats["complete"] == 5
+    assert response_stats["missing_owner_bucket"] == 0
+    assert response_stats["missing_repair_kind"] == 0
+    assert response_stats["missing_mutation_classification"] == 1
+
+
+def test_co89_response_type_mutation_projects_preserved_sealed_owner_bucket():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+        "sealed_fallback_owner_bucket": "sealed-gate",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_DIRECT
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co89_response_type_gate_outcome_projects_preserved_sealed_owner_bucket():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+        "sealed_fallback_owner_bucket": "sealed-gate",
+    }
+    gate_outcome = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "gate_outcome"
+    )
+    record = attribution_record_from_lineage_event(
+        gate_outcome,
+        replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert "mutation_classification" in record["missing_fields"]
+
+
+def test_co89_response_type_fem_metadata_projects_direct_sealed_owner_bucket():
+    fem = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+        "sealed_fallback_owner_bucket": "sealed-gate",
+    }
+    record = attribution_record_from_fem(fem, replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE)
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_DIRECT
+    assert record["missing_fields"] == []
+
+
+def test_co89_response_type_failure_classification_projects_owner_from_observed_turn():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    observed = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+        "sealed_fallback_owner_bucket": "sealed-gate",
+        "fem_runtime_lineage_events": build_fem_runtime_lineage_events(
+            {
+                "final_route": "accept_candidate",
+                "response_type_repair_used": True,
+                "response_type_repair_kind": "answer_upstream_prepared_repair",
+                "upstream_prepared_emission_used": True,
+                "sealed_fallback_owner_bucket": "sealed-gate",
+            }
+        ),
+    }
+    classification = classify_replay_failure(
+        scenario_id="co89_response_type",
+        turn_index=0,
+        observed_turn=observed,
+        drift_rows=[response_type_repair_drift_row()],
+    )[0]
+    record = attribution_record_from_failure_classification(
+        classification,
+        replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE,
+        observed_turn=observed,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co89_response_type_without_preserved_bucket_stays_unresolved():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "response_type_repair_used": True,
+        "response_type_repair_kind": "answer_upstream_prepared_repair",
+        "upstream_prepared_emission_used": True,
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_RESPONSE_TYPE,
+        fem=fem,
+    )
+    assert record is not None
+    assert "owner_bucket" in record["missing_fields"]
+
+
+def test_co90_repair_mutation_baseline_resolved_completeness():
+    path_report = build_replacement_path_attribution_report(build_baseline_attribution_corpus())
+    repair_stats = path_report[REPLACEMENT_PATH_REPAIR_MUTATION]
+    assert repair_stats["total"] == 7
+    assert repair_stats["complete"] == 7
+    assert repair_stats["missing_owner_bucket"] == 0
+    assert repair_stats["missing_repair_kind"] == 0
+    assert repair_stats["missing_mutation_classification"] == 0
+
+
+def test_co90_passive_scene_mutation_lineage_projects_owner_from_producer_evidence():
+    from game.runtime_lineage_telemetry import make_runtime_lineage_event
+
+    fem = {
+        "final_route": "accept_candidate",
+        "passive_scene_concrete_beat_satisfier_applied": True,
+        "passive_scene_pressure_fallback_avoided": True,
+        "passive_scene_concrete_beat_type": "guard_reaction",
+        "producer_repair_kind": "passive_scene_concrete_beat",
+    }
+    mutation = make_runtime_lineage_event(
+        event_kind="mutation",
+        stage="gate",
+        owner="game.final_emission_gate",
+        mutation_kind="final_emission_mutation",
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_REPAIR_MUTATION,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_PROJECTED
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co90_fallback_behavior_mutation_lineage_projects_direct_sealed_owner():
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    fem = {
+        "final_route": "accept_candidate",
+        "fallback_behavior_repaired": True,
+        "fallback_behavior_repair_kind": "fallback_behavior_repair",
+        "producer_repair_kind": "fallback_behavior_repair",
+        "sealed_fallback_owner_bucket": "sealed-gate",
+    }
+    mutation = next(
+        event
+        for event in build_fem_runtime_lineage_events(fem)
+        if event.get("event_kind") == "mutation"
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_REPAIR_MUTATION,
+        fem=fem,
+    )
+    assert record is not None
+    assert record["owner_bucket"] == "sealed-gate"
+    assert record["attribution_origin"]["owner_bucket"] == ATTRIBUTION_ORIGIN_DIRECT
+    assert "owner_bucket" not in record["missing_fields"]
+
+
+def test_co90_repair_mutation_without_bucket_evidence_stays_unresolved():
+    from game.runtime_lineage_telemetry import make_runtime_lineage_event
+
+    mutation = make_runtime_lineage_event(
+        event_kind="mutation",
+        stage="gate",
+        owner="game.final_emission_gate",
+        mutation_kind="repair_only_mutation",
+    )
+    record = attribution_record_from_lineage_event(
+        mutation,
+        replacement_path=REPLACEMENT_PATH_REPAIR_MUTATION,
+    )
+    assert record is not None
+    assert "owner_bucket" in record["missing_fields"]
 
 
 def test_bs4_producer_stamp_report_improves_completeness():

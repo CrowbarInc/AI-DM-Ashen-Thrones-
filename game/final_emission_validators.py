@@ -551,6 +551,8 @@ def _merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> No
             "fallback_family_used": debug.get("fallback_family_used"),
             "fallback_temporal_frame": debug.get("fallback_temporal_frame"),
             "realization_fallback_family": debug.get("realization_fallback_family"),
+            "opening_fallback_owner_bucket": debug.get("opening_fallback_owner_bucket"),
+            "sealed_fallback_owner_bucket": debug.get("sealed_fallback_owner_bucket"),
         }
     )
 

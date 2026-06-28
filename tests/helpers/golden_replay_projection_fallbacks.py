@@ -3,7 +3,10 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from game.final_emission_replay_projection import is_sealed_replacement_lineage_kind
+from game.final_emission_replay_projection import (
+    is_sealed_replacement_lineage_kind,
+    read_opening_fallback_owner_bucket_for_replay,
+)
 from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD
 
 from tests.helpers.golden_replay_projection_fields import _first_present

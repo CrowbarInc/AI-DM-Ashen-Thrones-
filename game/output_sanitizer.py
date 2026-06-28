@@ -16,7 +16,7 @@ import re
 from typing import Any, Dict
 
 from game.attribution_read_views import SEALED_FALLBACK_OWNER_UNKNOWN_NONE
-from game.final_emission_meta import PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY
+from game.observability_attribution_read import PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY
 from game.social_exchange_fallback_catalog import (
     select_strict_social_emergency_fallback_line,
     social_fallback_line_for_sanitizer,

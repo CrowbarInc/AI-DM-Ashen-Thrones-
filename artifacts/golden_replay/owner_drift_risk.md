@@ -2,9 +2,8 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-05-30T00:00:00Z`
-- Command: `pytest synthetic`
-- Total risk signals: `0`
+- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_co102_live_protected_replay_pipeline.py -q --tb=short`
+- Total risk signals: `3`
 
 ## High Risk Drift
 
@@ -12,7 +11,9 @@ No drift risk signals in this band.
 
 ## Medium Risk Drift
 
-No drift risk signals in this band.
+- `fallback_drift` (source=`protected`, frequency=`1`, trend=`stable`)
+- `fallback_family` (source=`protected`, frequency=`1`, trend=`stable`)
+- `tests/helpers/golden_replay.py` (source=`protected`, frequency=`1`, trend=`stable`)
 
 ## Low Risk Drift
 
@@ -20,19 +21,27 @@ No drift risk signals in this band.
 
 ## Top Risk Fields
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `fallback_family` | `medium` |
 
 ## Top Risk Owners
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `fallback_drift` | `medium` |
 
 ## Top Risk Investigation Targets
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `tests/helpers/golden_replay.py` | `medium` |
 
 ## Recommended Investigation Order
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `tests/helpers/golden_replay.py` | `medium` |
 
 ## Stability Ownership
 

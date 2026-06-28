@@ -59,6 +59,7 @@ def test_upstream_satisfier_injects_beat_when_pressure_due_and_beat_missing():
     )
     meta = out.get("_final_emission_meta") or out.get("final_emission_meta") or {}
     assert meta.get("passive_scene_concrete_beat_satisfier_applied") is True
+    assert meta.get("producer_repair_kind") == "passive_scene_concrete_beat"
     assert meta.get("passive_scene_concrete_beat_type") in {
         "guard_reaction",
         "generic_interruption",

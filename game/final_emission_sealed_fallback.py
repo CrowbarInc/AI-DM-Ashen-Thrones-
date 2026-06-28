@@ -232,6 +232,8 @@ def stamp_non_strict_sealed_replacement_realization_family(
     meta: MutableMapping[str, Any],
 ) -> MutableMapping[str, Any]:
     """Stamp gate-terminal repair family on non-strict sealed replacement FEM fragments."""
+    from game.final_emission_meta import stamp_passive_scene_pressure_fallback_producer_metadata
+
     attach_realization_fallback_family(meta, GATE_TERMINAL_REPAIR)
     if not str(meta.get("sealed_fallback_owner_bucket") or "").strip():
         from game.final_emission_owner_bucket_views import sealed_fallback_owner_bucket_from_fields
@@ -240,6 +242,7 @@ def stamp_non_strict_sealed_replacement_realization_family(
             final_emitted_source=str(meta.get("final_emitted_source") or ""),
             strict_social_route=bool(meta.get("strict_social_active")),
         )
+    stamp_passive_scene_pressure_fallback_producer_metadata(meta)
     return meta
 
 
