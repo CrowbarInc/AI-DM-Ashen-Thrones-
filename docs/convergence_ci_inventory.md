@@ -48,6 +48,20 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 
 **Protected replay failure artifact:** When the protected replay step fails, Actions attempts to upload the stable artifact `protected-replay-failure-report` from `artifacts/golden_replay/replay_failure_report.md`. It is not uploaded on a successful replay run; missing output is reported as a warning rather than masking the blocking replay failure. Reproduce locally with `python -m pytest -m golden_replay -q`.
 
+**Compact golden drift foundation-readiness (manual):**
+
+```bash
+python tools/run_protected_replay_trend.py --runs 2 --compact
+```
+
+This is a manual foundation-readiness signal over exactly the six compact protected replay cases. It is not a mandatory CI gate. Expected pass criteria:
+
+- Command exits successfully and reports `guardrail=PASS`.
+- `artifacts/golden_replay/trend_window/compact_golden_drift_summary.json` exists.
+- `total_compared_cases` is `6`.
+- `route_drift_count`, `speaker_drift_count`, `source_drift_count`, `fallback_drift_count`, and `mutation_drift_count` are all `0`.
+- `final_text_hash_drift_count` remains report-only/advisory unless explicitly promoted in a later policy block.
+
 ---
 
 ## Classification legend
@@ -65,6 +79,7 @@ Or run each tool individually: `python tools/architecture_audit.py --print-summa
 | Closed seam | Closeout / source doc | Pytest slice | Static audit / tool | In CI before Block B | Recommended CI status | Rationale |
 | --- | --- | --- | --- | --- | --- | --- |
 | **Protected golden replay acceptance** | `docs/testing/protected_replay_manifest.md`, `docs/audits/cycle_k_block_k1_protected_replay_declaration_2026-05-26.md` | `-m golden_replay` | — | No | **Hard-fail** | Protected end-to-end and direct-seam replay failures block acceptance; marker selection permits future protected replay expansion without workflow rewiring. |
+| **Compact golden drift foundation-readiness** | `docs/testing/protected_replay_manifest.md`, `tools/run_protected_replay_trend.py` | — | `python tools/run_protected_replay_trend.py --runs 2 --compact` | No | **Deferred/manual** | Thin report-only signal over the six compact protected cases; validates compact drift artifacts without promoting final-text hash drift or adding long-session/BX/direct-seam/dashboard/scenario-spine lanes to CI. |
 | **Evaluator convergence** | `docs/audits/closeouts/evaluator_convergence_closeout.md`, `docs/evaluator_convergence_inventory.md` | `tests/test_evaluator_convergence_closeout.py` | — | No | **Hard-fail** | Fast lock on evaluator maintenance-grade invariants. |
 | **Evaluator boundary / governance guards** | Same | `tests/test_dead_turn_evaluation_threading.py`, `tests/test_playability_eval.py`, `tests/test_behavioral_gauntlet_eval.py`, `tests/test_scenario_spine_eval.py`, `tests/test_final_emission_meta.py`, `tests/test_architecture_audit_tool.py`, `tests/test_validation_layer_audit_smoke.py` | — | No | **Hard-fail** | Same slice as closeout doc; protects evaluator-adjacent and audit-smoke coverage without extending evaluator scope. |
 | **FE-C2 / final emission boundary** | `docs/final_emission_ownership_convergence.md` (Block D2), `docs/narrative_integrity_architecture.md` | `tests/test_final_emission_boundary_convergence.py`, `tests/test_final_emission_boundary_contract.py` | `tools/final_emission_ownership_audit.py` | No | **Pytests + ownership audit: Hard-fail** | Convergence scenarios + boundary contract tests; strict ownership audit catches advisory drift signals. |
@@ -176,6 +191,7 @@ Aligned with `.github/workflows/convergence-checks.yml`:
 ### Deferred / future work
 
 - **`tools/run_governance_audits.py`** — Thin local runner for informational audits only (`python tools/run_governance_audits.py`). Strict audits and pytest remain separate commands.
+- **Compact golden drift foundation-readiness** — Manual command only for now: `python tools/run_protected_replay_trend.py --runs 2 --compact`. Promotion to informational or hard-fail CI requires a later policy block and must keep `final_text_hash_drift_count` advisory unless explicitly reclassified.
 
 **Test inventory (wired in CI):** `python tools/test_audit.py --check` validates committed `tests/test_inventory_governance.json` drift in `convergence-checks.yml` (alongside registry and governance suites in `tests/test_ownership_registry.py`, `tests/test_inventory_governance.py`, `tests/test_gate_boundary_governance.py`, `tests/test_replay_boundary_governance.py`, and `tests/test_ownership_write_path_governance.py`). Regenerate governance with `py -3 tools/test_audit.py`; full diagnostic via `--full` → `artifacts/test_inventory_full.json`. See `tests/TEST_AUDIT.md`.
 

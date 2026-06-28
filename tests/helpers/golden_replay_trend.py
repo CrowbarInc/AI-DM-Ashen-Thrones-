@@ -31,6 +31,7 @@ from tests.helpers.protected_replay_registry import (
     BW_DIMENSION_SOURCE,
     BW_DIMENSION_SPEAKER,
     bx_speaker_parity_corpus,
+    compact_golden_drift_corpus,
     protected_replay_corpus,
 )
 
@@ -193,6 +194,11 @@ def bx_speaker_parity_corpus_scenario_ids() -> tuple[str, ...]:
 def protected_replay_corpus_scenario_ids() -> tuple[str, ...]:
     """Ordered BW protected corpus scenario IDs (registry authority)."""
     return tuple(entry.scenario_id for entry in protected_replay_corpus())
+
+
+def compact_golden_drift_corpus_scenario_ids() -> tuple[str, ...]:
+    """Ordered compact Golden Transcript Drift scenario IDs (six protected replays only)."""
+    return tuple(entry.scenario_id for entry in compact_golden_drift_corpus())
 
 
 def _gpt_callback_from_lines(lines: tuple[str, ...]) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
@@ -477,6 +483,53 @@ def build_trend_manifest(*, run_envelopes: Sequence[Mapping[str, Any]]) -> dict[
         "run_count": len(run_envelopes),
         "corpus_scenario_ids": [entry.scenario_id for entry in protected_replay_corpus()],
         "runs": run_ids,
+    }
+
+
+def _dimension_drift_count(report: Mapping[str, Any], dimension: str) -> int:
+    totals = report.get("dimension_totals")
+    if not isinstance(totals, Mapping):
+        return 0
+    bucket = totals.get(dimension)
+    if not isinstance(bucket, Mapping):
+        return 0
+    return int(bucket.get("drift_count") or 0)
+
+
+def _dimension_affected_identities(report: Mapping[str, Any], dimension: str) -> set[str]:
+    totals = report.get("dimension_totals")
+    if not isinstance(totals, Mapping):
+        return set()
+    bucket = totals.get(dimension)
+    if not isinstance(bucket, Mapping):
+        return set()
+    affected = bucket.get("affected_identities")
+    if not isinstance(affected, list):
+        return set()
+    return {str(identity) for identity in affected}
+
+
+def build_compact_golden_drift_summary(
+    *,
+    drift_report: Mapping[str, Any],
+    corpus_case_ids: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Build the machine-readable compact drift summary from existing trend projections."""
+    case_ids = list(corpus_case_ids or compact_golden_drift_corpus_scenario_ids())
+    source_or_owner_identities = _dimension_affected_identities(
+        drift_report, BW_DIMENSION_SOURCE
+    ) | _dimension_affected_identities(drift_report, BW_DIMENSION_OWNER)
+    return {
+        "schema_version": TREND_SCHEMA_VERSION,
+        "report_only": True,
+        "route_drift_count": _dimension_drift_count(drift_report, BW_DIMENSION_ROUTE),
+        "speaker_drift_count": _dimension_drift_count(drift_report, BW_DIMENSION_SPEAKER),
+        "source_drift_count": _dimension_drift_count(drift_report, BW_DIMENSION_SOURCE),
+        "fallback_drift_count": len(source_or_owner_identities),
+        "mutation_drift_count": _dimension_drift_count(drift_report, BW_DIMENSION_MUTATION),
+        "final_text_hash_drift_count": _dimension_drift_count(drift_report, BW_DIMENSION_FINAL_TEXT),
+        "total_compared_cases": len(case_ids),
+        "corpus_case_ids": case_ids,
     }
 
 
@@ -1198,6 +1251,7 @@ def run_protected_replay_trend_window(
     *,
     runs: int,
     out_dir: Path,
+    compact: bool = False,
     append_history: bool = False,
     thresholds: Mapping[str, int | None] | None = None,
     bz_replay_key_baseline_run: Path | None = None,
@@ -1251,6 +1305,14 @@ def run_protected_replay_trend_window(
         ),
         thresholds=thresholds,
     )
+    if compact:
+        compact_summary = build_compact_golden_drift_summary(
+            drift_report=drift_report,
+            corpus_case_ids=compact_golden_drift_corpus_scenario_ids(),
+        )
+        drift_report = dict(drift_report)
+        drift_report["compact_drift_summary"] = compact_summary
+        write_deterministic_json(out_dir / "compact_golden_drift_summary.json", compact_summary)
     write_deterministic_json(out_dir / "golden_transcript_drift.json", drift_report)
     (out_dir / "golden_transcript_drift.md").write_text(
         render_golden_transcript_drift_markdown(drift_report),

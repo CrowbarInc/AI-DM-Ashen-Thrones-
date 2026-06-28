@@ -26,10 +26,12 @@ from tests.helpers.golden_replay_trend import (
     HISTORY_FORBIDDEN_EQUALITY_KEYS,
     append_golden_transcript_drift_history,
     apply_guardrail_to_drift_report,
+    build_compact_golden_drift_summary,
     build_golden_transcript_drift_report,
     build_run_envelope,
     build_trend_history_row,
     classify_history_trend_direction,
+    compact_golden_drift_corpus_scenario_ids,
     compare_trend_runs,
     default_guardrail_thresholds,
     evaluate_drift_guardrails,
@@ -41,6 +43,7 @@ from tests.helpers.golden_replay_trend import (
     run_protected_replay_trend_window,
     turn_identity_key,
 )
+from tests.helpers.protected_replay_registry import compact_golden_drift_corpus, protected_replay_corpus
 from tests.helpers.replay_observed_row_fixtures import synthetic_rerun_turn
 
 
@@ -241,6 +244,98 @@ def test_run_protected_replay_trend_window_writes_artifacts(tmp_path: Path) -> N
     assert (tmp_path / "golden_transcript_drift.json").is_file()
     assert (tmp_path / "golden_transcript_drift.md").is_file()
     assert report["golden_transcript_drift_count"] == 0
+
+
+def test_compact_golden_drift_harness_is_explicit_and_advisory(tmp_path: Path) -> None:
+    expected_case_ids = [
+        "directed_npc_question",
+        "lead_followup_with_dialogue_lock",
+        "sanitizer_scaffold_leakage",
+        "thin_answer_action_outcome_final_emission",
+        "vocative_override_after_prior_continuity",
+        "wrong_speaker_strict_social_emission",
+    ]
+    assert [entry.scenario_id for entry in compact_golden_drift_corpus()] == expected_case_ids
+    assert compact_golden_drift_corpus() == protected_replay_corpus()
+    assert list(compact_golden_drift_corpus_scenario_ids()) == expected_case_ids
+
+    baseline = _raw_turn(final_text_hash="hash-a")
+    current = _raw_turn(final_text_hash="hash-b")
+    comparison = compare_trend_runs(_envelope_from_turns(0, [baseline]), _envelope_from_turns(1, [current]))
+    report = apply_guardrail_to_drift_report(
+        build_golden_transcript_drift_report(
+            run_envelopes=[{"run_id": "run-000"}, {"run_id": "run-001"}],
+            comparisons=[comparison],
+        )
+    )
+    summary = build_compact_golden_drift_summary(drift_report=report)
+    required_fields = {
+        "schema_version",
+        "report_only",
+        "route_drift_count",
+        "speaker_drift_count",
+        "source_drift_count",
+        "fallback_drift_count",
+        "mutation_drift_count",
+        "final_text_hash_drift_count",
+        "total_compared_cases",
+        "corpus_case_ids",
+    }
+
+    assert set(summary) == required_fields
+    assert summary["corpus_case_ids"] == expected_case_ids
+    assert summary["total_compared_cases"] == 6
+    for field in {
+        "route_drift_count",
+        "speaker_drift_count",
+        "source_drift_count",
+        "fallback_drift_count",
+        "mutation_drift_count",
+        "final_text_hash_drift_count",
+        "total_compared_cases",
+    }:
+        assert isinstance(summary[field], int)
+    assert summary["final_text_hash_drift_count"] == 1
+    assert "final_text_drift_count" not in summary
+    assert report["guardrail"]["report_only"] is True
+    assert report["guardrail"]["advisory_exceeded_fields"][0]["field"] == ADVISORY_GUARDRAIL_FIELD
+
+    fallback_summary = build_compact_golden_drift_summary(
+        drift_report={
+            "dimension_totals": {
+                BW_DIMENSION_SOURCE: {
+                    "drift_count": 1,
+                    "affected_identities": ["directed_npc_question|idx:0"],
+                },
+                BW_DIMENSION_OWNER: {
+                    "drift_count": 1,
+                    "affected_identities": ["directed_npc_question|idx:0"],
+                },
+            }
+        }
+    )
+    assert fallback_summary["fallback_drift_count"] == 1
+
+    run_report = run_protected_replay_trend_window(runs=2, out_dir=tmp_path, compact=True)
+    compact_artifact = tmp_path / "compact_golden_drift_summary.json"
+    assert compact_artifact.is_file()
+    artifact_payload = json.loads(compact_artifact.read_text(encoding="utf-8"))
+    assert set(artifact_payload) == required_fields
+    assert artifact_payload["corpus_case_ids"] == expected_case_ids
+    assert artifact_payload["total_compared_cases"] == len(expected_case_ids)
+    for field in required_fields:
+        if field.endswith("_count") or field == "total_compared_cases" or field == "schema_version":
+            assert isinstance(artifact_payload[field], int)
+    assert run_report["compact_drift_summary"]["corpus_case_ids"] == expected_case_ids
+
+    second_report = run_protected_replay_trend_window(runs=2, out_dir=tmp_path / "repeat", compact=True)
+    second_payload = json.loads(
+        (tmp_path / "repeat" / "compact_golden_drift_summary.json").read_text(encoding="utf-8")
+    )
+    assert set(second_payload) == set(artifact_payload)
+    assert second_payload["corpus_case_ids"] == artifact_payload["corpus_case_ids"]
+    assert second_payload["total_compared_cases"] == artifact_payload["total_compared_cases"]
+    assert set(second_report["compact_drift_summary"]) == required_fields
 
 
 def test_first_history_write_creates_jsonl_and_markdown(tmp_path: Path) -> None:

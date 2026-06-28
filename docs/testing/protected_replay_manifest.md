@@ -28,6 +28,29 @@ Protected replay reproduction command:
 python -m pytest -m golden_replay -q
 ```
 
+Compact Golden Transcript Drift command:
+
+```bash
+python tools/run_protected_replay_trend.py --runs 2 --compact
+```
+
+The compact drift harness is an explicit, report-only entry point over exactly the six
+`protected_replay_corpus()` entries. It does not include long-session, BX speaker parity,
+direct-seam, dashboard, recurrence, or scenario-spine cases. Machine-readable compact output is
+written to `compact_golden_drift_summary.json` and embedded under `compact_drift_summary` in
+`golden_transcript_drift.json`.
+
+Compact drift fields:
+
+- `route_drift_count`
+- `speaker_drift_count`
+- `source_drift_count`
+- `fallback_drift_count` (derived from existing source/owner affected identities)
+- `mutation_drift_count`
+- `final_text_hash_drift_count` (advisory/hash-based)
+- `total_compared_cases`
+- `corpus_case_ids`
+
 The decomposed golden replay modules split protected, supporting, and diagnostic coverage across
 focused pytest files. `tests/test_golden_replay.py` is a redirect stub only. The protected replay
 registry in `tests/helpers/protected_replay_registry.py` is the mechanical authority for which

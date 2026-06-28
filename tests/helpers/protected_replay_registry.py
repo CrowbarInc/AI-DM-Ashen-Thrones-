@@ -284,6 +284,11 @@ def protected_replay_corpus() -> tuple[ProtectedReplayScenarioEntry, ...]:
     )
 
 
+def compact_golden_drift_corpus() -> tuple[ProtectedReplayScenarioEntry, ...]:
+    """Return the compact Golden Transcript Drift corpus: the six short protected replays."""
+    return protected_replay_corpus()
+
+
 def bx_speaker_parity_corpus() -> tuple[ProtectedReplayScenarioEntry, ...]:
     """Return acceptance-blocking BX guard speaker parity scenarios (separate from BW trend window)."""
     return tuple(
