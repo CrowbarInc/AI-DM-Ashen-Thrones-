@@ -47,6 +47,24 @@ from tests.helpers.runtime_lineage_reporting import (
     build_runtime_lineage_summary_from_branch_transcripts,
     runtime_lineage_markdown_lines,
 )
+from tools.fallback_incidence_report import classify_fallback_incidence_event
+
+
+def _fallback_selected_event(events: list[dict]) -> dict:
+    return next(event for event in events if event.get("event_kind") == "fallback_selected")
+
+
+def _fallback_classification(event: dict, fem: dict) -> dict[str, str]:
+    return classify_fallback_incidence_event(
+        {
+            **event,
+            "diegetic_family": fem.get("fallback_family_used"),
+            "realization_family": fem.get("realization_fallback_family"),
+            "observed_family": fem.get("fallback_family"),
+            "final_route": fem.get("final_route"),
+            "route_kind": "synthetic_matrix",
+        }
+    )
 
 
 def test_make_runtime_lineage_event_is_json_serializable_and_normalized() -> None:
@@ -442,3 +460,56 @@ def test_split_owner_acceptance_matrix_fem_builder_projection_matches_matrix() -
 
         observed = project_split_owner_matrix_row(row)
         assert_split_owner_matrix_fem_projection(row, observed)
+
+
+def test_split_owner_acceptance_matrix_projection_fidelity_matches_runtime_evidence() -> None:
+    """CT5: projected fallback classification stays aligned with explicit matrix runtime evidence."""
+    from game.final_emission_replay_projection import build_fem_runtime_lineage_events
+
+    known_noncomparable_sources = {
+        "scene_opening",
+        "opening_failed_closed",
+        "visibility_enforcement",
+        "first_mention_enforcement",
+        "referential_clarity_enforcement",
+        "sanitizer_empty_output",
+        "sanitizer_strict_social",
+        "sealed_social_interlocutor",
+        "sealed_passive_scene_pressure",
+        "sealed_npc_pursuit_neutral",
+        "sealed_anti_reset_continuation",
+        "sealed_global_scene",
+        "sealed_unknown_replacement",
+    }
+    observed_noncomparable_sources: set[str] = set()
+    for row in split_owner_acceptance_matrix_rows():
+        if row.event_kind != "fallback_selected" or split_owner_fem_projection_excluded(row):
+            continue
+
+        fem = split_owner_fem_meta_from_matrix_row(row)
+        runtime_event = split_owner_lineage_event_from_matrix_row(row)
+        projected_event = _fallback_selected_event(build_fem_runtime_lineage_events(fem))
+
+        for field in (
+            "fallback_kind",
+            "owner",
+            "fallback_selection_owner",
+            "fallback_content_owner",
+            "fallback_owner_bucket",
+        ):
+            if runtime_event.get(field) is not None:
+                assert projected_event.get(field) == runtime_event.get(field), (row.matrix_id, field)
+        if row.matrix_id == "upstream_fast_fallback":
+            assert projected_event.get("fallback_owner_bucket") == "retry"
+
+        runtime_classification = _fallback_classification(runtime_event, fem)
+        projected_classification = _fallback_classification(projected_event, fem)
+        for field in ("family", "owner", "route", "compatibility_status", "governed_classification"):
+            assert projected_classification[field] == runtime_classification[field], (row.matrix_id, field)
+
+        if runtime_classification["source"] != "not_recorded":
+            if projected_classification["source"] == runtime_classification["source"]:
+                continue
+            observed_noncomparable_sources.add(row.matrix_id)
+
+    assert observed_noncomparable_sources <= known_noncomparable_sources

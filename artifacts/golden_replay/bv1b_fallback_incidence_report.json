@@ -1,6 +1,6 @@
 {
   "artifact_scan": {
-    "canonical_fem_instances": 95,
+    "canonical_fem_instances": 101,
     "generated_at": "2026-06-21T13:45:36.418647Z",
     "measurement_scope": "BV3D",
     "method": "BV3D measurement scope + build_fem_runtime_lineage_events projector",
@@ -12,14 +12,42 @@
     ]
   },
   "cross_tabs": {
+    "compatibility_status_by_family": {
+      "active_governed": {
+        "gate_terminal_repair": 1
+      },
+      "unknown_unclassified": {
+        "sealed_unknown_replacement": 1
+      }
+    },
+    "compatibility_status_by_route": {
+      "active_governed": {
+        "replaced": 1
+      },
+      "unknown_unclassified": {
+        "replaced": 1
+      }
+    },
     "final_route_x_fallback_kind": {
       "replaced": {
-        "referential_clarity_hard_replacement": 1
+        "referential_clarity_hard_replacement": 1,
+        "sealed_unknown_replacement": 1
+      }
+    },
+    "owner_by_compatibility_status": {
+      "game.final_emission_gate": {
+        "unknown_unclassified": 1
+      },
+      "game.final_emission_visibility_fallback": {
+        "active_governed": 1
       }
     },
     "route_kind_x_fallback_kind": {
       "observe": {
         "referential_clarity_hard_replacement": 1
+      },
+      "question": {
+        "sealed_unknown_replacement": 1
       }
     },
     "route_kind_x_fallback_owner_bucket": {
@@ -30,64 +58,99 @@
     "route_kind_x_final_route": {
       "observe": {
         "replaced": 1
+      },
+      "question": {
+        "replaced": 1
+      }
+    },
+    "trigger_site_by_family": {
+      "referential_clarity_hard_replacement": {
+        "gate_terminal_repair": 1
+      },
+      "sealed_terminal_replacement": {
+        "sealed_unknown_replacement": 1
       }
     }
   },
-  "eligible_turn_count": 95,
-  "fallback_event_count": 1,
-  "fallback_trigger_rate": 0.010526315789473684,
-  "fallback_turn_count": 1,
+  "eligible_turn_count": 101,
+  "fallback_event_count": 2,
+  "fallback_trigger_rate": 0.019801980198019802,
+  "fallback_turn_count": 2,
   "frequency": {
+    "compatibility_status": {
+      "active_governed": 1,
+      "unknown_unclassified": 1
+    },
     "diegetic_family": {},
     "event_owner": {
-      "game.final_emission_gate": 1
+      "game.final_emission_gate": 2
     },
     "fallback_authorship_source": {},
     "fallback_content_owner": {
+      "game.final_emission_gate": 1,
       "game.final_emission_sealed_fallback": 1
     },
     "fallback_kind": {
-      "referential_clarity_hard_replacement": 1
+      "referential_clarity_hard_replacement": 1,
+      "sealed_unknown_replacement": 1
     },
     "fallback_owner_bucket": {
       "sealed-gate": 1
     },
     "fallback_selection_owner": {
+      "game.final_emission_gate": 1,
       "game.final_emission_visibility_fallback": 1
     },
     "final_route": {
-      "replaced": 1
+      "replaced": 2
     },
     "gate_path": {},
+    "governed_classification": {
+      "BOUNDED": 1,
+      "UNKNOWN": 1
+    },
     "observed_family": {},
     "realization_family": {
       "gate_terminal_repair": 1
+    },
+    "trigger_condition": {
+      "referential_clarity_gate_failed": 1,
+      "sealed_terminal_replacement_required": 1
+    },
+    "trigger_site": {
+      "referential_clarity_hard_replacement": 1,
+      "sealed_terminal_replacement": 1
     }
   },
   "metadata_coverage": {
-    "fallback_events_with_content_owner": 1,
+    "fallback_events_with_content_owner": 2,
     "fallback_events_with_diegetic_family": 0,
-    "fallback_events_with_known_route": 1,
+    "fallback_events_with_known_route": 2,
     "fallback_events_with_observed_family": 0,
     "fallback_events_with_owner_bucket": 1,
     "fallback_events_with_realization_family": 1,
-    "fallback_events_with_selection_owner": 1,
-    "turns_with_final_emission_meta": 95,
-    "turns_with_runtime_lineage_events": 95
+    "fallback_events_with_selection_owner": 2,
+    "turns_with_final_emission_meta": 101,
+    "turns_with_runtime_lineage_events": 101
   },
   "route_fallback_trigger_rate": {
     "observe": 0.043478260869565216,
+    "question": 0.2,
     "scene_opening": 0.0,
-    "social_probe": 0.0
+    "social_probe": 0.0,
+    "unknown": 0.0
   },
   "route_fallback_turn_count": {
-    "observe": 1
+    "observe": 1,
+    "question": 1
   },
   "route_turn_count": {
     "observe": 23,
+    "question": 5,
     "scene_opening": 62,
-    "social_probe": 10
+    "social_probe": 10,
+    "unknown": 1
   },
   "schema_version": 1,
-  "unknown_route_turn_count": 0
+  "unknown_route_turn_count": 1
 }

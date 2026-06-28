@@ -254,6 +254,8 @@ def project_mutation_classification_from_fallback_kind(fallback_kind: Any) -> st
 
 def _fem_preserved_fallback_owner_bucket(fem: Mapping[str, Any], fallback_kind: str) -> str | None:
     """Preserve owner buckets already stamped on finalized FEM — do not synthesize new values."""
+    if fallback_kind == "upstream_fast_fallback":
+        return "retry"
     if fallback_kind in {"scene_opening", "opening_failed_closed"}:
         bucket = _opening_fallback_owner_bucket_from_meta(fem)
         return bucket if bucket else None
