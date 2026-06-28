@@ -16,6 +16,7 @@ from typing import Any, Mapping, Sequence
 from tests.helpers.failure_dashboard_paths import (
     BUG_RECURRENCE_HISTORY_JSON_PATH,
     BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
+    BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH,
     OWNER_DRIFT_HOTSPOTS_JSON_PATH,
     OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH,
     OWNER_DRIFT_LONGITUDINAL_JSON_PATH,
@@ -24,6 +25,7 @@ from tests.helpers.failure_dashboard_paths import (
     OWNER_DRIFT_RISK_MARKDOWN_PATH,
     OWNER_DRIFT_TRENDS_JSON_PATH,
     OWNER_DRIFT_TRENDS_MARKDOWN_PATH,
+    BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH,
     RERUN_DRIFT_SCORECARD_ENV_VAR,
     RERUN_DRIFT_SCORECARD_JSON_PATH,
     RERUN_DRIFT_SCORECARD_MARKDOWN_PATH,
@@ -260,6 +262,12 @@ def write_owner_drift_risk_artifacts(
     *,
     json_path: Path | str = OWNER_DRIFT_RISK_JSON_PATH,
     markdown_path: Path | str = OWNER_DRIFT_RISK_MARKDOWN_PATH,
+    recurrence_json_path: Path | str | None = None,
+    recurrence_markdown_path: Path | str | None = None,
+    recurrence_event_log_path: Path | str | None = None,
+    recurrence_session_diagnostic_event_log_path: Path | str | None = None,
+    recurrence_session_event_log_path: Path | str | None = None,
+    recurrence_synthetic_test_artifact_event_log_path: Path | str | None = None,
     scorecard_history: Sequence[Mapping[str, Any]] | None = None,
     command_used: str | None = None,
     generated_at: str | None = None,
@@ -294,8 +302,20 @@ def write_owner_drift_risk_artifacts(
     )
     write_bug_recurrence_history_artifacts(
         rows,
-        json_path=json_out.with_name(BUG_RECURRENCE_HISTORY_JSON_PATH.name),
-        markdown_path=markdown_out.with_name(BUG_RECURRENCE_HISTORY_MARKDOWN_PATH.name),
+        json_path=(
+            Path(recurrence_json_path)
+            if recurrence_json_path is not None
+            else json_out.with_name(BUG_RECURRENCE_HISTORY_JSON_PATH.name)
+        ),
+        markdown_path=(
+            Path(recurrence_markdown_path)
+            if recurrence_markdown_path is not None
+            else markdown_out.with_name(BUG_RECURRENCE_HISTORY_MARKDOWN_PATH.name)
+        ),
+        event_log_path=recurrence_event_log_path,
+        session_diagnostic_event_log_path=recurrence_session_diagnostic_event_log_path,
+        session_event_log_path=recurrence_session_event_log_path,
+        synthetic_test_artifact_event_log_path=recurrence_synthetic_test_artifact_event_log_path,
         command_used=command_used,
         generated_at=generated_at,
         recurrence_event_metadata=recurrence_event_metadata,
@@ -467,6 +487,7 @@ def write_rerun_drift_scorecard_artifacts(
     markdown_path: Path | str = RERUN_DRIFT_SCORECARD_MARKDOWN_PATH,
     longitudinal_json_path: Path | str = OWNER_DRIFT_LONGITUDINAL_JSON_PATH,
     longitudinal_markdown_path: Path | str = OWNER_DRIFT_LONGITUDINAL_MARKDOWN_PATH,
+    side_effect_artifact_root: Path | str | None = None,
     command_used: str | None = None,
     generated_at: str | None = None,
 ) -> tuple[Path, Path]:
@@ -499,19 +520,70 @@ def write_rerun_drift_scorecard_artifacts(
         command_used=command_used,
         generated_at=generated_at,
     )
+    side_effect_root = Path(side_effect_artifact_root) if side_effect_artifact_root is not None else None
     write_owner_drift_hotspot_artifacts(
         collected_hotspot_classifications(),
+        json_path=(
+            side_effect_root / OWNER_DRIFT_HOTSPOTS_JSON_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_HOTSPOTS_JSON_PATH
+        ),
+        markdown_path=(
+            side_effect_root / OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH
+        ),
         scorecard_history=history_scorecards,
         command_used=command_used,
         generated_at=generated_at,
     )
     write_owner_drift_trend_artifacts(
         history_scorecards,
+        json_path=(
+            side_effect_root / OWNER_DRIFT_TRENDS_JSON_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_TRENDS_JSON_PATH
+        ),
+        markdown_path=(
+            side_effect_root / OWNER_DRIFT_TRENDS_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_TRENDS_MARKDOWN_PATH
+        ),
         command_used=command_used,
         generated_at=generated_at,
     )
     write_owner_drift_risk_artifacts(
         collected_hotspot_classifications(),
+        json_path=(
+            side_effect_root / OWNER_DRIFT_RISK_JSON_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_RISK_JSON_PATH
+        ),
+        markdown_path=(
+            side_effect_root / OWNER_DRIFT_RISK_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_RISK_MARKDOWN_PATH
+        ),
+        recurrence_json_path=(
+            side_effect_root / BUG_RECURRENCE_HISTORY_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_markdown_path=(
+            side_effect_root / BUG_RECURRENCE_HISTORY_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_session_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_synthetic_test_artifact_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
         scorecard_history=history_scorecards,
         command_used=command_used,
         generated_at=generated_at,

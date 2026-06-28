@@ -42,6 +42,7 @@ RECURRENCE_EVENT_SOURCE_BUCKETS: frozenset[str] = frozenset(
 )
 RECURRENCE_PERSISTENCE_LANE_PROTECTED = "protected_replay_history"
 RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC = "session_diagnostic_history"
+RECURRENCE_PERSISTENCE_LANE_SYNTHETIC_TEST_ARTIFACT = "synthetic_test_artifact_history"
 GOLDEN_REPLAY_ARTIFACT_SOURCE_PREFIX = "artifacts/golden_replay/"
 DEFAULT_DISALLOWED_ARTIFACT_SOURCE_SUBSTRINGS: tuple[str, ...] = (
     "codex_pytest_tmp",
@@ -51,6 +52,18 @@ DEFAULT_DISALLOWED_ARTIFACT_SOURCE_SUBSTRINGS: tuple[str, ...] = (
 )
 ALLOWED_RECURRENCE_STATUSES: frozenset[str] = frozenset({"active", "retired"})
 SUMMARY_RECURRENCE_STATUSES: frozenset[str] = frozenset({"active", "retired", "watch"})
+RECURRENCE_POPULATION_PROTECTED_REPLAY = "protected_replay"
+RECURRENCE_POPULATION_SESSION_DIAGNOSTIC = "session_diagnostic"
+RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT = "synthetic_test_artifact"
+RECURRENCE_POPULATION_LEGACY_UNIFIED = "legacy_unified"
+RECURRENCE_POPULATIONS: frozenset[str] = frozenset(
+    {
+        RECURRENCE_POPULATION_PROTECTED_REPLAY,
+        RECURRENCE_POPULATION_SESSION_DIAGNOSTIC,
+        RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT,
+        RECURRENCE_POPULATION_LEGACY_UNIFIED,
+    }
+)
 REGRESSION_RECURRENCE_RATE_METRIC = "regression_recurrence_rate"
 REGRESSION_RECURRENCE_RATE_DEFINITION = (
     "Share of observed recurrence keys with occurrence_count >= 2 "
@@ -263,21 +276,23 @@ def classify_recurrence_event_commit_worthiness(
     *,
     policy: RecurrenceCommitWorthinessPolicy | None = None,
 ) -> dict[str, Any]:
-    """Split recurrence events into protected and session-diagnostic lanes with reasons."""
+    """Split recurrence events into protected, session, and synthetic/test artifact lanes."""
     active_policy = policy or DEFAULT_RECURRENCE_COMMIT_WORTHINESS_POLICY
     protected_events: list[dict[str, Any]] = []
     session_diagnostic_events: list[dict[str, Any]] = []
+    synthetic_test_artifact_events: list[dict[str, Any]] = []
     classifications: list[dict[str, Any]] = []
     for event in events or ():
         if not isinstance(event, Mapping):
             continue
         event_copy = dict(event)
         worthy, reason = is_commit_worthy_recurrence_event(event_copy, policy=active_policy)
-        lane = (
-            RECURRENCE_PERSISTENCE_LANE_PROTECTED
-            if worthy
-            else RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC
-        )
+        if worthy:
+            lane = RECURRENCE_PERSISTENCE_LANE_PROTECTED
+        elif reason == "session_event_source":
+            lane = RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC
+        else:
+            lane = RECURRENCE_PERSISTENCE_LANE_SYNTHETIC_TEST_ARTIFACT
         classifications.append(
             {
                 "event_index": event_copy.get("event_index"),
@@ -292,19 +307,26 @@ def classify_recurrence_event_commit_worthiness(
         )
         if worthy:
             protected_events.append(event_copy)
-        else:
+        elif lane == RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC:
             session_diagnostic_events.append(event_copy)
+        else:
+            synthetic_test_artifact_events.append(event_copy)
+    diagnostic_events = session_diagnostic_events + synthetic_test_artifact_events
     return {
         "schema_version": RECURRENCE_SCHEMA_VERSION,
         "report_only": RECURRENCE_REPORT_ONLY,
         "advisory_only": RECURRENCE_ADVISORY_ONLY,
         "protected_replay_history": protected_events,
         "session_diagnostic_history": session_diagnostic_events,
+        "synthetic_test_artifact_history": synthetic_test_artifact_events,
+        "diagnostic_history": diagnostic_events,
         "classifications": classifications,
         "counts": {
             "total": len(classifications),
             "protected_replay_history": len(protected_events),
             "session_diagnostic_history": len(session_diagnostic_events),
+            "synthetic_test_artifact_history": len(synthetic_test_artifact_events),
+            "diagnostic_history": len(diagnostic_events),
         },
     }
 
@@ -352,7 +374,7 @@ def classify_committed_recurrence_event_log(
         "advisory_only": RECURRENCE_ADVISORY_ONLY,
         "total_events": classification["counts"]["total"],
         "events_retained_for_protected_history": classification["counts"]["protected_replay_history"],
-        "events_excluded_from_protected_history": classification["counts"]["session_diagnostic_history"],
+        "events_excluded_from_protected_history": classification["counts"]["diagnostic_history"],
         "events_classified_as_session_noise": sum(
             1
             for item in classification["classifications"]
@@ -371,8 +393,109 @@ def classify_committed_recurrence_event_log(
                 event_log,
                 event_source_filter=DEFAULT_EVENT_SOURCE,
             ),
+            "synthetic_test_artifact_history": calculate_synthetic_test_artifact_regression_recurrence_rate(
+                event_log,
+                policy=active_policy,
+            ),
         },
+        **build_scoped_recurrence_population_metrics(event_log, policy=active_policy),
     }
+
+
+def classify_recurrence_event_population(
+    event: Mapping[str, Any] | None,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> str:
+    """Classify one recurrence event into an explicit population taxonomy bucket."""
+    worthy, reason = is_commit_worthy_recurrence_event(event, policy=policy)
+    if worthy:
+        return RECURRENCE_POPULATION_PROTECTED_REPLAY
+    if reason == "session_event_source":
+        return RECURRENCE_POPULATION_SESSION_DIAGNOSTIC
+    return RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT
+
+
+def _occurrence_counts_for_event_population(
+    events: Sequence[Mapping[str, Any]] | None,
+    population: str,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, int]:
+    """Return recurrence-key occurrence counts for one population bucket."""
+    if population not in RECURRENCE_POPULATIONS - {RECURRENCE_POPULATION_LEGACY_UNIFIED}:
+        return {}
+    active_policy = policy or DEFAULT_RECURRENCE_COMMIT_WORTHINESS_POLICY
+    counts: dict[str, int] = {}
+    ordered = sorted(
+        [dict(event) for event in events or () if isinstance(event, Mapping)],
+        key=lambda event: (
+            int(event.get("event_index") or 0),
+            str(event.get("recurrence_key") or ""),
+        ),
+    )
+    for event in ordered:
+        if population == RECURRENCE_POPULATION_LEGACY_UNIFIED:
+            include = True
+        else:
+            include = classify_recurrence_event_population(event, policy=active_policy) == population
+        if not include:
+            continue
+        key = str(event.get("recurrence_key") or build_recurrence_key(event)).strip()
+        if key:
+            counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
+def _regression_recurrence_rate_from_counts(
+    counts: Mapping[str, int],
+    *,
+    population: str | None = None,
+    event_source_filter: str | None = None,
+) -> dict[str, Any]:
+    """Build a regression recurrence rate payload from precomputed key counts."""
+    denominator = len(counts)
+    numerator = sum(1 for count in counts.values() if count >= 2)
+    rate = (numerator / denominator) if denominator else 0.0
+    payload: dict[str, Any] = {
+        "schema_version": RECURRENCE_SCHEMA_VERSION,
+        "report_only": RECURRENCE_REPORT_ONLY,
+        "advisory_only": RECURRENCE_ADVISORY_ONLY,
+        "metric": REGRESSION_RECURRENCE_RATE_METRIC,
+        "numerator": numerator,
+        "denominator": denominator,
+        "rate": rate,
+        "definition": REGRESSION_RECURRENCE_RATE_DEFINITION,
+        "interpretation": REGRESSION_RECURRENCE_RATE_INTERPRETATION,
+    }
+    if population is not None:
+        payload["population"] = population
+    if event_source_filter is not None:
+        payload["event_source_filter"] = event_source_filter
+    return payload
+
+
+def calculate_regression_recurrence_rate_for_population(
+    event_log_or_history: Mapping[str, Any] | None,
+    population: str,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, Any]:
+    """Return Regression Recurrence Rate scoped to one recurrence population bucket."""
+    if population == RECURRENCE_POPULATION_PROTECTED_REPLAY:
+        return calculate_protected_replay_regression_recurrence_rate(
+            event_log_or_history,
+            policy=policy,
+        )
+    if population == RECURRENCE_POPULATION_LEGACY_UNIFIED:
+        return calculate_legacy_unified_regression_recurrence_rate(event_log_or_history)
+
+    events = _event_log_events(event_log_or_history)
+    counts = _occurrence_counts_for_event_population(events, population, policy=policy)
+    metric = _regression_recurrence_rate_from_counts(counts, population=population)
+    if population == RECURRENCE_POPULATION_SESSION_DIAGNOSTIC:
+        metric["event_source_filter"] = DEFAULT_EVENT_SOURCE
+    return metric
 
 
 def calculate_protected_replay_regression_recurrence_rate(
@@ -391,6 +514,124 @@ def calculate_protected_replay_regression_recurrence_rate(
         )
     metric["population"] = RECURRENCE_PERSISTENCE_LANE_PROTECTED
     return metric
+
+
+def calculate_session_diagnostic_regression_recurrence_rate(
+    event_log_or_history: Mapping[str, Any] | None,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, Any]:
+    """Return Regression Recurrence Rate for session diagnostic events only."""
+    if isinstance(event_log_or_history, Mapping) and isinstance(event_log_or_history.get("events"), list):
+        return calculate_regression_recurrence_rate_for_population(
+            event_log_or_history,
+            RECURRENCE_POPULATION_SESSION_DIAGNOSTIC,
+            policy=policy,
+        )
+    return calculate_regression_recurrence_rate(
+        event_log_or_history,
+        event_source_filter=DEFAULT_EVENT_SOURCE,
+    )
+
+
+def calculate_synthetic_test_artifact_regression_recurrence_rate(
+    event_log_or_history: Mapping[str, Any] | None,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, Any]:
+    """Return Regression Recurrence Rate for synthetic/test artifact rejects only."""
+    return calculate_regression_recurrence_rate_for_population(
+        event_log_or_history,
+        RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT,
+        policy=policy,
+    )
+
+
+def calculate_legacy_unified_regression_recurrence_rate(
+    event_log_or_history: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Return legacy unified Regression Recurrence Rate for compatibility comparisons."""
+    metric = calculate_regression_recurrence_rate(event_log_or_history)
+    metric["population"] = RECURRENCE_POPULATION_LEGACY_UNIFIED
+    metric["compatibility_only"] = True
+    return metric
+
+
+def build_recurrence_rate_by_population(
+    event_log_or_history: Mapping[str, Any] | None,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, Any]:
+    """Return grouped recurrence rates with explicit population health semantics."""
+    protected_rate = calculate_protected_replay_regression_recurrence_rate(
+        event_log_or_history,
+        policy=policy,
+    )
+    session_rate = calculate_session_diagnostic_regression_recurrence_rate(
+        event_log_or_history,
+        policy=policy,
+    )
+    synthetic_rate = calculate_synthetic_test_artifact_regression_recurrence_rate(
+        event_log_or_history,
+        policy=policy,
+    )
+    legacy_rate = calculate_legacy_unified_regression_recurrence_rate(event_log_or_history)
+    return {
+        RECURRENCE_POPULATION_PROTECTED_REPLAY: {
+            "recurrence_rate": protected_rate,
+            "health_metric": True,
+        },
+        RECURRENCE_POPULATION_SESSION_DIAGNOSTIC: {
+            "recurrence_rate": session_rate,
+            "health_metric": False,
+        },
+        RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT: {
+            "recurrence_rate": synthetic_rate,
+            "health_metric": False,
+        },
+        RECURRENCE_POPULATION_LEGACY_UNIFIED: {
+            "recurrence_rate": legacy_rate,
+            "health_metric": False,
+            "compatibility_only": True,
+        },
+    }
+
+
+def build_scoped_recurrence_population_metrics(
+    protected_log: Mapping[str, Any] | None,
+    session_diagnostic_log: Mapping[str, Any] | None = None,
+    synthetic_test_artifact_log: Mapping[str, Any] | None = None,
+    *,
+    policy: RecurrenceCommitWorthinessPolicy | None = None,
+) -> dict[str, Any]:
+    """Return additive scoped recurrence metrics from protected and diagnostic lanes."""
+    combined_events = (
+        _event_log_events(protected_log)
+        + _event_log_events(session_diagnostic_log)
+        + _event_log_events(synthetic_test_artifact_log)
+    )
+    combined_log = {"events": combined_events} if combined_events else empty_recurrence_event_log()
+    by_population = build_recurrence_rate_by_population(combined_log, policy=policy)
+    protected_rate = calculate_protected_replay_regression_recurrence_rate(protected_log, policy=policy)
+    return {
+        "protected_replay_regression_recurrence_rate": protected_rate,
+        "session_diagnostic_regression_recurrence_rate": by_population[
+            RECURRENCE_POPULATION_SESSION_DIAGNOSTIC
+        ]["recurrence_rate"],
+        "synthetic_test_artifact_regression_recurrence_rate": by_population[
+            RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT
+        ]["recurrence_rate"],
+        "legacy_unified_regression_recurrence_rate": by_population[
+            RECURRENCE_POPULATION_LEGACY_UNIFIED
+        ]["recurrence_rate"],
+        "recurrence_rate_by_population": {
+            **by_population,
+            RECURRENCE_POPULATION_PROTECTED_REPLAY: {
+                "recurrence_rate": protected_rate,
+                "health_metric": True,
+            },
+        },
+    }
 
 
 def _occurrence_counts_by_recurrence_key(
@@ -530,6 +771,7 @@ def audit_recurrence_event_log_provenance(
             event_log,
             event_source_filter=RECURRENCE_EVENT_SOURCE_UNKNOWN,
         )
+    scoped_metrics = build_scoped_recurrence_population_metrics(event_log)
 
     return {
         "schema_version": RECURRENCE_SCHEMA_VERSION,
@@ -554,6 +796,7 @@ def audit_recurrence_event_log_provenance(
         "artifact_source_distribution": dict(sorted(artifact_counts.items())),
         "recurrence_key_event_counts": dict(sorted(recurrence_key_counts.items())),
         "regression_recurrence_rate_comparison": rate_comparison,
+        **scoped_metrics,
     }
 
 
@@ -735,12 +978,15 @@ def load_recurrence_event_log(path: Path | str) -> dict[str, Any]:
         raise ValueError("event log must be a JSON object with an events list")
     if raw.get("schema_version") != RECURRENCE_SCHEMA_VERSION:
         raise ValueError(f"unsupported event log schema_version: {raw.get('schema_version')!r}")
-    return {
+    loaded = {
         "schema_version": RECURRENCE_SCHEMA_VERSION,
         "report_only": RECURRENCE_REPORT_ONLY,
         "advisory_only": RECURRENCE_ADVISORY_ONLY,
         "events": [dict(item) for item in raw["events"] if isinstance(item, Mapping)],
     }
+    if bool(raw.get("compatibility_only")):
+        loaded["compatibility_only"] = True
+    return loaded
 
 
 def write_recurrence_event_log(path: Path | str, payload: Mapping[str, Any]) -> Path:
@@ -839,18 +1085,21 @@ def append_recurrence_events_to_persistence_lanes(
     session_diagnostic_log: Mapping[str, Any],
     rows: Sequence[Mapping[str, Any]] | None,
     *,
+    synthetic_test_artifact_log: Mapping[str, Any] | None = None,
     event_metadata: Mapping[str, Any] | None = None,
     event_source: str | None = None,
     recorded_at: str | None = None,
     policy: RecurrenceCommitWorthinessPolicy | None = None,
 ) -> dict[str, Any]:
-    """Route projected recurrence events into protected or session-diagnostic lanes explicitly."""
+    """Route projected recurrence events into explicit protected, session, or synthetic lanes."""
     active_policy = policy or DEFAULT_RECURRENCE_COMMIT_WORTHINESS_POLICY
     protected_preserved = [dict(item) for item in _event_log_events(protected_log)]
     session_preserved = [dict(item) for item in _event_log_events(session_diagnostic_log)]
+    synthetic_preserved = [dict(item) for item in _event_log_events(synthetic_test_artifact_log)]
     start_index = max(
         _next_event_index(protected_preserved),
         _next_event_index(session_preserved),
+        _next_event_index(synthetic_preserved),
     )
     projected = _project_recurrence_events_for_append(
         empty_recurrence_event_log(),
@@ -864,13 +1113,15 @@ def append_recurrence_events_to_persistence_lanes(
     routing: list[dict[str, Any]] = []
     protected_new: list[dict[str, Any]] = []
     session_new: list[dict[str, Any]] = []
+    synthetic_new: list[dict[str, Any]] = []
     for event in projected:
         worthy, reason = is_commit_worthy_recurrence_event(event, policy=active_policy)
-        lane = (
-            RECURRENCE_PERSISTENCE_LANE_PROTECTED
-            if worthy
-            else RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC
-        )
+        if worthy:
+            lane = RECURRENCE_PERSISTENCE_LANE_PROTECTED
+        elif reason == "session_event_source":
+            lane = RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC
+        else:
+            lane = RECURRENCE_PERSISTENCE_LANE_SYNTHETIC_TEST_ARTIFACT
         routing.append(
             {
                 "event_index": event.get("event_index"),
@@ -882,8 +1133,10 @@ def append_recurrence_events_to_persistence_lanes(
         )
         if worthy:
             protected_new.append(event)
-        else:
+        elif lane == RECURRENCE_PERSISTENCE_LANE_SESSION_DIAGNOSTIC:
             session_new.append(event)
+        else:
+            synthetic_new.append(event)
 
     updated_protected = {
         "schema_version": RECURRENCE_SCHEMA_VERSION,
@@ -897,11 +1150,27 @@ def append_recurrence_events_to_persistence_lanes(
         "advisory_only": RECURRENCE_ADVISORY_ONLY,
         "events": session_preserved + session_new,
     }
+    updated_synthetic = {
+        "schema_version": RECURRENCE_SCHEMA_VERSION,
+        "report_only": RECURRENCE_REPORT_ONLY,
+        "advisory_only": RECURRENCE_ADVISORY_ONLY,
+        "events": synthetic_preserved + synthetic_new,
+    }
+    updated_compatibility_diagnostic = {
+        "schema_version": RECURRENCE_SCHEMA_VERSION,
+        "report_only": RECURRENCE_REPORT_ONLY,
+        "advisory_only": RECURRENCE_ADVISORY_ONLY,
+        "compatibility_only": True,
+        "events": updated_session["events"] + updated_synthetic["events"],
+    }
     return {
         "protected_log": updated_protected,
         "session_diagnostic_log": updated_session,
+        "synthetic_test_artifact_log": updated_synthetic,
+        "compatibility_diagnostic_log": updated_compatibility_diagnostic,
         "protected_appended": len(protected_new),
         "session_diagnostic_appended": len(session_new),
+        "synthetic_test_artifact_appended": len(synthetic_new),
         "routing": routing,
     }
 
@@ -937,6 +1206,7 @@ def aggregate_protected_recurrence_history_from_event_log(
     history["protected_replay_regression_recurrence_rate"] = (
         calculate_protected_replay_regression_recurrence_rate(event_log, policy=policy)
     )
+    history.update(build_scoped_recurrence_population_metrics(event_log, policy=policy))
     return history
 
 

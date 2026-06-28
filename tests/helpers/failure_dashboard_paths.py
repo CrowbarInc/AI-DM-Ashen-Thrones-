@@ -42,6 +42,12 @@ OWNER_DRIFT_RISK_MARKDOWN_PATH = Path("artifacts/golden_replay/owner_drift_risk.
 BUG_RECURRENCE_HISTORY_JSON_PATH = Path("artifacts/golden_replay/bug_recurrence_history.json")
 BUG_RECURRENCE_HISTORY_MARKDOWN_PATH = Path("artifacts/golden_replay/bug_recurrence_history.md")
 BUG_RECURRENCE_EVENT_LOG_JSON_PATH = Path("artifacts/golden_replay/bug_recurrence_event_log.json")
+BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH = Path(
+    "artifacts/golden_replay/bug_recurrence_session_event_log.json"
+)
+BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH = Path(
+    "artifacts/golden_replay/bug_recurrence_synthetic_test_artifact_event_log.json"
+)
 BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH = Path(
     "artifacts/golden_replay/bug_recurrence_session_diagnostic_event_log.json"
 )
@@ -59,11 +65,27 @@ def bug_recurrence_event_log_path(json_path: Path | str) -> Path:
 
 
 def bug_recurrence_session_diagnostic_event_log_path(json_path: Path | str) -> Path:
-    """Derive the session-diagnostic event-log path from a history JSON path."""
+    """Derive the legacy combined diagnostic event-log path from a history JSON path."""
     history_path = Path(json_path)
     if history_path.name == BUG_RECURRENCE_HISTORY_JSON_PATH.name:
         return history_path.with_name(BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH.name)
     return history_path.with_name(f"{history_path.stem}_session_diagnostic_event_log.json")
+
+
+def bug_recurrence_session_event_log_path(json_path: Path | str) -> Path:
+    """Derive the explicit session diagnostic event-log path from a history JSON path."""
+    history_path = Path(json_path)
+    if history_path.name == BUG_RECURRENCE_HISTORY_JSON_PATH.name:
+        return history_path.with_name(BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH.name)
+    return history_path.with_name(f"{history_path.stem}_session_event_log.json")
+
+
+def bug_recurrence_synthetic_test_artifact_event_log_path(json_path: Path | str) -> Path:
+    """Derive the explicit synthetic/test artifact event-log path from a history JSON path."""
+    history_path = Path(json_path)
+    if history_path.name == BUG_RECURRENCE_HISTORY_JSON_PATH.name:
+        return history_path.with_name(BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH.name)
+    return history_path.with_name(f"{history_path.stem}_synthetic_test_artifact_event_log.json")
 
 
 def bug_recurrence_trajectory_history_path(json_path: Path | str) -> Path:

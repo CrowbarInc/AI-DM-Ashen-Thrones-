@@ -23,7 +23,9 @@ from tests.helpers.failure_dashboard_paths import (
     BUG_RECURRENCE_EVENT_LOG_JSON_PATH,
     BUG_RECURRENCE_HISTORY_JSON_PATH,
     BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
+    BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH,
     BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH,
+    BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH,
     FAILURE_DASHBOARD_ENV_VAR,
     FAILURE_DASHBOARD_LATEST_PATH,
     LONG_SESSION_STABILITY_SCORECARD_ENV_VAR,
@@ -78,6 +80,7 @@ from tests.helpers.failure_dashboard_drift import (
 from tests.helpers.failure_dashboard_recurrence import (
     protected_replay_recurrence_event_metadata,
     render_bug_recurrence_history_markdown,
+    write_bug_recurrence_artifact_set,
     write_bug_recurrence_history_artifacts,
 )
 # CE2.2 — session buffer authority moved to tests/helpers/failure_dashboard_session.py;
@@ -681,6 +684,7 @@ def write_protected_replay_failure_report_if_present(
     rows: Sequence[Mapping[str, Any]] | None = None,
     *,
     path: Path | str = PROTECTED_REPLAY_FAILURE_REPORT_PATH,
+    side_effect_artifact_root: Path | str | None = None,
     command_used: str | None = None,
     generated_at: str | None = None,
     runtime_lineage_events: Any = None,
@@ -705,13 +709,64 @@ def write_protected_replay_failure_report_if_present(
         ),
         encoding="utf-8",
     )
+    side_effect_root = Path(side_effect_artifact_root) if side_effect_artifact_root is not None else None
     write_owner_drift_hotspot_artifacts(
         report_rows,
+        json_path=(
+            side_effect_root / OWNER_DRIFT_HOTSPOTS_JSON_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_HOTSPOTS_JSON_PATH
+        ),
+        markdown_path=(
+            side_effect_root / OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_HOTSPOTS_MARKDOWN_PATH
+        ),
         command_used=command_used,
         generated_at=generated_at,
     )
     write_owner_drift_risk_artifacts(
         report_rows,
+        json_path=(
+            side_effect_root / OWNER_DRIFT_RISK_JSON_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_RISK_JSON_PATH
+        ),
+        markdown_path=(
+            side_effect_root / OWNER_DRIFT_RISK_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else OWNER_DRIFT_RISK_MARKDOWN_PATH
+        ),
+        recurrence_json_path=(
+            side_effect_root / BUG_RECURRENCE_HISTORY_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_markdown_path=(
+            side_effect_root / BUG_RECURRENCE_HISTORY_MARKDOWN_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_session_diagnostic_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_session_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
+        recurrence_synthetic_test_artifact_event_log_path=(
+            side_effect_root / BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH.name
+            if side_effect_root is not None
+            else None
+        ),
         command_used=command_used,
         generated_at=generated_at,
         recurrence_event_metadata=protected_replay_recurrence_event_metadata(
@@ -1160,6 +1215,45 @@ def assert_recurrence_payload_regression_rate(
             _assert_payload_value(protected_rate, "numerator", numerator)
         if rate is not None:
             _assert_payload_value(protected_rate, "rate", rate)
+
+
+def assert_recurrence_payload_scoped_populations(
+    payload: Mapping[str, Any],
+    *,
+    legacy_compatibility_only: bool = True,
+) -> None:
+    """Assert additive scoped recurrence population metrics remain present."""
+    _assert_payload_has_keys(
+        payload,
+        "protected_replay_regression_recurrence_rate",
+        "session_diagnostic_regression_recurrence_rate",
+        "synthetic_test_artifact_regression_recurrence_rate",
+        "legacy_unified_regression_recurrence_rate",
+        "recurrence_rate_by_population",
+    )
+    by_population = payload["recurrence_rate_by_population"]
+    assert isinstance(by_population, Mapping), "payload['recurrence_rate_by_population'] must be a mapping"
+    for population in (
+        "protected_replay",
+        "session_diagnostic",
+        "synthetic_test_artifact",
+        "legacy_unified",
+    ):
+        bucket = by_population.get(population)
+        assert isinstance(bucket, Mapping), f"recurrence_rate_by_population[{population!r}] must be a mapping"
+        recurrence_rate = bucket.get("recurrence_rate")
+        assert isinstance(recurrence_rate, Mapping), (
+            f"recurrence_rate_by_population[{population!r}]['recurrence_rate'] must be a mapping"
+        )
+    assert by_population["protected_replay"]["health_metric"] is True
+    assert by_population["session_diagnostic"]["health_metric"] is False
+    assert by_population["synthetic_test_artifact"]["health_metric"] is False
+    assert by_population["legacy_unified"]["health_metric"] is False
+    if legacy_compatibility_only:
+        assert by_population["legacy_unified"]["compatibility_only"] is True
+        legacy_rate = payload["legacy_unified_regression_recurrence_rate"]
+        assert isinstance(legacy_rate, Mapping)
+        assert legacy_rate.get("compatibility_only") is True
 
 
 def assert_recurrence_history_payload_shape(

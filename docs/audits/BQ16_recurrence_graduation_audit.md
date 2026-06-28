@@ -1,6 +1,6 @@
 # BQ16 Recurrence Graduation Audit
 
-**Date:** 2026-06-28T22:00:00Z
+**Date:** 2026-06-28T19:49:24Z
 **Protected replay only:** true
 
 ## Governance context (CO99)
@@ -22,24 +22,24 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 | Requirement | Current (BQ-C4) | Target | Category |
 |---|---|---|---|
-| Protected replay observations | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | **Observation volume** |
-| Unique recurrence keys | 7 keys | Coverage supporting forecast/governance validation | **Observation volume** |
+| Protected replay observations | Low volume (`recurrence_data_quality` critical) | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | **Observation volume** |
+| Unique recurrence keys | 1 keys | Coverage supporting forecast/governance validation | **Observation volume** |
 | Trajectory snapshots | ≥ 2 snapshots (`trajectory_available: true`) | ≥ 2 snapshots for change detection | **Trajectory** |
-| Graduation readiness score | `94.7` | ≥ `90.0` | **Graduation gate** |
+| Graduation readiness score | `66.8` | ≥ `90.0` | **Graduation gate** |
 | Calibration score | See BQC4 | ≥ `70.0` | **Confidence** |
 | Largest calibration gap | See BQC4 | ≤ `0.20` | **Confidence** |
 | `graduation_confidence_ready` | See BQC4 | `true` | **Confidence** |
-| Forecast confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
-| Effectiveness confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
-| Governance confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
-| Operational readiness score | `100.0` | ≥ `80.0` | **Operational readiness** |
-| Overall maturity score | `79.0` | ≥ `80.0` | **Program maturity** |
-| Critical blind spots | `0` (none) | `0` | **Architectural constraint** |
+| Forecast confidence | `0.2` | ≥ `0.75` | **Operational readiness** |
+| Effectiveness confidence | `0.15` | ≥ `0.75` | **Operational readiness** |
+| Governance confidence | `0.18` | ≥ `0.75` | **Operational readiness** |
+| Operational readiness score | `31.9` | ≥ `80.0` | **Operational readiness** |
+| Overall maturity score | `42.6` | ≥ `80.0` | **Program maturity** |
+| Critical blind spots | `1` (recurrence_data_quality) | `0` | **Architectural constraint** |
 | Program graduated | `false` | `true` | **Verdict** |
 
 **Stability / regression posture:** Trajectory tracks `stability_score` and `regression_recurrence_rate` for longitudinal comparison. Graduation is **not** blocked by a single regression-rate tolerance constant; insufficient protected-replay volume prevents meaningful stability and effectiveness validation (see Effectiveness Validation below).
 
-**Graduation recommendation (BQ-C4):** **B — One final targeted validation cycle required** (confidence/outcome evidence pending).
+**Graduation recommendation (BQ-C4):** **C — Recurrence program remains operationally immature** (`recurrence_program_remains_operationally_immature`).
 
 **Remaining operational evidence needed:**
 
@@ -52,27 +52,27 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 ## Graduation Readiness
 
-- Graduation readiness score: `94.7`
-- Readiness level: `Ready for graduation`
+- Graduation readiness score: `66.8`
+- Readiness level: `Moderate gaps remain`
 - Program graduated: `false`
-- Recommended next action: Execute roadmap sequence in dependency order to reach optimized maturity.
+- Recommended next action: Collect more protected replay observations before optimizing models.
 
 # Capability Coverage
 
 | Capability | Implemented | Validated | Operational | Confidence |
 |---|---|---|---|---:|
-| Historical Persistence | `true` | `true` | `true` | `1.00` |
-| Trend Analytics | `true` | `true` | `true` | `1.00` |
-| Forecasting | `true` | `true` | `true` | `1.00` |
-| Portfolio Analytics | `true` | `true` | `true` | `1.00` |
-| Remediation Targeting | `true` | `true` | `true` | `0.90` |
-| ROI Analytics | `true` | `true` | `true` | `0.85` |
-| Governance | `true` | `true` | `true` | `1.00` |
-| Lifecycle Management | `true` | `true` | `true` | `1.00` |
-| Effectiveness Measurement | `true` | `true` | `true` | `1.00` |
-| Maturity Assessment | `true` | `true` | `true` | `0.79` |
+| Historical Persistence | `true` | `true` | `false` | `0.07` |
+| Trend Analytics | `true` | `true` | `true` | `0.17` |
+| Forecasting | `true` | `true` | `true` | `0.20` |
+| Portfolio Analytics | `true` | `true` | `false` | `0.13` |
+| Remediation Targeting | `true` | `true` | `true` | `0.15` |
+| ROI Analytics | `true` | `true` | `true` | `0.20` |
+| Governance | `true` | `true` | `true` | `0.18` |
+| Lifecycle Management | `true` | `true` | `true` | `0.27` |
+| Effectiveness Measurement | `true` | `true` | `true` | `0.15` |
+| Maturity Assessment | `true` | `true` | `true` | `0.43` |
 | Strategic Roadmap | `true` | `true` | `true` | `0.80` |
-| Completion Tracking | `true` | `true` | `true` | `0.96` |
+| Completion Tracking | `true` | `true` | `true` | `0.78` |
 
 # Completion Criteria Validation
 
@@ -82,11 +82,11 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 - `portfolio_analytics_present` (observability): current `True`, target `True`, status `met`
 - `governance_analytics_present` (observability): current `True`, target `True`, status `met`
 - `lifecycle_analytics_present` (observability): current `True`, target `True`, status `met`
-- `governance_health_target_met` (governance): current `45.9`, target `80.0`, status `unmet`
+- `governance_health_target_met` (governance): current `65.5`, target `80.0`, status `unmet`
 - `watchlist_operational` (governance): current `True`, target `True`, status `met`
 - `ownership_accountability_present` (governance): current `True`, target `True`, status `met`
 - `retirement_tracking_present` (governance): current `True`, target `True`, status `met`
-- `forecast_confidence_target_met` (forecasting): current `1.0`, target `0.75`, status `met`
+- `forecast_confidence_target_met` (forecasting): current `0.2`, target `0.75`, status `unmet`
 - `forecast_effectiveness_measurable` (forecasting): current `True`, target `True`, status `met`
 - `trajectory_available` (forecasting): current `True`, target `True`, status `met`
 - `forecast_validation_available` (forecasting): current `True`, target `True`, status `met`
@@ -98,34 +98,36 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 - `transition_tracking_available` (lifecycle): current `True`, target `True`, status `met`
 - `closure_effectiveness_measurable` (lifecycle): current `True`, target `True`, status `met`
 - `age_distribution_available` (lifecycle): current `True`, target `True`, status `met`
-- `operational_readiness_target_met` (operational_readiness): current `100.0`, target `80.0`, status `met`
-- `effectiveness_confidence_target_met` (operational_readiness): current `1.0`, target `0.75`, status `met`
-- `governance_confidence_target_met` (operational_readiness): current `1.0`, target `0.75`, status `met`
+- `operational_readiness_target_met` (operational_readiness): current `31.9`, target `80.0`, status `unmet`
+- `effectiveness_confidence_target_met` (operational_readiness): current `0.15`, target `0.75`, status `unmet`
+- `governance_confidence_target_met` (operational_readiness): current `0.18`, target `0.75`, status `unmet`
 - `trajectory_available` (operational_readiness): current `True`, target `True`, status `met`
-- `overall_maturity_target_met` (program): current `79.0`, target `80.0`, status `unmet`
-- `forecast_confidence_graduation` (program): current `1.0`, target `0.75`, status `met`
-- `effectiveness_confidence_graduation` (program): current `1.0`, target `0.75`, status `met`
+- `overall_maturity_target_met` (program): current `42.6`, target `80.0`, status `unmet`
+- `forecast_confidence_graduation` (program): current `0.2`, target `0.75`, status `unmet`
+- `effectiveness_confidence_graduation` (program): current `0.15`, target `0.75`, status `unmet`
 
 # Roadmap Validation
 
-- Data Volume Expansion: `partially_valid` — Volume threshold partially met; continued expansion still improves confidence.
+- Data Volume Expansion: `still_valid` — Low protected replay volume confirms data expansion remains highest ROI.
 - Trajectory Establishment: `partially_valid` — Trajectory exists but downstream forecasting and readiness remain incomplete.
-- Forecast Validation: `partially_valid` — Forecast confidence met structurally but effectiveness evidence remains thin.
-- Lifecycle Closure Tracking: `partially_valid` — Closure signal exists but longitudinal closure effectiveness remains limited.
-- Remediation Feedback Loop: `partially_valid` — Reduction signal present but sample size may be insufficient.
-- Operationalization: `partially_valid` — Operational readiness improved but graduation thresholds not fully met.
+- Forecast Validation: `still_valid` — Forecast confidence below target; validation initiative remains appropriate.
+- Lifecycle Closure Tracking: `still_valid` — No closure outcomes observed; lifecycle closure tracking remains necessary.
+- Remediation Feedback Loop: `still_valid` — Zero recurrence reduction rate; remediation feedback loop not yet evidenced.
+- Operationalization: `still_valid` — Operational readiness below target; final operationalization stage remains required.
 
 # Effectiveness Validation
 
-- forecast_accuracy: `supported_by_evidence` — Forecast effectiveness metrics available with non-trivial confidence.
-- governance_effectiveness: `supported_by_evidence` — Zero conversion rates indicate governance funnel not yet exercised by history volume.
-- remediation_effectiveness: `supported_by_evidence` — No resolved remediation outcomes observed in protected replay history.
-- lifecycle_closure_effectiveness: `supported_by_evidence` — Lifecycle closure rate requires retired or dormant keys to validate effectiveness.
+- forecast_accuracy: `potentially_misleading` — Perfect accuracy with very low confidence suggests insufficient validation volume.
+- governance_effectiveness: `insufficient_evidence` — Zero conversion rates indicate governance funnel not yet exercised by history volume.
+- remediation_effectiveness: `insufficient_evidence` — No resolved remediation outcomes observed in protected replay history.
+- lifecycle_closure_effectiveness: `insufficient_evidence` — Lifecycle closure rate requires retired or dormant keys to validate effectiveness.
 
 # Blind Spots
 
+- **recurrence_data_quality** (critical): Protected replay observation and key volume remain below maturity confidence thresholds.
 - **recurrence_confidence_decay** (medium): Confidence scores do not decay with stale observations or aging keys.
 - **recurrence_auditability** (low): No immutable audit chain links recurrence analytics revisions over time.
+- **recurrence_model_calibration** (high): High forecast accuracy coexists with low forecast confidence, risking over-interpretation.
 - **recurrence_ownership_drift** (medium): Recurrence ownership drift across runs is not tracked as a dedicated longitudinal signal.
 
 # Redundancies
@@ -138,7 +140,7 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 # Recommended Actions
 
-1. Execute roadmap sequence in dependency order to reach optimized maturity.
+1. Collect more protected replay observations before optimizing models.
 2. Establish trajectory baseline before treating forecasting and operational readiness as graduation-ready.
 3. Keep maturity, effectiveness, and completion scores distinct in operator reporting to avoid redundant escalation.
 

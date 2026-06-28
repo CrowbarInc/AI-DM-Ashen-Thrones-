@@ -449,6 +449,7 @@ def apply_recurrence_trajectory_to_analytics(
     recurrence_graduation_audit: Mapping[str, Any],
     trajectory_history_path: Path | str | None = None,
     temporal_capture: bool = False,
+    write_trajectory_history: bool = True,
 ) -> dict[str, Any]:
     """Append trajectory snapshots and rebuild analytics when trajectory activates."""
     current_snapshot = build_recurrence_trajectory_snapshot(
@@ -639,7 +640,8 @@ def apply_recurrence_trajectory_to_analytics(
         )
         trajectory_summary = summarize_recurrence_trajectory(projected_history)
 
-    write_recurrence_trajectory_history(projected_history, trajectory_history_path)
+    if write_trajectory_history:
+        write_recurrence_trajectory_history(projected_history, trajectory_history_path)
     return {
         "recurrence_trajectory_history": projected_history,
         "recurrence_trajectory_summary": trajectory_summary,

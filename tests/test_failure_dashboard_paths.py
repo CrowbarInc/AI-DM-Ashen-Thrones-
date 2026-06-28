@@ -28,6 +28,8 @@ CANONICAL_PATH_CONSTANTS: tuple[str, ...] = (
     "BUG_RECURRENCE_HISTORY_JSON_PATH",
     "BUG_RECURRENCE_HISTORY_MARKDOWN_PATH",
     "BUG_RECURRENCE_EVENT_LOG_JSON_PATH",
+    "BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH",
+    "BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH",
     "BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH",
     "RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH",
 )
@@ -79,6 +81,14 @@ def test_bug_recurrence_path_helpers_for_canonical_history_json() -> None:
         == paths_module.BUG_RECURRENCE_SESSION_DIAGNOSTIC_EVENT_LOG_JSON_PATH
     )
     assert (
+        paths_module.bug_recurrence_session_event_log_path(history)
+        == paths_module.BUG_RECURRENCE_SESSION_EVENT_LOG_JSON_PATH
+    )
+    assert (
+        paths_module.bug_recurrence_synthetic_test_artifact_event_log_path(history)
+        == paths_module.BUG_RECURRENCE_SYNTHETIC_TEST_ARTIFACT_EVENT_LOG_JSON_PATH
+    )
+    assert (
         paths_module.bug_recurrence_trajectory_history_path(history)
         == paths_module.RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH
     )
@@ -90,6 +100,14 @@ def test_bug_recurrence_path_helpers_for_custom_history_json(tmp_path: Path) -> 
     assert (
         paths_module.bug_recurrence_session_diagnostic_event_log_path(custom_history)
         == tmp_path / "custom_recurrence_history_session_diagnostic_event_log.json"
+    )
+    assert (
+        paths_module.bug_recurrence_session_event_log_path(custom_history)
+        == tmp_path / "custom_recurrence_history_session_event_log.json"
+    )
+    assert (
+        paths_module.bug_recurrence_synthetic_test_artifact_event_log_path(custom_history)
+        == tmp_path / "custom_recurrence_history_synthetic_test_artifact_event_log.json"
     )
     assert paths_module.bug_recurrence_trajectory_history_path(custom_history) == tmp_path / "recurrence_trajectory_history.json"
 

@@ -1,93 +1,13 @@
 {
   "advisory_only": true,
-  "recommended_investigation_order": [
-    {
-      "item": "tests/helpers/golden_replay.py",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
+  "recommended_investigation_order": [],
   "report_only": true,
   "risk_by_level": {
     "high": [],
     "low": [],
-    "medium": [
-      {
-        "category": "projection",
-        "field_path": "fallback_family",
-        "field_source": "protected",
-        "item": "fallback_drift",
-        "item_kind": "owner",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "fallback_drift",
-        "risk_level": "medium",
-        "severity": "medium",
-        "trend_direction": "stable"
-      },
-      {
-        "category": "projection",
-        "field_path": "fallback_family",
-        "field_source": "protected",
-        "item": "fallback_family",
-        "item_kind": "field",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "fallback_drift",
-        "risk_level": "medium",
-        "severity": "medium",
-        "trend_direction": "stable"
-      },
-      {
-        "category": "projection",
-        "field_path": "fallback_family",
-        "field_source": "protected",
-        "item": "tests/helpers/golden_replay.py",
-        "item_kind": "investigation_target",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "fallback_drift",
-        "risk_level": "medium",
-        "severity": "medium",
-        "trend_direction": "stable"
-      }
-    ]
+    "medium": []
   },
-  "risk_signals": [
-    {
-      "category": "projection",
-      "field_path": "fallback_family",
-      "field_source": "protected",
-      "item": "fallback_family",
-      "item_kind": "field",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "fallback_drift",
-      "risk_level": "medium",
-      "severity": "medium",
-      "trend_direction": "stable"
-    },
-    {
-      "category": "projection",
-      "field_path": "fallback_family",
-      "field_source": "protected",
-      "item": "fallback_drift",
-      "item_kind": "owner",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "fallback_drift",
-      "risk_level": "medium",
-      "severity": "medium",
-      "trend_direction": "stable"
-    },
-    {
-      "category": "projection",
-      "field_path": "fallback_family",
-      "field_source": "protected",
-      "item": "tests/helpers/golden_replay.py",
-      "item_kind": "investigation_target",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "fallback_drift",
-      "risk_level": "medium",
-      "severity": "medium",
-      "trend_direction": "stable"
-    }
-  ],
+  "risk_signals": [],
   "schema_version": 1,
   "stability_ownership": {
     "advisory_only": true,
@@ -234,26 +154,8 @@
     ],
     "stability_trend_signals": []
   },
-  "top_risk_fields": [
-    {
-      "item": "fallback_family",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "top_risk_investigation_targets": [
-    {
-      "item": "tests/helpers/golden_replay.py",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "top_risk_owners": [
-    {
-      "item": "fallback_drift",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "total_signals": 3
+  "top_risk_fields": [],
+  "top_risk_investigation_targets": [],
+  "top_risk_owners": [],
+  "total_signals": 0
 }

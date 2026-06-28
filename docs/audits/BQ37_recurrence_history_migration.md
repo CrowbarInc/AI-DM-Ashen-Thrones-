@@ -1,7 +1,7 @@
 # BQ3.7 Recurrence History Migration
 
-**Date:** 2026-06-20T03:18:06Z
-**Source:** `event_log`
+**Date:** 2026-06-28T19:35:14Z
+**Source:** `legacy_archive`
 
 ## Migration Summary
 
@@ -9,7 +9,9 @@
 |---|---:|
 | Original unified log | 43 |
 | Protected replay history | 1 |
-| Session diagnostic history | 42 |
+| Session diagnostic history | 32 |
+| Synthetic/test artifact history | 10 |
+| Legacy diagnostic compatibility output | 42 |
 
 ## Protected Population
 
@@ -21,7 +23,24 @@
 | Denominator | 1 |
 | Rate | 0.0% |
 
-## Diagnostic Population
+## Session Diagnostic Population
+
+| Metric | Value |
+|---|---|
+| Events | 32 |
+| Unique Keys | 6 |
+
+## Synthetic/Test Artifact Population
+
+| Metric | Value |
+|---|---|
+| Events | 10 |
+| Unique Keys | 1 |
+
+## Legacy Diagnostic Compatibility Output
+
+Compatibility-only combined diagnostic output retained for existing consumers:
+`artifacts/golden_replay/bug_recurrence_session_diagnostic_event_log.json`
 
 | Metric | Value |
 |---|---|

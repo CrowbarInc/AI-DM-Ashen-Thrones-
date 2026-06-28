@@ -24,10 +24,14 @@ from tests.helpers.failure_dashboard_paths import (
     PROTECTED_REPLAY_FAILURE_REPORT_PATH,
     bug_recurrence_event_log_path as _bug_recurrence_event_log_path,
     bug_recurrence_session_diagnostic_event_log_path as _bug_recurrence_session_diagnostic_event_log_path,
+    bug_recurrence_session_event_log_path as _bug_recurrence_session_event_log_path,
+    bug_recurrence_synthetic_test_artifact_event_log_path as _bug_recurrence_synthetic_test_artifact_event_log_path,
     bug_recurrence_trajectory_history_path as _bug_recurrence_trajectory_history_path,
 )
 from tests.helpers.replay_bug_recurrence import (
     PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+    RECURRENCE_POPULATION_SESSION_DIAGNOSTIC,
+    RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT,
     RECURRENCE_CONFIDENCE_CALIBRATION_DOC_PATH,
     RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH,
     RECURRENCE_GRADUATION_AUDIT_DOC_PATH,
@@ -52,7 +56,10 @@ from tests.helpers.replay_bug_recurrence import (
     build_recurrence_strategic_roadmap,
     build_recurrence_timeline,
     build_recurrence_trend_summary,
+    build_scoped_recurrence_population_metrics,
     calculate_regression_recurrence_rate,
+    classify_recurrence_event_population,
+    empty_recurrence_event_log,
     load_recurrence_event_log,
     normalize_recurrence_event_metadata,
     render_recurrence_confidence_calibration_report_markdown,
@@ -94,6 +101,68 @@ def _regression_recurrence_rate_markdown_lines(metric: Mapping[str, Any]) -> lis
         f"- Advisory only: `{str(bool(metric.get('advisory_only', True))).lower()}`",
         "",
     ]
+
+
+def _scoped_population_rate_markdown_lines(
+    heading: str,
+    bucket: Mapping[str, Any] | None,
+    *,
+    compatibility_only: bool = False,
+) -> list[str]:
+    """Render one scoped recurrence population rate subsection."""
+    payload = bucket if isinstance(bucket, Mapping) else {}
+    metric = payload.get("recurrence_rate")
+    if not isinstance(metric, Mapping):
+        metric = {}
+    numerator = int(metric.get("numerator") or 0)
+    denominator = int(metric.get("denominator") or 0)
+    rate = float(metric.get("rate") or 0.0)
+    pct_text = f"{rate * 100.0:.1f}%" if denominator else "0.0%"
+    health_metric = bool(payload.get("health_metric"))
+    lines = [
+        heading,
+        "",
+        f"- Recurrence rate: `{pct_text}` ({numerator} / {denominator})",
+        f"- Health metric: `{str(health_metric).lower()}`",
+    ]
+    if compatibility_only or bool(payload.get("compatibility_only")):
+        lines.append("- Compatibility only: `true`")
+    lines.extend(["",])
+    return lines
+
+
+def _recurrence_rate_by_population_markdown_lines(
+    by_population: Mapping[str, Any] | None,
+) -> list[str]:
+    """Render explicitly scoped recurrence population metrics."""
+    populations = by_population if isinstance(by_population, Mapping) else {}
+    lines = ["## Scoped Recurrence Populations", ""]
+    lines.extend(
+        _scoped_population_rate_markdown_lines(
+            "### Protected Replay Recurrence",
+            populations.get("protected_replay"),
+        )
+    )
+    lines.extend(
+        _scoped_population_rate_markdown_lines(
+            "### Session Diagnostic Recurrence",
+            populations.get("session_diagnostic"),
+        )
+    )
+    lines.extend(
+        _scoped_population_rate_markdown_lines(
+            "### Synthetic/Test Artifact Recurrence",
+            populations.get("synthetic_test_artifact"),
+        )
+    )
+    lines.extend(
+        _scoped_population_rate_markdown_lines(
+            "### Legacy Unified Recurrence, compatibility only",
+            populations.get("legacy_unified"),
+            compatibility_only=True,
+        )
+    )
+    return lines
 
 
 def _recurrence_trends_markdown_lines(
@@ -1226,6 +1295,9 @@ def render_bug_recurrence_history_markdown(
         "",
     ]
     lines.extend(_regression_recurrence_rate_markdown_lines(metric))
+    by_population = payload.get("recurrence_rate_by_population")
+    if isinstance(by_population, Mapping):
+        lines.extend(_recurrence_rate_by_population_markdown_lines(by_population))
     trends = payload.get("recurrence_trends")
     timeline = payload.get("recurrence_timeline")
     if isinstance(trends, Mapping):
@@ -1441,6 +1513,56 @@ def protected_replay_recurrence_event_metadata(
     )
 
 
+def _split_compatibility_diagnostic_log(
+    compatibility_log: Mapping[str, Any] | None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Split the legacy combined diagnostic log into explicit diagnostic populations."""
+    session_events: list[dict[str, Any]] = []
+    synthetic_events: list[dict[str, Any]] = []
+    for event in compatibility_log.get("events", []) if isinstance(compatibility_log, Mapping) else []:
+        if not isinstance(event, Mapping):
+            continue
+        event_copy = dict(event)
+        population = classify_recurrence_event_population(event_copy)
+        if population == RECURRENCE_POPULATION_SESSION_DIAGNOSTIC:
+            session_events.append(event_copy)
+        elif population == RECURRENCE_POPULATION_SYNTHETIC_TEST_ARTIFACT:
+            synthetic_events.append(event_copy)
+    return (
+        {
+            **empty_recurrence_event_log(),
+            "events": session_events,
+        },
+        {
+            **empty_recurrence_event_log(),
+            "events": synthetic_events,
+        },
+    )
+
+
+def _compatibility_diagnostic_log(
+    session_log: Mapping[str, Any] | None,
+    synthetic_log: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    """Return the legacy combined diagnostic log for compatibility readers."""
+    return {
+        **empty_recurrence_event_log(),
+        "compatibility_only": True,
+        "events": [
+            *(
+                dict(event)
+                for event in (session_log.get("events", []) if isinstance(session_log, Mapping) else [])
+                if isinstance(event, Mapping)
+            ),
+            *(
+                dict(event)
+                for event in (synthetic_log.get("events", []) if isinstance(synthetic_log, Mapping) else [])
+                if isinstance(event, Mapping)
+            ),
+        ],
+    }
+
+
 def write_bug_recurrence_history_artifacts(
     rows: Sequence[Mapping[str, Any]] | None = None,
     *,
@@ -1448,6 +1570,8 @@ def write_bug_recurrence_history_artifacts(
     markdown_path: Path | str = BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
     event_log_path: Path | str | None = None,
     session_diagnostic_event_log_path: Path | str | None = None,
+    session_event_log_path: Path | str | None = None,
+    synthetic_test_artifact_event_log_path: Path | str | None = None,
     command_used: str | None = None,
     generated_at: str | None = None,
     recurrence_event_metadata: Mapping[str, Any] | None = None,
@@ -1455,21 +1579,43 @@ def write_bug_recurrence_history_artifacts(
     recorded_at: str | None = None,
     persistence_report: dict[str, Any] | None = None,
     temporal_trajectory_capture: bool = False,
+    emit_governance_docs: bool = True,
+    emit_trajectory_history: bool = True,
 ) -> tuple[Path, Path]:
     """Write report-only bug-class recurrence JSON and markdown artifacts."""
     json_out = Path(json_path)
     markdown_out = Path(markdown_path)
     log_out = Path(event_log_path) if event_log_path is not None else _bug_recurrence_event_log_path(json_out)
-    session_log_out = (
+    compatibility_session_log_out = (
         Path(session_diagnostic_event_log_path)
         if session_diagnostic_event_log_path is not None
         else _bug_recurrence_session_diagnostic_event_log_path(json_out)
+    )
+    session_log_out = (
+        Path(session_event_log_path)
+        if session_event_log_path is not None
+        else _bug_recurrence_session_event_log_path(json_out)
+    )
+    synthetic_log_out = (
+        Path(synthetic_test_artifact_event_log_path)
+        if synthetic_test_artifact_event_log_path is not None
+        else _bug_recurrence_synthetic_test_artifact_event_log_path(json_out)
     )
     json_out.parent.mkdir(parents=True, exist_ok=True)
     markdown_out.parent.mkdir(parents=True, exist_ok=True)
 
     protected_log = load_recurrence_event_log(log_out)
+    compatibility_session_log = load_recurrence_event_log(compatibility_session_log_out)
     session_diagnostic_log = load_recurrence_event_log(session_log_out)
+    synthetic_test_artifact_log = load_recurrence_event_log(synthetic_log_out)
+    if (
+        not session_diagnostic_log.get("events")
+        and not synthetic_test_artifact_log.get("events")
+        and compatibility_session_log.get("events")
+    ):
+        session_diagnostic_log, synthetic_test_artifact_log = _split_compatibility_diagnostic_log(
+            compatibility_session_log
+        )
     if rows:
         merge_kwargs: dict[str, Any] = {
             "event_source": event_source,
@@ -1485,12 +1631,19 @@ def write_bug_recurrence_history_artifacts(
             protected_log,
             session_diagnostic_log,
             rows,
+            synthetic_test_artifact_log=synthetic_test_artifact_log,
             event_metadata=metadata,
         )
         protected_log = lane_result["protected_log"]
         session_diagnostic_log = lane_result["session_diagnostic_log"]
+        synthetic_test_artifact_log = lane_result["synthetic_test_artifact_log"]
         write_recurrence_event_log(log_out, protected_log)
         write_recurrence_event_log(session_log_out, session_diagnostic_log)
+        write_recurrence_event_log(synthetic_log_out, synthetic_test_artifact_log)
+        write_recurrence_event_log(
+            compatibility_session_log_out,
+            lane_result["compatibility_diagnostic_log"],
+        )
         if persistence_report is not None:
             persistence_report.clear()
             persistence_report.update(lane_result)
@@ -1676,6 +1829,7 @@ def write_bug_recurrence_history_artifacts(
         recurrence_graduation_audit=recurrence_graduation_audit,
         trajectory_history_path=_bug_recurrence_trajectory_history_path(json_out),
         temporal_capture=temporal_trajectory_capture,
+        write_trajectory_history=emit_trajectory_history,
     )
     recurrence_program_effectiveness = trajectory_result["recurrence_program_effectiveness"]
     recurrence_maturity = trajectory_result["recurrence_maturity"]
@@ -1743,6 +1897,11 @@ def write_bug_recurrence_history_artifacts(
     )
     payload = {
         **recurrence_history,
+        **build_scoped_recurrence_population_metrics(
+            protected_log,
+            session_diagnostic_log,
+            synthetic_test_artifact_log,
+        ),
         "summary": build_recurrence_summary(recurrence_history),
         "recurrence_timeline": recurrence_timeline,
         "recurrence_trends": recurrence_trends,
@@ -1810,7 +1969,7 @@ def write_bug_recurrence_history_artifacts(
         ),
         encoding="utf-8",
     )
-    if json_out.name == BUG_RECURRENCE_HISTORY_JSON_PATH.name:
+    if emit_governance_docs and json_out.resolve() == BUG_RECURRENCE_HISTORY_JSON_PATH.resolve():
         audit_doc_path = RECURRENCE_GRADUATION_AUDIT_DOC_PATH
         audit_doc_path.parent.mkdir(parents=True, exist_ok=True)
         audit_doc_path.write_text(
@@ -1850,3 +2009,87 @@ def write_bug_recurrence_history_artifacts(
                 encoding="utf-8",
             )
     return json_out, markdown_out
+
+
+def write_bug_recurrence_artifact_set(
+    *,
+    protected_log: Mapping[str, Any],
+    session_diagnostic_log: Mapping[str, Any],
+    synthetic_test_artifact_log: Mapping[str, Any],
+    compatibility_diagnostic_log: Mapping[str, Any] | None = None,
+    event_log_path: Path | str,
+    session_event_log_path: Path | str,
+    synthetic_test_artifact_event_log_path: Path | str,
+    session_diagnostic_event_log_path: Path | str,
+    history_json_path: Path | str,
+    history_md_path: Path | str,
+    command_used: str | None = None,
+    generated_at: str | None = None,
+    emit_recurrence_artifacts: bool = True,
+    emit_compatibility_artifacts: bool = True,
+    emit_governance_docs: bool = True,
+    emit_trajectory_history: bool = True,
+) -> dict[str, list[str]]:
+    """Write recurrence artifacts in explicit phases and report emitted paths."""
+    written: dict[str, list[str]] = {
+        "recurrence_artifacts": [],
+        "compatibility_artifacts": [],
+        "governance_reports": [],
+    }
+    log_out = Path(event_log_path)
+    session_log_out = Path(session_event_log_path)
+    synthetic_log_out = Path(synthetic_test_artifact_event_log_path)
+    compatibility_log_out = Path(session_diagnostic_event_log_path)
+    history_json_out = Path(history_json_path)
+    history_md_out = Path(history_md_path)
+    canonical_history_output = history_json_out.resolve() == BUG_RECURRENCE_HISTORY_JSON_PATH.resolve()
+
+    if emit_recurrence_artifacts:
+        write_recurrence_event_log(log_out, protected_log)
+        write_recurrence_event_log(session_log_out, session_diagnostic_log)
+        write_recurrence_event_log(synthetic_log_out, synthetic_test_artifact_log)
+        written["recurrence_artifacts"].extend(
+            [
+                str(log_out.as_posix()),
+                str(session_log_out.as_posix()),
+                str(synthetic_log_out.as_posix()),
+            ]
+        )
+
+        write_bug_recurrence_history_artifacts(
+            None,
+            json_path=history_json_out,
+            markdown_path=history_md_out,
+            event_log_path=log_out,
+            session_diagnostic_event_log_path=compatibility_log_out,
+            session_event_log_path=session_log_out,
+            synthetic_test_artifact_event_log_path=synthetic_log_out,
+            command_used=command_used,
+            generated_at=generated_at,
+            emit_governance_docs=emit_governance_docs,
+            emit_trajectory_history=emit_trajectory_history,
+        )
+        written["recurrence_artifacts"].extend(
+            [
+                str(history_json_out.as_posix()),
+                str(history_md_out.as_posix()),
+            ]
+        )
+        if emit_governance_docs and canonical_history_output:
+            if emit_trajectory_history:
+                written["governance_reports"].append(
+                    str(_bug_recurrence_trajectory_history_path(history_json_out).as_posix())
+                )
+            written["governance_reports"].extend(
+                [
+                    str(RECURRENCE_GRADUATION_AUDIT_DOC_PATH.as_posix()),
+                    str(RECURRENCE_CONFIDENCE_CALIBRATION_DOC_PATH.as_posix()),
+                    str(RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH.as_posix()),
+                ]
+            )
+
+    if emit_compatibility_artifacts and compatibility_diagnostic_log is not None:
+        write_recurrence_event_log(compatibility_log_out, compatibility_diagnostic_log)
+        written["compatibility_artifacts"].append(str(compatibility_log_out.as_posix()))
+
+    return written

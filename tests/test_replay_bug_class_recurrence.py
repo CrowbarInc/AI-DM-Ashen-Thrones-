@@ -90,6 +90,7 @@ from tests.helpers.replay_bug_recurrence import (
     build_recurrence_summary,
     build_recurrence_timeline,
     build_recurrence_trend_summary,
+    build_scoped_recurrence_population_metrics,
     calculate_protected_replay_regression_recurrence_rate,
     calculate_recurrence_reduction_potential,
     calculate_recurrence_roi,
@@ -105,6 +106,7 @@ from tests.helpers.replay_bug_recurrence import (
     classify_recurrence_lifecycle_stage,
     classify_committed_recurrence_event_log,
     classify_recurrence_event_commit_worthiness,
+    classify_recurrence_event_population,
     classify_recurrence_forecast,
     classify_remediation_priority,
     classify_recurrence_status,
@@ -845,6 +847,7 @@ def test_append_recurrence_events_to_persistence_lanes_routes_explicitly() -> No
 
     assert lane_result["protected_appended"] == 0
     assert lane_result["session_diagnostic_appended"] == 1
+    assert lane_result["synthetic_test_artifact_appended"] == 0
     assert lane_result["routing"][0]["reason"] == "session_event_source"
 
 
@@ -868,6 +871,137 @@ def test_calculate_protected_replay_regression_recurrence_rate_uses_commit_worth
     assert metric["numerator"] == 1
     assert metric["denominator"] == 1
     assert metric["rate"] == 1.0
+
+
+def test_scoped_recurrence_populations_separate_protected_session_and_synthetic() -> None:
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        empty_recurrence_event_log(),
+        empty_recurrence_event_log(),
+        [
+            _classification_row(scenario_id="session-a"),
+            _classification_row(scenario_id="session-b"),
+        ],
+        event_source=DEFAULT_EVENT_SOURCE,
+        recorded_at="2026-06-10T00:00:00Z",
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id="protected-a"), _classification_row(scenario_id="protected-b")],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-11T00:00:00Z",
+            }
+        ),
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id=None)],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-12T00:00:00Z",
+            }
+        ),
+    )
+
+    scoped = build_scoped_recurrence_population_metrics(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        lane_result["synthetic_test_artifact_log"],
+    )
+    by_population = scoped["recurrence_rate_by_population"]
+
+    assert scoped["protected_replay_regression_recurrence_rate"]["numerator"] == 1
+    assert scoped["protected_replay_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["session_diagnostic_regression_recurrence_rate"]["numerator"] == 1
+    assert scoped["session_diagnostic_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["synthetic_test_artifact_regression_recurrence_rate"]["numerator"] == 0
+    assert scoped["synthetic_test_artifact_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["legacy_unified_regression_recurrence_rate"]["compatibility_only"] is True
+    assert by_population["protected_replay"]["health_metric"] is True
+    assert by_population["session_diagnostic"]["health_metric"] is False
+    assert by_population["synthetic_test_artifact"]["health_metric"] is False
+    assert by_population["legacy_unified"]["compatibility_only"] is True
+
+
+def test_persistence_lanes_separate_session_synthetic_and_protected() -> None:
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        empty_recurrence_event_log(),
+        empty_recurrence_event_log(),
+        [_classification_row(scenario_id="session-only")],
+        event_source=DEFAULT_EVENT_SOURCE,
+        recorded_at="2026-06-10T00:00:00Z",
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id="protected-only")],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-11T00:00:00Z",
+            }
+        ),
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id=None)],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-12T00:00:00Z",
+            }
+        ),
+    )
+
+    protected_events = lane_result["protected_log"]["events"]
+    session_events = lane_result["session_diagnostic_log"]["events"]
+    synthetic_events = lane_result["synthetic_test_artifact_log"]["events"]
+    compatibility_events = lane_result["compatibility_diagnostic_log"]["events"]
+
+    assert [event["scenario_id"] for event in protected_events] == ["protected-only"]
+    assert [event["scenario_id"] for event in session_events] == ["session-only"]
+    assert [event["scenario_id"] for event in synthetic_events] == [None]
+    assert len(compatibility_events) == len(session_events) + len(synthetic_events)
+    assert lane_result["routing"][-1]["persistence_lane"] == "synthetic_test_artifact_history"
+
+
+def test_classify_recurrence_event_population_taxonomy() -> None:
+    assert (
+        classify_recurrence_event_population(_sample_recurrence_event())
+        == "protected_replay"
+    )
+    assert (
+        classify_recurrence_event_population(
+            _sample_recurrence_event(event_source=DEFAULT_EVENT_SOURCE)
+        )
+        == "session_diagnostic"
+    )
+    assert (
+        classify_recurrence_event_population(_sample_recurrence_event(scenario_id=None))
+        == "synthetic_test_artifact"
+    )
+
+
+def test_legacy_regression_recurrence_rate_field_remains_on_history() -> None:
+    history = aggregate_recurrence_history(
+        recurrence_rows([_classification_row(scenario_id="a"), _classification_row(scenario_id="b")])
+    )
+
+    assert "regression_recurrence_rate" in history
+    assert history["regression_recurrence_rate"]["metric"] == REGRESSION_RECURRENCE_RATE_METRIC
 
 
 def _protected_event_log_with_recorded_at(*recorded_at_values: str) -> dict[str, object]:

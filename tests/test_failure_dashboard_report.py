@@ -3,8 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
 from tests.helpers.failure_classifier import classify_replay_failure
+from tests.helpers.failure_dashboard_paths import (
+    BUG_RECURRENCE_HISTORY_JSON_PATH,
+    BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
+)
 from tests.helpers.failure_dashboard_report import (
     assert_dashboard_recurrence_payload,
     assert_dashboard_recurrence_sections,
@@ -13,7 +19,9 @@ from tests.helpers.failure_dashboard_report import (
     assert_recurrence_payload_counts,
     assert_recurrence_payload_entry,
     assert_recurrence_payload_regression_rate,
+    assert_recurrence_payload_scoped_populations,
     assert_recurrence_payload_status,
+    assert_recurrence_report_section,
     assert_report_has_command_guidance,
     assert_report_has_failure_locator,
     assert_report_has_lineage_summary,
@@ -61,6 +69,27 @@ from tests.helpers.replay_observed_row_fixtures import (
 # Protected replay failure report lock: scenario-specific locator text and row identity stay direct.
 
 
+@pytest.fixture(autouse=True)
+def _committed_recurrence_history_artifacts_are_not_mutated() -> None:
+    """Guard this report suite against accidental writes to committed recurrence history."""
+    guarded_paths = (
+        BUG_RECURRENCE_HISTORY_JSON_PATH,
+        BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
+    )
+    before = {
+        path: path.read_bytes()
+        for path in guarded_paths
+        if path.exists()
+    }
+    yield
+    after = {
+        path: path.read_bytes()
+        for path in guarded_paths
+        if path.exists()
+    }
+    assert after == before
+
+
 def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) -> None:
     report_path = tmp_path / "replay_failure_report.md"
     clear_recorded_protected_replay_failures()
@@ -86,6 +115,7 @@ def test_protected_replay_failure_report_renders_canonical_sections(tmp_path) ->
 
         written = write_protected_replay_failure_report_if_present(
             path=report_path,
+            side_effect_artifact_root=tmp_path,
             command_used="python -m pytest -m golden_replay -q",
             generated_at="2026-05-26T00:00:00Z",
         )
@@ -126,6 +156,7 @@ def test_protected_replay_failure_report_handles_missing_replay_identity(tmp_pat
         )
         written = write_protected_replay_failure_report_if_present(
             path=report_path,
+            side_effect_artifact_root=tmp_path,
             command_used="python -m pytest -m golden_replay -q",
             generated_at="2026-05-26T00:00:00Z",
         )
@@ -287,6 +318,7 @@ def test_rerun_drift_scorecard_writer_creates_json_and_markdown(tmp_path) -> Non
         scorecard,
         json_path=json_path,
         markdown_path=markdown_path,
+        side_effect_artifact_root=tmp_path,
         generated_at="2026-05-30T00:00:00Z",
         command_used="pytest synthetic",
     )
@@ -323,6 +355,7 @@ def test_rerun_drift_scorecard_writer_handles_missing_comparison(tmp_path) -> No
         None,
         json_path=json_path,
         markdown_path=markdown_path,
+        side_effect_artifact_root=tmp_path,
         generated_at="2026-05-30T00:00:00Z",
         command_used="pytest synthetic",
     )
@@ -774,8 +807,9 @@ def test_bug_recurrence_history_markdown_renders_regression_recurrence_rate_sect
         ],
         event_metadata=_golden_protected_recurrence_metadata(),
     )["protected_log"]
+    history = aggregate_protected_recurrence_history_from_event_log(protected_log)
     report = render_bug_recurrence_history_markdown(
-        aggregate_protected_recurrence_history_from_event_log(protected_log),
+        history,
         generated_at="2026-06-10T00:00:00Z",
         command_used="pytest regression recurrence rate",
     )
@@ -788,6 +822,15 @@ def test_bug_recurrence_history_markdown_renders_regression_recurrence_rate_sect
         report_only=True,
         advisory_only=True,
     )
+    assert_recurrence_report_section(
+        report,
+        "## Scoped Recurrence Populations",
+        "### Protected Replay Recurrence",
+        "### Session Diagnostic Recurrence",
+        "### Synthetic/Test Artifact Recurrence",
+        "### Legacy Unified Recurrence, compatibility only",
+    )
+    assert_recurrence_payload_scoped_populations(history)
 
 
 # Recurrence payload spot-check lock: one layer-specific field assertion per markdown/payload pair.
@@ -824,6 +867,7 @@ def test_bug_recurrence_history_payload_backward_compatible_core_fields(tmp_path
         required_keys=("recurrence_trends", "recurrence_timeline"),
         regression_rate_metric="regression_recurrence_rate",
     )
+    assert_recurrence_payload_scoped_populations(payload)
 
 
 def test_bug_recurrence_history_markdown_renders_recurrence_forecast_section(tmp_path) -> None:
