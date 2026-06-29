@@ -237,6 +237,25 @@ def test_summarize_runtime_lineage_events_owns_frequency_and_persisted_recurrenc
     assert summary["recurring_events"] == [{"recurrence_key": "persisted:opening:key", "count": 2}]
 
 
+def test_cu3_runtime_lineage_summary_exposes_first_mutation_writer() -> None:
+    summary = summarize_runtime_lineage_events(
+        [
+            make_runtime_lineage_event(
+                event_kind="mutation",
+                stage="sanitizer",
+                owner="game.output_sanitizer",
+                mutation_kind="sanitizer_mutation",
+            )
+        ]
+    )
+
+    assert summary["first_mutation_owner"] == "game.output_sanitizer"
+    assert summary["first_mutation_family"] == "sanitizer_mutation"
+    assert summary["first_mutation_evidence_type"] == "runtime_lineage"
+    assert summary["first_mutation_inference_used"] is False
+    assert "First mutation writer" in "\n".join(runtime_lineage_markdown_lines(summary))
+
+
 def test_summarize_runtime_lineage_events_counts_opening_family_split_owner_trifecta() -> None:
     summary = summarize_runtime_lineage_events(
         [

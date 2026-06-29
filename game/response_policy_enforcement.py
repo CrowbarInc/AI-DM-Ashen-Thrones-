@@ -10,6 +10,10 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
+from game.final_emission_meta import (
+    FINAL_EMISSION_META_KEY,
+    append_semantic_mutation_write_site,
+)
 from game.prompt_context import RESPONSE_RULE_PRIORITY
 from game.social_exchange_policy import strict_social_emission_will_apply
 from game.utils import slugify
@@ -231,6 +235,51 @@ def _mark_response_policy_enforcement_applied(out: Dict[str, Any]) -> None:
     md = out.setdefault("metadata", {})
     if isinstance(md, dict):
         md[GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED] = True
+
+
+def _policy_emission_debug(out: Dict[str, Any]) -> Dict[str, Any]:
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        md = {}
+        out["metadata"] = md
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        em = {}
+        md["emission_debug"] = em
+    return em
+
+
+def _record_policy_semantic_write_site_if_changed(
+    before: Dict[str, Any],
+    after: Dict[str, Any],
+    *,
+    policy_identifier: str,
+    mutation_reason: str,
+    write_site_function: str,
+) -> None:
+    before_text = before.get("player_facing_text") if isinstance(before, dict) else ""
+    after_text = after.get("player_facing_text") if isinstance(after, dict) else ""
+    if not isinstance(after, dict) or str(before_text or "") == str(after_text or ""):
+        return
+    fem = after.get(FINAL_EMISSION_META_KEY)
+    if not isinstance(fem, dict):
+        fem = {}
+        after[FINAL_EMISSION_META_KEY] = fem
+    for metadata in (_policy_emission_debug(after), fem):
+        append_semantic_mutation_write_site(
+            metadata,
+            before_text=before_text,
+            after_text=after_text,
+            write_site_family="policy",
+            write_site_file="game/response_policy_enforcement.py",
+            write_site_function=write_site_function,
+            owner="game.response_policy_enforcement",
+            source=policy_identifier,
+            mutation_reason=mutation_reason,
+            selected_active_stream=True,
+            candidate_only=False,
+            compatibility_status="diagnostic_only",
+        )
 
 
 def _apply_must_answer_question_resolution_enforcement(
@@ -1543,6 +1592,7 @@ def apply_response_policy_enforcement(
     for policy_key, _rule_name in RESPONSE_RULE_PRIORITY:
         if policy_key == "must_answer" and policy.get(policy_key, True):
             if not strict_social_turn:
+                before_policy = dict(out)
                 out = _apply_must_answer_question_resolution_enforcement(
                     out,
                     player_text=player_text,
@@ -1550,6 +1600,13 @@ def apply_response_policy_enforcement(
                     session=session,
                     world=world,
                     resolution=resolution,
+                )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="must_answer",
+                    mutation_reason="question_resolution_rule",
+                    write_site_function="_apply_must_answer_question_resolution_enforcement",
                 )
             continue
 
@@ -1559,6 +1616,7 @@ def apply_response_policy_enforcement(
 
         if policy_key == "forbid_secret_leak" and policy.get(policy_key, True):
             if not strict_social_turn:
+                before_policy = dict(out)
                 out = _apply_forbid_secret_leak_guard(
                     out,
                     scene_envelope,
@@ -1567,6 +1625,13 @@ def apply_response_policy_enforcement(
                     session=session,
                     world=world,
                     resolution=resolution,
+                )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="forbid_secret_leak",
+                    mutation_reason="secret_leak_guard",
+                    write_site_function="_apply_forbid_secret_leak_guard",
                 )
             continue
 
@@ -1579,6 +1644,7 @@ def apply_response_policy_enforcement(
             and bool((policy.get("no_validator_voice") or {}).get("enabled", True))
         ):
             if not strict_social_turn:
+                before_policy = dict(out)
                 out = _apply_diegetic_validator_voice_enforcement(
                     out,
                     scene_envelope=scene_envelope,
@@ -1587,16 +1653,32 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="diegetic_only.no_validator_voice",
+                    mutation_reason="validator_voice_rewrite",
+                    write_site_function="_apply_diegetic_validator_voice_enforcement",
+                )
             continue
 
         if policy_key == "prefer_scene_momentum" and policy.get(policy_key, True):
             if not strict_social_turn:
+                before_policy = dict(out)
                 out = _apply_topic_pressure_escalation_enforcement(
                     out,
                     player_text=player_text,
                     session=session,
                     scene_envelope=scene_envelope,
                 )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="prefer_scene_momentum.topic_pressure",
+                    mutation_reason="topic_pressure_escalation",
+                    write_site_function="_apply_topic_pressure_escalation_enforcement",
+                )
+                before_policy = dict(out)
                 out = _apply_escalate_passive_scene_enforcement(
                     out,
                     player_text=player_text,
@@ -1605,15 +1687,31 @@ def apply_response_policy_enforcement(
                     scene_envelope=scene_envelope,
                     resolution=resolution,
                 )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="prefer_scene_momentum.passive_scene",
+                    mutation_reason="passive_scene_pressure",
+                    write_site_function="_apply_escalate_passive_scene_enforcement",
+                )
+                before_policy = dict(out)
                 out = _apply_scene_momentum_enforcement(
                     out,
                     session=session,
                     scene_envelope=scene_envelope,
                 )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="prefer_scene_momentum.scene_momentum",
+                    mutation_reason="scene_momentum_enforced_fallback",
+                    write_site_function="_apply_scene_momentum_enforcement",
+                )
             continue
 
         if policy_key == "prefer_specificity" and policy.get(policy_key, True):
             if not strict_social_turn:
+                before_policy = dict(out)
                 out = _apply_prefer_specificity_text_enforcement(
                     out,
                     player_text=player_text,
@@ -1621,6 +1719,13 @@ def apply_response_policy_enforcement(
                     session=session,
                     world=world,
                     resolution=resolution,
+                )
+                _record_policy_semantic_write_site_if_changed(
+                    before_policy,
+                    out,
+                    policy_identifier="prefer_specificity",
+                    mutation_reason="specificity_enforcement",
+                    write_site_function="_apply_prefer_specificity_text_enforcement",
                 )
 
     _commit_topic_progress_after_enforcement(

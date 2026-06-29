@@ -990,6 +990,72 @@ def test_failure_classifier_keeps_post_gate_unknown_without_lineage_or_specific_
     )
 
 
+def test_cu3_failure_classifier_prefers_write_site_over_projection_inference():
+    rows = build_failure_dashboard_rows(
+        observed_turn={
+            "scenario_id": "cu3_classifier_write_site",
+            "turn_index": 1,
+            "final_text_hash": "hash",
+            "semantic_mutation_write_sites": [
+                {
+                    "write_site_family": "fallback",
+                    "write_site_file": "game/fallback_provenance_debug.py",
+                    "write_site_function": "finalize_upstream_fallback_overwrite_containment",
+                    "owner": "game.fallback_provenance_debug",
+                    "selected_active_stream": True,
+                    "candidate_only": False,
+                }
+            ],
+            "first_semantic_mutation_bucket": "sanitizer",
+            "first_semantic_mutation_owner": "game.output_sanitizer",
+            "first_semantic_mutation_source": "projected.sanitizer",
+        },
+        drift_rows=[
+            {
+                "field_path": "final_text",
+                "expected": "old",
+                "actual": "new",
+                "drift_bucket": "semantic_drift",
+                "reason": "semantic mutation",
+            }
+        ],
+    )
+
+    assert rows[0]["category"] == "semantic_mutation"
+    assert rows[0]["authoritative_mutation_owner"] == "game.fallback_provenance_debug"
+    assert rows[0]["authoritative_mutation_family"] == "fallback"
+    assert rows[0]["authoritative_evidence_source"] == "write_site"
+    assert rows[0]["used_projection_inference"] is False
+    assert rows[0]["mutation_source"] == "fallback"
+
+
+def test_cu3_failure_classifier_uses_projection_inference_only_without_write_site():
+    rows = build_failure_dashboard_rows(
+        observed_turn={
+            "scenario_id": "cu3_classifier_inference",
+            "turn_index": 1,
+            "final_text_hash": "hash",
+            "first_semantic_mutation_bucket": "sanitizer",
+            "first_semantic_mutation_owner": "game.output_sanitizer",
+            "first_semantic_mutation_source": "projected.sanitizer",
+        },
+        drift_rows=[
+            {
+                "field_path": "final_text",
+                "expected": "old",
+                "actual": "new",
+                "drift_bucket": "semantic_drift",
+                "reason": "semantic mutation",
+            }
+        ],
+    )
+
+    assert rows[0]["authoritative_mutation_owner"] == "game.output_sanitizer"
+    assert rows[0]["authoritative_mutation_family"] == "sanitizer"
+    assert rows[0]["authoritative_evidence_source"] == "projection_inference"
+    assert rows[0]["used_projection_inference"] is True
+
+
 # --- Scenario-specific classifier parity (prepared emission routing) -----------
 
 

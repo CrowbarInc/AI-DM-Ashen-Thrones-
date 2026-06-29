@@ -14,7 +14,7 @@ from game.acceptance_quality import (
     validate_and_repair_acceptance_quality,
 )
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
-from game.final_emission_meta import ensure_final_emission_meta_dict
+from game.final_emission_meta import append_semantic_mutation_write_site, ensure_final_emission_meta_dict
 from game.final_emission_sealed_fallback import (
     finalize_n4_sealed_replace_fem_route_meta,
     select_acceptance_quality_n4_sealed_fallback_line,
@@ -186,6 +186,7 @@ def apply_acceptance_quality_n4_floor_seam(
         "normalize_whitespace",
         source="gate._apply_acceptance_quality_n4_floor_seam.replace_normalized",
     )
+    before_replace_text = str(out.get("player_facing_text") or "")
     out["player_facing_text"] = _normalize_text(text2)
     out["tags"] = list(out.get("tags") or []) + [
         "final_emission_gate_replaced",
@@ -193,6 +194,20 @@ def apply_acceptance_quality_n4_floor_seam(
     ]
     finalize_n4_sealed_replace_fem_route_meta(fem, strict_social_path=strict_social_path)
     _patch_n4_floor_text_fingerprint(out, pre_gate_text=pre_gate_text)
+    append_semantic_mutation_write_site(
+        fem,
+        before_text=before_replace_text,
+        after_text=out.get("player_facing_text"),
+        write_site_family="fallback",
+        write_site_file="game/final_emission_acceptance_quality.py",
+        write_site_function="apply_acceptance_quality_n4_floor_seam",
+        owner="game.final_emission_acceptance_quality",
+        route="replaced",
+        source=str(fem.get("final_emitted_source") or ""),
+        mutation_reason="acceptance_quality_n4_sealed_fallback",
+        compatibility_status="diagnostic_only",
+        fallback_family=str(fem.get("realization_fallback_family") or ""),
+    )
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
     codes = ",".join(str(c) for c in (val1.get("reason_codes") or [])[:8])
     out["debug_notes"] = (dbg + " | " if dbg else "") + f"final_emission_gate:acceptance_quality_replaced:{codes}"

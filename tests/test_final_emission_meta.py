@@ -12,6 +12,7 @@ from game.final_emission_ownership_schema import (
 )
 from game.final_emission_sealed_fallback import (
     non_strict_sealed_replacement_realization_family_token,
+    prepare_sealed_replacement_route_meta,
     stamp_non_strict_sealed_replacement_realization_family,
 )
 from game.final_emission_replay_projection import (
@@ -77,6 +78,8 @@ from game.final_emission_meta import (
     opening_fallback_metadata_field_registry_parity_errors,
     opening_fallback_metadata_field_registry_surface,
     UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    SEMANTIC_MUTATION_WRITE_SITES_KEY,
+    append_semantic_mutation_write_site,
     upstream_fast_fallback_provenance_field_registry_parity_errors,
     upstream_fast_fallback_provenance_field_registry_surface,
     SEALED_FALLBACK_OWNER_BUCKETS,
@@ -139,6 +142,97 @@ from game.narrative_mode_contract import (
     build_narrative_mode_emission_trace,
     validate_narrative_mode_output,
 )
+
+
+def test_semantic_mutation_write_site_helper_appends_bounds_and_omits_text() -> None:
+    meta: dict[str, object] = {}
+    append_semantic_mutation_write_site(
+        meta,
+        before_text="The guard waits.",
+        after_text="The gate is sealed.",
+        write_site_family="fallback",
+        write_site_file="game/example.py",
+        write_site_function="replace_text",
+        mutation_reason="unit_test",
+        owner="game.example",
+        max_records=2,
+    )
+    append_semantic_mutation_write_site(
+        meta,
+        before_text="The gate is sealed.",
+        after_text="The gate is sealed.",
+        write_site_family="fallback",
+        write_site_file="game/example.py",
+        write_site_function="replace_text",
+    )
+    append_semantic_mutation_write_site(
+        meta,
+        before_text="A",
+        after_text="B",
+        write_site_family="repair",
+        write_site_file="game/example.py",
+        write_site_function="repair_text",
+        max_records=2,
+    )
+    append_semantic_mutation_write_site(
+        meta,
+        before_text="B",
+        after_text="C",
+        write_site_family="final_emission",
+        write_site_file="game/example.py",
+        write_site_function="finalize",
+        max_records=2,
+    )
+
+    records = meta[SEMANTIC_MUTATION_WRITE_SITES_KEY]
+    assert isinstance(records, list)
+    assert len(records) == 2
+    assert records[-1]["write_site_family"] == "final_emission"
+    assert records[-1]["selected_active_stream"] is True
+    assert records[-1]["candidate_only"] is False
+    assert "before_text" not in records[-1]
+    assert "after_text" not in records[-1]
+
+
+def test_semantic_mutation_write_site_helper_noops_on_bad_metadata() -> None:
+    append_semantic_mutation_write_site(  # type: ignore[arg-type]
+        None,
+        before_text="A",
+        after_text="B",
+        write_site_family="fallback",
+        write_site_file="game/example.py",
+        write_site_function="replace_text",
+    )
+    malformed = {"semantic_mutation_write_sites": "not-a-list"}
+    append_semantic_mutation_write_site(
+        malformed,
+        before_text="A",
+        after_text="B",
+        write_site_family="not_allowed",
+        write_site_file="game/example.py",
+        write_site_function="replace_text",
+    )
+    assert malformed["semantic_mutation_write_sites"] == "not-a-list"
+
+
+def test_prepare_sealed_replacement_route_meta_records_selected_fallback_write_site() -> None:
+    meta: dict[str, object] = {}
+    out = {"player_facing_text": "For a breath, the scene stays still."}
+    prepare_sealed_replacement_route_meta(
+        meta,
+        gm_output=out,
+        pre_gate_candidate_text="Validator: internal scaffold.",
+        final_emitted_source="minimal_social_emergency_fallback",
+        strict_social_route=True,
+        composition_meta=None,
+    )
+
+    records = meta.get(SEMANTIC_MUTATION_WRITE_SITES_KEY)
+    assert isinstance(records, list)
+    assert records[-1]["write_site_family"] == "fallback"
+    assert records[-1]["write_site_file"] == "game/final_emission_sealed_fallback.py"
+    assert records[-1]["candidate_only"] is False
+    assert records[-1]["selected_active_stream"] is True
 
 
 def test_narration_constraint_small_str_rejects_long_and_whitespace() -> None:

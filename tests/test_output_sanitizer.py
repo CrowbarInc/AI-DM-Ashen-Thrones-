@@ -62,6 +62,14 @@ def test_strip_only_mode_drops_scaffold_without_diegetic_template_substitution()
     assert trace.get("sanitizer_lineage_dropped_count") == 1
     assert trace.get("sanitizer_lineage_empty_fallback_used") is True
     assert trace.get("sanitizer_lineage_legacy_rewrite_active") is False
+    records = trace.get("semantic_mutation_write_sites")
+    assert isinstance(records, list)
+    assert len(records) == 1
+    assert records[0]["write_site_family"] == "sanitizer"
+    assert records[0]["write_site_file"] == "game/output_sanitizer.py"
+    assert records[0]["mutation_reason"] == "sanitizer_empty_fallback"
+    assert "before_text" not in records[0]
+    assert "after_text" not in records[0]
 
 
 def test_strip_only_preserves_clean_atmospheric_narration():
@@ -74,6 +82,7 @@ def test_strip_only_preserves_clean_atmospheric_narration():
     assert trace.get("sanitizer_lineage_dropped_count") == 0
     assert trace.get("sanitizer_lineage_empty_fallback_used") is False
     assert trace.get("sanitizer_lineage_legacy_rewrite_active") is False
+    assert trace.get("semantic_mutation_write_sites") is None
 
 
 def test_default_sanitizer_mode_is_strip_only_lineage():

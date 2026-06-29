@@ -74,6 +74,11 @@ from game.final_emission_replay_projection import (
     read_fem_from_turn_for_replay,
     read_opening_fallback_owner_bucket_for_replay,
 )
+from game.semantic_mutation_attribution import (
+    reconcile_semantic_mutation_owner,
+    selected_semantic_mutation_write_site,
+    semantic_mutation_write_site_label,
+)
 
 build_runtime_lineage_events_from_fem = build_fem_runtime_lineage_events
 
@@ -271,6 +276,12 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         payload=payload,
         final_speaker_observation=final_speaker_observation,
     )
+    semantic_trace = turn_payload.get("semantic_mutation_trace")
+    if not isinstance(semantic_trace, Mapping):
+        semantic_trace = payload.get("semantic_mutation_trace")
+    semantic_summary = project_semantic_mutation_summary(
+        semantic_trace if isinstance(semantic_trace, Mapping) else None
+    )
     observed = {
         "scenario_id": scenario_id,
         "turn_index": snap.get("turn_index"),
@@ -312,16 +323,38 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         "runtime_lineage_events": runtime_lineage_events,
         "interaction_continuity_validation": interaction_continuity_validation,
     }
+    write_sites = fem.get("semantic_mutation_write_sites")
+    if isinstance(write_sites, list):
+        projected_write_sites = [
+            dict(row) for row in write_sites if isinstance(row, Mapping)
+        ]
+        observed["semantic_mutation_write_sites"] = projected_write_sites
+        first_write_site = selected_semantic_mutation_write_site(projected_write_sites)
+        first_prompt_write = selected_semantic_mutation_write_site(projected_write_sites, family="prompt")
+        first_policy_write = selected_semantic_mutation_write_site(projected_write_sites, family="policy")
+        if isinstance(first_prompt_write, Mapping):
+            observed["first_prompt_write"] = semantic_mutation_write_site_label(first_prompt_write)
+        if isinstance(first_policy_write, Mapping):
+            observed["first_policy_write"] = semantic_mutation_write_site_label(first_policy_write)
+        if isinstance(first_write_site, Mapping):
+            observed["first_write_site"] = semantic_mutation_write_site_label(first_write_site)
+            observed["first_write_family"] = first_write_site.get("write_site_family")
+            observed["first_write_owner"] = first_write_site.get("owner")
+            observed["semantic_mutation_attribution_evidence_source"] = "write_site"
     if replay_identity_map:
         for key in ("source_path", "branch_id", "turn_id"):
             value = replay_identity_map.get(key)
             if value is not None and str(value).strip():
                 observed[key] = str(value)
     observed["unavailable"] = projection_status.unavailable
-    semantic_trace = turn_payload.get("semantic_mutation_trace")
-    if not isinstance(semantic_trace, Mapping):
-        semantic_trace = payload.get("semantic_mutation_trace")
-    observed.update(project_semantic_mutation_summary(
-        semantic_trace if isinstance(semantic_trace, Mapping) else None
-    ))
+    observed.update(semantic_summary)
+    reconciled = reconcile_semantic_mutation_owner(
+        fem=fem,
+        runtime_lineage=runtime_lineage_events,
+        sanitizer_trace=sanitizer_trace,
+        fallback_provenance=fem.get("fallback_provenance_trace"),
+        projection_metadata=semantic_summary,
+        stage_diff=stage_diff,
+    )
+    observed.update(reconciled.as_dict())
     return observed

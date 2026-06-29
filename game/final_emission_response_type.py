@@ -13,7 +13,9 @@ from dataclasses import dataclass
 from typing import Any, Dict, List
 
 from game.final_emission_meta import (
+    append_semantic_mutation_write_site,
     default_response_type_debug as _default_response_type_debug,
+    merge_semantic_mutation_write_sites,
     stamp_opening_fallback_owner_bucket,
     stamp_response_type_prepared_repair_owner_bucket,
 )
@@ -280,6 +282,12 @@ def enforce_response_type_contract(
         session=session,
     )
     debug = _default_response_type_debug(contract, source)
+    if isinstance(gm_output, Mapping):
+        existing_fem = gm_output.get("_final_emission_meta")
+        merge_semantic_mutation_write_sites(debug, existing_fem if isinstance(existing_fem, Mapping) else None)
+        metadata = gm_output.get("metadata")
+        emission_debug = metadata.get("emission_debug") if isinstance(metadata, Mapping) else None
+        merge_semantic_mutation_write_sites(debug, emission_debug if isinstance(emission_debug, Mapping) else None)
     if not contract:
         return candidate_text, debug
 
@@ -437,6 +445,7 @@ def enforce_response_type_contract(
     repair_kind: str | None = None
     upstream_src_label: str | None = None
     upstream = _upstream_prepared_emission_dict(gm_output if isinstance(gm_output, dict) else None)
+    merge_semantic_mutation_write_sites(debug, upstream)
     if required == "dialogue":
         social_resolution = build_social_fallback_resolution(
             resolution=resolution,
@@ -481,6 +490,21 @@ def enforce_response_type_contract(
                     debug,
                     repair_kind=str(repair_kind),
                     upstream_src_label=upstream_src_label,
+                )
+                append_semantic_mutation_write_site(
+                    debug,
+                    before_text=current,
+                    after_text=repaired,
+                    write_site_family="repair",
+                    write_site_file="game/final_emission_response_type.py",
+                    write_site_function="enforce_response_type_contract",
+                    owner="game.final_emission_response_type",
+                    source=upstream_src_label,
+                    mutation_reason=f"candidate_selected:{repair_kind}",
+                    repair_family=str(repair_kind),
+                    selected_active_stream=True,
+                    candidate_only=False,
+                    compatibility_status="diagnostic_only",
                 )
                 attach_realization_fallback_family(debug, UPSTREAM_PREPARED_EMISSION)
                 stamp_response_type_prepared_repair_owner_bucket(debug)

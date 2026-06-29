@@ -15,6 +15,7 @@ from __future__ import annotations
 from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
 from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
+from game.semantic_mutation_attribution import reconcile_semantic_mutation_owner
 from tests.failure_classification_contract import (
     ALLOWED_CLASSIFICATION_ROW_FIELDS,
     ALLOWED_EMISSION_SUBLAYERS,
@@ -89,6 +90,12 @@ class FailureClassification(TypedDict):
     emission_sublayer: NotRequired[str | None]
     repair_kind: NotRequired[str | None]
     mutation_source: NotRequired[str | None]
+    authoritative_mutation_owner: NotRequired[str | None]
+    authoritative_mutation_family: NotRequired[str | None]
+    authoritative_write_site: NotRequired[str | None]
+    authoritative_evidence_source: NotRequired[str | None]
+    authoritative_mutation_confidence: NotRequired[str | None]
+    used_projection_inference: NotRequired[bool]
     missing_source_kind: NotRequired[str | None]
     sanitizer_mode: NotRequired[Any]
     sanitizer_event_count: NotRequired[Any]
@@ -245,6 +252,12 @@ _CLASSIFIER_COMPUTED_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "final_text_hash",
         "missing_source_kind",
         "mutation_source",
+        "authoritative_mutation_owner",
+        "authoritative_mutation_family",
+        "authoritative_write_site",
+        "authoritative_evidence_source",
+        "authoritative_mutation_confidence",
+        "used_projection_inference",
         "opening_fallback_owner_bucket",
         "prepared_emission_owner",
         "repair_kind",
@@ -661,6 +674,12 @@ def _repair_kind(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any])
 
 
 def _mutation_source(observed_turn: Mapping[str, Any], emission_sublayer: str | None) -> str | None:
+    authoritative = _authoritative_mutation_attribution(observed_turn)
+    if (
+        authoritative.get("authoritative_evidence_source") == "write_site"
+        and authoritative.get("authoritative_mutation_family")
+    ):
+        return str(authoritative.get("authoritative_mutation_family"))
     if emission_sublayer:
         return emission_sublayer
     lineage_mutation = _mutation_classification_from_lineage(observed_turn)
@@ -668,7 +687,37 @@ def _mutation_source(observed_turn: Mapping[str, Any], emission_sublayer: str | 
         return lineage_mutation
     if observed_turn.get("post_gate_mutation_detected") is True:
         return _post_gate_lineage_mutation_source(observed_turn) or "emission.post_gate_mutation_unknown"
+    if authoritative.get("authoritative_mutation_family"):
+        return str(authoritative.get("authoritative_mutation_family"))
     return None
+
+
+def _authoritative_mutation_attribution(observed_turn: Mapping[str, Any]) -> dict[str, Any]:
+    existing = {
+        key: observed_turn.get(key)
+        for key in (
+            "authoritative_mutation_owner",
+            "authoritative_mutation_family",
+            "authoritative_write_site",
+            "authoritative_evidence_source",
+            "authoritative_mutation_confidence",
+            "used_projection_inference",
+        )
+        if key in observed_turn
+    }
+    if existing.get("authoritative_evidence_source"):
+        return existing
+    stage_diff = observed_turn.get("stage_diff") if isinstance(observed_turn.get("stage_diff"), Mapping) else None
+    return reconcile_semantic_mutation_owner(
+        fem=observed_turn,
+        runtime_lineage=_runtime_lineage_events(observed_turn),
+        sanitizer_trace=observed_turn,
+        fallback_provenance=observed_turn.get("fallback_provenance_trace")
+        if isinstance(observed_turn.get("fallback_provenance_trace"), Mapping)
+        else None,
+        projection_metadata=observed_turn,
+        stage_diff=stage_diff,
+    ).as_dict()
 
 
 def _fallback_observed(observed_turn: Mapping[str, Any], drift_row: Mapping[str, Any]) -> bool:
@@ -989,7 +1038,14 @@ def classify_replay_failure(
         row["prepared_emission_owner"] = _prepared_emission_owner(observed_turn)
         row["emission_sublayer"] = emission_sublayer
         row["repair_kind"] = repair_kind
+        authoritative_mutation = _authoritative_mutation_attribution(observed_turn)
         row["mutation_source"] = _mutation_source(observed_turn, emission_sublayer)
+        row["authoritative_mutation_owner"] = authoritative_mutation.get("authoritative_mutation_owner")
+        row["authoritative_mutation_family"] = authoritative_mutation.get("authoritative_mutation_family")
+        row["authoritative_write_site"] = authoritative_mutation.get("authoritative_write_site")
+        row["authoritative_evidence_source"] = authoritative_mutation.get("authoritative_evidence_source")
+        row["authoritative_mutation_confidence"] = authoritative_mutation.get("authoritative_mutation_confidence")
+        row["used_projection_inference"] = bool(authoritative_mutation.get("used_projection_inference"))
         row["missing_source_kind"] = missing_source_kind
         row["owner_drift_bucket"] = classify_owner_drift_bucket(
             field_path=field_path,

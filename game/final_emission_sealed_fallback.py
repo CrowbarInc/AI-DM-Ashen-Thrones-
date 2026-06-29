@@ -14,7 +14,7 @@ from game.final_emission_ownership_schema import (
     SEALED_FALLBACK_OWNER_UNKNOWN_AMBIGUOUS,
     SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
 )
-from game.final_emission_meta import refresh_final_emission_mutation_lineage
+from game.final_emission_meta import append_semantic_mutation_write_site, refresh_final_emission_mutation_lineage
 from game.final_emission_owner_bucket_views import sealed_fallback_owner_bucket_from_fields
 import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_visibility_fallback import VisibilitySelectedFallback
@@ -295,6 +295,20 @@ def prepare_sealed_replacement_route_meta(
         meta["fallback_temporal_frame"] = composition_meta.get("fallback_temporal_frame")
     meta["post_gate_mutation_detected"] = pre_gate_candidate_text != gate_out_text
     meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
+    append_semantic_mutation_write_site(
+        meta,
+        before_text=pre_gate_candidate_text,
+        after_text=gate_out_text,
+        write_site_family="fallback",
+        write_site_file="game/final_emission_sealed_fallback.py",
+        write_site_function="prepare_sealed_replacement_route_meta",
+        owner="game.final_emission_sealed_fallback",
+        route="replaced",
+        source=final_emitted_source,
+        mutation_reason="sealed_fallback_replacement",
+        compatibility_status="diagnostic_only",
+        fallback_family=str(meta.get("realization_fallback_family") or meta.get("fallback_family_used") or ""),
+    )
     refresh_final_emission_mutation_lineage(meta)
 
 

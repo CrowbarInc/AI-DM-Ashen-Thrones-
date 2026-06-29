@@ -206,6 +206,11 @@ PROTECTED_CLASSIFIER_EVIDENCE_FIELDS: frozenset[str] = protected_classifier_evid
 
 CLASSIFIER_EVIDENCE_EXTENSION_FIELDS: frozenset[str] = frozenset(
     {
+        "authoritative_evidence_source",
+        "authoritative_mutation_confidence",
+        "authoritative_mutation_family",
+        "authoritative_mutation_owner",
+        "authoritative_write_site",
         "canonical_target_actor_id",
         "emission_sublayer",
         "fallback_content_owner",
@@ -222,6 +227,7 @@ CLASSIFIER_EVIDENCE_EXTENSION_FIELDS: frozenset[str] = frozenset(
         "sanitizer_mode",
         "sanitizer_rewrite_used",
         "secondary_owner",
+        "used_projection_inference",
     }
 )
 
@@ -258,6 +264,12 @@ OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS: frozenset[str] = frozenset(
         "response_type_repair_used",
         "response_type_repair_kind",
         "post_gate_mutation_detected",
+        "authoritative_mutation_owner",
+        "authoritative_mutation_family",
+        "authoritative_write_site",
+        "authoritative_evidence_source",
+        "authoritative_mutation_confidence",
+        "used_projection_inference",
         "emission_sublayer",
         "repair_kind",
         "mutation_source",
@@ -306,7 +318,7 @@ if PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS:
 
 # Cycle AK3 / AO3 — dashboard Evidence column manifest (label, classifier row key).
 # Row keys are a curated subset of ``CLASSIFIER_EVIDENCE_FIELDS`` surfaced in markdown.
-_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 29
+_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 35
 
 FAILURE_DASHBOARD_EVIDENCE_MANIFEST: tuple[tuple[str, str], ...] = (
     ("sublayer", "emission_sublayer"),
@@ -322,6 +334,12 @@ FAILURE_DASHBOARD_EVIDENCE_MANIFEST: tuple[tuple[str, str], ...] = (
     ("visibility_pool", "visibility_fallback_pool"),
     ("visibility_kind", "visibility_fallback_kind"),
     ("mutation", "mutation_source"),
+    ("authoritative_owner", "authoritative_mutation_owner"),
+    ("authoritative_family", "authoritative_mutation_family"),
+    ("authoritative_write_site", "authoritative_write_site"),
+    ("authoritative_evidence", "authoritative_evidence_source"),
+    ("authoritative_confidence", "authoritative_mutation_confidence"),
+    ("projection_inference", "used_projection_inference"),
     ("missing", "missing_source_kind"),
     ("sanitizer_mode", "sanitizer_mode"),
     ("sanitizer_events", "sanitizer_event_count"),

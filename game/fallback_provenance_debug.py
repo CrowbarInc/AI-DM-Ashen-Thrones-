@@ -42,6 +42,8 @@ from game.final_emission_meta import (
     UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
     UPSTREAM_FAST_FALLBACK_PROVENANCE_SELECTOR_KEYS,
     UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    append_semantic_mutation_write_site,
+    ensure_final_emission_meta_dict,
     patch_final_emission_meta,
 )
 from game.final_emission_text_formatting import (
@@ -247,11 +249,25 @@ def apply_upstream_fallback_pregate_containment(out: Dict[str, Any]) -> bool:
         "preserve_candidate_text",
         source="game.fallback_provenance_debug.apply_upstream_fallback_pregate_containment",
     )
+    before_text = str(out.get("player_facing_text") or "")
     out["player_facing_text"] = snap
     md = out.get("metadata") if isinstance(out.get("metadata"), dict) else {}
     prov2 = dict(md.get(METADATA_KEY) or prov)
     prov2["overwrite_containment_applied"] = "pre_gate"
     out["metadata"] = {**md, METADATA_KEY: prov2}
+    append_semantic_mutation_write_site(
+        ensure_final_emission_meta_dict(out),
+        before_text=before_text,
+        after_text=snap,
+        write_site_family="final_emission",
+        write_site_file="game/fallback_provenance_debug.py",
+        write_site_function="apply_upstream_fallback_pregate_containment",
+        owner="game.fallback_provenance_debug",
+        source="fallback_provenance.selector_player_facing_text",
+        mutation_reason="upstream_fallback_pregate_overwrite_containment",
+        compatibility_status="diagnostic_only",
+        fallback_family="upstream_fast_fallback",
+    )
     print("FALLBACK OVERWRITE CONTAINED: pre-gate")
     record_final_emission_gate_entry(out)
     return True
@@ -291,6 +307,7 @@ def finalize_upstream_fallback_overwrite_containment(
         "preserve_candidate_text",
         source="game.fallback_provenance_debug.finalize_upstream_fallback_overwrite_containment",
     )
+    before_text = str(out.get("player_facing_text") or "")
     out["player_facing_text"] = chosen
     gate_norm = _normalize_text(chosen)
     contained_kind = (
@@ -306,6 +323,19 @@ def finalize_upstream_fallback_overwrite_containment(
             "post_gate_mutation_detected": pre_gate_normalized != gate_norm,
             "final_text_preview": (gate_norm[:120] + "…") if len(gate_norm) > 120 else gate_norm,
         },
+    )
+    append_semantic_mutation_write_site(
+        ensure_final_emission_meta_dict(out),
+        before_text=before_text,
+        after_text=chosen,
+        write_site_family="final_emission",
+        write_site_file="game/fallback_provenance_debug.py",
+        write_site_function="finalize_upstream_fallback_overwrite_containment",
+        owner="game.fallback_provenance_debug",
+        source="fallback_provenance.selector_player_facing_text",
+        mutation_reason="upstream_fallback_finalize_overwrite_containment",
+        compatibility_status="diagnostic_only",
+        fallback_family="upstream_fast_fallback",
     )
     print(
         "FALLBACK OVERWRITE CONTAINED: in-gate/finalize"

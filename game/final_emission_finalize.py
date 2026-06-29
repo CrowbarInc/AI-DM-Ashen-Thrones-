@@ -16,6 +16,7 @@ from game.fallback_provenance_debug import (
 from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
 from game.final_emission_opening_fallback import reassert_scene_opening_accepted_candidate
 from game.final_emission_meta import (
+    append_semantic_mutation_write_site,
     ensure_final_emission_meta_dict,
     package_dead_turn_snapshot_into_final_emission_meta,
     package_emission_channel_sidecar,
@@ -216,6 +217,30 @@ def finalize_emission_output(
             "final_text_preview": (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text,
         }
     )
+    append_semantic_mutation_write_site(
+        meta,
+        before_text=final_text,
+        after_text=sanitized_text,
+        write_site_family="final_emission",
+        write_site_file="game/final_emission_finalize.py",
+        write_site_function="finalize_emission_output",
+        owner="game.final_emission_finalize",
+        source="gate._finalize_emission_output",
+        mutation_reason="final_output_sanitization",
+        compatibility_status="diagnostic_only",
+    )
+    append_semantic_mutation_write_site(
+        meta,
+        before_text=pre_route_strip_text,
+        after_text=smoothed_text,
+        write_site_family="final_emission",
+        write_site_file="game/final_emission_finalize.py",
+        write_site_function="finalize_emission_output",
+        owner="game.final_emission_finalize",
+        source="gate._finalize_emission_output",
+        mutation_reason="finalize_route_illegal_strip",
+        compatibility_status="diagnostic_only",
+    )
     _refresh_output_mutation_lineage(out)
     record_final_emission_gate_exit(out, final_normalized_text=gate_out_text)
     finalize_upstream_fallback_overwrite_containment(out, pre_gate_normalized=pre_gate_text)
@@ -242,6 +267,18 @@ def finalize_emission_output(
                 "finalize_route_illegal_strip_applied": True,
                 "final_text_preview": (gate_norm_final[:120] + "…") if len(gate_norm_final) > 120 else gate_norm_final,
             },
+        )
+        append_semantic_mutation_write_site(
+            ensure_final_emission_meta_dict(out),
+            before_text=pre_seal,
+            after_text=sealed,
+            write_site_family="final_emission",
+            write_site_file="game/final_emission_finalize.py",
+            write_site_function="finalize_emission_output",
+            owner="game.final_emission_finalize",
+            source="gate._finalize_emission_output.reseal",
+            mutation_reason="finalize_route_illegal_reseal_strip",
+            compatibility_status="diagnostic_only",
         )
     reassert_scene_opening_accepted_candidate(
         out,

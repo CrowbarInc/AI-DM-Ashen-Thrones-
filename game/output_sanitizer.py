@@ -16,6 +16,7 @@ import re
 from typing import Any, Dict
 
 from game.attribution_read_views import SEALED_FALLBACK_OWNER_UNKNOWN_NONE
+from game.final_emission_meta import append_semantic_mutation_write_site
 from game.observability_attribution_read import PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY
 from game.social_exchange_fallback_catalog import (
     select_strict_social_emergency_fallback_line,
@@ -1284,6 +1285,37 @@ def _prepared_upstream_empty_fallback_text(context: Dict[str, Any] | None) -> st
     return ""
 
 
+def _record_sanitizer_semantic_write_site(
+    context: Dict[str, Any] | None,
+    *,
+    before_text: str,
+    after_text: str,
+    mutation_reason: str,
+    source: str | None = None,
+    owner: str | None = None,
+) -> None:
+    if not isinstance(context, dict):
+        return
+    trace = context.setdefault("sanitizer_trace", {})
+    if not isinstance(trace, dict):
+        return
+    append_semantic_mutation_write_site(
+        trace,
+        before_text=before_text,
+        after_text=after_text,
+        write_site_family="sanitizer",
+        write_site_file="game/output_sanitizer.py",
+        write_site_function="sanitize_player_facing_output",
+        owner=owner or trace.get("sanitizer_empty_fallback_owner") or trace.get("sanitizer_strict_social_selection_owner"),
+        route=context.get("final_route") or context.get("route"),
+        source=source or trace.get("sanitizer_empty_fallback_source") or trace.get("sanitizer_strict_social_source"),
+        speaker=context.get("speaker") or context.get("active_interlocutor"),
+        mutation_reason=mutation_reason,
+        compatibility_status="diagnostic_only",
+        fallback_family="sanitizer_empty" if "fallback" in str(mutation_reason or "") else None,
+    )
+
+
 def _sanitizer_must_rewrite_sentence(sentence: str, *, has_previous_kept_sentence: bool) -> bool:
     """Mirror ``_classify_sentence_action`` rewrite triggers without performing rewrites."""
     s = _strip_internal_prefixes(sentence).strip()
@@ -1392,7 +1424,15 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
 
     if not rebuilt:
         if strict_clamp and isinstance(context.get("gate_sealed_text"), str) and str(context.get("gate_sealed_text") or "").strip():
-            return str(context.get("gate_sealed_text") or "").strip()
+            fallback = str(context.get("gate_sealed_text") or "").strip()
+            _record_sanitizer_semantic_write_site(
+                context,
+                before_text=out,
+                after_text=fallback,
+                mutation_reason="strict_social_gate_sealed_text_fallback",
+                source="context.gate_sealed_text",
+            )
+            return fallback
         if strict_social and isinstance(eff_res, dict):
             fb_ctx = dict(context)
             fb_ctx["resolution"] = eff_res
@@ -1401,16 +1441,31 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
                 used=True,
                 source="social_fallback_line_for_sanitizer.empty_output",
             )
-            return select_strict_social_emergency_fallback_line(
+            fallback = select_strict_social_emergency_fallback_line(
                 context=fb_ctx,
                 source_text=out,
                 surface="sanitizer_empty",
             )
+            _record_sanitizer_semantic_write_site(
+                context,
+                before_text=out,
+                after_text=fallback,
+                mutation_reason="strict_social_sanitizer_empty_fallback",
+                source="social_fallback_line_for_sanitizer.empty_output",
+            )
+            return fallback
         prepared = _prepared_upstream_empty_fallback_text(context)
         if prepared:
             _mark_sanitizer_empty_fallback(
                 context,
                 used=True,
+                source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
+            )
+            _record_sanitizer_semantic_write_site(
+                context,
+                before_text=out,
+                after_text=prepared,
+                mutation_reason="sanitizer_empty_fallback",
                 source="upstream_prepared_emission.prepared_sanitizer_empty_fallback_text",
             )
             return prepared
@@ -1425,6 +1480,13 @@ def _sanitize_player_facing_output_strip_only(text: str, context: Dict[str, Any]
             context,
             repair_kind=PRODUCER_REPAIR_KIND_SANITIZER_STRIP_ONLY,
             owner_bucket=SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
+        )
+        _record_sanitizer_semantic_write_site(
+            context,
+            before_text=out,
+            after_text=rebuilt,
+            mutation_reason="strip_only_sanitizer_changed_output",
+            source="strip_only",
         )
     return rebuilt
 
@@ -1502,7 +1564,15 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
 
     if not rebuilt:
         if strict_clamp and isinstance(ctx.get("gate_sealed_text"), str) and str(ctx.get("gate_sealed_text") or "").strip():
-            return str(ctx.get("gate_sealed_text") or "").strip()
+            fallback = str(ctx.get("gate_sealed_text") or "").strip()
+            _record_sanitizer_semantic_write_site(
+                ctx,
+                before_text=out,
+                after_text=fallback,
+                mutation_reason="legacy_strict_social_gate_sealed_text_fallback",
+                source="context.gate_sealed_text",
+            )
+            return fallback
         if strict_social and isinstance(eff_res, dict):
             fb_ctx = dict(ctx)
             fb_ctx["resolution"] = eff_res
@@ -1511,10 +1581,34 @@ def sanitize_player_facing_output(text: str, context: Dict[str, Any] | None = No
                 used=True,
                 source="social_fallback_line_for_sanitizer.empty_output",
             )
-            return select_strict_social_emergency_fallback_line(
+            fallback = select_strict_social_emergency_fallback_line(
                 context=fb_ctx,
                 source_text=out,
                 surface="sanitizer_empty",
             )
-        return "For a breath, the scene stays still."
+            _record_sanitizer_semantic_write_site(
+                ctx,
+                before_text=out,
+                after_text=fallback,
+                mutation_reason="legacy_strict_social_sanitizer_empty_fallback",
+                source="social_fallback_line_for_sanitizer.empty_output",
+            )
+            return fallback
+        fallback = "For a breath, the scene stays still."
+        _record_sanitizer_semantic_write_site(
+            ctx,
+            before_text=out,
+            after_text=fallback,
+            mutation_reason="legacy_sanitizer_empty_fallback",
+            source="output_sanitizer.legacy_empty_fallback",
+        )
+        return fallback
+    if rebuilt != out:
+        _record_sanitizer_semantic_write_site(
+            ctx,
+            before_text=out,
+            after_text=rebuilt,
+            mutation_reason="legacy_sentence_rewrite_sanitizer_changed_output",
+            source="legacy_sentence_rewrite",
+        )
     return rebuilt

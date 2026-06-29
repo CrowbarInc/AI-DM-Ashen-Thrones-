@@ -291,7 +291,7 @@ def contract_classifier_misalignments(
     return misalignments
 
 
-_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 29
+_EXPECTED_FAILURE_DASHBOARD_EVIDENCE_COUNT = 35
 
 
 def dashboard_evidence_manifest_misalignments() -> list[str]:
@@ -364,9 +364,9 @@ def classifier_evidence_manifest_misalignments() -> list[str]:
         misalignments.append(
             f"PROTECTED_CLASSIFIER_EVIDENCE_FIELDS must contain 32 fields, got {len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS)}"
         )
-    if len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) != 16:
+    if len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) != 22:
         misalignments.append(
-            f"CLASSIFIER_EVIDENCE_EXTENSION_FIELDS must contain 16 fields, got {len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)}"
+            f"CLASSIFIER_EVIDENCE_EXTENSION_FIELDS must contain 22 fields, got {len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)}"
         )
 
     overlap = PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS

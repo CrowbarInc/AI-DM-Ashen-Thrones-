@@ -12,8 +12,10 @@ from game.final_emission_answer_shape_primacy import default_answer_shape_primac
 from game.final_emission_context_separation import default_context_separation_meta
 from game.final_emission_fast_fallback_composition import default_fast_fallback_neutral_composition_meta
 from game.final_emission_meta import (
+    SEMANTIC_MUTATION_WRITE_SITES_KEY,
     default_narrative_authenticity_layer_meta,
     default_response_type_debug,
+    merge_semantic_mutation_write_sites,
 )
 from game.final_emission_narrative_authority import default_narrative_authority_meta
 from game.final_emission_player_facing_narration_purity import default_player_facing_narration_purity_meta
@@ -57,6 +59,13 @@ def initialize_gate_preflight_layer_meta_defaults(
     """Initialize response-type debug and empty/default layer-meta dicts for gate preflight."""
     response_type_debug = default_response_type_debug(None, None)
     _merge_opening_upstream_prepare_attach_observability_into_response_type_debug(out, response_type_debug)
+    metadata = out.get("metadata") if isinstance(out, dict) else None
+    emission_debug = metadata.get("emission_debug") if isinstance(metadata, dict) else None
+    if isinstance(emission_debug, dict) and isinstance(emission_debug.get(SEMANTIC_MUTATION_WRITE_SITES_KEY), list):
+        merge_semantic_mutation_write_sites(response_type_debug, emission_debug)
+    existing_fem = out.get("_final_emission_meta") if isinstance(out, dict) else None
+    if isinstance(existing_fem, dict) and isinstance(existing_fem.get(SEMANTIC_MUTATION_WRITE_SITES_KEY), list):
+        merge_semantic_mutation_write_sites(response_type_debug, existing_fem)
     ac_layer_meta: Dict[str, Any] = {}
     rd_layer_meta: Dict[str, Any] = _default_response_delta_meta()
     srs_layer_meta: Dict[str, Any] = _default_social_response_structure_meta()

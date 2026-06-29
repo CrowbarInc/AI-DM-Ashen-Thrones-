@@ -22,6 +22,7 @@ from game.final_emission_meta import (
     PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_ENFORCEMENT,
     PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION,
     PRODUCER_REPAIR_KIND_VISIBILITY_ENFORCEMENT,
+    append_semantic_mutation_write_site,
     stamp_producer_repair_kind,
     stamp_visibility_fallback_owner_bucket_from_fields,
 )
@@ -1524,6 +1525,19 @@ def apply_referential_clarity_enforcement(
             meta["final_text_preview"] = (gate_out_text[:120] + "…") if len(gate_out_text) > 120 else gate_out_text
             stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
             stamp_visibility_fallback_owner_bucket_from_fields(meta)
+            append_semantic_mutation_write_site(
+                meta,
+                before_text=candidate_text,
+                after_text=repaired,
+                write_site_family="repair",
+                write_site_file="game/final_emission_visibility_fallback.py",
+                write_site_function="apply_referential_clarity_enforcement",
+                owner="game.final_emission_visibility_fallback",
+                source="referential_clarity_local_substitution",
+                mutation_reason="strict_social_referential_clarity_local_substitution",
+                compatibility_status="diagnostic_only",
+                repair_family="referential_clarity_local_substitution",
+            )
             log_final_emission_decision(
                 {
                     "stage": "final_emission_gate_referential_clarity",
@@ -1565,6 +1579,19 @@ def apply_referential_clarity_enforcement(
             )
             stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_REFERENTIAL_CLARITY_LOCAL_SUBSTITUTION)
             stamp_visibility_fallback_owner_bucket_from_fields(meta)
+            append_semantic_mutation_write_site(
+                meta,
+                before_text=candidate_text,
+                after_text=repaired,
+                write_site_family="repair",
+                write_site_file="game/final_emission_visibility_fallback.py",
+                write_site_function="apply_referential_clarity_enforcement",
+                owner="game.final_emission_visibility_fallback",
+                source="referential_clarity_local_substitution",
+                mutation_reason="referential_clarity_local_substitution",
+                compatibility_status="diagnostic_only",
+                repair_family="referential_clarity_local_substitution",
+            )
             log_final_emission_decision(
                 {
                     "stage": "final_emission_gate_referential_clarity",

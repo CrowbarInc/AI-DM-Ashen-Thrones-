@@ -36,7 +36,9 @@ from game.final_emission_visibility_fallback import VisibilitySelectedFallback
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
     OPENING_FALLBACK_RESULT_META_FIELDS,
+    append_semantic_mutation_write_site,
     default_opening_fallback_fail_closed_result_meta,
+    ensure_final_emission_meta_dict,
     stamp_opening_fallback_owner_bucket,
 )
 from game.upstream_response_repairs import (
@@ -371,12 +373,25 @@ def reassert_scene_opening_accepted_candidate(
     accepted = _normalize_text(accepted_scene_opening_text or "")
     if not accepted:
         return
-    if _normalize_text(out.get("player_facing_text") or "") != accepted:
+    before_text = str(out.get("player_facing_text") or "")
+    if _normalize_text(before_text) != accepted:
         assert_final_emission_mutation_allowed(
             "restore_accepted_scene_opening_candidate",
             source=source,
         )
         out["player_facing_text"] = accepted
+        append_semantic_mutation_write_site(
+            ensure_final_emission_meta_dict(out),
+            before_text=before_text,
+            after_text=accepted,
+            write_site_family="final_emission",
+            write_site_file="game/final_emission_opening_fallback.py",
+            write_site_function="reassert_scene_opening_accepted_candidate",
+            owner="game.final_emission_opening_fallback",
+            source=source,
+            mutation_reason="accepted_scene_opening_reassertion",
+            compatibility_status="diagnostic_only",
+        )
     patch_scene_opening_candidate_emission_debug(
         out,
         accepted_scene_opening_text=accepted,

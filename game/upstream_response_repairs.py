@@ -27,6 +27,10 @@ from game.final_emission_text_formatting import (
     _normalize_terminal_punctuation,
     _normalize_text,
 )
+from game.final_emission_meta import (
+    FINAL_EMISSION_META_KEY,
+    append_semantic_mutation_write_site,
+)
 from game.opening_deterministic_fallback import deterministic_opening_fallback_text_and_meta
 from game.interaction_context import inspect as inspect_interaction_context
 from game.leads import get_lead, normalize_lead
@@ -320,6 +324,34 @@ def build_upstream_prepared_emission_payload(
         "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
         "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
     }
+    append_semantic_mutation_write_site(
+        payload,
+        before_text="",
+        after_text=answer,
+        write_site_family="repair",
+        write_site_file="game/upstream_response_repairs.py",
+        write_site_function="build_upstream_prepared_emission_payload",
+        owner="game.upstream_response_repairs",
+        source="prepared_answer_fallback_text",
+        mutation_reason="candidate_creation:answer_upstream_prepared_repair",
+        selected_active_stream=False,
+        candidate_only=True,
+        compatibility_status="diagnostic_only",
+    )
+    append_semantic_mutation_write_site(
+        payload,
+        before_text="",
+        after_text=action,
+        write_site_family="repair",
+        write_site_file="game/upstream_response_repairs.py",
+        write_site_function="build_upstream_prepared_emission_payload",
+        owner="game.upstream_response_repairs",
+        source="prepared_action_fallback_text",
+        mutation_reason="candidate_creation:action_outcome_upstream_prepared_repair",
+        selected_active_stream=False,
+        candidate_only=True,
+        compatibility_status="diagnostic_only",
+    )
     attach_realization_fallback_family(payload, UPSTREAM_PREPARED_EMISSION)
     return payload
 
@@ -596,6 +628,33 @@ def apply_spoken_state_refinement_cash_out(
     new_text = _normalize_text(emitted.rstrip() + " " + tail)
     out = dict(gm_output)
     out["player_facing_text"] = new_text
+    fem = out.get(FINAL_EMISSION_META_KEY)
+    if not isinstance(fem, dict):
+        fem = {}
+        out[FINAL_EMISSION_META_KEY] = fem
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        md = {}
+        out["metadata"] = md
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        em = {}
+        md["emission_debug"] = em
+    for metadata in (fem, em):
+        append_semantic_mutation_write_site(
+            metadata,
+            before_text=emitted,
+            after_text=new_text,
+            write_site_family="prompt",
+            write_site_file="game/upstream_response_repairs.py",
+            write_site_function="apply_spoken_state_refinement_cash_out",
+            owner="game.upstream_response_repairs",
+            source="prompt_contract:spoken_state_refinement",
+            mutation_reason=f"spoken_state_refinement_cash_out:{source}",
+            selected_active_stream=True,
+            candidate_only=False,
+            compatibility_status="diagnostic_only",
+        )
     dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
     out["debug_notes"] = (dbg + " | " if dbg else "") + f"spoken_state_refinement_cash_out:{source}"
     out["_spoken_refinement_cash_out"] = {

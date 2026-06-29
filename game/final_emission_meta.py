@@ -39,6 +39,7 @@ path. This module packages **metadata shapes** and observational read paths, not
 """
 from __future__ import annotations
 
+import hashlib
 import importlib
 import re
 from typing import Any, Dict, List, Mapping, MutableMapping
@@ -68,6 +69,7 @@ from game.final_emission_ownership_schema import (
     VISIBILITY_FALLBACK_OWNER_UNKNOWN_NONE,
     fallback_owner_bucket_registry_surface,
 )
+from game.semantic_mutation_attribution import SEMANTIC_MUTATION_WRITE_SITE_FAMILIES
 from game.final_emission_validators import (
     _default_response_type_debug as _validators_default_response_type_debug,
     _merge_response_type_meta as _validators_merge_response_type_meta,
@@ -117,6 +119,8 @@ EMISSION_AUTHOR_LANE_KEY: str = "emission_author_lane"
 FINAL_EMISSION_META_KEY: str = "_final_emission_meta"
 DEBUG_NOTES_KEY: str = "debug_notes"
 FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
+SEMANTIC_MUTATION_WRITE_SITES_KEY: str = "semantic_mutation_write_sites"
+SEMANTIC_MUTATION_WRITE_SITE_LIMIT: int = 16
 
 # FEM subtrees / well-known nested keys.
 FEM_DEAD_TURN_KEY: str = "dead_turn"
@@ -135,6 +139,150 @@ def ensure_final_emission_meta_dict(gm_output: MutableMapping[str, Any]) -> Dict
         meta = {}
         gm_output[FINAL_EMISSION_META_KEY] = meta
     return meta
+
+
+def _semantic_mutation_normalized_text(value: Any) -> str:
+    try:
+        return re.sub(r"\s+", " ", str(value or "")).strip()
+    except Exception:
+        return ""
+
+
+def _semantic_mutation_hash(value: Any) -> str:
+    normalized = _semantic_mutation_normalized_text(value)
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
+
+
+def _semantic_mutation_small_str(value: Any, *, limit: int = 96) -> str | None:
+    try:
+        clean = str(value or "").strip()
+    except Exception:
+        return None
+    if not clean:
+        return None
+    clean = re.sub(r"[\r\n\t]+", " ", clean)
+    return clean[:limit]
+
+
+def append_semantic_mutation_write_site(
+    metadata: MutableMapping[str, Any] | None,
+    *,
+    before_text: Any = None,
+    after_text: Any = None,
+    before_semantic_hash: str | None = None,
+    after_semantic_hash: str | None = None,
+    write_site_family: str,
+    write_site_file: str,
+    write_site_function: str,
+    owner: str | None = None,
+    route: str | None = None,
+    source: str | None = None,
+    speaker: str | None = None,
+    mutation_reason: str | None = None,
+    compatibility_status: str | None = None,
+    fallback_family: str | None = None,
+    repair_family: str | None = None,
+    selected_active_stream: bool = True,
+    candidate_only: bool = False,
+    turn_id: Any = None,
+    replay_id: Any = None,
+    trace_id: Any = None,
+    max_records: int = SEMANTIC_MUTATION_WRITE_SITE_LIMIT,
+) -> None:
+    """Append bounded metadata-only semantic mutation write-site evidence.
+
+    This helper is deliberately passive: malformed inputs, unchanged normalized
+    text, or unusable metadata simply leave runtime behavior untouched.
+    """
+    try:
+        if not isinstance(metadata, MutableMapping):
+            return
+        before_hash = _semantic_mutation_small_str(before_semantic_hash)
+        after_hash = _semantic_mutation_small_str(after_semantic_hash)
+        if not before_hash:
+            before_hash = _semantic_mutation_hash(before_text)
+        if not after_hash:
+            after_hash = _semantic_mutation_hash(after_text)
+        if not before_hash or not after_hash or before_hash == after_hash:
+            return
+
+        family = _semantic_mutation_small_str(write_site_family, limit=32)
+        if family not in SEMANTIC_MUTATION_WRITE_SITE_FAMILIES:
+            return
+        records = metadata.get(SEMANTIC_MUTATION_WRITE_SITES_KEY)
+        if not isinstance(records, list):
+            records = []
+        limit = max(1, min(int(max_records or SEMANTIC_MUTATION_WRITE_SITE_LIMIT), SEMANTIC_MUTATION_WRITE_SITE_LIMIT))
+        seed = "|".join(
+            str(part or "")
+            for part in (
+                family,
+                write_site_file,
+                write_site_function,
+                mutation_reason,
+                before_hash,
+                after_hash,
+                len(records),
+            )
+        )
+        record: dict[str, Any] = {
+            "mutation_id": hashlib.sha256(seed.encode("utf-8")).hexdigest()[:12],
+            "write_site_family": family,
+            "write_site_file": _semantic_mutation_small_str(write_site_file, limit=128),
+            "write_site_function": _semantic_mutation_small_str(write_site_function, limit=96),
+            "before_semantic_hash": before_hash,
+            "after_semantic_hash": after_hash,
+            "selected_active_stream": bool(selected_active_stream),
+            "candidate_only": bool(candidate_only),
+        }
+        optional = {
+            "owner": owner,
+            "route": route,
+            "source": source,
+            "speaker": speaker,
+            "mutation_reason": mutation_reason,
+            "compatibility_status": compatibility_status,
+            "fallback_family": fallback_family,
+            "repair_family": repair_family,
+            "turn_id": turn_id,
+            "replay_id": replay_id,
+            "trace_id": trace_id,
+        }
+        for key, value in optional.items():
+            clean = _semantic_mutation_small_str(value)
+            if clean is not None:
+                record[key] = clean
+        records = records[-(limit - 1) :] + [record]
+        metadata[SEMANTIC_MUTATION_WRITE_SITES_KEY] = records
+    except Exception:
+        return
+
+
+def merge_semantic_mutation_write_sites(
+    target: MutableMapping[str, Any] | None,
+    source: Mapping[str, Any] | None,
+    *,
+    max_records: int = SEMANTIC_MUTATION_WRITE_SITE_LIMIT,
+) -> None:
+    """Merge bounded metadata-only semantic mutation write-site evidence."""
+    if not isinstance(target, MutableMapping) or not isinstance(source, Mapping):
+        return
+    incoming = source.get(SEMANTIC_MUTATION_WRITE_SITES_KEY)
+    if not isinstance(incoming, list):
+        return
+    existing = target.get(SEMANTIC_MUTATION_WRITE_SITES_KEY)
+    merged = [
+        dict(row)
+        for row in [*(existing if isinstance(existing, list) else []), *incoming]
+        if isinstance(row, Mapping)
+    ]
+    if not merged:
+        return
+    try:
+        limit = max(1, min(int(max_records or SEMANTIC_MUTATION_WRITE_SITE_LIMIT), SEMANTIC_MUTATION_WRITE_SITE_LIMIT))
+    except Exception:
+        limit = SEMANTIC_MUTATION_WRITE_SITE_LIMIT
+    target[SEMANTIC_MUTATION_WRITE_SITES_KEY] = merged[-limit:]
 
 
 def _accept_path_layer_meta(meta: Mapping[str, Any] | None) -> Mapping[str, Any]:
@@ -1176,6 +1324,7 @@ def apply_sanitizer_producer_attribution_to_fem(
     if owner_bucket and not str(meta.get("sealed_fallback_owner_bucket") or "").strip():
         meta["sealed_fallback_owner_bucket"] = owner_bucket
     for key in (
+        SEMANTIC_MUTATION_WRITE_SITES_KEY,
         "sanitizer_empty_fallback_used",
         "sanitizer_lineage_empty_fallback_used",
         "sanitizer_strict_social_fallback_used",
@@ -1188,6 +1337,16 @@ def apply_sanitizer_producer_attribution_to_fem(
         "sanitizer_strict_social_selection_owner_trace_short",
         "sanitizer_strict_social_prose_owner_trace_short",
     ):
+        if key == SEMANTIC_MUTATION_WRITE_SITES_KEY and isinstance(trace.get(key), list):
+            existing = meta.get(key) if isinstance(meta.get(key), list) else []
+            merged = [
+                dict(row)
+                for row in [*existing, *trace.get(key)]
+                if isinstance(row, Mapping)
+            ]
+            if merged:
+                meta[key] = merged[-SEMANTIC_MUTATION_WRITE_SITE_LIMIT:]
+            continue
         if key in trace and meta.get(key) is None:
             meta[key] = trace.get(key)
 
@@ -1231,6 +1390,7 @@ def default_response_type_debug(contract: Dict[str, Any] | None, source: str | N
 def merge_response_type_meta(meta: Dict[str, Any], debug: Dict[str, Any]) -> None:
     """Metadata-only merge of response-type debug fields into ``_final_emission_meta``."""
     _validators_merge_response_type_meta(meta, debug)
+    merge_semantic_mutation_write_sites(meta, debug)
 
 
 def response_type_decision_payload(debug: Dict[str, Any]) -> Dict[str, Any]:
