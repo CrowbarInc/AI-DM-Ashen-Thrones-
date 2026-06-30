@@ -66,6 +66,7 @@ GPT_REALIZATION_FORBIDDEN_AUTHORITY: tuple[str, ...] = (
     "clue meaning not supplied",
     "scene transitions not supplied",
     "fallback facts",
+    "fallback authorship",
     "legality verdicts",
     "state mutation",
 )

@@ -91,6 +91,7 @@ def test_gpt_forbidden_authority_includes_semantic_invention_concepts() -> None:
         "clue meaning",
         "scene transitions",
         "fallback facts",
+        "fallback authorship",
         "legality verdicts",
         "state mutation",
     ):
@@ -99,7 +100,14 @@ def test_gpt_forbidden_authority_includes_semantic_invention_concepts() -> None:
 
 def test_prompt_context_forbidden_authority_includes_reconstruct_infer_repair_decide() -> None:
     forbidden = _joined(get_authority_profile("prompt_context").forbidden_authority)
-    for fragment in ("reconstruct", "infer", "repair", "decide"):
+    for fragment in (
+        "build narrative plans",
+        "reconstruct scene semantics",
+        "infer",
+        "repair",
+        "decide",
+        "fallback exposition",
+    ):
         assert fragment in forbidden
 
 
@@ -111,6 +119,8 @@ def test_final_emission_gate_forbidden_authority_names_semantic_reconstruction()
         "compose opening fallback prose from raw state",
     ):
         assert fragment in forbidden
+    allowed = _joined(get_authority_profile("final_emission_gate").allowed_authority)
+    assert "select upstream-prepared emission when explicitly present" in allowed
 
 
 def test_every_player_facing_fallback_family_requires_provenance_metadata() -> None:

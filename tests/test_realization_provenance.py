@@ -16,13 +16,23 @@ from game.realization_provenance import (
     attach_realization_fallback_family,
     normalize_realization_fallback_family,
 )
+from game.opening_deterministic_fallback import OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+from game.final_emission_opening_fallback import (
+    OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY,
+    OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY,
+    select_opening_fallback_for_response_type_contract,
+)
 from game.upstream_response_repairs import (
     UPSTREAM_PREPARED_EMISSION_KEY,
+    UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
     build_upstream_prepared_emission_payload,
     build_upstream_prepared_opening_fallback_payload,
     merge_upstream_prepared_emission_into_gm_output,
 )
-from tests.helpers.opening_fallback_evidence import opening_gm_output
+from tests.helpers.opening_fallback_evidence import (
+    EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+    opening_gm_output,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -148,3 +158,31 @@ def test_upstream_prepared_opening_payload_stamps_realization_family_distinct_fr
     assert payload[REALIZATION_FALLBACK_FAMILY_FIELD] == UPSTREAM_PREPARED_EMISSION
     assert comp["fallback_family_used"] != payload[REALIZATION_FALLBACK_FAMILY_FIELD]
     assert payload[REALIZATION_FALLBACK_FAMILY_FIELD] in FALLBACK_FAMILIES
+
+
+def test_opening_selector_requires_structurally_usable_upstream_payload_and_fails_closed() -> None:
+    """Gate-side opening fallback selection consumes prepared snapshots only; it does not author prose."""
+    (
+        text,
+        meta,
+        stub_patch,
+        upstream_selected,
+        upstream_payload,
+    ) = select_opening_fallback_for_response_type_contract(
+        {
+            "opening_curated_facts": opening_gm_output()["opening_curated_facts"],
+            UPSTREAM_PREPARED_OPENING_FALLBACK_KEY: {
+                "prepared_opening_fallback_text": EXPECTED_FRONTIER_GATE_OPENING_FALLBACK,
+            },
+        }
+    )
+
+    assert text == OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER
+    assert text != EXPECTED_FRONTIER_GATE_OPENING_FALLBACK
+    assert upstream_selected is False
+    assert upstream_payload is None
+    assert meta.get("opening_fallback_failed_closed") is True
+    assert meta.get("opening_fallback_authorship_source") is None
+    assert meta.get(OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY) is True
+    assert meta.get(OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY) is False
+    assert stub_patch.get(OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY) is True
