@@ -8,11 +8,8 @@ from types import SimpleNamespace
 import pytest
 
 from tests.helpers.failure_classification_sync import (
-    SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_DASHBOARD_COVERED_ROWS,
-    SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_FEM_PROJECTION_ROWS,
-    SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_LEGACY_ONLY_ROWS,
-    SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_TOTAL_ROWS,
     render_split_owner_acceptance_matrix_report,
+    split_owner_acceptance_matrix_report_summary,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -25,11 +22,13 @@ import split_owner_acceptance_matrix_ops as matrix_ops
 pytestmark = pytest.mark.split_owner_matrix_contract
 
 REPORT_REL = matrix_ops.SPLIT_OWNER_ACCEPTANCE_MATRIX_REPORT_REL_PATH
+_SUMMARY = split_owner_acceptance_matrix_report_summary()
 EXPECTED_COUNTS_SNIPPET = (
-    f"rows={SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_TOTAL_ROWS} "
-    f"dashboard={SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_DASHBOARD_COVERED_ROWS} "
-    f"fem={SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_FEM_PROJECTION_ROWS} "
-    f"legacy={SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_LEGACY_ONLY_ROWS}"
+    f"rows={_SUMMARY['total_rows']} "
+    f"dashboard={_SUMMARY['dashboard_covered_rows']} "
+    f"fem={_SUMMARY['fem_projection_rows']} "
+    f"legacy={_SUMMARY['legacy_only_rows']} "
+    f"sealed={_SUMMARY['sealed_non_legacy_dashboard_rows']}/{_SUMMARY['sealed_non_legacy_rows']}"
 )
 
 

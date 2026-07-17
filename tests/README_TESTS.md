@@ -1,5 +1,9 @@
 # Running tests
 
+For multi-surface changes, start with the [feature-lane verification guide](../docs/feature_lane_verification.md) to choose the correct owner tests, projection checks, replay/governance checks, and documentation lane before editing.
+
+For governance artifact refreshes, generated reports, manifests, inventories, or registry-backed docs, use the [governance refresh workflow](../docs/governance_refresh_workflow.md) before changing commands or generated outputs.
+
 ## Test ownership rules (Blocks A–D)
 
 These rules keep the suite maintainable without turning CI into a heavy transcript or harness gate.

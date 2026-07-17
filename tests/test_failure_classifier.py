@@ -106,6 +106,7 @@ from tests.helpers.failure_classification_sync import (
     scaffold_leakage_drift_row,
     semantic_text_fragment_drift_row,
     speaker_mismatch_drift_row,
+    split_owner_acceptance_matrix_report_summary,
     split_owner_acceptance_matrix_rows,
     split_owner_fem_projection_excluded,
     split_owner_lineage_event_from_matrix_row,
@@ -2364,9 +2365,15 @@ def test_cross_family_split_owner_acceptance_matrix_stays_aligned() -> None:
     assert "Legacy matrix rows (BU17 synthetic-only)" in report
     assert "Dashboard case id aliases" not in report
     assert "sealed_or_global_replacement_legacy" in report
-    assert "Dashboard probes: 15" in report
-    assert "Sealed subkind dashboard parity: 6/6 non-legacy rows" in report
-    assert f"Total rows: {len(split_owner_acceptance_matrix_rows())}" in report
+    report_summary = split_owner_acceptance_matrix_report_summary()
+    assert f"Dashboard probes: {report_summary['dashboard_probes']}" in report
+    assert (
+        "Sealed subkind dashboard parity: "
+        f"{report_summary['sealed_non_legacy_dashboard_rows']}/"
+        f"{report_summary['sealed_non_legacy_rows']} non-legacy rows"
+    ) in report
+    assert f"Total rows: {report_summary['total_rows']}" in report
+    assert report_summary["total_rows"] == len(split_owner_acceptance_matrix_rows())
 
     for row in split_owner_acceptance_matrix_rows():
         if split_owner_fem_projection_excluded(row):

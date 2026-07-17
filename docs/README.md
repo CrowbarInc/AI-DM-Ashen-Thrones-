@@ -63,7 +63,9 @@ $env:ENABLE_MODEL_ROUTING="true"
 - Setting `ENABLE_MODEL_ROUTING=false` keeps calls on `DEFAULT_MODEL_NAME` without changing player-facing schemas.
 - Deterministic and non-GPT repair paths stay outside the routing system.
 
-See `docs/model_routing_architecture.md` for the current routing note.
+See `docs/model_routing_architecture.md` for the current routing note and
+`docs/backend_contract_registry.md` for backend contract ownership,
+compatibility, and verification expectations.
 
 ## Notes
 - The engine owns mechanics and persistence.

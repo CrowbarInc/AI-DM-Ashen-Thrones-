@@ -12,6 +12,10 @@
 
 ## Local and CI usage
 
+Before choosing a test or governance lane for a multi-surface change, use the [feature-lane verification guide](feature_lane_verification.md). It maps feature categories to owner tests, projection checks, replay/provenance review, governance checks, and documentation expectations without changing CI policy.
+
+When a change touches governance artifacts, generated reports, manifests, inventories, or registry-backed docs, use the [governance refresh workflow](governance_refresh_workflow.md) to identify the authoritative source and refresh/check order before editing.
+
 Run from the **repository root**. GitHub Actions uses the same commands with `python` from `actions/setup-python`. On Windows, if `python` is not on `PATH`, use `py -3` in place of `python` (see `tests/README_TESTS.md`).
 
 **Hard-fail — pytest (matches workflow order):**

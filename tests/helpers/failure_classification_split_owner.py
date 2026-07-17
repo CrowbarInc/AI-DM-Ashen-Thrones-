@@ -758,8 +758,6 @@ def render_split_owner_acceptance_matrix_report() -> str:
     """Render a concise markdown report of the canonical BU15/BU16/BU17/BU18/BU19 matrix."""
     from tests.helpers.failure_classification_dashboard_expectations import (
         SPLIT_OWNER_DASHBOARD_CASE_ID_ALIASES,
-        split_owner_matrix_controlled_failure_cases,
-        split_owner_sealed_matrix_rows_requiring_dashboard_probe,
     )
 
     lines = [
@@ -781,13 +779,14 @@ def render_split_owner_acceptance_matrix_report() -> str:
             f"{row.owner_bucket_field or ''} | {row.owner_bucket or ''} | "
             f"{row.repair_kind or ''} | {row.dashboard_case_id or ''} | {fem_status} |"
         )
+    summary = split_owner_acceptance_matrix_report_summary()
     lines.append("")
-    lines.append(f"Total rows: {len(SPLIT_OWNER_ACCEPTANCE_MATRIX)}")
-    lines.append(f"Dashboard probes: {len(split_owner_matrix_controlled_failure_cases())}")
-    sealed_dashboard_rows = split_owner_sealed_matrix_rows_requiring_dashboard_probe()
+    lines.append(f"Total rows: {summary['total_rows']}")
+    lines.append(f"Dashboard probes: {summary['dashboard_probes']}")
     lines.append(
-        f"Sealed subkind dashboard parity: {sum(1 for row in sealed_dashboard_rows if row.dashboard_case_id)}"
-        f"/{len(sealed_dashboard_rows)} non-legacy rows"
+        "Sealed subkind dashboard parity: "
+        f"{summary['sealed_non_legacy_dashboard_rows']}/"
+        f"{summary['sealed_non_legacy_rows']} non-legacy rows"
     )
     if SPLIT_OWNER_DASHBOARD_CASE_ID_ALIASES:
         lines.append("")
@@ -869,8 +868,8 @@ SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_LEGACY_ONLY_ROWS = 1
 SPLIT_OWNER_ACCEPTANCE_MATRIX_EXPECTED_SEALED_NON_LEGACY_DASHBOARD_ROWS = 6
 
 
-def split_owner_acceptance_matrix_counts() -> dict[str, int]:
-    """Return live split-owner matrix row counts for contract/CI gates."""
+def split_owner_acceptance_matrix_report_summary() -> dict[str, int]:
+    """Return report summary counts derived from the canonical matrix and probes."""
     from tests.helpers.failure_classification_dashboard_expectations import (
         split_owner_matrix_controlled_failure_cases,
         split_owner_sealed_matrix_rows_requiring_dashboard_probe,
@@ -887,9 +886,24 @@ def split_owner_acceptance_matrix_counts() -> dict[str, int]:
         "fem_projection_rows": len(fem_rows),
         "legacy_only_rows": len(legacy_rows),
         "dashboard_probes": len(split_owner_matrix_controlled_failure_cases()),
+        "sealed_non_legacy_rows": len(sealed_dashboard_rows),
         "sealed_non_legacy_dashboard_rows": sum(
             1 for row in sealed_dashboard_rows if row.dashboard_case_id is not None
         ),
+    }
+
+
+def split_owner_acceptance_matrix_counts() -> dict[str, int]:
+    """Return live split-owner matrix row counts for contract/CI gates."""
+    summary = split_owner_acceptance_matrix_report_summary()
+    return {
+        "total_rows": summary["total_rows"],
+        "dashboard_covered_rows": summary["dashboard_covered_rows"],
+        "fem_projection_rows": summary["fem_projection_rows"],
+        "legacy_only_rows": summary["legacy_only_rows"],
+        "dashboard_probes": summary["dashboard_probes"],
+        "sealed_non_legacy_dashboard_rows": summary["sealed_non_legacy_dashboard_rows"],
+        "sealed_non_legacy_rows": summary["sealed_non_legacy_rows"],
     }
 
 
