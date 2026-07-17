@@ -46,6 +46,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Append the latest window aggregate to golden_transcript_drift_history.jsonl.",
     )
     parser.add_argument(
+        "--compact",
+        action="store_true",
+        help="Emit compact_golden_drift_summary.json for the six protected replay cases.",
+    )
+    parser.add_argument(
         "--thresholds",
         type=Path,
         default=None,
@@ -106,6 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     report = run_protected_replay_trend_window(
         runs=args.runs,
         out_dir=out_dir,
+        compact=args.compact,
         append_history=args.append_history,
         thresholds=thresholds,
         bz_replay_key_baseline_run=bz_baseline_run.resolve() if bz_baseline_run else None,
@@ -123,6 +129,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     if args.append_history:
         message += " and appended golden_transcript_drift_history"
+    if args.compact:
+        message += "; wrote compact_golden_drift_summary.json"
     if bz_baseline_run is not None:
         bz_report = report.get("bz_replay_key_movement")
         if isinstance(bz_report, Mapping):

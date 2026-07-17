@@ -190,6 +190,7 @@ def test_final_gate_upstream_prepared_emission_branch_records_upstream_family() 
     assert fem["upstream_prepared_emission_used"] is True
     assert fem["upstream_prepared_emission_valid"] is True
     assert fem["upstream_prepared_emission_source"] == "unit_upstream_answer"
+    assert fem["sealed_fallback_owner_bucket"] == "sealed-gate"
     lineage = fem.get("final_emission_mutation_lineage")
     assert "response_type_repair" in lineage
     assert "prepared_emission_selection" in lineage

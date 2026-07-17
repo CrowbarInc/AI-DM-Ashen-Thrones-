@@ -88,6 +88,14 @@ def runtime_lineage_markdown_lines(
         f"- **Mutation:** {kinds.get('mutation', 0)}",
         f"- **Gate outcome:** {kinds.get('gate_outcome', 0)}",
     ]
+    if summary.get("first_mutation_owner") or summary.get("first_mutation_family"):
+        lines.append(
+            "- **First mutation writer:** "
+            f"`{summary.get('first_mutation_owner') or '-'}` "
+            f"family=`{summary.get('first_mutation_family') or '-'}` "
+            f"evidence=`{summary.get('first_mutation_evidence_type') or '-'}` "
+            f"inference_used=`{bool(summary.get('first_mutation_inference_used'))}`"
+        )
     if profile == "spine_aggregate":
         lines.extend(
             [

@@ -1,8 +1,13 @@
 """Owner-oriented replay drift bucket taxonomy (Cycle AR).
 
-Maps existing replay measurement buckets, failure categories, and rerun deltas
-into stable owner drift buckets for reporting. Read-only replay side; no runtime
-imports.
+**Authority (CG-1):** owner-drift bucket vocabulary (``ALLOWED_OWNER_DRIFT_BUCKETS``)
+and ``classify_owner_drift_bucket`` mapping logic. First component of
+``recurrence:v1`` keys.
+
+**Consumes:** classifier rows for drift reporting; does not own failure
+categories or investigation-target defaults (those mirror contract/classifier).
+
+Registry: ``docs/audits/CG_failure_classification_authority_registry.md``
 """
 from __future__ import annotations
 

@@ -39,7 +39,7 @@ ALLOWLIST = frozenset(
         "tests/test_bv14a_social_exchange_emission_facade_delegates.py",
         "tests/test_narration_transcript_regressions.py",
         "tests/test_output_sanitizer.py",
-        "tests/test_ownership_registry.py",
+        "tests/test_compat_import_governance.py",
         "tests/test_realization_provenance.py",
         "tests/test_social_answer_candidate.py",
         "tests/test_social_emission_quality.py",
@@ -67,7 +67,7 @@ DELEGATE_VERIFICATION = frozenset(
         "tests/test_bv14a_social_exchange_emission_facade_delegates.py",
     }
 )
-GOVERNANCE = frozenset({"tests/test_ownership_registry.py"})
+GOVERNANCE = frozenset({"tests/test_compat_import_governance.py"})
 GOVERNANCE_MARKERS = frozenset({"tests/helpers/gate_thin_boundary_locks.py"})
 
 
@@ -126,7 +126,7 @@ def compat_symbol_hint(rel: str) -> str:
         return "composition + legality suite"
     if rel == "tests/test_bv14a_social_exchange_emission_facade_delegates.py":
         return "module import"
-    if rel == "tests/test_ownership_registry.py":
+    if rel == "tests/test_compat_import_governance.py":
         return "BJ-115/116 introspection"
     if rel == "tests/test_output_sanitizer.py":
         return "`apply_strict_social_sentence_ownership_filter` (monkeypatch)"

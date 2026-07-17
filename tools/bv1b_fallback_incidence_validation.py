@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import json
+import argparse
 import subprocess
 import sys
 from collections import Counter
@@ -39,6 +40,9 @@ BV1_BASELINE_JSON = ARTIFACT_DIR / "bv1_fallback_incidence_report.json"
 BV1_SUMMARY_JSON = ROOT / "artifacts" / "bv1_fallback_summary.json"
 HISTORY_PATH = ARTIFACT_DIR / "fallback_incidence_history.json"
 BI_SHA = "f7e73fb"
+BASELINE_TRIGGER_RATE_HARD_MAX = 0.05
+BASELINE_EVENT_COUNT_DELTA_HARD_MAX = 3
+BASELINE_UNKNOWN_UNCLASSIFIED_DELTA_HARD_MAX = 1
 
 FAMILY_ROUTES = {
     "referential_clarity_hard_replacement": "observe",
@@ -119,7 +123,22 @@ def _run_tool(script: str, *args: str) -> None:
         raise RuntimeError(f"{script} failed: {result.stderr or result.stdout}")
 
 
-def run_instrumentation_pipeline(*, should_append_snapshot: bool = True) -> dict[str, Any]:
+def _existing_primary_generated_at() -> str | None:
+    existing = _load_json(BV1B_REPORT_JSON)
+    artifact_scan = existing.get("artifact_scan")
+    if isinstance(artifact_scan, Mapping):
+        generated_at = artifact_scan.get("generated_at")
+        if isinstance(generated_at, str) and generated_at.strip():
+            return generated_at.strip()
+    return None
+
+
+def run_instrumentation_pipeline(
+    *,
+    should_append_snapshot: bool = True,
+    primary_only: bool = False,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
     turns, fem_count = scan_canonical_fem_turns()
     report = build_fallback_incidence_report(turns)
     report["artifact_scan"] = {
@@ -127,13 +146,17 @@ def run_instrumentation_pipeline(*, should_append_snapshot: bool = True) -> dict
         "method": "BV3D measurement scope + build_fem_runtime_lineage_events projector",
         "roots": [str(path.relative_to(ROOT)).replace("\\", "/") for path in MEASUREMENT_ROOTS],
         "measurement_scope": "BV3D",
-        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "generated_at": generated_at
+        or (primary_only and _existing_primary_generated_at())
+        or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
     }
     write_fallback_incidence_artifacts(
         report,
         json_path=BV1B_REPORT_JSON,
         markdown_path=BV1B_REPORT_MD,
     )
+    if primary_only:
+        return report
 
     summary_path = ROOT / "artifacts" / "bv1b_fallback_summary.json"
     summary_path.write_text(
@@ -223,6 +246,189 @@ def _load_json(path: Path) -> dict[str, Any]:
         return {}
     raw = json.loads(path.read_text(encoding="utf-8"))
     return raw if isinstance(raw, dict) else {}
+
+
+def _frequency(report: Mapping[str, Any], name: str) -> dict[str, int]:
+    rows = report.get("frequency")
+    values = rows.get(name) if isinstance(rows, Mapping) else None
+    if not isinstance(values, Mapping):
+        return {}
+    out: dict[str, int] = {}
+    for key, value in values.items():
+        try:
+            count = int(value or 0)
+        except (TypeError, ValueError):
+            count = 0
+        if count:
+            out[str(key)] = count
+    return dict(sorted(out.items()))
+
+
+def _count(report: Mapping[str, Any], key: str) -> int:
+    try:
+        return int(report.get(key) or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _rate(report: Mapping[str, Any]) -> float:
+    try:
+        return float(report.get("fallback_trigger_rate") or 0.0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _top(values: Mapping[str, int]) -> tuple[str, int] | None:
+    rows = sorted(values.items(), key=lambda item: (-int(item[1]), item[0]))
+    return rows[0] if rows else None
+
+
+def _diff_counts(baseline: Mapping[str, int], current: Mapping[str, int]) -> dict[str, int]:
+    keys = sorted(set(baseline) | set(current))
+    return {
+        key: int(current.get(key, 0)) - int(baseline.get(key, 0))
+        for key in keys
+        if int(current.get(key, 0)) - int(baseline.get(key, 0))
+    }
+
+
+def _format_top(row: tuple[str, int] | None) -> str:
+    if row is None:
+        return "none=0"
+    return f"{row[0]}={row[1]}"
+
+
+def _summary_lines(prefix: str, report: Mapping[str, Any]) -> list[str]:
+    return [
+        f"{prefix} fallback_trigger_rate={_rate(report):.6f}",
+        f"{prefix} fallback_event_count={_count(report, 'fallback_event_count')}",
+        f"{prefix} fallback_turn_count={_count(report, 'fallback_turn_count')}",
+        f"{prefix} top_family={_format_top(_top(_frequency(report, 'fallback_kind')))}",
+        f"{prefix} top_owner={_format_top(_top(_frequency(report, 'event_owner')))}",
+        f"{prefix} top_route={_format_top(_top(_frequency(report, 'final_route')))}",
+        f"{prefix} compatibility_status={_frequency(report, 'compatibility_status')}",
+    ]
+
+
+def compare_bv1b_primary_baseline(
+    baseline: Mapping[str, Any],
+    current: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Return deterministic BV1B baseline guard diagnostics without mutating artifacts.
+
+    Hard-fail policy:
+    - fallback_trigger_rate must remain at or below 5%.
+    - fallback_event_count may increase by at most +3 over the baseline.
+    - unknown_unclassified compatibility count may increase by at most +1 over the baseline.
+
+    Family/source/owner/route distribution movement is reported as advisory while
+    hard pressure thresholds remain within bounds.
+    """
+    baseline_unknown = _frequency(baseline, "compatibility_status").get("unknown_unclassified", 0)
+    current_unknown = _frequency(current, "compatibility_status").get("unknown_unclassified", 0)
+    event_delta = _count(current, "fallback_event_count") - _count(baseline, "fallback_event_count")
+    unknown_delta = current_unknown - baseline_unknown
+    failures: list[str] = []
+    if _rate(current) > BASELINE_TRIGGER_RATE_HARD_MAX:
+        failures.append(
+            "fallback_trigger_rate_above_5_percent: "
+            f"current={_rate(current):.6f} threshold={BASELINE_TRIGGER_RATE_HARD_MAX:.6f}"
+        )
+    if event_delta > BASELINE_EVENT_COUNT_DELTA_HARD_MAX:
+        failures.append(
+            "fallback_event_count_delta_above_3: "
+            f"baseline={_count(baseline, 'fallback_event_count')} current={_count(current, 'fallback_event_count')} delta={event_delta}"
+        )
+    if unknown_delta > BASELINE_UNKNOWN_UNCLASSIFIED_DELTA_HARD_MAX:
+        failures.append(
+            "unknown_unclassified_delta_above_1: "
+            f"baseline={baseline_unknown} current={current_unknown} delta={unknown_delta}"
+        )
+
+    distribution_diffs = {
+        "family": _diff_counts(_frequency(baseline, "fallback_kind"), _frequency(current, "fallback_kind")),
+        "source": _diff_counts(
+            _frequency(baseline, "fallback_authorship_source"),
+            _frequency(current, "fallback_authorship_source"),
+        ),
+        "owner": _diff_counts(_frequency(baseline, "event_owner"), _frequency(current, "event_owner")),
+        "route": _diff_counts(_frequency(baseline, "final_route"), _frequency(current, "final_route")),
+        "compatibility_status": _diff_counts(
+            _frequency(baseline, "compatibility_status"),
+            _frequency(current, "compatibility_status"),
+        ),
+        "governed_classification": _diff_counts(
+            _frequency(baseline, "governed_classification"),
+            _frequency(current, "governed_classification"),
+        ),
+        "trigger_site": _diff_counts(_frequency(baseline, "trigger_site"), _frequency(current, "trigger_site")),
+    }
+    warnings = [
+        f"{name}_distribution_changed: {diff}"
+        for name, diff in distribution_diffs.items()
+        if diff
+    ]
+    return {
+        "status": "fail" if failures else "pass",
+        "hard_failures": failures,
+        "warnings": warnings,
+        "thresholds": {
+            "fallback_trigger_rate_hard_max": BASELINE_TRIGGER_RATE_HARD_MAX,
+            "fallback_event_count_delta_hard_max": BASELINE_EVENT_COUNT_DELTA_HARD_MAX,
+            "unknown_unclassified_delta_hard_max": BASELINE_UNKNOWN_UNCLASSIFIED_DELTA_HARD_MAX,
+        },
+        "baseline": {
+            "fallback_trigger_rate": _rate(baseline),
+            "fallback_event_count": _count(baseline, "fallback_event_count"),
+            "fallback_turn_count": _count(baseline, "fallback_turn_count"),
+            "compatibility_status": _frequency(baseline, "compatibility_status"),
+            "top_family": _format_top(_top(_frequency(baseline, "fallback_kind"))),
+            "top_owner": _format_top(_top(_frequency(baseline, "event_owner"))),
+            "top_route": _format_top(_top(_frequency(baseline, "final_route"))),
+        },
+        "current": {
+            "fallback_trigger_rate": _rate(current),
+            "fallback_event_count": _count(current, "fallback_event_count"),
+            "fallback_turn_count": _count(current, "fallback_turn_count"),
+            "compatibility_status": _frequency(current, "compatibility_status"),
+            "top_family": _format_top(_top(_frequency(current, "fallback_kind"))),
+            "top_owner": _format_top(_top(_frequency(current, "event_owner"))),
+            "top_route": _format_top(_top(_frequency(current, "final_route"))),
+        },
+        "distribution_diffs": distribution_diffs,
+    }
+
+
+def render_bv1b_baseline_guard_summary(result: Mapping[str, Any]) -> str:
+    baseline = result.get("baseline") if isinstance(result.get("baseline"), Mapping) else {}
+    current = result.get("current") if isinstance(result.get("current"), Mapping) else {}
+    lines = [
+        f"BV1B fallback incidence baseline guard: {result.get('status')}",
+        "Thresholds: fallback_trigger_rate <= 0.050000; fallback_event_count delta <= +3; unknown_unclassified delta <= +1",
+        f"baseline fallback_trigger_rate={float(baseline.get('fallback_trigger_rate') or 0.0):.6f}",
+        f"current fallback_trigger_rate={float(current.get('fallback_trigger_rate') or 0.0):.6f}",
+        f"baseline fallback_event_count={int(baseline.get('fallback_event_count') or 0)}",
+        f"current fallback_event_count={int(current.get('fallback_event_count') or 0)}",
+        f"baseline fallback_turn_count={int(baseline.get('fallback_turn_count') or 0)}",
+        f"current fallback_turn_count={int(current.get('fallback_turn_count') or 0)}",
+        f"baseline compatibility_status={baseline.get('compatibility_status') or {}}",
+        f"current compatibility_status={current.get('compatibility_status') or {}}",
+        f"baseline top_family={baseline.get('top_family') or 'none=0'}",
+        f"current top_family={current.get('top_family') or 'none=0'}",
+        f"baseline top_owner={baseline.get('top_owner') or 'none=0'}",
+        f"current top_owner={current.get('top_owner') or 'none=0'}",
+        f"baseline top_route={baseline.get('top_route') or 'none=0'}",
+        f"current top_route={current.get('top_route') or 'none=0'}",
+    ]
+    failures = result.get("hard_failures") if isinstance(result.get("hard_failures"), list) else []
+    warnings = result.get("warnings") if isinstance(result.get("warnings"), list) else []
+    if failures:
+        lines.append("Hard failures:")
+        lines.extend(f"- {item}" for item in failures)
+    if warnings:
+        lines.append("Warnings:")
+        lines.extend(f"- {item}" for item in warnings)
+    return "\n".join(lines)
 
 
 def _pct(value: float | None) -> str:
@@ -695,8 +901,60 @@ def append_closeout() -> None:
     path.write_text(text, encoding="utf-8")
 
 
-def main() -> int:
-    report = run_instrumentation_pipeline(should_append_snapshot=True)
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--primary-only",
+        action="store_true",
+        help="Refresh only the primary BV1B fallback incidence JSON/Markdown artifacts.",
+    )
+    parser.add_argument(
+        "--check-baseline",
+        action="store_true",
+        help="Generate the current BV1B incidence report in memory and compare it to the committed primary baseline without writing artifacts.",
+    )
+    parser.add_argument(
+        "--generated-at",
+        help="Optional deterministic artifact_scan.generated_at value for primary report output.",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _build_parser().parse_args(argv)
+    if args.check_baseline:
+        baseline = _load_json(BV1B_REPORT_JSON)
+        if not baseline:
+            print(f"BV1B fallback incidence baseline guard failed: missing baseline {BV1B_REPORT_JSON}", file=sys.stderr)
+            return 2
+        turns, fem_count = scan_canonical_fem_turns()
+        current = build_fallback_incidence_report(turns)
+        current["artifact_scan"] = {
+            "canonical_fem_instances": fem_count,
+            "method": "BV3D measurement scope + build_fem_runtime_lineage_events projector",
+            "roots": [str(path.relative_to(ROOT)).replace("\\", "/") for path in MEASUREMENT_ROOTS],
+            "measurement_scope": "BV3D",
+            "generated_at": args.generated_at or _existing_primary_generated_at() or "",
+        }
+        result = compare_bv1b_primary_baseline(baseline, current)
+        print(render_bv1b_baseline_guard_summary(result))
+        return 1 if result["status"] == "fail" else 0
+
+    report = run_instrumentation_pipeline(
+        should_append_snapshot=not args.primary_only,
+        primary_only=args.primary_only,
+        generated_at=args.generated_at,
+    )
+    if args.primary_only:
+        print(f"Wrote {BV1B_REPORT_JSON}")
+        print(f"Wrote {BV1B_REPORT_MD}")
+        print(
+            f"BV1B primary-only: {report['fallback_event_count']} events, "
+            f"rate={report['fallback_trigger_rate']:.4f}, "
+            f"fem={report['artifact_scan']['canonical_fem_instances']}"
+        )
+        return 0
+
     baseline = _baseline_metrics()
     family_rows = _family_rows(report)
     touches = _post_bi_fallback_touches()

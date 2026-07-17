@@ -120,7 +120,7 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Belongs in runtime owner:** final-emission layer ordering, gate-level integration, last-mile finalize flow, calls into validators, repairs, sanitizer, metadata packaging.
 - **Does not belong in runtime owner:** canonical metadata schema ownership, standalone contract-authority logic, telemetry field semantics.
 - **Governance note:** describe as `runtime owner → direct-owner suite → downstream suites`, not mixed gate/meta/telemetry/pipeline parallel ownership.
-- **Test magnet guard (BA-7):** `tests/test_final_emission_gate.py` (redirect stub) and other gate-layer direct-owner suites (validators, repairs, visibility, sanitizer, social emission) must not import golden-replay projection, failure-classifier, or dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors own those contracts. Enforced by `tests/test_ownership_registry.py` (`test_ba7_gate_direct_owners_*`).
+- **Test magnet guard (BA-7):** `tests/test_final_emission_gate.py` (redirect stub) and other gate-layer direct-owner suites (validators, repairs, visibility, sanitizer, social emission) must not import golden-replay projection, failure-classifier, or dashboard read-side helpers, or accumulate replay/dashboard/classifier projection assertions. FEM meta projection (`tests/test_final_emission_meta.py`) and gauntlet/classifier neighbors own those contracts. Enforced by `tests/test_gate_boundary_governance.py` (`test_ba7_gate_direct_owners_*`).
 
 ## Final Emission Repairs
 
@@ -210,3 +210,20 @@ Each governed seam below uses the same four rows (plus boundary notes where help
 - **Does not belong here:** long procedural command reference (defer to README), inventory implementation details, long-range consolidation execution steps.
 - **Authority note:** subordinate maps must mirror runtime owners and practical direct-owner suites from this ledger, not compete as a higher authority layer.
 - **Prompt pointer:** for prompt contracts, `tests/TEST_AUDIT.md` points first to `game/prompt_context.py` and `tests/test_prompt_context.py`, then lists downstream suites as consumers.
+
+## Test Governance Suite Placement (CM8)
+
+`tests/test_ownership_registry.py` is **registry identity only** (required groups, derived index, inventory integration, governance errors, allowlist contract, stable neighbor relationships). It must **not** accumulate domain structural guards by default.
+
+| Policy domain | Owner test module |
+|---|---|
+| Registry identity + inventory integration | `tests/test_ownership_registry.py` |
+| Committed inventory JSON shape | `tests/test_inventory_governance.py` |
+| Gate magnet / smoke facade / downstream neighbor locks | `tests/test_gate_boundary_governance.py` |
+| Replay bridge / protected manifest / projection split | `tests/test_replay_boundary_governance.py` |
+| BU4 CSV / producer-stamp write-path parity | `tests/test_ownership_write_path_governance.py` |
+| BD/BV compat barrel / import-cap guards | `tests/test_compat_import_governance.py` |
+| BN gate-context / preflight import guards | `tests/test_gate_context_ownership_guards.py` |
+| BJ delegate closeout / thin-boundary locks | `tests/test_gate_delegate_closeout_locks.py` |
+
+New structural/import/replay/write-path guards land in the matching row above. The registry module includes `test_registry_module_scope_guard_identity_only` to reject accidental re-bloat. See also [`docs/convergence_ci_inventory.md`](convergence_ci_inventory.md) and [`tests/README_TESTS.md`](../tests/README_TESTS.md).

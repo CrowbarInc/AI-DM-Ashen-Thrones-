@@ -30,6 +30,7 @@ from game.interaction_context import (
     session_allows_implicit_social_reply_authority,
     set_non_social_activity,
     set_social_target,
+    scene_npcs_in_active_scene,
     synchronize_scene_addressability,
 )
 from game.skill_checks import should_trigger_check
@@ -2179,15 +2180,66 @@ def apply_npc_runtime_deltas(
             rt["attitude"] = max(-5, int(rt.get("attitude", 0) or 0) - 1)
 
 
+def compact_npc_runtime_stance(runtime: Dict[str, Any]) -> Dict[str, Any]:
+    """Player-safe NPC stance snapshot from runtime (publication only)."""
+    if not isinstance(runtime, dict):
+        runtime = {}
+    revealed = runtime.get("revealed_topics") or []
+    return {
+        "attitude": int(runtime.get("attitude", 0) or 0),
+        "trust": int(runtime.get("trust", 0) or 0),
+        "fear": int(runtime.get("fear", 0) or 0),
+        "suspicion": int(runtime.get("suspicion", 0) or 0),
+        "topics_revealed": len(revealed) if isinstance(revealed, list) else 0,
+        "last_interaction_turn": runtime.get("last_interaction_turn"),
+    }
+
+
+def build_scene_npc_player_snapshot(
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+    scene_envelope: Dict[str, Any] | None,
+) -> List[Dict[str, Any]]:
+    """Player-facing roster for NPCs in the active scene, including runtime stance."""
+    npcs = scene_npcs_in_active_scene(scene_envelope, world)
+    out: List[Dict[str, Any]] = []
+    for npc in npcs:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        if not nid:
+            continue
+        rt = get_npc_runtime(session, nid)
+        out.append(
+            {
+                "id": nid,
+                "name": str(npc.get("name") or nid),
+                "disposition": str(npc.get("disposition") or "neutral"),
+                "role": str(npc.get("role") or ""),
+                **compact_npc_runtime_stance(rt),
+            }
+        )
+    return out
+
+
 def _social_result_dict_with_incoming_metadata(
-    result: SocialEngineResult, incoming_meta: Dict[str, Any]
+    result: SocialEngineResult,
+    incoming_meta: Dict[str, Any],
+    *,
+    session: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     out = result.to_dict()
+    merged: Dict[str, Any] = {}
+    prev = out.get("metadata")
+    if isinstance(prev, dict):
+        merged.update(prev)
     if incoming_meta:
-        merged = dict(incoming_meta)
-        prev = out.get("metadata")
-        if isinstance(prev, dict):
-            merged = {**prev, **merged}
+        merged.update(incoming_meta)
+    social = out.get("social") if isinstance(out.get("social"), dict) else {}
+    nid = str(social.get("npc_id") or "").strip()
+    if session and nid:
+        merged["npc_stance"] = compact_npc_runtime_stance(get_npc_runtime(session, nid))
+    if merged:
         out["metadata"] = merged
     return out
 
@@ -2326,7 +2378,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     if incoming_action_meta.get("open_social_solicitation") and not (
         auth.get("target_resolved") and auth.get("npc_id")
@@ -2379,7 +2431,7 @@ def resolve_social_action(
                 },
                 requires_check=False,
             )
-            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     if not (auth.get("target_resolved") and auth.get("npc_id")):
         known_target = _find_world_npc_by_target(world, str(target_id or "")) if target_id else None
@@ -2414,7 +2466,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     _gp_social: Dict[str, Any] = {
         "npc_id": str(auth.get("npc_id") or "").strip(),
@@ -2460,7 +2512,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
     _g_nid = str(_gp_social.get("npc_id") or "").strip()
     if _g_nid and _g_nid != str(auth.get("npc_id") or "").strip():
         auth = dict(auth)
@@ -2502,7 +2554,7 @@ def resolve_social_action(
             },
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     npc_name = str(npc.get("name") or auth.get("npc_name") or "the NPC").strip()
 
@@ -2568,7 +2620,7 @@ def resolve_social_action(
                 social=social_payload,
                 requires_check=False,
             )
-            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+            return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
         if action_type == "social_probe":
             seg_probe: Dict[str, Any] | None = None
@@ -2634,7 +2686,7 @@ def resolve_social_action(
                     social=social_payload,
                     requires_check=False,
                 )
-                return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+                return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
         apply_npc_runtime_deltas(session, npc_id, action_type, None, turn_counter)
         revealed_list = runtime.get("revealed_topics") or []
@@ -2672,7 +2724,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     # Skill-check kinds: persuade, intimidate, deceive, barter, recruit
     skill_entry = SOCIAL_SKILL_MAP.get(action_type)
@@ -2703,7 +2755,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     skill_id, dc_mod = skill_entry
     effective_skill = _resolve_skill_for_kind(action_type, character or {})
@@ -2734,7 +2786,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     # Skill check authority: engine decides when to roll
     ctx = {
@@ -2776,7 +2828,7 @@ def resolve_social_action(
             social=social_payload,
             requires_check=False,
         )
-        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+        return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
 
     effective_skill = _resolve_skill_for_kind(action_type, character or {}) or decision["skill"]
     dc = int(decision["difficulty"])
@@ -2825,4 +2877,4 @@ def resolve_social_action(
         requires_check=True,
         check_request=check_request,
     )
-    return _social_result_dict_with_incoming_metadata(result, incoming_action_meta)
+    return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)

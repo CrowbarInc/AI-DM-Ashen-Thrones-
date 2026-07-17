@@ -6,7 +6,7 @@ import this module instead of ``tests.helpers.replay_smoke_assertions``.
 
 Compatibility re-export: ``tests.helpers.replay_smoke_assertions``.
 
-Registry reference: ``tests/test_ownership_registry.py`` (Cycle BV12A).
+Registry reference: ``tests/test_gate_boundary_governance.py`` (Cycle BV12A).
 """
 from __future__ import annotations
 

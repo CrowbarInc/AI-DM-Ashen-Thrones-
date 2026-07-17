@@ -20,6 +20,7 @@ from game.final_emission_boundary_contract import assert_final_emission_mutation
 from game.final_emission_meta import (
     FINAL_EMISSION_META_KEY,
     PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR,
+    append_semantic_mutation_write_site,
     ensure_final_emission_meta_dict,
     stamp_producer_repair_kind,
 )
@@ -68,6 +69,7 @@ def apply_strict_social_emergency_fallback_patch(
     candidate_validation_passed: bool | None = None,
 ) -> None:
     """Apply already-authored strict-social emergency fallback text and stamp FEM metadata."""
+    before_text = str(out.get("player_facing_text") or "")
     out["player_facing_text"] = fallback_text
     out["tags"] = list(out.get("tags") or []) + [
         "final_emission_gate_replaced",
@@ -89,6 +91,20 @@ def apply_strict_social_emergency_fallback_patch(
     )
     stamp_producer_repair_kind(fem, PRODUCER_REPAIR_KIND_STRICT_SOCIAL_REPAIR)
     _patch_fem_text_fingerprint(out, pre_gate_text=pre_gate_text)
+    append_semantic_mutation_write_site(
+        fem,
+        before_text=before_text,
+        after_text=fallback_text,
+        write_site_family="fallback",
+        write_site_file="game/final_emission_terminal_pipeline.py",
+        write_site_function="apply_strict_social_emergency_fallback_patch",
+        owner="game.final_emission_terminal_pipeline",
+        route=final_route,
+        source=f"final_emission_gate:{gate_tag}",
+        mutation_reason="strict_social_emergency_fallback_patch",
+        compatibility_status="diagnostic_only",
+        fallback_family="strict_social_emergency",
+    )
 
 
 def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: str) -> None:
@@ -112,6 +128,19 @@ def _apply_referent_clarity_pre_finalize(out: Dict[str, Any], *, pre_gate_text: 
     if gtxt:
         fem["final_text_preview"] = (gtxt[:120] + "…") if len(gtxt) > 120 else gtxt
         fem["post_gate_mutation_detected"] = _normalize_text(pre_gate_text) != gtxt
+    append_semantic_mutation_write_site(
+        fem,
+        before_text=text_in,
+        after_text=text_out,
+        write_site_family="repair",
+        write_site_file="game/final_emission_terminal_pipeline.py",
+        write_site_function="_apply_referent_clarity_pre_finalize",
+        owner="game.final_emission_terminal_pipeline",
+        source="gate._apply_referent_clarity_pre_finalize",
+        mutation_reason="referent_clarity_pre_finalize",
+        compatibility_status="diagnostic_only",
+        repair_family="referent_clarity",
+    )
 
 
 def run_gate_terminal_enforcement_pipeline(
@@ -217,6 +246,7 @@ def run_gate_terminal_enforcement_pipeline(
             )
 
     if strict_social_path:
+        pre_fb_text = _normalize_text(out.get("player_facing_text"))
         fb_text, fb_layer_meta, _ = emission_repairs._apply_fallback_behavior_layer(
             _normalize_text(out.get("player_facing_text")),
             gm_output=out,
@@ -251,6 +281,20 @@ def run_gate_terminal_enforcement_pipeline(
                 fem_patch["final_emitted_source"] = str(
                     fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_repair"
                 )
+            append_semantic_mutation_write_site(
+                fem_patch,
+                before_text=pre_fb_text,
+                after_text=fb_text,
+                write_site_family="repair",
+                write_site_file="game/final_emission_terminal_pipeline.py",
+                write_site_function="run_gate_terminal_enforcement_pipeline",
+                owner="game.final_emission_repairs",
+                route=profile,
+                source=fb_source,
+                mutation_reason=str(fb_layer_meta.get("fallback_behavior_repair_mode") or "fallback_behavior_layer"),
+                compatibility_status="diagnostic_only",
+                repair_family="fallback_behavior",
+            )
 
     _apply_referent_clarity_pre_finalize(out, pre_gate_text=pre_gate_text)
 

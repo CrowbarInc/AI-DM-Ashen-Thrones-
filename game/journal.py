@@ -123,6 +123,8 @@ def _journal_compact_lead_record(lead: Dict[str, Any]) -> Dict[str, Any]:
         "related_location_ids": _journal_str_id_list(lead.get("related_location_ids")),
         "parent_lead_id": _journal_optional_id(lead.get("parent_lead_id")),
         "superseded_by": _journal_optional_id(lead.get("superseded_by")),
+        "last_touched_turn": _journal_optional_int(lead.get("last_touched_turn")),
+        "last_updated_turn": _journal_optional_int(lead.get("last_updated_turn")),
     }
 
 
@@ -270,6 +272,76 @@ def _merge_known_fact_lines(bootstrap: List[str], revealed: List[str]) -> List[s
     return out
 
 
+def _journal_status_effects(
+    character: Dict[str, Any] | None,
+    condition_definitions: Dict[str, Any] | None,
+) -> List[Dict[str, str]]:
+    """Player-safe active condition names derived from character state (publication only)."""
+    if not isinstance(character, dict):
+        return []
+    definitions = condition_definitions if isinstance(condition_definitions, dict) else {}
+    out: List[Dict[str, str]] = []
+    seen_lower: set[str] = set()
+    for cond in character.get("conditions") or []:
+        if not isinstance(cond, dict):
+            continue
+        cond_id = str(cond.get("name") or "").strip()
+        if not cond_id:
+            continue
+        key = cond_id.lower()
+        if key in seen_lower:
+            continue
+        seen_lower.add(key)
+        template = definitions.get(cond_id) if isinstance(definitions.get(cond_id), dict) else {}
+        display = str((template or {}).get("name") or cond_id)
+        kind = str((template or {}).get("kind") or "condition")
+        out.append({"id": cond_id, "name": display, "kind": kind})
+    return out
+
+
+def _runtime_suspicion_flags(session: Dict[str, Any], active_scene_id: str | None) -> List[str]:
+    """Earned suspicion flags for the active scene (runtime publication seam)."""
+    if not active_scene_id:
+        return []
+    root = session.get("scene_runtime") or {}
+    if not isinstance(root, dict):
+        return []
+    data = root.get(active_scene_id)
+    if not isinstance(data, dict):
+        return []
+    flags = data.get("suspicion_flags") or []
+    if not isinstance(flags, list):
+        return []
+    out: List[str] = []
+    seen_lower: set[str] = set()
+    for flag in flags:
+        if not isinstance(flag, str) or not flag.strip():
+            continue
+        s = flag.strip()
+        key = s.lower()
+        if key in seen_lower:
+            continue
+        seen_lower.add(key)
+        out.append(s)
+    return out
+
+
+def merge_player_journal_suspicion_flags_publication(
+    active_scene_id: str | None,
+    suspicion_flags: List[str],
+) -> List[str]:
+    """Publication seam: expose earned scene-runtime suspicion flags in the journal."""
+    flags = [x for x in suspicion_flags if isinstance(x, str) and x.strip()]
+    if flags:
+        assert_cross_domain_write_allowed(
+            HIDDEN_STATE,
+            PLAYER_VISIBLE_STATE,
+            operation="journal_merge_suspicion_flags",
+        )
+    assert_owner_can_mutate_domain(__name__, PLAYER_VISIBLE_STATE, operation="journal_suspicion_flags_merge")
+    return list(flags)
+
+
 def merge_player_journal_known_facts_publication(
     bootstrap: List[str],
     revealed_hidden_runtime: List[str],
@@ -289,7 +361,14 @@ def merge_player_journal_known_facts_publication(
     return _merge_known_fact_lines(bootstrap, rev)
 
 
-def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None = None, scene_envelope: Dict[str, Any] | None = None) -> Dict[str, Any]:
+def build_player_journal(
+    session: Dict[str, Any],
+    world: Dict[str, Any] | None = None,
+    scene_envelope: Dict[str, Any] | None = None,
+    *,
+    character: Dict[str, Any] | None = None,
+    condition_definitions: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Construct a lightweight, player-facing journal/codex view.
 
     Merges bootstrap (scene ``journal_seed_facts`` or a capped slice of
@@ -298,8 +377,9 @@ def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None =
 
     Stable keys (in this order): ``known_facts``, ``discovered_clues``,
     ``unresolved_leads``, ``active_leads``, ``pursued_leads``, ``stale_leads``,
-    ``resolved_leads``, ``obsolete_leads``, ``lead_counts``, ``npcs``, ``factions``,
-    ``recent_events``, ``projects``. Lead buckets and ``lead_counts`` come from the
+    ``resolved_leads``, ``obsolete_leads``, ``lead_counts``, ``status_effects``,
+    ``suspicion_flags``, ``npcs``, ``factions``, ``recent_events``, ``projects``.
+    Lead buckets and ``lead_counts`` come from the
     authoritative registry; ``unresolved_leads`` duplicates non-terminal titles for
     callers that expect a flat list. Terminal rows use a history-oriented shape
     (``resolved_leads`` vs ``obsolete_leads`` are kept separate).
@@ -332,6 +412,24 @@ def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None =
     lead_sections = _build_authoritative_journal_lead_sections(session)
     unresolved_leads = _compat_unresolved_lead_titles(lead_sections)
 
+    status_effects = _journal_status_effects(character, condition_definitions)
+    active_scene_id = str(session.get("active_scene_id") or "").strip() or None
+    suspicion_flags = merge_player_journal_suspicion_flags_publication(
+        active_scene_id,
+        _runtime_suspicion_flags(session, active_scene_id),
+    )
+    if isinstance(session, dict) and suspicion_flags:
+        append_debug_trace(
+            session,
+            build_state_mutation_trace(
+                domain=PLAYER_VISIBLE_STATE,
+                owner_module=__name__,
+                operation="journal_suspicion_flags_merge",
+                cross_domain=(HIDDEN_STATE, PLAYER_VISIBLE_STATE, "journal_merge_suspicion_flags"),
+                extra={"changed_area": "journal.suspicion_flags", "scene_id": active_scene_id},
+            ),
+        )
+
     factions = list(world.get('factions', []) or [])
     recent_events = list((world.get('event_log', []) or [])[-10:])
     projects = list(world.get('projects', []) or [])
@@ -346,6 +444,8 @@ def build_player_journal(session: Dict[str, Any], world: Dict[str, Any] | None =
         'resolved_leads': lead_sections['resolved_leads'],
         'obsolete_leads': lead_sections['obsolete_leads'],
         'lead_counts': lead_sections['lead_counts'],
+        'status_effects': status_effects,
+        'suspicion_flags': suspicion_flags,
         'npcs': [],  # NPC summarization can be added in a later pass.
         'factions': factions,
         'recent_events': recent_events,

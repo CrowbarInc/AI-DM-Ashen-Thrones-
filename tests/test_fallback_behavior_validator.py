@@ -13,6 +13,10 @@ import pytest
 
 from game.final_emission_validators import validate_fallback_behavior
 from tests.helpers.fallback_behavior_fixtures import fallback_contract
+from tests.helpers.opening_fallback_evidence import (
+    assert_fallback_validator_failure,
+    assert_fallback_validator_pass,
+)
 
 
 pytestmark = pytest.mark.unit
@@ -21,10 +25,12 @@ pytestmark = pytest.mark.unit
 def test_validate_fallback_behavior_skips_cleanly_without_contract() -> None:
     out = validate_fallback_behavior("No names yet. Check the ward clerk.", None)
 
-    assert out["checked"] is False
-    assert out["contract_present"] is False
-    assert out["skip_reason"] == "no_contract"
-    assert out["passed"] is True
+    assert_fallback_validator_pass(
+        out,
+        checked=False,
+        contract_present=False,
+        skip_reason="no_contract",
+    )
 
 
 def test_validate_fallback_behavior_skips_cleanly_when_uncertainty_inactive() -> None:
@@ -33,10 +39,12 @@ def test_validate_fallback_behavior_skips_cleanly_when_uncertainty_inactive() ->
         fallback_contract(uncertainty_active=False),
     )
 
-    assert out["checked"] is False
-    assert out["uncertainty_active"] is False
-    assert out["skip_reason"] == "uncertainty_inactive"
-    assert out["passed"] is True
+    assert_fallback_validator_pass(
+        out,
+        checked=False,
+        uncertainty_active=False,
+        skip_reason="uncertainty_inactive",
+    )
 
 
 def test_validate_fallback_behavior_fails_on_invented_certainty() -> None:
@@ -45,9 +53,11 @@ def test_validate_fallback_behavior_fails_on_invented_certainty() -> None:
         fallback_contract(),
     )
 
-    assert out["passed"] is False
-    assert out["invented_certainty_detected"] is True
-    assert "invented_certainty" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="invented_certainty",
+        invented_certainty_detected=True,
+    )
 
 
 def test_validate_fallback_behavior_fails_on_fabricated_authority() -> None:
@@ -56,9 +66,11 @@ def test_validate_fallback_behavior_fails_on_fabricated_authority() -> None:
         fallback_contract(),
     )
 
-    assert out["passed"] is False
-    assert out["fabricated_authority_detected"] is True
-    assert "fabricated_authority" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="fabricated_authority",
+        fabricated_authority_detected=True,
+    )
 
 
 def test_validate_fallback_behavior_fails_on_meta_fallback_voice() -> None:
@@ -67,9 +79,11 @@ def test_validate_fallback_behavior_fails_on_meta_fallback_voice() -> None:
         fallback_contract(),
     )
 
-    assert out["passed"] is False
-    assert out["meta_fallback_voice_detected"] is True
-    assert "meta_fallback_voice" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="meta_fallback_voice",
+        meta_fallback_voice_detected=True,
+    )
 
 
 @pytest.mark.parametrize(
@@ -85,9 +99,11 @@ def test_validate_fallback_behavior_fails_on_meta_fallback_voice() -> None:
 def test_validate_fallback_behavior_catches_meta_adjudicative_uncertainty_leaks(text: str) -> None:
     out = validate_fallback_behavior(text, fallback_contract())
 
-    assert out["passed"] is False
-    assert out["meta_fallback_voice_detected"] is True
-    assert "meta_fallback_voice" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="meta_fallback_voice",
+        meta_fallback_voice_detected=True,
+    )
 
 
 def test_validate_fallback_behavior_accepts_bounded_partial_shape() -> None:
@@ -96,12 +112,14 @@ def test_validate_fallback_behavior_accepts_bounded_partial_shape() -> None:
         fallback_contract(),
     )
 
-    assert out["checked"] is True
-    assert out["passed"] is True
-    assert out["partial_information_detected"] is True
-    assert out["known_edge_present"] is True
-    assert out["unknown_edge_present"] is True
-    assert out["next_lead_present"] is True
+    assert_fallback_validator_pass(
+        out,
+        checked=True,
+        partial_information_detected=True,
+        known_edge_present=True,
+        unknown_edge_present=True,
+        next_lead_present=True,
+    )
 
 
 def test_validate_fallback_behavior_rejects_bare_thin_identity_line_without_known_and_lead() -> None:
@@ -110,8 +128,10 @@ def test_validate_fallback_behavior_rejects_bare_thin_identity_line_without_know
         fallback_contract(),
     )
 
-    assert out["passed"] is False
-    assert "bounded_partial_insufficient_substance" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="bounded_partial_insufficient_substance",
+    )
 
 
 def test_validate_fallback_behavior_accepts_single_clarifying_question_when_partial_not_allowed() -> None:
@@ -127,9 +147,11 @@ def test_validate_fallback_behavior_accepts_single_clarifying_question_when_part
         ),
     )
 
-    assert out["passed"] is True
-    assert out["clarifying_question_detected"] is True
-    assert out["question_count"] == 1
+    assert_fallback_validator_pass(
+        out,
+        clarifying_question_detected=True,
+        question_count=1,
+    )
 
 
 def test_validate_fallback_behavior_fails_when_question_count_exceeds_contract_cap() -> None:
@@ -145,9 +167,11 @@ def test_validate_fallback_behavior_fails_when_question_count_exceeds_contract_c
         ),
     )
 
-    assert out["passed"] is False
-    assert out["question_count"] == 2
-    assert "too_many_clarifying_questions" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="too_many_clarifying_questions",
+        question_count=2,
+    )
 
 
 def test_validate_fallback_behavior_rejects_bare_question_when_partial_is_preferred() -> None:
@@ -156,6 +180,8 @@ def test_validate_fallback_behavior_rejects_bare_question_when_partial_is_prefer
         fallback_contract(),
     )
 
-    assert out["passed"] is False
-    assert out["clarifying_question_detected"] is True
-    assert "question_used_when_partial_preferred" in out["failure_reasons"]
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="question_used_when_partial_preferred",
+        clarifying_question_detected=True,
+    )

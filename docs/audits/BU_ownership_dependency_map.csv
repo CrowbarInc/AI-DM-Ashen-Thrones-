@@ -1,52 +1,63 @@
 module,file,kind,ecosystem_module,responsibility,ownership_reference_count,ownership_registry,owner_bucket,final_emission_ownership,gate_ownership,replay_ownership,fallback_ownership,speaker_ownership,semantic_replacement_attribution
-tests.helpers.failure_classification_sync,tests/helpers/failure_classification_sync.py,helper,True,supporting contract/test,414,0,156,2,18,2,236,0,0
+tests.test_ownership_registry,tests/test_ownership_registry.py,test,True,ownership enforcement,443,202,6,56,121,9,41,8,0
 tests.test_failure_classifier,tests/test_failure_classifier.py,test,True,supporting contract/test,384,0,53,19,33,0,278,1,0
-tests.test_ownership_registry,tests/test_ownership_registry.py,test,True,ownership enforcement,380,94,23,64,133,14,46,6,0
 tests.test_final_emission_meta,tests/test_final_emission_meta.py,test,True,supporting contract/test,338,0,51,30,31,3,222,1,0
-tests.test_golden_replay_fallback_projection,tests/test_golden_replay_fallback_projection.py,test,True,replay projection/governance,273,0,42,4,32,1,193,1,0
-game.final_emission_ownership_schema,game/final_emission_ownership_schema.py,production,True,ownership enforcement,174,0,13,5,16,1,136,3,0
+tests.helpers.failure_classification_split_owner,tests/helpers/failure_classification_split_owner.py,helper,True,supporting contract/test,257,0,93,0,11,0,153,0,0
+game.final_emission_ownership_schema,game/final_emission_ownership_schema.py,production,True,ownership enforcement,177,0,14,6,16,1,137,3,0
 tests.test_runtime_lineage_telemetry,tests/test_runtime_lineage_telemetry.py,test,True,semantic replacement attribution,158,0,20,14,21,0,101,2,0
-tests.test_failure_classification_contract,tests/test_failure_classification_contract.py,test,False,supporting contract/test,149,0,44,6,8,0,91,0,0
+tests.test_failure_classification_contract,tests/test_failure_classification_contract.py,test,False,supporting contract/test,151,0,45,7,8,0,91,0,0
 game.attribution_read_views,game/attribution_read_views.py,production,False,semantic replacement attribution,145,0,31,6,6,0,102,0,0
 game.final_emission_replay_projection,game/final_emission_replay_projection.py,production,True,replay projection/governance,145,0,21,7,13,2,96,6,0
 tests.test_failure_dashboard_controlled_failures,tests/test_failure_dashboard_controlled_failures.py,test,False,supporting contract/test,125,0,15,23,22,0,65,0,0
-game.final_emission_meta,game/final_emission_meta.py,production,True,final-emission policy/metadata,114,0,45,4,3,1,61,0,0
+tests.helpers.failure_classification_builders,tests/helpers/failure_classification_builders.py,helper,True,supporting contract/test,122,0,42,2,7,0,71,0,0
+game.final_emission_meta,game/final_emission_meta.py,production,True,final-emission policy/metadata,117,0,46,5,3,1,62,0,0
+tests.ownership_closeout_delegate_locks,tests/ownership_closeout_delegate_locks.py,test,True,ownership enforcement,116,75,0,7,20,0,11,3,0
 tests.test_opening_fallback_owner_bucket,tests/test_opening_fallback_owner_bucket.py,test,True,fallback selection/projection,109,0,32,6,9,0,62,0,0
 tests.test_replacement_attribution_inventory,tests/test_replacement_attribution_inventory.py,test,True,semantic replacement attribution,109,0,54,0,17,1,32,1,4
 tests.helpers.replacement_attribution_inventory,tests/helpers/replacement_attribution_inventory.py,helper,True,semantic replacement attribution,99,0,60,0,6,0,31,0,2
 tests.helpers.failure_classifier,tests/helpers/failure_classifier.py,helper,True,supporting contract/test,97,0,33,2,0,3,58,1,0
 game.final_emission_owner_bucket_views,game/final_emission_owner_bucket_views.py,production,True,final-emission policy/metadata,92,0,19,2,9,0,62,0,0
+tests.test_golden_replay_fallback_long_session_summary,tests/test_golden_replay_fallback_long_session_summary.py,test,True,replay projection/governance,86,0,7,2,10,0,67,0,0
 tests.test_final_emission_visibility_fallback,tests/test_final_emission_visibility_fallback.py,test,True,fallback selection/projection,82,0,23,1,11,0,47,0,0
+tests.test_golden_replay_fallback_visibility_projection,tests/test_golden_replay_fallback_visibility_projection.py,test,True,replay projection/governance,74,0,14,1,12,0,47,0,0
+tests.test_golden_replay_fallback_sealed_projection,tests/test_golden_replay_fallback_sealed_projection.py,test,True,replay projection/governance,72,0,11,0,11,0,50,0,0
 tests.test_final_emission_gate_delegator_regression,tests/test_final_emission_gate_delegator_regression.py,test,True,gate orchestration/preflight,70,0,0,13,28,0,24,5,0
 scripts.bu4_ownership_write_path_discovery,scripts/bu4_ownership_write_path_discovery.py,script,False,ownership enforcement,69,1,23,8,0,1,33,0,3
 tests.helpers.ownership_write_path_governance,tests/helpers/ownership_write_path_governance.py,helper,True,ownership enforcement,67,0,33,4,1,0,29,0,0
 tests.helpers.golden_replay,tests/helpers/golden_replay.py,helper,True,replay projection/governance,65,0,10,0,0,1,53,1,0
 game.ownership_projection_views,game/ownership_projection_views.py,production,False,ownership enforcement,59,0,0,3,4,0,49,3,0
 tests.test_run_scenario_spine_validation,tests/test_run_scenario_spine_validation.py,test,False,supporting contract/test,58,0,13,5,16,0,21,3,0
+tests.ownership_guard_bd_dependency_compression,tests/ownership_guard_bd_dependency_compression.py,test,True,ownership enforcement,56,2,6,3,11,9,18,3,4
+tests.test_golden_replay_fallback_opening_projection,tests/test_golden_replay_fallback_opening_projection.py,test,True,replay projection/governance,56,0,8,1,8,0,38,1,0
 tests.helpers.attribution_contract,tests/helpers/attribution_contract.py,helper,True,semantic replacement attribution,53,0,34,1,0,0,13,0,5
-tests.helpers.failure_dashboard_fixtures,tests/helpers/failure_dashboard_fixtures.py,helper,False,supporting contract/test,52,0,12,0,4,1,34,1,0
-tests.helpers.gate_thin_boundary_locks,tests/helpers/gate_thin_boundary_locks.py,helper,True,gate orchestration/preflight,51,3,0,7,41,0,0,0,0
+tests.ownership_guard_bn_gate_context,tests/ownership_guard_bn_gate_context.py,test,True,ownership enforcement,50,1,0,4,45,0,0,0,0
 tests.test_final_emission_opening_fallback,tests/test_final_emission_opening_fallback.py,test,True,fallback selection/projection,49,0,20,0,9,0,20,0,0
 game.final_emission_visibility_fallback,game/final_emission_visibility_fallback.py,production,True,fallback selection/projection,48,0,23,2,1,0,22,0,0
+tests.test_golden_replay_fallback_sanitizer_projection,tests/test_golden_replay_fallback_sanitizer_projection.py,test,True,replay projection/governance,48,0,0,0,3,0,45,0,0
 game.runtime_lineage_telemetry,game/runtime_lineage_telemetry.py,production,True,semantic replacement attribution,45,0,12,1,0,0,32,0,0
-tests.failure_classification_contract,tests/failure_classification_contract.py,test,True,supporting contract/test,43,0,15,1,0,1,26,0,0
+tests.failure_classification_contract,tests/failure_classification_contract.py,test,True,supporting contract/test,45,0,15,2,0,2,26,0,0
+tests.ownership_guard_bv_compatibility,tests/ownership_guard_bv_compatibility.py,test,True,ownership enforcement,43,9,11,6,11,1,5,0,0
 tests.test_final_emission_sealed_fallback,tests/test_final_emission_sealed_fallback.py,test,True,fallback selection/projection,42,0,9,1,6,0,26,0,0
 tests.helpers.opening_fallback_evidence,tests/helpers/opening_fallback_evidence.py,helper,True,fallback selection/projection,40,0,20,0,3,0,17,0,0
-tests.helpers.replay_drift_taxonomy,tests/helpers/replay_drift_taxonomy.py,helper,True,replay projection/governance,38,0,17,0,1,4,10,6,0
+tests.helpers.golden_replay_artifact_manifest,tests/helpers/golden_replay_artifact_manifest.py,helper,True,replay projection/governance,38,0,0,0,0,34,4,0,0
+tests.helpers.replay_drift_taxonomy,tests/helpers/replay_drift_taxonomy.py,helper,True,replay projection/governance,37,0,17,0,1,3,10,6,0
+tests.test_golden_replay_fallback_upstream_fast_projection,tests/test_golden_replay_fallback_upstream_fast_projection.py,test,True,replay projection/governance,35,0,0,0,3,0,32,0,0
 tests.test_architecture_audit_tool,tests/test_architecture_audit_tool.py,test,False,supporting contract/test,33,0,0,18,15,0,0,0,0
 tests.test_bz_protected_replay_trend_window_2,tests/test_bz_protected_replay_trend_window_2.py,test,False,supporting contract/test,31,0,17,0,3,0,5,6,0
+tests.test_golden_replay_fallback_acceptance_matrix,tests/test_golden_replay_fallback_acceptance_matrix.py,test,True,replay projection/governance,30,0,2,0,3,2,23,0,0
 tests.replay_governance_registry,tests/replay_governance_registry.py,test,True,ownership enforcement,29,0,21,0,0,3,3,2,0
-tests.helpers.golden_replay_projection,tests/helpers/golden_replay_projection.py,helper,True,replay projection/governance,28,0,11,0,0,2,14,1,0
+tests.helpers.synthetic_replay_evidence_bridge,tests/helpers/synthetic_replay_evidence_bridge.py,helper,False,supporting contract/test,27,0,0,2,1,24,0,0,0
 game.final_emission_sealed_fallback,game/final_emission_sealed_fallback.py,production,True,fallback selection/projection,26,0,10,3,1,0,12,0,0
+tests.helpers.failure_dashboard_fixtures,tests/helpers/failure_dashboard_fixtures.py,helper,False,supporting contract/test,25,0,8,0,2,0,15,0,0
 tests.test_replay_drift_taxonomy,tests/test_replay_drift_taxonomy.py,test,True,replay projection/governance,24,0,1,2,4,6,4,7,0
-tests.test_golden_replay_projection,tests/test_golden_replay_projection.py,test,True,replay projection/governance,23,0,6,0,0,0,16,1,0
 game.output_sanitizer,game/output_sanitizer.py,production,True,sanitizer boundary,22,0,6,2,0,0,14,0,0
-tests.helpers.failure_dashboard_report,tests/helpers/failure_dashboard_report.py,helper,True,supporting contract/test,22,0,5,0,4,8,5,0,0
 tests.test_replay_drift_longitudinal,tests/test_replay_drift_longitudinal.py,test,False,replay projection/governance,22,0,8,0,10,0,0,4,0
+tests.test_golden_replay_fallback_upstream_projection,tests/test_golden_replay_fallback_upstream_projection.py,test,True,replay projection/governance,21,0,0,0,3,0,18,0,0
+tests.helpers.failure_classification_alignment,tests/helpers/failure_classification_alignment.py,helper,False,supporting contract/test,20,0,12,0,0,1,7,0,0
+tests.helpers.golden_replay_projection_extractors,tests/helpers/golden_replay_projection_extractors.py,helper,True,replay projection/governance,20,0,8,0,0,2,10,0,0
 tests.test_attribution_contract,tests/test_attribution_contract.py,test,True,semantic replacement attribution,20,0,13,0,2,0,4,0,1
 tests.test_fallback_incidence_report,tests/test_fallback_incidence_report.py,test,True,fallback selection/projection,18,0,2,5,5,0,6,0,0
 tests.test_final_emission_gate_selector_snapshots,tests/test_final_emission_gate_selector_snapshots.py,test,True,gate orchestration/preflight,18,0,5,1,3,0,9,0,0
-tests.helpers.replay_bug_recurrence,tests/helpers/replay_bug_recurrence.py,helper,False,supporting contract/test,17,0,12,0,3,2,0,0,0
 tests.test_bv10a_read_facade_delegates,tests/test_bv10a_read_facade_delegates.py,test,False,supporting contract/test,16,0,5,2,1,0,8,0,0
 tests.test_failure_dashboard_report,tests/test_failure_dashboard_report.py,test,True,supporting contract/test,16,0,0,4,5,1,2,4,0
 tests.test_final_emission_visibility,tests/test_final_emission_visibility.py,test,True,supporting contract/test,16,0,5,2,4,0,5,0,0
@@ -55,24 +66,38 @@ tests.helpers.replay_drift_longitudinal,tests/helpers/replay_drift_longitudinal.
 tests.test_golden_replay_trend,tests/test_golden_replay_trend.py,test,True,replay projection/governance,15,0,7,1,1,0,6,0,0
 scripts.bu_final_emission_coupling_discovery,scripts/bu_final_emission_coupling_discovery.py,script,False,supporting contract/test,14,1,1,1,2,2,2,2,3
 tests.helpers.replay_drift_risk,tests/helpers/replay_drift_risk.py,helper,False,replay projection/governance,13,0,8,0,2,3,0,0,0
+tests.ownership_registry_contract,tests/ownership_registry_contract.py,test,True,ownership enforcement,13,2,0,6,4,1,0,0,0
 tests.test_speaker_contract_risk,tests/test_speaker_contract_risk.py,test,True,speaker finalization,13,0,0,2,0,0,0,11,0
 tests.helpers.runtime_lineage_reporting,tests/helpers/runtime_lineage_reporting.py,helper,True,semantic replacement attribution,12,0,4,0,0,0,8,0,0
 tests.helpers.semantic_mutation_attribution,tests/helpers/semantic_mutation_attribution.py,helper,True,semantic replacement attribution,12,0,0,8,1,1,1,1,0
+tests.ownership_inventory_governance,tests/ownership_inventory_governance.py,test,True,ownership enforcement,12,10,0,0,2,0,0,0,0
 tests.test_replay_bug_class_recurrence,tests/test_replay_bug_class_recurrence.py,test,False,supporting contract/test,12,0,1,0,0,2,0,9,0
 tests.test_stability_reporting_contract,tests/test_stability_reporting_contract.py,test,False,supporting contract/test,12,0,0,0,0,1,6,5,0
 game.social_exchange_emission,game/social_exchange_emission.py,production,True,strict-social composition,11,0,0,0,0,0,11,0,0
+tests.helpers.failure_classification_dashboard_expectations,tests/helpers/failure_classification_dashboard_expectations.py,helper,False,supporting contract/test,11,0,5,0,0,0,6,0,0
+tests.ownership_guard_gate_magnet,tests/ownership_guard_gate_magnet.py,test,True,ownership enforcement,11,2,0,0,5,4,0,0,0
 tests.test_social_exchange_emission,tests/test_social_exchange_emission.py,test,True,supporting contract/test,11,0,0,0,0,0,11,0,0
+tests.helpers.fem_normalization_contract,tests/helpers/fem_normalization_contract.py,helper,True,supporting contract/test,10,0,3,1,0,3,3,0,0
+tests.helpers.replay_bug_recurrence_history,tests/helpers/replay_bug_recurrence_history.py,helper,False,supporting contract/test,10,0,6,0,3,1,0,0,0
+tests.ownership_guard_bv16c_terminal_monkeypatch,tests/ownership_guard_bv16c_terminal_monkeypatch.py,test,True,ownership enforcement,10,3,0,4,2,0,1,0,0
+tests.test_cf3_raw_normalized_fem_field_matrix,tests/test_cf3_raw_normalized_fem_field_matrix.py,test,True,supporting contract/test,10,0,5,0,1,0,4,0,0
 tests.test_test_audit_tool,tests/test_test_audit_tool.py,test,False,supporting contract/test,10,9,0,0,1,0,0,0,0
 game.api,game/api.py,production,False,supporting contract/test,9,0,0,1,8,0,0,0,0
+tests.helpers.failure_dashboard_report,tests/helpers/failure_dashboard_report.py,helper,False,supporting contract/test,9,0,2,0,1,1,5,0,0
 tests.helpers.golden_replay_profiles,tests/helpers/golden_replay_profiles.py,helper,True,replay projection/governance,9,0,0,0,0,0,9,0,0
+tests.helpers.golden_replay_projection_test_support,tests/helpers/golden_replay_projection_test_support.py,helper,True,replay projection/governance,9,0,2,0,0,0,6,1,0
 tests.helpers.golden_replay_trend,tests/helpers/golden_replay_trend.py,helper,True,replay projection/governance,9,0,5,0,0,0,4,0,0
 game.fallback_provenance_debug,game/fallback_provenance_debug.py,production,True,fallback selection/projection,8,1,1,1,0,0,5,0,0
 game.final_emission_response_type,game/final_emission_response_type.py,production,True,final-emission policy/metadata,8,0,3,0,0,0,5,0,0
+tests.helpers.failure_dashboard_paths,tests/helpers/failure_dashboard_paths.py,helper,False,supporting contract/test,8,0,0,0,0,8,0,0,0
+tests.helpers.replay_bug_recurrence_events,tests/helpers/replay_bug_recurrence_events.py,helper,False,supporting contract/test,8,0,6,0,0,2,0,0,0
 tests.test_fallback_incidence_trends,tests/test_fallback_incidence_trends.py,test,True,fallback selection/projection,8,0,1,2,2,0,3,0,0
 tests.test_fallback_recurrence,tests/test_fallback_recurrence.py,test,True,fallback selection/projection,8,0,5,0,3,0,0,0,0
 tests.test_gm_retry,tests/test_gm_retry.py,test,True,supporting contract/test,8,0,3,1,0,0,4,0,0
 tests.test_replay_drift_hotspots,tests/test_replay_drift_hotspots.py,test,False,replay projection/governance,8,0,3,0,3,0,0,2,0
+tests.helpers.golden_replay_projection_fields,tests/helpers/golden_replay_projection_fields.py,helper,True,replay projection/governance,7,0,3,0,0,0,4,0,0
 tests.helpers.protected_semantic_mutation_measurement,tests/helpers/protected_semantic_mutation_measurement.py,helper,False,supporting contract/test,7,0,3,0,0,0,4,0,0
+tests.ownership_guard_bi8_golden_replay_boundary,tests/ownership_guard_bi8_golden_replay_boundary.py,test,True,ownership enforcement,7,1,0,0,0,3,3,0,0
 tests.test_fallback_incidence_anomalies,tests/test_fallback_incidence_anomalies.py,test,True,fallback selection/projection,7,0,4,0,3,0,0,0,0
 tests.test_final_emission_boundary_convergence,tests/test_final_emission_boundary_convergence.py,test,True,supporting contract/test,7,0,0,2,2,0,3,0,0
 tests.test_output_sanitizer,tests/test_output_sanitizer.py,test,True,supporting contract/test,7,0,0,0,1,0,6,0,0
@@ -80,16 +105,21 @@ tests.test_replay_governance_registry,tests/test_replay_governance_registry.py,t
 game.final_emission_opening_fallback,game/final_emission_opening_fallback.py,production,True,fallback selection/projection,6,0,3,0,0,0,3,0,0
 tests.helpers.replay_observed_row_fixtures,tests/helpers/replay_observed_row_fixtures.py,helper,True,supporting contract/test,6,0,1,1,1,0,3,0,0
 tests.helpers.speaker_contract_risk,tests/helpers/speaker_contract_risk.py,helper,True,speaker finalization,6,0,0,3,0,2,0,1,0
+tests.test_golden_replay_projection_metadata,tests/test_golden_replay_projection_metadata.py,test,True,replay projection/governance,6,0,0,0,0,0,6,0,0
 game.realization_authority,game/realization_authority.py,production,True,semantic replacement attribution,5,0,0,1,1,0,3,0,0
 game.upstream_response_repairs,game/upstream_response_repairs.py,production,False,supporting contract/test,5,0,2,1,0,0,2,0,0
 tests.helpers.emission_smoke_assertions,tests/helpers/emission_smoke_assertions.py,helper,True,supporting contract/test,5,2,0,0,2,0,1,0,0
 tests.helpers.replay_drift_trends,tests/helpers/replay_drift_trends.py,helper,False,replay projection/governance,5,0,4,0,0,1,0,0,0
+tests.helpers.trace_nest_contract,tests/helpers/trace_nest_contract.py,helper,False,supporting contract/test,5,0,0,0,0,5,0,0,0
 tests.test_final_emission_fast_fallback_composition,tests/test_final_emission_fast_fallback_composition.py,test,True,fallback selection/projection,5,0,0,1,1,0,3,0,0
+tests.test_final_emission_gate,tests/test_final_emission_gate.py,test,True,supporting contract/test,5,0,0,2,3,0,0,0,0
+game.final_emission_referential_clarity,game/final_emission_referential_clarity.py,production,True,final-emission policy/metadata,4,0,2,0,0,0,2,0,0
 game.speaker_contract_enforcement,game/speaker_contract_enforcement.py,production,True,speaker finalization,4,0,0,0,0,0,2,2,0
 scripts.bv7_generate_audit_docs,scripts/bv7_generate_audit_docs.py,script,False,supporting contract/test,4,4,0,0,0,0,0,0,0
 tests.helpers.attribution_completeness_metric,tests/helpers/attribution_completeness_metric.py,helper,True,semantic replacement attribution,4,0,3,0,0,0,0,0,1
 tests.helpers.corrective_prevention_effectiveness,tests/helpers/corrective_prevention_effectiveness.py,helper,False,supporting contract/test,4,0,0,0,0,1,3,0,0
 tests.helpers.replay_governance_fixtures,tests/helpers/replay_governance_fixtures.py,helper,False,ownership enforcement,4,0,2,0,0,1,0,1,0
+tests.test_cf7_synthetic_row_classifier_evidence_bridge,tests/test_cf7_synthetic_row_classifier_evidence_bridge.py,test,False,supporting contract/test,4,0,3,0,0,0,1,0,0
 tests.test_golden_replay,tests/test_golden_replay.py,test,True,replay projection/governance,4,0,0,1,1,1,1,0,0
 tests.test_realization_authority,tests/test_realization_authority.py,test,True,semantic replacement attribution,4,0,0,1,0,0,3,0,0
 tests.test_upstream_fast_fallback_block_l,tests/test_upstream_fast_fallback_block_l.py,test,True,fallback selection/projection,4,0,0,1,0,0,3,0,0
@@ -97,6 +127,11 @@ game.final_emission_gate,game/final_emission_gate.py,production,True,gate orches
 game.final_emission_repairs,game/final_emission_repairs.py,production,True,final-emission policy/metadata,3,0,0,2,1,0,0,0,0
 game.response_policy_contracts,game/response_policy_contracts.py,production,False,supporting contract/test,3,0,0,2,1,0,0,0,0
 tests.helpers.actor_consistency_smoke,tests/helpers/actor_consistency_smoke.py,helper,False,supporting contract/test,3,1,0,0,2,0,0,0,0
+tests.helpers.failure_dashboard_drift,tests/helpers/failure_dashboard_drift.py,helper,False,supporting contract/test,3,0,0,0,3,0,0,0,0
+tests.helpers.failure_dashboard_stability,tests/helpers/failure_dashboard_stability.py,helper,False,supporting contract/test,3,0,3,0,0,0,0,0,0
+tests.helpers.gate_thin_boundary_locks,tests/helpers/gate_thin_boundary_locks.py,helper,True,gate orchestration/preflight,3,2,0,0,1,0,0,0,0
+tests.helpers.golden_replay_projection,tests/helpers/golden_replay_projection.py,helper,True,replay projection/governance,3,0,1,0,0,1,1,0,0
+tests.helpers.protected_field_routing_contract,tests/helpers/protected_field_routing_contract.py,helper,False,supporting contract/test,3,0,1,0,0,1,1,0,0
 tests.test_backfill_bug_recurrence_history,tests/test_backfill_bug_recurrence_history.py,test,False,supporting contract/test,3,0,0,0,2,0,0,1,0
 tests.test_c4_narrative_mode_live_pipeline,tests/test_c4_narrative_mode_live_pipeline.py,test,True,supporting contract/test,3,0,0,1,1,0,1,0,0
 tests.test_fallback_behavior_gate,tests/test_fallback_behavior_gate.py,test,True,fallback selection/projection,3,0,0,0,3,0,0,0,0
@@ -116,22 +151,27 @@ tests.helpers.bx_guard_speaker_parity,tests/helpers/bx_guard_speaker_parity.py,h
 tests.helpers.embedded_corrective_attribution,tests/helpers/embedded_corrective_attribution.py,helper,True,semantic replacement attribution,2,0,0,0,0,2,0,0,0
 tests.helpers.opening_fallback_gate_harness,tests/helpers/opening_fallback_gate_harness.py,helper,True,fallback selection/projection,2,0,0,1,1,0,0,0,0
 tests.helpers.protected_replay_trend_movement,tests/helpers/protected_replay_trend_movement.py,helper,False,supporting contract/test,2,0,2,0,0,0,0,0,0
+tests.helpers.replay_bug_recurrence,tests/helpers/replay_bug_recurrence.py,helper,False,supporting contract/test,2,0,1,0,0,1,0,0,0
 tests.helpers.replay_drift_reports,tests/helpers/replay_drift_reports.py,helper,False,replay projection/governance,2,0,0,0,2,0,0,0,0
 tests.helpers.response_type_smoke,tests/helpers/response_type_smoke.py,helper,False,supporting contract/test,2,1,0,0,1,0,0,0,0
 tests.helpers.route_determinism_smoke,tests/helpers/route_determinism_smoke.py,helper,False,supporting contract/test,2,1,0,0,1,0,0,0,0
 tests.replay_governance_contract,tests/replay_governance_contract.py,test,True,ownership enforcement,2,0,2,0,0,0,0,0,0
 tests.test_answer_shape_primacy,tests/test_answer_shape_primacy.py,test,True,supporting contract/test,2,0,0,0,2,0,0,0,0
 tests.test_anti_railroading,tests/test_anti_railroading.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
+tests.test_cf1_fallback_family_precedence,tests/test_cf1_fallback_family_precedence.py,test,True,fallback selection/projection,2,0,0,1,1,0,0,0,0
+tests.test_cf1_runtime_lineage_precedence,tests/test_cf1_runtime_lineage_precedence.py,test,True,semantic replacement attribution,2,0,0,1,1,0,0,0,0
 tests.test_context_separation,tests/test_context_separation.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
 tests.test_dead_turn_detection,tests/test_dead_turn_detection.py,test,False,supporting contract/test,2,0,0,1,1,0,0,0,0
 tests.test_expand_protected_replay_observations,tests/test_expand_protected_replay_observations.py,test,False,supporting contract/test,2,0,0,0,0,0,0,2,0
-tests.test_final_emission_gate,tests/test_final_emission_gate.py,test,True,supporting contract/test,2,0,0,1,1,0,0,0,0
+tests.test_failure_dashboard_drift,tests/test_failure_dashboard_drift.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
+tests.test_failure_dashboard_recurrence,tests/test_failure_dashboard_recurrence.py,test,False,supporting contract/test,2,0,0,0,0,0,0,2,0
 tests.test_final_emission_opening_accept_debug,tests/test_final_emission_opening_accept_debug.py,test,True,supporting contract/test,2,0,0,1,0,0,1,0,0
 tests.test_final_emission_repairs,tests/test_final_emission_repairs.py,test,True,supporting contract/test,2,0,0,1,0,0,1,0,0
 tests.test_final_emission_scene_emit_integrity,tests/test_final_emission_scene_emit_integrity.py,test,True,supporting contract/test,2,0,0,1,0,0,1,0,0
 tests.test_final_emission_scene_state_anchor,tests/test_final_emission_scene_state_anchor.py,test,True,supporting contract/test,2,0,0,1,1,0,0,0,0
 tests.test_narrative_mode_output_validator,tests/test_narrative_mode_output_validator.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
 tests.test_post_gm_adoption_gateway,tests/test_post_gm_adoption_gateway.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
+tests.test_replay_bug_recurrence_decomposition,tests/test_replay_bug_recurrence_decomposition.py,test,False,supporting contract/test,2,0,0,0,0,0,0,2,0
 tests.test_replay_drift_risk,tests/test_replay_drift_risk.py,test,False,replay projection/governance,2,0,0,0,0,0,1,1,0
 tests.test_turn_pipeline_shared,tests/test_turn_pipeline_shared.py,test,False,supporting contract/test,2,0,0,0,1,0,0,1,0
 tests.test_world_updates_and_clue_normalization,tests/test_world_updates_and_clue_normalization.py,test,False,supporting contract/test,2,0,0,0,2,0,0,0,0
@@ -148,9 +188,12 @@ tests.helpers.fallback_bridge_smoke,tests/helpers/fallback_bridge_smoke.py,helpe
 tests.helpers.gate_integration_smoke,tests/helpers/gate_integration_smoke.py,helper,True,gate orchestration/preflight,1,1,0,0,0,0,0,0,0
 tests.helpers.gate_orchestration_smoke,tests/helpers/gate_orchestration_smoke.py,helper,True,gate orchestration/preflight,1,1,0,0,0,0,0,0,0
 tests.helpers.golden_replay_api,tests/helpers/golden_replay_api.py,helper,True,replay projection/governance,1,1,0,0,0,0,0,0,0
+tests.helpers.golden_replay_projection_speaker,tests/helpers/golden_replay_projection_speaker.py,helper,True,replay projection/governance,1,0,0,0,0,0,0,1,0
 tests.helpers.protected_replay_observation_corpus,tests/helpers/protected_replay_observation_corpus.py,helper,False,supporting contract/test,1,0,0,0,1,0,0,0,0
 tests.helpers.protected_replay_registry,tests/helpers/protected_replay_registry.py,helper,False,supporting contract/test,1,0,0,0,0,0,1,0,0
 tests.helpers.repairs_consumer_facade,tests/helpers/repairs_consumer_facade.py,helper,False,supporting contract/test,1,0,0,1,0,0,0,0,0
+tests.helpers.replay_bug_recurrence_serialization,tests/helpers/replay_bug_recurrence_serialization.py,helper,False,supporting contract/test,1,0,0,0,0,1,0,0,0
+tests.helpers.replay_bug_recurrence_statistics,tests/helpers/replay_bug_recurrence_statistics.py,helper,False,supporting contract/test,1,0,0,0,0,1,0,0,0
 tests.helpers.replay_fem_read_smoke,tests/helpers/replay_fem_read_smoke.py,helper,True,supporting contract/test,1,1,0,0,0,0,0,0,0
 tests.helpers.replay_smoke_assertions,tests/helpers/replay_smoke_assertions.py,helper,True,supporting contract/test,1,1,0,0,0,0,0,0,0
 tests.helpers.stability_reporting_sync,tests/helpers/stability_reporting_sync.py,helper,False,supporting contract/test,1,0,0,0,0,1,0,0,0
@@ -159,6 +202,7 @@ tests.helpers.terminal_owner_test_seams,tests/helpers/terminal_owner_test_seams.
 tests.replay_governance_traceability_contract,tests/replay_governance_traceability_contract.py,test,True,ownership enforcement,1,0,1,0,0,0,0,0,0
 tests.test_attribution_completeness_metric,tests/test_attribution_completeness_metric.py,test,True,semantic replacement attribution,1,0,0,0,0,0,0,0,1
 tests.test_bx_speaker_identity_end_to_end_parity,tests/test_bx_speaker_identity_end_to_end_parity.py,test,True,speaker finalization,1,0,0,0,0,0,0,1,0
+tests.test_cf1_speaker_projection_precedence,tests/test_cf1_speaker_projection_precedence.py,test,True,speaker finalization,1,0,0,0,0,0,0,1,0
 tests.test_embedded_corrective_attribution,tests/test_embedded_corrective_attribution.py,test,True,semantic replacement attribution,1,0,0,0,0,0,1,0,0
 tests.test_fallback_behavior_validator,tests/test_fallback_behavior_validator.py,test,True,fallback selection/projection,1,0,0,0,0,0,1,0,0
 tests.test_fallback_overwrite_containment,tests/test_fallback_overwrite_containment.py,test,True,fallback selection/projection,1,0,0,0,0,0,1,0,0
@@ -170,6 +214,7 @@ tests.test_final_emission_passive_scene_pressure,tests/test_final_emission_passi
 tests.test_final_emission_referential_clarity,tests/test_final_emission_referential_clarity.py,test,True,supporting contract/test,1,0,0,1,0,0,0,0,0
 tests.test_final_emission_response_type,tests/test_final_emission_response_type.py,test,True,supporting contract/test,1,0,0,1,0,0,0,0,0
 tests.test_final_emission_scene_facts,tests/test_final_emission_scene_facts.py,test,True,supporting contract/test,1,0,0,1,0,0,0,0,0
+tests.test_golden_replay_fallback_projection,tests/test_golden_replay_fallback_projection.py,test,True,replay projection/governance,1,0,0,0,0,0,1,0,0
 tests.test_golden_replay_protected_bridge,tests/test_golden_replay_protected_bridge.py,test,True,replay projection/governance,1,0,0,0,0,1,0,0,0
 tests.test_golden_replay_structural_invariants,tests/test_golden_replay_structural_invariants.py,test,True,replay projection/governance,1,0,0,0,0,0,1,0,0
 tests.test_migrate_bug_recurrence_event_log,tests/test_migrate_bug_recurrence_event_log.py,test,False,supporting contract/test,1,0,0,0,0,0,0,1,0

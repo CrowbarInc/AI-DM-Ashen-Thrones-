@@ -35,7 +35,7 @@ ALLOWLIST = frozenset(
         "tests/helpers/replay_smoke_assertions.py",
         "tests/helpers/gate_integration_smoke.py",
         "tests/test_bv12a_smoke_bridge_facade_delegates.py",
-        "tests/test_ownership_registry.py",
+        "tests/test_compat_import_governance.py",
     }
 )
 

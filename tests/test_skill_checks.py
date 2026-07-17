@@ -1,7 +1,7 @@
 """Tests for deterministic skill check authority layer."""
 import pytest
 from game.skill_checks import resolve_skill_check, should_trigger_check
-from game.defaults import default_character, default_world
+from game.defaults import default_character, default_world, default_conditions
 
 
 
@@ -56,6 +56,16 @@ def test_success_path_info_revealed(monkeypatch):
     assert result["total"] == 24
     assert result["difficulty"] == 10
     assert result["skill"] == "diplomacy"
+    assert result["margin"] == 14
+
+
+def test_skill_check_margin_negative_on_failure(monkeypatch):
+    monkeypatch.setattr("game.skill_checks._deterministic_d20", lambda _: 3)
+    character = default_character()
+    character["skills"]["perception"] = 1
+    result = resolve_skill_check("perception", 12, character, {"seed_parts": ["margin-fail"]})
+    assert result["success"] is False
+    assert result["margin"] == -8
 
 
 def test_deterministic_output_consistency():
@@ -80,6 +90,21 @@ def test_no_skill_fallback_clean():
     assert "roll" in result
     assert "total" in result
     assert "success" in result
+
+
+def test_shaken_condition_reduces_skill_check_and_can_flip_success(monkeypatch):
+    """Shaken applies skill_penalty from condition templates into resolve_skill_check."""
+    monkeypatch.setattr("game.skill_checks._deterministic_d20", lambda _: 10)
+    character = default_character()
+    character["skills"]["perception"] = 5
+    character["conditions"] = [{"name": "shaken"}]
+    ctx = {"seed_parts": ["cq2", "shaken", "perception"], "condition_definitions": default_conditions()}
+    result = resolve_skill_check("perception", 14, character, ctx)
+    assert result["base_modifier"] == 5
+    assert result["condition_penalty"] == 2
+    assert result["modifier"] == 3
+    assert result["total"] == 13
+    assert result["success"] is False
 
 
 def test_should_trigger_investigate_with_explicit_skill_check():

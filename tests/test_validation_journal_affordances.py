@@ -3,8 +3,12 @@ import json
 from game.gm import validate_gm_state_update, build_messages
 from game.journal import build_player_journal, merge_player_journal_known_facts_publication
 from game.affordances import generate_scene_affordances
-from game.storage import get_scene_runtime
+from game.storage import get_scene_runtime, mark_hidden_fact_revealed
 from game.scene_actions import normalize_scene_action, normalize_scene_actions_list
+from game.exploration import resolve_exploration_action
+from game.api import _apply_authoritative_resolution_state_mutation
+from game.session import create_fresh_session_document
+from game.campaign_state import create_fresh_combat_state
 from tests.test_prompt_and_guard import FRONTIER_GATE_SCENE, _dummy_state
 
 
@@ -109,6 +113,42 @@ def test_merge_player_journal_known_facts_publication_invokes_allow_list_when_re
     assert merged == ["Bootstrap.", "Runtime reveal."]
 
 
+def test_journal_status_effects_from_character_conditions():
+    _, world, session, character, _, _ = _dummy_state()
+    session["active_scene_id"] = "test_gate"
+    character["conditions"] = [{"name": "shaken"}, {"name": "shield"}]
+    conditions = {
+        "shaken": {"name": "Shaken", "kind": "condition"},
+        "shield": {"name": "Shield", "kind": "spell_effect"},
+    }
+    journal = build_player_journal(
+        session, world, FRONTIER_GATE_SCENE, character=character, condition_definitions=conditions
+    )
+    assert journal["status_effects"] == [
+        {"id": "shaken", "name": "Shaken", "kind": "condition"},
+        {"id": "shield", "name": "Shield", "kind": "spell_effect"},
+    ]
+
+
+def test_journal_publishes_active_scene_suspicion_flags():
+    _, world, session, _, _, _ = _dummy_state()
+    session["active_scene_id"] = "frontier_gate"
+    session["scene_runtime"] = {
+        "frontier_gate": {
+            "suspicion_flags": ["shifty_guard", "shifty_guard", "watchful_captain"],
+            "revealed_hidden_facts": [],
+            "discovered_clues": [],
+        }
+    }
+    journal = build_player_journal(session, world, FRONTIER_GATE_SCENE)
+    assert journal["suspicion_flags"] == ["shifty_guard", "watchful_captain"]
+    traces = session.get("debug_traces") or []
+    assert traces
+    trace = traces[-1]
+    assert trace.get("operation") == "journal_suspicion_flags_merge"
+    assert trace.get("cross_domain", {}).get("operation") == "journal_merge_suspicion_flags"
+
+
 def test_journal_includes_discovered_clues_player_safe():
     campaign, world, session, character, combat, recent_log = _dummy_state()
     # Synthesize a runtime discovered clue.
@@ -194,3 +234,119 @@ def test_response_mode_instructions_change_prompt():
     # Mechanics unchanged: we only touch instructions.
     assert tactical_payload["mechanical_resolution"] is None
 
+
+def test_discover_clue_cross_subsystem_hidden_fact_reaches_journal():
+    """Exploration discover_clue → hidden runtime → journal known_facts (CQ3 seam)."""
+    hidden_line = "The vault door opens only at midnight."
+    scene = {
+        "scene": {
+            "id": "vault_room",
+            "location": "Vault",
+            "visible_facts": ["A heavy door stands shut."],
+            "journal_seed_facts": ["A heavy door stands shut."],
+            "discoverable_clues": [{"id": "seal-clue", "text": "Scratched seal marks."}],
+            "hidden_facts": [hidden_line],
+            "interactables": [
+                {
+                    "id": "door_seal",
+                    "type": "investigate",
+                    "reveals_clue": "seal-clue",
+                    "reveals_hidden_fact": hidden_line,
+                }
+            ],
+            "exits": [],
+            "enemies": [],
+            "mode": "exploration",
+        }
+    }
+    action = normalize_scene_action(
+        {
+            "id": "inv-seal",
+            "label": "Study the seal",
+            "type": "investigate",
+            "prompt": "I investigate the door seal",
+        }
+    )
+    resolution = resolve_exploration_action(
+        scene, {}, {}, action, raw_player_text="I investigate the door seal", list_scene_ids=lambda: []
+    )
+    assert resolution["kind"] == "discover_clue"
+    assert resolution["metadata"]["hidden_fact_revealed"] == hidden_line
+
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "vault_room"
+    world: dict = {"npcs": [], "world_state": {"flags": {}, "counters": {}, "clocks": {}}, "event_log": [], "factions": [], "projects": []}
+    combat = create_fresh_combat_state()
+
+    _apply_authoritative_resolution_state_mutation(
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        resolution=dict(resolution),
+        normalized_action=action,
+    )
+
+    rt = get_scene_runtime(session, "vault_room")
+    assert hidden_line in rt.get("revealed_hidden_facts", [])
+
+    journal = build_player_journal(session, world, scene)
+    assert hidden_line in journal["known_facts"]
+    assert hidden_line not in journal["discovered_clues"]
+
+
+def test_discover_clue_refreshes_registry_lead_touch():
+    """Successful discover_clue should refresh last_touched_turn on the related registry lead."""
+    from game.leads import SESSION_LEAD_REGISTRY_KEY, create_lead, upsert_lead, LeadLifecycle, LeadStatus
+
+    scene = {
+        "scene": {
+            "id": "vault_room",
+            "location": "Vault",
+            "visible_facts": ["A heavy door stands shut."],
+            "discoverable_clues": [{"id": "seal-clue", "text": "Scratched seal marks."}],
+            "interactables": [
+                {"id": "door_seal", "type": "investigate", "reveals_clue": "seal-clue"},
+            ],
+            "exits": [],
+            "enemies": [],
+            "mode": "exploration",
+        }
+    }
+    action = normalize_scene_action(
+        {"id": "inv-seal", "label": "Study the seal", "type": "investigate", "prompt": "I investigate the door seal"}
+    )
+    resolution = resolve_exploration_action(
+        scene, {}, {}, action, raw_player_text="I investigate the door seal", list_scene_ids=lambda: []
+    )
+    assert resolution["kind"] == "discover_clue"
+    assert resolution["clue_id"] == "seal-clue"
+
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "vault_room"
+    session["turn_counter"] = 7
+    upsert_lead(
+        session,
+        create_lead(
+            title="Seal marks",
+            summary="",
+            id="seal-clue",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            last_touched_turn=1,
+        ),
+    )
+    world: dict = {"npcs": [], "world_state": {"flags": {}, "counters": {}, "clocks": {}}, "event_log": [], "factions": [], "projects": []}
+    combat = create_fresh_combat_state()
+
+    _apply_authoritative_resolution_state_mutation(
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        resolution=dict(resolution),
+        normalized_action=action,
+    )
+
+    lead = session[SESSION_LEAD_REGISTRY_KEY]["seal-clue"]
+    assert lead["last_touched_turn"] == 7

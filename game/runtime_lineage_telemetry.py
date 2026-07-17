@@ -21,9 +21,11 @@ Owner vocabulary contract:
   silently reinterpreting ``owner``.
 
 H2/H3 wire finalized fallback/gate-outcome/speaker-repair/mutation FEM reads through
-``game.final_emission_meta.build_fem_runtime_lineage_events``. Future read-side
-consumers may derive additional events from stage-diff, post-emission state, or
-state-mutation metadata after those owners have already recorded decisions.
+``game.final_emission_meta.build_fem_runtime_lineage_events``. ``gate_outcome`` intentionally
+omits ``mutation_kind``; sibling ``mutation`` events carry text-mutation classification
+(CO94 lineage contract). Future read-side consumers may derive additional events from
+stage-diff, post-emission state, or state-mutation metadata after those owners have
+already recorded decisions.
 """
 
 from __future__ import annotations
@@ -35,6 +37,7 @@ from game.ownership_projection_views import (
     OWNERSHIP_LINEAGE_ATTRIBUTION_FIELDS,
     SANITIZER_TRACE_OWNER_LEGACY_SHORT_FIELDS,
 )
+from game.semantic_mutation_attribution import reconcile_semantic_mutation_owner
 from game.telemetry_vocab import normalize_owner, normalize_reason_list
 
 RUNTIME_LINEAGE_EVENT_TYPE: str = "runtime_lineage"
@@ -278,7 +281,6 @@ def summarize_runtime_lineage_events(events: Any) -> dict[str, Any]:
         "gate_path_frequency": {},
     }
     total_events = 0
-
     def _count(bucket: str, value: Any) -> None:
         if isinstance(value, str) and value.strip():
             key = value.strip()
@@ -311,8 +313,13 @@ def summarize_runtime_lineage_events(events: Any) -> dict[str, Any]:
                 _count("gate_path_frequency", event.get("gate_path"))
 
     recurrence = buckets["by_recurrence_key"]
+    first_mutation = reconcile_semantic_mutation_owner(runtime_lineage=events)
     return {
         "total_events": total_events,
+        "first_mutation_owner": first_mutation.authoritative_mutation_owner,
+        "first_mutation_family": first_mutation.authoritative_mutation_family,
+        "first_mutation_evidence_type": first_mutation.authoritative_evidence_source,
+        "first_mutation_inference_used": first_mutation.used_projection_inference,
         **{key: dict(sorted(values.items())) for key, values in buckets.items()},
         "recurring_events": [
             {"recurrence_key": key, "count": count}

@@ -28,6 +28,7 @@ from game.content_lint import (  # noqa: E402
     lint_all_content,
     message_code_family,
     summarize_message_code_families,
+    summarize_scene_finding_counts,
 )
 from game.storage import SCENES_DIR  # noqa: E402
 
@@ -115,15 +116,25 @@ def _format_code_family_counts(report: ContentLintReport) -> str:
     return "code_families=" + ",".join(f"{k}:{v}" for k, v in counts.items())
 
 
+def _format_scene_finding_counts(report: ContentLintReport) -> str:
+    """Compact CLI metric: ``hub:2,island:1`` (sorted scene ids, author-time diagnostic only)."""
+    counts = summarize_scene_finding_counts(report.messages)
+    if not counts:
+        return ""
+    return "scene_findings=" + ",".join(f"{k}:{v}" for k, v in counts.items())
+
+
 def _render_cli_report(report: ContentLintReport, *, quiet: bool) -> None:
     out = sys.stdout
     family_metric = _format_code_family_counts(report)
+    scene_metric = _format_scene_finding_counts(report)
     summary = (
         f"scenes_checked={len(report.scene_ids_checked)} "
         f"errors={report.error_count} warnings={report.warning_count}"
     )
-    if family_metric:
-        summary = f"{summary} {family_metric}"
+    for metric in (family_metric, scene_metric):
+        if metric:
+            summary = f"{summary} {metric}"
     out.write(summary + "\n")
     if quiet:
         return

@@ -225,6 +225,7 @@ def test_cli_json_out_matches_canonical_as_dict(tmp_path: Path) -> None:
         "messages",
         "scene_ids_checked",
         "code_family_counts",
+        "scene_finding_counts",
     }
 
 
@@ -250,6 +251,14 @@ def test_cli_summary_includes_code_family_metric_for_warnings(tmp_path: Path) ->
     r = _run_cli("--scenes-dir", str(sd), "--quiet")
     assert r.returncode == 0
     assert "code_families=scene:2" in r.stdout
+
+
+def test_cli_summary_includes_scene_finding_metric_for_warnings(tmp_path: Path) -> None:
+    sd = _mk_scenes_dir(tmp_path)
+    _write_scene(sd, "lonely", _warning_only_scene("lonely"))
+    r = _run_cli("--scenes-dir", str(sd), "--quiet")
+    assert r.returncode == 0
+    assert "scene_findings=lonely:2" in r.stdout
 
 
 def test_subset_cli_exit_to_unloaded_real_scene_not_unknown_target(tmp_path: Path) -> None:

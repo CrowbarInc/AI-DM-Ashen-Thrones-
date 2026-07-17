@@ -1,50 +1,46 @@
 # BQ-C5 Effectiveness Outcome Validation
 
-**Date:** 2026-06-22T21:39:03Z
+**Date:** 2026-06-28T19:49:24Z
 **Protected replay only:** true
 
 # Outcome Evidence
 
-- Total keys: `6`
-- Active keys: `6`
+- Total keys: `1`
+- Active keys: `1`
 - Validated retired keys: `0`
 - Validated dormant keys: `0`
-- Validated outcome count: `0`
-- Has validated outcomes: `false`
+- Validated outcome count: `1`
+- Has validated outcomes: `true`
 
-- No validated outcome signals discovered.
-
-### Rejected Candidates
-
-- `measurable_recurrence_reduction` (portfolio): insufficient_evidence
+- `measurable_recurrence_reduction`: trajectory_regression_rate_decrease
 
 # Effectiveness Confidence
 
-- Reported confidence: `1.00`
-- Outcome evidence strength: `0.20`
-- Calibration gap: `0.80`
-- Status: `overconfident`
-- Outcome supported: `false`
+- Reported confidence: `0.15`
+- Outcome evidence strength: `0.70`
+- Calibration gap: `-0.55`
+- Status: `underconfident`
+- Outcome supported: `true`
 
 # Calibration Recalculation
 
-- Calibration score: `55.3`
-- Largest calibration gap: `0.80`
+- Calibration score: `64.3`
+- Largest calibration gap: `0.55`
 - Graduation confidence ready: `false`
 - BQ-C4 effectiveness evidence: `0.18`
-- BQ-C5 effectiveness evidence: `0.20`
-- Evidence delta: `+0.02`
+- BQ-C5 effectiveness evidence: `0.70`
+- Evidence delta: `+0.52`
 - BQ-C4 calibration score: `61.3`
-- BQ-C5 calibration score: `55.3`
-- Calibration score delta: `-6.0`
+- BQ-C5 calibration score: `64.3`
+- Calibration score delta: `+3.0`
 
 # Graduation Impact
 
 - Formal graduation criteria met: `false`
-- Missing outcome signal: At least one validated outcome event is required: retired key, dormant key, measurable recurrence reduction, or confirmed remediation impact.
+- Missing outcome signal: none
 
 # Final Recommendation
 
 **B. One additional validation period required**
 
-Trajectory is active but no validated outcome evidence exists; one additional validation period is required.
+Some outcome evidence exists but calibration or effectiveness support remains insufficient for graduation.

@@ -9,11 +9,24 @@ from __future__ import annotations
 import hashlib
 from typing import Any, Dict, Optional
 
+from game.conditions import get_effect_value
+
 
 # Difficulty bands (DC): easy 8–10, standard 10–14, hard 14–18
 DC_EASY = 8
 DC_STANDARD = 12
 DC_HARD = 16
+
+
+def _condition_definitions(context: dict | None, actor_stats: dict) -> dict:
+    ctx = context or {}
+    defs = ctx.get("condition_definitions")
+    if isinstance(defs, dict):
+        return defs
+    if actor_stats and actor_stats.get("conditions"):
+        from game import storage
+        return storage.load_conditions()
+    return {}
 
 
 def _deterministic_d20(seed_parts: list) -> int:
@@ -63,6 +76,10 @@ def resolve_skill_check(
         elif isinstance(actor_stats.get(skill), (int, float)):
             modifier = int(actor_stats[skill])
 
+    cond_defs = _condition_definitions(context, actor_stats if isinstance(actor_stats, dict) else {})
+    condition_penalty = get_effect_value(actor_stats or {}, cond_defs, "skill_penalty")
+    net_modifier = modifier - condition_penalty
+
     ctx = context or {}
     seed_parts = ctx.get("seed_parts")
     if not isinstance(seed_parts, list):
@@ -75,18 +92,24 @@ def resolve_skill_check(
             str(difficulty),
         ]
     roll = _deterministic_d20(seed_parts)
-    total = roll + modifier
+    total = roll + net_modifier
     success = total >= difficulty
+    margin = total - difficulty
 
-    return {
+    result = {
         "skill": skill,
         "difficulty": difficulty,
         "dc": difficulty,
-        "modifier": modifier,
+        "modifier": net_modifier,
         "roll": roll,
         "total": total,
         "success": success,
+        "margin": margin,
     }
+    if condition_penalty:
+        result["base_modifier"] = modifier
+        result["condition_penalty"] = condition_penalty
+    return result
 
 
 def should_trigger_check(action: dict, context: dict) -> dict:

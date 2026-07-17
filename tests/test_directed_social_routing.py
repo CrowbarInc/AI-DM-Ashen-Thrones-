@@ -536,6 +536,52 @@ def test_spoken_vocative_listen_stranger_overrides_guard_continuity(tmp_path, mo
     assert ent.get("continuity_overridden_by_spoken_vocative") is True
 
 
+def test_spoken_vocative_hey_guard_dash_overrides_runner_continuity(tmp_path, monkeypatch):
+    _seed_scene_with_runner(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    session_ctx = session.setdefault("interaction_context", {})
+    session_ctx["active_interaction_target_id"] = "runner"
+    session_ctx["active_interaction_kind"] = "social"
+    session_ctx["interaction_mode"] = "social"
+    session_ctx["engagement_level"] = "engaged"
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    rebuild_active_scene_entities(session, world, "scene_investigate", scene_envelope=scene)
+    storage._save_json(storage.SESSION_PATH, session)
+    session = storage.load_session()
+    raw = "Hey guard - what did you notice by the north arch?"
+    seg = segment_mixed_player_turn(raw)
+    ent = resolve_directed_social_entry(
+        session=session, scene=scene, world=world, segmented_turn=seg, raw_text=raw
+    )
+    assert ent.get("target_actor_id") == "gate_guard"
+    assert ent.get("target_source") == "spoken_vocative"
+    assert ent.get("continuity_overridden_by_spoken_vocative") is True
+
+
+def test_spoken_vocative_listen_guard_bare_question_overrides_runner_continuity(tmp_path, monkeypatch):
+    _seed_scene_with_runner(tmp_path, monkeypatch, clear_interaction=False)
+    session = storage.load_session()
+    session_ctx = session.setdefault("interaction_context", {})
+    session_ctx["active_interaction_target_id"] = "runner"
+    session_ctx["active_interaction_kind"] = "social"
+    session_ctx["interaction_mode"] = "social"
+    session_ctx["engagement_level"] = "engaged"
+    world = storage.load_world()
+    scene = storage.load_scene("scene_investigate")
+    rebuild_active_scene_entities(session, world, "scene_investigate", scene_envelope=scene)
+    storage._save_json(storage.SESSION_PATH, session)
+    session = storage.load_session()
+    raw = "Listen guard what did you hear about the patrol?"
+    seg = segment_mixed_player_turn(raw)
+    ent = resolve_directed_social_entry(
+        session=session, scene=scene, world=world, segmented_turn=seg, raw_text=raw
+    )
+    assert ent.get("target_actor_id") == "gate_guard"
+    assert ent.get("target_source") == "spoken_vocative"
+    assert ent.get("continuity_overridden_by_spoken_vocative") is True
+
+
 def test_resolve_spoken_vocative_target_returns_shape(tmp_path, monkeypatch):
     _seed_scene_with_runner(tmp_path, monkeypatch, clear_interaction=True)
     session = storage.load_session()

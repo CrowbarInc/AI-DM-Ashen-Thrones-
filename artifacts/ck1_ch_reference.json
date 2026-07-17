@@ -1,0 +1,824 @@
+{
+  "ck_baseline_draft": {
+    "files_above_hotspot_threshold": 0,
+    "hci_headline": 9.52,
+    "hotspot_threshold_t_touch": 3,
+    "largest_single_hotspot": "tests/helpers/failure_dashboard_recurrence.py (1.9%)",
+    "top_10_most_touched_files": [
+      {
+        "display": "tests/helpers/failure_dashboard_recurrence.py (2 touches, 1.9%)",
+        "path": "tests/helpers/failure_dashboard_recurrence.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/golden_replay_artifact_manifest.py (2 touches, 1.9%)",
+        "path": "tests/helpers/golden_replay_artifact_manifest.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/golden_replay_projection.py (2 touches, 1.9%)",
+        "path": "tests/helpers/golden_replay_projection.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/replay_bug_recurrence.py (2 touches, 1.9%)",
+        "path": "tests/helpers/replay_bug_recurrence.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/replay_bug_recurrence_events.py (2 touches, 1.9%)",
+        "path": "tests/helpers/replay_bug_recurrence_events.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/replay_bug_recurrence_history.py (2 touches, 1.9%)",
+        "path": "tests/helpers/replay_bug_recurrence_history.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/replay_bug_recurrence_serialization.py (2 touches, 1.9%)",
+        "path": "tests/helpers/replay_bug_recurrence_serialization.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/helpers/replay_bug_recurrence_statistics.py (2 touches, 1.9%)",
+        "path": "tests/helpers/replay_bug_recurrence_statistics.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "tests/test_ownership_registry.py (2 touches, 1.9%)",
+        "path": "tests/test_ownership_registry.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "display": "game/attribution_read_views.py (1 touches, 0.95%)",
+        "path": "game/attribution_read_views.py",
+        "share_pct": 0.95,
+        "touch_count": 1
+      }
+    ],
+    "top_10_touch_share_pct": 18.1,
+    "top_5_touch_share_pct": 9.52
+  },
+  "ck_fi": {
+    "available": true,
+    "csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
+    "distinct_modules": 236,
+    "files_above_threshold": 39,
+    "largest_hotspot": {
+      "display": "tests.helpers.replay_fem_read_smoke (5.56%)",
+      "fan_in_total": 58,
+      "module": "tests.helpers.replay_fem_read_smoke",
+      "share_pct": 5.56
+    },
+    "notes_string": "FI top5=20.79% top10=32.76% above_T10=39",
+    "t_fi": 10,
+    "top10_share_pct": 32.76,
+    "top5_share_pct": 20.79,
+    "top_10_modules": [
+      {
+        "fan_in_total": 58,
+        "module": "tests.helpers.replay_fem_read_smoke",
+        "share_pct": 5.56
+      },
+      {
+        "fan_in_total": 52,
+        "module": "game.final_emission_text_formatting",
+        "share_pct": 4.98
+      },
+      {
+        "fan_in_total": 41,
+        "module": "tests.helpers.gate_orchestration_smoke",
+        "share_pct": 3.93
+      },
+      {
+        "fan_in_total": 34,
+        "module": "game.final_emission_gate",
+        "share_pct": 3.26
+      },
+      {
+        "fan_in_total": 32,
+        "module": "game.final_emission_visibility_fallback",
+        "share_pct": 3.07
+      },
+      {
+        "fan_in_total": 29,
+        "module": "game.realization_provenance",
+        "share_pct": 2.78
+      },
+      {
+        "fan_in_total": 26,
+        "module": "game.final_emission_repairs",
+        "share_pct": 2.49
+      },
+      {
+        "fan_in_total": 24,
+        "module": "game.final_emission_meta",
+        "share_pct": 2.3
+      },
+      {
+        "fan_in_total": 23,
+        "module": "game.final_emission_strict_social_stack",
+        "share_pct": 2.2
+      },
+      {
+        "fan_in_total": 23,
+        "module": "tests.helpers.opening_fallback_evidence",
+        "share_pct": 2.2
+      }
+    ],
+    "total_fi": 1044
+  },
+  "ck_git": {
+    "distinct_paths": 96,
+    "files_above_threshold": 0,
+    "hci": 9.52,
+    "hotspot_rankings": [
+      {
+        "path": "tests/helpers/failure_dashboard_recurrence.py",
+        "rank": 1,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/golden_replay_artifact_manifest.py",
+        "rank": 2,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection.py",
+        "rank": 3,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence.py",
+        "rank": 4,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_events.py",
+        "rank": 5,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_history.py",
+        "rank": 6,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_serialization.py",
+        "rank": 7,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_statistics.py",
+        "rank": 8,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/test_ownership_registry.py",
+        "rank": 9,
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "game/attribution_read_views.py",
+        "rank": 10,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "game/content_lint.py",
+        "rank": 11,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "game/final_emission_meta.py",
+        "rank": 12,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "game/final_emission_ownership_schema.py",
+        "rank": 13,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "game/final_emission_replay_projection.py",
+        "rank": 14,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/failure_classification_contract.py",
+        "rank": 15,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/attribution_contract.py",
+        "rank": 16,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classification_alignment.py",
+        "rank": 17,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classification_builders.py",
+        "rank": 18,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classification_dashboard_expectations.py",
+        "rank": 19,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classification_split_owner.py",
+        "rank": 20,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classification_sync.py",
+        "rank": 21,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_classifier.py",
+        "rank": 22,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_drift.py",
+        "rank": 23,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_fixtures.py",
+        "rank": 24,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_orchestration.py",
+        "rank": 25,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_paths.py",
+        "rank": 26,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_report.py",
+        "rank": 27,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_session.py",
+        "rank": 28,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/failure_dashboard_stability.py",
+        "rank": 29,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/fem_normalization_contract.py",
+        "rank": 30,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/gate_thin_boundary_locks.py",
+        "rank": 31,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_fallback_projection_helpers.py",
+        "rank": 32,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_extractors.py",
+        "rank": 33,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_fallbacks.py",
+        "rank": 34,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_fields.py",
+        "rank": 35,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_manifest.py",
+        "rank": 36,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_speaker.py",
+        "rank": 37,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection_test_support.py",
+        "rank": 38,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/protected_field_routing_contract.py",
+        "rank": 39,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/protected_replay_trend_movement.py",
+        "rank": 40,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/replacement_attribution_inventory.py",
+        "rank": 41,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/replay_drift_taxonomy.py",
+        "rank": 42,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/replay_observed_row_fixtures.py",
+        "rank": 43,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/synthetic_replay_evidence_bridge.py",
+        "rank": 44,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/helpers/trace_nest_contract.py",
+        "rank": 45,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_closeout_delegate_locks.py",
+        "rank": 46,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_bd_dependency_compression.py",
+        "rank": 47,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_bi8_golden_replay_boundary.py",
+        "rank": 48,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_bn_gate_context.py",
+        "rank": 49,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_bv16c_terminal_monkeypatch.py",
+        "rank": 50,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_bv_compatibility.py",
+        "rank": 51,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_guard_gate_magnet.py",
+        "rank": 52,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_inventory_governance.py",
+        "rank": 53,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/ownership_registry_contract.py",
+        "rank": 54,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf1_fallback_family_precedence.py",
+        "rank": 55,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf1_route_and_trace_precedence.py",
+        "rank": 56,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf1_runtime_lineage_precedence.py",
+        "rank": 57,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf1_speaker_projection_precedence.py",
+        "rank": 58,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf2_protected_field_routing.py",
+        "rank": 59,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf3_raw_normalized_fem_field_matrix.py",
+        "rank": 60,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf4_trace_nest_dotted_path_contract.py",
+        "rank": 61,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf6_generated_projection_artifact_governance.py",
+        "rank": 62,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_cf7_synthetic_row_classifier_evidence_bridge.py",
+        "rank": 63,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_content_lint.py",
+        "rank": 64,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_content_lint_tool.py",
+        "rank": 65,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_classification_contract.py",
+        "rank": 66,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_classifier.py",
+        "rank": 67,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_controlled_failures.py",
+        "rank": 68,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_drift.py",
+        "rank": 69,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_orchestration.py",
+        "rank": 70,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_paths.py",
+        "rank": 71,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_recurrence.py",
+        "rank": 72,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_session.py",
+        "rank": 73,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_failure_dashboard_stability.py",
+        "rank": 74,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_artifact_manifest.py",
+        "rank": 75,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_acceptance_matrix.py",
+        "rank": 76,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_long_session_summary.py",
+        "rank": 77,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_opening_projection.py",
+        "rank": 78,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_projection.py",
+        "rank": 79,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_sanitizer_projection.py",
+        "rank": 80,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_sealed_projection.py",
+        "rank": 81,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_upstream_fast_projection.py",
+        "rank": 82,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_upstream_projection.py",
+        "rank": 83,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_fallback_visibility_projection.py",
+        "rank": 84,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection.py",
+        "rank": 85,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_fallback_integration.py",
+        "rank": 86,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_governance.py",
+        "rank": 87,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_manifest.py",
+        "rank": 88,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_metadata.py",
+        "rank": 89,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_modules.py",
+        "rank": 90,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_presence_integration.py",
+        "rank": 91,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_registry.py",
+        "rank": 92,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_golden_replay_projection_speaker_integration.py",
+        "rank": 93,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_replay_bug_recurrence_decomposition.py",
+        "rank": 94,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_replay_maintenance_metrics.py",
+        "rank": 95,
+        "share_pct": 0.95,
+        "touch_count": 1
+      },
+      {
+        "path": "tests/test_test_audit_tool.py",
+        "rank": 96,
+        "share_pct": 0.95,
+        "touch_count": 1
+      }
+    ],
+    "largest_hotspot": {
+      "display": "tests/helpers/failure_dashboard_recurrence.py (1.9%)",
+      "path": "tests/helpers/failure_dashboard_recurrence.py",
+      "share_pct": 1.9,
+      "touch_count": 2
+    },
+    "t_touch": 3,
+    "top10_share_pct": 18.1,
+    "top5_share_pct": 9.52,
+    "top_10_paths": [
+      {
+        "path": "tests/helpers/failure_dashboard_recurrence.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/golden_replay_artifact_manifest.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/golden_replay_projection.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_events.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_history.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_serialization.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/helpers/replay_bug_recurrence_statistics.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "tests/test_ownership_registry.py",
+        "share_pct": 1.9,
+        "touch_count": 2
+      },
+      {
+        "path": "game/attribution_read_views.py",
+        "share_pct": 0.95,
+        "touch_count": 1
+      }
+    ],
+    "total_touches": 105
+  },
+  "ck_ledger_snippet_md": "<!-- CK ledger snippet \u2014 append Measurement Log row; on first measurement replace baseline placeholders -->\n\n### Measurement Log row\n\n| Measurement | Commit | Date | Top 5 % | Top 10 % | Largest Hotspot | Files Above Threshold | Notes |\n|---|---|---|---:|---:|---|---:|---|\n| CJ3 CH reference (non-authoritative) | `85855df` | 2026-06-26 | 9.52 | 18.1 | tests/helpers/failure_dashboard_recurrence.py (1.9%) | 0 | `std=v1; REV_RANGE=5f0ad53..85855df; total_touches=105; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 CH reference (non-authoritative)` |\n\n### Baseline section (first measurement only)\n\n| Baseline field | Value |\n|---|---|\n| Top 10 most-touched files | tests/helpers/failure_dashboard_recurrence.py (2 touches, 1.9%); tests/helpers/golden_replay_artifact_manifest.py (2 touches, 1.9%); tests/helpers/golden_replay_projection.py (2 touches, 1.9%); tests/helpers/replay_bug_recurrence.py (2 touches, 1.9%); tests/helpers/replay_bug_recurrence_events.py (2 touches, 1.9%); tests/helpers/replay_bug_recurrence_history.py (2 touches, 1.9%); tests/helpers/replay_bug_recurrence_serialization.py (2 touches, 1.9%); tests/helpers/replay_bug_recurrence_statistics.py (2 touches, 1.9%); tests/test_ownership_registry.py (2 touches, 1.9%); game/attribution_read_views.py (1 touches, 0.95%) |\n| Top 5 touch share (% of repository touches) | 9.52 |\n| Top 10 touch share (% of repository touches) | 18.1 |\n| Largest single hotspot (file + touch share) | tests/helpers/failure_dashboard_recurrence.py (1.9%) |\n| Files above hotspot threshold | 0 |\n| Hotspot threshold (touch count) | T_touch=3 |\n\n**HCI headline:** 9.52\n",
+  "ck_log_draft": {
+    "commit": "85855df",
+    "date": "2026-06-26",
+    "files_above_threshold": 0,
+    "hci": 9.52,
+    "largest_hotspot": "tests/helpers/failure_dashboard_recurrence.py (1.9%)",
+    "measurement": "CJ3 CH reference (non-authoritative)",
+    "notes": "std=v1; REV_RANGE=5f0ad53..85855df; total_touches=105; FI top5=20.79% top10=32.76% above_T10=39; cycle=CJ3 CH reference (non-authoritative)",
+    "top_10_pct": 18.1,
+    "top_5_pct": 9.52
+  },
+  "data_sufficient": true,
+  "generation_status": "success",
+  "measurement_readiness": "measurement_ready",
+  "measurement_window": {
+    "commit_count": 7,
+    "measurement_commit": "85855df",
+    "measurement_commit_full": "85855df00ebdee20a33c0ada447c178bf1f49820",
+    "measurement_date": "2026-06-26",
+    "rev_range": "5f0ad53..85855df",
+    "watch_start_commit": "5f0ad53",
+    "watch_start_commit_full": "5f0ad53259b73905c88b75a1cfc3448dd5704fd0"
+  },
+  "primary_metric": "hotspot_concentration_index",
+  "report_provenance": {
+    "bu_csv_path": "docs/audits/BU_import_fan_in_fan_out.csv",
+    "command": "python tools/ck_hotspot_compression_report.py --watch-start 5f0ad53 --measurement-commit 85855df --cycle-label 'CJ3 CH reference (non-authoritative)' --output-md 'artifacts\\ck1_ch_reference.md' --output-json 'artifacts\\ck1_ch_reference.json'",
+    "generated_at": "2026-06-26T19:52:38Z",
+    "generator": "tools/ck_hotspot_compression_report.py",
+    "helper": "tests/helpers/ck_hotspot_compression_report.py",
+    "lane_primary": "CK-GIT",
+    "lane_supplementary": "CK-FI",
+    "output_json": "artifacts/ck1_ch_reference.json",
+    "output_md": "artifacts/ck1_ch_reference.md"
+  },
+  "schema_version": 2,
+  "standard_version": 1
+}

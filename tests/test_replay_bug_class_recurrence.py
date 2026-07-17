@@ -5,6 +5,22 @@ from pathlib import Path
 
 import pytest
 
+from tests.helpers.failure_dashboard_report import (
+    assert_recurrence_history_payload_shape,
+    assert_recurrence_payload_counts,
+    assert_recurrence_payload_entry,
+    assert_recurrence_payload_summary_scope,
+)
+from tests.helpers.replay_bug_recurrence_assertions import (
+    assert_recurrence_aggregated_summary_status,
+    assert_recurrence_confidence_status,
+    assert_recurrence_core_regression_rate,
+    assert_recurrence_empty_collection,
+    assert_recurrence_empty_summary,
+    assert_recurrence_report_markdown_sections,
+    assert_recurrence_summarizer_parity,
+    assert_recurrence_zero_payload,
+)
 from tests.helpers.replay_bug_recurrence import (
     BACKFILL_PROTECTED_REPLAY_PERSISTENCE_INTENT,
     DEFAULT_EVENT_SOURCE,
@@ -74,6 +90,7 @@ from tests.helpers.replay_bug_recurrence import (
     build_recurrence_summary,
     build_recurrence_timeline,
     build_recurrence_trend_summary,
+    build_scoped_recurrence_population_metrics,
     calculate_protected_replay_regression_recurrence_rate,
     calculate_recurrence_reduction_potential,
     calculate_recurrence_roi,
@@ -89,6 +106,7 @@ from tests.helpers.replay_bug_recurrence import (
     classify_recurrence_lifecycle_stage,
     classify_committed_recurrence_event_log,
     classify_recurrence_event_commit_worthiness,
+    classify_recurrence_event_population,
     classify_recurrence_forecast,
     classify_remediation_priority,
     classify_recurrence_status,
@@ -172,6 +190,9 @@ def _classification_row(**overrides: object) -> dict[str, object]:
     return row
 
 
+# Recurrence identity lock: key derivation ignores scenario/turn; owner/category/field_path define identity.
+
+
 def test_same_owner_category_field_produces_same_recurrence_key() -> None:
     left = _classification_row(scenario_id="left", turn_index=0)
     right = _classification_row(scenario_id="right", turn_index=9)
@@ -191,6 +212,9 @@ def test_missing_owner_bucket_falls_back_to_replay_drift_unclassified() -> None:
 
     assert build_recurrence_key(row).startswith("recurrence:v1:replay_drift_unclassified|")
     assert recurrence_rows([row])[0]["owner_drift_bucket"] == "replay_drift_unclassified"
+
+
+# Classification row identity lock: recurrence_rows projection must preserve source classification fields.
 
 
 def test_recurrence_rows_preserve_existing_classification_identity() -> None:
@@ -227,9 +251,9 @@ def test_repeated_keys_increment_occurrence_count() -> None:
 
     history = aggregate_recurrence_history(rows)
 
-    assert history["unique_recurrence_count"] == 1
+    assert_recurrence_payload_counts(history, unique_recurrence_count=1)
     assert history["recurrences"][0]["occurrence_count"] == 2
-    assert build_recurrence_summary(history)[0]["occurrence_count"] == 2
+    assert_recurrence_aggregated_summary_status(history, occurrence_count=2)
 
 
 def test_first_and_last_seen_indexes_are_deterministic() -> None:
@@ -277,19 +301,24 @@ def test_active_status_is_preserved() -> None:
 def test_empty_input_returns_empty_report_only_advisory_only_history() -> None:
     history = aggregate_recurrence_history([])
 
-    assert history["report_only"] is True
+    assert_recurrence_history_payload_shape(
+        history,
+        report_only=True,
+        unique_recurrence_count=0,
+        regression_rate_metric=REGRESSION_RECURRENCE_RATE_METRIC,
+    )
+    assert_recurrence_payload_counts(history, total_rows=0, unique_recurrence_count=0)
     assert history["advisory_only"] is True
-    assert history["total_rows"] == 0
-    assert history["unique_recurrence_count"] == 0
-    assert history["recurrences"] == []
+    assert_recurrence_empty_collection(history, "recurrences")
     assert build_recurrence_summary(history) == []
-    metric = history["regression_recurrence_rate"]
-    assert metric["metric"] == REGRESSION_RECURRENCE_RATE_METRIC
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 0
-    assert metric["rate"] == 0.0
-    assert metric["report_only"] is True
-    assert metric["advisory_only"] is True
+    assert_recurrence_core_regression_rate(
+        history["regression_recurrence_rate"],
+        numerator=0,
+        denominator=0,
+        rate=0.0,
+        report_only=True,
+        advisory_only=True,
+    )
 
 
 def test_repeated_recurrence_summary_becomes_active() -> None:
@@ -304,14 +333,14 @@ def test_repeated_recurrence_summary_becomes_active() -> None:
 
     summary = build_recurrence_summary(history)
 
-    assert summary[0]["status"] == "active"
+    assert_recurrence_aggregated_summary_status(history, status="active")
     assert classify_recurrence_status(summary[0]) == "active"
 
 
 def test_single_recurrence_summary_becomes_watch() -> None:
     history = aggregate_recurrence_history(recurrence_rows([_classification_row()]))
 
-    assert build_recurrence_summary(history)[0]["status"] == "watch"
+    assert_recurrence_aggregated_summary_status(history, status="watch")
 
 
 def test_explicit_retired_or_deprecated_input_becomes_retired() -> None:
@@ -358,12 +387,9 @@ def test_protected_replay_manifest_documents_cycle_ay_recurrence_policy() -> Non
 def test_empty_recurrence_event_log_shape() -> None:
     log = empty_recurrence_event_log()
 
-    assert log == {
-        "schema_version": 1,
-        "report_only": True,
-        "advisory_only": True,
-        "events": [],
-    }
+    assert_recurrence_history_payload_shape(log, schema_version=1, report_only=True)
+    assert log["advisory_only"] is True
+    assert_recurrence_empty_collection(log, "events")
 
 
 def test_append_recurrence_events_preserves_existing_events() -> None:
@@ -415,9 +441,8 @@ def test_aggregate_recurrence_history_from_event_log_becomes_active_after_two_sa
 
     history = aggregate_recurrence_history_from_event_log(log)
 
-    assert history["total_rows"] == 2
-    assert history["unique_recurrence_count"] == 1
-    assert build_recurrence_summary(history)[0]["status"] == "active"
+    assert_recurrence_payload_counts(history, total_rows=2, unique_recurrence_count=1)
+    assert_recurrence_aggregated_summary_status(history, status="active")
 
 
 def test_missing_event_log_loads_as_empty(tmp_path: Path) -> None:
@@ -472,11 +497,14 @@ def test_append_recurrence_events_attaches_metadata_to_each_event() -> None:
     )
 
     for event in log["events"]:
-        assert event["event_source"] == "protected_replay_failure"
-        assert event["recorded_at"] == "2026-06-12T00:00:00Z"
-        assert event["command"] == "pytest recurrence metadata"
+        assert_recurrence_payload_entry(
+            event,
+            event_source="protected_replay_failure",
+            recorded_at="2026-06-12T00:00:00Z",
+            command="pytest recurrence metadata",
+            artifact_source="artifacts/golden_replay/replay_failure_report.md",
+        )
         assert event["run_id"] == "2026-06-12T00:00:00Z"
-        assert event["artifact_source"] == "artifacts/golden_replay/replay_failure_report.md"
 
 
 def test_append_recurrence_event_metadata_does_not_alter_recurrence_key() -> None:
@@ -515,10 +543,10 @@ def test_append_recurrence_event_metadata_does_not_change_aggregation_counts() -
     plain_history = aggregate_recurrence_history_from_event_log(plain_log)
     rich_history = aggregate_recurrence_history_from_event_log(rich_log)
 
-    assert plain_history["total_rows"] == rich_history["total_rows"] == 2
-    assert plain_history["unique_recurrence_count"] == rich_history["unique_recurrence_count"] == 1
-    assert build_recurrence_summary(plain_history)[0]["status"] == "active"
-    assert build_recurrence_summary(rich_history)[0]["status"] == "active"
+    assert_recurrence_payload_counts(plain_history, total_rows=2, unique_recurrence_count=1)
+    assert_recurrence_payload_counts(rich_history, total_rows=2, unique_recurrence_count=1)
+    assert_recurrence_aggregated_summary_status(plain_history, status="active")
+    assert_recurrence_aggregated_summary_status(rich_history, status="active")
 
 
 def test_normalize_recurrence_event_metadata_omits_empty_values() -> None:
@@ -538,26 +566,30 @@ def test_row_test_node_id_overrides_batch_metadata() -> None:
         ),
     )
 
-    assert log["events"][0]["test_node_id"] == "tests/test_golden_replay.py::test_row_node"
+    assert_recurrence_payload_entry(
+        log["events"][0],
+        test_node_id="tests/test_golden_replay.py::test_row_node",
+    )
 
 
 def test_empty_history_regression_recurrence_rate_is_zero() -> None:
     metric = calculate_regression_recurrence_rate(aggregate_recurrence_history([]))
 
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 0
-    assert metric["rate"] == 0.0
-    assert metric["report_only"] is True
-    assert metric["advisory_only"] is True
+    assert_recurrence_core_regression_rate(
+        metric,
+        numerator=0,
+        denominator=0,
+        rate=0.0,
+        report_only=True,
+        advisory_only=True,
+    )
 
 
 def test_single_watch_recurrence_rate_is_zero_over_one() -> None:
     history = aggregate_recurrence_history(recurrence_rows([_classification_row()]))
 
     metric = history["regression_recurrence_rate"]
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 1
-    assert metric["rate"] == 0.0
+    assert_recurrence_core_regression_rate(metric, numerator=0, denominator=1, rate=0.0)
 
 
 def test_repeated_same_key_recurrence_rate_is_one_over_one() -> None:
@@ -571,9 +603,7 @@ def test_repeated_same_key_recurrence_rate_is_one_over_one() -> None:
     )
 
     metric = history["regression_recurrence_rate"]
-    assert metric["numerator"] == 1
-    assert metric["denominator"] == 1
-    assert metric["rate"] == 1.0
+    assert_recurrence_core_regression_rate(metric, numerator=1, denominator=1, rate=1.0)
 
 
 def test_mixed_keys_regression_recurrence_rate() -> None:
@@ -592,9 +622,7 @@ def test_mixed_keys_regression_recurrence_rate() -> None:
     )
 
     metric = history["regression_recurrence_rate"]
-    assert metric["numerator"] == 1
-    assert metric["denominator"] == 2
-    assert metric["rate"] == 0.5
+    assert_recurrence_core_regression_rate(metric, numerator=1, denominator=2, rate=0.5)
 
 
 def test_regression_recurrence_rate_from_event_log_matches_history() -> None:
@@ -647,9 +675,7 @@ def test_filtered_regression_recurrence_rate_protected_only() -> None:
     )
 
     assert metric["event_source_filter"] == PROTECTED_REPLAY_FAILURE_EVENT_SOURCE
-    assert metric["numerator"] == 1
-    assert metric["denominator"] == 1
-    assert metric["rate"] == 1.0
+    assert_recurrence_core_regression_rate(metric, numerator=1, denominator=1, rate=1.0)
 
 
 def test_filtered_regression_recurrence_rate_session_only() -> None:
@@ -669,9 +695,7 @@ def test_filtered_regression_recurrence_rate_session_only() -> None:
     metric = calculate_regression_recurrence_rate(log, event_source_filter=DEFAULT_EVENT_SOURCE)
 
     assert metric["event_source_filter"] == DEFAULT_EVENT_SOURCE
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 1
-    assert metric["rate"] == 0.0
+    assert_recurrence_core_regression_rate(metric, numerator=0, denominator=1, rate=0.0)
 
 
 def test_filtered_regression_recurrence_rate_empty_population() -> None:
@@ -687,9 +711,7 @@ def test_filtered_regression_recurrence_rate_empty_population() -> None:
         event_source_filter=PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
     )
 
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 0
-    assert metric["rate"] == 0.0
+    assert_recurrence_core_regression_rate(metric, numerator=0, denominator=0, rate=0.0)
 
 
 def test_filtered_regression_recurrence_rate_on_history_without_events_is_empty() -> None:
@@ -700,9 +722,7 @@ def test_filtered_regression_recurrence_rate_on_history_without_events_is_empty(
         event_source_filter=PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
     )
 
-    assert metric["numerator"] == 0
-    assert metric["denominator"] == 0
-    assert metric["rate"] == 0.0
+    assert_recurrence_core_regression_rate(metric, numerator=0, denominator=0, rate=0.0)
 
 
 def test_normalized_recurrence_event_source_buckets() -> None:
@@ -751,6 +771,9 @@ def _sample_recurrence_event(**overrides: object) -> dict[str, object]:
     }
     event.update(overrides)
     return event
+
+
+# Commit-worthiness/provenance lock: one test per rejection/accept reason; not a shared row-shape matrix.
 
 
 def test_is_commit_worthy_allows_golden_replay_protected_event() -> None:
@@ -824,6 +847,7 @@ def test_append_recurrence_events_to_persistence_lanes_routes_explicitly() -> No
 
     assert lane_result["protected_appended"] == 0
     assert lane_result["session_diagnostic_appended"] == 1
+    assert lane_result["synthetic_test_artifact_appended"] == 0
     assert lane_result["routing"][0]["reason"] == "session_event_source"
 
 
@@ -847,6 +871,137 @@ def test_calculate_protected_replay_regression_recurrence_rate_uses_commit_worth
     assert metric["numerator"] == 1
     assert metric["denominator"] == 1
     assert metric["rate"] == 1.0
+
+
+def test_scoped_recurrence_populations_separate_protected_session_and_synthetic() -> None:
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        empty_recurrence_event_log(),
+        empty_recurrence_event_log(),
+        [
+            _classification_row(scenario_id="session-a"),
+            _classification_row(scenario_id="session-b"),
+        ],
+        event_source=DEFAULT_EVENT_SOURCE,
+        recorded_at="2026-06-10T00:00:00Z",
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id="protected-a"), _classification_row(scenario_id="protected-b")],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-11T00:00:00Z",
+            }
+        ),
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id=None)],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-12T00:00:00Z",
+            }
+        ),
+    )
+
+    scoped = build_scoped_recurrence_population_metrics(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        lane_result["synthetic_test_artifact_log"],
+    )
+    by_population = scoped["recurrence_rate_by_population"]
+
+    assert scoped["protected_replay_regression_recurrence_rate"]["numerator"] == 1
+    assert scoped["protected_replay_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["session_diagnostic_regression_recurrence_rate"]["numerator"] == 1
+    assert scoped["session_diagnostic_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["synthetic_test_artifact_regression_recurrence_rate"]["numerator"] == 0
+    assert scoped["synthetic_test_artifact_regression_recurrence_rate"]["denominator"] == 1
+    assert scoped["legacy_unified_regression_recurrence_rate"]["compatibility_only"] is True
+    assert by_population["protected_replay"]["health_metric"] is True
+    assert by_population["session_diagnostic"]["health_metric"] is False
+    assert by_population["synthetic_test_artifact"]["health_metric"] is False
+    assert by_population["legacy_unified"]["compatibility_only"] is True
+
+
+def test_persistence_lanes_separate_session_synthetic_and_protected() -> None:
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        empty_recurrence_event_log(),
+        empty_recurrence_event_log(),
+        [_classification_row(scenario_id="session-only")],
+        event_source=DEFAULT_EVENT_SOURCE,
+        recorded_at="2026-06-10T00:00:00Z",
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id="protected-only")],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-11T00:00:00Z",
+            }
+        ),
+    )
+    lane_result = append_recurrence_events_to_persistence_lanes(
+        lane_result["protected_log"],
+        lane_result["session_diagnostic_log"],
+        [_classification_row(scenario_id=None)],
+        synthetic_test_artifact_log=lane_result["synthetic_test_artifact_log"],
+        event_metadata=normalize_recurrence_event_metadata(
+            {
+                "event_source": PROTECTED_REPLAY_FAILURE_EVENT_SOURCE,
+                "artifact_source": "artifacts/golden_replay/replay_failure_report.md",
+                "recorded_at": "2026-06-12T00:00:00Z",
+            }
+        ),
+    )
+
+    protected_events = lane_result["protected_log"]["events"]
+    session_events = lane_result["session_diagnostic_log"]["events"]
+    synthetic_events = lane_result["synthetic_test_artifact_log"]["events"]
+    compatibility_events = lane_result["compatibility_diagnostic_log"]["events"]
+
+    assert [event["scenario_id"] for event in protected_events] == ["protected-only"]
+    assert [event["scenario_id"] for event in session_events] == ["session-only"]
+    assert [event["scenario_id"] for event in synthetic_events] == [None]
+    assert len(compatibility_events) == len(session_events) + len(synthetic_events)
+    assert lane_result["routing"][-1]["persistence_lane"] == "synthetic_test_artifact_history"
+
+
+def test_classify_recurrence_event_population_taxonomy() -> None:
+    assert (
+        classify_recurrence_event_population(_sample_recurrence_event())
+        == "protected_replay"
+    )
+    assert (
+        classify_recurrence_event_population(
+            _sample_recurrence_event(event_source=DEFAULT_EVENT_SOURCE)
+        )
+        == "session_diagnostic"
+    )
+    assert (
+        classify_recurrence_event_population(_sample_recurrence_event(scenario_id=None))
+        == "synthetic_test_artifact"
+    )
+
+
+def test_legacy_regression_recurrence_rate_field_remains_on_history() -> None:
+    history = aggregate_recurrence_history(
+        recurrence_rows([_classification_row(scenario_id="a"), _classification_row(scenario_id="b")])
+    )
+
+    assert "regression_recurrence_rate" in history
+    assert history["regression_recurrence_rate"]["metric"] == REGRESSION_RECURRENCE_RATE_METRIC
 
 
 def _protected_event_log_with_recorded_at(*recorded_at_values: str) -> dict[str, object]:
@@ -911,14 +1066,16 @@ def test_historically_repeated_but_inactive_classifies_as_dormant() -> None:
 
 
 def test_empty_history_trend_summary_is_zeroed() -> None:
-    trends = build_recurrence_trend_summary(empty_recurrence_event_log())
-    growth = summarize_recurrence_growth(build_recurrence_timeline(empty_recurrence_event_log()))
+    empty_log = empty_recurrence_event_log()
+    trends = build_recurrence_trend_summary(empty_log)
+    growth = summarize_recurrence_growth(build_recurrence_timeline(empty_log))
 
-    assert trends["total_keys"] == 0
-    assert trends["emerging_keys"] == 0
-    assert trends["growth_rate"] == 0.0
-    assert growth["total_keys"] == 0
-    assert build_recurrence_timeline(empty_recurrence_event_log()) == []
+    assert_recurrence_zero_payload(trends, total_keys=0, emerging_keys=0, growth_rate=0.0)
+    assert_recurrence_zero_payload(growth, total_keys=0)
+    assert build_recurrence_timeline(empty_log) == []
+
+
+# Cross-suite integration overlap: each enrich_* additive test locks layer keys, protected scope, and JSON round-trip.
 
 
 def test_enrich_recurrence_history_with_trends_is_additive(tmp_path: Path) -> None:
@@ -929,7 +1086,7 @@ def test_enrich_recurrence_history_with_trends_is_additive(tmp_path: Path) -> No
     assert enriched["unique_recurrence_count"] == history["unique_recurrence_count"]
     assert "recurrence_trends" in enriched
     assert "recurrence_timeline" in enriched
-    assert enriched["recurrence_trends"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(enriched, "recurrence_trends", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(enriched, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -961,12 +1118,15 @@ def test_trend_summary_excludes_session_diagnostic_events() -> None:
 def test_empty_history_forecast_is_zeroed() -> None:
     forecast = build_recurrence_forecast(recurrence_timeline=[])
 
-    summary = forecast["forecast_summary"]
-    assert summary["stable_keys"] == 0
-    assert summary["watch_keys"] == 0
-    assert summary["forecast_risk_score"] == 0.0
-    assert summary["stability_score"] == 100.0
-    assert summary["forecast_confidence"] == 0.0
+    assert_recurrence_empty_summary(
+        forecast,
+        "forecast_summary",
+        stable_keys=0,
+        watch_keys=0,
+        forecast_risk_score=0.0,
+        forecast_confidence=0.0,
+    )
+    assert forecast["forecast_summary"]["stability_score"] == 100.0
     assert forecast["risk_concentration"]["concentration_ratio"] == 0.0
 
 
@@ -1041,11 +1201,10 @@ def test_stability_score_extremes() -> None:
 
 def test_enrich_recurrence_history_with_forecasts_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
-    history = enrich_recurrence_history_with_trends(
-        aggregate_protected_recurrence_history_from_event_log(log),
-        log,
+    enriched = enrich_recurrence_history_with_forecasts(
+        _enriched_history_through(log, "trends"),
+        event_log=log,
     )
-    enriched = enrich_recurrence_history_with_forecasts(history, event_log=log)
 
     assert enriched["unique_recurrence_count"] == 1
     assert "recurrence_forecast" in enriched
@@ -1054,7 +1213,7 @@ def test_enrich_recurrence_history_with_forecasts_is_additive(tmp_path: Path) ->
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(enriched, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     reloaded = json.loads(out_path.read_text(encoding="utf-8"))
-    assert reloaded["recurrence_forecast"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(reloaded, "recurrence_forecast", protected_replay_only=True)
 
 
 def test_summarize_recurrence_risk_concentration_metrics() -> None:
@@ -1088,11 +1247,14 @@ def test_empty_portfolio_is_zeroed() -> None:
     portfolio = build_recurrence_portfolio(recurrence_timeline=[])
 
     assert portfolio["owner_count"] == 0
-    assert portfolio["owners"] == []
-    summary = portfolio["portfolio_summary"]
-    assert summary["portfolio_risk_score"] == 0.0
-    assert summary["owner_concentration_ratio"] == 0.0
-    assert summary["largest_risk_bucket"] is None
+    assert_recurrence_empty_collection(portfolio, "owners")
+    assert_recurrence_empty_summary(
+        portfolio,
+        "portfolio_summary",
+        portfolio_risk_score=0.0,
+        owner_concentration_ratio=0.0,
+        largest_risk_bucket=None,
+    )
 
 
 def test_single_key_portfolio_attributes_all_dimensions() -> None:
@@ -1233,23 +1395,19 @@ def test_summarize_recurrence_portfolio_matches_build_output() -> None:
     )
     summary = summarize_recurrence_portfolio(portfolio, recurrence_forecast=forecast)
 
-    assert summary == portfolio["portfolio_summary"]
+    assert_recurrence_summarizer_parity(summary, portfolio, "portfolio_summary")
 
 
 def test_enrich_recurrence_history_with_portfolio_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
-    history = enrich_recurrence_history_with_forecasts(
-        enrich_recurrence_history_with_trends(
-            aggregate_protected_recurrence_history_from_event_log(log),
-            log,
-        ),
+    enriched = enrich_recurrence_history_with_portfolio(
+        _enriched_history_through(log, "forecasts"),
         event_log=log,
     )
-    enriched = enrich_recurrence_history_with_portfolio(history, event_log=log)
 
     assert "recurrence_portfolio" in enriched
     assert "recurrence_portfolio_summary" in enriched
-    assert enriched["recurrence_portfolio_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(enriched, "recurrence_portfolio_summary", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(enriched, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -1260,10 +1418,14 @@ def test_enrich_recurrence_history_with_portfolio_is_additive(tmp_path: Path) ->
 def test_empty_remediation_targets_are_zeroed() -> None:
     targets = build_recurrence_remediation_targets(recurrence_portfolio={})
 
-    assert targets["keys"] == []
-    assert targets["remediation_summary"]["estimated_portfolio_reduction"] == 0.0
-    assert targets["remediation_summary"]["remediation_confidence"] == 0.0
-    assert targets["remediation_summary"]["highest_leverage_key"] is None
+    assert_recurrence_empty_collection(targets)
+    assert_recurrence_empty_summary(
+        targets,
+        "remediation_summary",
+        estimated_portfolio_reduction=0.0,
+        remediation_confidence=0.0,
+        highest_leverage_key=None,
+    )
 
 
 def test_single_key_remediation_target_is_ranked() -> None:
@@ -1394,28 +1556,19 @@ def test_summarize_recurrence_remediation_opportunities_matches_targets() -> Non
         recurrence_portfolio_summary=portfolio["portfolio_summary"],
     )
 
-    assert summary == targets["remediation_summary"]
+    assert_recurrence_summarizer_parity(summary, targets, "remediation_summary")
 
 
 def test_enrich_recurrence_history_with_remediation_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_remediation(
-        enrich_recurrence_history_with_portfolio(
-            enrich_recurrence_history_with_forecasts(
-                enrich_recurrence_history_with_trends(
-                    aggregate_protected_recurrence_history_from_event_log(log),
-                    log,
-                ),
-                event_log=log,
-            ),
-            event_log=log,
-        ),
+        _enriched_history_through(log, "portfolio"),
         event_log=log,
     )
 
     assert "recurrence_remediation_targets" in history
     assert "recurrence_remediation_summary" in history
-    assert history["recurrence_remediation_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_remediation_summary", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -1426,10 +1579,14 @@ def test_enrich_recurrence_history_with_remediation_is_additive(tmp_path: Path) 
 def test_empty_recurrence_roi_analysis_is_zeroed() -> None:
     analysis = build_recurrence_roi_analysis(recurrence_remediation_targets={})
 
-    assert analysis["keys"] == []
-    assert analysis["roi_summary"]["portfolio_roi_score"] == 0.0
-    assert analysis["roi_summary"]["highest_roi_target"] is None
-    assert analysis["roi_summary"]["roi_confidence"] == 0.0
+    assert_recurrence_empty_collection(analysis)
+    assert_recurrence_empty_summary(
+        analysis,
+        "roi_summary",
+        portfolio_roi_score=0.0,
+        highest_roi_target=None,
+        roi_confidence=0.0,
+    )
 
 
 def test_low_cost_high_benefit_target_scores_higher_roi() -> None:
@@ -1559,31 +1716,19 @@ def test_summarize_recurrence_roi_matches_analysis_output() -> None:
         recurrence_remediation_summary=build_recurrence_remediation_targets(event_log=log)["remediation_summary"],
     )
 
-    assert summary == analysis["roi_summary"]
+    assert_recurrence_summarizer_parity(summary, analysis, "roi_summary")
 
 
 def test_enrich_recurrence_history_with_roi_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_roi(
-        enrich_recurrence_history_with_remediation(
-            enrich_recurrence_history_with_portfolio(
-                enrich_recurrence_history_with_forecasts(
-                    enrich_recurrence_history_with_trends(
-                        aggregate_protected_recurrence_history_from_event_log(log),
-                        log,
-                    ),
-                    event_log=log,
-                ),
-                event_log=log,
-            ),
-            event_log=log,
-        ),
+        _enriched_history_through(log, "remediation"),
         event_log=log,
     )
 
     assert "recurrence_roi" in history
     assert "recurrence_roi_summary" in history
-    assert history["recurrence_roi_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_roi_summary", protected_replay_only=True)
     assert history["recurrence_roi"]["keys"][0]["roi_score"] >= 0.0
 
     out_path = tmp_path / "history.json"
@@ -1595,10 +1740,16 @@ def test_enrich_recurrence_history_with_roi_is_additive(tmp_path: Path) -> None:
 def test_empty_recurrence_governance_is_zeroed() -> None:
     governance = build_recurrence_governance()
 
-    assert governance["watchlist"] == []
-    assert governance["governance_summary"]["watchlist_size"] == 0
-    assert governance["governance_summary"]["prioritized_targets"] == 0
+    assert_recurrence_empty_collection(governance, "watchlist")
+    assert_recurrence_zero_payload(
+        governance["governance_summary"],
+        watchlist_size=0,
+        prioritized_targets=0,
+    )
     assert governance["governance_summary"]["governance_health_score"] == 100.0
+
+
+# Threshold/policy matrix lock: governance routing tests one status boundary per call path.
 
 
 def test_classify_recurrence_governance_status_watch() -> None:
@@ -1683,28 +1834,13 @@ def test_summarize_recurrence_governance_matches_build_output() -> None:
     governance = build_recurrence_governance(event_log=log)
     summary = summarize_recurrence_governance(governance)
 
-    assert summary == governance["governance_summary"]
+    assert_recurrence_summarizer_parity(summary, governance, "governance_summary")
 
 
 def test_enrich_recurrence_history_with_governance_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_governance(
-        enrich_recurrence_history_with_roi(
-            enrich_recurrence_history_with_remediation(
-                enrich_recurrence_history_with_portfolio(
-                    enrich_recurrence_history_with_forecasts(
-                        enrich_recurrence_history_with_trends(
-                            aggregate_protected_recurrence_history_from_event_log(log),
-                            log,
-                        ),
-                        event_log=log,
-                    ),
-                    event_log=log,
-                ),
-                event_log=log,
-            ),
-            event_log=log,
-        ),
+        _enriched_history_through(log, "roi"),
         event_log=log,
     )
 
@@ -1712,7 +1848,7 @@ def test_enrich_recurrence_history_with_governance_is_additive(tmp_path: Path) -
     assert "recurrence_watchlist" in history
     assert "recurrence_governance_summary" in history
     assert "recurrence_retirement_summary" in history
-    assert history["recurrence_governance_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_governance_summary", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -1723,7 +1859,7 @@ def test_enrich_recurrence_history_with_governance_is_additive(tmp_path: Path) -
 def test_empty_recurrence_lifecycle_is_zeroed() -> None:
     lifecycle = build_recurrence_lifecycle()
 
-    assert lifecycle["keys"] == []
+    assert_recurrence_empty_collection(lifecycle)
     assert lifecycle["lifecycle_summary"]["closure_rate"] == 0.0
     assert lifecycle["transition_summary"]["transition_count"] == 0
     assert lifecycle["lifecycle_summary"]["lifecycle_health_score"] == 100.0
@@ -1843,31 +1979,13 @@ def test_summarize_recurrence_lifecycle_matches_build_output() -> None:
     lifecycle = build_recurrence_lifecycle(event_log=log)
     summary = summarize_recurrence_lifecycle(lifecycle)
 
-    assert summary == lifecycle["lifecycle_summary"]
+    assert_recurrence_summarizer_parity(summary, lifecycle, "lifecycle_summary")
 
 
 def test_enrich_recurrence_history_with_lifecycle_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_lifecycle(
-        enrich_recurrence_history_with_governance(
-            enrich_recurrence_history_with_roi(
-                enrich_recurrence_history_with_remediation(
-                    enrich_recurrence_history_with_portfolio(
-                        enrich_recurrence_history_with_forecasts(
-                            enrich_recurrence_history_with_trends(
-                                aggregate_protected_recurrence_history_from_event_log(log),
-                                log,
-                            ),
-                            event_log=log,
-                        ),
-                        event_log=log,
-                    ),
-                    event_log=log,
-                ),
-                event_log=log,
-            ),
-            event_log=log,
-        ),
+        _enriched_history_through(log, "governance"),
         event_log=log,
     )
 
@@ -1876,7 +1994,7 @@ def test_enrich_recurrence_history_with_lifecycle_is_additive(tmp_path: Path) ->
     assert "recurrence_age_distribution" in history
     assert "recurrence_transition_summary" in history
     assert "recurrence_closure_effectiveness" in history
-    assert history["recurrence_lifecycle_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_lifecycle_summary", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -2038,41 +2156,24 @@ def test_summarize_recurrence_program_effectiveness_matches_build_output() -> No
     effectiveness = build_recurrence_program_effectiveness(**_program_effectiveness_inputs_from_log(log))
     summary = summarize_recurrence_program_effectiveness(effectiveness)
 
-    assert summary == effectiveness["program_effectiveness_summary"]
+    assert_recurrence_summarizer_parity(summary, effectiveness, "program_effectiveness_summary")
 
 
 def test_enrich_recurrence_history_with_program_effectiveness_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_program_effectiveness(
-        enrich_recurrence_history_with_lifecycle(
-            enrich_recurrence_history_with_governance(
-                enrich_recurrence_history_with_roi(
-                    enrich_recurrence_history_with_remediation(
-                        enrich_recurrence_history_with_portfolio(
-                            enrich_recurrence_history_with_forecasts(
-                                enrich_recurrence_history_with_trends(
-                                    aggregate_protected_recurrence_history_from_event_log(log),
-                                    log,
-                                ),
-                                event_log=log,
-                            ),
-                            event_log=log,
-                        ),
-                        event_log=log,
-                    ),
-                    event_log=log,
-                ),
-                event_log=log,
-            ),
-            event_log=log,
-        ),
+        _enriched_history_through(log, "lifecycle"),
     )
 
     assert "recurrence_program_effectiveness" in history
     assert "recurrence_program_effectiveness_summary" in history
     assert "governance_effectiveness_summary" in history
     assert "forecast_effectiveness_summary" in history
-    assert history["recurrence_program_effectiveness_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(
+        history,
+        "recurrence_program_effectiveness_summary",
+        protected_replay_only=True,
+    )
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -2196,7 +2297,7 @@ def test_summarize_recurrence_maturity_matches_build_output() -> None:
     maturity = build_recurrence_maturity_assessment(**_maturity_inputs_from_log(log))
     summary = summarize_recurrence_maturity(maturity)
 
-    assert summary == maturity["recurrence_maturity_summary"]
+    assert_recurrence_summarizer_parity(summary, maturity, "recurrence_maturity_summary")
     assert summary["highest_dimension"] in RECURRENCE_MATURITY_DIMENSION_WEIGHTS
     assert summary["lowest_dimension"] in RECURRENCE_MATURITY_DIMENSION_WEIGHTS
 
@@ -2204,36 +2305,13 @@ def test_summarize_recurrence_maturity_matches_build_output() -> None:
 def test_enrich_recurrence_history_with_maturity_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_maturity(
-        enrich_recurrence_history_with_program_effectiveness(
-            enrich_recurrence_history_with_lifecycle(
-                enrich_recurrence_history_with_governance(
-                    enrich_recurrence_history_with_roi(
-                        enrich_recurrence_history_with_remediation(
-                            enrich_recurrence_history_with_portfolio(
-                                enrich_recurrence_history_with_forecasts(
-                                    enrich_recurrence_history_with_trends(
-                                        aggregate_protected_recurrence_history_from_event_log(log),
-                                        log,
-                                    ),
-                                    event_log=log,
-                                ),
-                                event_log=log,
-                            ),
-                            event_log=log,
-                        ),
-                        event_log=log,
-                    ),
-                    event_log=log,
-                ),
-                event_log=log,
-            ),
-        ),
+        _enriched_history_through(log, "program_effectiveness"),
     )
 
     assert "recurrence_maturity" in history
     assert "recurrence_maturity_summary" in history
     assert "recurrence_maturity_gap_analysis" in history
-    assert history["recurrence_maturity_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_maturity_summary", protected_replay_only=True)
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -2357,47 +2435,24 @@ def test_summarize_recurrence_roadmap_matches_build_output() -> None:
     roadmap = build_recurrence_strategic_roadmap(**_roadmap_inputs_from_log(log))
     summary = summarize_recurrence_roadmap(roadmap)
 
-    assert summary["highest_roi_initiative"] == roadmap["recurrence_roadmap_summary"]["highest_roi_initiative"]
-    assert summary["estimated_initiatives_remaining"] == roadmap["recurrence_roadmap_summary"][
-        "estimated_initiatives_remaining"
-    ]
+    assert_recurrence_summarizer_parity(
+        summary,
+        roadmap,
+        "recurrence_roadmap_summary",
+        expected_fields=("highest_roi_initiative", "estimated_initiatives_remaining"),
+    )
 
 
 def test_enrich_recurrence_history_with_roadmap_is_additive(tmp_path: Path) -> None:
     log = _protected_event_log_with_recorded_at("2026-06-04T22:31:59Z")
     history = enrich_recurrence_history_with_roadmap(
-        enrich_recurrence_history_with_maturity(
-            enrich_recurrence_history_with_program_effectiveness(
-                enrich_recurrence_history_with_lifecycle(
-                    enrich_recurrence_history_with_governance(
-                        enrich_recurrence_history_with_roi(
-                            enrich_recurrence_history_with_remediation(
-                                enrich_recurrence_history_with_portfolio(
-                                    enrich_recurrence_history_with_forecasts(
-                                        enrich_recurrence_history_with_trends(
-                                            aggregate_protected_recurrence_history_from_event_log(log),
-                                            log,
-                                        ),
-                                        event_log=log,
-                                    ),
-                                    event_log=log,
-                                ),
-                                event_log=log,
-                            ),
-                            event_log=log,
-                        ),
-                        event_log=log,
-                    ),
-                    event_log=log,
-                ),
-            ),
-        ),
+        _enriched_history_through(log, "maturity"),
     )
 
     assert "recurrence_roadmap" in history
     assert "recurrence_roadmap_summary" in history
     assert "recurrence_target_state" in history
-    assert history["recurrence_roadmap_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_roadmap_summary", protected_replay_only=True)
     assert (
         history["recurrence_roadmap_summary"]["roadmap_priority_guidance"]
         == "Collect more protected replay observations before optimizing models."
@@ -2451,37 +2506,46 @@ def _completion_inputs_from_log(log: dict[str, object]) -> dict[str, object]:
     }
 
 
+def _enriched_history_through(log: dict[str, object], through: str = "completion") -> dict[str, object]:
+    history = aggregate_protected_recurrence_history_from_event_log(log)
+    history = enrich_recurrence_history_with_trends(history, log)
+    if through == "trends":
+        return history
+    history = enrich_recurrence_history_with_forecasts(history, event_log=log)
+    if through == "forecasts":
+        return history
+    history = enrich_recurrence_history_with_portfolio(history, event_log=log)
+    if through == "portfolio":
+        return history
+    history = enrich_recurrence_history_with_remediation(history, event_log=log)
+    if through == "remediation":
+        return history
+    history = enrich_recurrence_history_with_roi(history, event_log=log)
+    if through == "roi":
+        return history
+    history = enrich_recurrence_history_with_governance(history, event_log=log)
+    if through == "governance":
+        return history
+    history = enrich_recurrence_history_with_lifecycle(history, event_log=log)
+    if through == "lifecycle":
+        return history
+    history = enrich_recurrence_history_with_program_effectiveness(history)
+    if through == "program_effectiveness":
+        return history
+    history = enrich_recurrence_history_with_maturity(history)
+    if through == "maturity":
+        return history
+    history = enrich_recurrence_history_with_roadmap(history)
+    if through == "roadmap":
+        return history
+    return enrich_recurrence_history_with_completion(history)
+
+
 def _fully_enriched_history(log: dict[str, object]) -> dict[str, object]:
-    return enrich_recurrence_history_with_completion(
-        enrich_recurrence_history_with_roadmap(
-            enrich_recurrence_history_with_maturity(
-                enrich_recurrence_history_with_program_effectiveness(
-                    enrich_recurrence_history_with_lifecycle(
-                        enrich_recurrence_history_with_governance(
-                            enrich_recurrence_history_with_roi(
-                                enrich_recurrence_history_with_remediation(
-                                    enrich_recurrence_history_with_portfolio(
-                                        enrich_recurrence_history_with_forecasts(
-                                            enrich_recurrence_history_with_trends(
-                                                aggregate_protected_recurrence_history_from_event_log(log),
-                                                log,
-                                            ),
-                                            event_log=log,
-                                        ),
-                                        event_log=log,
-                                    ),
-                                    event_log=log,
-                                ),
-                                event_log=log,
-                            ),
-                            event_log=log,
-                        ),
-                        event_log=log,
-                    ),
-                ),
-            ),
-        ),
-    )
+    return _enriched_history_through(log, "completion")
+
+
+# Graduation/completion policy lock: dimension thresholds and synthetic graduation inputs are explicit contracts.
 
 
 def test_empty_completion_assessment_is_not_graduated() -> None:
@@ -2580,7 +2644,7 @@ def test_summarize_recurrence_completion_matches_build_output() -> None:
     completion = build_recurrence_completion_assessment(**_completion_inputs_from_log(log))
     summary = summarize_recurrence_completion(completion)
 
-    assert summary == completion["recurrence_completion_summary"]
+    assert_recurrence_summarizer_parity(summary, completion, "recurrence_completion_summary")
     assert summary["estimated_completion_distance"] == round(
         100.0 - float(summary["overall_completion_score"]),
         1,
@@ -2594,7 +2658,7 @@ def test_enrich_recurrence_history_with_completion_is_additive(tmp_path: Path) -
     assert "recurrence_completion" in history
     assert "recurrence_completion_summary" in history
     assert "recurrence_completion_gap_analysis" in history
-    assert history["recurrence_completion_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "recurrence_completion_summary", protected_replay_only=True)
     assert history["recurrence_completion_summary"]["program_graduated"] is False
 
     out_path = tmp_path / "history.json"
@@ -2677,7 +2741,7 @@ def test_summarize_recurrence_graduation_audit_matches_build_output() -> None:
     audit = build_recurrence_graduation_audit(**_graduation_audit_inputs_from_log(log))
     summary = summarize_recurrence_graduation_audit(audit)
 
-    assert summary == audit["recurrence_graduation_audit_summary"]
+    assert_recurrence_summarizer_parity(summary, audit, "recurrence_graduation_audit_summary")
 
 
 def test_render_recurrence_graduation_audit_report_markdown() -> None:
@@ -2685,10 +2749,13 @@ def test_render_recurrence_graduation_audit_report_markdown() -> None:
     audit = build_recurrence_graduation_audit(**_graduation_audit_inputs_from_log(log))
     markdown = render_recurrence_graduation_audit_report_markdown(audit)
 
-    assert "# BQ16 Recurrence Graduation Audit" in markdown
-    assert "# Capability Coverage" in markdown
-    assert "# Blind Spots" in markdown
-    assert "# Redundancies" in markdown
+    assert_recurrence_report_markdown_sections(
+        markdown,
+        "# BQ16 Recurrence Graduation Audit",
+        "# Capability Coverage",
+        "# Blind Spots",
+        "# Redundancies",
+    )
 
 
 def test_enrich_recurrence_history_with_graduation_audit_is_additive(tmp_path: Path) -> None:
@@ -2697,7 +2764,11 @@ def test_enrich_recurrence_history_with_graduation_audit_is_additive(tmp_path: P
 
     assert "recurrence_graduation_audit" in history
     assert "recurrence_graduation_audit_summary" in history
-    assert history["recurrence_graduation_audit_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(
+        history,
+        "recurrence_graduation_audit_summary",
+        protected_replay_only=True,
+    )
     assert history["recurrence_graduation_audit_summary"]["program_graduated"] is False
 
     out_path = tmp_path / "history.json"
@@ -2793,6 +2864,9 @@ def _confidence_audit_inputs(
     }
 
 
+# Confidence scoring formula lock: calibration dimensions and graduation thresholds are independent policy rows.
+
+
 def test_calibrated_confidence_status() -> None:
     audit = build_recurrence_confidence_audit(
         **_confidence_audit_inputs(
@@ -2808,16 +2882,17 @@ def test_calibrated_confidence_status() -> None:
         )
     )
 
-    assert audit["forecast_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_CALIBRATED
-    assert audit["governance_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_CALIBRATED
-    assert audit["effectiveness_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_CALIBRATED
+    assert_recurrence_confidence_status(audit, RECURRENCE_CONFIDENCE_STATUS_CALIBRATED)
 
 
 def test_overconfidence_detection() -> None:
     audit = build_recurrence_confidence_audit(**_confidence_audit_inputs())
 
-    assert audit["forecast_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_OVERCONFIDENT
-    assert audit["effectiveness_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_OVERCONFIDENT
+    assert_recurrence_confidence_status(
+        audit,
+        RECURRENCE_CONFIDENCE_STATUS_OVERCONFIDENT,
+        dimensions=("forecast_confidence_audit", "effectiveness_confidence_audit"),
+    )
     assert audit["recurrence_confidence_calibration_summary"]["graduation_confidence_ready"] is False
 
 
@@ -2836,9 +2911,7 @@ def test_underconfidence_detection() -> None:
         )
     )
 
-    assert audit["forecast_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_UNDERCONFIDENT
-    assert audit["governance_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_UNDERCONFIDENT
-    assert audit["effectiveness_confidence_audit"]["confidence_status"] == RECURRENCE_CONFIDENCE_STATUS_UNDERCONFIDENT
+    assert_recurrence_confidence_status(audit, RECURRENCE_CONFIDENCE_STATUS_UNDERCONFIDENT)
 
 
 def test_graduation_threshold_validation_classifications() -> None:
@@ -2908,21 +2981,24 @@ def test_summarize_recurrence_confidence_calibration_matches_build_output() -> N
     audit = build_recurrence_confidence_audit(**_confidence_audit_inputs())
     summary = summarize_recurrence_confidence_calibration(audit)
 
-    assert summary == audit["recurrence_confidence_calibration_summary"]
-    assert summary["protected_replay_only"] is True
+    assert_recurrence_summarizer_parity(summary, audit, "recurrence_confidence_calibration_summary")
+    assert_recurrence_payload_summary_scope(audit, "recurrence_confidence_calibration_summary", protected_replay_only=True)
 
 
 def test_render_recurrence_confidence_calibration_report_markdown() -> None:
     audit = build_recurrence_confidence_audit(**_confidence_audit_inputs())
     markdown = render_recurrence_confidence_calibration_report_markdown(audit)
 
-    assert "# BQ-C3 Confidence Calibration Audit" in markdown
-    assert "# Forecast Confidence" in markdown
-    assert "# Governance Confidence" in markdown
-    assert "# Effectiveness Confidence" in markdown
-    assert "# Graduation Threshold Validation" in markdown
-    assert "# Blind Spot Reassessment" in markdown
-    assert "# Recommended Actions" in markdown
+    assert_recurrence_report_markdown_sections(
+        markdown,
+        "# BQ-C3 Confidence Calibration Audit",
+        "# Forecast Confidence",
+        "# Governance Confidence",
+        "# Effectiveness Confidence",
+        "# Graduation Threshold Validation",
+        "# Blind Spot Reassessment",
+        "# Recommended Actions",
+    )
 
 
 def test_enrich_recurrence_history_with_confidence_audit_is_additive(tmp_path: Path) -> None:
@@ -2931,7 +3007,11 @@ def test_enrich_recurrence_history_with_confidence_audit_is_additive(tmp_path: P
 
     assert "recurrence_confidence_audit" in history
     assert "recurrence_confidence_calibration_summary" in history
-    assert history["recurrence_confidence_calibration_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(
+        history,
+        "recurrence_confidence_calibration_summary",
+        protected_replay_only=True,
+    )
 
     out_path = tmp_path / "history.json"
     out_path.write_text(json.dumps(history, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -2978,13 +3058,16 @@ def test_render_recurrence_final_graduation_decision_report_markdown() -> None:
     )
     markdown = render_recurrence_final_graduation_decision_report_markdown(decision)
 
-    assert "# BQ-C4 Final Graduation Decision" in markdown
-    assert "# Trajectory Activation" in markdown
-    assert "# Confidence Recalculation" in markdown
-    assert "# Calibration Comparison" in markdown
-    assert "# Graduation Readiness" in markdown
-    assert "# Remaining Blockers" in markdown
-    assert "# Final Recommendation" in markdown
+    assert_recurrence_report_markdown_sections(
+        markdown,
+        "# BQ-C4 Final Graduation Decision",
+        "# Trajectory Activation",
+        "# Confidence Recalculation",
+        "# Calibration Comparison",
+        "# Graduation Readiness",
+        "# Remaining Blockers",
+        "# Final Recommendation",
+    )
 
 
 def test_summarize_recurrence_outcomes_finds_no_validated_outcomes_without_closure() -> None:
@@ -3120,12 +3203,15 @@ def test_render_recurrence_outcome_validation_report_markdown() -> None:
     validation = build_recurrence_outcome_validation(**_outcome_validation_inputs())
     markdown = render_recurrence_outcome_validation_report_markdown(validation)
 
-    assert "# BQ-C5 Effectiveness Outcome Validation" in markdown
-    assert "# Outcome Evidence" in markdown
-    assert "# Effectiveness Confidence" in markdown
-    assert "# Calibration Recalculation" in markdown
-    assert "# Graduation Impact" in markdown
-    assert "# Final Recommendation" in markdown
+    assert_recurrence_report_markdown_sections(
+        markdown,
+        "# BQ-C5 Effectiveness Outcome Validation",
+        "# Outcome Evidence",
+        "# Effectiveness Confidence",
+        "# Calibration Recalculation",
+        "# Graduation Impact",
+        "# Final Recommendation",
+    )
 
 
 def test_enrich_recurrence_history_with_outcome_validation_is_additive(tmp_path: Path) -> None:
@@ -3138,4 +3224,4 @@ def test_enrich_recurrence_history_with_outcome_validation_is_additive(tmp_path:
 
     assert "recurrence_outcome_validation" in history
     assert "outcome_validation_summary" in history
-    assert history["outcome_validation_summary"]["protected_replay_only"] is True
+    assert_recurrence_payload_summary_scope(history, "outcome_validation_summary", protected_replay_only=True)

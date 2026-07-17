@@ -17,3 +17,6 @@
 - Deterministic or non-GPT repair paths are outside the routing system.
 - Fast fallback, local repair, and terminal retry fallback keep their existing behavior.
 - Player-facing response schema is unchanged by routing.
+- Backend-facing ownership, compatibility, versioning, replay/provenance, and
+  verification expectations for this surface are centralized in
+  `docs/backend_contract_registry.md`.

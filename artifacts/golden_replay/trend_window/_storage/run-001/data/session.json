@@ -1,7 +1,7 @@
 {
   "persistence_version": 1,
   "kind": "session",
-  "saved_at": "2026-06-22T01:04:42.090580Z",
+  "saved_at": "2026-06-28T19:58:44.150447Z",
   "payload": {
     "active_scene_id": "scene_investigate",
     "visited_scene_ids": [
@@ -58,6 +58,14 @@
         "runtime_entities": [],
         "mutations": {}
       },
+      "tavern": {
+        "scene_id": "tavern",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      },
       "market_quarter": {
         "scene_id": "market_quarter",
         "visible_facts_add": [],
@@ -68,14 +76,6 @@
       },
       "old_milestone": {
         "scene_id": "old_milestone",
-        "visible_facts_add": [],
-        "discovered_clues": [],
-        "state_flags": {},
-        "runtime_entities": [],
-        "mutations": {}
-      },
-      "tavern": {
-        "scene_id": "tavern",
         "visible_facts_add": [],
         "discovered_clues": [],
         "state_flags": {},
@@ -264,6 +264,15 @@
           "lanes"
         ],
         "last_interaction_turn": 1
+      },
+      "guard": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [],
+        "last_interaction_turn": null
       }
     },
     "last_action_debug": {
@@ -456,9 +465,9 @@
           "owner_module": "game.api",
           "path_label": "dialogue_social",
           "ctir_present": true,
-          "ctir_stamp": "1:1b5a31ca400:8d03ffc9",
+          "ctir_stamp": "1:2c7e8383880:113d4ee0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b5a31ca400:8d03ffc9",
+          "narrative_plan_stamp": "1:2c7e8383880:113d4ee0",
           "stamp_matches": true,
           "prompt_consumes_plan": false,
           "raw_state_prompt_bypass_detected": false,
@@ -477,9 +486,9 @@
           "owner_module": "game.api",
           "path_label": "dialogue_social",
           "ctir_present": true,
-          "ctir_stamp": "1:1b5a31ca400:8d03ffc9",
+          "ctir_stamp": "1:2c7e8383880:113d4ee0",
           "narrative_plan_present": true,
-          "narrative_plan_stamp": "1:1b5a31ca400:8d03ffc9",
+          "narrative_plan_stamp": "1:2c7e8383880:113d4ee0",
           "stamp_matches": true,
           "prompt_consumes_plan": true,
           "raw_state_prompt_bypass_detected": false,
@@ -656,7 +665,7 @@
         "changed_area": "scene_state.active_entities"
       },
       {
-        "timestamp": "2026-06-22T01:04:42.035886Z",
+        "timestamp": "2026-06-28T19:58:44.093217Z",
         "source": "chat",
         "action_type": "chat",
         "raw_input": "Who attacked the patrol?",
@@ -765,6 +774,14 @@
             "segmented_turn": {
               "declared_action_text": "Who attacked the patrol?"
             },
+            "npc_stance": {
+              "attitude": 0,
+              "trust": 1,
+              "fear": 0,
+              "suspicion": 0,
+              "topics_revealed": 1,
+              "last_interaction_turn": 1
+            },
             "turn_segmentation": {
               "declared_action_text": "Who attacked the patrol?"
             },
@@ -787,7 +804,7 @@
                 ],
                 "surfaced_facts": [
                   "clue:east_lanes",
-                  "clue_text_digest:2f52709a"
+                  "clue_text_digest:b53b939b"
                 ],
                 "state_changes": {
                   "npc_id": "runner",
@@ -1634,10 +1651,10 @@
             "engine_resolution": 1,
             "prompt_construction": 6,
             "gpt_call": 0,
-            "retry_loop_total": 9,
-            "final_emission_gate": 8,
+            "retry_loop_total": 10,
+            "final_emission_gate": 9,
             "fallback_repair": 5,
-            "total_turn": 40
+            "total_turn": 43
           }
         },
         "gpt_called": true,
@@ -1677,10 +1694,10 @@
           "engine_resolution": 1,
           "prompt_construction": 6,
           "gpt_call": 0,
-          "retry_loop_total": 9,
-          "final_emission_gate": 8,
+          "retry_loop_total": 10,
+          "final_emission_gate": 9,
           "fallback_repair": 5,
-          "total_turn": 40
+          "total_turn": 43
         }
       },
       {
@@ -1693,10 +1710,10 @@
     ],
     "flags": {},
     "character_name": "Galinor",
-    "campaign_run_id": "6f773c4e4d4ae1847104784f",
-    "session_id": "6f773c4e4d4ae1847104784f",
+    "campaign_run_id": "fcb1b2737dcaf0a84dbb8ed5",
+    "session_id": "fcb1b2737dcaf0a84dbb8ed5",
     "campaign_started": false,
-    "last_saved_at": "2026-06-22T01:04:42.090580Z",
+    "last_saved_at": "2026-06-28T19:58:44.150447Z",
     "social_lead_event_ids": [
       "east_lanes"
     ],
@@ -1826,10 +1843,10 @@
         "normalization_notes": []
       }
     },
-    "_runtime_canonical_ctir_stamp_v1": "1:1b5a31ca400:8d03ffc9",
+    "_runtime_canonical_ctir_stamp_v1": "1:2c7e8383880:113d4ee0",
     "_runtime_narration_plan_bundle_v1": {
       "plan_metadata": {
-        "ctir_stamp": "1:1b5a31ca400:8d03ffc9",
+        "ctir_stamp": "1:2c7e8383880:113d4ee0",
         "narrative_plan_bundle_version": 1,
         "narrative_plan_version": 1,
         "narration_plan_bundle_error": null,
@@ -3159,7 +3176,7 @@
         }
       }
     },
-    "_runtime_narration_plan_bundle_stamp_v1": "1:1b5a31ca400:8d03ffc9",
+    "_runtime_narration_plan_bundle_stamp_v1": "1:2c7e8383880:113d4ee0",
     "last_turn_response_policy": {
       "rule_priority_order": [
         "ANSWER THE PLAYER",
@@ -3925,7 +3942,7 @@
     }
   },
   "integrity": {
-    "payload_sha256": "bc8a33b60055b215739494da029508dcce1f473fc8e8a6eea12e3735765df96f",
+    "payload_sha256": "70e3669f56ae877918f3a7f2491d23c37964d9483665180d46c715c361c31ac3",
     "canonicalization": "json/sort_keys,separators",
     "hash": "sha256"
   }

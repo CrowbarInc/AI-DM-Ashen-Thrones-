@@ -8,7 +8,12 @@ from tests.helpers.attribution_completeness_metric import (
     render_attribution_completeness_report_md,
     write_attribution_completeness_report,
 )
-from tests.helpers.attribution_contract import REPLACEMENT_PATHS, REQUIRED_ATTRIBUTION_FIELDS
+from tests.helpers.attribution_contract import (
+    ATTRIBUTION_MATURITY_PRIMARY_KPI,
+    ATTRIBUTION_STRICT_COMPLETENESS_ROLE,
+    REPLACEMENT_PATHS,
+    REQUIRED_ATTRIBUTION_FIELDS,
+)
 from tests.helpers.replacement_attribution_inventory import build_baseline_attribution_corpus
 
 
@@ -59,3 +64,11 @@ def test_path_coverage_reconciles_with_completeness():
     assert resolved_complete == sum(
         1 for record in records if not record.get("missing_fields")
     )
+
+
+def test_co96_br1_report_documents_governance_roles():
+    report = build_attribution_completeness_report()
+    markdown = render_attribution_completeness_report_md(report)
+    assert ATTRIBUTION_MATURITY_PRIMARY_KPI in markdown
+    assert ATTRIBUTION_STRICT_COMPLETENESS_ROLE in markdown
+    assert "CO96 governance" in markdown

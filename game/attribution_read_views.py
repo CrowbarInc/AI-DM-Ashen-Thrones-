@@ -1,11 +1,15 @@
 """Delegate-only read facade for attribution lookups and owner-bucket projections.
 
-Canonical bucket string values remain on :mod:`game.final_emission_ownership_schema`.
-Bucket mapper implementations remain on :mod:`game.final_emission_owner_bucket_views`.
+**Authority (CG-5):** none — re-exports only. Canonical bucket strings live in
+``game.final_emission_ownership_schema``; mappers in
+``game.final_emission_owner_bucket_views``. Attribution contract **validates**
+mirrored bucket sets imported via ``failure_classification_contract``.
 
-This module adds **no** ownership authority, write paths, or mapper logic. Phase 2
-will route attribution/classifier consumers here instead of importing schema and
-views separately.
+Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
+This module adds **no** ownership authority, write paths, or mapper logic.
 """
 from __future__ import annotations
 
@@ -40,6 +44,7 @@ from game.final_emission_ownership_schema import (
     OPENING_FAIL_CLOSED_CONTENT_OWNER,
     OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
     OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP,
     OPENING_FALLBACK_SELECTION_OWNER,
     SANITIZER_EMPTY_FALLBACK_OWNER_TRACE_SHORT_FIELD,
     SANITIZER_FALLBACK_SELECTION_OWNER,
@@ -69,6 +74,7 @@ __all__ = [
     "OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED",
     "OPENING_FALLBACK_CONTENT_OWNER",
     "OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES",
+    "OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP",
     "OPENING_FALLBACK_OWNER_BUCKETS",
     "OPENING_FALLBACK_OWNER_RETRY",
     "OPENING_FALLBACK_OWNER_SEALED_GATE",

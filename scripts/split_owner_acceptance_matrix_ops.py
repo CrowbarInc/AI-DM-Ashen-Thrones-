@@ -45,11 +45,18 @@ def write_split_owner_acceptance_matrix_report(*, repo_root: Path) -> Path:
 
 
 def format_split_owner_matrix_counts(counts: dict[str, int]) -> str:
+    sealed = ""
+    if "sealed_non_legacy_dashboard_rows" in counts and "sealed_non_legacy_rows" in counts:
+        sealed = (
+            f" sealed={counts['sealed_non_legacy_dashboard_rows']}/"
+            f"{counts['sealed_non_legacy_rows']}"
+        )
     return (
         f"rows={counts['total_rows']} "
         f"dashboard={counts['dashboard_covered_rows']} "
         f"fem={counts['fem_projection_rows']} "
         f"legacy={counts['legacy_only_rows']}"
+        f"{sealed}"
     )
 
 

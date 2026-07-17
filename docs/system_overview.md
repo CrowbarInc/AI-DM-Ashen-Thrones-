@@ -72,6 +72,11 @@ For **post-resolution** narration, turn meaning is snapshotted once into **CTIR*
 - Responsibilities must not be duplicated across systems.
 - Systems may be refactored, but ownership boundaries must remain clear.
 - If a new system is introduced, its ownership must be explicitly defined.
+- Ruleset-facing contract ownership is centralized in
+  [Ruleset Contract Registry](ruleset_contract_registry.md). Future rulesets
+  must integrate through explicit action, mechanics, state, validation,
+  compatibility, replay, and provenance contracts rather than scattered
+  conditionals.
 
 ---
 

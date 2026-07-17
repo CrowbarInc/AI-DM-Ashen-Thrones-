@@ -21,8 +21,20 @@ if str(ROOT) not in sys.path:
 
 from game.runtime_lineage_telemetry import normalize_runtime_lineage_events  # noqa: E402
 
+try:  # noqa: E402
+    from game.attribution_read_views import OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
+    from game.realization_authority import BOUNDED, FALLBACK_FAMILIES, LEGACY, SAFE, SUSPICIOUS
+except ImportError:  # pragma: no cover - keeps the CLI diagnosable if optional authorities move.
+    OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES = frozenset()
+    FALLBACK_FAMILIES = {}
+    SAFE = "SAFE"
+    BOUNDED = "BOUNDED"
+    SUSPICIOUS = "SUSPICIOUS"
+    LEGACY = "LEGACY"
+
 SCHEMA_VERSION = 1
 UNKNOWN = "unknown"
+NOT_RECORDED = "not_recorded"
 
 FREQUENCY_FIELDS = (
     "fallback_kind",
@@ -36,6 +48,10 @@ FREQUENCY_FIELDS = (
     "fallback_authorship_source",
     "final_route",
     "gate_path",
+    "compatibility_status",
+    "governed_classification",
+    "trigger_site",
+    "trigger_condition",
 )
 
 CROSS_TAB_FIELDS = (
@@ -43,6 +59,10 @@ CROSS_TAB_FIELDS = (
     "route_kind_x_fallback_owner_bucket",
     "route_kind_x_final_route",
     "final_route_x_fallback_kind",
+    "compatibility_status_by_family",
+    "compatibility_status_by_route",
+    "trigger_site_by_family",
+    "owner_by_compatibility_status",
 )
 
 COVERAGE_FIELDS = (
@@ -166,6 +186,108 @@ def _sorted_cross_tab(values: Mapping[str, Mapping[str, int]]) -> dict[str, dict
     return {row: _sorted_counts(values[row]) for row in sorted(values)}
 
 
+def _governed_classification(family: str | None) -> str:
+    if family is None:
+        return NOT_RECORDED
+    governed = FALLBACK_FAMILIES.get(family)
+    if governed is None:
+        return "UNKNOWN"
+    classification = _first_token(getattr(governed, "classification", None))
+    return classification or "UNKNOWN"
+
+
+def _is_unknown_token(value: str | None) -> bool:
+    if value is None:
+        return False
+    normalized = value.replace("-", "_").lower()
+    return normalized in {"unknown", "unknown_ambiguous", "unknown_none", "legacy_unclassified"}
+
+
+def _trigger_from_event(event: Mapping[str, Any]) -> tuple[str, str]:
+    fallback_kind = _first_token(event.get("fallback_kind"))
+    gate_path = _first_token(event.get("gate_path"))
+    stage = _first_token(event.get("stage"))
+    repair_kind = _first_token(event.get("repair_kind"))
+    final_route = _first_token(event.get("final_route"))
+    route_kind = _first_token(event.get("route_kind"))
+
+    signal = " ".join(
+        token
+        for token in (fallback_kind, gate_path, stage, repair_kind, final_route, route_kind)
+        if token is not None
+    )
+    if fallback_kind == "scene_opening" or gate_path == "opening_fallback":
+        return "opening_fallback", "missing_or_unusable_opening_payload"
+    if fallback_kind == "opening_failed_closed" or gate_path == "opening_failed_closed":
+        return "opening_failed_closed", "empty_curated_facts"
+    if fallback_kind in {"strict_social_fallback", "minimal_social_emergency_fallback"}:
+        return "strict_social_fallback", "strict_social_terminal_invalid"
+    if fallback_kind in {"sanitizer_strict_social", "sanitizer_empty_output"} or stage == "sanitizer":
+        return "sanitizer_fallback", "sanitizer_repair_selected"
+    if fallback_kind == "upstream_fast_fallback":
+        return "upstream_fast_fallback", "upstream_provider_or_budget_failure"
+    if fallback_kind == "visibility_hard_replacement" or gate_path == "visibility_hard_replaced":
+        return "visibility_hard_replacement", "visibility_gate_failed"
+    if fallback_kind == "first_mention_hard_replacement" or gate_path == "first_mention_hard_replaced":
+        return "first_mention_hard_replacement", "first_mention_gate_failed"
+    if fallback_kind == "referential_clarity_hard_replacement" or gate_path == "referential_clarity_hard_replaced":
+        return "referential_clarity_hard_replacement", "referential_clarity_gate_failed"
+    if fallback_kind and (fallback_kind.startswith("sealed_") or fallback_kind == "sealed_or_global_replacement"):
+        return "sealed_terminal_replacement", "sealed_terminal_replacement_required"
+    if fallback_kind == "retry_terminal_fallback" or stage == "retry":
+        return "retry_terminal_fallback", "retry_exhausted_or_forced"
+    if final_route == "replaced":
+        return "unknown", "inferred_from_final_route_replaced"
+    if signal:
+        return "unknown", NOT_RECORDED
+    return "unknown", NOT_RECORDED
+
+
+def classify_fallback_incidence_event(event: Mapping[str, Any]) -> dict[str, str]:
+    """Classify one normalized fallback-selected event for read-side reporting only."""
+    realization_family = _first_token(event.get("realization_family"), event.get("realization_fallback_family"))
+    diegetic_family = _first_token(event.get("diegetic_family"), event.get("fallback_family_used"))
+    observed_family = _first_token(event.get("observed_family"), event.get("fallback_family"))
+    family = _first_token(realization_family, observed_family, diegetic_family, event.get("fallback_kind"))
+    source = _first_token(event.get("source"), event.get("fallback_authorship_source"))
+    owner = _first_token(
+        event.get("fallback_selection_owner"),
+        event.get("owner"),
+        event.get("fallback_content_owner"),
+        event.get("fallback_owner_bucket"),
+    )
+    route = _first_token(event.get("final_route"), event.get("route_kind"))
+    governed_classification = _governed_classification(realization_family or family)
+
+    authorship_source = _first_token(event.get("fallback_authorship_source"), source)
+    owner_bucket = _first_token(event.get("fallback_owner_bucket"))
+    compatibility_local_sources = set(OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES)
+    if authorship_source in compatibility_local_sources or source in compatibility_local_sources:
+        compatibility_status = "legacy_read_only"
+    elif family == "legacy_diegetic_fallback" or governed_classification == LEGACY:
+        compatibility_status = "legacy_runtime"
+    elif family == "legacy_unclassified" or governed_classification == "UNKNOWN" or any(
+        _is_unknown_token(value) for value in (owner, source, owner_bucket)
+    ):
+        compatibility_status = "unknown_unclassified"
+    elif governed_classification in {SAFE, BOUNDED, SUSPICIOUS}:
+        compatibility_status = "active_governed"
+    else:
+        compatibility_status = NOT_RECORDED
+
+    trigger_site, trigger_condition = _trigger_from_event(event)
+    return {
+        "family": family or NOT_RECORDED,
+        "source": source or NOT_RECORDED,
+        "owner": owner or NOT_RECORDED,
+        "route": route or NOT_RECORDED,
+        "compatibility_status": compatibility_status,
+        "governed_classification": governed_classification,
+        "trigger_site": trigger_site,
+        "trigger_condition": trigger_condition,
+    }
+
+
 def build_fallback_incidence_report(turns: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     """Aggregate finalized fallback evidence without mutating input turns."""
     frequency: dict[str, dict[str, int]] = {field: {} for field in FREQUENCY_FIELDS}
@@ -239,6 +361,24 @@ def build_fallback_incidence_report(turns: Sequence[Mapping[str, Any]]) -> dict[
                 "final_route": final_route,
                 "gate_path": gate_path,
             }
+            classification = classify_fallback_incidence_event(
+                {
+                    **event,
+                    "diegetic_family": diegetic_family,
+                    "realization_family": realization_family,
+                    "observed_family": observed_family,
+                    "final_route": final_route,
+                    "route_kind": route_kind,
+                }
+            )
+            dimensions.update(
+                {
+                    "compatibility_status": classification["compatibility_status"],
+                    "governed_classification": classification["governed_classification"],
+                    "trigger_site": classification["trigger_site"],
+                    "trigger_condition": classification["trigger_condition"],
+                }
+            )
             for field, value in dimensions.items():
                 _increment(frequency[field], value)
 
@@ -246,6 +386,26 @@ def build_fallback_incidence_report(turns: Sequence[Mapping[str, Any]]) -> dict[
             _increment_cross_tab(cross_tabs["route_kind_x_fallback_owner_bucket"], route_kind, owner_bucket)
             _increment_cross_tab(cross_tabs["route_kind_x_final_route"], route_kind, final_route)
             _increment_cross_tab(cross_tabs["final_route_x_fallback_kind"], final_route, fallback_kind)
+            _increment_cross_tab(
+                cross_tabs["compatibility_status_by_family"],
+                classification["compatibility_status"],
+                classification["family"],
+            )
+            _increment_cross_tab(
+                cross_tabs["compatibility_status_by_route"],
+                classification["compatibility_status"],
+                classification["route"],
+            )
+            _increment_cross_tab(
+                cross_tabs["trigger_site_by_family"],
+                classification["trigger_site"],
+                classification["family"],
+            )
+            _increment_cross_tab(
+                cross_tabs["owner_by_compatibility_status"],
+                classification["owner"],
+                classification["compatibility_status"],
+            )
 
             coverage["fallback_events_with_owner_bucket"] += int(owner_bucket is not None)
             coverage["fallback_events_with_selection_owner"] += int(selection_owner is not None)
@@ -336,6 +496,14 @@ def render_fallback_incidence_markdown(report: Mapping[str, Any]) -> str:
     lines.extend(_frequency_section("Selection Owners", _mapping(frequency.get("fallback_selection_owner"))))
     lines.extend([""])
     lines.extend(_frequency_section("Content Owners", _mapping(frequency.get("fallback_content_owner"))))
+    lines.extend([""])
+    lines.extend(_frequency_section("Compatibility Status", _mapping(frequency.get("compatibility_status"))))
+    lines.extend([""])
+    lines.extend(_frequency_section("Governed Classifications", _mapping(frequency.get("governed_classification"))))
+    lines.extend([""])
+    lines.extend(_frequency_section("Trigger Sites", _mapping(frequency.get("trigger_site"))))
+    lines.extend([""])
+    lines.extend(_frequency_section("Trigger Conditions", _mapping(frequency.get("trigger_condition"))))
     lines.extend(
         [
             "",

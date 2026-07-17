@@ -16,6 +16,7 @@ from game.social import (
     SOCIAL_KINDS,
     apply_interaction_implied_heuristics,
     update_interaction_context_for_non_social,
+    build_scene_npc_player_snapshot,
 )
 from game.skill_checks import resolve_skill_check
 from game.models import SocialEngineResult, social_result_to_dict
@@ -155,6 +156,71 @@ def test_question_reveals_topic_clue():
     assert resolution["state_changes"].get("topic_revealed") is True
     assert resolution["social"]["social_intent_class"] == "social_exchange"
     assert resolution["social"].get("topic_revealed") is not None
+    stance = (resolution.get("metadata") or {}).get("npc_stance") or {}
+    assert stance.get("trust", 0) >= 1
+    assert stance.get("topics_revealed", 0) >= 1
+
+
+def test_build_scene_npc_player_snapshot_merges_world_and_runtime():
+    world = default_world()
+    world["npcs"] = [
+        {"id": "runner", "name": "Tavern Runner", "location": "gate", "disposition": "friendly", "role": "informant"},
+    ]
+    session = {}
+    get_npc_runtime(session, "runner")["trust"] = 2
+    scene = {"scene": {"id": "gate"}}
+    rows = build_scene_npc_player_snapshot(session, world, scene)
+    assert len(rows) == 1
+    assert rows[0]["id"] == "runner"
+    assert rows[0]["name"] == "Tavern Runner"
+    assert rows[0]["disposition"] == "friendly"
+    assert rows[0]["trust"] == 2
+
+
+def test_social_clue_reveal_refreshes_registry_lead_touch():
+    from game.api import _apply_authoritative_resolution_state_mutation
+    from game.campaign_state import create_fresh_combat_state
+    from game.leads import SESSION_LEAD_REGISTRY_KEY, LeadLifecycle, LeadStatus, create_lead, upsert_lead
+    from game.session import create_fresh_session_document
+
+    world = default_world()
+    world["npcs"] = [
+        {
+            "id": "runner",
+            "name": "Runner",
+            "location": "gate",
+            "topics": [{"id": "patrol", "text": "Missing patrol.", "clue_id": "patrol_clue"}],
+        },
+    ]
+    scene = {"scene": {"id": "gate", "location": "Gate", "mode": "exploration"}}
+    action = {"id": "q1", "label": "Ask", "type": "question", "prompt": "Ask", "target_id": "runner"}
+    resolution = resolve_social_action(scene, {}, world, action, character=default_character(), turn_counter=1)
+    assert resolution.get("clue_id") == "patrol_clue"
+
+    session = create_fresh_session_document()
+    session["active_scene_id"] = "gate"
+    session["turn_counter"] = 5
+    upsert_lead(
+        session,
+        create_lead(
+            title="Patrol",
+            summary="",
+            id="patrol_clue",
+            lifecycle=LeadLifecycle.DISCOVERED,
+            status=LeadStatus.ACTIVE,
+            last_touched_turn=1,
+        ),
+    )
+    combat = create_fresh_combat_state()
+    _apply_authoritative_resolution_state_mutation(
+        session=session,
+        world=world,
+        combat=combat,
+        scene=scene,
+        resolution=dict(resolution),
+        normalized_action=action,
+    )
+    assert session[SESSION_LEAD_REGISTRY_KEY]["patrol_clue"]["last_touched_turn"] == 5
 
 
 def test_repeat_question_does_not_duplicate_reveal():

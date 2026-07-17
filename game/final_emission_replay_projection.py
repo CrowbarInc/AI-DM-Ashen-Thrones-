@@ -1,5 +1,18 @@
 """Read-side FEM replay/runtime-lineage projection helpers.
 
+**Authority (CG-5):** runtime-owned **emission** of diagnostic lineage vocabulary
+from finalized FEM (``repair_kind``, ``mutation_kind``, ``fallback_kind``,
+split-owner fields on events). Projection maps **derive** mutation/source labels;
+attribution contract **validates** emitted core tokens against its union.
+
+**Does not own:** protected golden-replay acceptance schema
+(``tests.helpers.golden_replay_projection``), attribution unions/aliases, or
+failure-classification categories.
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
 This module must not select fallbacks, mutate output, or stamp write-time FEM.
 
 **Cycle AO5 boundary — runtime lineage only (do not merge with acceptance projection):**
@@ -241,6 +254,8 @@ def project_mutation_classification_from_fallback_kind(fallback_kind: Any) -> st
 
 def _fem_preserved_fallback_owner_bucket(fem: Mapping[str, Any], fallback_kind: str) -> str | None:
     """Preserve owner buckets already stamped on finalized FEM — do not synthesize new values."""
+    if fallback_kind == "upstream_fast_fallback":
+        return "retry"
     if fallback_kind in {"scene_opening", "opening_failed_closed"}:
         bucket = _opening_fallback_owner_bucket_from_meta(fem)
         return bucket if bucket else None

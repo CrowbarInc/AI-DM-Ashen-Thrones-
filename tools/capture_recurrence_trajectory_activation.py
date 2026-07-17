@@ -17,13 +17,15 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tests.helpers.failure_dashboard_report import (  # noqa: E402
+from tests.helpers.failure_dashboard_paths import (  # noqa: E402
     BUG_RECURRENCE_EVENT_LOG_JSON_PATH,
     BUG_RECURRENCE_HISTORY_JSON_PATH,
     BUG_RECURRENCE_HISTORY_MARKDOWN_PATH,
-    RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH,
     RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH,
-    write_bug_recurrence_history_artifacts,
+)
+from tests.helpers.failure_dashboard_report import write_bug_recurrence_history_artifacts  # noqa: E402
+from tests.helpers.replay_bug_recurrence_serialization import (  # noqa: E402
+    RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH,
 )
 
 

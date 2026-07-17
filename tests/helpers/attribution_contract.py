@@ -1,7 +1,19 @@
 """BS3 canonical semantic replacement attribution contract.
 
-Single source of truth for attribution field taxonomies, normalization rules,
-and read-side validation. Does not modify runtime replacement behavior.
+**Authority (CG-5):** attribution-contract-owned replacement paths, repair-kind
+union/aliases, mutation-classification core union/aliases, normalization helpers,
+and attribution record validation.
+
+**Imports for validation (does not own):** repair-kind runtime/producer subsets,
+emission sublayers, source-family tags, and owner-bucket mirrors from
+``tests.failure_classification_contract`` (those subsets remain replay-contract-owned).
+
+**Does not own:** failure categories, drift buckets, investigation routing,
+dashboard evidence, recurrence key formula, or runtime FEM/lineage emission.
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md`` (attribution boundary),
+``docs/audits/CG_failure_classification_authority_registry.md`` (failure vs runtime).
 """
 from __future__ import annotations
 
@@ -146,27 +158,55 @@ RECURRENCE_KEY_MIN_LENGTH: int = 5
 # --- Maturity snapshot baselines (BS1 / BS5 / BS4 frozen; BS3 computed live) ---
 
 BS1_MATURITY_SNAPSHOT: dict[str, Any] = {
-    "coverage_score_pct": 5.77,
+    "coverage_score_pct": 5.36,
     "contract_compliance_score_pct": 40.3,
     "taxonomy_consistency_score_pct": 72.0,
     "resolved_complete_records": 3,
-    "total_records": 52,
+    "total_records": 56,
 }
 
 BS5_MATURITY_SNAPSHOT: dict[str, Any] = {
-    "coverage_score_pct": 10.2,
-    "contract_compliance_score_pct": 55.6,
-    "taxonomy_consistency_score_pct": 85.0,
-    "resolved_complete_records": 5,
-    "total_records": 52,
+    "coverage_score_pct": 85.71,
+    "contract_compliance_score_pct": 100.0,
+    "taxonomy_consistency_score_pct": 100.0,
+    "resolved_complete_records": 48,
+    "total_records": 56,
+}
+
+# --- CO96 attribution program closeout governance (policy only; no runtime effect) ---
+
+ATTRIBUTION_MATURITY_PROGRAM_STATUS: str = "closed"
+
+ATTRIBUTION_MATURITY_PRIMARY_KPI: str = "resolved_completeness_pct"
+
+ATTRIBUTION_STRICT_COMPLETENESS_ROLE: str = "architectural_diagnostic"
+
+ATTRIBUTION_GOVERNANCE_RULES: tuple[str, ...] = (
+    "Resolved completeness is the primary production KPI.",
+    "Strict completeness is an architectural diagnostic only.",
+    "Replay-derived fields are not production-stamp candidates.",
+    "Production stamps must never duplicate replay semantics solely to improve metrics.",
+    "Read-side projection remains bounded by existing production evidence.",
+)
+
+ATTRIBUTION_PROGRAM_CLOSEOUT: dict[str, Any] = {
+    "program_status": ATTRIBUTION_MATURITY_PROGRAM_STATUS,
+    "primary_kpi": ATTRIBUTION_MATURITY_PRIMARY_KPI,
+    "strict_completeness_role": ATTRIBUTION_STRICT_COMPLETENESS_ROLE,
+    "resolved_completeness_pct": BS5_MATURITY_SNAPSHOT["coverage_score_pct"],
+    "resolved_complete_records": BS5_MATURITY_SNAPSHOT["resolved_complete_records"],
+    "total_records": BS5_MATURITY_SNAPSHOT["total_records"],
+    "strict_completeness_pct": 0.0,
+    "intentional_gap_mutation_classification_gate_outcome": 8,
+    "closeout_audit": "docs/audits/CO96_attribution_program_closeout.md",
 }
 
 BS4_MATURITY_SNAPSHOT: dict[str, Any] = {
-    "coverage_score_pct": 32.65,
-    "contract_compliance_score_pct": 68.0,
-    "taxonomy_consistency_score_pct": 90.0,
-    "resolved_complete_records": 16,
-    "total_records": 49,
+    "coverage_score_pct": 50.0,
+    "contract_compliance_score_pct": 100.0,
+    "taxonomy_consistency_score_pct": 100.0,
+    "resolved_complete_records": 28,
+    "total_records": 56,
 }
 
 
@@ -519,7 +559,8 @@ def calculate_attribution_maturity_scores(
 
     contract_compliance_pct = round(100.0 * compliant / populated, 2) if populated else 0.0
 
-    # Taxonomy consistency: shared contract module owns unions; failure contract re-exports buckets.
+    # Taxonomy consistency: attribution contract owns unions; failure contract
+    # owns imported subsets (repair kinds, emission sublayers, bucket mirrors).
     consistency_checks = [
         ALLOWED_OWNER_BUCKETS
         == (

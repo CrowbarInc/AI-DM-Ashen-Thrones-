@@ -232,6 +232,16 @@ def test_block_ai_non_strict_terminal_selector_does_not_mutate_gm_output_when_op
     assert gm == snap
 
 
+def test_co93_non_strict_sealed_stamp_sets_passive_scene_pressure_producer_repair_kind() -> None:
+    meta: dict[str, Any] = {
+        "final_route": "replaced",
+        "final_emitted_source": "passive_scene_pressure_fallback",
+    }
+    sealed_fallback.stamp_non_strict_sealed_replacement_realization_family(meta)
+    assert meta["producer_repair_kind"] == "passive_scene_pressure_fallback"
+    assert meta["sealed_fallback_owner_bucket"] == "sealed-gate"
+
+
 def test_bj60_generic_replace_exit_calls_sealed_fallback_selector_directly() -> None:
     """BJ-60: generic replace exit calls sealed_fallback owner; gate retains no selector wrapper."""
     import inspect

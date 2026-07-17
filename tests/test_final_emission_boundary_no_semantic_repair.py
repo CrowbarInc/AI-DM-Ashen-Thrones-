@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from game.final_emission_gate import apply_final_emission_gate
+from game.final_emission_finalize import finalize_emission_output
 import game.final_emission_terminal_pipeline as terminal_pipeline
 import game.final_emission_visibility_fallback as visibility_fallback
 from game.final_emission_text_formatting import _normalize_text
@@ -35,6 +36,56 @@ def _minimal_n4_narrative_plan(*, acceptance_quality: dict[str, Any] | None = No
     if acceptance_quality is not None:
         plan["acceptance_quality_contract"] = acceptance_quality
     return plan
+
+
+def test_finalize_route_illegal_strip_records_final_emission_write_site() -> None:
+    out = {
+        "player_facing_text": "Rain needles across the checkpoint. For a breath, the scene stays still.",
+        "tags": [],
+        "_final_emission_meta": {"final_route": "accept_candidate"},
+    }
+    finalized = finalize_emission_output(
+        out,
+        pre_gate_text="Rain needles across the checkpoint. For a breath, the scene stays still.",
+    )
+    assert finalized["player_facing_text"] == "Rain needles across the checkpoint."
+    fem = final_emission_meta_from_output(finalized)
+    records = fem.get("semantic_mutation_write_sites")
+    assert isinstance(records, list)
+    assert any(
+        row.get("write_site_family") == "final_emission"
+        and row.get("mutation_reason") == "finalize_route_illegal_strip"
+        for row in records
+    )
+
+
+def test_terminal_referent_clarity_repair_records_repair_write_site(monkeypatch) -> None:
+    def fake_referent_layer(text: str, **kwargs: Any) -> tuple[str, dict[str, Any], None]:
+        return ("The guard points to the east gate.", {"referent_clarity_repaired": True}, None)
+
+    monkeypatch.setattr(
+        terminal_pipeline.emission_repairs,
+        "_apply_referent_clarity_emission_layer",
+        fake_referent_layer,
+    )
+    monkeypatch.setattr(
+        terminal_pipeline.emission_repairs,
+        "_merge_referent_clarity_meta",
+        lambda fem, dbg: fem.update(dbg),
+    )
+    out = {
+        "player_facing_text": "They point that way.",
+        "tags": [],
+        "_final_emission_meta": {},
+    }
+
+    terminal_pipeline._apply_referent_clarity_pre_finalize(out, pre_gate_text="They point that way.")
+
+    records = out["_final_emission_meta"].get("semantic_mutation_write_sites")
+    assert isinstance(records, list)
+    assert records[-1]["write_site_family"] == "repair"
+    assert records[-1]["repair_family"] == "referent_clarity"
+    assert records[-1]["write_site_file"] == "game/final_emission_terminal_pipeline.py"
 
 
 def test_list_like_dialogue_stays_list_like(monkeypatch):

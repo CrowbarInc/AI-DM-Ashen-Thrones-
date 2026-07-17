@@ -1,5 +1,16 @@
 """Narrow ownership and attribution schema vocabulary for final emission.
 
+**Authority (CG-5):** runtime-owned split-owner tokens, fallback selection/content
+owners, and opening/sealed/visibility owner-bucket string values.
+
+**Does not own:** bucket mappers (``final_emission_owner_bucket_views``), FEM
+packaging (``final_emission_meta``), attribution validation unions, or replay
+contract mirrors (``failure_classification_contract`` re-exports for validation).
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
 Constants and stable string tokens only. Stamp helpers, bucket mappers, and lineage
 projection logic remain in :mod:`game.final_emission_meta` and
 :mod:`game.final_emission_replay_projection`.
@@ -179,10 +190,18 @@ OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES: frozenset[str] = frozenset(
     }
 )
 
-# Cycle AP1: retired gate-local opening composer authorship tokens (read-side only).
+# Cycle AP1 / CK Block 1: retired gate-local opening composer authorship (read-side only).
+# Production must never emit these tokens on live opening fallback paths; upstream packaging
+# stamps ``OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED`` instead. Bucket mappers map any
+# injected legacy/test/replay evidence to ``unknown-ambiguous`` by design.
+#
+# CK Block 5: ``compatibility_local`` was removed from the active legacy registry because it
+# overlaps non-opening compatibility bucket vocabulary and is never emitted as opening
+# authorship. The canonical legacy inject/read token is ``compatibility_local_opening_deterministic``.
+OPENING_FALLBACK_RETIRED_SHORT_COMPATIBILITY_LOCAL_AUTHORSHIP: str = "compatibility_local"
+
 OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES: frozenset[str] = frozenset(
     {
-        "compatibility_local",
         "compatibility_local_opening_deterministic",
     }
 )
@@ -271,7 +290,12 @@ def ownership_schema_registry_surface() -> dict[str, object]:
         "realization_fallback_family_field": REALIZATION_FALLBACK_FAMILY_FIELD,
         "governed_realization_fallback_families": sorted(GOVERNED_REALIZATION_FALLBACK_FAMILIES),
         "opening_fallback_authorship_upstream_prepared": OPENING_FALLBACK_AUTHORSHIP_UPSTREAM_PREPARED,
+        "opening_fallback_authorship_upstream_prepared_sources": sorted(
+            OPENING_FALLBACK_AUTH_UPSTREAM_PREPARED_SOURCES
+        ),
+        # Read-only partition: legacy/test/replay evidence classification — not runtime writer tokens.
         "opening_fallback_legacy_compatibility_local_authorship_sources": sorted(
             OPENING_FALLBACK_LEGACY_COMPATIBILITY_LOCAL_AUTHORSHIP_SOURCES
         ),
+        "opening_fallback_legacy_compatibility_local_read_only": True,
     }

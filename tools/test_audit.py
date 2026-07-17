@@ -454,9 +454,9 @@ def _parse_module_pytestmarks_and_per_test_marks(
 
 
 def _build_ownership_registry_index() -> dict[str, object] | None:
-    """Snapshot of ``tests/test_ownership_registry.py`` for full diagnostic inventory only."""
+    """Snapshot of ``tests/ownership_registry_contract.py`` for full diagnostic inventory only."""
     try:
-        from tests.test_ownership_registry import build_ownership_registry_index
+        from tests.ownership_registry_contract import build_ownership_registry_index
 
         return build_ownership_registry_index()
     except Exception:
@@ -744,9 +744,9 @@ def collect_cross_file_duplicate_governance_errors(
 
 def _validate_derived_cross_file_duplicate_governance(full_payload: dict) -> list[str]:
     try:
-        from tests.test_ownership_registry import _CROSS_FILE_DUPLICATE_ALLOWLIST
+        from tests.ownership_registry_contract import _CROSS_FILE_DUPLICATE_ALLOWLIST
     except ImportError:
-        return ["cannot import cross-file duplicate allowlist from tests.test_ownership_registry"]
+        return ["cannot import cross-file duplicate allowlist from tests.ownership_registry_contract"]
     return collect_cross_file_duplicate_governance_errors(
         full_payload.get("cross_file_duplicate_test_names", ()),
         cross_file_allowlist=_CROSS_FILE_DUPLICATE_ALLOWLIST,

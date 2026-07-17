@@ -285,7 +285,7 @@ def write_hub_verification() -> None:
             "## Governance",
             "",
             "Direct read-cluster authority imports are locked by `test_bv10_read_cluster_direct_import_guard_*` "
-            "in `tests/test_ownership_registry.py`. New consumers must route through facades or approved owner suites.",
+            "in `tests/test_compat_import_governance.py`. New consumers must route through facades or approved owner suites.",
         ]
     )
     (AUDITS / "BV10_read_cluster_verification.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

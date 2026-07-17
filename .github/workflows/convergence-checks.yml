@@ -84,8 +84,8 @@ jobs:
       - name: Pytest — validation coverage audit guards
         run: python -m pytest tests/test_validation_coverage_audit.py -q
 
-      - name: Pytest — test ownership registry
-        run: python -m pytest tests/test_ownership_registry.py -q
+      - name: Pytest — test ownership registry and governance suites
+        run: python -m pytest tests/test_ownership_registry.py tests/test_inventory_governance.py tests/test_gate_boundary_governance.py tests/test_replay_boundary_governance.py tests/test_ownership_write_path_governance.py -q
 
       - name: Split-owner acceptance matrix contract (BU20/BU21)
         # CI canonical entrypoint: read-only check script (not refresh wrapper — no report writes, no nested pytest).

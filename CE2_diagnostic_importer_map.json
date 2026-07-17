@@ -1,0 +1,36 @@
+{
+  "audit_id": "CE2",
+  "module": "tests.helpers.failure_dashboard_report",
+  "incoming_dependencies": [
+    {"file": "tests/conftest.py", "symbols": ["clear_requested_artifact_recordings", "write_requested_dashboard_artifacts"], "usage": "pytest session teardown and post-run artifact writer facade"},
+    {"file": "tests/helpers/failure_classification_sync.py", "symbols": ["FAILURE_DASHBOARD_EVIDENCE_LABELS", "FAILURE_DASHBOARD_EVIDENCE_MANIFEST", "FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS"], "usage": "contract parity assertion against dashboard re-exports"},
+    {"file": "tests/helpers/failure_dashboard_fixtures.py", "symbols": ["build_classified_dashboard_row", "record_protected_replay_assertion_failure"], "usage": "controlled failure fixture seeding"},
+    {"file": "tests/helpers/golden_replay.py", "symbols": ["failure_dashboard_requested", "record_failure_dashboard_rows", "record_protected_replay_assertion_failure", "record_runtime_lineage_events"], "usage": "replay runner session recording hooks"},
+    {"file": "tests/helpers/replay_bug_recurrence.py", "symbols": ["RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH"], "usage": "lazy default path for trajectory history load/save (creates import cycle)"},
+    {"file": "tests/test_failure_classification_contract.py", "symbols": ["build_classified_dashboard_row", "render_failure_dashboard_markdown", "FAILURE_DASHBOARD_EVIDENCE_*"], "usage": "contract and renderer tests"},
+    {"file": "tests/test_failure_classifier.py", "symbols": ["build_classified_dashboard_row", "build_failure_dashboard_rows", "build_runtime_lineage_summary", "expected_failure_dashboard_columns", "render_failure_dashboard_markdown", "write_failure_dashboard_artifact_if_requested"], "usage": "classifier locality tests plus accidental re-export of lineage summary"},
+    {"file": "tests/test_failure_dashboard_controlled_failures.py", "symbols": ["FAILURE_DASHBOARD_EVIDENCE_*", "KNOWN_FAILURE_CATEGORIES", "REPLAY_PROTECTED_FIELD_PATHS", "_evidence_cell", "build_classified_dashboard_row", "failure_dashboard_requested"], "usage": "opt-in dashboard probe integration"},
+    {"file": "tests/test_failure_dashboard_report.py", "symbols": ["16+ render/write/record APIs"], "usage": "primary unit/integration tests for report writers"},
+    {"file": "tests/test_golden_replay_protected_bridge.py", "symbols": ["clear_recorded_protected_replay_failures", "protected_replay_recurrence_event_metadata", "recorded_protected_replay_failure_rows", "write_owner_drift_risk_artifacts", "write_protected_replay_failure_report_if_present"], "usage": "protected assertion-to-report bridge"},
+    {"file": "tests/test_recurrence_trajectory_history.py", "symbols": ["render_bug_recurrence_history_markdown"], "usage": "recurrence markdown contract tests"},
+    {"file": "tests/test_replay_drift_hotspots.py", "symbols": ["write_owner_drift_hotspot_artifacts"], "usage": "hotspot artifact writer tests"},
+    {"file": "tests/test_replay_drift_longitudinal.py", "symbols": ["write_owner_drift_longitudinal_artifacts", "write_rerun_drift_scorecard_artifacts"], "usage": "longitudinal and scorecard cascade tests"},
+    {"file": "tests/test_replay_drift_risk.py", "symbols": ["write_owner_drift_risk_artifacts"], "usage": "risk artifact writer tests"},
+    {"file": "tests/test_replay_drift_trends.py", "symbols": ["write_owner_drift_trend_artifacts"], "usage": "trend artifact writer tests"},
+    {"file": "tests/test_stability_reporting_contract.py", "symbols": ["render_long_session_stability_scorecard_markdown"], "usage": "stability markdown contract tests"},
+    {"file": "tools/backfill_bug_recurrence_history.py", "symbols": ["BUG_RECURRENCE_* paths", "PROTECTED_REPLAY_FAILURE_REPORT_PATH", "protected_replay_recurrence_event_metadata", "write_bug_recurrence_history_artifacts"], "usage": "recurrence history backfill CLI"},
+    {"file": "tools/capture_recurrence_trajectory_activation.py", "symbols": ["BUG_RECURRENCE_* paths", "RECURRENCE_FINAL_GRADUATION_DECISION_DOC_PATH", "RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH", "write_bug_recurrence_history_artifacts"], "usage": "trajectory activation capture CLI"},
+    {"file": "tools/capture_recurrence_trajectory_baseline.py", "symbols": ["BUG_RECURRENCE_* paths", "RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH", "write_bug_recurrence_history_artifacts"], "usage": "trajectory baseline capture CLI"},
+    {"file": "tools/expand_protected_replay_observations.py", "symbols": ["BUG_RECURRENCE_* paths"], "usage": "observation corpus expansion tooling"},
+    {"file": "tools/migrate_bug_recurrence_event_log.py", "symbols": ["BUG_RECURRENCE_* paths", "write_bug_recurrence_history_artifacts"], "usage": "event log migration CLI"}
+  ],
+  "outgoing_dependencies": [
+    {"module": "game.runtime_lineage_telemetry", "symbols": ["normalize_runtime_lineage_events"], "coupling": "runtime"},
+    {"module": "tests.helpers.failure_classifier", "symbols": ["FailureClassification", "classify_replay_failure"], "coupling": "classifier"},
+    {"module": "tests.helpers.failure_classification_sync", "symbols": ["failure_dashboard_evidence_*", "failure_dashboard_row_shape_errors", "known_failure_categories"], "coupling": "projection/sync contract"},
+    {"module": "tests.helpers.golden_replay_projection", "symbols": ["protected_observation_field_paths"], "coupling": "projection"},
+    {"module": "tests.helpers.runtime_lineage_reporting", "symbols": ["build_runtime_lineage_summary", "runtime_lineage_markdown_lines"], "coupling": "lifecycle/event logging"},
+    {"module": "tests.helpers.replay_bug_recurrence", "symbols": ["30+ build/render/aggregate recurrence helpers"], "coupling": "recurrence"},
+    {"module": "tests.helpers.replay_drift_reports", "symbols": ["20+ drift analytics and render helpers"], "coupling": "drift facade"}
+  ]
+}

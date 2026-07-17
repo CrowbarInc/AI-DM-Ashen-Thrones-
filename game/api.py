@@ -75,6 +75,7 @@ from game.storage import (
     get_scene_runtime,
     mark_interactable_resolved,
     mark_target_searched,
+    mark_hidden_fact_revealed,
     apply_repeated_description_guard,
     update_scene_momentum_runtime,
     append_debug_trace,
@@ -158,6 +159,7 @@ from game.exploration import (
 from game.adjudication import neutralize_engine_voice_for_player, resolve_adjudication_query
 from game.social import (
     apply_social_lead_discussion_tracking,
+    build_scene_npc_player_snapshot,
     parse_social_intent,
     resolve_social_action,
     apply_social_topic_escalation_to_resolution,
@@ -176,6 +178,7 @@ from game.interaction_context import (
     establish_dialogue_interaction_from_input,
     inspect as inspect_interaction_context,
     merge_turn_segments_for_directed_social_entry,
+    npc_dict_by_id,
     response_type_context_snapshot,
     resolve_declared_actor_switch,
     resolve_directed_social_entry,
@@ -209,6 +212,7 @@ from game.session import reset_session_state
 from game.campaign_reset import apply_new_campaign_hard_reset
 from game.campaign_state import create_fresh_combat_state
 from game.clues import (
+    _canonical_registry_lead_id,
     apply_authoritative_clue_discovery,
     apply_social_narration_lead_supplements,
     apply_socially_revealed_leads,
@@ -1644,6 +1648,10 @@ def _apply_authoritative_resolution_state_mutation(
             player_text=str(resolution.get("prompt") or ""),
         )
         maybe_finalize_pursued_lead_npc_contact_payoff(session, resolution, normalized_action)
+        clue_id = resolution.get("clue_id")
+        if clue_id:
+            lead_id = _canonical_registry_lead_id(str(clue_id).strip(), world, None)
+            leads_module.refresh_session_lead_touch(session, lead_id, turn=session.get("turn_counter"))
     else:
         authoritative_clue_updates.extend(
             _apply_authoritative_clues_from_resolution(session, scene['scene']['id'], resolution, world)
@@ -1698,6 +1706,15 @@ def _apply_authoritative_resolution_state_mutation(
         action_id = resolution.get('action_id') or (normalized_action.get('id') if normalized_action else None)
         if action_id:
             mark_target_searched(session, scene['scene']['id'], action_id)
+        res_md = resolution.get("metadata")
+        if isinstance(res_md, dict):
+            hidden_fact = res_md.get("hidden_fact_revealed")
+            if isinstance(hidden_fact, str) and hidden_fact.strip():
+                mark_hidden_fact_revealed(session, scene['scene']['id'], hidden_fact.strip())
+        clue_id = resolution.get("clue_id")
+        if clue_id:
+            lead_id = _canonical_registry_lead_id(str(clue_id).strip(), world, None)
+            leads_module.refresh_session_lead_touch(session, lead_id, turn=session.get("turn_counter"))
         scene_rt = get_scene_runtime(session, scene['scene']['id'])
 
     return (scene, session, combat, authoritative_clue_updates, scene_rt)
@@ -3457,6 +3474,17 @@ def _session_allows_structured_start_campaign(session: dict, recent_log: list | 
     return True
 
 
+def _compose_ui_interaction_snapshot(session: dict, world: dict) -> dict:
+    """Compact active interaction context for the player UI."""
+    snap = dict(response_type_context_snapshot(session))
+    tid = str(snap.get("active_interaction_target_id") or "").strip()
+    if tid:
+        npc = npc_dict_by_id(world, tid)
+        if isinstance(npc, dict):
+            snap["active_interaction_target_name"] = str(npc.get("name") or tid)
+    return snap
+
+
 def compose_state():
     """Assemble the client-visible state snapshot (reads + derived views).
 
@@ -3492,6 +3520,8 @@ def compose_state():
             'clues': {
                 'known': get_known_clues_with_presentation(session),
             },
+            'scene_npcs': build_scene_npc_player_snapshot(session, world, scene),
+            'interaction': _compose_ui_interaction_snapshot(session, world),
         }
     }
     _log_entries = load_log()
@@ -3513,7 +3543,9 @@ def compose_state():
         session['character_name'] = char_name
         save_session(session)
     state['player_name'] = session.get('character_name') or char_name
-    state['journal'] = build_player_journal(session, world, scene)
+    state['journal'] = build_player_journal(
+        session, world, scene, character=character, condition_definitions=conditions
+    )
     if session.get('last_action_debug'):
         state['debug'] = session['last_action_debug']
     state['debug_traces'] = session.get('debug_traces') or []

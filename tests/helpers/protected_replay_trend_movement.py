@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Final
 
 from tests.helpers.golden_replay_trend import write_deterministic_json
-from tests.helpers.replay_bug_recurrence import (
+from tests.helpers.replay_bug_recurrence_events import (
     RECURRENCE_EVENT_SOURCE_UNKNOWN,
     RECURRENCE_REPORT_ONLY,
     RECURRENCE_SCHEMA_VERSION,
@@ -21,6 +21,7 @@ from tests.helpers.replay_bug_recurrence import (
     normalized_recurrence_event_source,
     recurrence_owner,
 )
+from tests.helpers.replay_bug_recurrence_history import _protected_events_ordered
 
 BZ_RECURRENCE_MOVEMENT_FILENAME: Final[str] = "BZ_recurrence_movement.json"
 BZ_WINDOW_SUMMARY_MD: Final[str] = "BZ_protected_replay_trend_window_2.md"
@@ -101,8 +102,6 @@ def _event_sources_by_recurrence_key(event_log_path: Path | str | None) -> dict[
     path = Path(event_log_path)
     if not path.is_file():
         return {}
-    from tests.helpers.replay_bug_recurrence import _protected_events_ordered
-
     event_log = load_recurrence_event_log(path)
     sources: dict[str, str] = {}
     for event in _protected_events_ordered(event_log):

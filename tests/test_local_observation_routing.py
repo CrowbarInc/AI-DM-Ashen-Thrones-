@@ -97,6 +97,21 @@ def test_resolve_directed_social_entry_named_npc_perception_still_social_when_re
     assert out.get("target_actor_id") == "runner"
 
 
+def test_resolve_directed_social_entry_generic_role_perception_binds_single_guard() -> None:
+    """Generic role in perception questions binds to the sole matching roster NPC."""
+    scene, session, world = _scene_world_session()
+    out = resolve_directed_social_entry(
+        session=session,
+        scene=scene,
+        world=world,
+        segmented_turn=None,
+        raw_text="What does the guard see?",
+    )
+    assert out["should_route_social"] is True
+    assert out.get("target_actor_id") == "gate_guard"
+    assert out.get("target_source") == "generic_role"
+
+
 def test_is_directed_dialogue_not_for_bare_observation_with_npcs_present() -> None:
     scene, session, world = _scene_world_session()
     ce = resolve_directed_social_entry(

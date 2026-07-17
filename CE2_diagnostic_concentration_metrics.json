@@ -1,0 +1,79 @@
+{
+  "audit_id": "CE2",
+  "target_module": "tests/helpers/failure_dashboard_report.py",
+  "measured_at": "2026-06-24",
+  "metrics": {
+    "total_loc": 3359,
+    "total_functions": 82,
+    "total_classes": 0,
+    "avg_function_loc": 37.0,
+    "module_constants_loc_approx": 280,
+    "importer_count": 21
+  },
+  "top10_largest_functions": [
+    {"name": "write_bug_recurrence_history_artifacts", "loc": 409, "lines": "2113-2521", "category": "recurrence analysis"},
+    {"name": "render_bug_recurrence_history_markdown", "loc": 220, "lines": "1849-2068", "category": "recurrence analysis"},
+    {"name": "render_protected_replay_failure_report", "loc": 185, "lines": "2980-3164", "category": "markdown generation"},
+    {"name": "render_rerun_drift_scorecard_markdown", "loc": 123, "lines": "2766-2888", "category": "markdown generation"},
+    {"name": "_recurrence_program_effectiveness_markdown_lines", "loc": 101, "lines": "1380-1480", "category": "recurrence analysis"},
+    {"name": "render_long_session_stability_scorecard_markdown", "loc": 99, "lines": "3213-3311", "category": "stability analysis"},
+    {"name": "_recurrence_trends_markdown_lines", "loc": 83, "lines": "747-829", "category": "recurrence analysis"},
+    {"name": "_recurrence_completion_markdown_lines", "loc": 81, "lines": "1636-1716", "category": "recurrence analysis"},
+    {"name": "_recurrence_maturity_markdown_lines", "loc": 77, "lines": "1483-1559", "category": "recurrence analysis"},
+    {"name": "render_failure_dashboard_markdown", "loc": 75, "lines": "2572-2646", "category": "markdown generation"}
+  ],
+  "top10_fan_in": [
+    {"name": "_cell", "fan_in": 17},
+    {"name": "recorded_rerun_drift_scorecards", "fan_in": 6},
+    {"name": "recorded_long_session_stability_scorecards", "fan_in": 4},
+    {"name": "_as_list", "fan_in": 3},
+    {"name": "collected_hotspot_classifications", "fan_in": 3},
+    {"name": "failure_dashboard_requested", "fan_in": 3},
+    {"name": "long_session_stability_scorecard_requested", "fan_in": 3},
+    {"name": "rerun_drift_scorecard_requested", "fan_in": 3},
+    {"name": "_owner_drift_breakdown_lines", "fan_in": 2},
+    {"name": "_owner_drift_summary_table_lines", "fan_in": 2}
+  ],
+  "loc_by_category": {
+    "recurrence analysis": {"loc": 1653, "pct": 54.5},
+    "markdown generation": {"loc": 498, "pct": 16.4},
+    "artifact writing": {"loc": 237, "pct": 7.8},
+    "stability analysis": {"loc": 214, "pct": 7.1},
+    "failure classification": {"loc": 89, "pct": 2.9},
+    "failure collection": {"loc": 76, "pct": 2.5},
+    "drift analysis": {"loc": 56, "pct": 1.8},
+    "report rendering": {"loc": 54, "pct": 1.8},
+    "risk analysis": {"loc": 46, "pct": 1.5},
+    "utility/helper": {"loc": 45, "pct": 1.5},
+    "hotspot analysis": {"loc": 37, "pct": 1.2},
+    "trend analysis": {"loc": 30, "pct": 1.0},
+    "path management": {"loc": 15, "pct": 0.5},
+    "other": {"loc": 10, "pct": 0.3}
+  },
+  "related_module_sizes": {
+    "tests/helpers/failure_classifier.py": {"loc": 995, "functions": 37},
+    "tests/helpers/replay_bug_recurrence.py": {"loc": 10470, "functions": 221},
+    "tests/helpers/replay_drift_reports.py": {"loc": 79, "functions": 0},
+    "tests/helpers/replay_drift_taxonomy.py": {"loc": 1253, "functions": 43},
+    "tests/helpers/replay_drift_risk.py": {"loc": 729, "functions": 21},
+    "tests/helpers/replay_drift_trends.py": {"loc": 245, "functions": 11},
+    "tests/helpers/replay_drift_hotspots.py": {"loc": 175, "functions": 7},
+    "tests/helpers/replay_drift_longitudinal.py": {"loc": 168, "functions": 6},
+    "tests/helpers/replay_drift_rows.py": {"loc": 80, "functions": 3}
+  },
+  "git_commit_themes": {
+    "total_commits": 21,
+    "drift": 15,
+    "recurrence": 10,
+    "compression_refactor": 8,
+    "classification": 6,
+    "dashboard_format": 4,
+    "lineage": 3,
+    "stability": 1,
+    "other": 1
+  },
+  "dependency_cycle": [
+    "tests/helpers/failure_dashboard_report.py -> tests/helpers/replay_bug_recurrence.py",
+    "tests/helpers/replay_bug_recurrence.py -> tests/helpers/failure_dashboard_report.py (lazy import: RECURRENCE_TRAJECTORY_HISTORY_JSON_PATH)"
+  ]
+}

@@ -1,94 +1,13 @@
 {
   "advisory_only": true,
-  "recommended_investigation_order": [
-    {
-      "item": "game/speaker_contract_enforcement.py",
-      "rank": 1,
-      "risk": "low"
-    }
-  ],
+  "recommended_investigation_order": [],
   "report_only": true,
   "risk_by_level": {
     "high": [],
-    "low": [
-      {
-        "category": "speaker",
-        "field_path": "selected_speaker_source",
-        "field_source": "advisory",
-        "item": "game/speaker_contract_enforcement.py",
-        "item_kind": "investigation_target",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "low",
-        "severity": "high",
-        "trend_direction": "stable"
-      },
-      {
-        "category": "speaker",
-        "field_path": "selected_speaker_source",
-        "field_source": "advisory",
-        "item": "selected_speaker_source",
-        "item_kind": "field",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "low",
-        "severity": "high",
-        "trend_direction": "stable"
-      }
-    ],
-    "medium": [
-      {
-        "category": "speaker",
-        "field_path": "selected_speaker_source",
-        "field_source": "protected",
-        "item": "speaker_drift",
-        "item_kind": "owner",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "high",
-        "trend_direction": "stable"
-      }
-    ]
+    "low": [],
+    "medium": []
   },
-  "risk_signals": [
-    {
-      "category": "speaker",
-      "field_path": "selected_speaker_source",
-      "field_source": "advisory",
-      "item": "selected_speaker_source",
-      "item_kind": "field",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "low",
-      "severity": "high",
-      "trend_direction": "stable"
-    },
-    {
-      "category": "speaker",
-      "field_path": "selected_speaker_source",
-      "field_source": "protected",
-      "item": "speaker_drift",
-      "item_kind": "owner",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "medium",
-      "severity": "high",
-      "trend_direction": "stable"
-    },
-    {
-      "category": "speaker",
-      "field_path": "selected_speaker_source",
-      "field_source": "advisory",
-      "item": "game/speaker_contract_enforcement.py",
-      "item_kind": "investigation_target",
-      "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
-      "risk_level": "low",
-      "severity": "high",
-      "trend_direction": "stable"
-    }
-  ],
+  "risk_signals": [],
   "schema_version": 1,
   "stability_ownership": {
     "advisory_only": true,
@@ -235,26 +154,8 @@
     ],
     "stability_trend_signals": []
   },
-  "top_risk_fields": [
-    {
-      "item": "selected_speaker_source",
-      "rank": 1,
-      "risk": "low"
-    }
-  ],
-  "top_risk_investigation_targets": [
-    {
-      "item": "game/speaker_contract_enforcement.py",
-      "rank": 1,
-      "risk": "low"
-    }
-  ],
-  "top_risk_owners": [
-    {
-      "item": "speaker_drift",
-      "rank": 1,
-      "risk": "medium"
-    }
-  ],
-  "total_signals": 3
+  "top_risk_fields": [],
+  "top_risk_investigation_targets": [],
+  "top_risk_owners": [],
+  "total_signals": 0
 }

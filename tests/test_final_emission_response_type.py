@@ -89,6 +89,30 @@ def test_bj39_enforce_response_type_contract_applies_upstream_answer_prepared_re
     assert dbg.get("response_type_repair_kind") == "answer_upstream_prepared_repair"
     assert dbg.get("upstream_prepared_emission_used") is True
     assert dbg.get("upstream_prepared_emission_valid") is True
+    assert dbg.get("sealed_fallback_owner_bucket") == "sealed-gate"
+
+
+def test_co92_stamp_response_type_prepared_repair_owner_bucket_action_outcome() -> None:
+    text, dbg = response_type.enforce_response_type_contract(
+        "You consider the lock.",
+        gm_output={
+            "response_policy": {"response_type_contract": response_type_contract("action_outcome")},
+            UPSTREAM_PREPARED_EMISSION_KEY: {
+                "prepared_action_fallback_text": "You act, and your position changes with that movement.",
+                "upstream_prepared_emission_attribution": "unit_upstream_action",
+            },
+        },
+        resolution={"kind": "action", "prompt": "Pick the lock"},
+        session={},
+        scene_id="yard",
+        world={},
+        strict_social_turn=False,
+        strict_social_suppressed_non_social_turn=False,
+        active_interlocutor="",
+    )
+    assert text == "You act, and your position changes with that movement."
+    assert dbg.get("response_type_repair_kind") == "action_outcome_upstream_prepared_repair"
+    assert dbg.get("sealed_fallback_owner_bucket") == "sealed-gate"
 
 
 def test_bj39_enforce_response_type_contract_marks_upstream_absent_for_answer() -> None:

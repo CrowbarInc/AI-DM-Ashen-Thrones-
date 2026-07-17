@@ -51,6 +51,8 @@ Machine-readable and human-readable audit reports under `docs/audits/` support o
 
 **Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) → [Split-owner acceptance matrix governance](../convergence_ci_inventory.md#split-owner-acceptance-matrix-governance) (CI entrypoint, local refresh, contract tests). Use that index before adding parallel command blocks in audit notes.
 
+**Governance refresh workflow:** [`docs/governance_refresh_workflow.md`](../governance_refresh_workflow.md) defines refresh triggers, generated/manual artifact boundaries, authoritative sources, and stop conditions for governance maintenance.
+
 ## Split-owner matrix change workflow (BU22)
 
 Use this checklist when editing the canonical split-owner acceptance matrix. The **BU20/BU21 contract gate** (`scripts/check_split_owner_acceptance_matrix.py`, `make split-owner-matrix-check`, CI step **Split-owner acceptance matrix contract (BU20/BU21)** in `.github/workflows/convergence-checks.yml`) must pass before merge.

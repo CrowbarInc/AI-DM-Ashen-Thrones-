@@ -247,11 +247,55 @@ function renderPublicState(s){
     $('worldEventsList').innerHTML = events.map(ev=>`<li>${esc(ev.text || JSON.stringify(ev))}</li>`).join('') || '<li class="muted">No recent events.</li>';
   }
 
+  const ui = s.ui || {};
+  const sceneNpcs = ui.scene_npcs || [];
+  if($('sceneNpcsList')){
+    $('sceneNpcsList').innerHTML = sceneNpcs.map(npc=>{
+      const name = esc(npc.name || npc.id || 'Unknown');
+      const disp = esc(npc.disposition || 'neutral');
+      const trust = npc.trust != null ? ` · trust ${esc(npc.trust)}` : '';
+      const attitude = npc.attitude != null ? ` · attitude ${esc(npc.attitude)}` : '';
+      const role = npc.role ? ` <span class="muted">(${esc(npc.role)})</span>` : '';
+      return `<li><strong>${name}</strong>${role} — ${disp}${trust}${attitude}</li>`;
+    }).join('') || '<li class="muted">No NPCs in this scene.</li>';
+  }
+  if($('activeInteractionBox')){
+    const ix = ui.interaction || {};
+    const target = ix.active_interaction_target_name || ix.active_interaction_target_id;
+    if(target){
+      const kind = ix.active_interaction_kind ? ` (${esc(ix.active_interaction_kind)})` : '';
+      const mode = ix.interaction_mode ? ` · ${esc(ix.interaction_mode)}` : '';
+      $('activeInteractionBox').innerHTML = `<strong>${esc(target)}</strong>${kind}${mode}`;
+    } else {
+      $('activeInteractionBox').textContent = 'No active conversation.';
+    }
+  }
+
   const journal = s.journal || {};
   const knownFacts = journal.known_facts || [];
-  const clues = (journal.discovered_clues || []).concat(journal.unresolved_leads || []);
+  const clues = journal.discovered_clues || [];
   if($('journalKnownFacts')) $('journalKnownFacts').innerHTML = knownFacts.map(f=>`<li>${esc(f)}</li>`).join('') || '<li class="muted">No facts recorded yet.</li>';
   if($('journalClues')) $('journalClues').innerHTML = clues.map(c=>`<li>${esc(c)}</li>`).join('') || '<li class="muted">No clues discovered yet.</li>';
+
+  function renderJournalLeadRows(rows){
+    if(!rows || !rows.length) return '<li class="muted">None.</li>';
+    return rows.map(row=>{
+      const title = esc(row.title || row.id || 'Untitled lead');
+      const summary = row.summary ? `<div class="muted">${esc(row.summary)}</div>` : '';
+      const next = row.next_step ? `<div class="muted">Next: ${esc(row.next_step)}</div>` : '';
+      const touch = row.last_touched_turn != null ? `<span class="muted"> · turn ${esc(row.last_touched_turn)}</span>` : '';
+      return `<li><strong>${title}</strong>${touch}${summary}${next}</li>`;
+    }).join('');
+  }
+  if($('journalActiveLeads')) $('journalActiveLeads').innerHTML = renderJournalLeadRows(journal.active_leads);
+  if($('journalPursuedLeads')) $('journalPursuedLeads').innerHTML = renderJournalLeadRows(journal.pursued_leads);
+  if($('journalStaleLeads')) $('journalStaleLeads').innerHTML = renderJournalLeadRows(journal.stale_leads);
+
+  const statusEffects = journal.status_effects || [];
+  if($('journalStatusEffects')) $('journalStatusEffects').innerHTML = statusEffects.map(e=>`<li>${esc(e.name || e.id)} <span class="muted">(${esc(e.kind || 'condition')})</span></li>`).join('') || '<li class="muted">No active effects.</li>';
+
+  const suspicionFlags = journal.suspicion_flags || [];
+  if($('journalSuspicionFlags')) $('journalSuspicionFlags').innerHTML = suspicionFlags.map(f=>`<li>${esc(f)}</li>`).join('') || '<li class="muted">No suspicion noted.</li>';
 
   // Player/world must never render debug panels.
   if($('worldDebugBox')) $('worldDebugBox').textContent = '';
