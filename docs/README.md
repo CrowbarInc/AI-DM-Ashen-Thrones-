@@ -12,18 +12,18 @@ A local, browser-based solo PF1e-inspired AI GM toolkit built for chat-first pla
 - One-command startup
 
 ## Requirements
-- Python 3.9+
+- Python 3.12 recommended for parity with CI
 - OpenAI API key in `OPENAI_API_KEY`
 
 ## Setup
 ```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 $env:OPENAI_API_KEY="your_key_here"
 # Optional: override the model (defaults to gpt-4o-mini)
 # $env:MODEL_NAME="gpt-4o-mini"
-python run.py
+.\.venv\Scripts\python.exe run.py
 ```
 
 Alternatively, use a local `.env` file for development:
@@ -31,11 +31,25 @@ Alternatively, use a local `.env` file for development:
 ```powershell
 Copy-Item .env.example .env
 # Edit .env and set OPENAI_API_KEY (never commit the real .env)
-python run.py
+.\.venv\Scripts\python.exe run.py
 ```
 
 Open:
 `http://127.0.0.1:8000`
+
+`run.py` is the normal local launcher. It starts the ASGI app at
+`game.api:app`, keeps Uvicorn reload enabled by default for development, and
+prints secret-safe startup context before the FastAPI worker runs the upstream
+API billing/health preflight.
+
+For direct ASGI diagnostics or advanced Uvicorn troubleshooting, use:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn game.api:app --host 127.0.0.1 --port 8000 --reload
+```
+
+This reaches the same application and endpoint, but bypasses the small
+developer-facing context printed by `run.py`.
 
 ## Model Configuration
 Environment variables define the routing defaults and fallback chain, but the actual model is selected per request in `game.gm.call_gpt(...)` from explicit route inputs such as `purpose`, `retry_attempt`, `retry_reason`, `strict_social`, and `force_high_precision`.

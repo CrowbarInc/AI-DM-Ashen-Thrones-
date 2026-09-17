@@ -247,7 +247,6 @@ function renderPublicState(s){
     $('worldEventsList').innerHTML = events.map(ev=>`<li>${esc(ev.text || JSON.stringify(ev))}</li>`).join('') || '<li class="muted">No recent events.</li>';
   }
 
-  const ui = s.ui || {};
   const sceneNpcs = ui.scene_npcs || [];
   if($('sceneNpcsList')){
     $('sceneNpcsList').innerHTML = sceneNpcs.map(npc=>{

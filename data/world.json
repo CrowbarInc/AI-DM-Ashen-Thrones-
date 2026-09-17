@@ -69,6 +69,13 @@
       "type": "faction_pressure",
       "text": "Ordo Pyric's pressure mounts.",
       "source": "ordo_pyric"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "c_patrol_milestone",
+      "scene_id": "frontier_gate",
+      "npc_id": "tavern_runner",
+      "topic_id": "patrol_milestone"
     }
   ],
   "inference_rules": [],
@@ -77,7 +84,7 @@
     {
       "id": "tavern_runner",
       "name": "Tavern Runner",
-      "location": "tavern",
+      "location": "frontier_gate",
       "topics": [
         {
           "id": "patrol_milestone",
@@ -89,8 +96,8 @@
       "role": "",
       "affiliation": "",
       "availability": "available",
-      "current_agenda": "",
-      "disposition": "neutral",
+      "current_agenda": "sell_rumors",
+      "disposition": "friendly",
       "stance_toward_player": "neutral",
       "knowledge_scope": [],
       "information_reliability": "partial",
