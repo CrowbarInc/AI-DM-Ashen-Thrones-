@@ -1,0 +1,203 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "validation_portfolio_rationalization_20260918",
+  "campaign_name": "Validation Portfolio Rationalization",
+  "generated_at": "2026-09-18T05:00:00+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 8367,
+      "sha256": "558dc638e5cebd485ad89c9e55586184f9e60a5a4f0e405e9b7f50281b0b7a43"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "docs/validation_portfolio_rationalization.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_portfolio_rationalization.md",
+      "bundle_path": "support/docs/validation_portfolio_rationalization.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 20462,
+      "sha256": "f6b2e9c1c67259bd5a1673d889f7f8c26b56a40a1be1794351d54f566f1571e5"
+    },
+    {
+      "path": "data/validation/validation_family_registry.json",
+      "role": "authoritative_registry",
+      "why": "Machine-readable record for all 19 families and their claim, authority, disposition, risk, and rationale.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "data/validation/validation_family_registry.json",
+      "bundle_path": "support/data/validation/validation_family_registry.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 37194,
+      "sha256": "994dcc758aeb1d9c470bc6817f5ca2457a692f0a81fe8be5f98fb62aca54adfc"
+    },
+    {
+      "path": "docs/validation_family_registry.md",
+      "role": "generated_registry_view",
+      "why": "Concise human-readable registry and disposition counts.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_family_registry.md",
+      "bundle_path": "support/docs/validation_family_registry.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 3796,
+      "sha256": "e616a6b01a80e0f55930e33b0925a06d8c3b51a3ce3e3a388ef3665f5e322cd3"
+    },
+    {
+      "path": "artifacts/validation_portfolio/current_failure_classification.json",
+      "role": "failure_classification",
+      "why": "Maps every observed full-suite failure to a family, likely cause, confidence, and rationale.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/validation_portfolio/current_failure_classification.json",
+      "bundle_path": "support/artifacts/validation_portfolio/current_failure_classification.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 16454,
+      "sha256": "1e34acbe6d238fe5d18e7620ba32ccdc544cb4e386ec8e110c4d582030f0fb92"
+    },
+    {
+      "path": "artifacts/validation_portfolio/current_failure_summary.md",
+      "role": "failure_summary",
+      "why": "Summarizes the exact 49-failure baseline by cause, confidence, and family.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/validation_portfolio/current_failure_summary.md",
+      "bundle_path": "support/artifacts/validation_portfolio/current_failure_summary.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1560,
+      "sha256": "9dd5c243cdee76ac6e0b1f7be3398b9977fba71b9e88eaaabbfbf7232b8d3f82"
+    },
+    {
+      "path": "docs/validation_reliability_audit.md",
+      "role": "prior_audit",
+      "why": "Provides traced PASS semantics, mock boundaries, and validation-lane reliability findings reused here.",
+      "behavioral_evidence": true,
+      "human_review_required": false,
+      "canonical_source_path": "docs/validation_reliability_audit.md",
+      "bundle_path": "support/docs/validation_reliability_audit.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 37082,
+      "sha256": "3be8b0a38f8dc631bfba6e90f20061e2d03ba69237d1f88f71ab175e2e908e19"
+    },
+    {
+      "path": "docs/simulated_playtest_observability_audit.md",
+      "role": "prior_audit",
+      "why": "Provides the earlier evidence-producer and observability baseline.",
+      "behavioral_evidence": true,
+      "human_review_required": false,
+      "canonical_source_path": "docs/simulated_playtest_observability_audit.md",
+      "bundle_path": "support/docs/simulated_playtest_observability_audit.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 7201,
+      "sha256": "a251916f1371941271e9b874f6a67139231b4827f7699222662bd5d970225ce6"
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "governing_standard",
+      "why": "Defines inspectability requirements for behavioral claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "docs/validation_evidence_standard.md",
+      "bundle_path": "support/docs/validation_evidence_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 10530,
+      "sha256": "27f21f6ea18a8248e4906cff56a928ef8432b9c640a71d7acee387365696fb4a"
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "governing_standard",
+      "why": "Defines delivery requirements used by this campaign.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "docs/review_handoff_standard.md",
+      "bundle_path": "support/docs/review_handoff_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8774,
+      "sha256": "ad9884cf802b10b1220cf99d2d7a6b8855a1743ff6ea357ce74d68ecf52956a6"
+    },
+    {
+      "path": "tools/build_validation_portfolio.py",
+      "role": "audit_tooling",
+      "why": "Validates registry completeness and renders internally consistent summaries.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "tools/build_validation_portfolio.py",
+      "bundle_path": "support/tools/build_validation_portfolio.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 7003,
+      "sha256": "2daed5e068c048da4a262de1990202f2a8578a66ad7aad0af23c4e274e8d292d"
+    },
+    {
+      "path": "tests/test_validation_portfolio.py",
+      "role": "focused_tests",
+      "why": "Protects family coverage, disposition safeguards, failure reconciliation, architecture references, and handoff inclusion.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "tests/test_validation_portfolio.py",
+      "bundle_path": "support/tests/test_validation_portfolio.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 5544,
+      "sha256": "9ebeb027337fa31ef2184962e6f6ee4e955baa67a0d76442900ae4e2ff9aa3b3"
+    }
+  ],
+  "omitted_artifacts": [
+    {
+      "path": "docs/validation_portfolio_rationalization.md",
+      "role": "primary_campaign_report",
+      "why": "Contains audit findings, overlap analysis, target architecture, plan, risk, and human decision surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of docs/validation_portfolio_rationalization.md; canonical reference retained",
+      "size_bytes": 20462,
+      "sha256": "f6b2e9c1c67259bd5a1673d889f7f8c26b56a40a1be1794351d54f566f1571e5"
+    }
+  ],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 13,
+    "zip_size_bytes": "000000070214",
+    "uncompressed_payload_bytes": 163967,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/validation_portfolio_rationalization.json",
+    "canonical_repository_root": "."
+  }
+}

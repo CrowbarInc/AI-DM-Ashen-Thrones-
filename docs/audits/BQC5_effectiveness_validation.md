@@ -1,46 +1,50 @@
 # BQ-C5 Effectiveness Outcome Validation
 
-**Date:** 2026-06-28T19:49:24Z
+**Date:** 2026-06-06T00:00:00Z
 **Protected replay only:** true
 
 # Outcome Evidence
 
-- Total keys: `1`
-- Active keys: `1`
+- Total keys: `2`
+- Active keys: `2`
 - Validated retired keys: `0`
 - Validated dormant keys: `0`
-- Validated outcome count: `1`
-- Has validated outcomes: `true`
+- Validated outcome count: `0`
+- Has validated outcomes: `false`
 
-- `measurable_recurrence_reduction`: trajectory_regression_rate_decrease
+- No validated outcome signals discovered.
+
+### Rejected Candidates
+
+- `measurable_recurrence_reduction` (portfolio): insufficient_evidence
 
 # Effectiveness Confidence
 
-- Reported confidence: `0.15`
-- Outcome evidence strength: `0.70`
-- Calibration gap: `-0.55`
-- Status: `underconfident`
-- Outcome supported: `true`
+- Reported confidence: `0.90`
+- Outcome evidence strength: `0.20`
+- Calibration gap: `0.70`
+- Status: `overconfident`
+- Outcome supported: `false`
 
 # Calibration Recalculation
 
-- Calibration score: `64.3`
-- Largest calibration gap: `0.55`
+- Calibration score: `53.0`
+- Largest calibration gap: `0.70`
 - Graduation confidence ready: `false`
 - BQ-C4 effectiveness evidence: `0.18`
-- BQ-C5 effectiveness evidence: `0.70`
-- Evidence delta: `+0.52`
+- BQ-C5 effectiveness evidence: `0.20`
+- Evidence delta: `+0.02`
 - BQ-C4 calibration score: `61.3`
-- BQ-C5 calibration score: `64.3`
-- Calibration score delta: `+3.0`
+- BQ-C5 calibration score: `53.0`
+- Calibration score delta: `-8.3`
 
 # Graduation Impact
 
 - Formal graduation criteria met: `false`
-- Missing outcome signal: none
+- Missing outcome signal: At least one validated outcome event is required: retired key, dormant key, measurable recurrence reduction, or confirmed remediation impact.
 
 # Final Recommendation
 
 **B. One additional validation period required**
 
-Some outcome evidence exists but calibration or effectiveness support remains insufficient for graduation.
+Trajectory is active but no validated outcome evidence exists; one additional validation period is required.

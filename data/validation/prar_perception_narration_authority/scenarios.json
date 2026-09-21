@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.prar_perception_narration_authority.r1",
+  "description": "PR-AR continuation: ordinary-play chain through repaired walk/listen typing, then grounded perception narration and one further natural action.",
+  "scenarios": [
+    {
+      "case_id": "R2-MT01-AR",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry_return_captain_answer_roster_inspection_stew_relevance_world_action_question_sufficiency_investigation_provenance_refusal_grammar_physical_action_perception_authority",
+      "initial_objective": "Learn the missing-patrol route, pursue it, investigate, return, observe, reread the board, bind the Guard Captain, receive a legitimate first-ask answer, inspect the referenced roster, look around, ask the tavern runner what stew costs, glance back at the notice board, ask who last checked that board, thank the runner and look toward the gate line, walk a few steps along the muddy gate line and listen, then take one more natural action.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate ordinary listen/observe must not invent unsupported speech or sound",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "I look around.",
+        "I examine the milestone.",
+        "I'll head back to the gate.",
+        "I look around.",
+        "I read the notice board again.",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "If the watch already has a commander on this, I'll check the roster board the serjeant is watching.",
+        "I look around the gate again after that.",
+        "I step over to the tavern runner and ask what the stew costs.",
+        "I glance back at the notice board after that.",
+        "I step back to the tavern runner and ask who last checked that board.",
+        "I thank the runner and look toward the gate line again.",
+        "I walk a few steps along the muddy gate line and listen",
+        "I look toward the notice board again."
+      ]
+    }
+  ]
+}

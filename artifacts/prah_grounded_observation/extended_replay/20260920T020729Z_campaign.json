@@ -1,0 +1,41 @@
+{
+  "report_version": 1,
+  "generated_at": "2026-09-20T02:07:29.888664+00:00",
+  "stamp": "20260920T020729Z",
+  "corpus_id": "ashen_thrones.prah_grounded_observation.r1",
+  "upstream_dependent_run_gate": {
+    "upstream_runtime_healthy": true,
+    "preflight_available": true,
+    "startup_run_valid": true,
+    "manual_testing_blocked": false,
+    "block_reason": null,
+    "preflight_health_class": "healthy",
+    "preflight_checked_at": "2026-09-20T02:07:27Z"
+  },
+  "cases": [
+    {
+      "case_id": "R2-MT01-AH",
+      "scenario": "notice_patrol_inquiry_return_observe_continuation",
+      "family": "multi_turn_arc",
+      "turn_count": 14,
+      "completed": true,
+      "semantic_results": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "FAIL",
+        "PASS",
+        "PASS",
+        "PASS",
+        "FAIL",
+        "PASS",
+        "PASS",
+        "FAIL",
+        "PASS",
+        "PASS"
+      ],
+      "artifact": "artifacts/prah_grounded_observation/extended_replay/runs/20260920T020729Z_R2-MT01-AH/run.json"
+    }
+  ]
+}

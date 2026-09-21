@@ -49,6 +49,10 @@ def test_choose_interaction_route_dialogue_lock_pure_contract() -> None:
     assert (
         choose_interaction_route("I follow the runner.", scene=scene, session=session, world=world) == "action"
     )
+    assert is_world_action("I'll follow the northwest track.")
+    assert (
+        choose_interaction_route("I'll follow the runner.", scene=scene, session=session, world=world) == "action"
+    )
     assert (
         choose_interaction_route("I grab him and demand answers.", scene=scene, session=session, world=world)
         == "action"

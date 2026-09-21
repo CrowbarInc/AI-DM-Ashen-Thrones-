@@ -1,0 +1,153 @@
+{
+  "schema_version": "baseline-repair-queue.v1",
+  "items": [
+    {
+      "id": "REPAIR-RC-01",
+      "root_cause_cluster": "RC-01",
+      "affected_tests": [
+        "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+        "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+        "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+        "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness"
+      ],
+      "defect_type": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "affected_subsystem": "attribution corpus completeness regression",
+      "current_requirement": "docs/audits/CO96_attribution_program_closeout.md",
+      "recommended_change": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "validation_required_after_repair": [
+        "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+        "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+        "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+        "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P1",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-04",
+      "root_cause_cluster": "RC-04",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "defect_type": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "affected_subsystem": "final-emission metadata facade bypasses",
+      "current_requirement": "docs/audits/BV2C_fan_in_closeout.md",
+      "recommended_change": "Route production reads/writes through the reconciled facade; separately clean test-only imports.",
+      "validation_required_after_repair": [
+        "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P1",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-12",
+      "root_cause_cluster": "RC-12",
+      "affected_tests": [
+        "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+        "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line"
+      ],
+      "defect_type": "CONFIRMED_PRODUCT_DEFECT",
+      "affected_subsystem": "resolved destination loses scene grounding in global fallback",
+      "current_requirement": "docs/narrative_integrity_architecture.md",
+      "recommended_change": "Preserve resolved destination context when constructing the global scene fallback.",
+      "validation_required_after_repair": [
+        "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+        "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P1",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-15",
+      "root_cause_cluster": "RC-15",
+      "affected_tests": [
+        "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance"
+      ],
+      "defect_type": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "affected_subsystem": "retired projection alias remains exported",
+      "current_requirement": "docs/audits/closeouts/cycle_ar_replay_drift_classification_closeout.md",
+      "recommended_change": "Remove the deprecated alias after verifying named-authority callers.",
+      "validation_required_after_repair": [
+        "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance"
+      ],
+      "risk": "LOW",
+      "priority": "P2",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-16",
+      "root_cause_cluster": "RC-16",
+      "affected_tests": [
+        "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report"
+      ],
+      "defect_type": "CONFIRMED_PRODUCT_DEFECT",
+      "affected_subsystem": "protected assertion bridge omits recurrence event",
+      "current_requirement": "docs/audits/CR_protected_replay_recurrence_separation_closeout.md",
+      "recommended_change": "Restore canonical recurrence recording on protected assertion failure.",
+      "validation_required_after_repair": [
+        "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report"
+      ],
+      "risk": "LOW",
+      "priority": "P2",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-17",
+      "root_cause_cluster": "RC-17",
+      "affected_tests": [
+        "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social"
+      ],
+      "defect_type": "CONFIRMED_PRODUCT_DEFECT",
+      "affected_subsystem": "social fallback calls an undefined prompt helper",
+      "current_requirement": "docs/narrative_integrity_architecture.md",
+      "recommended_change": "Restore the owned resolution-question helper or route to its current authority.",
+      "validation_required_after_repair": [
+        "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P0",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-19",
+      "root_cause_cluster": "RC-19",
+      "affected_tests": [
+        "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked"
+      ],
+      "defect_type": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "affected_subsystem": "visibility fallback writes bypass producer stamping",
+      "current_requirement": "docs/architecture_ownership_ledger.md",
+      "recommended_change": "Route both direct owner writes through the declared stamping function.",
+      "validation_required_after_repair": [
+        "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P1",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "REPAIR-RC-23",
+      "root_cause_cluster": "RC-23",
+      "affected_tests": [
+        "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+      ],
+      "defect_type": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "affected_subsystem": "narrative-authenticity module imports gate repair surface",
+      "current_requirement": "docs/validation_layer_separation.md",
+      "recommended_change": "Move the dependency behind the reconciled validation-layer boundary.",
+      "validation_required_after_repair": [
+        "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+      ],
+      "risk": "MEDIUM",
+      "priority": "P1",
+      "confidence": "HIGH"
+    }
+  ]
+}

@@ -22,6 +22,10 @@ from tests.helpers.protected_replay_registry import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+_LIVE_PIPELINE_MARKER_NODE_ID = (
+    "tests/test_co102_live_protected_replay_pipeline.py::"
+    "test_co102_live_protected_replay_records_session_failure_artifacts"
+)
 
 
 def test_protected_replay_registry_contains_six_short_structural_scenarios() -> None:
@@ -118,14 +122,14 @@ def test_golden_replay_marker_collects_protected_corpus_tests() -> None:
     output = f"{completed.stdout}\n{completed.stderr}"
 
     assert completed.returncode == 0, output
-    assert "6/" in output and "tests collected" in output, output
-
     collected_node_ids = {
         line.strip()
         for line in completed.stdout.splitlines()
         if line.strip().startswith("tests/") and "::" in line
     }
-    assert collected_node_ids == set(protected_replay_corpus_test_node_ids()), (
+    expected_node_ids = set(protected_replay_corpus_test_node_ids()) | {_LIVE_PIPELINE_MARKER_NODE_ID}
+    assert f"{len(expected_node_ids)}/" in output and "tests collected" in output, output
+    assert collected_node_ids == expected_node_ids, (
         f"collected={sorted(collected_node_ids)!r} "
         f"expected={sorted(protected_replay_corpus_test_node_ids())!r}"
     )

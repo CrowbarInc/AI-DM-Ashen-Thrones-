@@ -135,13 +135,10 @@ def test_multi_person_dialogue_he_without_introducer_still_hard_replaces_via_gat
 
 
 def test_canonical_session_log_observe_shape_repairs_when_replayed():
-    log_path = Path("data/session_log.jsonl")
-    if not log_path.is_file():
-        pytest.skip("canonical session_log.jsonl not present")
-    record = json.loads(log_path.read_text(encoding="utf-8").splitlines()[0])
+    fixture_path = Path(__file__).with_name("fixtures") / "bv3e_observe_repair_record.json"
+    record = json.loads(fixture_path.read_text(encoding="utf-8"))
     candidate = str((record.get("gm_output") or {}).get("player_facing_text") or "")
-    if not candidate.strip():
-        pytest.skip("session_log observe turn missing player_facing_text")
+    assert candidate.strip()
     session, world, scene, sid, resolution = _observe_bundle_frontier_gate()
     out = _apply_upstream_repair(
         candidate,

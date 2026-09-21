@@ -1,0 +1,998 @@
+{
+  "artifact_version": 1,
+  "scenario_id": "watch_command",
+  "player_strategy": "adversarial",
+  "seed": 1701,
+  "configuration": {
+    "objective": "Identify who specifically commands the watch at the gate.",
+    "max_turns": 6,
+    "max_attempts_per_intent": 3
+  },
+  "termination_reason": "max_intent_attempts",
+  "turn_count": 4,
+  "valid_run": true,
+  "unresolved_intents": [
+    "Identify who specifically commands the watch at the gate."
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_objective": "Identify who specifically commands the watch at the gate.",
+      "current_intent": "Identify who specifically commands the watch at the gate.",
+      "selected_player_action": "Who commands the watch here?",
+      "selection_reason": "initial_objective:Identify who specifically commands the watch at the gate.",
+      "relevant_prior_context": {
+        "player": "",
+        "gm": ""
+      },
+      "gm_response": "The murmur around you never tightens into a single clear voice on that point.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:unanswered_intelligible_question"
+          ],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "commands",
+              "watch"
+            ],
+            "gm_terms": [
+              "around",
+              "clear",
+              "murmur",
+              "never",
+              "point",
+              "single",
+              "tightens",
+              "voice"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 67,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 9,
+          "logical_escalation": 19,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:unanswered_intelligible_question"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "commands",
+                "watch"
+              ],
+              "gm_terms": [
+                "around",
+                "clear",
+                "murmur",
+                "never",
+                "point",
+                "single",
+                "tightens",
+                "voice"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 19,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 67,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    },
+    {
+      "turn_index": 1,
+      "player_objective": "Identify who specifically commands the watch at the gate.",
+      "current_intent": "Identify who specifically commands the watch at the gate.",
+      "selected_player_action": "Who specifically is in command of the watch at this gate?",
+      "selection_reason": "incomplete_or_vague_answer:demand_specificity",
+      "relevant_prior_context": {
+        "player": "Who commands the watch here?",
+        "gm": "The murmur around you never tightens into a single clear voice on that point."
+      },
+      "gm_response": "The murmur around you never tightens into a single clear voice on that point.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:unanswered_intelligible_question"
+          ],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "command",
+              "gate",
+              "specifically",
+              "watch"
+            ],
+            "gm_terms": [
+              "around",
+              "clear",
+              "murmur",
+              "never",
+              "point",
+              "single",
+              "tightens",
+              "voice"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 56,
+        "rating": "acceptable",
+        "passed": false,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 9,
+          "logical_escalation": 8,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 56,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 56,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:unanswered_intelligible_question"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "command",
+                "gate",
+                "specifically",
+                "watch"
+              ],
+              "gm_terms": [
+                "around",
+                "clear",
+                "murmur",
+                "never",
+                "point",
+                "single",
+                "tightens",
+                "voice"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 56,
+          "rating": "acceptable",
+          "passed": false,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 8,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 8,
+            "passed": false,
+            "reasons": [
+              "High overlap with prior GM text suggests stale repetition."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 1.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 0
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "logical_escalation: weak (8/25).",
+            "logical_escalation: High overlap with prior GM text suggests stale repetition."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 56,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    },
+    {
+      "turn_index": 2,
+      "player_objective": "Identify who specifically commands the watch at the gate.",
+      "current_intent": "Identify who specifically commands the watch at the gate.",
+      "selected_player_action": "Give me the name or rank of the person who commands this watch.",
+      "selection_reason": "unresolved_intent:rephrase",
+      "relevant_prior_context": {
+        "player": "Who specifically is in command of the watch at this gate?",
+        "gm": "The murmur around you never tightens into a single clear voice on that point."
+      },
+      "gm_response": "The murmur around you never tightens into a single clear voice on that point.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:observation_request_not_fulfilled"
+          ],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "commands",
+              "give",
+              "name",
+              "person",
+              "rank",
+              "watch"
+            ],
+            "gm_terms": [
+              "around",
+              "clear",
+              "murmur",
+              "never",
+              "point",
+              "single",
+              "tightens",
+              "voice"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 62,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 9,
+          "logical_escalation": 8,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:observation_request_not_fulfilled"
+            ],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "commands",
+                "give",
+                "name",
+                "person",
+                "rank",
+                "watch"
+              ],
+              "gm_terms": [
+                "around",
+                "clear",
+                "murmur",
+                "never",
+                "point",
+                "single",
+                "tightens",
+                "voice"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 8,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 8,
+            "passed": false,
+            "reasons": [
+              "High overlap with prior GM text suggests stale repetition."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 1.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 0
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "logical_escalation: weak (8/25).",
+            "logical_escalation: High overlap with prior GM text suggests stale repetition."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 62,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": null,
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    },
+    {
+      "turn_index": 3,
+      "player_objective": "Identify who specifically commands the watch at the gate.",
+      "current_intent": "Identify who specifically commands the watch at the gate.",
+      "selected_player_action": "Before we move on, return to my unresolved question: who commands this watch?",
+      "selection_reason": "thread_persistence:return_to_unresolved_objective",
+      "relevant_prior_context": {
+        "player": "Give me the name or rank of the person who commands this watch.",
+        "gm": "The murmur around you never tightens into a single clear voice on that point."
+      },
+      "gm_response": "The moment passes without anyone stepping forward to own that thread.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 11,
+            "text_preview": "The moment passes without anyone stepping forward to own that thread."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:unanswered_intelligible_question"
+          ],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "before",
+              "commands",
+              "move",
+              "question",
+              "return",
+              "unresolved",
+              "watch"
+            ],
+            "gm_terms": [
+              "anyone",
+              "forward",
+              "moment",
+              "own",
+              "passes",
+              "stepping",
+              "thread",
+              "without"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 4
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 66,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 4,
+          "logical_escalation": 23,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 66,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 66,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 11,
+              "text_preview": "The moment passes without anyone stepping forward to own that thread."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:unanswered_intelligible_question"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "before",
+                "commands",
+                "move",
+                "question",
+                "return",
+                "unresolved",
+                "watch"
+              ],
+              "gm_terms": [
+                "anyone",
+                "forward",
+                "moment",
+                "own",
+                "passes",
+                "stepping",
+                "thread",
+                "without"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 4
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 66,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 4,
+            "logical_escalation": 23,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 11,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 4,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors.",
+              "Possible thread drift from the established player focus."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 11,
+              "net_new_terms": 8
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (4/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "player_intent: Possible thread drift from the established player focus."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 66,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    }
+  ]
+}

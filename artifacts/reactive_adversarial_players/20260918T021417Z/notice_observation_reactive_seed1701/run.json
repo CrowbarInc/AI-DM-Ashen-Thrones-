@@ -1,0 +1,286 @@
+{
+  "artifact_version": 1,
+  "scenario_id": "notice_observation",
+  "player_strategy": "reactive",
+  "seed": 1701,
+  "configuration": {
+    "objective": "Read the concrete information posted on the gate notice.",
+    "max_turns": 6,
+    "max_attempts_per_intent": 3
+  },
+  "termination_reason": "objective_resolved",
+  "turn_count": 1,
+  "valid_run": true,
+  "unresolved_intents": [],
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_objective": "Read the concrete information posted on the gate notice.",
+      "current_intent": "Read the concrete information posted on the gate notice.",
+      "selected_player_action": "I inspect the notice closely and read what is posted.",
+      "selection_reason": "initial_objective:Read the concrete information posted on the gate notice.",
+      "relevant_prior_context": {
+        "player": "",
+        "gm": ""
+      },
+      "gm_response": "A gate serjeant manages the crowd and keeps one eye on the roster board while threadbare watchers and refugees cluster along the muddy gate line. Guard Captain watches with hard, tired discipline, while Tavern Runner trades hot stew and rumors near the rain barrel.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 44,
+            "text_preview": "A gate serjeant manages the crowd and keeps one eye on the roster board while threadbare watchers and refugees cluster along the muddy gate line. Guard Captain "
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "closely",
+              "inspect",
+              "notice",
+              "posted",
+              "read",
+              "what"
+            ],
+            "gm_terms": [
+              "along",
+              "barrel",
+              "board",
+              "captain",
+              "cluster",
+              "crowd",
+              "discipline",
+              "eye",
+              "gate",
+              "guard",
+              "hard",
+              "hot",
+              "keeps",
+              "line",
+              "manages",
+              "muddy",
+              "near",
+              "one",
+              "rain",
+              "refugees"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 75,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 9,
+          "logical_escalation": 19,
+          "immersion": 24
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 75,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 75,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 44,
+              "text_preview": "A gate serjeant manages the crowd and keeps one eye on the roster board while threadbare watchers and refugees cluster along the muddy gate line. Guard Captain "
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "closely",
+                "inspect",
+                "notice",
+                "posted",
+                "read",
+                "what"
+              ],
+              "gm_terms": [
+                "along",
+                "barrel",
+                "board",
+                "captain",
+                "cluster",
+                "crowd",
+                "discipline",
+                "eye",
+                "gate",
+                "guard",
+                "hard",
+                "hot",
+                "keeps",
+                "line",
+                "manages",
+                "muddy",
+                "near",
+                "one",
+                "rain",
+                "refugees"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 75,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 19,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 44,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 44
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 75,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "investigate",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    }
+  ]
+}

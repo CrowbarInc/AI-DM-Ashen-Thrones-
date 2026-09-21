@@ -1,0 +1,1512 @@
+{
+  "schema_version": "baseline-triage.v1",
+  "observed_at": "2026-09-19",
+  "baseline": {
+    "collected": 6440,
+    "passed": 6305,
+    "failed": 36,
+    "skipped": 99
+  },
+  "post_baseline": {
+    "collected": 6445,
+    "passed": 6310,
+    "failed": 36,
+    "skipped": 99
+  },
+  "counting_reconciliation": "JUnit reports 6,440 pre-triage test cases. The earlier 6,439 value was a generated summary's collection-count semantic, not a missing test case. Post-triage collection adds only the five new passing tooling tests.",
+  "failures": [
+    {
+      "investigation_id": "BT-001",
+      "test": "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+      "test_path": "tests/test_attribution_contract.py",
+      "test_name": "test_co96_closeout_metrics_match_live_corpus",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Locked 85.71% snapshot differs from current 83.93% corpus.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Locked 85.71% snapshot differs from current 83.93% corpus.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_attribution_contract.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-002",
+      "test": "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+      "test_path": "tests/test_attribution_regression_guard.py",
+      "test_name": "test_live_attribution_regression_guard_passes",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Live attribution audit reports fail; underlying ownership records require separate triage.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Live attribution audit reports fail; underlying ownership records require separate triage.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_attribution_regression_guard.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-003",
+      "test": "tests/test_bv3e_eligibility_expansion.py::test_canonical_session_log_observe_shape_repairs_when_replayed",
+      "test_path": "tests/test_bv3e_eligibility_expansion.py",
+      "test_name": "test_canonical_session_log_observe_shape_repairs_when_replayed",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "STALE_FIXTURE",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Canonical session log no longer satisfies historical repair-eligibility setup.",
+      "requirement_source": "docs/audits/BV3D_measurement_validation.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Canonical session log no longer satisfies historical repair-eligibility setup.",
+      "expected_behavior": "Modernize the canonical fixture without changing eligibility policy.",
+      "root_cause_finding": "obsolete repair-eligibility session fixture",
+      "root_cause_cluster": "RC-02",
+      "confirmed_classification": "STALE_FIXTURE",
+      "confidence": "MEDIUM",
+      "recommended_action": "Modernize the canonical fixture without changing eligibility policy.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV3D_measurement_validation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_bv3e_eligibility_expansion.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-004",
+      "test": "tests/test_ck_hotspot_compression_report.py::test_ck_fi_parse_from_bu_csv",
+      "test_path": "tests/test_ck_hotspot_compression_report.py",
+      "test_name": "test_ck_fi_parse_from_bu_csv",
+      "validation_family": "ARCHITECTURE_GOVERNANCE",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Historical 20.79% metric snapshot differs from current 18.3%.",
+      "requirement_source": "docs/audits/CI_2_hotspot_compression_measurement_standard_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Historical 20.79% metric snapshot differs from current 18.3%.",
+      "expected_behavior": "Regenerate the diagnostic snapshot from the current BU inventory.",
+      "root_cause_finding": "historical hotspot percentage snapshot",
+      "root_cause_cluster": "RC-03",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Regenerate the diagnostic snapshot from the current BU inventory.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CI_2_hotspot_compression_measurement_standard_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_ck_hotspot_compression_report.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-005",
+      "test": "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades",
+      "test_path": "tests/test_compat_import_governance.py",
+      "test_name": "test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Current production and test imports bypass declared read facades.",
+      "requirement_source": "docs/audits/BV2C_fan_in_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Current production and test imports bypass declared read facades.",
+      "expected_behavior": "Route production reads/writes through the reconciled facade; separately clean test-only imports.",
+      "root_cause_finding": "final-emission metadata facade bypasses",
+      "root_cause_cluster": "RC-04",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Route production reads/writes through the reconciled facade; separately clean test-only imports.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV2C_fan_in_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_compat_import_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-006",
+      "test": "tests/test_compat_import_governance.py::test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades",
+      "test_path": "tests/test_compat_import_governance.py",
+      "test_name": "test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Helper imports authority constants directly; desired post-reconciliation boundary needs confirmation.",
+      "requirement_source": "docs/audits/BV10C_fan_in_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Helper imports authority constants directly; desired post-reconciliation boundary needs confirmation.",
+      "expected_behavior": "Make the test helper consume attribution_read_views.",
+      "root_cause_finding": "attribution helper imports sealed owner constants",
+      "root_cause_cluster": "RC-05",
+      "confirmed_classification": "CONFIRMED_VALIDATION_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Make the test helper consume attribution_read_views.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV10C_fan_in_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_compat_import_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-007",
+      "test": "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+      "test_path": "tests/test_compat_import_governance.py",
+      "test_name": "test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "A test imports the compatibility barrel instead of named authorities.",
+      "requirement_source": "docs/audits/BV14_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "A test imports the compatibility barrel instead of named authorities.",
+      "expected_behavior": "Import named social authorities in the integration test and recompute the cap.",
+      "root_cause_finding": "test-only social compatibility barrel fan-in",
+      "root_cause_cluster": "RC-06",
+      "confirmed_classification": "CONFIRMED_VALIDATION_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Import named social authorities in the integration test and recompute the cap.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV14_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_compat_import_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-008",
+      "test": "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_fi_cap_locked",
+      "test_path": "tests/test_compat_import_governance.py",
+      "test_name": "test_bv14c_social_exchange_compat_fi_cap_locked",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Historical compatibility fan-in cap has drifted; desired cap is uncertain.",
+      "requirement_source": "docs/audits/BV14_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Historical compatibility fan-in cap has drifted; desired cap is uncertain.",
+      "expected_behavior": "Import named social authorities in the integration test and recompute the cap.",
+      "root_cause_finding": "test-only social compatibility barrel fan-in",
+      "root_cause_cluster": "RC-06",
+      "confirmed_classification": "CONFIRMED_VALIDATION_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Import named social authorities in the integration test and recompute the cap.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV14_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_compat_import_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-009",
+      "test": "tests/test_dead_turn_evaluation_threading.py::test_playability_eval_excludes_only_from_fem_dead_turn_source",
+      "test_path": "tests/test_dead_turn_evaluation_threading.py",
+      "test_name": "test_playability_eval_excludes_only_from_fem_dead_turn_source",
+      "validation_family": "PLAYABILITY_RUNTIME",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Evaluator exclusion-source expectation no longer matches reconciled metadata threading.",
+      "requirement_source": "docs/playability_validation.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Evaluator exclusion-source expectation no longer matches reconciled metadata threading.",
+      "expected_behavior": "Assert the authoritative exclusion fields instead of exact whole-dict equality.",
+      "root_cause_finding": "playability result schema grew diagnostic fields",
+      "root_cause_cluster": "RC-07",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Assert the authoritative exclusion fields instead of exact whole-dict equality.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/playability_validation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_dead_turn_evaluation_threading.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-010",
+      "test": "tests/test_failure_classification_contract.py::test_classifier_evidence_manifest_matches_optional_contract_fields",
+      "test_path": "tests/test_failure_classification_contract.py",
+      "test_name": "test_classifier_evidence_manifest_matches_optional_contract_fields",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Evidence manifest and classifier optional-field contract diverged.",
+      "requirement_source": "docs/validation_evidence_standard.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Evidence manifest and classifier optional-field contract diverged.",
+      "expected_behavior": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "root_cause_finding": "failure-evidence governance manifests diverged",
+      "root_cause_cluster": "RC-08",
+      "confirmed_classification": "GOVERNANCE_DRIFT",
+      "confidence": "HIGH",
+      "recommended_action": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_evidence_standard.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_failure_classification_contract.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-011",
+      "test": "tests/test_failure_classification_contract.py::test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+      "test_path": "tests/test_failure_classification_contract.py",
+      "test_name": "test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Dashboard evidence ownership metadata diverged from classifier contract.",
+      "requirement_source": "docs/validation_evidence_standard.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Dashboard evidence ownership metadata diverged from classifier contract.",
+      "expected_behavior": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "root_cause_finding": "failure-evidence governance manifests diverged",
+      "root_cause_cluster": "RC-08",
+      "confirmed_classification": "GOVERNANCE_DRIFT",
+      "confidence": "HIGH",
+      "recommended_action": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_evidence_standard.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_failure_classification_contract.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-012",
+      "test": "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority",
+      "test_path": "tests/test_failure_classification_contract.py",
+      "test_name": "test_co98_failure_classification_registry_documents_governing_authority",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Failure registry documentation does not match governing authority metadata.",
+      "requirement_source": "docs/validation_evidence_standard.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Failure registry documentation does not match governing authority metadata.",
+      "expected_behavior": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "root_cause_finding": "failure-evidence governance manifests diverged",
+      "root_cause_cluster": "RC-08",
+      "confirmed_classification": "GOVERNANCE_DRIFT",
+      "confidence": "HIGH",
+      "recommended_action": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_evidence_standard.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_failure_classification_contract.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-013",
+      "test": "tests/test_final_emission_debt_retirement.py::test_final_emission_modules_forbidden_substring_snapshot",
+      "test_path": "tests/test_final_emission_debt_retirement.py",
+      "test_name": "test_final_emission_modules_forbidden_substring_snapshot",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Debt-retirement substring snapshot has drifted after later architecture work.",
+      "requirement_source": "docs/audits/BV_maintenance_economics_validation_closeout.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Debt-retirement substring snapshot has drifted after later architecture work.",
+      "expected_behavior": "Re-audit and regenerate the debt snapshot against current modules.",
+      "root_cause_finding": "final-emission debt snapshot predates later modules",
+      "root_cause_cluster": "RC-09",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Re-audit and regenerate the debt snapshot against current modules.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/BV_maintenance_economics_validation_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_final_emission_debt_retirement.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-014",
+      "test": "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+      "test_path": "tests/test_final_emission_meta.py",
+      "test_name": "test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Compatibility token boundary appears broader than declared; current requirement needs owner confirmation.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Compatibility token boundary appears broader than declared; current requirement needs owner confirmation.",
+      "expected_behavior": "Choose whether opening fallback is the sole permitted local raw-token consumer.",
+      "root_cause_finding": "raw-token compatibility boundary lacks final authority",
+      "root_cause_cluster": "RC-10",
+      "confirmed_classification": "POLICY_DECISION_REQUIRED",
+      "confidence": "LOW",
+      "recommended_action": "Choose whether opening fallback is the sole permitted local raw-token consumer.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_final_emission_meta.py"
+      ],
+      "human_judgment_required": true,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-015",
+      "test": "tests/test_final_emission_opening_accept_debug.py::test_reassert_scene_opening_accepted_candidate_matches_inline_sequence",
+      "test_path": "tests/test_final_emission_opening_accept_debug.py",
+      "test_name": "test_reassert_scene_opening_accepted_candidate_matches_inline_sequence",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Opening candidate/debug behavior differs from expected production sequence.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Opening candidate/debug behavior differs from expected production sequence.",
+      "expected_behavior": "Trace candidate mutation ordering with non-semantic instrumentation before repair.",
+      "root_cause_finding": "opening acceptance debug sequence diverges",
+      "root_cause_cluster": "RC-11",
+      "confirmed_classification": "UNRESOLVED",
+      "confidence": "LOW",
+      "recommended_action": "Trace candidate mutation ordering with non-semantic instrumentation before repair.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_final_emission_opening_accept_debug.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-016",
+      "test": "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+      "test_path": "tests/test_final_emission_scene_integrity.py",
+      "test_name": "test_valid_resolved_scene_transition_allows_global_scene_fallback",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Valid resolved transition emits blank-scene fallback rather than scene-grounded text.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "direct",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Valid resolved transition emits blank-scene fallback rather than scene-grounded text.",
+      "expected_behavior": "Preserve resolved destination context when constructing the global scene fallback.",
+      "root_cause_finding": "resolved destination loses scene grounding in global fallback",
+      "root_cause_cluster": "RC-12",
+      "confirmed_classification": "CONFIRMED_PRODUCT_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Preserve resolved destination context when constructing the global scene fallback.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_final_emission_scene_integrity.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-017",
+      "test": "tests/test_golden_replay_long_session.py::test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability",
+      "test_path": "tests/test_golden_replay_long_session.py",
+      "test_name": "test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "UNCERTAIN",
+      "previous_confidence": "LOW",
+      "protected_requirement": "Long-session diagnostic drift needs reproduction to separate product behavior from mutable history.",
+      "requirement_source": "docs/testing/protected_replay_manifest.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Long-session diagnostic drift needs reproduction to separate product behavior from mutable history.",
+      "expected_behavior": "Capture the first divergent turn and determine whether mutable history or runtime logic owns it.",
+      "root_cause_finding": "25-turn diagnostic history is not stable",
+      "root_cause_cluster": "RC-13",
+      "confirmed_classification": "UNRESOLVED",
+      "confidence": "LOW",
+      "recommended_action": "Capture the first divergent turn and determine whether mutable history or runtime logic owns it.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/testing/protected_replay_manifest.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_golden_replay_long_session.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-018",
+      "test": "tests/test_golden_replay_projection_engine.py::test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup",
+      "test_path": "tests/test_golden_replay_projection_engine.py",
+      "test_name": "test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Projection added attribution fields, breaking a historical byte snapshot.",
+      "requirement_source": "docs/audits/CU3_semantic_mutation_evidence_reconciliation.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Projection added attribution fields, breaking a historical byte snapshot.",
+      "expected_behavior": "Replace byte identity with a versioned semantic projection assertion.",
+      "root_cause_finding": "projection backup predates attribution columns",
+      "root_cause_cluster": "RC-14",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Replace byte identity with a versioned semantic projection assertion.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CU3_semantic_mutation_evidence_reconciliation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_golden_replay_projection_engine.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-019",
+      "test": "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance",
+      "test_path": "tests/test_golden_replay_projection_governance.py",
+      "test_name": "test_bl5_replay_projection_closeout_governance",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Deprecated projection alias remains exported after declared closeout.",
+      "requirement_source": "docs/audits/closeouts/cycle_ar_replay_drift_classification_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Deprecated projection alias remains exported after declared closeout.",
+      "expected_behavior": "Remove the deprecated alias after verifying named-authority callers.",
+      "root_cause_finding": "retired projection alias remains exported",
+      "root_cause_cluster": "RC-15",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Remove the deprecated alias after verifying named-authority callers.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/closeouts/cycle_ar_replay_drift_classification_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_golden_replay_projection_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-020",
+      "test": "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report",
+      "test_path": "tests/test_golden_replay_protected_bridge.py",
+      "test_name": "test_protected_golden_assertion_failure_records_canonical_report",
+      "validation_family": "GOLDEN_PROTECTED_REPLAY",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Protected failure bridge does not record the expected canonical recurrence event.",
+      "requirement_source": "docs/audits/CR_protected_replay_recurrence_separation_closeout.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "direct",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Protected failure bridge does not record the expected canonical recurrence event.",
+      "expected_behavior": "Restore canonical recurrence recording on protected assertion failure.",
+      "root_cause_finding": "protected assertion bridge omits recurrence event",
+      "root_cause_cluster": "RC-16",
+      "confirmed_classification": "CONFIRMED_PRODUCT_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Restore canonical recurrence recording on protected assertion failure.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CR_protected_replay_recurrence_separation_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_golden_replay_protected_bridge.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-021",
+      "test": "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social",
+      "test_path": "tests/test_lead_npc_payoff_and_fallback.py",
+      "test_name": "test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Production path raises NameError for missing _question_prompt_for_resolution.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "direct",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Production path raises NameError for missing _question_prompt_for_resolution.",
+      "expected_behavior": "Restore the owned resolution-question helper or route to its current authority.",
+      "root_cause_finding": "social fallback calls an undefined prompt helper",
+      "root_cause_cluster": "RC-17",
+      "confirmed_classification": "CONFIRMED_PRODUCT_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Restore the owned resolution-question helper or route to its current authority.",
+      "repair_priority": "P0",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_lead_npc_payoff_and_fallback.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-022",
+      "test": "tests/test_ownership_write_path_governance.py::test_bu8_bu4_production_ownership_write_paths_parity_locked",
+      "test_path": "tests/test_ownership_write_path_governance.py",
+      "test_name": "test_bu8_bu4_production_ownership_write_paths_parity_locked",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "29 discovered production write paths are absent from the ownership registry.",
+      "requirement_source": "docs/architecture_ownership_ledger.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "29 discovered production write paths are absent from the ownership registry.",
+      "expected_behavior": "Review and register the 29 current production write paths; do not alter ownership policy.",
+      "root_cause_finding": "ownership write registry is missing discovered paths",
+      "root_cause_cluster": "RC-18",
+      "confirmed_classification": "GOVERNANCE_DRIFT",
+      "confidence": "HIGH",
+      "recommended_action": "Review and register the 29 current production write paths; do not alter ownership policy.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/architecture_ownership_ledger.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_ownership_write_path_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-023",
+      "test": "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked",
+      "test_path": "tests/test_ownership_write_path_governance.py",
+      "test_name": "test_bu9_visibility_fallback_producer_stamp_pairing_locked",
+      "validation_family": "OWNERSHIP_IMPORT_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Direct visibility owner writes bypass declared stamping functions.",
+      "requirement_source": "docs/architecture_ownership_ledger.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Direct visibility owner writes bypass declared stamping functions.",
+      "expected_behavior": "Route both direct owner writes through the declared stamping function.",
+      "root_cause_finding": "visibility fallback writes bypass producer stamping",
+      "root_cause_cluster": "RC-19",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Route both direct owner writes through the declared stamping function.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/architecture_ownership_ledger.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_ownership_write_path_governance.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-024",
+      "test": "tests/test_protected_replay_registry.py::test_golden_replay_marker_collects_protected_corpus_tests",
+      "test_path": "tests/test_protected_replay_registry.py",
+      "test_name": "test_golden_replay_marker_collects_protected_corpus_tests",
+      "validation_family": "GOLDEN_PROTECTED_REPLAY",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Marker now collects 7 tests while registry expectation is 6.",
+      "requirement_source": "docs/testing/protected_replay_manifest.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Marker now collects 7 tests while registry expectation is 6.",
+      "expected_behavior": "Update the count assertion to derive from the authoritative protected manifest.",
+      "root_cause_finding": "protected replay count lock predates CO102 case",
+      "root_cause_cluster": "RC-20",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Update the count assertion to derive from the authoritative protected manifest.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/testing/protected_replay_manifest.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_protected_replay_registry.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-025",
+      "test": "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+      "test_path": "tests/test_replacement_attribution_inventory.py",
+      "test_name": "test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Resolved attribution completeness declined from 7 to 6 records.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Resolved attribution completeness declined from 7 to 6 records.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_replacement_attribution_inventory.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-026",
+      "test": "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+      "test_path": "tests/test_replacement_attribution_inventory.py",
+      "test_name": "test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Missing mutation classification count increased from 8 to 9.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Missing mutation classification count increased from 8 to 9.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_replacement_attribution_inventory.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-027",
+      "test": "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+      "test_path": "tests/test_replacement_attribution_inventory.py",
+      "test_name": "test_co90_repair_mutation_baseline_resolved_completeness",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Resolved attribution baseline declined from 7 to 6.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Resolved attribution baseline declined from 7 to 6.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_replacement_attribution_inventory.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-028",
+      "test": "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness",
+      "test_path": "tests/test_replacement_attribution_inventory.py",
+      "test_name": "test_bs4_producer_stamp_report_improves_completeness",
+      "validation_family": "REPLAY_PROJECTION_DIAGNOSTICS",
+      "previous_classification": "REGISTRY_GOVERNANCE_DRIFT",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Current 83.93% completeness is below historical 85.71% baseline.",
+      "requirement_source": "docs/audits/CO96_attribution_program_closeout.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Current 83.93% completeness is below historical 85.71% baseline.",
+      "expected_behavior": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "root_cause_finding": "attribution corpus completeness regression",
+      "root_cause_cluster": "RC-01",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/audits/CO96_attribution_program_closeout.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_replacement_attribution_inventory.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-029",
+      "test": "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line",
+      "test_path": "tests/test_scene_destination_binding.py",
+      "test_name": "test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line",
+      "validation_family": "FINAL_EMISSION_CONTRACTS",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "HIGH",
+      "protected_requirement": "Aligned transition returns a blank-scene fallback instead of destination-grounded narration.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "direct",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Aligned transition returns a blank-scene fallback instead of destination-grounded narration.",
+      "expected_behavior": "Preserve resolved destination context when constructing the global scene fallback.",
+      "root_cause_finding": "resolved destination loses scene grounding in global fallback",
+      "root_cause_cluster": "RC-12",
+      "confirmed_classification": "CONFIRMED_PRODUCT_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Preserve resolved destination context when constructing the global scene fallback.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_scene_destination_binding.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-030",
+      "test": "tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+      "test_path": "tests/test_social_destination_redirect_leads.py",
+      "test_name": "test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+      "validation_family": "PYTEST_COMPONENT_CONTRACT",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Expected actionable NPC pending lead is absent despite clue discovery.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Expected actionable NPC pending lead is absent despite clue discovery.",
+      "expected_behavior": "Choose the authoritative lead representation, then align production and component contracts.",
+      "root_cause_finding": "destination redirect authority between NPC pending and clue state is ambiguous",
+      "root_cause_cluster": "RC-21",
+      "confirmed_classification": "POLICY_DECISION_REQUIRED",
+      "confidence": "LOW",
+      "recommended_action": "Choose the authoritative lead representation, then align production and component contracts.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_social_destination_redirect_leads.py"
+      ],
+      "human_judgment_required": true,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-031",
+      "test": "tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+      "test_path": "tests/test_social_destination_redirect_leads.py",
+      "test_name": "test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+      "validation_family": "PYTEST_COMPONENT_CONTRACT",
+      "previous_classification": "CURRENT_PRODUCT_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Redirect fails to preserve expected NPC pending lead.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Redirect fails to preserve expected NPC pending lead.",
+      "expected_behavior": "Choose the authoritative lead representation, then align production and component contracts.",
+      "root_cause_finding": "destination redirect authority between NPC pending and clue state is ambiguous",
+      "root_cause_cluster": "RC-21",
+      "confirmed_classification": "POLICY_DECISION_REQUIRED",
+      "confidence": "LOW",
+      "recommended_action": "Choose the authoritative lead representation, then align production and component contracts.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_social_destination_redirect_leads.py"
+      ],
+      "human_judgment_required": true,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-032",
+      "test": "tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending",
+      "test_path": "tests/test_social_destination_redirect_leads.py",
+      "test_name": "test_destination_lead_distinct_from_existing_milestone_pending",
+      "validation_family": "PYTEST_COMPONENT_CONTRACT",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "LOW",
+      "protected_requirement": "Absence of NPC pending may reflect changed lead authority; intent is uncertain.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Absence of NPC pending may reflect changed lead authority; intent is uncertain.",
+      "expected_behavior": "Choose the authoritative lead representation, then align production and component contracts.",
+      "root_cause_finding": "destination redirect authority between NPC pending and clue state is ambiguous",
+      "root_cause_cluster": "RC-21",
+      "confirmed_classification": "POLICY_DECISION_REQUIRED",
+      "confidence": "LOW",
+      "recommended_action": "Choose the authoritative lead representation, then align production and component contracts.",
+      "repair_priority": "P2",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_social_destination_redirect_leads.py"
+      ],
+      "human_judgment_required": true,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-033",
+      "test": "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty",
+      "test_path": "tests/test_social_lead_landing.py",
+      "test_name": "test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty",
+      "validation_family": "PYTEST_COMPONENT_CONTRACT",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Current enforced source is exit rather than historical discoverable_clue expectation.",
+      "requirement_source": "docs/narrative_integrity_architecture.md",
+      "current_architecture_relevance": "supporting",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Current enforced source is exit rather than historical discoverable_clue expectation.",
+      "expected_behavior": "Assert actionable lead semantics rather than the historical source label.",
+      "root_cause_finding": "minimum lead source changed from clue to exit",
+      "root_cause_cluster": "RC-22",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Assert actionable lead semantics rather than the historical source label.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/narrative_integrity_architecture.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_social_lead_landing.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-034",
+      "test": "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces",
+      "test_path": "tests/test_validation_layer_closeout.py",
+      "test_name": "test_na_live_module_does_not_import_gate_or_evaluator_surfaces",
+      "validation_family": "ARCHITECTURE_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Narrative authenticity module imports final_emission_repairs, contrary to declared separation.",
+      "requirement_source": "docs/validation_layer_separation.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Narrative authenticity module imports final_emission_repairs, contrary to declared separation.",
+      "expected_behavior": "Move the dependency behind the reconciled validation-layer boundary.",
+      "root_cause_finding": "narrative-authenticity module imports gate repair surface",
+      "root_cause_cluster": "RC-23",
+      "confirmed_classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "confidence": "HIGH",
+      "recommended_action": "Move the dependency behind the reconciled validation-layer boundary.",
+      "repair_priority": "P1",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_layer_separation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_validation_layer_closeout.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-035",
+      "test": "tests/test_validation_layer_closeout.py::test_offline_evaluator_import_allowlist_matches_audit_policy",
+      "test_path": "tests/test_validation_layer_closeout.py",
+      "test_name": "test_offline_evaluator_import_allowlist_matches_audit_policy",
+      "validation_family": "ARCHITECTURE_GOVERNANCE",
+      "previous_classification": "STALE_EXPECTATION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Evaluator now uses observability_attribution_read rather than historical final_emission_meta allowlist.",
+      "requirement_source": "docs/validation_layer_separation.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Evaluator now uses observability_attribution_read rather than historical final_emission_meta allowlist.",
+      "expected_behavior": "Update the allowlist to the reconciled read-only facade.",
+      "root_cause_finding": "offline evaluator allowlist predates attribution read facade",
+      "root_cause_cluster": "RC-24",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Update the allowlist to the reconciled read-only facade.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_layer_separation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_validation_layer_closeout.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    },
+    {
+      "investigation_id": "BT-036",
+      "test": "tests/test_validation_layer_separation_runtime.py::test_final_emission_gate_imports_are_gate_layer_not_evaluator",
+      "test_path": "tests/test_validation_layer_separation_runtime.py",
+      "test_name": "test_final_emission_gate_imports_are_gate_layer_not_evaluator",
+      "validation_family": "ARCHITECTURE_GOVERNANCE",
+      "previous_classification": "CURRENT_ARCHITECTURE_REGRESSION",
+      "previous_confidence": "MEDIUM",
+      "protected_requirement": "Runtime module graph no longer exhibits the declared gate-layer import shape.",
+      "requirement_source": "docs/validation_layer_separation.md",
+      "current_architecture_relevance": "direct",
+      "current_product_relevance": "indirect",
+      "reproduction_status": "REPRODUCED_IN_PRE_TRIAGE_JUNIT",
+      "observed_behavior": "Runtime module graph no longer exhibits the declared gate-layer import shape.",
+      "expected_behavior": "Replace the historical module-presence assertion with the current layer invariant.",
+      "root_cause_finding": "runtime import-shape assertion predates gate composition split",
+      "root_cause_cluster": "RC-25",
+      "confirmed_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "recommended_action": "Replace the historical module-presence assertion with the current layer invariant.",
+      "repair_priority": "P3",
+      "dependencies": [],
+      "evidence_references": [
+        "docs/validation_layer_separation.md",
+        "artifacts/baseline_triage/pre_triage_suite.xml",
+        "tests/test_validation_layer_separation_runtime.py"
+      ],
+      "human_judgment_required": false,
+      "notes": "No production or validation repair was made during triage."
+    }
+  ],
+  "root_cause_clusters": [
+    {
+      "cluster_id": "RC-01",
+      "affected_tests": [
+        "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+        "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+        "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+        "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "attribution corpus completeness regression",
+      "confirmed_cause": "attribution corpus completeness regression",
+      "recommended_repair": "Repair the unstamped/misclassified mutation producer and then refresh derived metrics.",
+      "expected_failures_resolved": 6,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-02",
+      "affected_tests": [
+        "tests/test_bv3e_eligibility_expansion.py::test_canonical_session_log_observe_shape_repairs_when_replayed"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "obsolete repair-eligibility session fixture",
+      "confirmed_cause": "obsolete repair-eligibility session fixture",
+      "recommended_repair": "Modernize the canonical fixture without changing eligibility policy.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-03",
+      "affected_tests": [
+        "tests/test_ck_hotspot_compression_report.py::test_ck_fi_parse_from_bu_csv"
+      ],
+      "affected_validation_families": [
+        "ARCHITECTURE_GOVERNANCE"
+      ],
+      "underlying_subsystem": "historical hotspot percentage snapshot",
+      "confirmed_cause": "historical hotspot percentage snapshot",
+      "recommended_repair": "Regenerate the diagnostic snapshot from the current BU inventory.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-04",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "affected_validation_families": [
+        "OWNERSHIP_IMPORT_GOVERNANCE"
+      ],
+      "underlying_subsystem": "final-emission metadata facade bypasses",
+      "confirmed_cause": "final-emission metadata facade bypasses",
+      "recommended_repair": "Route production reads/writes through the reconciled facade; separately clean test-only imports.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-05",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "affected_validation_families": [
+        "OWNERSHIP_IMPORT_GOVERNANCE"
+      ],
+      "underlying_subsystem": "attribution helper imports sealed owner constants",
+      "confirmed_cause": "attribution helper imports sealed owner constants",
+      "recommended_repair": "Make the test helper consume attribution_read_views.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-06",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_fi_cap_locked"
+      ],
+      "affected_validation_families": [
+        "OWNERSHIP_IMPORT_GOVERNANCE"
+      ],
+      "underlying_subsystem": "test-only social compatibility barrel fan-in",
+      "confirmed_cause": "test-only social compatibility barrel fan-in",
+      "recommended_repair": "Import named social authorities in the integration test and recompute the cap.",
+      "expected_failures_resolved": 2,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-07",
+      "affected_tests": [
+        "tests/test_dead_turn_evaluation_threading.py::test_playability_eval_excludes_only_from_fem_dead_turn_source"
+      ],
+      "affected_validation_families": [
+        "PLAYABILITY_RUNTIME"
+      ],
+      "underlying_subsystem": "playability result schema grew diagnostic fields",
+      "confirmed_cause": "playability result schema grew diagnostic fields",
+      "recommended_repair": "Assert the authoritative exclusion fields instead of exact whole-dict equality.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-08",
+      "affected_tests": [
+        "tests/test_failure_classification_contract.py::test_classifier_evidence_manifest_matches_optional_contract_fields",
+        "tests/test_failure_classification_contract.py::test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+        "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "failure-evidence governance manifests diverged",
+      "confirmed_cause": "failure-evidence governance manifests diverged",
+      "recommended_repair": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "expected_failures_resolved": 3,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-09",
+      "affected_tests": [
+        "tests/test_final_emission_debt_retirement.py::test_final_emission_modules_forbidden_substring_snapshot"
+      ],
+      "affected_validation_families": [
+        "FINAL_EMISSION_CONTRACTS"
+      ],
+      "underlying_subsystem": "final-emission debt snapshot predates later modules",
+      "confirmed_cause": "final-emission debt snapshot predates later modules",
+      "recommended_repair": "Re-audit and regenerate the debt snapshot against current modules.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-10",
+      "affected_tests": [
+        "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only"
+      ],
+      "affected_validation_families": [
+        "FINAL_EMISSION_CONTRACTS"
+      ],
+      "underlying_subsystem": "raw-token compatibility boundary lacks final authority",
+      "confirmed_cause": "raw-token compatibility boundary lacks final authority",
+      "recommended_repair": "Choose whether opening fallback is the sole permitted local raw-token consumer.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "LOW"
+    },
+    {
+      "cluster_id": "RC-11",
+      "affected_tests": [
+        "tests/test_final_emission_opening_accept_debug.py::test_reassert_scene_opening_accepted_candidate_matches_inline_sequence"
+      ],
+      "affected_validation_families": [
+        "FINAL_EMISSION_CONTRACTS"
+      ],
+      "underlying_subsystem": "opening acceptance debug sequence diverges",
+      "confirmed_cause": "opening acceptance debug sequence diverges",
+      "recommended_repair": "Trace candidate mutation ordering with non-semantic instrumentation before repair.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "LOW"
+    },
+    {
+      "cluster_id": "RC-12",
+      "affected_tests": [
+        "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+        "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line"
+      ],
+      "affected_validation_families": [
+        "FINAL_EMISSION_CONTRACTS"
+      ],
+      "underlying_subsystem": "resolved destination loses scene grounding in global fallback",
+      "confirmed_cause": "resolved destination loses scene grounding in global fallback",
+      "recommended_repair": "Preserve resolved destination context when constructing the global scene fallback.",
+      "expected_failures_resolved": 2,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-13",
+      "affected_tests": [
+        "tests/test_golden_replay_long_session.py::test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "25-turn diagnostic history is not stable",
+      "confirmed_cause": "25-turn diagnostic history is not stable",
+      "recommended_repair": "Capture the first divergent turn and determine whether mutable history or runtime logic owns it.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "LOW"
+    },
+    {
+      "cluster_id": "RC-14",
+      "affected_tests": [
+        "tests/test_golden_replay_projection_engine.py::test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "projection backup predates attribution columns",
+      "confirmed_cause": "projection backup predates attribution columns",
+      "recommended_repair": "Replace byte identity with a versioned semantic projection assertion.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-15",
+      "affected_tests": [
+        "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance"
+      ],
+      "affected_validation_families": [
+        "REPLAY_PROJECTION_DIAGNOSTICS"
+      ],
+      "underlying_subsystem": "retired projection alias remains exported",
+      "confirmed_cause": "retired projection alias remains exported",
+      "recommended_repair": "Remove the deprecated alias after verifying named-authority callers.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-16",
+      "affected_tests": [
+        "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report"
+      ],
+      "affected_validation_families": [
+        "GOLDEN_PROTECTED_REPLAY"
+      ],
+      "underlying_subsystem": "protected assertion bridge omits recurrence event",
+      "confirmed_cause": "protected assertion bridge omits recurrence event",
+      "recommended_repair": "Restore canonical recurrence recording on protected assertion failure.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-17",
+      "affected_tests": [
+        "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social"
+      ],
+      "affected_validation_families": [
+        "FINAL_EMISSION_CONTRACTS"
+      ],
+      "underlying_subsystem": "social fallback calls an undefined prompt helper",
+      "confirmed_cause": "social fallback calls an undefined prompt helper",
+      "recommended_repair": "Restore the owned resolution-question helper or route to its current authority.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-18",
+      "affected_tests": [
+        "tests/test_ownership_write_path_governance.py::test_bu8_bu4_production_ownership_write_paths_parity_locked"
+      ],
+      "affected_validation_families": [
+        "OWNERSHIP_IMPORT_GOVERNANCE"
+      ],
+      "underlying_subsystem": "ownership write registry is missing discovered paths",
+      "confirmed_cause": "ownership write registry is missing discovered paths",
+      "recommended_repair": "Review and register the 29 current production write paths; do not alter ownership policy.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-19",
+      "affected_tests": [
+        "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked"
+      ],
+      "affected_validation_families": [
+        "OWNERSHIP_IMPORT_GOVERNANCE"
+      ],
+      "underlying_subsystem": "visibility fallback writes bypass producer stamping",
+      "confirmed_cause": "visibility fallback writes bypass producer stamping",
+      "recommended_repair": "Route both direct owner writes through the declared stamping function.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-20",
+      "affected_tests": [
+        "tests/test_protected_replay_registry.py::test_golden_replay_marker_collects_protected_corpus_tests"
+      ],
+      "affected_validation_families": [
+        "GOLDEN_PROTECTED_REPLAY"
+      ],
+      "underlying_subsystem": "protected replay count lock predates CO102 case",
+      "confirmed_cause": "protected replay count lock predates CO102 case",
+      "recommended_repair": "Update the count assertion to derive from the authoritative protected manifest.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-21",
+      "affected_tests": [
+        "tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+        "tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+        "tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending"
+      ],
+      "affected_validation_families": [
+        "PYTEST_COMPONENT_CONTRACT"
+      ],
+      "underlying_subsystem": "destination redirect authority between NPC pending and clue state is ambiguous",
+      "confirmed_cause": "destination redirect authority between NPC pending and clue state is ambiguous",
+      "recommended_repair": "Choose the authoritative lead representation, then align production and component contracts.",
+      "expected_failures_resolved": 3,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "LOW"
+    },
+    {
+      "cluster_id": "RC-22",
+      "affected_tests": [
+        "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty"
+      ],
+      "affected_validation_families": [
+        "PYTEST_COMPONENT_CONTRACT"
+      ],
+      "underlying_subsystem": "minimum lead source changed from clue to exit",
+      "confirmed_cause": "minimum lead source changed from clue to exit",
+      "recommended_repair": "Assert actionable lead semantics rather than the historical source label.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-23",
+      "affected_tests": [
+        "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+      ],
+      "affected_validation_families": [
+        "ARCHITECTURE_GOVERNANCE"
+      ],
+      "underlying_subsystem": "narrative-authenticity module imports gate repair surface",
+      "confirmed_cause": "narrative-authenticity module imports gate repair surface",
+      "recommended_repair": "Move the dependency behind the reconciled validation-layer boundary.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "MEDIUM",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-24",
+      "affected_tests": [
+        "tests/test_validation_layer_closeout.py::test_offline_evaluator_import_allowlist_matches_audit_policy"
+      ],
+      "affected_validation_families": [
+        "ARCHITECTURE_GOVERNANCE"
+      ],
+      "underlying_subsystem": "offline evaluator allowlist predates attribution read facade",
+      "confirmed_cause": "offline evaluator allowlist predates attribution read facade",
+      "recommended_repair": "Update the allowlist to the reconciled read-only facade.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    },
+    {
+      "cluster_id": "RC-25",
+      "affected_tests": [
+        "tests/test_validation_layer_separation_runtime.py::test_final_emission_gate_imports_are_gate_layer_not_evaluator"
+      ],
+      "affected_validation_families": [
+        "ARCHITECTURE_GOVERNANCE"
+      ],
+      "underlying_subsystem": "runtime import-shape assertion predates gate composition split",
+      "confirmed_cause": "runtime import-shape assertion predates gate composition split",
+      "recommended_repair": "Replace the historical module-presence assertion with the current layer invariant.",
+      "expected_failures_resolved": 1,
+      "regression_risk": "LOW",
+      "dependencies": [],
+      "confidence": "HIGH"
+    }
+  ]
+}

@@ -1,0 +1,982 @@
+{
+  "case_id": "RC-13",
+  "continuity_axes": {
+    "branch_coherence": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "narrative_grounding": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "referent_persistence": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "state_continuity": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    },
+    "world_project_progression": {
+      "failure_codes": [],
+      "passed": true,
+      "warning_codes": []
+    }
+  },
+  "degradation": {
+    "clarity_warning_count": 0,
+    "continuity_warning_count": 0,
+    "early_window": {
+      "signals": [],
+      "turn_range": {
+        "end": 8,
+        "start": 0
+      },
+      "warning_count": 0
+    },
+    "grounding_warning_count": 0,
+    "late_window": {
+      "signals": [],
+      "turn_range": {
+        "end": 24,
+        "start": 17
+      },
+      "warning_count": 0
+    },
+    "middle_window": {
+      "signals": [],
+      "turn_range": {
+        "end": 16,
+        "start": 9
+      },
+      "warning_count": 0
+    },
+    "progressive_degradation_detected": false,
+    "reason_codes": []
+  },
+  "first_aggregate_limit_exceedance": {
+    "count": 15,
+    "turn_id": "act_19",
+    "turn_index": 18
+  },
+  "first_unprofiled_mutation": {
+    "mutation_kinds": [
+      "sealed_replacement_mutation"
+    ],
+    "turn_id": "act_02",
+    "turn_index": 1
+  },
+  "observed_event_kind_frequency": {
+    "fallback_selected": 7,
+    "gate_outcome": 25,
+    "mutation": 19,
+    "speaker_repair": 1
+  },
+  "observed_mutation_kind_frequency": {
+    "fallback_mutation": 7,
+    "final_emission_mutation": 4,
+    "referential_clarity_replacement_mutation": 1,
+    "response_type_repair_mutation": 2,
+    "sealed_replacement_mutation": 4,
+    "speaker_repair_mutation": 1
+  },
+  "profile_mutation_limit": 14,
+  "scenario_id": "frontier_gate_direct_intrusion_25_turn_diagnostic",
+  "session_health": {
+    "branch_id": "branch_direct_intrusion",
+    "classification": "clean",
+    "continuation_convergence_passed": true,
+    "continuation_emergency_nonplan_count": 0,
+    "continuation_engine_only_count": 0,
+    "continuation_explicit_nonplan_count": 0,
+    "continuation_failure_reasons": [],
+    "continuation_plan_verified_count": 0,
+    "continuation_turns_checked": 0,
+    "degradation_detected": false,
+    "first_continuation_failure_turn_id": null,
+    "first_missing_turn_by_key": {},
+    "first_missing_turn_by_scenario_spine_identity_key": {},
+    "full_length_branch": true,
+    "long_session_band": "long",
+    "metadata_completeness_passed": true,
+    "missing_by_key": {
+      "final_emission_meta": 0,
+      "narration_seam": 0,
+      "opening_convergence": 0,
+      "planner_convergence": 0,
+      "response_type_contract": 0,
+      "scenario_spine": 0
+    },
+    "missing_scenario_spine_identity_by_key": {
+      "artifact_schema_version": 0,
+      "branch_id": 0,
+      "max_turns": 0,
+      "resume_entry_first_turn": 0,
+      "smoke": 0,
+      "spine_id": 0,
+      "turn_id": 0,
+      "turn_index": 0
+    },
+    "opening_anchor_grounding_failures": 0,
+    "opening_convergence_failure_details": [],
+    "opening_convergence_verdict": "no_observations",
+    "opening_invalid_plan_count": 0,
+    "opening_plan_backed_count": 0,
+    "opening_plan_missing_count": 0,
+    "opening_repeated_generic_first_line": false,
+    "opening_resume_entry_checked": 0,
+    "opening_seam_failure_count": 0,
+    "opening_stock_fallback_hits": 0,
+    "opening_turns_checked": 0,
+    "overall_passed": true,
+    "score": 100,
+    "scripted_turn_count": 25,
+    "turn_count": 25,
+    "turns_checked": 25,
+    "turns_missing_meta": 0
+  },
+  "summary": {
+    "fallback_owner_change_count": 0,
+    "fallback_turn_count": 7,
+    "mutation_turn_count": 25,
+    "route_change_count": 6,
+    "speaker_change_count": 3,
+    "speaker_missing_count": 20,
+    "turn_count": 25
+  },
+  "turn_count": 25,
+  "turns": [
+    {
+      "cumulative_mutation_count": 0,
+      "cumulative_mutation_kinds": {},
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_01",
+      "turn_index": 0
+    },
+    {
+      "cumulative_mutation_count": 2,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 1,
+        "sealed_replacement_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "sealed_unknown_replacement",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement",
+          "repair_kind": "strict_social_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "replaced_or_sealed",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "sealed_replacement_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:sealed_replacement_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "neutral_reply_speaker_grounding_bridge",
+      "mutation_kinds": [
+        "sealed_replacement_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_02",
+      "turn_index": 1
+    },
+    {
+      "cumulative_mutation_count": 4,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 2,
+        "sealed_replacement_mutation": 2
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "sealed_unknown_replacement",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement",
+          "repair_kind": "strict_social_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "replaced_or_sealed",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "sealed_replacement_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:sealed_replacement_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "neutral_reply_speaker_grounding_bridge",
+      "mutation_kinds": [
+        "sealed_replacement_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_03",
+      "turn_index": 2
+    },
+    {
+      "cumulative_mutation_count": 5,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 2,
+        "final_emission_mutation": 1,
+        "sealed_replacement_mutation": 2
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "strict_social_accept",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "final_emission_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:final_emission_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [
+        "final_emission_mutation"
+      ],
+      "route_kind": "dialogue",
+      "selected_speaker_id": "threadbare_watcher",
+      "turn_id": "act_04",
+      "turn_index": 3
+    },
+    {
+      "cumulative_mutation_count": 6,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 2,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 2
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "strict_social_accept",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "final_emission_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:final_emission_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [
+        "final_emission_mutation"
+      ],
+      "route_kind": "dialogue",
+      "selected_speaker_id": "gate_guard",
+      "turn_id": "act_05",
+      "turn_index": 4
+    },
+    {
+      "cumulative_mutation_count": 6,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 2,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 2
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "dialogue",
+      "selected_speaker_id": null,
+      "turn_id": "act_06",
+      "turn_index": 5
+    },
+    {
+      "cumulative_mutation_count": 6,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 2,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 2
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_07",
+      "turn_index": 6
+    },
+    {
+      "cumulative_mutation_count": 8,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 3,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 3
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "sealed_unknown_replacement",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement",
+          "repair_kind": "strict_social_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "replaced_or_sealed",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "sealed_replacement_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:sealed_replacement_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "neutral_reply_speaker_grounding_bridge",
+      "mutation_kinds": [
+        "sealed_replacement_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_08",
+      "turn_index": 7
+    },
+    {
+      "cumulative_mutation_count": 8,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 3,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 3
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_09",
+      "turn_index": 8
+    },
+    {
+      "cumulative_mutation_count": 8,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 3,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 3
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_10",
+      "turn_index": 9
+    },
+    {
+      "cumulative_mutation_count": 8,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 3,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 3
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_11",
+      "turn_index": 10
+    },
+    {
+      "cumulative_mutation_count": 11,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 4,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "sealed_unknown_replacement",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement",
+          "repair_kind": "strict_social_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "replaced_or_sealed",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:replaced_or_sealed",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "speaker_repair",
+          "owner": "game.speaker_contract_enforcement",
+          "recurrence_key": "speaker_repair:gate:game.speaker_contract_enforcement:narrator_neutral",
+          "repair_kind": "narrator_neutral",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "sealed_replacement_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:sealed_replacement_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "speaker_repair_mutation",
+          "owner": "game.speaker_contract_enforcement",
+          "recurrence_key": "mutation:gate:game.speaker_contract_enforcement:speaker_repair_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "neutral_reply_speaker_grounding_bridge",
+      "mutation_kinds": [
+        "sealed_replacement_mutation",
+        "speaker_repair_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_12",
+      "turn_index": 11
+    },
+    {
+      "cumulative_mutation_count": 11,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 4,
+        "final_emission_mutation": 2,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_13",
+      "turn_index": 12
+    },
+    {
+      "cumulative_mutation_count": 13,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 5,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "referential_clarity_hard_replacement",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:referential_clarity_hard_replacement",
+          "repair_kind": "passive_scene_pressure_fallback",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "referential_clarity_hard_replaced",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:referential_clarity_hard_replaced",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "referential_clarity_replacement_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:referential_clarity_replacement_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "gate_terminal_repair",
+      "mutation_kinds": [
+        "referential_clarity_replacement_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_14",
+      "turn_index": 13
+    },
+    {
+      "cumulative_mutation_count": 13,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 5,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_15",
+      "turn_index": 14
+    },
+    {
+      "cumulative_mutation_count": 13,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 5,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_16",
+      "turn_index": 15
+    },
+    {
+      "cumulative_mutation_count": 13,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 5,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_17",
+      "turn_index": 16
+    },
+    {
+      "cumulative_mutation_count": 13,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 5,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_18",
+      "turn_index": 17
+    },
+    {
+      "cumulative_mutation_count": 15,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "response_type_prepared_emission",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
+          "repair_kind": "referential_clarity_enforcement",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "prepared_repair",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:prepared_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "response_type_repair_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "gate_terminal_repair",
+      "mutation_kinds": [
+        "response_type_repair_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_19",
+      "turn_index": 18
+    },
+    {
+      "cumulative_mutation_count": 15,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "action",
+      "selected_speaker_id": "tavern_runner",
+      "turn_id": "act_20",
+      "turn_index": 19
+    },
+    {
+      "cumulative_mutation_count": 15,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 2,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "undecided",
+      "selected_speaker_id": null,
+      "turn_id": "act_21",
+      "turn_index": 20
+    },
+    {
+      "cumulative_mutation_count": 16,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 3,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "strict_social_accept",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "final_emission_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:final_emission_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [
+        "final_emission_mutation"
+      ],
+      "route_kind": "dialogue",
+      "selected_speaker_id": "gate_guard",
+      "turn_id": "act_22",
+      "turn_index": 21
+    },
+    {
+      "cumulative_mutation_count": 17,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 4,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "strict_social_accept",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:strict_social_accept",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "final_emission_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:final_emission_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [
+        "final_emission_mutation"
+      ],
+      "route_kind": "dialogue",
+      "selected_speaker_id": "gate_guard",
+      "turn_id": "act_23",
+      "turn_index": 22
+    },
+    {
+      "cumulative_mutation_count": 17,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 6,
+        "final_emission_mutation": 4,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 1,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "accept_unchanged",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": null,
+      "mutation_kinds": [],
+      "route_kind": "action",
+      "selected_speaker_id": null,
+      "turn_id": "act_24",
+      "turn_index": 23
+    },
+    {
+      "cumulative_mutation_count": 19,
+      "cumulative_mutation_kinds": {
+        "fallback_mutation": 7,
+        "final_emission_mutation": 4,
+        "referential_clarity_replacement_mutation": 1,
+        "response_type_repair_mutation": 2,
+        "sealed_replacement_mutation": 4,
+        "speaker_repair_mutation": 1
+      },
+      "events": [
+        {
+          "event_kind": "fallback_selected",
+          "fallback_kind": "response_type_prepared_emission",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission",
+          "repair_kind": "action_outcome_upstream_prepared_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "gate_outcome",
+          "gate_path": "prepared_repair",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "gate_outcome:gate:game.final_emission_gate:prepared_repair",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "response_type_repair_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:response_type_repair_mutation",
+          "stage": "gate"
+        },
+        {
+          "event_kind": "mutation",
+          "mutation_kind": "fallback_mutation",
+          "owner": "game.final_emission_gate",
+          "recurrence_key": "mutation:gate:game.final_emission_gate:fallback_mutation",
+          "stage": "gate"
+        }
+      ],
+      "fallback_family": "gate_terminal_repair",
+      "mutation_kinds": [
+        "response_type_repair_mutation",
+        "fallback_mutation"
+      ],
+      "route_kind": "action",
+      "selected_speaker_id": null,
+      "turn_id": "act_25",
+      "turn_index": 24
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "unresolved-root-cause-investigation.v1",
+  "observed_at": "2026-09-19",
+  "scope": ["RC-11", "RC-13"],
+  "repair_performed": false,
+  "cases": [
+    {
+      "case_id": "RC-11",
+      "test": "tests/test_final_emission_opening_accept_debug.py::test_reassert_scene_opening_accepted_candidate_matches_inline_sequence",
+      "classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "root_cause": "The preserved pre-BU2-C whole-dictionary comparator predates governed semantic-mutation write-site attribution added to the current helper.",
+      "first_meaningful_divergence": "After accepted-candidate text restoration, the current helper appends _final_emission_meta.semantic_mutation_write_sites; the preserved inline comparator does not.",
+      "product_behavior_changed": false,
+      "validation_behavior_changed": false,
+      "reproduction": {"attempts": 10, "identical_failures": 10},
+      "recommended_action": "Modernize the equivalence test to compare the protected text/debug contract and separately require the governed diagnostic write-site row.",
+      "evidence": ["rc11_trace.json", "rc11_trace.md", "rc11_run_1.xml through rc11_run_10.xml"]
+    },
+    {
+      "case_id": "RC-13",
+      "test": "tests/test_golden_replay_long_session.py::test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability",
+      "classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "root_cause": "The diagnostic lineage profile's aggregate mutation cap predates explicit sealed-replacement and referential-clarity mutation categories now projected by the governed runtime lineage.",
+      "first_meaningful_divergence": "act_02 adds sealed_replacement_mutation, a category absent from the profile; act_19 is the first turn where cumulative mutations exceed 14.",
+      "product_behavior_changed": false,
+      "validation_behavior_changed": false,
+      "reproduction": {"attempts": 10, "identical_failures": 10},
+      "recommended_action": "Recalibrate the diagnostic profile from governed mutation subtypes and make the aggregate expectation derivable from those subtype expectations; retain the current replay and projection behavior.",
+      "evidence": ["rc13_turn_trace.json", "rc13_turn_trace.md", "rc13_root_cause.md", "rc13_run_1.xml through rc13_run_10.xml"]
+    }
+  ],
+  "explicitly_undecided": ["RC-10", "RC-21"]
+}

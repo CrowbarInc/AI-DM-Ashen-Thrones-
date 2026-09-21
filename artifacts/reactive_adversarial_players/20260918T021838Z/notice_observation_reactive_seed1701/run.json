@@ -1,0 +1,280 @@
+{
+  "artifact_version": 1,
+  "scenario_id": "notice_observation",
+  "player_strategy": "reactive",
+  "seed": 1701,
+  "configuration": {
+    "objective": "Read the concrete information posted on the gate notice.",
+    "max_turns": 6,
+    "max_attempts_per_intent": 3
+  },
+  "termination_reason": "objective_resolved",
+  "turn_count": 1,
+  "valid_run": true,
+  "unresolved_intents": [],
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_objective": "Read the concrete information posted on the gate notice.",
+      "current_intent": "Read the concrete information posted on the gate notice.",
+      "selected_player_action": "I inspect the notice closely and read what is posted.",
+      "selection_reason": "initial_objective:Read the concrete information posted on the gate notice.",
+      "relevant_prior_context": {
+        "player": "",
+        "gm": ""
+      },
+      "gm_response": "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the eastern caravan choke point still competes for notice.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 35,
+            "text_preview": "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the "
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "closely",
+              "inspect",
+              "notice",
+              "posted",
+              "read",
+              "what"
+            ],
+            "gm_terms": [
+              "again",
+              "ash",
+              "board",
+              "caravan",
+              "census",
+              "choke",
+              "compact",
+              "competes",
+              "curfew",
+              "delays",
+              "eastern",
+              "lists",
+              "look",
+              "missing",
+              "notice",
+              "patrol",
+              "point",
+              "rules",
+              "sharpens",
+              "still"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 82,
+        "rating": "strong",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 18,
+          "logical_escalation": 19,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 35,
+              "text_preview": "The notice board lists taxes, curfew rules, and a warning about a missing patrol sharpens when you look again, and ash compact census delays have tightened the "
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "closely",
+                "inspect",
+                "notice",
+                "posted",
+                "read",
+                "what"
+              ],
+              "gm_terms": [
+                "again",
+                "ash",
+                "board",
+                "caravan",
+                "census",
+                "choke",
+                "compact",
+                "competes",
+                "curfew",
+                "delays",
+                "eastern",
+                "lists",
+                "look",
+                "missing",
+                "notice",
+                "patrol",
+                "point",
+                "rules",
+                "sharpens",
+                "still"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 19,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.034,
+              "gm_word_count": 35,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.167,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 35
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 82,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "investigate",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    }
+  ]
+}

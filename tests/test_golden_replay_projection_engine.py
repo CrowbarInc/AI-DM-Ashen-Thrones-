@@ -36,7 +36,19 @@ def _stable_json(row: dict) -> str:
     )
 
 
-def test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup():
+_POST_CL7_ATTRIBUTION_FIELDS = frozenset(
+    {
+        "authoritative_evidence_source",
+        "authoritative_mutation_confidence",
+        "authoritative_mutation_family",
+        "authoritative_mutation_owner",
+        "authoritative_write_site",
+        "used_projection_inference",
+    }
+)
+
+
+def test_cl7_projected_rows_preserve_backup_fields_with_versioned_attribution_extension():
     backup = _load_backup_module()
     sparse_payload = minimal_turn_payload(
         scenario_id="cl7_sparse_projection",
@@ -51,9 +63,11 @@ def test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup():
     )
 
     for payload in (sparse_payload, rich_payload):
-        assert _stable_json(project_turn_observation(payload)) == _stable_json(
-            backup.project_turn_observation(payload)
-        )
+        current = project_turn_observation(payload)
+        previous = backup.project_turn_observation(payload)
+        assert set(current) - set(previous) == _POST_CL7_ATTRIBUTION_FIELDS
+        legacy_projection = {key: current[key] for key in previous}
+        assert _stable_json(legacy_projection) == _stable_json(previous)
 
 
 def test_cl7_flat_projection_ordering_unchanged_from_backup():

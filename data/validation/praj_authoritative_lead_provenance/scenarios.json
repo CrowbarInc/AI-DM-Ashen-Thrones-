@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.praj_authoritative_lead_provenance.r1",
+  "description": "PR-AJ continuation: ordinary-play chain through the repaired Captain answer, then one more natural action.",
+  "scenarios": [
+    {
+      "case_id": "R2-MT01-AJ",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry_return_captain_answer_no_prose_lead",
+      "initial_objective": "Learn the missing-patrol route, pursue it, investigate, return, observe, reread the board, bind the Guard Captain, receive a legitimate first-ask answer without a prose-derived lead, then take one more natural action.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate notice board, notice_patrol_route clue, old_milestone destination, authored return exit, bound Guard Captain first-ask knowledge, lead provenance",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "I look around.",
+        "I examine the milestone.",
+        "I'll head back to the gate.",
+        "I look around.",
+        "I read the notice board again.",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "If the watch already has a commander on this, I'll check the roster board the serjeant is watching.",
+        "I look around the gate again after that."
+      ]
+    }
+  ]
+}

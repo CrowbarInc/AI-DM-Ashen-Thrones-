@@ -67,6 +67,25 @@ _EXPLICIT_NON_SOCIAL_REDIRECT_RES: tuple[tuple[re.Pattern[str], str], ...] = (
         ),
         "change_course",
     ),
+    (
+        re.compile(
+            r"\b(?:i|we)\s+(?:walk|step|pace|move)\s+(?:a\s+few|along|beside|closer)\b",
+            re.IGNORECASE,
+        ),
+        "local_physical_movement",
+    ),
+    (
+        re.compile(r"\b(?:i|we)\s+(?:pace|paces|pacing)\b", re.IGNORECASE),
+        "local_pace",
+    ),
+    (
+        re.compile(r"\b(?:i|we)\s+listen\b", re.IGNORECASE),
+        "listen_perception",
+    ),
+    (
+        re.compile(r"\band\s+listen\b", re.IGNORECASE),
+        "and_listen_perception",
+    ),
 )
 
 

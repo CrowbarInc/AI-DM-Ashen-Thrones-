@@ -689,9 +689,9 @@ def test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_emp
     )
     assert dbg is not None
     assert dbg.get("minimum_actionable_lead_enforced") is True
-    # Authored discoverable_clues (old milestone) win before generic investigative exits.
-    assert dbg.get("enforced_lead_source") == "discoverable_clue"
-    assert dbg.get("enforced_lead_id") == "lead_frontier_gate_old_milestone"
+    # The reconciled architecture sources the actionable destination from the authored exit.
+    assert dbg.get("enforced_lead_source") == "exit"
+    assert dbg.get("enforced_lead_id") == "minlead_exit_frontier_gate_old_milestone"
     rt = get_scene_runtime(session, "frontier_gate")
     pending = rt.get("pending_leads") or []
     assert any(
@@ -701,7 +701,7 @@ def test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_emp
     mal = meta.get("minimum_actionable_lead") if isinstance(meta.get("minimum_actionable_lead"), dict) else {}
     assert mal.get("minimum_actionable_lead_enforced") is True
     assert meta.get("minimum_actionable_lead_enforced") is True
-    assert meta.get("enforced_lead_source") == "discoverable_clue"
+    assert meta.get("enforced_lead_source") == "exit"
 
 
 def test_minimum_actionable_lead_skips_when_pending_already_actionable():

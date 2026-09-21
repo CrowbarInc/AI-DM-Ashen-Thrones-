@@ -140,7 +140,7 @@ def test_question_reveals_topic_clue():
         "id": "question-runner",
         "label": "Ask the Tavern Runner",
         "type": "question",
-        "prompt": "I ask the Tavern Runner about the area.",
+        "prompt": "I ask the Tavern Runner about the missing patrol.",
         "target_id": "runner",
     }
     resolution = resolve_social_action(
@@ -264,7 +264,7 @@ def test_direct_question_sets_npc_reply_expected_signal():
         "id": "ask-scribe",
         "label": "Ask the scribe",
         "type": "question",
-        "prompt": 'Galinor asks, "Who keeps the ledgers?"',
+        "prompt": 'Galinor asks, "What happens to the ledgers?"',
         "target_id": "scribe",
     }
     resolution = resolve_social_action(
@@ -272,7 +272,7 @@ def test_direct_question_sets_npc_reply_expected_signal():
         session,
         world,
         action,
-        raw_player_text='Galinor asks, "Who keeps the ledgers?"',
+        raw_player_text='Galinor asks, "What happens to the ledgers?"',
         character=default_character(),
         turn_counter=1,
     )

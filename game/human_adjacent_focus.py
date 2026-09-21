@@ -30,7 +30,7 @@ _HA_CONTINUITY_FOLLOWUP_RES: Tuple[re.Pattern[str], ...] = (
     re.compile(r"\b(?:try|tries|trying)\s+to\s+hear\b", re.IGNORECASE),
 )
 
-_HUMAN_FOCUS_KEYWORDS: Tuple[str, ...] = (
+_PEOPLE_PRESENCE_KEYWORDS: Tuple[str, ...] = (
     "refugee",
     "refugees",
     "patron",
@@ -41,6 +41,13 @@ _HUMAN_FOCUS_KEYWORDS: Tuple[str, ...] = (
     "group",
     "huddle",
     "cluster",
+    "runner",
+    "merchant",
+    "merchants",
+)
+
+# Authored current speech / sound. Presence of people is not speech authority.
+_SPEECH_SOUND_KEYWORDS: Tuple[str, ...] = (
     "whisper",
     "whispers",
     "murmur",
@@ -50,17 +57,27 @@ _HUMAN_FOCUS_KEYWORDS: Tuple[str, ...] = (
     "conversation",
     "shout",
     "shouts",
-    "runner",
     "voices",
     "voice",
-    "rumor",
-    "rumour",
-    "merchant",
-    "merchants",
     "talking",
     "murmuring",
-    "urgent whispers",
+    "call",
+    "calls",
+    "calling",
+    "heard",
+    "hear",
+    "audible",
+    "sound",
+    "sounds",
+    "drip",
+    "dripping",
+    "footstep",
+    "footsteps",
+    "bell",
+    "bells",
 )
+
+_HUMAN_FOCUS_KEYWORDS: Tuple[str, ...] = _PEOPLE_PRESENCE_KEYWORDS + _SPEECH_SOUND_KEYWORDS
 
 _PHYSICAL_OBJECT_KEYWORDS: Tuple[str, ...] = (
     "footprint",
@@ -144,6 +161,37 @@ def looks_like_human_adjacent_continuity_followup_text(text: str | None) -> bool
     return any(rx.search(low) for rx in _HA_CONTINUITY_FOLLOWUP_RES)
 
 
+_RE_LISTEN_VOCATIVE = re.compile(
+    r"^\s*listen\s*(?:,|up\b|here\b|to\s+me\b)",
+    re.IGNORECASE,
+)
+_RE_LISTEN_PERCEPTION = re.compile(
+    r"\b(?:listen(?:ing)?|eavesdrop(?:ping)?|overhear(?:ing)?)\b",
+    re.IGNORECASE,
+)
+_RE_LOCAL_APPROACH_MOTION = re.compile(
+    r"\b(?:walk|walks|walking|step|steps|stepping|pace|paces|pacing|move|moves|moving|"
+    r"edge|draw)\s+(?:a\s+few\s+(?:steps|paces)|few\s+(?:steps|paces)|along|beside|closer)\b"
+    r"|\b(?:step|steps|stepping|move|moves|moving)\s+closer\b",
+    re.IGNORECASE,
+)
+
+
+def looks_like_listen_perception_intent(text: str | None) -> bool:
+    """True for auditory perception, not vocative ``Listen,`` / ``listen to me`` discourse."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    low = raw.lower()
+    if _RE_LISTEN_VOCATIVE.search(low):
+        return False
+    if re.search(r"\blisten\s+to\s+the\s+(?:rain|wind|storm|waves|thunder)\b", low):
+        return False
+    if re.search(r"\blisten\s+to\s+(?:me|him|her|us)\b", low):
+        return False
+    return bool(_RE_LISTEN_PERCEPTION.search(low) or re.search(r"\b(?:i|we)\s+listen\b", low))
+
+
 def classify_human_adjacent_intent_family(text: str | None) -> str:
     """Narrow intent family for implicit focus; ``none`` when not human-adjacent or when physical inspection."""
     low = str(text or "").strip().lower()
@@ -166,6 +214,10 @@ def classify_human_adjacent_intent_family(text: str | None) -> str:
     ):
         return "listen"
     if re.search(r"\b(?:i|we)\s+listen\b", low) and not re.search(r"\bto\s+the\s+(?:rain|wind|storm)\b", low):
+        return "listen"
+    if looks_like_listen_perception_intent(low):
+        if _RE_LOCAL_APPROACH_MOTION.search(low):
+            return "approach_listen"
         return "listen"
     if re.search(
         r"\b(?:watch|observe)\s+(?:the\s+)?(?:crowd|patrons?|refugees?|guards?|people|group|gathering)\b", low
@@ -193,6 +245,16 @@ def _fact_human_score(fact: str, *, player_text: str) -> int:
         if len(raw) >= 5 and raw in fl:
             score += 5
     return int(score)
+
+
+def _fact_speech_score(fact: str) -> int:
+    fl = str(fact or "").lower()
+    return sum(2 for kw in _SPEECH_SOUND_KEYWORDS if re.search(rf"\b{re.escape(kw)}\b", fl))
+
+
+def _fact_people_score(fact: str) -> int:
+    fl = str(fact or "").lower()
+    return sum(2 for kw in _PEOPLE_PRESENCE_KEYWORDS if kw in fl)
 
 
 def _fact_physical_score(fact: str) -> int:
@@ -260,20 +322,21 @@ def resolve_implicit_human_adjacent_focus(
     if not facts:
         return out
 
-    ranked: List[Tuple[int, int, str]] = []
+    ranked: List[Tuple[int, int, int, int, str]] = []
     for f in facts:
+        speech = _fact_speech_score(f)
+        people = _fact_people_score(f)
         h = _fact_human_score(f, player_text=text)
         p = _fact_physical_score(f)
-        ranked.append((h, -p, f))
-    ranked.sort(key=lambda t: (-t[0], t[1], t[2]))
+        ranked.append((speech, people, h, -p, f))
+    ranked.sort(key=lambda t: (-t[0], -t[1], -t[2], t[3], t[4]))
 
-    best_h, neg_p, best_fact = ranked[0]
-    phys_penalty = -neg_p
-    if best_h >= 6 or (best_h >= 4 and best_h > phys_penalty + 2):
+    best_speech, best_people, best_h, _neg_p, best_fact = ranked[0]
+    if best_speech >= 1:
         out["implicit_focus_resolution"] = "speaking_group"
         out["implicit_focus_anchor_fact"] = best_fact[:220]
         return out
-    if best_h >= 2:
+    if best_people >= 2 or best_h >= 2:
         out["implicit_focus_resolution"] = "crowd_cluster"
         out["implicit_focus_anchor_fact"] = best_fact[:220]
         return out
@@ -291,21 +354,27 @@ def _hint_for_focus_bundle(bundle: Dict[str, Any], *, player_text: str) -> str |
         tid = str(bundle.get("implicit_focus_target_id") or "").strip()
         return (
             "Player is listening / observing near an active in-scene interlocutor. "
-            f"Prioritize audible content and reactions tied to that exchange (target id: {tid}). "
-            "Do not substitute unrelated environmental props unless the fiction already ties them in."
+            f"Realize only audible content already tied to that exchange (target id: {tid}). "
+            "Do not invent extra speakers, overheard topics, or unrelated environmental events."
         )
-    if tier in {"speaking_group", "crowd_cluster"} and anchor_s:
-        scope = "a nearby speaking cluster or audible crowd detail" if tier == "speaking_group" else "crowd-level noise and motion"
+    if tier == "speaking_group" and anchor_s:
         return (
-            f"Human-adjacent intent ({fam}): anchor narration on {scope}. "
-            f"Primary visible cue: {anchor_s} "
-            "Prefer voices, groups, patrons, refugees, or guards already implied there; avoid random crate or footprint detail unless it directly supports that focus."
+            f"Human-adjacent intent ({fam}): realize only the authored audible or speech "
+            f"already present in this visible cue: {anchor_s} "
+            "Do not invent additional speakers, overheard topics, or audible events beyond that cue."
+        )
+    if tier == "crowd_cluster" and anchor_s:
+        return (
+            f"Human-adjacent intent ({fam}): people are present, but no current speech is authorized. "
+            f"Visible presence cue: {anchor_s} "
+            "You may realize that presence. Do not invent overheard speech or new audible events. "
+            "Absence of authorized sound is a valid perception result."
         )
     if fam in {"listen", "approach_listen", "observe_group"} and tier == "none":
         return (
-            f"Human-adjacent intent ({fam}) but no strong nearby speech focus in established visible facts. "
-            "Narrate a clean diegetic limitation: overlapping crowd noise, distance, indistinct voices, or no clear words carrying—"
-            "do NOT invent unrelated environmental clues (footprints, crates, stains) as a substitute for overheard content."
+            f"Human-adjacent intent ({fam}) but no authorized audible or speech fact. "
+            "Narrate a clean diegetic limitation: no distinct words or authorized sound carry. "
+            "Do not invent overheard speech, new audible events, or unrelated environmental clues."
         )
     return None
 
@@ -390,8 +459,13 @@ def enrich_exploration_resolution_for_human_adjacent_focus(
         md["implicit_focus_target_id"] = bundle["implicit_focus_target_id"]
     if bundle.get("implicit_focus_anchor_fact"):
         md["implicit_focus_anchor_fact"] = bundle["implicit_focus_anchor_fact"]
-    if bundle.get("implicit_focus_resolution") == "none" and fam in {"listen", "approach_listen", "observe_group"}:
-        md["human_adjacent_diegetic_null"] = True
+    if fam in {"listen", "approach_listen", "observe_group"}:
+        anchor = str(bundle.get("implicit_focus_anchor_fact") or "")
+        if (
+            bundle.get("implicit_focus_resolution") == "none"
+            or _fact_speech_score(anchor) < 1
+        ):
+            md["human_adjacent_diegetic_null"] = True
 
     extra = _hint_for_focus_bundle({**bundle, "human_adjacent_intent_family": fam}, player_text=text)
     new_hint = hint

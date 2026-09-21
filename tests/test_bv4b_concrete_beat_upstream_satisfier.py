@@ -43,7 +43,7 @@ def test_reply_has_concrete_interaction_detects_dialogue_and_approach():
     assert not reply_has_concrete_interaction("The notice board lists taxes and curfew rules.")
 
 
-def test_upstream_satisfier_injects_beat_when_pressure_due_and_beat_missing():
+def test_upstream_satisfier_leaves_grounded_observe_without_invented_beat():
     session, world, scene, sid, resolution = _passive_observe_bundle()
     upstream = "As you watch the scene, the notice board lists taxes, curfew rules, and a warning."
     gm = {"player_facing_text": upstream, "tags": []}
@@ -58,15 +58,9 @@ def test_upstream_satisfier_injects_beat_when_pressure_due_and_beat_missing():
         strict_social_active=False,
     )
     meta = out.get("_final_emission_meta") or out.get("final_emission_meta") or {}
-    assert meta.get("passive_scene_concrete_beat_satisfier_applied") is True
-    assert meta.get("producer_repair_kind") == "passive_scene_concrete_beat"
-    assert meta.get("passive_scene_concrete_beat_type") in {
-        "guard_reaction",
-        "generic_interruption",
-        "observer_interruption",
-    }
-    assert meta.get("passive_scene_pressure_fallback_avoided") is True
-    assert reply_has_concrete_interaction(str(out.get("player_facing_text") or ""))
+    assert meta.get("passive_scene_concrete_beat_satisfier_applied") is not True
+    assert out.get("player_facing_text") == upstream
+    assert "walk with me" not in str(out.get("player_facing_text") or "").lower()
 
 
 def test_observe_passive_pressure_avoids_sealed_fallback_via_gate():
@@ -83,12 +77,14 @@ def test_observe_passive_pressure_avoids_sealed_fallback_via_gate():
         scene_id=sid,
     )
     meta = final_emission_meta_from_output(out)
-    assert meta.get("passive_scene_concrete_beat_satisfier_applied") is True
+    text = str(out.get("player_facing_text") or "").lower()
     assert meta.get("final_emitted_source") != "passive_scene_pressure_fallback"
     assert meta.get("final_route") != "replaced"
+    assert "walk with me" not in text
+    assert "board, runner, or road" not in text
 
 
-def test_upstream_satisfier_skips_when_concrete_beat_already_present():
+def test_upstream_satisfier_replaces_unsupported_confrontation():
     session, world, scene, sid, _resolution = _passive_observe_bundle()
     upstream = (
         'As you watch the board, a guard notices you lingering and comes over. '
@@ -106,6 +102,8 @@ def test_upstream_satisfier_skips_when_concrete_beat_already_present():
         strict_social_active=False,
     )
     meta = out.get("_final_emission_meta") or {}
+    text = str(out.get("player_facing_text") or "").lower()
     assert meta.get("passive_scene_concrete_beat_satisfier_attempted") is True
-    assert meta.get("passive_scene_concrete_beat_satisfier_applied") is not True
-    assert out.get("player_facing_text") == upstream
+    assert meta.get("passive_scene_concrete_beat_satisfier_applied") is True
+    assert "comes over" not in text
+    assert "waiting on trouble" not in text

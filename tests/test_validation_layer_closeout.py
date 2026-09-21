@@ -62,10 +62,10 @@ def test_planner_prompt_context_does_not_import_gate_or_evaluator_surfaces() -> 
 
 
 def test_offline_evaluator_import_allowlist_matches_audit_policy() -> None:
-    """Evaluator may read meta + registry only (see tools/validation_layer_audit.py)."""
+    """Evaluator may read the observability facade + registry only."""
     src = Path(nae_mod.__file__).read_text(encoding="utf-8")
     roots = _game_submodule_roots_from_source(src)
-    allowed = {"final_emission_meta", "validation_layer_contracts", "telemetry_vocab"}
+    allowed = {"observability_attribution_read", "validation_layer_contracts", "telemetry_vocab"}
     assert roots <= allowed, f"evaluator game imports {roots!r} exceed allowlist {allowed!r}"
 
 

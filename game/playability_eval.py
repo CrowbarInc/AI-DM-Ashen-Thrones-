@@ -13,7 +13,13 @@ from typing import Any, Mapping, Sequence
 
 from game.observability_attribution_read import normalized_observational_telemetry_bundle, summarize_gameplay_validation_for_turn
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
+
+SEMANTIC_PASS = "PASS"
+SEMANTIC_FAIL = "FAIL"
+SEMANTIC_UNCHECKED = "UNCHECKED"
+SEMANTIC_NOT_APPLICABLE = "NOT_APPLICABLE"
+SEMANTIC_INVALID_RUN = "INVALID_RUN"
 
 _STOPWORDS = frozenset(
     """
@@ -162,6 +168,36 @@ _ANSWER_MARKERS_RES = (
     re.compile(r"\b(is|was|were|are)\s+[a-z]", re.I),
     re.compile(r"\b\d{1,4}\b"),
     re.compile(r"\b[a-z]{2,}\s+(commands|leads|runs|owns|guards)\b", re.I),
+)
+
+_COHERENT_NONANSWER_RES = (
+    re.compile(r"\b(i|we|they)\s+(do not|don't|cannot|can't|couldn't|could not)\s+(know|tell|say|confirm)\b", re.I),
+    re.compile(r"\b(couldn't|could not|can't|cannot)\s+tell\s+you\b", re.I),
+    re.compile(r"\b(no one|nothing|not enough|no evidence|no witness)\b", re.I),
+    re.compile(r"\b(unknown|unclear|not clear|not certain|not established)\b", re.I),
+    re.compile(r"\b(i'?m|i am|we are|we're|they are|they're)\s+not\s+(telling|saying)\b", re.I),
+    re.compile(r"\b(refuses|won't answer|will not answer|not telling you)\b", re.I),
+    re.compile(r"\bwhich (one|notice|door|person)|what do you mean|clarify|be more specific\b", re.I),
+)
+
+_OBSERVATION_VERBS_RE = re.compile(
+    r"\b(see|spot|notice|read|glance|look|scan|watch|observe|inspect|posted|lists?|shows?|says?)\b",
+    re.I,
+)
+
+_NOTICE_CONTENT_RE = re.compile(
+    r"\b(notice|posting|posted|board|curfew|tax|taxes|warning|wanted|missing|reward|decree|edict|proclamation)\b",
+    re.I,
+)
+
+_MALFORMED_REFUSAL_FRAGMENT_RE = re.compile(
+    r"\b(cannot|can't|could not|couldn't)\s+answer\s+that\s+from\s+(what|where|when|who)\.?[\"']?$",
+    re.I,
+)
+
+_DANGLING_ATTRIBUTION_RE = re.compile(
+    r"\b(?:says|said|mutters|muttered|replies|replied|whispers|whispered|asks|asked|answers|answered),\s*$",
+    re.I,
 )
 
 _SPECIFIC_NAME_RE = re.compile(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b")
@@ -438,12 +474,168 @@ def _score_immersion(*, gm: str, debug_traces: Any) -> tuple[int, bool, list[str
     return score, passed, reasons, signals
 
 
+def _gate(status: str, reason_codes: list[str], evidence: dict[str, Any] | None = None) -> dict[str, Any]:
+    return {
+        "status": status,
+        "passed": status == SEMANTIC_PASS,
+        "reason_codes": reason_codes,
+        "evidence": evidence or {},
+    }
+
+
+def _evaluate_malformed_output_gate(*, gm: str, gm_output: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    text = gm.strip()
+    evidence: dict[str, Any] = {
+        "gm_word_count": len(_tokens(text)),
+        "text_preview": text[:160],
+    }
+    if not text:
+        return _gate(SEMANTIC_FAIL, ["malformed_output:missing_player_facing_text"], evidence)
+
+    fem = _safe_mapping((gm_output or {}).get("_final_emission_meta"))
+    if fem.get("final_emission_truncated") or fem.get("known_truncation_detected"):
+        evidence["final_emission_meta"] = {
+            "final_emission_truncated": fem.get("final_emission_truncated"),
+            "known_truncation_detected": fem.get("known_truncation_detected"),
+        }
+        return _gate(SEMANTIC_FAIL, ["malformed_output:final_emission_truncation_evidence"], evidence)
+
+    if _DANGLING_ATTRIBUTION_RE.search(text):
+        return _gate(SEMANTIC_FAIL, ["malformed_output:dangling_speech_attribution"], evidence)
+
+    if text.endswith(",") and re.search(r"\b(says|mutters|replies|whispers|asks|answers)\b", text, re.I):
+        return _gate(SEMANTIC_FAIL, ["malformed_output:trailing_comma_speech_construction"], evidence)
+
+    if text.count('"') % 2 == 1:
+        return _gate(SEMANTIC_FAIL, ["malformed_output:unfinished_quotation"], evidence)
+
+    if _MALFORMED_REFUSAL_FRAGMENT_RE.search(text):
+        return _gate(SEMANTIC_FAIL, ["malformed_output:broken_refusal_fragment"], evidence)
+
+    return _gate(SEMANTIC_PASS, [], evidence)
+
+
+def _request_kind(player: str) -> str:
+    lower = player.lower()
+    if _has_player_question(player):
+        return "question"
+    if re.search(r"\b(glance|look|scan|inspect|read|watch|observe|see|check)\b", lower):
+        return "observation"
+    if player.strip():
+        return "action_or_statement"
+    return "none"
+
+
+def _is_coherent_nonanswer(gm: str) -> bool:
+    return _any_re_match(_COHERENT_NONANSWER_RES, gm)
+
+
+def _has_yes_no_answer(player: str, gm: str) -> bool:
+    if not re.match(r"^\s*(did|do|does|is|are|was|were|can|could|will|would|has|have|had)\b", player, re.I):
+        return False
+    return bool(re.match(r"^\s*(yes|no|aye|nah|never)\b[.!?]?\s*$", gm, re.I))
+
+
+def _question_intent_addressed(player: str, gm: str, direct: tuple[int, bool, list[str], dict[str, Any]]) -> bool:
+    signals = direct[3]
+    if _has_yes_no_answer(player, gm):
+        return True
+    if int(signals.get("answer_markers") or 0) >= 1 and len(_tokens(gm)) <= 4:
+        return True
+    if int(signals.get("answer_markers") or 0) >= 2:
+        return True
+    if _is_coherent_nonanswer(gm):
+        return True
+    if re.search(r"\b(hear|listen|sound)\b", player, re.I) and re.search(
+        r"\b(footsteps?|silence|voices?|whispers?|shout|cry|music|scrape|thud)\b", gm, re.I
+    ):
+        return True
+    if _SPECIFIC_PLACE_RE.search(gm):
+        return True
+    player_terms = _player_topic_terms(player)
+    gm_terms = _word_set(gm)
+    if player_terms and len(player_terms & gm_terms) >= min(2, len(player_terms)):
+        return True
+    return False
+
+
+def _observation_intent_addressed(player: str, gm: str) -> bool:
+    p = player.lower()
+    g = gm.lower()
+    if "notice" in p or "posted" in p or "board" in p:
+        # Merely offering "board" as a menu choice does not fulfill reading/glancing at the notice.
+        if not _NOTICE_CONTENT_RE.search(g):
+            return False
+        if re.search(r"\b(pick|choose)\s+one\b", g) and not re.search(
+            r"\b(lists?|reads?|shows?|mentions?|warning|curfew|tax|missing|reward)\b", g
+        ):
+            return False
+        return True
+    if _OBSERVATION_VERBS_RE.search(g):
+        return True
+    player_terms = _player_topic_terms(player)
+    gm_terms = _word_set(gm)
+    return bool(player_terms and (player_terms & gm_terms))
+
+
+def _evaluate_intent_addressed_gate(
+    *,
+    player: str,
+    gm: str,
+    direct: tuple[int, bool, list[str], dict[str, Any]],
+    intent: tuple[int, bool, list[str], dict[str, Any]],
+    malformed_gate: Mapping[str, Any],
+) -> dict[str, Any]:
+    kind = _request_kind(player)
+    evidence: dict[str, Any] = {
+        "request_kind": kind,
+        "player_terms": sorted(_player_topic_terms(player)),
+        "gm_terms": sorted(_word_set(gm))[:20],
+        "direct_answer_score": direct[0],
+        "player_intent_score": intent[0],
+    }
+    if kind == "none":
+        return _gate(SEMANTIC_NOT_APPLICABLE, ["intent_addressed:no_player_input"], evidence)
+    if malformed_gate.get("status") == SEMANTIC_FAIL:
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:response_malformed_before_intent_can_be_satisfied"],
+            evidence,
+        )
+    if not gm.strip():
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:missing_response"], evidence)
+
+    if kind == "question":
+        if _question_intent_addressed(player, gm, direct):
+            return _gate(SEMANTIC_PASS, [], evidence)
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:unanswered_intelligible_question"],
+            evidence,
+        )
+
+    if kind == "observation":
+        if _observation_intent_addressed(player, gm):
+            return _gate(SEMANTIC_PASS, [], evidence)
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:observation_request_not_fulfilled"],
+            evidence,
+        )
+
+    if intent[1] or _is_coherent_nonanswer(gm):
+        return _gate(SEMANTIC_PASS, [], evidence)
+    return _gate(SEMANTIC_FAIL, ["intent_addressed:player_action_or_request_lost"], evidence)
+
+
 def _finalize_overall(
     *,
     direct: tuple[int, bool, list[str], dict[str, Any]],
     intent: tuple[int, bool, list[str], dict[str, Any]],
     escalation: tuple[int, bool, list[str], dict[str, Any]],
     immersion: tuple[int, bool, list[str], dict[str, Any]],
+    mandatory_gates: Mapping[str, Mapping[str, Any]],
+    run_valid: bool = True,
 ) -> dict[str, Any]:
     s1, _, _, _ = direct
     s2, _, _, _ = intent
@@ -458,8 +650,34 @@ def _finalize_overall(
     else:
         rating = "weak"
 
-    passed = total >= 60 and s4 >= 10
-    return {"score": total, "rating": rating, "passed": bool(passed)}
+    failed = [
+        name
+        for name, gate in mandatory_gates.items()
+        if gate.get("status") == SEMANTIC_FAIL
+    ]
+    unchecked = [
+        name
+        for name, gate in mandatory_gates.items()
+        if gate.get("status") == SEMANTIC_UNCHECKED
+    ]
+    if not run_valid:
+        semantic_result = SEMANTIC_INVALID_RUN
+    elif failed:
+        semantic_result = SEMANTIC_FAIL
+    elif unchecked:
+        semantic_result = SEMANTIC_UNCHECKED
+    elif total < 60 or s4 < 10:
+        semantic_result = SEMANTIC_FAIL
+    else:
+        semantic_result = SEMANTIC_PASS
+
+    return {
+        "score": total,
+        "rating": rating,
+        "passed": semantic_result == SEMANTIC_PASS,
+        "semantic_result": semantic_result,
+        "diagnostic_quality_rating": rating,
+    }
 
 
 def _summarize(
@@ -497,6 +715,7 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
     prior_player, prior_gm = _extract_prior_pair(data)
     bundle = normalized_observational_telemetry_bundle(data)
     dt = bundle.get("dead_turn") if isinstance(bundle.get("dead_turn"), Mapping) else {}
+    gm_output = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
 
     direct = _score_direct_answer(player=player, gm=gm)
     intent = _score_player_intent(player=player, gm=gm, prior_player=prior_player)
@@ -504,6 +723,18 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
         player=player, gm=gm, prior_player=prior_player, prior_gm=prior_gm
     )
     immersion = _score_immersion(gm=gm, debug_traces=data.get("debug_traces"))
+    malformed_gate = _evaluate_malformed_output_gate(gm=gm, gm_output=gm_output)
+    intent_gate = _evaluate_intent_addressed_gate(
+        player=player,
+        gm=gm,
+        direct=direct,
+        intent=intent,
+        malformed_gate=malformed_gate,
+    )
+    mandatory_gates = {
+        "malformed_output": malformed_gate,
+        "player_intent_addressed": intent_gate,
+    }
 
     axes_out = {
         "direct_answer": {
@@ -532,18 +763,43 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
         },
     }
 
-    overall = _finalize_overall(direct=direct, intent=intent, escalation=escalation, immersion=immersion)
+    gameplay_validation = summarize_gameplay_validation_for_turn(dt)
+    run_valid = not bool(gameplay_validation.get("excluded_from_scoring"))
+    overall = _finalize_overall(
+        direct=direct,
+        intent=intent,
+        escalation=escalation,
+        immersion=immersion,
+        mandatory_gates=mandatory_gates,
+        run_valid=run_valid,
+    )
     summary = _summarize(axes_out)
 
     raw_overall = dict(overall)
-    gameplay_validation = summarize_gameplay_validation_for_turn(dt)
     gameplay_validation["raw_overall"] = raw_overall
     if gameplay_validation.get("excluded_from_scoring"):
-        overall = {"score": 0, "rating": "weak", "passed": False}
+        overall = {
+            "score": 0,
+            "rating": "weak",
+            "passed": False,
+            "semantic_result": SEMANTIC_INVALID_RUN,
+            "diagnostic_quality_rating": raw_overall.get("diagnostic_quality_rating", raw_overall.get("rating")),
+        }
 
     return {
         "version": SCHEMA_VERSION,
         "overall": overall,
+        "semantic_result": overall.get("semantic_result", SEMANTIC_UNCHECKED),
+        "mandatory_gates": mandatory_gates,
+        "diagnostic_quality": {
+            "score": raw_overall.get("score"),
+            "rating": raw_overall.get("diagnostic_quality_rating", raw_overall.get("rating")),
+            "passed": int(raw_overall.get("score") or 0) >= 60 and axes_out["immersion"]["score"] >= 10,
+            "axis_scores": {name: axis["score"] for name, axis in axes_out.items()},
+        },
+        "evaluation_complete": all(
+            gate.get("status") != SEMANTIC_UNCHECKED for gate in mandatory_gates.values()
+        ),
         "axes": axes_out,
         "summary": summary,
         "gameplay_validation": gameplay_validation,

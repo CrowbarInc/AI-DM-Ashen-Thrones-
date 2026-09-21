@@ -80,7 +80,12 @@ def _default_response_delta_meta_keys() -> frozenset[str]:
 def test_final_emission_gate_imports_are_gate_layer_not_evaluator() -> None:
     src = Path(feg.__file__).read_text(encoding="utf-8")
     modules = _collect_import_from_modules(src)
-    assert any(m and m.startswith("game.final_emission_repairs") for m in modules)
+    gate_layer_modules = {
+        "game.final_emission_non_strict_stack",
+        "game.final_emission_strict_social_stack",
+        "game.final_emission_generic_exit",
+    }
+    assert gate_layer_modules <= modules
     assert not any(m == "game.narrative_authenticity_eval" for m in modules)
 
 

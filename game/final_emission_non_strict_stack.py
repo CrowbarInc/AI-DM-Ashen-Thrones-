@@ -139,7 +139,24 @@ def run_non_strict_layer_stack(
         scene=scene,
         scene_id=sid,
     ) and not _reply_already_has_concrete_interaction(text):
-        reasons.append("passive_scene_pressure_missing_concrete_beat")
+        from game.perception_grounding import (
+            build_perception_evidence_surface,
+            classify_perception_invention,
+        )
+
+        evidence = build_perception_evidence_surface(
+            scene=scene if isinstance(scene, dict) else None,
+            session=sess,
+            world=world if isinstance(world, dict) else None,
+            resolution=auth_res or {"kind": str(res_kind or "").strip().lower()},
+        )
+        verdict = classify_perception_invention(
+            text,
+            evidence,
+            resolution=auth_res or {"kind": str(res_kind or "").strip().lower()},
+        )
+        if verdict.get("unsupported"):
+            reasons.append("passive_scene_pressure_missing_concrete_beat")
 
     text, response_type_debug = response_type.enforce_response_type_contract(
         text,

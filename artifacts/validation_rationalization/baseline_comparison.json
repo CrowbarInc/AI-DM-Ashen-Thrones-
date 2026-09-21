@@ -1,0 +1,39 @@
+{
+  "schema_version": "validation-rationalization-baseline.v1",
+  "campaign": "high_confidence_validation_rationalization_20260918",
+  "pre_rationalization": {
+    "command": "python -m pytest -q --tb=short",
+    "collected": 6444,
+    "passed": 6296,
+    "failed": 49,
+    "skipped": 99,
+    "warnings": 1,
+    "runtime_seconds": null,
+    "runtime_note": "The uncontaminated pre-change run completed, but retained console output truncated the final duration. Runtime is intentionally not inferred.",
+    "failure_source": "artifacts/validation_portfolio/current_failure_classification.json before retirement; 49 individually mapped failures"
+  },
+  "post_rationalization": {
+    "command": "python -m pytest -q --tb=no --junitxml=artifacts/validation_rationalization/post_suite.xml",
+    "collected": 6440,
+    "passed": 6305,
+    "failed": 36,
+    "skipped": 99,
+    "warnings": 1,
+    "runtime_seconds": 470.510,
+    "failure_source": "artifacts/validation_portfolio/current_failure_classification.json after retirement; 36 individually mapped failures"
+  },
+  "delta": {
+    "collected": -4,
+    "passed": 9,
+    "failed": -13,
+    "skipped": 0
+  },
+  "removed_failures": {
+    "count": 13,
+    "classification": "DOCUMENTATION_DRIFT",
+    "family": "GENERATED_CLOSEOUT_ASSERTIONS",
+    "reason": "Obsolete root-path/prose assertions were retired after canonical provenance was verified.",
+    "product_defects_fixed": 0
+  },
+  "new_failures": []
+}

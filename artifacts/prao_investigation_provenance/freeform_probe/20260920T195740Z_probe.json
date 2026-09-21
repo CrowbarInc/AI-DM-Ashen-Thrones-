@@ -1,0 +1,249 @@
+{
+  "stamp": "20260920T195740Z",
+  "turns": [
+    {
+      "player": "I glance toward the rain barrel.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "rain barrel",
+      "skip": true,
+      "leads": [],
+      "discovered": [],
+      "gm": "On closer inspection, a tavern runner trades hot stew and rumors near the rain barrel. Closer looking yields nothing further."
+    },
+    {
+      "player": "I investigate the rain barrel.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "rain barrel",
+      "skip": true,
+      "leads": [],
+      "discovered": [],
+      "gm": "On closer inspection, a tavern runner trades hot stew and rumors near the rain barrel. Closer looking yields nothing further."
+    },
+    {
+      "player": "I look at the notice board.",
+      "ok": true,
+      "kind": "discover_clue",
+      "clue_id": "notice_patrol_route",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_interactable",
+      "target": "notice board",
+      "skip": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "player": "I search the mud by the crates for tracks.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "mud",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "On closer inspection, a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. Closer looking yields nothing further."
+    },
+    {
+      "player": "I inspect the board to see who last wrote on it.",
+      "ok": true,
+      "kind": "already_searched",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_interactable",
+      "target": "board",
+      "skip": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "The guard says, \"I do not know enough to answer that.\""
+    },
+    {
+      "player": "I examine the board to learn exactly when the patrol vanished.",
+      "ok": true,
+      "kind": "already_searched",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_interactable",
+      "target": "board",
+      "skip": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "Gate Serjeant mutters, \"Word is, the patrol route changed after the Ash Compact census choke worsened.\""
+    },
+    {
+      "player": "I search the rain barrel for proof that Rowan poisoned the well.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "rain barrel",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "On closer inspection, a tavern runner trades hot stew and rumors near the rain barrel. Closer looking yields nothing further."
+    },
+    {
+      "player": "I look for signs that Rowan was here.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "unsupported",
+      "target": "signs",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol."
+    },
+    {
+      "player": "I walk over to the tavern runner. Who oiled that hinge last?",
+      "ok": true,
+      "kind": "question",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "authority": "untargeted",
+      "target": "",
+      "skip": null,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "Tavern Runner shakes their head."
+    },
+    {
+      "player": "I inspect the rain barrel after that.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "rain barrel",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "On closer inspection, a tavern runner trades hot stew and rumors near the rain barrel. Closer looking yields nothing further."
+    },
+    {
+      "player": "I search the square for evidence Mara took the key.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "square",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "On closer inspection, a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor. Closer looking yields nothing further."
+    },
+    {
+      "player": "I read the notice board carefully.",
+      "ok": true,
+      "kind": "already_searched",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_interactable",
+      "target": "notice board",
+      "skip": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "The notice board confirms the new taxes and curfew rules that have been posted recently, and it prominently warns about a missing patrol. According to the notice, this patrol was last seen following the northwest mud track past the crates. The information reflects the ongoing te\u2026"
+    },
+    {
+      "player": "I investigate the rain barrel again.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "authored_visible_feature",
+      "target": "rain barrel",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "On closer inspection, a tavern runner trades hot stew and rumors near the rain barrel. Closer looking yields nothing further."
+    },
+    {
+      "player": "I look toward the doorway of the townhouse.",
+      "ok": true,
+      "kind": "investigate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "authority": "unsupported",
+      "target": "doorway of the townhouse",
+      "skip": true,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "discovered": [
+        "The missing patrol was last seen taking the northwest mud track past the crates."
+      ],
+      "gm": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol."
+    }
+  ]
+}

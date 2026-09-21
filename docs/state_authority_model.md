@@ -124,6 +124,16 @@ Guards (`assert_owner_can_mutate_domain`, `assert_cross_domain_write_allowed`, o
 
 Structured non-combat outcomes are owned by **`game.noncombat_resolution`**, embedded at runtime via **`game.api._resolve_engine_noncombat_seam`** as `resolution["noncombat_resolution"]`, then projected into **CTIR** by **`game.ctir.build_ctir`** (root `noncombat` only from that contract). Prompt and narrative layers **read** those signals; they must not invent mechanics from prose or legacy raw fields when the contract exists. When the contract is absent, CTIR `noncombat` remains **empty** by design—no silent reconstruction. Full flow, anti-drift rules, and deferred boundaries: **`docs/ctir_prompt_adapter_architecture.md`** (Objective #8 section).
 
+## Lead-store authority (RC-21 = B + C)
+
+Settled 2026-09-19. Official follow-up after a social redirect is realized from authored or realized scene evidence and written to the **lead registry**. `pending_leads` and clue/knowledge surfaces are compatibility or projection stores, not competing owners of lead truth. Narration or NPC speech may mention a person; that mention does not instantiate an NPC or an authoritative NPC-target lead unless the scene already authors that person.
+
+Narration may communicate an authoritative consequence. It is not, by itself, the authority that creates that consequence. Ordinary social or narrative prose must not mint a canonical lead (including historical `narration_ctx_…` ids) merely because the wording sounds actionable. Contextual extraction may remain a non-authoritative continuity hint. Unsourced prose-to-lead promotion fails closed.
+
+Current `frontier_gate` canon does not author Lirael, so a spoken “find Lirael near the notice board” realizes the authored notice-board landmark only.
+
+This does **not** start the deferred lead/clue overlap cleanup. Intent parsing and `compat_pending_lead_needed` remain later consumer-alignment work.
+
 ## Anti-goals
 
 - **Not** replacing existing module owners listed in `docs/architecture_ownership_ledger.md`—this model names domains and guards; it does not subsume `game.world`, `game.storage`, or `game.prompt_context`.

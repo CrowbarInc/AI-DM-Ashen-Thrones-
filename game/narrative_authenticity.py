@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Sequence
 
-from game.final_emission_repairs import build_narrative_authenticity_emission_trace
+from game.observability_attribution_read import build_narrative_authenticity_emission_trace
 from game.validation_layer_contracts import NA_SHADOW_RESPONSE_DELTA_FAILURE_REASON
 from game.final_emission_text_formatting import (
     _normalize_terminal_punctuation,

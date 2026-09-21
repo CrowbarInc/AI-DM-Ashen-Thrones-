@@ -38,7 +38,10 @@ def test_passive_scene_pressure_candidates_return_canonical_dataclass() -> None:
     assert selected[0].final_emitted_source == "passive_scene_pressure_fallback"
     assert selected[0].fallback_pool == "passive_scene_pressure"
     assert selected[0].fallback_strategy == "passive_scene_pressure_fallback"
-    assert selected[0].fallback_candidate_source == "passive_scene_pressure:lead_figure"
+    assert selected[0].fallback_candidate_source == "passive_scene_pressure:grounded_observe"
+    assert selected[0].fallback_kind == "passive_scene_pressure_grounded_observe"
+    assert "walk with me" not in selected[0].text.lower()
+    assert "ask me now" not in selected[0].text.lower()
 
 
 def test_passive_scene_pressure_due_for_fallback_requires_passive_signal() -> None:
@@ -84,9 +87,12 @@ def test_passive_scene_pressure_guard_rumor_branch_when_visible_facts_match() ->
     )
 
     assert len(selected) == 1
-    assert selected[0].fallback_kind == "passive_scene_pressure_guard_rumor"
-    assert selected[0].fallback_candidate_source == "passive_scene_pressure:guard_rumor"
-    assert "patrol" in selected[0].text.lower()
+    assert selected[0].fallback_kind == "passive_scene_pressure_grounded_observe"
+    assert selected[0].fallback_candidate_source == "passive_scene_pressure:grounded_observe"
+    low = selected[0].text.lower()
+    assert "walk with me" not in low
+    assert "squares up" not in low
+    assert "notice" in low or "patrol" in low or "guard" in low
 
 
 def test_passive_scene_pressure_visibility_candidate_stamps_canonical_fields() -> None:

@@ -155,13 +155,16 @@ _INTENT_FAMILY_ALIASES: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
     ("ask", ("ask", "question", "press", "interrogate", "quiz")),
 )
 
+_LISTEN_AUDIBLE_KEYWORDS: Tuple[str, ...] = (
+    "whisper", "whispers", "whispering", "mutter", "murmur", "gossip",
+    "voice", "voices", "talk", "talking", "conversation",
+    "heard", "hear", "audible", "sound", "sounds", "noise", "drip", "dripping",
+    "shout", "shouts", "call", "calls", "calling",
+    "footstep", "footsteps", "bell", "bells",
+)
+
 _INTENT_FAMILY_FACT_KEYWORDS: Dict[str, Tuple[str, ...]] = {
-    "listen": (
-        "whisper", "whispers", "whispering", "mutter", "murmur", "gossip", "rumor",
-        "rumour", "voice", "voices", "patron", "patrons", "merchant", "merchants",
-        "guard", "guards", "talk", "talking", "conversation", "crowd", "group",
-        "huddle", "cluster", "missing patrol",
-    ),
+    "listen": _LISTEN_AUDIBLE_KEYWORDS,
     "approach": (
         "patron", "patrons", "merchant", "merchants", "guard", "guards", "runner",
         "crowd", "group", "huddle", "cluster", "queue", "notice board", "checkpoint",
@@ -316,9 +319,9 @@ def _score_visible_fact_for_intent(
         if hits:
             family_hits += hits
             score += 9 + max(0, hits - 1) * 2
-        if family in {"listen", "approach", "scan", "ask"} and human_hits:
+        if family in {"approach", "scan", "ask"} and human_hits:
             score += 6
-        if family == "listen" and _keyword_hit_count(low_fact, ("whisper", "mutter", "murmur", "gossip", "rumor", "rumour", "voice", "voices")):
+        if family == "listen" and _keyword_hit_count(low_fact, _LISTEN_AUDIBLE_KEYWORDS):
             score += 6
         if family == "inspect" and physical_hits:
             score += 7
@@ -491,7 +494,22 @@ def render_observe_perception_fallback_line(
         and not physical
         and (res_md.get("human_adjacent_diegetic_null") is True or tier == "none")
     ):
-        return diegetic_listen_null_line(seed_key=seed_key)
+        authored_audible = [
+            fact
+            for fact in _select_intent_aligned_visible_facts(
+                scene, player_text=pt, seed_key=seed_key, max_facts=2
+            )
+            if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS)
+        ]
+        if not authored_audible:
+            # Location overlap with a silent crowd is not an audible fact.
+            for fact in _visible_fact_strings(scene):
+                if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS):
+                    authored_audible.append(fact)
+                    break
+        if not authored_audible:
+            return diegetic_listen_null_line(seed_key=seed_key)
+        scene["visible_facts"] = authored_audible
 
     if fam in {"listen", "approach_listen", "observe_group"} and not physical and tier not in ("", "none"):
         vf_list = _visible_fact_strings(scene)

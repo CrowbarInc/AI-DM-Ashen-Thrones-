@@ -73,6 +73,37 @@ def test_validate_fallback_behavior_fails_on_fabricated_authority() -> None:
     )
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        'Coil Warden says, "No. I cannot answer that from what I know."',
+        'Coil Warden says, "I cannot answer that from what I know."',
+        'Coil Warden keeps their voice low. "All I know on brine is rumor."',
+        'Coil Warden tightens their jaw. "I\'ve told you what I know."',
+        'Coil Warden exhales. "Not from what I know."',
+        "As far as I know, the ledger is rumor.",
+    ],
+)
+def test_validate_fallback_behavior_does_not_treat_knowledge_limit_hedges_as_authority(
+    text: str,
+) -> None:
+    out = validate_fallback_behavior(text, fallback_contract())
+    assert out["fabricated_authority_detected"] is False
+    assert "fabricated_authority" not in (out.get("failure_reasons") or [])
+
+
+def test_validate_fallback_behavior_still_flags_knowledge_claim_as_authority() -> None:
+    out = validate_fallback_behavior(
+        "I know the culprit was Captain Verrick. Check the ward clerk at the east gate office.",
+        fallback_contract(),
+    )
+    assert_fallback_validator_failure(
+        out,
+        failure_reason="fabricated_authority",
+        fabricated_authority_detected=True,
+    )
+
+
 def test_validate_fallback_behavior_fails_on_meta_fallback_voice() -> None:
     out = validate_fallback_behavior(
         "I don't have enough information to answer confidently. Check the ward clerk at the east gate office.",

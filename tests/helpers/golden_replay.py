@@ -1451,11 +1451,19 @@ def assert_runtime_lineage_profile(
     mutation_frequency = lineage_summary.get("mutation_kind_frequency") or {}
     assert isinstance(mutation_frequency, Mapping), debug_context
     if "mutation_kind_max" in expected:
+        mutation_kind_max = expected["mutation_kind_max"]
         _assert_mapping_max_values(
             mutation_frequency,
-            expected["mutation_kind_max"],
+            mutation_kind_max,
             debug_context=debug_context,
         )
+        if expected.get("reject_unexpected_mutation_kinds") is True:
+            assert set(mutation_frequency) <= set(mutation_kind_max), debug_context
+        if expected.get("derive_mutation_event_max_from_kind_max") is True:
+            derived_mutation_max = sum(int(value) for value in mutation_kind_max.values())
+            observed_mutation_events = int(event_frequency.get("mutation") or 0)
+            assert observed_mutation_events <= derived_mutation_max, debug_context
+            assert observed_mutation_events == sum(int(value) for value in mutation_frequency.values()), debug_context
 
     recurring_events = lineage_summary.get("recurring_events") or []
     assert isinstance(recurring_events, Sequence), debug_context

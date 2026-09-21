@@ -93,7 +93,7 @@ Commit-worthiness routing (`is_commit_worthy_recurrence_event()` in `replay_bug_
 **Disallow** (session diagnostic lane — not dropped):
 
 - `event_source=session`
-- Ephemeral paths (`codex_pytest_tmp`, `pytest_tmp`, `/tmp/`)
+- Ephemeral paths (`codex_pytest_tmp`, `pytest_tmp`, `development/tmp`, `/tmp/`)
 - Synthetic drift keys (`|unknown|…|unknown`)
 - Protected events with null `scenario_id`
 

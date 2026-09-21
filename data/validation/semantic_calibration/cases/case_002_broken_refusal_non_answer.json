@@ -1,0 +1,21 @@
+{
+  "case_id": "case_002_broken_refusal_non_answer",
+  "category": "known_bad.broken_refusal_non_answer",
+  "player_input": "Who stole the relic from the chapel?",
+  "prior_context": "Prior GM output: Tavern Runner mutters, the tavern runner replies, voice steady amid the murmur of the crowd.",
+  "gm_response": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+  "expected_semantic_result": "FAIL",
+  "expected_mandatory_gates": {
+    "malformed_output": "FAIL",
+    "player_intent_addressed": "FAIL"
+  },
+  "rationale": "The response is malformed as a communicative refusal and does not coherently address the question.",
+  "provenance": {
+    "kind": "real_runtime_failure",
+    "artifact": "artifacts/simulated_playtest_observability/20260917T221002Z_p1_direct_answer/evaluation.json",
+    "turn_index": 1
+  },
+  "synthetic": false,
+  "action_type": "question",
+  "whether_uncertainty_refusal_is_valid": true
+}

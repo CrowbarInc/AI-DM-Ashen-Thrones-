@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 
 from game.realization_provenance import REALIZATION_FALLBACK_FAMILY_FIELD, STRICT_SOCIAL_DETERMINISTIC_FALLBACK
-from game.social_exchange_emission import build_final_strict_social_response
+from game.final_emission_strict_social_stack import build_final_strict_social_response
 
 from tests.helpers.golden_replay_api import NEUTRAL_REPLY_SPEAKER_GROUNDING_BRIDGE_FAMILY
 from tests.helpers.golden_replay_fixtures import (

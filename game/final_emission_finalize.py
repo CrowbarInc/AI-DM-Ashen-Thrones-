@@ -33,6 +33,45 @@ from game.stage_diff_telemetry import record_stage_snapshot
 from game.state_channels import project_author_payload, project_debug_payload, project_public_payload
 
 
+def record_policy_semantic_write_site_if_changed(
+    before: Dict[str, Any],
+    after: Dict[str, Any],
+    *,
+    policy_identifier: str,
+    mutation_reason: str,
+    write_site_function: str,
+) -> None:
+    """Package policy mutation provenance through the final-emission write owner."""
+    before_text = before.get("player_facing_text") if isinstance(before, dict) else ""
+    after_text = after.get("player_facing_text") if isinstance(after, dict) else ""
+    if not isinstance(after, dict) or str(before_text or "") == str(after_text or ""):
+        return
+    fem = ensure_final_emission_meta_dict(after)
+    md = after.get("metadata")
+    if not isinstance(md, dict):
+        md = {}
+        after["metadata"] = md
+    emission_debug = md.get("emission_debug")
+    if not isinstance(emission_debug, dict):
+        emission_debug = {}
+        md["emission_debug"] = emission_debug
+    for metadata in (emission_debug, fem):
+        append_semantic_mutation_write_site(
+            metadata,
+            before_text=before_text,
+            after_text=after_text,
+            write_site_family="policy",
+            write_site_file="game/response_policy_enforcement.py",
+            write_site_function=write_site_function,
+            owner="game.response_policy_enforcement",
+            source=policy_identifier,
+            mutation_reason=mutation_reason,
+            selected_active_stream=True,
+            candidate_only=False,
+            compatibility_status="diagnostic_only",
+        )
+
+
 _GLOBAL_VISIBILITY_PLACEHOLDER_STOCK_RES: tuple[re.Pattern[str], ...] = (
     # Mirrors ``_global_narrative_fallback_stock_line`` and the empty-sanitizer stock in output_sanitizer.
     re.compile(

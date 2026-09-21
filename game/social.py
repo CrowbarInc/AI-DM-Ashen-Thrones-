@@ -35,6 +35,7 @@ from game.interaction_context import (
 )
 from game.skill_checks import should_trigger_check
 from game.social_memory import (
+    _THREAD_MATCH_STOPWORDS,
     _collect_social_discussion_implicated_leads,
     _get_scene_social_discussion_bucket,
     _is_followup_ack_question,
@@ -892,14 +893,33 @@ def classify_social_followup_dimension(player_text: str) -> str:
     ):
         return "clarification"
     if re.search(
+        r"\b(?:why\s+(?:is|was|are|were|did|does|do|would|could|can't|cannot)|the reason|what caused)\b",
+        low,
+    ):
+        return "cause"
+    if re.search(
         r"\b(where\s+(?:should|do)\s+i|what\s+should\s+i\s+do\s+next|who\s+should\s+i\s+(?:ask|talk|speak|see))\b",
         low,
     ):
         return "next_step"
-    if re.search(r"\b(who|whose)\b", low):
+    if re.search(r"\b(?:who|whose|whoever)\b", low):
         return "identity"
-    if re.search(r"\b(where\b|last\s+seen|seen\s+(?:him|her|them))\b", low):
+    if re.search(r"\b(?:name of(?: the)?|the person(?: who)?|the people who)\b", low):
+        return "identity"
+    if re.search(
+        r"\b(?:where\b|last\s+seen|seen\s+(?:him|her|them)|whereabouts|destination)\b",
+        low,
+    ):
         return "location"
+    if re.search(r"\b(?:when|what hour|what time|how long|how recently)\b", low):
+        return "time"
+    if re.search(
+        r"\b(?:how many|how much|what(?:'s| is) the (?:count|number|price|cost)|what does .+ cost)\b",
+        low,
+    ):
+        return "quantity"
+    if re.search(r"\b(?:what condition|what state|how damaged|how intact)\b", low):
+        return "status"
     if re.search(
         r"\b(tied\s+to|affiliated|faction|who\s+does\s+(?:he|she|they)\s+work|serve\s+house|house\s+\w+)\b",
         low,
@@ -1329,17 +1349,153 @@ def get_npc_dc_modifier(npc: Dict[str, Any], kind: str) -> int:
     return mod
 
 
+_SOCIAL_QUESTION_GENERIC_TOKENS = frozenset(
+    {
+        "ask",
+        "asks",
+        "asking",
+        "talk",
+        "talks",
+        "talking",
+        "tell",
+        "tells",
+        "told",
+        "speak",
+        "speaks",
+        "speaking",
+        "step",
+        "steps",
+        "walk",
+        "walks",
+        "come",
+        "comes",
+        "turn",
+        "turns",
+        "look",
+        "looks",
+        "over",
+        "please",
+        "want",
+        "wants",
+        "said",
+        "says",
+        "know",
+        "knows",
+        "mean",
+        "meant",
+        "hear",
+        "heard",
+    }
+)
+
+
+def _speaker_tokens_for_question_relevance(
+    npc: Dict[str, Any] | None = None,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> set[str]:
+    return _knowledge_identity_tokens(
+        npc if isinstance(npc, dict) else None,
+        speaker_id,
+        speaker_name,
+    )
+
+
+def _question_subject_tokens(
+    player_text: str,
+    exclude_tokens: set[str] | frozenset[str] | None = None,
+) -> List[str]:
+    """Distinctive subject tokens from the player's question, excluding speaker identity."""
+    exclude = {
+        str(tok or "").strip().lower()
+        for tok in (exclude_tokens or set())
+        if str(tok or "").strip()
+    }
+    out: List[str] = []
+    for tok in re.findall(r"[a-z]{4,}", str(player_text or "").lower()):
+        if tok in _THREAD_MATCH_STOPWORDS or tok in _SOCIAL_QUESTION_GENERIC_TOKENS or tok in exclude:
+            continue
+        if tok not in out:
+            out.append(tok)
+    return out[:18]
+
+
+def _authored_topic_hay(rec: Any) -> str:
+    if not isinstance(rec, dict):
+        return str(rec or "")
+    parts: List[str] = [
+        str(rec.get("id") or ""),
+        str(rec.get("text") or rec.get("label") or ""),
+        str(rec.get("clue_text") or ""),
+        str(rec.get("clue_id") or rec.get("reveals_clue") or ""),
+    ]
+    aliases = rec.get("aliases")
+    if isinstance(aliases, list):
+        parts.extend(str(item or "") for item in aliases)
+    return " ".join(parts)
+
+
+def authored_topic_relevant_to_question(
+    player_text: str,
+    rec: Any,
+    *,
+    npc: Dict[str, Any] | None = None,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> bool:
+    """Whether an owned topic concerns the asked subject.
+
+    Authorization and answer sufficiency are separate predicates. Subject
+    overlap does not mean the topic answers the requested information.
+    Generic asks with no remaining subject tokens keep first-available
+    behavior. Existing ellipsis follow-ups do not mint a different topic.
+    """
+    speaker_tokens = _speaker_tokens_for_question_relevance(npc, speaker_id, speaker_name)
+    subject = _question_subject_tokens(player_text, speaker_tokens)
+    if not subject:
+        return not is_valid_followup_question(player_text)
+    hay = _authored_topic_hay(rec).lower()
+    return any(tok in hay for tok in subject)
+
+
+def authored_answer_sufficient_for_question(player_text: str, rec: Any) -> bool:
+    """Whether a subject-relevant candidate can satisfy the requested information.
+
+    Knowing something about a subject is not the same as answering every
+    question about that subject. General and clarification asks keep the
+    existing first-available / any-authored-text behavior.
+    """
+    dim = classify_social_question_dimension(player_text)
+    if dim in ("general", "clarification"):
+        return True
+    text = ""
+    if isinstance(rec, dict):
+        text = str(rec.get("clue_text") or rec.get("text") or rec.get("label") or "").strip()
+    else:
+        text = str(rec or "").strip()
+    if not text:
+        return False
+    return _stored_text_supports_dimension(text, dim)
+
+
 def _next_topic_to_reveal(
     npc: Dict[str, Any],
     runtime: Dict[str, Any],
     topic_hint: Optional[str] = None,
+    player_text: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Return next unrevealed topic that matches hint (if any). Topic: {id, text, clue_id?, clue_text?}."""
+    """Return next unrevealed topic that matches hint, relevance, and sufficiency.
+
+    Topic: {id, text, clue_id?, clue_text?}. A speaker owning a topic does not
+    make that topic an answer to an unrelated question. A subject-relevant
+    topic still must contain the requested information.
+    """
     topics = npc.get("topics") or npc.get("knowledge") or []
     if not isinstance(topics, list):
         return None
     revealed = set(runtime.get("revealed_topics") or [])
     hint_slug = slugify(topic_hint) if topic_hint else None
+    text_in = str(player_text or "").strip()
 
     for t in topics:
         if not isinstance(t, dict):
@@ -1354,6 +1510,16 @@ def _next_topic_to_reveal(
         if tid in revealed:
             continue
         if hint_slug and hint_slug not in slugify(tid) and hint_slug not in slugify(rec.get("text", "")):
+            continue
+        if text_in and not authored_topic_relevant_to_question(
+            text_in,
+            rec,
+            npc=npc,
+            speaker_id=str(npc.get("id") or "").strip() or None,
+            speaker_name=str(npc.get("name") or "").strip() or None,
+        ):
+            continue
+        if text_in and not authored_answer_sufficient_for_question(text_in, rec):
             continue
         out: Dict[str, Any] = {
             "id": tid,
@@ -1503,7 +1669,11 @@ def determine_social_escalation_outcome(
     valid_fu = is_valid_followup_question(pt) or pressure_followup
     last_ans = str(entry.get("last_answer") or "").strip()
     prev_probe_dim = str(entry.get("previous_probe_dimension") or "").strip()
-    thread_covers = _player_question_covers_stored_thread(pt, last_ans)
+    thread_covers = _player_question_covers_stored_thread(
+        pt,
+        last_ans,
+        exclude_tokens=_speaker_tokens_for_question_relevance(None, npc_id, None),
+    )
     prior_same = bool(
         last_ans
         and _stored_text_supports_dimension(last_ans, current_dim)
@@ -1621,11 +1791,62 @@ def _stored_text_supports_dimension(stored: str, dimension: str) -> bool:
             skip = {"The", "He", "She", "They", "But", "And", "You", "House", "Tavern"}
             if any(w not in skip for w in words):
                 return True
+        # Authored topic rows often name the identity without quotes
+        # ("Captain Thoran commands the gate watch tonight.").
+        if re.search(
+            r"\b(?:Captain|Serjeant|Sergeant|Commander|Lieutenant|Warden|Lord|Lady)\s+[A-Z][a-z]{2,}\b",
+            t,
+        ):
+            return True
+        if re.search(r"\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})+\b", t):
+            return True
+        if re.search(
+            r"\b[A-Z][a-z]{2,}\s+"
+            r"(?:repaired|recaulked|checked|command(?:s|ed)?|posted|authored|wrote|"
+            r"guard(?:s|ed)?|closed|opened|built|fixed|named|led|trimmed|hid|hides)\b",
+            t,
+        ):
+            return True
+        if re.search(r"\bby\s+[A-Z][a-z]{2,}\b", t):
+            return True
         return False
     if dimension == "location":
         return bool(
             re.search(
-                r"\b(?:near|at|by|toward|towards|east|west|north|south|road|gate|milestone|square|market|lane)\b",
+                r"\b(?:near|at|by|on|in|under|over|behind|beside|inside|toward|towards|"
+                r"east|west|north|south|road|gate|milestone|square|market|lane|"
+                r"crossing|river|dock|pond|cistern|quay|wharf|yard)\b",
+                low,
+            )
+        )
+    if dimension == "time":
+        return bool(
+            re.search(
+                r"\b(?:dawn|dusk|morning|evening|night|noon|midnight|yesterday|"
+                r"today|tomorrow|hour|o'?clock|week|month|year|before|after|"
+                r"until|since|ago|bell)\b",
+                low,
+            )
+        )
+    if dimension == "cause":
+        return bool(
+            re.search(r"\b(?:because|due to|caused by|the reason|owing to|so that)\b", low)
+        )
+    if dimension == "quantity":
+        if re.search(r"\b\d+\b", low):
+            return True
+        return bool(
+            re.search(
+                r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|"
+                r"twelve|dozen|score)\s+[a-z]+s\b",
+                low,
+            )
+        )
+    if dimension == "status":
+        return bool(
+            re.search(
+                r"\b(?:damaged|cracked|broken|intact|closed|open|shut|ruined|"
+                r"leaning|rotten|sound)\b",
                 low,
             )
         )
@@ -1649,6 +1870,8 @@ def _stored_text_supports_dimension(stored: str, dimension: str) -> bool:
         )
     if dimension == "clarification":
         return len(low.strip()) >= 24
+    if dimension == "general":
+        return len(low.strip()) >= 8
     return bool(
         re.search(
             r"\b(?:saw|seen|heard|named|called|patrol|road|gate|milestone|house|tied)\b",
@@ -1701,7 +1924,493 @@ def format_structured_fact_social_line(resolution: Dict[str, Any] | None, fact_t
         inner = f"Word is, {inner[0].lower()}{inner[1:]}" if len(inner) > 1 else f"Word is, {inner}"
     if not re.search(r"[.!?…]$", inner):
         inner += "."
+    inner = inner.replace('"', "")
     return f'{speaker} mutters, "{inner}"'
+
+
+def format_authored_knowledge_realization_line(
+    resolution: Dict[str, Any] | None,
+    fact_text: str,
+    *,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> str:
+    """Realize an existing authored fact without inventing a speaker.
+
+    Uses the current grounded interlocutor when one exists, otherwise the topic-owning
+    present NPC, otherwise scene-grounded narration of the authored sentence.
+    """
+    social = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
+    name = str((social or {}).get("npc_name") or speaker_name or "").strip()
+    npc_id = str((social or {}).get("npc_id") or speaker_id or "").strip()
+    inner = str(fact_text or "").strip().strip('"').strip()
+    if not inner:
+        return ""
+    if name or npc_id:
+        tmp = dict(resolution or {})
+        soc = dict(social or {})
+        if name:
+            soc["npc_name"] = name
+        if npc_id:
+            soc["npc_id"] = npc_id
+        tmp["social"] = soc
+        return format_structured_fact_social_line(tmp, inner)
+    if not re.search(r"[.!?…]$", inner):
+        inner += "."
+    return inner
+
+
+_AUTHORED_KNOWLEDGE_IGNORANCE_MARKERS = (
+    "the murmur around you never tightens",
+    "no one at hand answers that directly",
+    "the moment passes without anyone stepping forward",
+    "i don't know",
+    "i do not know enough",
+    "i do not know that part",
+    "cannot answer that from what",
+    "i've heard talk, but not enough",
+    "couldn't tell you",
+    "for a breath, the scene holds",
+    "the scene holds while",
+    "stands nearby",
+    "gate guard mutters,",
+)
+
+
+def _player_facing_is_authored_concealment(text: str) -> bool:
+    raw = str(text or "").strip()
+    if not raw:
+        return True
+    low = raw.lower()
+    if any(marker in low for marker in _AUTHORED_KNOWLEDGE_IGNORANCE_MARKERS):
+        return True
+    if re.search(r"\bmutters,\s*$", raw):
+        return True
+    return False
+
+
+def _scene_inner_for_authored_knowledge(scene: Dict[str, Any] | None) -> Dict[str, Any]:
+    if not isinstance(scene, dict):
+        return {}
+    inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else scene
+    return inner if isinstance(inner, dict) else {}
+
+
+def _player_refers_to_surface(player_text: str, *labels: Any) -> bool:
+    pl = " ".join(str(player_text or "").strip().lower().split())
+    if not pl:
+        return False
+    pl_slug = slugify(pl)
+    for raw in labels:
+        label = str(raw or "").strip().lower()
+        if not label:
+            continue
+        if label in pl:
+            return True
+        lab_slug = slugify(label)
+        if lab_slug and (lab_slug in pl_slug or pl_slug in lab_slug):
+            return True
+    return False
+
+
+def _match_interactable_authored_knowledge(
+    player_text: str,
+    scene: Dict[str, Any] | None,
+    dimension: str = "general",
+) -> Dict[str, Any] | None:
+    """Return a revealable interactable/clue fact when that object is the subject.
+
+    Surface mention is subject relevance, not answer sufficiency. A
+    surface-content fact may answer what is written and still fail a
+    who/when/why ask.
+    """
+    inner = _scene_inner_for_authored_knowledge(scene)
+    if not inner:
+        return None
+    clues: Dict[str, str] = {}
+    for rec in inner.get("discoverable_clues") or []:
+        if not isinstance(rec, dict):
+            continue
+        cid = str(rec.get("id") or "").strip()
+        text = str(rec.get("text") or "").strip()
+        if cid and text:
+            clues[cid] = text
+    best: Dict[str, Any] | None = None
+    for item in inner.get("interactables") or []:
+        if not isinstance(item, dict):
+            continue
+        iid = str(item.get("id") or "").strip()
+        labels = [iid, item.get("label"), item.get("name"), *(item.get("aliases") or [])]
+        if not _player_refers_to_surface(player_text, *labels):
+            continue
+        clue_id = str(item.get("reveals_clue") or "").strip()
+        text = clues.get(clue_id) or ""
+        if not text:
+            for fact in inner.get("visible_facts") or []:
+                fact_text = str(fact or "").strip()
+                if fact_text and _player_refers_to_surface(fact_text, *labels):
+                    text = fact_text
+                    break
+        if not text:
+            continue
+        dim = str(dimension or "general").strip() or "general"
+        if dim not in ("general", "clarification") and not _stored_text_supports_dimension(text, dim):
+            continue
+        cand = {
+            "answer_kind": "structured_fact",
+            "text": text,
+            "source": f"interactable:{iid or clue_id or 'scene'}",
+            "confidence": 0.9,
+            "clue_id": clue_id or None,
+        }
+        if iid:
+            best = cand
+            break
+        if best is None:
+            best = cand
+    return best
+
+
+_KNOWLEDGE_IDENTITY_STOPWORDS = frozenset(
+    {
+        "that",
+        "this",
+        "with",
+        "from",
+        "they",
+        "them",
+        "their",
+        "have",
+        "been",
+        "someone",
+        "anyone",
+        "person",
+        "people",
+        "npc",
+        "actor",
+        "scene",
+        "name",
+    }
+)
+
+
+def _canonical_speaker_npc_id(session: Dict[str, Any] | None, raw_id: str | None) -> str:
+    """Reuse promoted_actor_npc_map; do not invent a second identity system."""
+    raw = str(raw_id or "").strip()
+    if not raw or not isinstance(session, dict):
+        return raw
+    st = get_scene_state(session)
+    pmap = st.get("promoted_actor_npc_map")
+    if isinstance(pmap, dict):
+        mapped = pmap.get(raw)
+        if isinstance(mapped, str) and mapped.strip():
+            return mapped.strip()
+    return raw
+
+
+def _knowledge_identity_tokens(row: Dict[str, Any] | None, *extra: Any) -> set[str]:
+    """Identity tokens from existing id / name / alias / role / address_role contracts."""
+    out: set[str] = set()
+
+    def _add_raw(raw: Any) -> None:
+        text = str(raw or "").strip().lower().replace("_", " ").replace("-", " ")
+        if not text:
+            return
+        for tok in re.findall(r"[a-z]{4,}", text):
+            if tok not in _KNOWLEDGE_IDENTITY_STOPWORDS:
+                out.add(tok)
+        slug = slugify(text)
+        if slug and slug not in _KNOWLEDGE_IDENTITY_STOPWORDS:
+            out.add(slug)
+
+    if isinstance(row, dict):
+        _add_raw(row.get("id"))
+        _add_raw(row.get("name"))
+        _add_raw(row.get("role"))
+        for src in (row.get("aliases"), row.get("address_roles")):
+            if not isinstance(src, list):
+                continue
+            for item in src:
+                _add_raw(item)
+    for item in extra:
+        _add_raw(item)
+    return out
+
+
+def _speaker_roster_row_for_knowledge(
+    *,
+    world: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    speaker_id: str,
+    scene: Dict[str, Any] | None = None,
+) -> Dict[str, Any] | None:
+    sid = str(scene_id or "").strip()
+    nid = str(speaker_id or "").strip()
+    if not nid:
+        return None
+    env = scene if isinstance(scene, dict) else None
+    roster = canonical_scene_addressable_roster(
+        world if isinstance(world, dict) else {},
+        sid,
+        scene_envelope=env,
+        session=session if isinstance(session, dict) else None,
+    )
+    for row in roster:
+        if isinstance(row, dict) and str(row.get("id") or "").strip() == nid:
+            return row
+    own = npc_dict_by_id(world if isinstance(world, dict) else {}, nid)
+    return own if isinstance(own, dict) else None
+
+
+def authoritative_knowledge_npc_ids_for_speaker(
+    *,
+    world: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    speaker_id: str | None,
+    speaker_name: str | None = None,
+    scene: Dict[str, Any] | None = None,
+) -> List[str]:
+    """World NPC ids this bound speaker may draw topics from.
+
+    Paths: exact id, promoted canonical id, exact name/alias equality, and a
+    unique addressing-token match against present world NPCs. Binding alone
+    does not grant every present NPC's topics.
+    """
+    out: List[str] = []
+    seen: set[str] = set()
+
+    def _add(raw: Any) -> None:
+        nid = str(raw or "").strip()
+        if nid and nid not in seen:
+            seen.add(nid)
+            out.append(nid)
+
+    speaker = str(speaker_id or "").strip()
+    if speaker:
+        _add(speaker)
+        _add(_canonical_speaker_npc_id(session, speaker))
+    w = world if isinstance(world, dict) else {}
+    sid = str(scene_id or "").strip()
+    roster_row = _speaker_roster_row_for_knowledge(
+        world=w, session=session, scene_id=sid, speaker_id=speaker, scene=scene
+    )
+    speaker_keys: set[str] = set()
+    for raw in (speaker, speaker_name, (roster_row or {}).get("name") if isinstance(roster_row, dict) else ""):
+        slug = slugify(str(raw or ""))
+        if slug:
+            speaker_keys.add(slug)
+    if isinstance(roster_row, dict):
+        for al in roster_row.get("aliases") or []:
+            slug = slugify(str(al or ""))
+            if slug:
+                speaker_keys.add(slug)
+    present: List[Dict[str, Any]] = []
+    for npc in w.get("npcs") or []:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        loc = str(npc.get("location") or npc.get("scene_id") or "").strip()
+        if not nid:
+            continue
+        if loc and sid and loc != sid:
+            continue
+        present.append(npc)
+        keys = {slugify(nid), slugify(str(npc.get("name") or ""))}
+        for al in npc.get("aliases") or []:
+            slug = slugify(str(al or ""))
+            if slug:
+                keys.add(slug)
+        keys.discard("")
+        if speaker_keys & keys:
+            _add(nid)
+    token_to_npcs: Dict[str, set[str]] = {}
+    for npc in present:
+        nid = str(npc.get("id") or "").strip()
+        for tok in _knowledge_identity_tokens(npc):
+            token_to_npcs.setdefault(tok, set()).add(nid)
+    speaker_tokens = _knowledge_identity_tokens(roster_row, speaker, speaker_name)
+    for tok in speaker_tokens:
+        hits = token_to_npcs.get(tok) or set()
+        if len(hits) == 1:
+            _add(next(iter(hits)))
+    return out
+
+
+def _match_present_npc_topic_authored_knowledge(
+    *,
+    world: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    scene_id: str,
+    player_text: str,
+    dimension: str,
+    restrict_npc_id: str | None = None,
+    scene: Dict[str, Any] | None = None,
+    speaker_name: str | None = None,
+) -> Dict[str, Any] | None:
+    """Return a matching topic the speaker has an authoritative path to."""
+    if not isinstance(world, dict) or not str(scene_id or "").strip():
+        return None
+    text_in = " ".join(str(player_text or "").strip().split())
+    if not text_in:
+        return None
+    wanted = str(restrict_npc_id or "").strip()
+    allowed: set[str] | None = None
+    if wanted:
+        allowed = set(
+            authoritative_knowledge_npc_ids_for_speaker(
+                world=world,
+                session=session,
+                scene_id=scene_id,
+                speaker_id=wanted,
+                speaker_name=speaker_name,
+                scene=scene,
+            )
+        )
+        allowed.add(wanted)
+    bound_speaker = wanted or None
+    bound_name = str(speaker_name or "").strip() or None
+    bound_row = npc_dict_by_id(world, bound_speaker) if bound_speaker else None
+    speaker_tokens = _speaker_tokens_for_question_relevance(bound_row, bound_speaker, bound_name)
+    subject = _question_subject_tokens(text_in, speaker_tokens)
+    if not subject:
+        return None
+    best: Dict[str, Any] | None = None
+    best_score = 0
+    for npc in world.get("npcs") or []:
+        if not isinstance(npc, dict):
+            continue
+        nid = str(npc.get("id") or "").strip()
+        loc = str(npc.get("location") or npc.get("scene_id") or "").strip()
+        if not nid:
+            continue
+        if allowed is not None and nid not in allowed:
+            continue
+        if loc and loc != scene_id:
+            continue
+        topics = npc.get("topics") or npc.get("knowledge") or []
+        if not isinstance(topics, list):
+            continue
+        for rec in topics:
+            if isinstance(rec, dict):
+                tid = str(rec.get("id") or "").strip()
+                topic_text = str(rec.get("clue_text") or rec.get("text") or "").strip()
+                clue_id = rec.get("clue_id") or rec.get("reveals_clue")
+            else:
+                tid = slugify(str(rec or ""))[:40]
+                topic_text = str(rec or "").strip()
+                clue_id = None
+            if not topic_text:
+                continue
+            hay = f"{tid} {topic_text}"
+            if not any(tok in hay.lower() for tok in subject):
+                continue
+            if not _player_question_covers_stored_thread(text_in, hay, exclude_tokens=speaker_tokens):
+                continue
+            if dimension not in ("general", "clarification") and not _stored_text_supports_dimension(
+                topic_text, dimension
+            ):
+                continue
+            score = sum(1 for tok in subject if tok in hay.lower())
+            if score <= best_score:
+                continue
+            best_score = score
+            speaker_id = bound_speaker or nid
+            speaker_nm = bound_name or str(npc.get("name") or "").strip() or None
+            if speaker_id == nid:
+                speaker_nm = str(npc.get("name") or "").strip() or speaker_nm
+            best = {
+                "answer_kind": "structured_fact",
+                "text": topic_text,
+                "source": f"npc_topic:{nid}:{tid or 'topic'}",
+                "confidence": 0.86,
+                "clue_id": str(clue_id).strip() if clue_id else None,
+                "speaker_id": speaker_id,
+                "speaker_name": speaker_nm,
+            }
+    return best if best_score >= 1 else None
+
+
+def _turn_resolution_authored_facts(resolution: Dict[str, Any] | None) -> List[str]:
+    if not isinstance(resolution, dict):
+        return []
+    out: List[str] = []
+    seen: set[str] = set()
+
+    def _add(raw: Any) -> None:
+        text = str(raw or "").strip()
+        key = text.lower()
+        if not text or key in seen:
+            return
+        seen.add(key)
+        out.append(text)
+
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    topic = soc.get("topic_revealed") if isinstance(soc.get("topic_revealed"), dict) else None
+    if isinstance(topic, dict):
+        _add(topic.get("clue_text") or topic.get("text"))
+    _add(resolution.get("clue_text"))
+    for raw in resolution.get("discovered_clues") or []:
+        _add(raw)
+    return out
+
+
+def _speaker_identity_tokens_for_communication(speaker_id: str | None, speaker_name: str | None) -> set[str]:
+    return _knowledge_identity_tokens(None, speaker_id, speaker_name)
+
+
+def _text_communicates_authored_fact(
+    player_facing: str,
+    fact_text: str,
+    *,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> bool:
+    text = str(player_facing or "").strip()
+    fact = str(fact_text or "").strip()
+    if not text or not fact:
+        return False
+    # Ignorance/murmur concealment is not communication, even when the speaker's
+    # display name overlaps a token in the authored fact (e.g. "Captain").
+    if _player_facing_is_authored_concealment(text):
+        return False
+    low = text.lower()
+    speaker_tokens = _speaker_identity_tokens_for_communication(speaker_id, speaker_name)
+    fact_tokens = [
+        t
+        for t in re.findall(r"[a-z]{4,}", fact.lower())
+        if t not in {"that", "this", "with", "from", "they"} and t not in speaker_tokens
+    ]
+    if not fact_tokens:
+        return False
+    distinctive = [
+        t
+        for t in fact_tokens
+        if t not in {"gate", "watch", "tonight", "missing", "patrol", "notice", "board"}
+    ]
+    if any(tok in low for tok in distinctive):
+        return True
+    hits = sum(1 for tok in fact_tokens if tok in low)
+    return hits >= 3
+
+
+def _load_scene_envelope_for_authored_knowledge(
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any] | None:
+    if isinstance(scene, dict) and (_scene_inner_for_authored_knowledge(scene)):
+        return scene
+    sid = str(scene_id or "").strip()
+    if not sid:
+        return None
+    try:
+        from game.storage import load_scene
+
+        loaded = load_scene(sid)
+    except Exception:
+        return None
+    return loaded if isinstance(loaded, dict) else None
 
 
 def select_best_social_answer_candidate(
@@ -1712,6 +2421,8 @@ def select_best_social_answer_candidate(
     topic_key: str | None,
     player_text: str,
     resolution: dict | None,
+    world: dict | None = None,
+    scene: dict | None = None,
 ) -> dict:
     """Choose the strongest deterministic social answer source for this turn (precedence A→D)."""
     sid = str(scene_id or "").strip()
@@ -1742,14 +2453,18 @@ def select_best_social_answer_candidate(
         return a == b or a in b or b in a
 
     pressure = rt.get("topic_pressure") if isinstance(rt.get("topic_pressure"), dict) else {}
+    speaker_name = str(((resolution or {}).get("social") or {}).get("npc_name") or "").strip() or None
+    exclude = _speaker_tokens_for_question_relevance(None, nid or None, speaker_name)
 
     # --- A: structured topic payload on resolution, then topic pressure last_answer ---
     res_soc = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
     topic_rev = res_soc.get("topic_revealed") if isinstance(res_soc.get("topic_revealed"), dict) else None
     if isinstance(topic_rev, dict):
         clue = str(topic_rev.get("clue_text") or topic_rev.get("text") or "").strip()
-        if clue and _stored_text_supports_dimension(clue, dimension):
-            utt = _pick_utterance_from_stored(clue, dimension) or _trim_utterance(clue)
+        if clue:
+            utt = _pick_utterance_from_stored(clue, dimension)
+            if not utt and dimension in ("general", "clarification"):
+                utt = _trim_utterance(clue)
             if utt:
                 return {
                     "answer_kind": "structured_fact",
@@ -1765,7 +2480,7 @@ def select_best_social_answer_candidate(
             last_ans
             and _speaker_aligned()
             and _stored_text_supports_dimension(last_ans, dimension)
-            and _player_question_covers_stored_thread(text_in, last_ans)
+            and _player_question_covers_stored_thread(text_in, last_ans, exclude_tokens=exclude)
             and not _topic_anchor_skips_stored_fact(text_in, last_ans)
         ):
             utt = _pick_utterance_from_stored(last_ans, dimension)
@@ -1792,7 +2507,7 @@ def select_best_social_answer_candidate(
             continue
         if not _stored_text_supports_dimension(clue_line, dimension):
             continue
-        if not _player_question_covers_stored_thread(text_in, clue_line):
+        if not _player_question_covers_stored_thread(text_in, clue_line, exclude_tokens=exclude):
             continue
         if _topic_anchor_skips_stored_fact(text_in, clue_line):
             continue
@@ -1823,7 +2538,7 @@ def select_best_social_answer_candidate(
             la2
             and _speaker_aligned()
             and not _stored_text_supports_dimension(la2, dimension)
-            and _player_question_covers_stored_thread(text_in, la2)
+            and _player_question_covers_stored_thread(text_in, la2, exclude_tokens=exclude)
             and not _topic_anchor_skips_stored_fact(text_in, la2)
         ):
             low2 = la2.lower()
@@ -1838,6 +2553,213 @@ def select_best_social_answer_candidate(
                     }
 
     return _refusal(0.1)
+
+
+def realize_authored_knowledge_answer(
+    *,
+    session: dict | None,
+    scene_id: str,
+    player_text: str,
+    resolution: dict | None,
+    world: dict | None = None,
+    scene: dict | None = None,
+) -> dict | None:
+    """If existing owners already have a revealable answer, return formatted player-facing text."""
+    sid = str(scene_id or "").strip()
+    text_in = " ".join(str(player_text or "").strip().split())
+    if not sid or not text_in:
+        return None
+    nid = str(((resolution or {}).get("social") or {}).get("npc_id") or "").strip() or None
+    speaker_name = str(((resolution or {}).get("social") or {}).get("npc_name") or "").strip() or None
+    dimension = classify_social_question_dimension(text_in)
+    scene_env = scene if isinstance(scene, dict) else None
+
+    def _usable(candidate: dict | None) -> bool:
+        if not isinstance(candidate, dict):
+            return False
+        if str(candidate.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact"):
+            return False
+        fact = str(candidate.get("text") or "").strip()
+        if not fact:
+            return False
+        if dimension not in ("general", "clarification") and not _stored_text_supports_dimension(fact, dimension):
+            return False
+        exclude = _speaker_tokens_for_question_relevance(None, nid, speaker_name)
+        subject = _question_subject_tokens(text_in, exclude)
+        if not subject:
+            return True
+        return bool(_player_question_covers_stored_thread(text_in, fact, exclude_tokens=exclude))
+
+    cand = select_best_social_answer_candidate(
+        session=session if isinstance(session, dict) else {},
+        scene_id=sid,
+        npc_id=nid,
+        topic_key=None,
+        player_text=text_in,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+    )
+    if not _usable(cand):
+        cand = {"answer_kind": "refusal", "text": None}
+    if str(cand.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact"):
+        scene_env = _load_scene_envelope_for_authored_knowledge(scene if isinstance(scene, dict) else None, sid)
+        interactable = _match_interactable_authored_knowledge(text_in, scene_env, dimension)
+        if isinstance(interactable, dict) and str(interactable.get("text") or "").strip():
+            cand = interactable
+    if str(cand.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact"):
+        extra = _match_present_npc_topic_authored_knowledge(
+            world=world if isinstance(world, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+            player_text=text_in,
+            dimension=dimension,
+            restrict_npc_id=nid,
+            scene=scene_env,
+            speaker_name=speaker_name,
+        )
+        if isinstance(extra, dict) and str(extra.get("text") or "").strip():
+            cand = extra
+    # Unbound questions may still use a present topic owner. A bound speaker
+    # must not inherit unrelated world NPC topics merely because the engine
+    # can retrieve them.
+    if str(cand.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact") and not nid:
+        extra = _match_present_npc_topic_authored_knowledge(
+            world=world if isinstance(world, dict) else None,
+            session=session if isinstance(session, dict) else None,
+            scene_id=sid,
+            player_text=text_in,
+            dimension=dimension,
+            restrict_npc_id=None,
+            scene=scene_env,
+        )
+        if isinstance(extra, dict) and str(extra.get("text") or "").strip():
+            cand = extra
+    if str(cand.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact"):
+        return None
+    fact = str(cand.get("text") or "").strip()
+    if not fact:
+        return None
+    line = format_authored_knowledge_realization_line(
+        resolution if isinstance(resolution, dict) else None,
+        fact,
+        speaker_id=str(cand.get("speaker_id") or "").strip() or None,
+        speaker_name=str(cand.get("speaker_name") or "").strip() or None,
+    )
+    if not line:
+        return None
+    return {
+        "text": line,
+        "source": str(cand.get("source") or ""),
+        "answer_kind": str(cand.get("answer_kind") or ""),
+        "fact_text": fact,
+        "clue_id": cand.get("clue_id"),
+    }
+
+
+def apply_authored_knowledge_realization_to_gm(
+    gm: Dict[str, Any] | None,
+    *,
+    player_text: str,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str = "",
+    extra_facts: List[str] | None = None,
+) -> Dict[str, Any]:
+    """Keep murmur/ignorance from concealing a revealable authored fact on this turn."""
+    if not isinstance(gm, dict):
+        return gm if gm is not None else {}
+    sid = str(scene_id or "").strip()
+    if not sid and isinstance(scene, dict):
+        inner = _scene_inner_for_authored_knowledge(scene)
+        sid = str(inner.get("id") or "").strip()
+    if not sid and isinstance(resolution, dict):
+        sid = str(resolution.get("scene_id") or "").strip()
+    current = str(gm.get("player_facing_text") or "")
+    realized = realize_authored_knowledge_answer(
+        session=session,
+        scene_id=sid,
+        player_text=player_text,
+        resolution=resolution,
+        world=world,
+        scene=scene,
+    )
+    written_all = _turn_resolution_authored_facts(resolution)
+    for raw in extra_facts or []:
+        text = str(raw or "").strip()
+        if text and text not in written_all:
+            written_all.append(text)
+    kind = str((resolution or {}).get("kind") or "").strip().lower()
+    inspect_turn = kind in {"discover_clue", "investigate"}
+    if inspect_turn:
+        written = written_all
+    else:
+        social_early = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
+        exclude = _speaker_tokens_for_question_relevance(
+            None,
+            str(social_early.get("npc_id") or "").strip() or None,
+            str(social_early.get("npc_name") or "").strip() or None,
+        )
+        written = [
+            fact
+            for fact in written_all
+            if _player_question_covers_stored_thread(player_text, fact, exclude_tokens=exclude)
+            and authored_answer_sufficient_for_question(player_text, fact)
+        ]
+    facts = list(written)
+    if isinstance(realized, dict) and str(realized.get("fact_text") or "").strip():
+        facts.append(str(realized.get("fact_text") or "").strip())
+    if not facts:
+        return gm
+    social = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
+    speaker_id = str((social or {}).get("npc_id") or "").strip() or None
+    speaker_name = str((social or {}).get("npc_name") or "").strip() or None
+    communicated_written = any(
+        _text_communicates_authored_fact(
+            current, fact, speaker_id=speaker_id, speaker_name=speaker_name
+        )
+        for fact in written
+    )
+    if inspect_turn and written and not communicated_written:
+        pass
+    elif any(
+        _text_communicates_authored_fact(
+            current, fact, speaker_id=speaker_id, speaker_name=speaker_name
+        )
+        for fact in facts
+    ):
+        return gm
+    replacement = ""
+    source = "authored_knowledge_realization"
+    if inspect_turn and written and not communicated_written:
+        fact_line = str(written[0] or "").strip()
+        if fact_line and not re.search(r"[.!?…]$", fact_line):
+            fact_line += "."
+        if current.strip() and not _player_facing_is_authored_concealment(current):
+            replacement = f"{current.rstrip()} {fact_line}".strip()
+        else:
+            replacement = fact_line
+        source = "resolution:authored_discovery"
+    elif isinstance(realized, dict) and str(realized.get("text") or "").strip():
+        replacement = str(realized.get("text") or "").strip()
+        source = str(realized.get("source") or source)
+    elif written:
+        replacement = format_authored_knowledge_realization_line(resolution, written[0])
+        source = "resolution:authored_discovery"
+    if not replacement:
+        return gm
+    out = dict(gm)
+    out["player_facing_text"] = replacement
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    tag_list = [str(t) for t in tags if isinstance(t, str)]
+    if "authored_knowledge_realization" not in tag_list:
+        tag_list.append("authored_knowledge_realization")
+    out["tags"] = tag_list
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (dbg + " | " if dbg else "") + f"authored_knowledge_realization:{source}"
+    return out
 
 
 def sync_strategy_forced_to_answer_for_valid_followup_alignment(soc: Dict[str, Any]) -> None:
@@ -1873,6 +2795,8 @@ def apply_structured_social_answer_candidate_to_resolution(
     scene_id: str,
     player_text: str,
     resolution: dict,
+    world: dict | None = None,
+    scene: dict | None = None,
 ) -> None:
     """Upgrade engine social resolution when stored facts already answer the current question."""
     if not isinstance(resolution, dict):
@@ -1892,6 +2816,8 @@ def apply_structured_social_answer_candidate_to_resolution(
         topic_key=None,
         player_text=str(player_text or ""),
         resolution=resolution,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
     )
     dim = classify_social_question_dimension(str(player_text or ""))
     soc["answer_candidate_selected"] = str(cand.get("answer_kind") or "refusal")
@@ -2576,7 +3502,12 @@ def resolve_social_action(
     if action_type in ("question", "social_probe"):
         # Only use topic hint when explicitly provided; otherwise reveal first available topic
         topic_hint = normalized_action.get("topic") if normalized_action.get("topic") else None
-        topic_rec = _next_topic_to_reveal(npc, runtime, topic_hint)
+        topic_rec = _next_topic_to_reveal(
+            npc,
+            runtime,
+            topic_hint,
+            player_text=str(raw_player_text or prompt or ""),
+        )
 
         if topic_rec:
             revealed_ids = runtime.get("revealed_topics") or []

@@ -1,0 +1,73 @@
+{
+  "accepted_candidate": "Rain on the gate. Guards watch the choke.",
+  "candidate_preview_equal": true,
+  "case_id": "RC-11",
+  "current_helper_result": {
+    "_final_emission_meta": {
+      "response_type_candidate_preview": "Rain on the gate. Guards watch the choke.",
+      "response_type_emitted_preview": "Rain on the gate. Guards watch the choke.",
+      "semantic_mutation_write_sites": [
+        {
+          "after_semantic_hash": "1e76a2756a9ada13",
+          "before_semantic_hash": "e342487437e9d25a",
+          "candidate_only": false,
+          "compatibility_status": "diagnostic_only",
+          "mutation_id": "00302d69aecc",
+          "mutation_reason": "accepted_scene_opening_reassertion",
+          "owner": "game.final_emission_opening_fallback",
+          "selected_active_stream": true,
+          "source": "test.reassert_scene_opening_accepted_candidate",
+          "write_site_family": "final_emission",
+          "write_site_file": "game/final_emission_opening_fallback.py",
+          "write_site_function": "reassert_scene_opening_accepted_candidate"
+        }
+      ]
+    },
+    "metadata": {
+      "emission_debug": {
+        "response_type_candidate_preview": "Rain on the gate. Guards watch the choke.",
+        "response_type_emitted_preview": "Rain on the gate. Guards watch the choke.",
+        "scene_opening_accepted_candidate_promoted": true,
+        "scene_opening_candidate_emitted_match": true,
+        "scene_opening_candidate_len": 41,
+        "scene_opening_emitted_len": 41
+      }
+    },
+    "player_facing_text": "Rain on the gate. Guards watch the choke."
+  },
+  "differing_paths": [
+    "_final_emission_meta.semantic_mutation_write_sites"
+  ],
+  "emitted_preview_equal": true,
+  "first_meaningful_divergence": {
+    "current": "one diagnostic_only write-site row",
+    "legacy": "absent",
+    "path": "_final_emission_meta.semantic_mutation_write_sites",
+    "stage": "accepted-candidate reassertion attribution"
+  },
+  "initial": {
+    "_final_emission_meta": {},
+    "metadata": {
+      "emission_debug": {}
+    },
+    "player_facing_text": "You stand at the gate."
+  },
+  "legacy_inline_result": {
+    "_final_emission_meta": {
+      "response_type_candidate_preview": "Rain on the gate. Guards watch the choke.",
+      "response_type_emitted_preview": "Rain on the gate. Guards watch the choke."
+    },
+    "metadata": {
+      "emission_debug": {
+        "response_type_candidate_preview": "Rain on the gate. Guards watch the choke.",
+        "response_type_emitted_preview": "Rain on the gate. Guards watch the choke.",
+        "scene_opening_accepted_candidate_promoted": true,
+        "scene_opening_candidate_emitted_match": true,
+        "scene_opening_candidate_len": 41,
+        "scene_opening_emitted_len": 41
+      }
+    },
+    "player_facing_text": "Rain on the gate. Guards watch the choke."
+  },
+  "player_facing_text_equal": true
+}

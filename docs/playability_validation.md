@@ -2,7 +2,7 @@
 
 This project’s **playability scores** come only from `game.playability_eval.evaluate_playability`. The CLI `tools/run_playability_validation.py` is a thin harness: it drives `POST /api/chat`, records the transcript, and attaches the evaluator’s return value per turn. It does **not** re-score, infer pass/fail from thresholds, or interpret GM quality beyond writing evaluator output to disk.
 
-Playability validation is the **final** player-facing validation layer: deterministic evaluation plus transcript-backed tests and the scenario runner. It is **validation and observability** only; it does not add runtime mechanics.
+Playability validation is **supporting player-facing evidence**: deterministic evaluation plus transcript-backed tests and the scenario runner. Its PASS records that the configured heuristic contract passed; it is not independent proof that gameplay is acceptable and does not by itself close a player-facing campaign. It is **validation and observability** only; it does not add runtime mechanics.
 
 ## Evaluation Model
 
@@ -28,7 +28,7 @@ Playability validation is the **final** player-facing validation layer: determin
 - recompute scores
 - introduce secondary validation logic
 
-**All** playability judgment comes from `evaluate_playability(...)`.
+**All automated playability scoring** comes from `evaluate_playability(...)`. Consequential semantic acceptance remains calibrated and human-reviewed where the Evidence Standard requires it.
 
 ## Prerequisites
 
@@ -118,7 +118,7 @@ Playability scores **per turn**; the scenario-spine lane scores **whole-branch s
 
 ## Relationship to behavioral gauntlet tests
 
-`game.playability_eval.evaluate_playability` is the canonical per-turn playability evaluator. It returns the playability schema (`overall`, `axes`, `summary`, `gameplay_validation`) and owns product-facing usability axes such as direct answer, player intent, logical escalation, and immersion.
+`game.playability_eval.evaluate_playability` is the canonical per-turn playability **scorer**. It returns the playability schema (`overall`, `axes`, `summary`, `gameplay_validation`) and evaluates bounded usability axes such as direct answer, player intent, logical escalation, and immersion. Those scores are supporting evidence, not independent semantic campaign authority.
 
 `tests/helpers/behavioral_gauntlet_eval.py` is a test-helper regression harness over short transcript slices. It returns a different helper schema (`overall_passed`, axis rows with `reason_codes`, `dead_turn_run_report`) and owns shallow behavioral regression checks such as neutrality, escalation proportionality, reengagement loops, and local dialogue coherence.
 

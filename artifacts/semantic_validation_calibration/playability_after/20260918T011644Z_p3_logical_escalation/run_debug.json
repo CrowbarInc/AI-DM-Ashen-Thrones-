@@ -1,0 +1,647 @@
+{
+  "report_version": 1,
+  "scenario_id": "p3_logical_escalation",
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_prompt": "What do I see at the gate?",
+      "gm_text": "Gate Guard says, \"I do not know enough to answer that.\"",
+      "resolution_kind": "question",
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 78,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 11,
+              "text_preview": "Gate Guard says, \"I do not know enough to answer that.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "gate",
+                "what"
+              ],
+              "gm_terms": [
+                "answer",
+                "enough",
+                "gate",
+                "guard",
+                "know",
+                "says"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 78,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 18,
+            "logical_escalation": 19,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.125,
+              "gm_word_count": 11,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.5,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 11
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 78,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:fallback_uncertainty_brief_compat"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:fallback_uncertainty_brief_compat"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "_final_emission_meta": {},
+      "dead_turn_visibility": {
+        "turn_index": 0,
+        "turn_number_one_based": 1,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      }
+    },
+    {
+      "turn_index": 1,
+      "player_prompt": "I press again: what is actually posted on the notice?",
+      "gm_text": "Gate Guard says, \"I do not know enough to answer that.\"",
+      "resolution_kind": "question",
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 58,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 11,
+              "text_preview": "Gate Guard says, \"I do not know enough to answer that.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "actually",
+                "again",
+                "notice",
+                "posted",
+                "press",
+                "what"
+              ],
+              "gm_terms": [
+                "answer",
+                "enough",
+                "gate",
+                "guard",
+                "know",
+                "says"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 58,
+          "rating": "acceptable",
+          "passed": false,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 8,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 11,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 8,
+            "passed": false,
+            "reasons": [
+              "High overlap with prior GM text suggests stale repetition."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 1.0,
+              "player_presses_thread": false,
+              "gm_word_count": 11,
+              "net_new_terms": 0
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "logical_escalation: weak (8/25).",
+            "logical_escalation: High overlap with prior GM text suggests stale repetition."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 58,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:fallback_uncertainty_brief_compat"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:fallback_uncertainty_brief_compat"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "_final_emission_meta": {},
+      "dead_turn_visibility": {
+        "turn_index": 1,
+        "turn_number_one_based": 2,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      }
+    }
+  ],
+  "summary": {
+    "report_version": 3,
+    "scenario_id": "p3_logical_escalation",
+    "overall": {
+      "score": 58,
+      "rating": "acceptable",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "acceptable"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 11,
+          "text_preview": "Gate Guard says, \"I do not know enough to answer that.\""
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "actually",
+            "again",
+            "notice",
+            "posted",
+            "press",
+            "what"
+          ],
+          "gm_terms": [
+            "answer",
+            "enough",
+            "gate",
+            "guard",
+            "know",
+            "says"
+          ],
+          "direct_answer_score": 17,
+          "player_intent_score": 9
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 58,
+      "rating": "acceptable",
+      "passed": false,
+      "axis_scores": {
+        "direct_answer": 17,
+        "player_intent": 9,
+        "logical_escalation": 8,
+        "immersion": 24
+      }
+    },
+    "axis_scores": {
+      "direct_answer": 17,
+      "player_intent": 9,
+      "logical_escalation": 8,
+      "immersion": 24
+    },
+    "failures": [
+      "player_intent: weak (9/25).",
+      "player_intent: GM misses obvious player topic anchors.",
+      "logical_escalation: weak (8/25).",
+      "logical_escalation: High overlap with prior GM text suggests stale repetition."
+    ],
+    "warnings": [],
+    "run_gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn_indexes": [],
+      "dead_turn_turn_numbers_one_based": [],
+      "dead_turn_by_class": {},
+      "dead_turn_banner": null,
+      "invalid_for_gameplay_conclusions": false,
+      "invalid_run_explanation": null
+    },
+    "dead_turn_report": {
+      "schema_version": "dead_turn_report_visibility.v1",
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "dead_turn_indexes": [],
+      "dead_turn_turn_numbers_one_based": [],
+      "infra_failure_count": 0,
+      "dead_turn_by_class": {},
+      "banner": null,
+      "invalid_for_gameplay_conclusions": false,
+      "invalid_run_explanation": null,
+      "chat_error_count": 0,
+      "per_turn": [
+        {
+          "turn_index": 0,
+          "turn_number_one_based": 1,
+          "dead_turn_detected": false,
+          "dead_turn_class": "none",
+          "dead_turn_reason_codes": [],
+          "manual_test_valid": true,
+          "validation_playable": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "run_valid": true,
+          "infra_failure_count": 0
+        },
+        {
+          "turn_index": 1,
+          "turn_number_one_based": 2,
+          "dead_turn_detected": false,
+          "dead_turn_class": "none",
+          "dead_turn_reason_codes": [],
+          "manual_test_valid": true,
+          "validation_playable": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "run_valid": true,
+          "infra_failure_count": 0
+        }
+      ]
+    },
+    "upstream_dependent_run_gate": {
+      "upstream_runtime_healthy": true,
+      "preflight_available": true,
+      "startup_run_valid": true,
+      "manual_testing_blocked": false,
+      "block_reason": null,
+      "preflight_health_class": "healthy",
+      "preflight_checked_at": "2026-09-18T01:16:42Z"
+    },
+    "upstream_dependent_run_gate_operator": {
+      "upstream_gate_disposition": "healthy",
+      "startup_run_valid": true,
+      "manual_testing_blocked": false,
+      "upstream_runtime_healthy": true,
+      "preflight_available": true,
+      "preflight_health_class": "healthy",
+      "preflight_checked_at": "2026-09-18T01:16:42Z",
+      "block_reason": null,
+      "gameplay_conclusions_valid": true,
+      "action_hint": "Upstream preflight cache is healthy; live-upstream gameplay conclusions may be valid.",
+      "compact_banner": null
+    }
+  }
+}

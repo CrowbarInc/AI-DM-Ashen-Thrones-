@@ -30,6 +30,7 @@ _BEAT_TYPE_BY_FALLBACK_KIND: dict[str, str] = {
     "passive_scene_pressure_guard_rumor": "guard_reaction",
     "passive_scene_pressure_visible_figure": "guard_reaction",
     "passive_scene_pressure_generic": "generic_interruption",
+    "passive_scene_pressure_grounded_observe": "grounded_observe",
 }
 
 
@@ -137,6 +138,23 @@ def _passive_scene_pressure_visibility_candidate(
     )
 
 
+def _grounded_pressure_observe_line(
+    *,
+    session: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> str:
+    from game.perception_grounding import render_grounded_perception_line
+
+    sid = str(scene_id or "").strip() or "scene"
+    return render_grounded_perception_line(
+        scene,
+        player_text="I look around.",
+        resolution={"kind": "observe", "prompt": "I look around."},
+        seed_key=f"pressure|{sid}",
+    ) or ""
+
+
 def _passive_scene_pressure_fallback_candidates(
     *,
     session: Dict[str, Any] | None,
@@ -146,77 +164,14 @@ def _passive_scene_pressure_fallback_candidates(
     if not _passive_scene_pressure_due_for_fallback(session=session, scene=scene, scene_id=scene_id):
         return []
 
-    sid = str(scene_id or "").strip()
-    runtime = get_scene_runtime(session, sid) if isinstance(session, dict) and sid else {}
-    passive_streak = int(runtime.get("passive_action_streak", 0) or 0) if isinstance(runtime, dict) else 0
-    recent = runtime.get("recent_contextual_leads") if isinstance(runtime, dict) else []
-    if isinstance(recent, list):
-        for lead in reversed(recent[-4:]):
-            if not isinstance(lead, dict):
-                continue
-            kind = str(lead.get("kind") or "").strip()
-            if kind not in {"visible_suspicious_figure", "recent_named_figure", "visible_named_figure"}:
-                continue
-            subject = _normalize_text(lead.get("subject"))
-            position = _normalize_text(lead.get("position"))
-            if not subject:
-                continue
-            move_from = f" leaves {position} and" if position else ""
-            if passive_streak >= 2:
-                return [
-                    _passive_scene_pressure_visibility_candidate(
-                        f'{subject}{move_from} comes straight to you before the pause can settle. "Enough watching," they say. "Ask me now, or lose the trail."',
-                        fallback_kind="passive_scene_pressure_lead_figure",
-                        fallback_candidate_source="passive_scene_pressure:lead_figure",
-                    )
-                ]
-            return [
-                _passive_scene_pressure_visibility_candidate(
-                    f'{subject}{move_from} cuts through the crowd and stops at your shoulder. "You\'re asking the wrong questions out loud," they murmur. "Walk with me if you want the next name."',
-                    fallback_kind="passive_scene_pressure_lead_figure",
-                    fallback_candidate_source="passive_scene_pressure:lead_figure",
-                )
-            ]
-
-    visible_facts = _scene_visible_facts(scene)
-    visible_low = " ".join(fact.lower() for fact in visible_facts)
-    if "guard" in visible_low and "missing patrol" in visible_low:
-        if passive_streak >= 2:
-            text = (
-                'The same guard does not let the silence stand a second time. "No more watching," he says, '
-                "closing the distance and jabbing a finger at the east-road line on the notice. "
-                '"Either tell me who sent you, or get moving before that trail cools for good."'
-            )
-        else:
-            text = (
-                'A guard peels away from the notice board and squares up to you. "Standing still won\'t help that patrol," '
-                'he says, stabbing two fingers at the posting. "Tell me what you know, or get on the east-road trail before it dies."'
-            )
-        return [
-            _passive_scene_pressure_visibility_candidate(
-                text,
-                fallback_kind="passive_scene_pressure_guard_rumor",
-                fallback_candidate_source="passive_scene_pressure:guard_rumor",
-            )
-        ]
-    if "guard" in visible_low:
-        text = (
-            'A guard notices you lingering and comes over at once. "If you\'re waiting on trouble, it already passed the checkpoint," '
-            'he says. "Take the east-road report or get clear."'
-        )
-        return [
-            _passive_scene_pressure_visibility_candidate(
-                text,
-                fallback_kind="passive_scene_pressure_visible_figure",
-                fallback_candidate_source="passive_scene_pressure:visible_figure",
-            )
-        ]
+    text = _grounded_pressure_observe_line(session=session, scene=scene, scene_id=scene_id)
+    if not text:
+        return []
     return [
         _passive_scene_pressure_visibility_candidate(
-            'The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. '
-            '"Board, runner, or road," he says. "Pick one before the gate swallows the trail."',
-            fallback_kind="passive_scene_pressure_generic",
-            fallback_candidate_source="passive_scene_pressure:fallback",
+            text,
+            fallback_kind="passive_scene_pressure_grounded_observe",
+            fallback_candidate_source="passive_scene_pressure:grounded_observe",
         )
     ]
 
@@ -246,14 +201,6 @@ def _select_deterministic_upstream_concrete_beat(
         scene_id=scene_id,
     )
     if not candidates:
-        visible_facts = _scene_visible_facts(scene)
-        visible_low = " ".join(fact.lower() for fact in visible_facts)
-        if "merchant" in visible_low:
-            return (
-                'A nearby merchant catches your lingering look and nods. '
-                '"If you mean to buy or ask, speak up before the board changes," she says.',
-                "merchant_acknowledgement",
-            )
         return None
     candidate = candidates[0]
     beat_type = _BEAT_TYPE_BY_FALLBACK_KIND.get(str(candidate.fallback_kind or ""), "environmental_reaction")
@@ -340,26 +287,40 @@ def apply_observe_passive_scene_concrete_beat_upstream_satisfier(
     ):
         return out
 
-    if _reply_already_has_concrete_interaction(candidate_text):
+    from game.perception_grounding import (
+        build_perception_evidence_surface,
+        classify_perception_invention,
+        render_grounded_perception_line,
+    )
+
+    evidence = build_perception_evidence_surface(
+        scene=scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        resolution={"kind": "observe"},
+    )
+    verdict = classify_perception_invention(
+        candidate_text,
+        evidence,
+        resolution={"kind": "observe"},
+    )
+    if not verdict.get("unsupported"):
         return out
 
     meta["passive_scene_concrete_beat_satisfier_eligible"] = True
-    selected = _select_deterministic_upstream_concrete_beat(
-        session=session if isinstance(session, dict) else None,
-        scene=scene if isinstance(scene, dict) else None,
-        scene_id=sid,
+    replacement = render_grounded_perception_line(
+        scene if isinstance(scene, dict) else None,
+        player_text="I look around.",
+        resolution={"kind": "observe", "prompt": "I look around."},
+        seed_key=f"pressure-repair|{sid}",
+        evidence=evidence,
     )
-    if selected is None:
+    if not replacement:
         return out
 
-    beat_text, beat_type = selected
-    merged = _merge_upstream_concrete_beat(candidate_text, beat_text)
-    if not _reply_already_has_concrete_interaction(merged):
-        return out
-
-    out["player_facing_text"] = merged
+    out["player_facing_text"] = replacement
     meta["passive_scene_concrete_beat_satisfier_applied"] = True
-    meta["passive_scene_concrete_beat_type"] = beat_type
+    meta["passive_scene_concrete_beat_type"] = "grounded_observe"
     meta["passive_scene_pressure_fallback_avoided"] = True
     stamp_producer_repair_kind(meta, PRODUCER_REPAIR_KIND_PASSIVE_SCENE_CONCRETE_BEAT)
     return out

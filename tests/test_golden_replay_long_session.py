@@ -7,11 +7,14 @@ Replay orchestration remains in tests/helpers/golden_replay.py.
 
 from __future__ import annotations
 
+import pytest
+
 from game import storage
 from game.api import chat
 from game.models import ChatRequest
 from tests.helpers.golden_replay import (
     _observed_turn,
+    assert_runtime_lineage_profile,
     assert_golden_replay_profile_bundle,
     evaluate_golden_replay_continuity_drift,
     format_golden_replay_debug,
@@ -42,6 +45,48 @@ from tests.helpers.golden_replay_fixtures import (
     golden_replay_chat_stubs,
     seed_frontier_gate_world,
 )
+
+
+def _direct_intrusion_lineage_summary(*, mutation_count: int, mutation_frequency: dict[str, int]):
+    return {
+        "by_event_kind": {
+            "fallback_selected": 7,
+            "mutation": mutation_count,
+            "speaker_repair": 1,
+        },
+        "mutation_kind_frequency": mutation_frequency,
+        "recurring_events": [],
+    }
+
+
+def test_direct_intrusion_lineage_profile_rejects_unknown_mutation_kind() -> None:
+    mutation_frequency = dict(FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE["mutation_kind_max"])
+    mutation_frequency["unclassified_mutation"] = 1
+
+    with pytest.raises(AssertionError):
+        assert_runtime_lineage_profile(
+            lineage_summary=_direct_intrusion_lineage_summary(
+                mutation_count=sum(mutation_frequency.values()),
+                mutation_frequency=mutation_frequency,
+            ),
+            expected=FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
+            debug_context="unknown mutation kind must remain detectable",
+        )
+
+
+def test_direct_intrusion_lineage_profile_rejects_excessive_governed_subtype() -> None:
+    mutation_frequency = dict(FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE["mutation_kind_max"])
+    mutation_frequency["sealed_replacement_mutation"] += 1
+
+    with pytest.raises(AssertionError):
+        assert_runtime_lineage_profile(
+            lineage_summary=_direct_intrusion_lineage_summary(
+                mutation_count=sum(mutation_frequency.values()),
+                mutation_frequency=mutation_frequency,
+            ),
+            expected=FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE,
+            debug_context="subtype growth must remain bounded",
+        )
 
 
 def test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability(tmp_path, monkeypatch):

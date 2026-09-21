@@ -1,0 +1,300 @@
+{
+  "schema_version": "confirmed-baseline-repair.v1",
+  "pre_repair_baseline": {
+    "collected": 6445,
+    "passed": 6310,
+    "failed": 36,
+    "skipped": 99
+  },
+  "post_repair_baseline": {
+    "collected": 6445,
+    "passed": 6323,
+    "failed": 23,
+    "skipped": 99
+  },
+  "resolved_failures": [
+    "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+    "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+    "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+    "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance",
+    "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report",
+    "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social",
+    "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked",
+    "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness",
+    "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+    "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+    "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+    "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line",
+    "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+  ],
+  "new_failures": [],
+  "remaining_failures": [
+    "tests/test_bv3e_eligibility_expansion.py::test_canonical_session_log_observe_shape_repairs_when_replayed",
+    "tests/test_ck_hotspot_compression_report.py::test_ck_fi_parse_from_bu_csv",
+    "tests/test_compat_import_governance.py::test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades",
+    "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_fi_cap_locked",
+    "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+    "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades",
+    "tests/test_dead_turn_evaluation_threading.py::test_playability_eval_excludes_only_from_fem_dead_turn_source",
+    "tests/test_failure_classification_contract.py::test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+    "tests/test_failure_classification_contract.py::test_classifier_evidence_manifest_matches_optional_contract_fields",
+    "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority",
+    "tests/test_final_emission_debt_retirement.py::test_final_emission_modules_forbidden_substring_snapshot",
+    "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+    "tests/test_final_emission_opening_accept_debug.py::test_reassert_scene_opening_accepted_candidate_matches_inline_sequence",
+    "tests/test_golden_replay_long_session.py::test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability",
+    "tests/test_golden_replay_projection_engine.py::test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup",
+    "tests/test_ownership_write_path_governance.py::test_bu8_bu4_production_ownership_write_paths_parity_locked",
+    "tests/test_protected_replay_registry.py::test_golden_replay_marker_collects_protected_corpus_tests",
+    "tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending",
+    "tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+    "tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+    "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty",
+    "tests/test_validation_layer_closeout.py::test_offline_evaluator_import_allowlist_matches_audit_policy",
+    "tests/test_validation_layer_separation_runtime.py::test_final_emission_gate_imports_are_gate_layer_not_evaluator"
+  ],
+  "repairs": [
+    {
+      "rc_id": "RC-17",
+      "classification": "CONFIRMED_PRODUCT_DEFECT",
+      "priority": "P0",
+      "status": "COMPLETED",
+      "files_modified": [
+        "game/social_exchange_emission.py",
+        "game/final_emission_strict_social_stack.py"
+      ],
+      "root_cause": "Reused the current early question helper and selected the owned NPC-pursuit neutral fallback before accepting strict-social prose.",
+      "implementation": "Reused the current early question helper and selected the owned NPC-pursuit neutral fallback before accepting strict-social prose.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_lead_npc_payoff_and_fallback.py::test_emission_gate_replaces_stock_global_fallback_for_failed_npc_pursuit_social"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-12",
+      "classification": "CONFIRMED_PRODUCT_DEFECT",
+      "priority": "P1",
+      "status": "COMPLETED",
+      "files_modified": [
+        "game/final_emission_scene_emit_integrity.py"
+      ],
+      "root_cause": "Resolved transitions now use the existing destination-grounded travel-arrival renderer before generic scene fallback.",
+      "implementation": "Resolved transitions now use the existing destination-grounded travel-arrival renderer before generic scene fallback.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+          "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_final_emission_scene_integrity.py::test_valid_resolved_scene_transition_allows_global_scene_fallback",
+        "tests/test_scene_destination_binding.py::test_sti_e2e_valid_aligned_transition_allows_global_scene_fallback_line"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-01",
+      "classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "priority": "P1",
+      "status": "COMPLETED",
+      "files_modified": [
+        "tests/helpers/replacement_attribution_inventory.py"
+      ],
+      "root_cause": "Canonical FEM mutation-lineage evidence is classified in the governed mutation taxonomy as direct final-emission attribution.",
+      "implementation": "Canonical FEM mutation-lineage evidence is classified in the governed mutation taxonomy as direct final-emission attribution.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+          "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+          "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+          "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only",
+          "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+          "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_attribution_contract.py::test_co96_closeout_metrics_match_live_corpus",
+        "tests/test_attribution_regression_guard.py::test_live_attribution_regression_guard_passes",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_producer_stamp_report_improves_completeness",
+        "tests/test_replacement_attribution_inventory.py::test_bs4_repair_mutation_path_baseline_records_are_resolved_complete",
+        "tests/test_replacement_attribution_inventory.py::test_co90_repair_mutation_baseline_resolved_completeness",
+        "tests/test_replacement_attribution_inventory.py::test_co94_bs5_mutation_classification_gap_is_gate_outcome_only"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-04",
+      "classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "priority": "P1",
+      "status": "PARTIAL",
+      "files_modified": [
+        "game/response_policy_enforcement.py",
+        "game/final_emission_finalize.py"
+      ],
+      "root_cause": "Policy mutation provenance now routes through the existing final-emission packaging owner.",
+      "implementation": "Policy mutation provenance now routes through the existing final-emission packaging owner.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades"
+        ],
+        "remaining_failures": [
+          "tests/test_compat_import_governance.py::test_bv2c_final_emission_meta_direct_import_guard_non_owners_route_through_facades"
+        ]
+      },
+      "expected_failures_resolved": [],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "Production bypass is repaired; the aggregate test remains red only for two frozen test-only imports in validation cleanup."
+    },
+    {
+      "rc_id": "RC-19",
+      "classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "priority": "P1",
+      "status": "COMPLETED",
+      "files_modified": [
+        "game/final_emission_visibility_metadata.py",
+        "game/final_emission_visibility_fallback.py"
+      ],
+      "root_cause": "Visibility metadata preparation is pure and the canonical fallback owner performs paired bucket stamping.",
+      "implementation": "Visibility metadata preparation is pure and the canonical fallback owner performs paired bucket stamping.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_ownership_write_path_governance.py::test_bu9_visibility_fallback_producer_stamp_pairing_locked"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-23",
+      "classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "priority": "P1",
+      "status": "COMPLETED",
+      "files_modified": [
+        "game/narrative_authenticity.py",
+        "game/final_emission_meta_read.py"
+      ],
+      "root_cause": "Narrative authenticity consumes telemetry through the metadata facade and no longer imports the repair layer.",
+      "implementation": "Narrative authenticity consumes telemetry through the metadata facade and no longer imports the repair layer.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_validation_layer_closeout.py::test_na_live_module_does_not_import_gate_or_evaluator_surfaces"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-15",
+      "classification": "CONFIRMED_ARCHITECTURE_DEFECT",
+      "priority": "P2",
+      "status": "COMPLETED",
+      "files_modified": [
+        "tests/helpers/golden_replay_projection.py"
+      ],
+      "root_cause": "Removed the retired runtime-lineage projection alias; canonical projection access remains.",
+      "implementation": "Removed the retired runtime-lineage projection alias; canonical projection access remains.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_golden_replay_projection_governance.py::test_bl5_replay_projection_closeout_governance"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    },
+    {
+      "rc_id": "RC-16",
+      "classification": "CONFIRMED_PRODUCT_DEFECT",
+      "priority": "P2",
+      "status": "COMPLETED",
+      "files_modified": [
+        "tests/helpers/failure_dashboard_report.py",
+        "tests/helpers/replay_bug_recurrence_events.py"
+      ],
+      "root_cause": "Protected assertion-bridge rows are explicitly routed to committed recurrence history while ordinary ephemeral diagnostics remain diagnostic.",
+      "implementation": "Protected assertion-bridge rows are explicitly routed to committed recurrence history while ordinary ephemeral diagnostics remain diagnostic.",
+      "focused_tests_before": "reproduced",
+      "focused_tests_after": {
+        "tests": [
+          "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report"
+        ],
+        "remaining_failures": []
+      },
+      "expected_failures_resolved": [
+        "tests/test_golden_replay_protected_bridge.py::test_protected_golden_assertion_failure_records_canonical_report"
+      ],
+      "unexpected_failures_changed": [],
+      "new_failures": [],
+      "validation_evidence": [
+        "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+        "artifacts/confirmed_baseline_repair/post_repair_suite.xml"
+      ],
+      "notes": "All cluster tests are green."
+    }
+  ],
+  "transient_observation": "One intermediate full run reported transcript combat sequencing red; the test passed immediately in isolation and is absent from the final JUnit baseline."
+}

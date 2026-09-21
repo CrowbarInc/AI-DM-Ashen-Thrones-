@@ -43,7 +43,7 @@ Standardize how **CK Hotspot Compression Watch** measurements are produced so **
 
 Include `.py` paths under `game/`, `tests/`, `scripts/`.
 
-Exclude paths under `artifacts/`, `codex_pytest_tmp/`, `docs/audits/`, `.pytest_cache/`, and any path ending in `.bak`.
+Exclude paths under `artifacts/`, `codex_pytest_tmp/`, `development/tmp/`, `docs/audits/`, `.pytest_cache/`, and any path ending in `.bak`.
 
 ### Touch count
 

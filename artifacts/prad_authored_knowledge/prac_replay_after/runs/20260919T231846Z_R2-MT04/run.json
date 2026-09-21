@@ -1,0 +1,4107 @@
+{
+  "case_id": "R2-MT04",
+  "family": "multi_turn_arc",
+  "scenario": "lirael_redirect_lead_policy",
+  "initial_objective": "Ask after Lirael, then pursue only official follow-up permitted by RC-21.",
+  "behaviors": [
+    "npc_interaction",
+    "world_coherence",
+    "state_narration_consistency",
+    "unsupported_invention",
+    "player_agency",
+    "multi_turn_continuity"
+  ],
+  "content": "frontier_gate RC-21: narration must not instantiate Lirael; official follow-up is the authored notice board",
+  "turn_count": 7,
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_input": "I ask the nearest guard, \"Where can I find Lirael?\"",
+      "gm_text": "Gate Guard says, \"I do not know enough to answer that.\"",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 0,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": null,
+        "last_turn_trace": null
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 1,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "question_nearest_guard_where_can_i_find_",
+            "label": "I ask the nearest guard, Where can I find Lirael?",
+            "type": "question",
+            "prompt": "I ask the nearest guard, Where can I find Lirael?"
+          },
+          "resolution_kind": "question"
+        },
+        "last_turn_trace": {
+          "parsed_intent": null,
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": null,
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": null
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "question",
+          "action_id": "question_nearest_guard_where_can_i_find_",
+          "requires_check": false,
+          "clue_id": null,
+          "clue_text": null,
+          "success": false,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {},
+          "metadata_keys": [
+            "canonical_entry_path",
+            "canonical_entry_reason",
+            "canonical_entry_target_actor_id",
+            "emission_debug",
+            "lead_landing",
+            "response_type_contract",
+            "segmented_turn",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "metadata",
+          "new_scene_draft",
+          "opening_fallback_owner_bucket",
+          "player_facing_text",
+          "realization_fallback_family",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 78,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 11,
+              "text_preview": "Gate Guard says, \"I do not know enough to answer that.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "find",
+                "guard",
+                "lirael",
+                "nearest",
+                "where"
+              ],
+              "gm_terms": [
+                "answer",
+                "enough",
+                "gate",
+                "guard",
+                "know",
+                "says"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 78,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 18,
+            "logical_escalation": 19,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.091,
+              "gm_word_count": 11,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.2,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 11
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 78,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:deterministic_known_fact_retry_fallback"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:deterministic_known_fact_retry_fallback"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "deterministic_known_fact_retry_fallback",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 0,
+        "turn_number_one_based": 1,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "PASS"
+    },
+    {
+      "turn_index": 1,
+      "player_input": "If you mentioned the notice board, I'll check that. What should I look for there?",
+      "gm_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 1,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "question_nearest_guard_where_can_i_find_",
+            "label": "I ask the nearest guard, Where can I find Lirael?",
+            "type": "question",
+            "prompt": "I ask the nearest guard, Where can I find Lirael?"
+          },
+          "resolution_kind": "question"
+        },
+        "last_turn_trace": {
+          "parsed_intent": null,
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": null,
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": null
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 2,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "ill_check_that_what_should_i_look_for_th",
+            "label": "I'll check that. What should I look for there?",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I'll check that. What should I look for there?"
+          },
+          "resolution_kind": "investigate"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "ill_check_that_what_should_i_look_for_th",
+            "label": "I'll check that. What should I look for there?",
+            "type": "investigate",
+            "prompt": "I'll check that. What should I look for there?",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "there?",
+            "targetEntityId": "there?"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "investigate",
+          "action_id": "ill_check_that_what_should_i_look_for_th",
+          "requires_check": null,
+          "clue_id": null,
+          "clue_text": null,
+          "success": null,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {},
+          "metadata_keys": [
+            "emission_debug",
+            "response_type_contract",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "debug_notes",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 71,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:unanswered_intelligible_question"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "board",
+                "check",
+                "i'll",
+                "look",
+                "mentioned",
+                "notice",
+                "what"
+              ],
+              "gm_terms": [
+                "crates",
+                "last",
+                "missing",
+                "mud",
+                "northwest",
+                "past",
+                "patrol",
+                "seen",
+                "taking",
+                "track"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 71,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 23,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 10
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 71,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:fallback_uncertainty_brief_compat"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:fallback_uncertainty_brief_compat"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 1,
+        "turn_number_one_based": 2,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "FAIL"
+    },
+    {
+      "turn_index": 2,
+      "player_input": "I read the notice board.",
+      "gm_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 2,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "ill_check_that_what_should_i_look_for_th",
+            "label": "I'll check that. What should I look for there?",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I'll check that. What should I look for there?"
+          },
+          "resolution_kind": "investigate"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "ill_check_that_what_should_i_look_for_th",
+            "label": "I'll check that. What should I look for there?",
+            "type": "investigate",
+            "prompt": "I'll check that. What should I look for there?",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "there?",
+            "targetEntityId": "there?"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 3,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "notice_board",
+            "label": "I read the notice board.",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I read the notice board."
+          },
+          "resolution_kind": "discover_clue"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "notice_board",
+            "label": "I read the notice board.",
+            "type": "investigate",
+            "prompt": "I read the notice board.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "notice_board",
+            "targetEntityId": "notice_board"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "discover_clue",
+          "action_id": "notice_board",
+          "requires_check": null,
+          "clue_id": "notice_patrol_route",
+          "clue_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+          "success": true,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {
+            "clue_revealed": true,
+            "interactable_id": "notice_board"
+          },
+          "metadata_keys": [
+            "emission_debug",
+            "response_type_contract",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "debug_notes",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 57,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The missing patrol was last seen taking the northwest mud track past the crates."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "board",
+                "notice",
+                "read"
+              ],
+              "gm_terms": [
+                "crates",
+                "last",
+                "missing",
+                "mud",
+                "northwest",
+                "past",
+                "patrol",
+                "seen",
+                "taking",
+                "track"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 4
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 57,
+          "rating": "acceptable",
+          "passed": false,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 4,
+            "logical_escalation": 8,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 4,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors.",
+              "Possible thread drift from the established player focus."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 8,
+            "passed": false,
+            "reasons": [
+              "High overlap with prior GM text suggests stale repetition."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 1.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 0
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (4/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "player_intent: Possible thread drift from the established player focus.",
+            "logical_escalation: weak (8/25).",
+            "logical_escalation: High overlap with prior GM text suggests stale repetition."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 57,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "clean_pass",
+        "scores": {
+          "signal_gain": 5,
+          "anti_echoing": 5,
+          "followup_evolution": 5,
+          "non_generic_specificity": 5,
+          "npc_voice_grounding": 4
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 4,
+          "secondhand_realism": 4,
+          "rumor_repair_success": 5,
+          "rumor_relaxation_correctness": 5,
+          "rumor_state_hygiene": 5
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_no_rumor_turn_echo_axis_lenient"
+          ],
+          "secondhand_realism": [
+            "na_eval_no_rumor_turn_secondhand_axis_lenient"
+          ],
+          "rumor_repair_success": [],
+          "rumor_relaxation_correctness": [],
+          "rumor_state_hygiene": []
+        },
+        "reasons": [
+          "scene_or_role_anchor"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": true,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": null,
+          "narrative_authenticity_status": "pass",
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 2,
+        "turn_number_one_based": 3,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "FAIL"
+    },
+    {
+      "turn_index": 3,
+      "player_input": "You said I'd find help near the board. Is Lirael actually here, or was that just talk?",
+      "gm_text": "I can't swear to it, but no one here at the gate has direct knowledge or confirmation that Lirael is present. The notice board warns of a missing patrol and creates tension among the watchers here, yet mention of Lirael remains unverified and elusive. If you want a clearer path…",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 3,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "notice_board",
+            "label": "I read the notice board.",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I read the notice board."
+          },
+          "resolution_kind": "discover_clue"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "notice_board",
+            "label": "I read the notice board.",
+            "type": "investigate",
+            "prompt": "I read the notice board.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "notice_board",
+            "targetEntityId": "notice_board"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 4,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": null,
+          "resolution_kind": null
+        },
+        "last_turn_trace": {
+          "parsed_intent": null,
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "neutral_narration",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "no_stricter_authoritative_contract",
+              "question_like_non_hostile_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": null,
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "debug_notes",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 86,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 50,
+              "text_preview": "I can't swear to it, but no one here at the gate has direct knowledge or confirmation that Lirael is present. The notice board warns of a missing patrol and cre"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "actually",
+                "board",
+                "find",
+                "help",
+                "lirael",
+                "near",
+                "said",
+                "talk"
+              ],
+              "gm_terms": [
+                "among",
+                "board",
+                "can't",
+                "clearer",
+                "confirmation",
+                "creates",
+                "direct",
+                "elusive",
+                "gate",
+                "knowledge",
+                "lirael",
+                "mention",
+                "missing",
+                "notice",
+                "one",
+                "path",
+                "patrol",
+                "present",
+                "remains",
+                "swear"
+              ],
+              "direct_answer_score": 22,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 86,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 22,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 22,
+            "passed": true,
+            "reasons": [
+              "Concrete answer markers present."
+            ],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.061,
+              "gm_word_count": 50,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 2
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 2,
+              "topic_overlap_ratio": 0.25,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.059,
+              "player_presses_thread": false,
+              "gm_word_count": 50,
+              "net_new_terms": 24
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (22/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 86,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:fallback_uncertainty_brief_compat"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:fallback_uncertainty_brief_compat"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 3,
+        "turn_number_one_based": 4,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "PASS"
+    },
+    {
+      "turn_index": 4,
+      "player_input": "I look for Lirael among the crowd.",
+      "gm_text": "You look for Lirael among the crowd, and you get an immediate read on what is there.",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 4,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": null,
+          "resolution_kind": null
+        },
+        "last_turn_trace": {
+          "parsed_intent": null,
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "neutral_narration",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "no_stricter_authoritative_contract",
+              "question_like_non_hostile_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 5,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "i_look_for_lirael_among_the_crowd",
+            "label": "I look for Lirael among the crowd.",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I look for Lirael among the crowd."
+          },
+          "resolution_kind": "investigate"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "i_look_for_lirael_among_the_crowd",
+            "label": "I look for Lirael among the crowd.",
+            "type": "investigate",
+            "prompt": "I look for Lirael among the crowd.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "lirael among the crowd",
+            "targetEntityId": "lirael among the crowd"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "investigate",
+          "action_id": "i_look_for_lirael_among_the_crowd",
+          "requires_check": null,
+          "clue_id": null,
+          "clue_text": null,
+          "success": null,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {},
+          "metadata_keys": [
+            "emission_debug",
+            "response_type_contract",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 17,
+              "text_preview": "You look for Lirael among the crowd, and you get an immediate read on what is there."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "among",
+                "crowd",
+                "lirael",
+                "look"
+              ],
+              "gm_terms": [
+                "among",
+                "crowd",
+                "get",
+                "immediate",
+                "lirael",
+                "look",
+                "read",
+                "what"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 18,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.5,
+              "gm_word_count": 17,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 4,
+              "topic_overlap_ratio": 1.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.062,
+              "player_presses_thread": false,
+              "gm_word_count": 17,
+              "net_new_terms": 6
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 82,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "clean_pass",
+        "scores": {
+          "signal_gain": 5,
+          "anti_echoing": 5,
+          "followup_evolution": 5,
+          "non_generic_specificity": 5,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 4,
+          "secondhand_realism": 4,
+          "rumor_repair_success": 5,
+          "rumor_relaxation_correctness": 5,
+          "rumor_state_hygiene": 5
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_no_rumor_turn_echo_axis_lenient"
+          ],
+          "secondhand_realism": [
+            "na_eval_no_rumor_turn_secondhand_axis_lenient"
+          ],
+          "rumor_repair_success": [],
+          "rumor_relaxation_correctness": [],
+          "rumor_state_hygiene": []
+        },
+        "reasons": [],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": true,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": null,
+          "narrative_authenticity_status": "pass",
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 4,
+        "turn_number_one_based": 5,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "PASS"
+    },
+    {
+      "turn_index": 5,
+      "player_input": "I'll pursue whatever official follow-up exists from that conversation.",
+      "gm_text": "You find no immediate official leads or personnel willing to provide formal updates here. The gate serjeant continues managing the crowd with a sharp eye on the roster board, but doesn't offer new information beyond what the notice board already showed: that the missing patrol w…",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 5,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "i_look_for_lirael_among_the_crowd",
+            "label": "I look for Lirael among the crowd.",
+            "type": "investigate",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I look for Lirael among the crowd."
+          },
+          "resolution_kind": "investigate"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "i_look_for_lirael_among_the_crowd",
+            "label": "I look for Lirael among the crowd.",
+            "type": "investigate",
+            "prompt": "I look for Lirael among the crowd.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "target_id": "lirael among the crowd",
+            "targetEntityId": "lirael among the crowd"
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "non_hostile_world_action_guard"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 6,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "interact",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "ill_pursue_whatever_official_follow_up_e",
+            "label": "I'll pursue whatever official follow-up exists from that conversation.",
+            "type": "interact",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I'll pursue whatever official follow-up exists from that conversation."
+          },
+          "resolution_kind": "interact"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "ill_pursue_whatever_official_follow_up_e",
+            "label": "I'll pursue whatever official follow-up exists from that conversation.",
+            "type": "interact",
+            "prompt": "I'll pursue whatever official follow-up exists from that conversation.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "metadata": {
+              "intent": "follow_target"
+            }
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "authoritative_state_allows_escalation"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "interact",
+          "action_id": "ill_pursue_whatever_official_follow_up_e",
+          "requires_check": null,
+          "clue_id": null,
+          "clue_text": null,
+          "success": null,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {},
+          "metadata_keys": [
+            "emission_debug",
+            "response_type_contract",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "debug_notes",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 88,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 46,
+              "text_preview": "You find no immediate official leads or personnel willing to provide formal updates here. The gate serjeant continues managing the crowd with a sharp eye on the"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "conversation",
+                "exists",
+                "follow",
+                "i'll",
+                "official",
+                "pursue",
+                "whatever"
+              ],
+              "gm_terms": [
+                "already",
+                "beyond",
+                "board",
+                "continues",
+                "crowd",
+                "doesn't",
+                "eye",
+                "find",
+                "formal",
+                "gate",
+                "immediate",
+                "information",
+                "leads",
+                "managing",
+                "missing",
+                "new",
+                "notice",
+                "offer",
+                "official",
+                "patrol"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 88,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.028,
+              "gm_word_count": 46,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 2
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.143,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.088,
+              "player_presses_thread": false,
+              "gm_word_count": 46,
+              "net_new_terms": 26
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 88,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "clean_pass",
+        "scores": {
+          "signal_gain": 5,
+          "anti_echoing": 5,
+          "followup_evolution": 5,
+          "non_generic_specificity": 5,
+          "npc_voice_grounding": 4
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 4,
+          "secondhand_realism": 4,
+          "rumor_repair_success": 5,
+          "rumor_relaxation_correctness": 5,
+          "rumor_state_hygiene": 5
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_no_rumor_turn_echo_axis_lenient"
+          ],
+          "secondhand_realism": [
+            "na_eval_no_rumor_turn_secondhand_axis_lenient"
+          ],
+          "rumor_repair_success": [],
+          "rumor_relaxation_correctness": [],
+          "rumor_state_hygiene": []
+        },
+        "reasons": [
+          "scene_or_role_anchor"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": true,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": null,
+          "narrative_authenticity_status": "pass",
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 5,
+        "turn_number_one_based": 6,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "PASS"
+    },
+    {
+      "turn_index": 6,
+      "player_input": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?",
+      "gm_text": "No new person named Lirael has appeared among the gate crowd as far as anyone present can say. The gate serjeant and others here have no direct knowledge or confirmation that Lirael is currently at the Cinderwatch Gate District. The atmosphere remains tense around the missing pa…",
+      "api_ok": true,
+      "api_error": null,
+      "state_before": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 6,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "interact",
+          "interaction_mode": "activity",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "ill_pursue_whatever_official_follow_up_e",
+            "label": "I'll pursue whatever official follow-up exists from that conversation.",
+            "type": "interact",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "prompt": "I'll pursue whatever official follow-up exists from that conversation."
+          },
+          "resolution_kind": "interact"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "ill_pursue_whatever_official_follow_up_e",
+            "label": "I'll pursue whatever official follow-up exists from that conversation.",
+            "type": "interact",
+            "prompt": "I'll pursue whatever official follow-up exists from that conversation.",
+            "targetSceneId": null,
+            "target_scene_id": null,
+            "metadata": {
+              "intent": "follow_target"
+            }
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "action_outcome",
+            "source_route": "exploration",
+            "allow_escalation": true,
+            "debug_reasons": [
+              "resolved_world_action_requires_action_outcome",
+              "authoritative_state_allows_escalation"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": false,
+            "target_actor_id": null,
+            "target_source": null,
+            "reason": "no_addressable_target",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false
+          }
+        }
+      },
+      "state_after": {
+        "scene_id": "frontier_gate",
+        "scene_location": "Cinderwatch Gate District",
+        "scene_mode": "social",
+        "visible_facts": [
+          "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "A tavern runner trades hot stew and rumors near the rain barrel.",
+          "Threadbare watchers and refugees cluster along the muddy gate line.",
+          "Ash Compact census delays have tightened the eastern caravan choke point."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "kind": "npc"
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "kind": "npc"
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "kind": "scene_actor"
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "kind": "scene_actor"
+          }
+        ],
+        "interactables": [
+          {
+            "id": "notice_board",
+            "label": "Notice board",
+            "type": "investigate"
+          }
+        ],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "turn_counter": 7,
+        "campaign_started": false,
+        "interaction": {
+          "active_interaction_target_id": null,
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "focused"
+        },
+        "known_clues": null,
+        "pending_leads_projection": [],
+        "lead_registry": [
+          {
+            "id": "notice_patrol_route",
+            "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "next_step": "",
+            "discovery_source": "clue_explicit"
+          }
+        ],
+        "world_npcs": [
+          {
+            "id": "gate_guard",
+            "name": "Gate Guard",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "gate_serjeant",
+            "name": "Gate Serjeant",
+            "location": "frontier_gate",
+            "status": null
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "status": null
+          }
+        ],
+        "world_state_flags": {
+          "flags": {
+            "faction_house_verevin_agenda_advanced": true,
+            "faction_ash_cowl_agenda_advanced": true,
+            "faction_ordo_pyric_agenda_advanced": true
+          },
+          "counters": {},
+          "clocks": {}
+        },
+        "combat_active": false,
+        "character_name": "Galinor",
+        "last_action_debug": {
+          "normalized_action": {
+            "id": "question_npc",
+            "label": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?",
+            "type": "question",
+            "prompt": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?"
+          },
+          "resolution_kind": "question"
+        },
+        "last_turn_trace": {
+          "parsed_intent": {
+            "id": "question_npc",
+            "label": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?",
+            "type": "question",
+            "social_intent_class": "open_call",
+            "prompt": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?",
+            "metadata": {
+              "routed_via_dialogue_lock": true,
+              "route": "dialogue",
+              "canonical_entry_path": "social",
+              "canonical_entry_reason": "open_social_solicitation",
+              "canonical_entry_target_actor_id": null,
+              "intent_route_debug": {
+                "routed_to": "social_exchange",
+                "route_reason": "open_social_solicitation",
+                "addressed_actor_id": null,
+                "addressed_actor_source": "scene_open_bid"
+              },
+              "social_turn_contract": {
+                "social_followup_recovery": "not_applicable",
+                "interlocutor_status": "none",
+                "continuity_status": "redirected",
+                "fallback_anchor_source": "none",
+                "reply_owner_actor_id": null,
+                "routing_reason_code": "open_social_solicitation",
+                "continuity_basis": "none",
+                "nearby_group_focus_source": "none"
+              },
+              "open_social_solicitation": true,
+              "broad_address_bid": true,
+              "candidate_addressable_ids": [
+                "guard_captain",
+                "tavern_runner",
+                "refugee",
+                "threadbare_watcher",
+                "gate_guard",
+                "gate_serjeant"
+              ],
+              "candidate_addressable_count": 6,
+              "broad_address_reason": "broad_lexical_and_framing_ok",
+              "broad_address_phrase_matched": "someone",
+              "segmented_turn": {
+                "adjudication_question_text": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?"
+              },
+              "turn_segmentation": {
+                "adjudication_question_text": "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?"
+              }
+            }
+          },
+          "intent": null,
+          "classification": null,
+          "resolution_path": null,
+          "response_type_contract": {
+            "required_response_type": "neutral_narration",
+            "source_route": "mixed",
+            "allow_escalation": true,
+            "debug_reasons": [
+              "no_stricter_authoritative_contract",
+              "authoritative_state_allows_escalation"
+            ]
+          },
+          "social_contract_trace": null,
+          "authoritative_state_changes": null,
+          "interaction_after": null,
+          "clues": null,
+          "leads": null,
+          "route_choice": null,
+          "canonical_entry": {
+            "should_route_social": true,
+            "target_actor_id": null,
+            "target_source": "scene_open_bid",
+            "reason": "open_social_solicitation",
+            "spoken_text": null,
+            "declared_switch_detected": false,
+            "declared_switch_target_actor_id": null,
+            "continuity_overridden_by_declared_switch": false,
+            "spoken_vocative_detected": false,
+            "spoken_vocative_target_actor_id": null,
+            "continuity_overridden_by_spoken_vocative": false,
+            "open_social_solicitation": true,
+            "broad_address_bid": true,
+            "broadcast_social_open_call": false,
+            "candidate_addressable_ids": [
+              "guard_captain",
+              "tavern_runner",
+              "refugee",
+              "threadbare_watcher",
+              "gate_guard",
+              "gate_serjeant"
+            ],
+            "candidate_addressable_count": 6,
+            "broad_address_reason": "broad_lexical_and_framing_ok",
+            "broad_address_phrase_matched": "someone"
+          }
+        }
+      },
+      "runtime_evidence": {
+        "ok": true,
+        "error": null,
+        "resolution": {
+          "kind": "question",
+          "action_id": "question_npc",
+          "requires_check": false,
+          "clue_id": null,
+          "clue_text": null,
+          "success": null,
+          "outcome": null,
+          "check_request": null,
+          "state_changes": {},
+          "metadata_keys": [
+            "broad_address_bid",
+            "broad_address_phrase_matched",
+            "broad_address_reason",
+            "candidate_addressable_count",
+            "candidate_addressable_ids",
+            "canonical_entry_path",
+            "canonical_entry_reason",
+            "canonical_entry_target_actor_id",
+            "emission_debug",
+            "intent_route_debug",
+            "lead_landing",
+            "open_social_solicitation",
+            "response_type_contract",
+            "route",
+            "routed_via_dialogue_lock",
+            "segmented_turn",
+            "social_turn_contract",
+            "turn_segmentation",
+            "unknown_legacy_keys"
+          ]
+        },
+        "final_emission": {},
+        "gm_keys": [
+          "activate_scene_id",
+          "conversational_memory_window",
+          "debug_notes",
+          "metadata",
+          "new_scene_draft",
+          "player_facing_text",
+          "response_policy",
+          "scene_state_anchor_contract",
+          "scene_update",
+          "selected_conversational_memory",
+          "suggested_action",
+          "tags",
+          "upstream_prepared_emission",
+          "world_updates"
+        ],
+        "has_oc": false
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 87,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 47,
+              "text_preview": "No new person named Lirael has appeared among the gate crowd as far as anyone present can say. The gate serjeant and others here have no direct knowledge or con"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "appeared",
+                "because",
+                "crowd",
+                "dealing",
+                "gate",
+                "lirael",
+                "named",
+                "person",
+                "same",
+                "someone",
+                "still"
+              ],
+              "gm_terms": [
+                "among",
+                "anyone",
+                "appeared",
+                "around",
+                "atmosphere",
+                "cinderwatch",
+                "confirmation",
+                "crowd",
+                "currently",
+                "direct",
+                "district",
+                "far",
+                "gate",
+                "knowledge",
+                "lirael",
+                "missing",
+                "named",
+                "new",
+                "others",
+                "pa"
+              ],
+              "direct_answer_score": 22,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 87,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 22,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 22,
+            "passed": true,
+            "reasons": [
+              "Concrete answer markers present."
+            ],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.219,
+              "gm_word_count": 47,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 2
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 6,
+              "topic_overlap_ratio": 0.545,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.1,
+              "player_presses_thread": false,
+              "gm_word_count": 47,
+              "net_new_terms": 21
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (22/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 87,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "narrative_authenticity_eval": {
+        "passed": true,
+        "narrative_authenticity_verdict": "unchecked",
+        "scores": {
+          "signal_gain": 3,
+          "anti_echoing": 3,
+          "followup_evolution": 3,
+          "non_generic_specificity": 3,
+          "npc_voice_grounding": 3
+        },
+        "rumor_realism_axes": {
+          "rumor_echo_control": 3,
+          "secondhand_realism": 3,
+          "rumor_repair_success": 3,
+          "rumor_relaxation_correctness": 3,
+          "rumor_state_hygiene": 4
+        },
+        "rumor_realism_axis_reasons": {
+          "rumor_echo_control": [
+            "na_eval_unchecked_neutral_rumor_echo_control"
+          ],
+          "secondhand_realism": [
+            "na_eval_unchecked_neutral_secondhand_realism"
+          ],
+          "rumor_repair_success": [
+            "na_eval_unchecked_neutral_rumor_repair_success"
+          ],
+          "rumor_relaxation_correctness": [
+            "na_eval_unchecked_neutral_rumor_relaxation_correctness"
+          ],
+          "rumor_state_hygiene": [
+            "na_eval_skip_reason_recorded:fallback_uncertainty_brief_compat"
+          ]
+        },
+        "reasons": [
+          "narrative_authenticity_not_checked_neutral_signal_gain",
+          "narrative_authenticity_not_checked_neutral_anti_echoing",
+          "narrative_authenticity_not_checked_neutral_followup",
+          "narrative_authenticity_not_checked_neutral_specificity",
+          "narrative_authenticity_not_checked_neutral_voice",
+          "narrative_authenticity_skip_reason:fallback_uncertainty_brief_compat"
+        ],
+        "supporting_metrics": {
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_evidence": {},
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_metrics": {},
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_relaxation_flags": {},
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": {}
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      },
+      "dead_turn_visibility": {
+        "turn_index": 6,
+        "turn_number_one_based": 7,
+        "dead_turn_detected": false,
+        "dead_turn_class": "none",
+        "dead_turn_reason_codes": [],
+        "manual_test_valid": true,
+        "validation_playable": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "run_valid": true,
+        "infra_failure_count": 0
+      },
+      "final_emission": {},
+      "semantic_result": "PASS"
+    }
+  ],
+  "completed": true,
+  "started_at": "2026-09-19T23:21:30.665892+00:00",
+  "finished_at": "2026-09-19T23:22:50.112749+00:00"
+}

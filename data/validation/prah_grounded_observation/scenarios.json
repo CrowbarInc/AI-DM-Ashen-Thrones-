@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.prah_grounded_observation.r1",
+  "description": "PR-AH continuation of the ordinary-play chain: learn, pursue, arrive, investigate, return, observe, then take another grounded action at the gate.",
+  "scenarios": [
+    {
+      "case_id": "R2-MT01-AH",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry_return_observe_continuation",
+      "initial_objective": "Learn the missing-patrol route, pursue it, investigate, return, look around without invented confrontation, then act on the gate's authored notice.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate notice board, notice_patrol_route clue, old_milestone destination, authored return exit, grounded post-return observe",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "That missing patrol warning matters. What exactly does it say about where they were last seen?",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "I don't want to rush the northwest track yet. Who last spoke to that patrol before they left?",
+        "Earlier the notice mentioned a mud track. Is that still the official last position?",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "After I start that way, I pause and check whether anything about the patrol warning has changed.",
+        "I look around.",
+        "I examine the milestone.",
+        "I look for signs of the patrol.",
+        "I'll head back to the gate.",
+        "I look around.",
+        "I read the notice board again."
+      ]
+    }
+  ]
+}

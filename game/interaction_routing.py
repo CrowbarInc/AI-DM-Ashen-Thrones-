@@ -151,15 +151,32 @@ _AMBIGUOUS_DIALOGUE_FOLLOWUP_PHRASES: tuple[str, ...] = (
 )
 _WORLD_ACTION_STRONG_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
+    r"\b(?:i(?:'ll|'m)|we(?:'ll|'re)|i\s+will|we\s+will)\s+(?:going\s+to\s+)?(?:search|sneak|attack|follow|track|pursue|leave|head|heading|cast|inspect|examine|check|investigate)\b",
+    r"\b(?:i|we)\s+(?:look|glance)(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards)\b",
+    r"\b(?:i|we)\s+(?:read|reads)\s+(?:the|a|an|this|that)\b",
+    r"\b(?:i|we)\s+(?:go|head|heading)\s+(?:out\s+)?after\b",
+    r"\b(?:i(?:'m| am)|we(?:'re| are))\s+heading\s+out\b",
+    r"\bi(?:'m| am)\s+leaving\b",
     r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
     r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
     # Third-person / narrative action lines (no "I …" prefix).
     r"\b\w+\s+(?:inspects|examines|searches|investigates|studies)\b",
     r"\b(?:he|she|they)\s+(?:inspect|examine|search|investigate|study)(?:s|ing)?\b",
+    r"\b(?:look|looks|looking|glance|glances|glancing)\s+(?:back\s+)?(?:at|over|toward|towards)\b",
+    r"\b(?:read|reads|reading)\s+(?:the|a|an|this|that)\b",
+    r"\b(?:i|we)\s+(?:walk|step|pace|move)\s+(?:a\s+few|along|beside|closer)\b",
+    r"\b(?:i|we)\s+(?:step|steps|stepping)\s+closer\b",
+    r"\b(?:i|we)\s+(?:pace|paces|pacing)\b",
+    r"\b(?:i|we)\s+listen\b",
+    r"\band\s+listen\b",
 )
 _WORLD_ACTION_FORCEFUL_PATTERNS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:grab|seize|attack|strike|cast|force|coerce|threaten|restrain)\b",
     r"\b(?:i|we)\s+(?:follow|track|sneak|search)\b",
+    r"\b(?:i(?:'ll|'m)|we(?:'ll)|i\s+will)\s+(?:going\s+to\s+)?(?:follow|track|pursue|leave|head|heading)\b",
+    r"\b(?:i|we)\s+(?:go|head|heading)\s+(?:out\s+)?after\b",
+    r"\b(?:i(?:'m| am)|we(?:'re| are))\s+heading\s+out\b",
+    r"\bi(?:'m| am)\s+leaving\b",
 )
 
 
@@ -392,6 +409,26 @@ def _build_dialogue_first_action(
         segmented_turn if isinstance(segmented_turn, dict) else None,
         str(player_text or ""),
     )
+    from game.intent_parser import (
+        recover_actionable_explicit_world_action,
+        recover_interactable_content_question,
+    )
+
+    interactable_question = recover_interactable_content_question(
+        str(merged_address or player_text or ""),
+        scene if isinstance(scene, dict) else None,
+    )
+    if interactable_question is not None:
+        return interactable_question
+    actionable_override = recover_actionable_explicit_world_action(
+        str(merged_address or player_text or ""),
+        scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    if actionable_override is not None:
+        return actionable_override
     if not ce.get("should_route_social") and not is_directed_dialogue(
         player_text,
         scene=scene,

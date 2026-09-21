@@ -1,0 +1,51 @@
+{
+  "schema_version": "expectation-maintenance-ledger.v1",
+  "campaign_date": "2026-09-19",
+  "entries": [
+    {
+      "id": "RC-11",
+      "starting_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "current_authority": ["game/final_emission_opening_fallback.py", "docs/gate_cleanup_inventory.md", "docs/audits/BU1_stack_pipeline_contract_surface_discovery.md"],
+      "old_expectation": "Whole-dictionary equality between the pre-BU2-C inline sequence and current helper.",
+      "obsolete_reason": "The modern helper adds governed diagnostic-only semantic mutation write-site attribution while preserving the same accepted candidate, emitted text, and previews.",
+      "new_expectation": "Assert player-facing and debug-preview equivalence separately from a complete provenance-row contract.",
+      "files_changed": ["tests/test_final_emission_opening_accept_debug.py"],
+      "focused_tests": ["tests/test_final_emission_opening_accept_debug.py", "tests/test_final_emission_opening_fallback.py", "tests/test_semantic_mutation_attribution_cu4.py", "tests/test_semantic_mutation_contract_adoption.py"],
+      "controls": ["Legacy inline result must not contain modern write-site metadata", "Modern row must identify family, file, function, owner, source, reason, compatibility status, stream, and changed semantic hash"],
+      "outcome": "PASS",
+      "product_behavior_impact": "NONE",
+      "authority_impact": "NONE"
+    },
+    {
+      "id": "RC-13",
+      "starting_classification": "STALE_EXPECTATION",
+      "confidence": "HIGH",
+      "current_authority": ["tests/helpers/golden_replay_profiles.py", "tests/helpers/golden_replay.py", "game/runtime_lineage_telemetry.py", "game/final_emission_replay_projection.py"],
+      "old_expectation": "Independent historical aggregate mutation maximum of 14 with four subtype caps.",
+      "obsolete_reason": "Current governed projection includes four sealed-replacement and one referential-clarity mutation events in addition to the historical 14.",
+      "new_expectation": "Six named subtype caps sum to the aggregate ceiling of 19; observed aggregate must reconcile exactly with subtype counts; unknown mutation kinds are rejected.",
+      "files_changed": ["tests/helpers/golden_replay_profiles.py", "tests/helpers/golden_replay.py", "tests/test_golden_replay_long_session.py"],
+      "focused_tests": ["tests/test_golden_replay_long_session.py", "tests/test_golden_replay_projection_engine.py", "tests/test_golden_replay_projection_fallback_integration.py"],
+      "controls": ["Healthy deterministic 25-turn replay passes", "Unknown mutation kind is rejected", "Excessive governed subtype count is rejected", "Aggregate/subtype mismatch is rejected by reconciliation"],
+      "outcome": "PASS",
+      "product_behavior_impact": "NONE",
+      "authority_impact": "NONE"
+    },
+    {
+      "id": "GD-01",
+      "starting_classification": "UNTRIAGED",
+      "confidence": "HIGH",
+      "current_authority": ["docs/audits/CG_failure_classification_authority_registry.md", "docs/audits/CO102_live_recurrence_validation_report.md", "docs/audits/BQC4_final_graduation_decision.md"],
+      "old_expectation": "BQC4 must contain Governance context (CO98).",
+      "obsolete_reason": "CO99 superseded the heading while preserving the substantive authority separation and not-graduated state.",
+      "new_expectation": "BQC4 must contain Governance context (CO99), plus all existing authority, closeout, architecture-constraint, and not-graduated assertions.",
+      "files_changed": ["tests/test_failure_classification_contract.py"],
+      "focused_tests": ["tests/test_failure_classification_contract.py::test_co99_failure_classification_registry_documents_governing_authority"],
+      "controls": ["CG authority registry still governs", "CO96 and attribution registry remain referenced", "BQC4 still says attribution is not reopened", "Program remains not graduated"],
+      "outcome": "PASS",
+      "product_behavior_impact": "NONE",
+      "authority_impact": "NONE"
+    }
+  ]
+}

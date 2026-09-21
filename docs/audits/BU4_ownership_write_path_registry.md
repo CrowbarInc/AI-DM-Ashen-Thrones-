@@ -4,9 +4,7 @@ Date: 2026-06-20
 
 ## Executive summary
 
-BU4 enumerates **83** deduplicated production write-path rows across **24** `game/` modules and **46** functions. Owner buckets, fallback families, authorship sources, split-owner lineage fields, and replay-visible lineage projection are still authored through multiple surfaces, but `game.final_emission_meta` now holds the canonical owner-bucket vocabulary (Cycle BK1) and `game.final_emission_replay_projection` owns read-side lineage projection (Cycle AO5).
-
-**Split-owner governance navigation:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) → [Split-owner acceptance matrix governance](../convergence_ci_inventory.md#split-owner-acceptance-matrix-governance).
+BU4 enumerates **94** deduplicated production write-path rows across **29** `game/` modules and **56** functions. Owner buckets, fallback families, authorship sources, split-owner lineage fields, and replay-visible lineage projection are still authored through multiple surfaces, but `game.final_emission_meta` now holds the canonical owner-bucket vocabulary (Cycle BK1) and `game.final_emission_replay_projection` owns read-side lineage projection (Cycle AO5).
 
 No runtime behavior was changed in BU4. This block is discovery + registry only.
 
@@ -20,9 +18,9 @@ Machine-readable inventory: `docs/audits/BU4_ownership_write_paths.csv`.
 
 | Writer class | Rows | Modules |
 |---|---:|---:|
-| FEM schema writer | 18 | 5 |
-| debug-only writer | 20 | 9 |
-| fallback selection writer | 31 | 9 |
+| FEM schema writer | 30 | 11 |
+| debug-only writer | 25 | 9 |
+| fallback selection writer | 25 | 9 |
 | replay projection writer | 13 | 3 |
 | speaker contract writer | 1 | 1 |
 
@@ -30,23 +28,28 @@ Machine-readable inventory: `docs/audits/BU4_ownership_write_paths.csv`.
 
 - `game/api.py` — 2 row(s): `realization_fallback_family`
 - `game/diegetic_fallback_narration.py` — 1 row(s): `fallback_family_used`
-- `game/fallback_provenance_debug.py` — 1 row(s): `fallback_provenance_trace`
+- `game/fallback_provenance_debug.py` — 3 row(s): `fallback_family`, `fallback_provenance_trace`
+- `game/final_emission_acceptance_quality.py` — 1 row(s): `fallback_family`
 - `game/final_emission_fem_assembly.py` — 5 row(s): `fallback_family_used`, `fallback_temporal_frame`, `realization_fallback_family`, `speaker_contract_enforcement_reason`
-- `game/final_emission_generic_exit.py` — 2 row(s): `fallback_family_used`, `fallback_temporal_frame`
-- `game/final_emission_meta.py` — 11 row(s): `fallback_family`, `fallback_temporal_frame`, `fem_runtime_lineage_events`, `opening_fallback_authorship_source`, `opening_fallback_owner_bucket`, `owner_bucket`, `sealed_fallback_owner_bucket`, `visibility_fallback_owner_bucket`
+- `game/final_emission_generic_exit.py` — 3 row(s): `fallback_family_used`, `fallback_temporal_frame`, `producer_repair_kind`
+- `game/final_emission_meta.py` — 8 row(s): `fem_runtime_lineage_events`, `opening_fallback_owner_bucket`, `owner_bucket`, `sealed_fallback_owner_bucket`, `visibility_fallback_owner_bucket`
+- `game/final_emission_meta_observability.py` — 1 row(s): `fem_runtime_lineage_events`
 - `game/final_emission_narration_constraint_debug.py` — 1 row(s): `speaker_contract_enforcement`
 - `game/final_emission_opening_fallback.py` — 6 row(s): `fallback_family_used`, `fallback_temporal_frame`, `opening_fallback_authorship_source`
+- `game/final_emission_owner_bucket_views.py` — 3 row(s): `fallback_family`, `fallback_temporal_frame`, `opening_fallback_authorship_source`
 - `game/final_emission_replay_projection.py` — 4 row(s): `fallback_authorship_source`, `fallback_content_owner`, `fallback_owner_bucket`, `fallback_selection_owner`
 - `game/final_emission_response_type.py` — 5 row(s): `fallback_family_used`, `fallback_temporal_frame`, `opening_fallback_authorship_source`, `opening_fallback_owner_bucket`, `realization_fallback_family`
-- `game/final_emission_sealed_fallback.py` — 5 row(s): `fallback_family_used`, `fallback_temporal_frame`, `realization_fallback_family`, `sealed_fallback_owner_bucket`
+- `game/final_emission_sealed_fallback.py` — 6 row(s): `fallback_family`, `fallback_family_used`, `fallback_temporal_frame`, `realization_fallback_family`, `sealed_fallback_owner_bucket`
 - `game/final_emission_strict_social_stack.py` — 2 row(s): `speaker_contract_enforcement`, `speaker_contract_enforcement_reason`
-- `game/final_emission_terminal_pipeline.py` — 1 row(s): `speaker_contract_enforcement`
-- `game/final_emission_validators.py` — 4 row(s): `fallback_family_used`, `fallback_temporal_frame`, `opening_fallback_authorship_source`, `realization_fallback_family`
-- `game/final_emission_visibility_fallback.py` — 3 row(s): `fallback_owner_bucket`, `visibility_fallback_owner_bucket`
+- `game/final_emission_terminal_pipeline.py` — 2 row(s): `fallback_family`, `speaker_contract_enforcement`
+- `game/final_emission_validators.py` — 6 row(s): `fallback_family_used`, `fallback_temporal_frame`, `opening_fallback_authorship_source`, `opening_fallback_owner_bucket`, `realization_fallback_family`, `sealed_fallback_owner_bucket`
+- `game/final_emission_visibility_fallback.py` — 1 row(s): `visibility_fallback_owner_bucket`
+- `game/final_emission_visibility_metadata.py` — 3 row(s): `fallback_owner_bucket`, `visibility_fallback_owner_bucket`
 - `game/gm.py` — 1 row(s): `realization_fallback_family`
 - `game/gm_retry.py` — 1 row(s): `realization_fallback_family`
 - `game/interaction_continuity.py` — 1 row(s): `speaker_contract_enforcement`
-- `game/output_sanitizer.py` — 10 row(s): `owner_bucket`, `sanitizer_empty_fallback_owner`, `sanitizer_empty_fallback_owner_trace_short`, `sanitizer_strict_social_prose_owner`, `sanitizer_strict_social_prose_owner_trace_short`, `sanitizer_strict_social_selection_owner`, `sanitizer_strict_social_selection_owner_trace_short`, `sealed_fallback_owner_bucket`
+- `game/output_sanitizer.py` — 5 row(s): `fallback_family`, `owner_bucket`, `sanitizer_empty_fallback_owner_trace_short`, `sanitizer_strict_social_prose_owner_trace_short`, `sanitizer_strict_social_selection_owner_trace_short`
+- `game/output_sanitizer_lineage.py` — 6 row(s): `owner_bucket`, `sanitizer_empty_fallback_owner`, `sanitizer_strict_social_prose_owner`, `sanitizer_strict_social_selection_owner`, `sealed_fallback_owner_bucket`
 - `game/realization_provenance.py` — 1 row(s): `realization_fallback_family`
 - `game/runtime_lineage_telemetry.py` — 8 row(s): `fallback_authorship_source`, `fallback_content_owner`, `fallback_owner_bucket`, `fallback_selection_owner`
 - `game/social_exchange_emission.py` — 2 row(s): `realization_fallback_family`
@@ -61,19 +64,20 @@ Machine-readable inventory: `docs/audits/BU4_ownership_write_paths.csv`.
 | `fallback_family_used` | 8 |
 | `fallback_temporal_frame` | 8 |
 | `opening_fallback_authorship_source` | 8 |
+| `fallback_family` | 7 |
+| `opening_fallback_owner_bucket` | 6 |
+| `sealed_fallback_owner_bucket` | 6 |
 | `fallback_owner_bucket` | 5 |
-| `opening_fallback_owner_bucket` | 5 |
 | `speaker_contract_enforcement` | 5 |
 | `owner_bucket` | 4 |
-| `sealed_fallback_owner_bucket` | 4 |
 | `fallback_authorship_source` | 3 |
 | `fallback_content_owner` | 3 |
 | `fallback_selection_owner` | 3 |
 | `speaker_contract_enforcement_reason` | 3 |
+| `visibility_fallback_owner_bucket` | 3 |
 | `fem_runtime_lineage_events` | 2 |
-| `visibility_fallback_owner_bucket` | 2 |
-| `fallback_family` | 1 |
 | `fallback_provenance_trace` | 1 |
+| `producer_repair_kind` | 1 |
 | `sanitizer_empty_fallback_owner` | 1 |
 | `sanitizer_empty_fallback_owner_trace_short` | 1 |
 | `sanitizer_strict_social_prose_owner` | 1 |
@@ -107,22 +111,22 @@ Machine-readable inventory: `docs/audits/BU4_ownership_write_paths.csv`.
 
 | File | Line | Literal |
 |---|---:|---|
-| `game/final_emission_finalize.py` | 134 | `retry` |
-| `game/final_emission_ownership_schema.py` | 26 | `upstream-prepared` |
-| `game/final_emission_ownership_schema.py` | 27 | `sealed-gate` |
-| `game/final_emission_ownership_schema.py` | 28 | `retry` |
-| `game/final_emission_ownership_schema.py` | 29 | `strict-social` |
-| `game/final_emission_ownership_schema.py` | 30 | `unknown-ambiguous` |
-| `game/final_emission_ownership_schema.py` | 42 | `sealed-gate` |
-| `game/final_emission_ownership_schema.py` | 43 | `strict-social-sealed` |
-| `game/final_emission_ownership_schema.py` | 44 | `unknown-none` |
-| `game/final_emission_ownership_schema.py` | 45 | `unknown-ambiguous` |
-| `game/final_emission_ownership_schema.py` | 56 | `sealed-gate` |
-| `game/final_emission_ownership_schema.py` | 57 | `strict-social-visibility` |
-| `game/final_emission_ownership_schema.py` | 58 | `opening-visibility` |
-| `game/final_emission_ownership_schema.py` | 59 | `unknown-none` |
-| `game/final_emission_ownership_schema.py` | 60 | `unknown-ambiguous` |
-| `game/runtime_lineage_telemetry.py` | 60 | `retry` |
+| `game/final_emission_finalize.py` | 178 | `retry` |
+| `game/final_emission_ownership_schema.py` | 37 | `upstream-prepared` |
+| `game/final_emission_ownership_schema.py` | 38 | `sealed-gate` |
+| `game/final_emission_ownership_schema.py` | 39 | `retry` |
+| `game/final_emission_ownership_schema.py` | 40 | `strict-social` |
+| `game/final_emission_ownership_schema.py` | 41 | `unknown-ambiguous` |
+| `game/final_emission_ownership_schema.py` | 53 | `sealed-gate` |
+| `game/final_emission_ownership_schema.py` | 54 | `strict-social-sealed` |
+| `game/final_emission_ownership_schema.py` | 55 | `unknown-none` |
+| `game/final_emission_ownership_schema.py` | 56 | `unknown-ambiguous` |
+| `game/final_emission_ownership_schema.py` | 67 | `sealed-gate` |
+| `game/final_emission_ownership_schema.py` | 68 | `strict-social-visibility` |
+| `game/final_emission_ownership_schema.py` | 69 | `opening-visibility` |
+| `game/final_emission_ownership_schema.py` | 70 | `unknown-none` |
+| `game/final_emission_ownership_schema.py` | 71 | `unknown-ambiguous` |
+| `game/runtime_lineage_telemetry.py` | 63 | `retry` |
 
 ## Recommended BU5 block
 
@@ -133,4 +137,4 @@ Machine-readable inventory: `docs/audits/BU4_ownership_write_paths.csv`.
 
 ## Test / governance writers (summary)
 
-Deduplicated test/helper rows: **129** across 25 files. Primary surfaces: `tests/helpers/replacement_attribution_inventory.py`, `tests/helpers/opening_fallback_evidence.py`, `tests/failure_classification_contract.py`, golden replay fixtures.
+Deduplicated test/helper rows: **279** across 42 files. Primary surfaces: `tests/helpers/replacement_attribution_inventory.py`, `tests/helpers/opening_fallback_evidence.py`, `tests/failure_classification_contract.py`, golden replay fixtures.

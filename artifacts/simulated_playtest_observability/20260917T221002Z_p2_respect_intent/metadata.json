@@ -1,0 +1,41 @@
+{
+  "artifact_version": 1,
+  "run_id": "20260917T221002Z_p2_respect_intent",
+  "scenario_id": "p2_respect_intent",
+  "scenario_description": "Player-intent axis: broad opener then narrowing follow-up.",
+  "started_at": "2026-09-17T22:10:15.117853+00:00",
+  "finished_at": "2026-09-17T22:10:22.552553+00:00",
+  "simulator": {
+    "runner": "tools/run_playability_validation.py",
+    "player_type": "fixed scripted natural-language prompts",
+    "prompt_count": 2,
+    "prompts": [
+      "Tell me about the thief.",
+      "Who exactly was seen near the dye vats?"
+    ],
+    "entrypoint": "/api/chat",
+    "caller_kind": "in-process TestClient",
+    "base_url": null,
+    "apply_reset_before_scenario": true,
+    "random_seed": null
+  },
+  "artifact_paths": {
+    "transcript_md": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\transcript.md",
+    "evaluation_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\evaluation.json",
+    "state_before_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\state_before.json",
+    "state_after_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\state_after.json",
+    "metadata_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\metadata.json",
+    "legacy_transcript_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\transcript.json",
+    "legacy_summary_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\summary.json",
+    "run_debug_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\simulated_playtest_observability\\20260917T221002Z_p2_respect_intent\\run_debug.json"
+  },
+  "upstream_dependent_run_gate": {
+    "upstream_runtime_healthy": true,
+    "preflight_available": true,
+    "startup_run_valid": true,
+    "manual_testing_blocked": false,
+    "block_reason": null,
+    "preflight_health_class": "healthy",
+    "preflight_checked_at": "2026-09-17T22:09:59Z"
+  }
+}

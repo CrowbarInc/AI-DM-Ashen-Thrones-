@@ -1,0 +1,137 @@
+{
+  "stamp": "20260920T014050Z",
+  "turns": [
+    {
+      "player": "I walk up and read the notice about the missing patrol.",
+      "ok": true,
+      "kind": "investigate",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "A gate serjeant manages the crowd and keeps one eye on the roster board while threadbare watchers and refugees cluster along the muddy gate line. Guard Captain watches with hard, tired discipline, while Tavern Runner trades hot stew and rumors near the rain barrel. The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "player": "Fine. I'm heading out after them along that northwest track.",
+      "ok": true,
+      "kind": "scene_transition",
+      "resolved_transition": true,
+      "target_scene_id": "old_milestone",
+      "clue_id": null,
+      "scene": "old_milestone",
+      "interlocutor": null,
+      "mode": "none",
+      "gm": "You act on that decision and leave along the available path."
+    },
+    {
+      "player": "I look around.",
+      "ok": true,
+      "kind": "observe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "old_milestone",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "A weathered stone milestone leans beside the northwest mud track holds the eye, while the track continues a short way past the stone before rainwater and brush make the next step unclear stays impossible to ignore."
+    },
+    {
+      "player": "I search the mud for any sign of that patrol.",
+      "ok": true,
+      "kind": "investigate",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "old_milestone",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "On closer inspection, the mud around the marker is churned with faint overlapping prints that fade into the scrub."
+    },
+    {
+      "player": "Alright. I'll head back to the gate.",
+      "ok": true,
+      "kind": "scene_transition",
+      "resolved_transition": true,
+      "target_scene_id": "frontier_gate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "none",
+      "gm": "You act on that decision and leave along the available path."
+    },
+    {
+      "player": "What lies beyond the market from here?",
+      "ok": true,
+      "kind": "question",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "social",
+      "gm": "The murmur around you never tightens into a single clear voice on that point."
+    },
+    {
+      "player": "I'll go to the glass observatory.",
+      "ok": true,
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "That destination is not available from here."
+    },
+    {
+      "player": "I look around.",
+      "ok": true,
+      "kind": "observe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "A guard peels away from the notice board and squares up to you. \"Standing still won't help that patrol,\" he says, stabbing two fingers at the posting. \"Tell me what you know, or get on the east-road trail before it dies.\"."
+    },
+    {
+      "player": "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+      "ok": true,
+      "kind": "scene_transition",
+      "resolved_transition": true,
+      "target_scene_id": "old_milestone",
+      "clue_id": null,
+      "scene": "old_milestone",
+      "interlocutor": null,
+      "mode": "none",
+      "gm": "You act on that decision and leave along the available path."
+    },
+    {
+      "player": "Let's go back.",
+      "ok": true,
+      "kind": "scene_transition",
+      "resolved_transition": true,
+      "target_scene_id": "frontier_gate",
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "none",
+      "gm": "You return to the Cinderwatch Gate District. Rain continues to spatter the soot-dark stone under frayed banners above the eastern gate. The muddy approach teems with refugees, wagons, and travelers, all tightly held at the choke point by weary guards. Near the notice board, which displays listings of taxes, curfew rules, and a warning about the missing patrol, a gate serjeant keeps a watchful eye "
+    },
+    {
+      "player": "I look around.",
+      "ok": true,
+      "kind": "observe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "As you watch the scene, threadbare watchers and ragged strangers cluster near the gate, eyeing the crowd. Refugees, wagons, and travelers crowd the muddy gate district, watched carefully by guards."
+    }
+  ]
+}

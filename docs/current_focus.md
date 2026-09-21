@@ -46,7 +46,7 @@ Detailed rules and runtime module boundaries: **`docs/narrative_integrity_archit
 | **Prompt / sanitizer ownership boundaries** | Pre-generation vs post-GM paths stay split; **smoke overlap** only for cross-layer integration, not duplicate phrase legality suites (see `tests/TEST_CONSOLIDATION_PLAN.md`). |
 | **Social / emission ownership boundaries** | Strict social shape, escalation state machine, and misc social integration each have an obvious **canonical owner** file; shrink catch-all modules. |
 | **Transcript duplicate assertion thinning** | Transcript and gauntlet modules assert **ordering** and **cross-turn state**; drop or weaken duplicate substring locks already owned by smaller **contract-driven** tests. |
-| **Lead / clue cleanup** | **Deferred** until after **prompt/sanitizer** and **social/emission** batches complete (registry overlap reduction, not a blocker for earlier work). |
+| **Lead / clue cleanup** | **Deferred** until after **prompt/sanitizer** and **social/emission** batches complete (registry overlap reduction, not a blocker for earlier work). **RC-21 = B + C is settled:** the lead registry is canonical; pending/clue surfaces are projections; narration alone does not instantiate NPCs. Remaining consumer alignment (`compat_pending_lead_needed`, intent-parser pursuit over `pending_leads`) stays in this deferred batch. |
 
 ---
 
@@ -56,7 +56,7 @@ Detailed rules and runtime module boundaries: **`docs/narrative_integrity_archit
 | --- | --- |
 | **Authoritative social target resolution** in `game/interaction_context.py` | **Canonical owner** — not moved to `dialogue_targeting` while import-cycle risk remains (**deferred** extraction). |
 | **Large policy clusters** still living in `game/final_emission_gate.py` | **Canonical** for **orchestration** and integration order; further extraction is optional and must not fork policy (**deferred** unless it reduces ambiguity). |
-| **Lead/clue test + runtime overlap reduction** | **Deferred** until prompt/sanitizer + social/emission consolidation passes. |
+| **Lead/clue test + runtime overlap reduction** | **Deferred** until prompt/sanitizer + social/emission consolidation passes. RC-21 B+C is already settled; this row is leftover consumer/overlap cleanup, not a reopened policy question. |
 | **Broad test-file merges** | **Deferred**; prefer thinning and **smoke overlap** discipline over kitchen-sink merges. |
 
 Full deferral notes live in **`docs/narrative_integrity_architecture.md`** → *Intentionally deferred*.

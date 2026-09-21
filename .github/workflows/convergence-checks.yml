@@ -44,7 +44,7 @@ jobs:
 
       # --- Hard-fail (blocking) ---
 
-      - name: Pytest - protected golden replay acceptance
+      - name: Pytest - controlled structural replay acceptance
         id: protected_replay
         run: python -m pytest -m golden_replay -q
 

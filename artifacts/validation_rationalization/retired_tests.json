@@ -1,0 +1,42 @@
+{
+  "schema_version": "retired-validation-tests.v1",
+  "campaign": "high_confidence_validation_rationalization_20260918",
+  "retired_node_count": 16,
+  "replacement_tests": [
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_bw_historical_closeout_provenance_remains_available",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_bz_historical_closeout_provenance_remains_available"
+  ],
+  "preserved_provenance": [
+    "docs/audits/closeouts/BW_protected_replay_trend_window_closeout.md",
+    "docs/audits/closeouts/BZ_protected_replay_trend_window_2_closeout.md",
+    "docs/audits/discovery/BW_protected_replay_trend_window_discovery.md",
+    "docs/audits/discovery/BZ_protected_replay_trend_window_2_discovery.md",
+    "docs/audits/audit_manifest.md",
+    "artifacts/golden_replay/trend_window/",
+    "artifacts/golden_replay/trend_window_2/"
+  ],
+  "unique_evidence_lost": false,
+  "audit_recommendation": "GENERATED_CLOSEOUT_ASSERTIONS: RETIRE, HIGH confidence.",
+  "retired_tests": [
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_closeout_doc_exists_and_declares_bw_closed",
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_closeout_doc_lists_all_required_artifact_paths",
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_closeout_doc_command_examples_match_implementation",
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_closeout_doc_states_six_scenario_protected_corpus",
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_closeout_doc_documents_supporting_scenarios_not_in_bw_corpus",
+    "tests/test_bw_protected_replay_trend_window_closeout.py::test_trend_cli_help_is_invocable",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_exists_and_declares_bz_closed",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_required_sections_exist",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_command_references_trend_window_2",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_references_bz_replay_key_movement_artifact",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_references_bz_recurrence_movement_artifact",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_states_bw_artifacts_are_not_modified",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_states_recurrence_historical_movement_requires_explicit_baseline",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_states_six_scenario_protected_corpus",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_closeout_doc_bz_output_artifacts_exist_in_repo",
+    "tests/test_bz_protected_replay_trend_window_2_closeout.py::test_trend_cli_help_exposes_bz_recurrence_baseline_flag"
+  ],
+  "previous_purpose": "Lock obsolete root-level closeout paths, historical prose, command examples, artifact names, and CLI help.",
+  "reason_for_retirement": "Canonical closeouts were moved into docs/audits/closeouts; historical prose and command locks do not prove current product correctness.",
+  "replacement_authority": "Two narrow HISTORICAL_ONLY provenance checks plus the canonical audit manifest.",
+  "rollback": "Restore the retired node bodies from version history; no production or evaluator rollback is required."
+}

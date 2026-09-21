@@ -1,0 +1,49 @@
+{
+  "stamp": "20260920T005001Z",
+  "turns": [
+    {
+      "player": "I walk up to the guard and ask what's posted on that notice.",
+      "ok": true,
+      "kind": "question",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": "gate_guard",
+      "mode": "social",
+      "gm": "Guard Captain mutters, \"Word is, the missing patrol was last seen taking the northwest mud track past the crates.\""
+    },
+    {
+      "player": "Alright, I'll stay here a moment and hear you out. When did that patrol go missing?",
+      "ok": true,
+      "kind": "observe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": "gate_guard",
+      "mode": "social",
+      "gm": "Follow the missing patrol rumor."
+    },
+    {
+      "player": "Okay. I'm heading out after them along that northwest track.",
+      "ok": true,
+      "kind": "social_probe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": "gate_guard",
+      "mode": "social",
+      "gm": "Gate Guard mutters, \"Word is, the patrol route changed after the Ash Compact census choke worsened.\""
+    },
+    {
+      "player": "Now that I've left the gate, I look at the road ahead.",
+      "ok": true,
+      "kind": "investigate",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "scene": "frontier_gate",
+      "interlocutor": null,
+      "mode": "activity",
+      "gm": "You act on that move, and you get an immediate read on what is there. The missing patrol was last seen taking the northwest mud track past the crates."
+    }
+  ]
+}

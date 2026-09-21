@@ -439,8 +439,16 @@ _THREAD_MATCH_STOPWORDS = frozenset(
 )
 
 
-def _player_question_covers_stored_thread(player_text: str, stored: str) -> bool:
-    """Avoid surfacing unrelated topic_pressure answers on a fresh 'who/what/where' question."""
+def _player_question_covers_stored_thread(
+    player_text: str,
+    stored: str,
+    exclude_tokens: set[str] | frozenset[str] | None = None,
+) -> bool:
+    """Avoid surfacing unrelated topic_pressure answers on a fresh 'who/what/where' question.
+
+    ``exclude_tokens`` strips speaker-identity (or other non-subject) tokens so that
+    naming the NPC cannot make an unrelated owned fact look like an answer.
+    """
     pl = str(player_text or "").strip().lower()
     st = str(stored or "").strip().lower()
     if not pl or not st:
@@ -450,7 +458,16 @@ def _player_question_covers_stored_thread(player_text: str, stored: str) -> bool
         pl,
     ):
         return True
-    toks = [t for t in re.findall(r"[a-z]{4,}", pl) if t not in _THREAD_MATCH_STOPWORDS]
+    exclude = {
+        str(tok or "").strip().lower()
+        for tok in (exclude_tokens or set())
+        if str(tok or "").strip()
+    }
+    toks = [
+        t
+        for t in re.findall(r"[a-z]{4,}", pl)
+        if t not in _THREAD_MATCH_STOPWORDS and t not in exclude
+    ]
     return any(t in st for t in toks[:18])
 
 

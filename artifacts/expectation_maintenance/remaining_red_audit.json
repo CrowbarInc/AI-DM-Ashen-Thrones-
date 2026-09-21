@@ -1,0 +1,43 @@
+{
+  "schema_version": "remaining-red-audit.v1",
+  "known_unresolved_technical_defects": false,
+  "technical_baseline_status": "POLICY_ONLY_RED_BASELINE",
+  "failures": [
+    {
+      "id": "RC-10",
+      "test": "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+      "classification": "POLICY_DECISION_REQUIRED",
+      "reason_remaining": "The permitted local raw-token boundary has not been chosen.",
+      "required_next_action": "Human policy decision in a separate campaign.",
+      "human_policy_judgment_required": true,
+      "touched_by_campaign": false
+    },
+    {
+      "id": "RC-21",
+      "test": "tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+      "classification": "POLICY_DECISION_REQUIRED",
+      "reason_remaining": "Destination-redirect lead authority has not been chosen.",
+      "required_next_action": "Human policy decision in a separate campaign.",
+      "human_policy_judgment_required": true,
+      "touched_by_campaign": false
+    },
+    {
+      "id": "RC-21",
+      "test": "tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+      "classification": "POLICY_DECISION_REQUIRED",
+      "reason_remaining": "Destination-redirect lead authority has not been chosen.",
+      "required_next_action": "Human policy decision in a separate campaign.",
+      "human_policy_judgment_required": true,
+      "touched_by_campaign": false
+    },
+    {
+      "id": "RC-21",
+      "test": "tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending",
+      "classification": "POLICY_DECISION_REQUIRED",
+      "reason_remaining": "Destination-redirect lead authority has not been chosen.",
+      "required_next_action": "Human policy decision in a separate campaign.",
+      "human_policy_judgment_required": true,
+      "touched_by_campaign": false
+    }
+  ]
+}

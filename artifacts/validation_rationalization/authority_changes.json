@@ -1,0 +1,62 @@
+{
+  "schema_version": "validation-authority-changes.v1",
+  "campaign": "high_confidence_validation_rationalization_20260918",
+  "changes": [
+    {
+      "validation_family": "GENERATED_CLOSEOUT_ASSERTIONS",
+      "previous_authority": "RELEASE_GATE",
+      "new_authority": "HISTORICAL_ONLY",
+      "previous_claim": "Historical BW/BZ closeout files existed at obsolete root paths and contained prescribed prose and commands.",
+      "new_claim": "Canonical BW/BZ closeouts remain discoverable in the audit archive and audit manifest.",
+      "implementation_locations": ["tests/test_bw_protected_replay_trend_window_closeout.py", "tests/test_bz_protected_replay_trend_window_2_closeout.py", "artifacts/validation_rationalization/retired_tests.json"],
+      "reason": "Historical campaign prose/path locks do not establish current product correctness.",
+      "supporting_audit_finding": "RETIRE at HIGH confidence after provenance review.",
+      "confidence": "HIGH",
+      "execution_behavior_changed": true,
+      "gating_behavior_changed": true,
+      "evidence_generation_changed": false
+    },
+    {
+      "validation_family": "PLAYABILITY_RUNTIME",
+      "previous_authority": "CAMPAIGN_GATE",
+      "new_authority": "SUPPORTING_EVIDENCE",
+      "previous_claim": "Automated playability PASS could be read as player-facing campaign acceptance.",
+      "new_claim": "PASS means configured per-turn heuristic thresholds passed and supplies inspectable supporting evidence; it is not independent semantic acceptance.",
+      "implementation_locations": ["docs/playability_validation.md", "tests/README_TESTS.md", "data/validation/validation_family_registry.json"],
+      "reason": "Calibration and reactive evidence demonstrated false confidence and evaluator disagreements.",
+      "supporting_audit_finding": "RECLASSIFY at HIGH confidence.",
+      "confidence": "HIGH",
+      "execution_behavior_changed": false,
+      "gating_behavior_changed": true,
+      "evidence_generation_changed": false
+    },
+    {
+      "validation_family": "GOLDEN_PROTECTED_REPLAY",
+      "previous_authority": "RELEASE_GATE with potentially overstated golden/live terminology",
+      "new_authority": "RELEASE_GATE for controlled structural replay invariants",
+      "previous_claim": "Protected/golden replay terminology could be read as production-model or semantic validation.",
+      "new_claim": "The hard gate protects enumerated structural/runtime invariants under deterministic GM output and does not prove production-model semantics, narrative quality, or human playability.",
+      "implementation_locations": [".github/workflows/convergence-checks.yml", "docs/testing/protected_replay_manifest.md", "tests/README_TESTS.md", "data/validation/validation_family_registry.json"],
+      "reason": "The gate is valuable, but its actual execution uses controlled/stubbed GM output.",
+      "supporting_audit_finding": "RECLASSIFY at HIGH confidence while preserving the hard gate.",
+      "confidence": "HIGH",
+      "execution_behavior_changed": false,
+      "gating_behavior_changed": false,
+      "evidence_generation_changed": false
+    },
+    {
+      "validation_family": "BEHAVIORAL_GAUNTLET",
+      "previous_authority": "SUPPORTING_EVIDENCE",
+      "new_authority": "DIAGNOSTIC",
+      "previous_claim": "Behavioral gauntlet PASS could compete with calibrated semantic evaluation.",
+      "new_claim": "The gauntlet detects enumerated deterministic anti-patterns; semantic calibration and human review interpret consequential semantic meaning.",
+      "implementation_locations": ["tests/README_TESTS.md", "data/validation/validation_family_registry.json"],
+      "reason": "Empty/short inputs can pass, transcript origin is unauthenticated, and rules are intentionally shallow.",
+      "supporting_audit_finding": "CONSOLIDATE authority at HIGH confidence; destructive consolidation deferred.",
+      "confidence": "HIGH",
+      "execution_behavior_changed": false,
+      "gating_behavior_changed": false,
+      "evidence_generation_changed": false
+    }
+  ]
+}

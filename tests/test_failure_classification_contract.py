@@ -80,7 +80,7 @@ def test_classifier_evidence_manifest_matches_optional_contract_fields():
     # AK2 field-set/count locks retained for visible contract ownership in this file.
     assert CLASSIFIER_EVIDENCE_FIELDS == OPTIONAL_CLASSIFICATION_EVIDENCE_FIELDS
     assert len(PROTECTED_CLASSIFIER_EVIDENCE_FIELDS) == 32
-    assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 16
+    assert len(CLASSIFIER_EVIDENCE_EXTENSION_FIELDS) == 22
     assert not (PROTECTED_CLASSIFIER_EVIDENCE_FIELDS & CLASSIFIER_EVIDENCE_EXTENSION_FIELDS)
 
 
@@ -116,7 +116,7 @@ def test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract():
 
     contract_manifest = failure_dashboard_evidence_manifest()
     # AO3 manifest count and cross-module re-export locks; labels/order differ per probe.
-    assert len(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) == 29
+    assert len(FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS) == 35
     assert dashboard_manifest == contract_manifest == FAILURE_DASHBOARD_EVIDENCE_MANIFEST
     assert dashboard_row_keys == FAILURE_DASHBOARD_EVIDENCE_ROW_KEYS
     assert dashboard_labels == FAILURE_DASHBOARD_EVIDENCE_LABELS
@@ -570,7 +570,7 @@ def test_failure_classification_authority_registry_documents_key_authorities():
     assert "recurrence:v1" in registry
 
 
-def test_co98_failure_classification_registry_documents_governing_authority():
+def test_co99_failure_classification_registry_documents_governing_authority():
     root = Path(__file__).resolve().parents[1]
     registry = (root / "docs" / "audits" / "CG_failure_classification_authority_registry.md").read_text(
         encoding="utf-8"
@@ -586,7 +586,7 @@ def test_co98_failure_classification_registry_documents_governing_authority():
     assert "Architectural constraints (not backlog)" in registry
     assert "ALLOWED_PRODUCER_REPAIR_KINDS" in registry
 
-    assert "Governance context (CO98)" in bqc4
+    assert "Governance context (CO99)" in bqc4
     assert "CO96_attribution_program_closeout.md" in bqc4
     assert "CG_failure_classification_authority_registry.md" in bqc4
     assert "does **not** reopen attribution" in bqc4 or "does not reopen attribution" in bqc4.lower()

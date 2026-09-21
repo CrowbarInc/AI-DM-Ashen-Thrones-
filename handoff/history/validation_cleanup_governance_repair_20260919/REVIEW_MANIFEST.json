@@ -1,0 +1,153 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "validation_cleanup_governance_repair_20260919",
+  "campaign_name": "Validation Cleanup & Governance Repair",
+  "generated_at": "2026-09-19T17:45:37.557914+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 5652,
+      "sha256": "ac25775de522a1ca84d16d0e767bf92157cca56f986258f2739c5d9822baca8f"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "docs/validation_cleanup_and_governance_repair.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_cleanup_and_governance_repair.md",
+      "bundle_path": "support/docs/validation_cleanup_and_governance_repair.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 6316,
+      "sha256": "9a167ba1ca9109bc47c40a3b4500e4eb7bf8816bae8818343d244103815ebacb"
+    },
+    {
+      "path": "artifacts/validation_cleanup/cleanup_ledger.json",
+      "role": "cleanup_ledger",
+      "why": "Accounts for all 17 actionable failures and their authority.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/validation_cleanup/cleanup_ledger.json",
+      "bundle_path": "support/artifacts/validation_cleanup/cleanup_ledger.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 17083,
+      "sha256": "c842eed4976fa7ece79b432e97063cdbe0653e0e5320a66a8520213d3ab87bb9"
+    },
+    {
+      "path": "artifacts/validation_cleanup/cleanup_summary.json",
+      "role": "cleanup_summary",
+      "why": "Reconciles exact pre/post counts and remaining reds.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/validation_cleanup/cleanup_summary.json",
+      "bundle_path": "support/artifacts/validation_cleanup/cleanup_summary.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 2262,
+      "sha256": "d2125cf2ed8863f242ea08c054674e59949b30fffb8b03980c0bc94ed27a0c43"
+    },
+    {
+      "path": "artifacts/validation_cleanup/pre_cleanup_suite.xml",
+      "role": "pre_junit",
+      "why": "Authoritative starting baseline.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/validation_cleanup/pre_cleanup_suite.xml",
+      "bundle_path": "support/artifacts/validation_cleanup/pre_cleanup_suite.xml",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1185173,
+      "sha256": "3e78be99bac17410286d2c2614ba61324e1bbb08fbe60e5fd4b589ab9b59a62b"
+    },
+    {
+      "path": "artifacts/validation_cleanup/post_cleanup_suite.xml",
+      "role": "post_junit",
+      "why": "Authoritative ending baseline.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/validation_cleanup/post_cleanup_suite.xml",
+      "bundle_path": "support/artifacts/validation_cleanup/post_cleanup_suite.xml",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1166540,
+      "sha256": "33675f9f389a1ae65f785d7dc7633d8c1d91fa705e4cd0c368009623e3741e4a"
+    },
+    {
+      "path": "artifacts/validation_cleanup/test_order_observations.md",
+      "role": "test_order_observations",
+      "why": "Preserves the bounded mutable-state observation.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/validation_cleanup/test_order_observations.md",
+      "bundle_path": "support/artifacts/validation_cleanup/test_order_observations.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 289,
+      "sha256": "89f93ffd7dd6ee3ed4087e6905cf0e669308dd97dea7be55085c28bf1764549e"
+    },
+    {
+      "path": "artifacts/baseline_triage/validation_cleanup_queue.json",
+      "role": "source_cleanup_queue",
+      "why": "Preserves the authorized cleanup inventory.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/baseline_triage/validation_cleanup_queue.json",
+      "bundle_path": "support/artifacts/baseline_triage/validation_cleanup_queue.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 11094,
+      "sha256": "0cf61f2f3a53fa28635860af7fa0d01ee6dee25148f5a1622eb08807fbac7662"
+    },
+    {
+      "path": "artifacts/baseline_triage/policy_decisions.md",
+      "role": "frozen_policy",
+      "why": "Preserves the policy decisions left open.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/baseline_triage/policy_decisions.md",
+      "bundle_path": "support/artifacts/baseline_triage/policy_decisions.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 2114,
+      "sha256": "2f899a5576b6dcbca5b03825439dc0f64723e840c2d84dcabb011ef6eca5031b"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 10,
+    "zip_size_bytes": "000000308676",
+    "uncompressed_payload_bytes": 2396523,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/validation_cleanup_governance_repair.json",
+    "canonical_repository_root": "."
+  }
+}

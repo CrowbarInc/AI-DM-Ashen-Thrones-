@@ -110,7 +110,7 @@ def classify_changed_path(path: str) -> str:
         return "test"
     if name.startswith("test_") or name.endswith("_test.py"):
         return "test"
-    if "pytest_cache" in normalized or "codex_pytest_tmp" in normalized:
+    if "pytest_cache" in normalized or "codex_pytest_tmp" in normalized or "development/tmp" in normalized:
         return "test"
     if normalized.startswith(DOCS_TOOLING_PREFIXES):
         return "docs_tooling"

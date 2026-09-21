@@ -40,6 +40,7 @@ from game.social import (
     classify_social_question_dimension,
     format_structured_fact_social_line,
     neutral_reply_speaker_grounding_bridge_line,
+    realize_authored_knowledge_answer,
     resolve_grounded_social_speaker,
     select_best_social_answer_candidate,
     topic_pressure_speaker_id_for_social_exchange,
@@ -751,7 +752,9 @@ def hard_reject_social_exchange_text(
     elif npc_id and gr_hr.get("grounded_actor_id") and npc_id != str(gr_hr.get("grounded_actor_id") or "").strip():
         reasons.append("speaker_binding_mismatch")
 
-    player_prompt = merged or _question_prompt_for_resolution(resolution if isinstance(resolution, dict) else None)
+    player_prompt = merged or _question_prompt_for_resolution_early(
+        resolution if isinstance(resolution, dict) else None
+    )
     if player_prompt:
         first_sentence_contract = question_resolution_rule_check(
             player_text=player_prompt,
@@ -1256,6 +1259,30 @@ def build_final_strict_social_response(
     soc0 = res.get("social") if isinstance(res, dict) and isinstance(res.get("social"), dict) else {}
     if soc0.get("reply_speaker_grounding_neutral_bridge"):
         clear_social_exchange_interruption_tracker(sess)
+        authored = realize_authored_knowledge_answer(
+            session=sess,
+            scene_id=sid,
+            player_text=_question_prompt_for_resolution_early(res),
+            resolution=res,
+            world=world if isinstance(world, dict) else None,
+        )
+        if isinstance(authored, dict) and str(authored.get("text") or "").strip():
+            details = {
+                "used_internal_fallback": False,
+                "fallback_kind": "none",
+                "rejection_reasons": [],
+                "final_emitted_source": "authored_knowledge_realization",
+                "deterministic_attempted": False,
+                "deterministic_passed": False,
+                "fallback_pool": "none",
+                "route_illegal_intercepted": False,
+                "intercepted_preview": "",
+                "candidate_quality_degraded": False,
+                "resolved_answer_preferred": True,
+                "resolved_answer_source": str(authored.get("source") or ""),
+                "resolved_answer_preference_reason": "authored_knowledge_over_neutral_bridge",
+            }
+            return str(authored.get("text") or "").strip(), details
         nb = neutral_reply_speaker_grounding_bridge_line(
             seed=f"{sid}|neutral_grounding|{_question_prompt_for_resolution_early(res)}"
         )

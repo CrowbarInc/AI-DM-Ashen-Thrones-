@@ -1,0 +1,1004 @@
+{
+  "artifact_version": 1,
+  "scenario_id": "patrol_knowledge",
+  "player_strategy": "adversarial",
+  "seed": 1701,
+  "configuration": {
+    "objective": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+    "max_turns": 6,
+    "max_attempts_per_intent": 3
+  },
+  "termination_reason": "max_intent_attempts",
+  "turn_count": 4,
+  "valid_run": true,
+  "unresolved_intents": [
+    "Determine where the missing patrol was last seen without granting an NPC impossible knowledge."
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_objective": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "current_intent": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "selected_player_action": "Runner, where exactly was the missing patrol last seen?",
+      "selection_reason": "initial_objective:Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "relevant_prior_context": {
+        "player": "",
+        "gm": ""
+      },
+      "gm_response": "Tavern Runner says, \"No. I cannot answer that from what.\"",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "malformed_output:broken_refusal_fragment"
+          ],
+          "evidence": {
+            "gm_word_count": 10,
+            "text_preview": "Tavern Runner says, \"No. I cannot answer that from what.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:response_malformed_before_intent_can_be_satisfied"
+          ],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "exactly",
+              "last",
+              "missing",
+              "patrol",
+              "runner",
+              "seen",
+              "where"
+            ],
+            "gm_terms": [
+              "answer",
+              "cannot",
+              "runner",
+              "says",
+              "tavern",
+              "what"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 23
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 82,
+        "rating": "strong",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 23,
+          "logical_escalation": 19,
+          "immersion": 23
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "strong"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "malformed_output:broken_refusal_fragment"
+            ],
+            "evidence": {
+              "gm_word_count": 10,
+              "text_preview": "Tavern Runner says, \"No. I cannot answer that from what.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:response_malformed_before_intent_can_be_satisfied"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "exactly",
+                "last",
+                "missing",
+                "patrol",
+                "runner",
+                "seen",
+                "where"
+              ],
+              "gm_terms": [
+                "answer",
+                "cannot",
+                "runner",
+                "says",
+                "tavern",
+                "what"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 23
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 23,
+            "logical_escalation": 19,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.083,
+              "gm_word_count": 10,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Narrow follow-up receives specific detail or a grounded refusal."
+            ],
+            "signals": {
+              "narrowing": true,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.143,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 10
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "player_intent: strong (23/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 82,
+            "rating": "strong",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    },
+    {
+      "turn_index": 1,
+      "player_objective": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "current_intent": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "selected_player_action": "One bounded answer: last reliable location, source, and uncertainty.",
+      "selection_reason": "repeat_after_malformed_output",
+      "relevant_prior_context": {
+        "player": "Runner, where exactly was the missing patrol last seen?",
+        "gm": "Tavern Runner says, \"No. I cannot answer that from what.\""
+      },
+      "gm_response": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 12,
+            "text_preview": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "answer",
+              "bounded",
+              "last",
+              "location",
+              "reliable",
+              "source",
+              "uncertainty"
+            ],
+            "gm_terms": [
+              "answer",
+              "cannot",
+              "know",
+              "runner",
+              "says",
+              "tavern",
+              "what"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 72,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 18,
+          "logical_escalation": 8,
+          "immersion": 23
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 12,
+              "text_preview": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "answer",
+                "bounded",
+                "last",
+                "location",
+                "reliable",
+                "source",
+                "uncertainty"
+              ],
+              "gm_terms": [
+                "answer",
+                "cannot",
+                "know",
+                "runner",
+                "says",
+                "tavern",
+                "what"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 8,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.071,
+              "gm_word_count": 12,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.143,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 8,
+            "passed": false,
+            "reasons": [
+              "High overlap with prior GM text suggests stale repetition."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.857,
+              "player_presses_thread": false,
+              "gm_word_count": 12,
+              "net_new_terms": 1
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [
+            "logical_escalation: weak (8/25).",
+            "logical_escalation: High overlap with prior GM text suggests stale repetition."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 72,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "social_probe",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    },
+    {
+      "turn_index": 2,
+      "player_objective": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "current_intent": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "selected_player_action": "Separate rumor from fact: where were they last seen, and who knows that?",
+      "selection_reason": "unresolved_intent:rephrase",
+      "relevant_prior_context": {
+        "player": "One bounded answer: last reliable location, source, and uncertainty.",
+        "gm": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+      },
+      "gm_response": "Tavern Runner mutters, the tavern runner begins cautiously, brushing rainwater from their hood,",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "malformed_output:trailing_comma_speech_construction"
+          ],
+          "evidence": {
+            "gm_word_count": 13,
+            "text_preview": "Tavern Runner mutters, the tavern runner begins cautiously, brushing rainwater from their hood,"
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:response_malformed_before_intent_can_be_satisfied"
+          ],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "fact",
+              "knows",
+              "last",
+              "rumor",
+              "seen",
+              "separate",
+              "they",
+              "where"
+            ],
+            "gm_terms": [
+              "begins",
+              "brushing",
+              "cautiously",
+              "hood",
+              "mutters",
+              "rainwater",
+              "runner",
+              "tavern"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 67,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 9,
+          "logical_escalation": 18,
+          "immersion": 23
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "malformed_output:trailing_comma_speech_construction"
+            ],
+            "evidence": {
+              "gm_word_count": 13,
+              "text_preview": "Tavern Runner mutters, the tavern runner begins cautiously, brushing rainwater from their hood,"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:response_malformed_before_intent_can_be_satisfied"
+            ],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "fact",
+                "knows",
+                "last",
+                "rumor",
+                "seen",
+                "separate",
+                "they",
+                "where"
+              ],
+              "gm_terms": [
+                "begins",
+                "brushing",
+                "cautiously",
+                "hood",
+                "mutters",
+                "rainwater",
+                "runner",
+                "tavern"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 18,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 13,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.154,
+              "player_presses_thread": false,
+              "gm_word_count": 13,
+              "net_new_terms": 6
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 67,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "final_emission_meta": {},
+      "failure_classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    },
+    {
+      "turn_index": 3,
+      "player_objective": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "current_intent": "Determine where the missing patrol was last seen without granting an NPC impossible knowledge.",
+      "selected_player_action": "One bounded answer: last reliable location, source, and uncertainty.",
+      "selection_reason": "repeat_after_malformed_output",
+      "relevant_prior_context": {
+        "player": "Separate rumor from fact: where were they last seen, and who knows that?",
+        "gm": "Tavern Runner mutters, the tavern runner begins cautiously, brushing rainwater from their hood,"
+      },
+      "gm_response": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 12,
+            "text_preview": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "answer",
+              "bounded",
+              "last",
+              "location",
+              "reliable",
+              "source",
+              "uncertainty"
+            ],
+            "gm_terms": [
+              "answer",
+              "cannot",
+              "know",
+              "runner",
+              "says",
+              "tavern",
+              "what"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 82,
+        "rating": "strong",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 18,
+          "logical_escalation": 18,
+          "immersion": 23
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 12,
+              "text_preview": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "answer",
+                "bounded",
+                "last",
+                "location",
+                "reliable",
+                "source",
+                "uncertainty"
+              ],
+              "gm_terms": [
+                "answer",
+                "cannot",
+                "know",
+                "runner",
+                "says",
+                "tavern",
+                "what"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 18,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.071,
+              "gm_word_count": 12,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.143,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.154,
+              "player_presses_thread": false,
+              "gm_word_count": 12,
+              "net_new_terms": 5
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 82,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "social_probe",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    }
+  ]
+}

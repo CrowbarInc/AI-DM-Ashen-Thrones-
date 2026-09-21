@@ -11,6 +11,9 @@ from pathlib import Path
 import pytest
 
 from game.runtime_lineage_telemetry import make_runtime_lineage_event
+from tests.helpers.opening_fallback_evidence import (
+    legacy_compatibility_local_opening_authorship_source,
+)
 
 pytestmark = pytest.mark.unit
 
@@ -147,7 +150,7 @@ def test_classifies_legacy_compatibility_local_opening_as_read_only() -> None:
         {
             "event_kind": "fallback_selected",
             "fallback_kind": "scene_opening",
-            "fallback_authorship_source": "compatibility_local_opening_deterministic",
+            "fallback_authorship_source": legacy_compatibility_local_opening_authorship_source(),
             "fallback_owner_bucket": "unknown-ambiguous",
         }
     )

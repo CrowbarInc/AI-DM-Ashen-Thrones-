@@ -1,0 +1,222 @@
+{
+  "stamp": "20260920T131851Z",
+  "turns": [
+    {
+      "player": "I walk over to the tavern runner. What's in the stew today?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "I walk over to the tavern runner. What's in the stew today?",
+      "dimension": "general",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": false,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": null,
+      "rejected": [
+        "patrol_rumor"
+      ],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": null,
+      "gm": "Tavern Runner mutters, \"Word is, stew's not my secret to spill,.\"",
+      "lead_ids": [],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "Fine, then tell me about the missing patrol.",
+      "ok": true,
+      "kind": "social_probe",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "Fine, then tell me about the missing patrol.",
+      "dimension": "general",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": true,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": "patrol_rumor",
+      "rejected": [],
+      "clue_id": "muddy_footprints_northwest",
+      "next_unrevealed_relevant": null,
+      "authored_match": "npc_topic:tavern_runner:patrol_rumor",
+      "gm": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "How much for a bowl?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "How much for a bowl?",
+      "dimension": "general",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": false,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": null,
+      "rejected": [
+        "patrol_rumor"
+      ],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": null,
+      "gm": "\"The price for a bowl?\" the tavern runner glances around warily before replying, \"Usually three copper pieces, hot and filling. But with the way things are\u2014tight supplies and rising taxes\u2014don't be surprised if that changes soon.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "I turn to the Guard Captain. Who posted the night watch list?",
+      "ok": true,
+      "kind": "social_probe",
+      "scene": "frontier_gate",
+      "interlocutor": "guard_captain",
+      "normalized_question": "I turn to the Guard Captain. Who posted the night watch list?",
+      "dimension": "identity",
+      "candidates": [],
+      "selected_topic": null,
+      "rejected": [],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": "npc_topic:gate_guard:watch_command",
+      "gm": "Guard Captain shakes their head. \"I won't answer that about turn\u2014not here.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "I ask the runner whether the stew is salted.",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "I ask the runner whether the stew is salted.",
+      "dimension": "general",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": false,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": null,
+      "rejected": [
+        "patrol_rumor"
+      ],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": null,
+      "gm": "\"Salted?\" \"Can't rightly say, and wouldn't be the stew's secret if I did. That\u2019s the talk these days.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "What happened to that patrol, exactly?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "What happened to that patrol, exactly?",
+      "dimension": "general",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": true,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": null,
+      "rejected": [
+        "patrol_rumor"
+      ],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": "npc_topic:tavern_runner:patrol_rumor",
+      "gm": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "What do you mean?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "tavern_runner",
+      "normalized_question": "What do you mean?",
+      "dimension": "clarification",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "authorized": true,
+          "relevant": false,
+          "has_clue": true
+        }
+      ],
+      "selected_topic": null,
+      "rejected": [
+        "patrol_rumor"
+      ],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": null,
+      "gm": "Tavern Runner mutters, \"Word is, i mean, as far as anyone's heard\u2014.\"",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    },
+    {
+      "player": "I ask the captain about the missing patrol instead.",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "interlocutor": "",
+      "normalized_question": "I ask the captain about the missing patrol instead.",
+      "dimension": "general",
+      "candidates": [],
+      "selected_topic": null,
+      "rejected": [],
+      "clue_id": null,
+      "next_unrevealed_relevant": null,
+      "authored_match": "npc_topic:gate_guard:watch_command",
+      "gm": "That patrol was ordered to take the northwest track past the crates.",
+      "lead_ids": [
+        "muddy_footprints_northwest",
+        "minlead_exit_frontier_gate_old_milestone"
+      ],
+      "patrol_in_gm": false
+    }
+  ]
+}

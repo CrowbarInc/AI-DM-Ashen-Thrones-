@@ -88,23 +88,58 @@ TURN_SEGMENT_KEYS = (
 # Verb patterns: (pattern, action_type, extracts_target)
 # Order matters: more specific patterns first
 OBSERVE_PATTERNS = [
-    (r"\b(look\s+around|scan|survey|glance|take\s+in|watch\s+the\s+area)\b", "observe", False),
+    (r"\b(look\s+around|scan|survey|glance\s+around|take\s+in|watch\s+the\s+area)\b", "observe", False),
+    # Untargeted glance only. Directed glance-at / glance-over remains investigate.
+    (r"\bglance(?:s|d|ing)?\b(?!\s+(?:back\s+)?(?:at|over|toward|towards)\b)", "observe", False),
     (r"\bobserve\s+(?:the\s+)?(.+)\b", "observe", True),
 ]
 INVESTIGATE_PATTERNS = [
-    (r"\b(look\s+at|look\s+behind|look\s+under|look\s+in|look\s+for)\s+(?:the\s+)?(.+?)(?:\s+carefully|\s+closely)?\.?$", "investigate", True),
+    (r"\b(read|reads|reading)\s+(?:the\s+|this\s+|that\s+)?(.+?)(?:\s+carefully|\s+closely)?\.?$", "investigate", True),
+    (
+        r"\b(look\s+at|look\s+behind|look\s+under|look\s+in|look\s+for|"
+        r"look\s+toward|look\s+towards|"
+        r"glance(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards))\s+"
+        r"(?:the\s+)?(.+?)(?:\s+carefully|\s+closely)?\.?$",
+        "investigate",
+        True,
+    ),
     (r"\b(inspect|examine|study|search|check)\s+(?:the\s+)?(.+?)(?:\s+carefully|\s+for\s+)?\.?$", "investigate", True),
     (r"\binvestigate\s+(?:the\s+)?(.+?)(?:\s+carefully)?\.?$", "investigate", True),
     (r"\b(dig\s+through|rifle\s+through|search)\s+(?:the\s+)?(.+?)\.?$", "investigate", True),
-    (r"\b(look|search|inspect|examine)\b", "investigate", False),  # fallback when no target
+    (r"\b(look|search|inspect|examine|read)\b", "investigate", False),  # fallback when no target
 ]
 _MIXED_INVESTIGATION_VERB_RE = re.compile(
-    r"\b(?P<verb>study|studies|inspect|inspects|examine|examines|check|checks|search|searches|look\s+at|looks\s+at|look\s+for|looks\s+for)\b",
+    r"\b(?P<verb>study|studies|inspect|inspects|examine|examines|check|checks|search|searches|read|reads|"
+    r"look\s+at|looks\s+at|look\s+for|looks\s+for|look\s+toward|looks\s+toward|look\s+towards|looks\s+towards|"
+    r"glance(?:s|d|ing)?(?:\s+back)?\s+at)\b",
     re.IGNORECASE,
 )
 _MIXED_INVESTIGATION_TARGET_RE = re.compile(
-    r"\b(?:study|studies|inspect|inspects|examine|examines|check|checks|search|searches|look\s+at|looks\s+at|look\s+for|looks\s+for)\s+(?:the\s+|a\s+|an\s+|this\s+|that\s+)?(?P<target>[^.;?!]{1,120})",
+    r"\b(?:study|studies|inspect|inspects|examine|examines|check|checks|search|searches|read|reads|"
+    r"look\s+at|looks\s+at|look\s+for|looks\s+for|look\s+toward|looks\s+toward|look\s+towards|looks\s+towards|"
+    r"glance(?:s|d|ing)?(?:\s+back)?\s+at)\s+"
+    r"(?:the\s+|a\s+|an\s+|this\s+|that\s+)?(?P<target>[^.;?!]{1,120})",
     re.IGNORECASE,
+)
+_RE_EXPLICIT_WORLD_OBJECT_ACTION = re.compile(
+    r"\b(?:inspect|examine|study|search|investigate|check|read|"
+    r"look\s+(?:at|behind|under|in|for|toward|towards)|"
+    r"glance(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards))\b",
+    re.IGNORECASE,
+)
+_INTERACTABLE_CONTENT_QUESTION_RES = (
+    re.compile(
+        r"\bwhat(?:'s| is)\s+(?:actually\s+)?(?:posted|written|listed|shown)\s+on\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s*\??\s*$",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bwhat(?:'s| is)\s+on\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s*\??\s*$",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\bwhat does\s+(?:the\s+|this\s+|that\s+)?(?P<target>.+?)\s+say\b",
+        re.IGNORECASE,
+    ),
 )
 INTERACT_PATTERNS = [
     (r"\b(talk\s+to|talk\s+with|speak\s+to|speak\s+with|ask|question|chat\s+with|greet)\s+(?:the\s+)?(.+?)(?:\s+about\s+)?\.?$", "interact", True),
@@ -112,11 +147,100 @@ INTERACT_PATTERNS = [
     (r"\b(talk|speak|ask|question)\b", "interact", False),
 ]
 TRAVEL_PREFIXES = (
-    "go ", "go to ", "follow ", "enter ", "travel ", "travel to ", "head ", "head to ",
-    "walk ", "walk to ", "move ", "move to ", "journey ", "journey to ", "leave for ",
-    "return to ", "take the route ", "take the path ", "run to ", "run ",
+    "go ", "go to ", "go back to ", "go back ", "follow ", "enter ", "travel ", "travel to ",
+    "head ", "head to ", "head back to ", "head back ", "heading ", "heading to ",
+    "heading back to ", "heading back ", "walk ", "walk to ", "walk back to ",
+    "move ", "move to ", "journey ", "journey to ", "leave for ",
+    "return to ", "take the route ", "take the path ", "take the ", "run to ", "run ",
 )
 TRAVEL_BARE = ("go", "travel", "leave", "move", "north", "south", "east", "west")
+
+# PR-AE: explicit stay / leave / pursuit shapes. These are semantic families, not a phrase whitelist.
+_RE_FOLLOW_UP_PHRASAL = re.compile(r"\bfollow(?:s|ing)?\s+up\b", re.IGNORECASE)
+_RE_STAY_COMMITMENT = re.compile(
+    r"\b(?:i(?:'ll| will| am|'m)?|we(?:'ll| will| are|'re)?)\s+"
+    r"(?:(?:just\s+)?(?:stay|remain)|not\s+(?:leaving|going|heading))\b",
+    re.IGNORECASE,
+)
+_RE_STAY_LOCATION = re.compile(
+    r"\b(?:stay|remain|staying|remaining)\s+(?:here|put|at|in|where)\b",
+    re.IGNORECASE,
+)
+_RE_NOT_LEAVING = re.compile(r"\b(?:not|n't)\s+leaving\b", re.IGNORECASE)
+_RE_NEGATED_TRAVEL = re.compile(
+    r"\b(?:don'?t|do\s+not|won't|will\s+not|not)\s+"
+    r"(?:want\s+to\s+)?(?:rush|leave|follow|pursue|go|head|enter|travel)\b",
+    re.IGNORECASE,
+)
+_RE_INSTEAD_OF_TRAVEL = re.compile(
+    r"\binstead\s+of\s+(?:entering|going|heading|leaving|traveling|travelling|following|pursuing)\b",
+    re.IGNORECASE,
+)
+_RE_ACTIONABLE_COMMITMENT = re.compile(
+    r"\b(?:i(?:'ll| will| am|'m)|we(?:'ll| will| are|'re)|let(?:'s| us))\s+"
+    r"(?:going\s+to\s+)?"
+    r"(?:follow|pursue|leave|return|head(?:ing)?|travel|walk|depart|"
+    r"go\s+(?:to|after|towards?|back)|"
+    r"head(?:ing)?\s+(?:to|for|down|off|out|back)|"
+    r"take\s+(?:the|a))\b",
+    re.IGNORECASE,
+)
+_RE_IM_LEAVING = re.compile(r"\bi(?:'m| am)\s+leaving\b", re.IGNORECASE)
+_RE_GO_AFTER = re.compile(
+    r"\b(?:go|going|head|heading|come)\s+(?:out\s+)?after\b",
+    re.IGNORECASE,
+)
+_RE_HEAD_OUT = re.compile(r"\b(?:head|heads|heading)\s+out\b", re.IGNORECASE)
+_RE_BARE_FOLLOW_PURSUE = re.compile(r"\b(?:i|we)\s+(?:follow|pursue|track)\b", re.IGNORECASE)
+_RE_COMMITMENT_PREFIX = re.compile(
+    r"^\s*(?:(?:fine|alright|all\s+right|okay|ok|right)\s*[.!,]\s*)?"
+    r"(?:(?:i|we)(?:'ll| will)|(?:i|we)\s+am\s+going\s+to|(?:i|we)'m\s+going\s+to|let(?:'s| us))\s+",
+    re.IGNORECASE,
+)
+_QUESTION_LEAD_TOKENS = frozenset(
+    {
+        "what",
+        "where",
+        "who",
+        "when",
+        "why",
+        "how",
+        "which",
+        "is",
+        "are",
+        "do",
+        "does",
+        "did",
+        "can",
+        "could",
+        "would",
+        "should",
+    }
+)
+_PURSUIT_OBJECT_HINTS = frozenset(
+    {"track", "patrol", "rumor", "route", "path", "lead", "road", "trail"}
+)
+_FOLLOW_MATCH_STOPWORDS = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "to",
+        "and",
+        "for",
+        "of",
+        "along",
+        "that",
+        "this",
+        "i",
+        "i'll",
+        "i'm",
+        "we",
+        "we'll",
+        "fine",
+        "along",
+    }
+)
 ATTACK_PATTERNS = [
     (r"\b(attack|strike|hit|smite|slash|stab)\s+(?:the\s+)?(.+?)(?:\s+with\s+)?\.?$", "attack", True),
     (r"\b(cast|use)\s+(?:my\s+)?(.+?)\s+(?:at|on)\s+(?:the\s+)?(.+?)\.?$", "attack", True),  # e.g. "cast magic missile at orc"
@@ -388,6 +512,367 @@ def _match_exit(dest_hint: str, exits: List[Dict[str, Any]]) -> Optional[str]:
     return None
 
 
+def _content_tokens(text: str) -> List[str]:
+    return [
+        w
+        for w in re.findall(r"[a-z0-9']+", str(text or "").lower())
+        if w not in _FOLLOW_MATCH_STOPWORDS
+    ]
+
+
+def looks_like_explicit_stay_intent(text: str | None) -> bool:
+    """True when the player clearly intends to remain in the current place."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    return bool(_RE_STAY_COMMITMENT.search(raw) or _RE_STAY_LOCATION.search(raw) or _RE_NOT_LEAVING.search(raw))
+
+
+def _explicit_stay_or_travel_negation(text: str | None) -> bool:
+    """True when stay/remain/not-leaving or a refused/contrastive travel clause is present."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if looks_like_explicit_stay_intent(raw):
+        return True
+    return bool(_RE_NEGATED_TRAVEL.search(raw) or _RE_INSTEAD_OF_TRAVEL.search(raw))
+
+
+def looks_like_explicit_leave_or_pursuit_intent(text: str | None) -> bool:
+    """True when the player clearly intends to leave, travel, or pursue an available path."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if _RE_FOLLOW_UP_PHRASAL.search(raw):
+        return False
+    if _explicit_stay_or_travel_negation(raw):
+        return False
+    return bool(
+        _RE_ACTIONABLE_COMMITMENT.search(raw)
+        or _RE_IM_LEAVING.search(raw)
+        or _RE_GO_AFTER.search(raw)
+        or _RE_HEAD_OUT.search(raw)
+        or _RE_BARE_FOLLOW_PURSUE.search(raw)
+    )
+
+
+def _has_information_seeking_question(text: str | None) -> bool:
+    """True for genuine questions. Explicit leave/pursuit commitments are not treated as questions."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if looks_like_explicit_leave_or_pursuit_intent(raw):
+        return False
+    if "?" in raw:
+        return True
+    lead = re.sub(r"^[^a-z0-9]+", "", raw.lower())
+    first = lead.split(" ", 1)[0] if lead else ""
+    return first in _QUESTION_LEAD_TOKENS
+
+
+def looks_like_explicit_actionable_stay_leave_or_pursuit(text: str | None) -> bool:
+    """Chat routing: sufficiently clear stay/leave/pursuit that must not be stolen as social follow-up."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if _has_information_seeking_question(raw):
+        return False
+    return looks_like_explicit_stay_intent(raw) or looks_like_explicit_leave_or_pursuit_intent(raw)
+
+
+def _strip_speaker_commitment_prefix(text: str) -> str:
+    raw = str(text or "").strip()
+    if not raw:
+        return raw
+    match = _RE_COMMITMENT_PREFIX.match(raw)
+    if not match:
+        return raw
+    rest = raw[match.end() :].strip()
+    return rest or raw
+
+
+def _authored_pursuit_clue_texts(
+    scene: Optional[Dict[str, Any]],
+    session: Optional[Dict[str, Any]],
+) -> List[str]:
+    texts: List[str] = []
+    if isinstance(scene, dict):
+        for clue in scene.get("discoverable_clues") or []:
+            if isinstance(clue, dict):
+                value = str(clue.get("text") or "").strip()
+            else:
+                value = str(clue or "").strip()
+            if value:
+                texts.append(value)
+    if isinstance(session, dict):
+        from game.leads import SESSION_LEAD_REGISTRY_KEY
+
+        registry = session.get(SESSION_LEAD_REGISTRY_KEY) or session.get("lead_registry") or {}
+        if isinstance(registry, dict):
+            for row in registry.values():
+                if not isinstance(row, dict):
+                    continue
+                for key in ("title", "summary", "text"):
+                    value = str(row.get(key) or "").strip()
+                    if value:
+                        texts.append(value)
+    return texts
+
+
+def _unique_exit_target(hits: List[str]) -> Optional[str]:
+    unique = [item for item in dict.fromkeys(hits) if item]
+    return unique[0] if len(unique) == 1 else None
+
+
+def _match_follow_pursuit_exit(
+    text: str,
+    exits: List[Dict[str, Any]],
+    *,
+    scene: Optional[Dict[str, Any]] = None,
+    session: Optional[Dict[str, Any]] = None,
+) -> Optional[str]:
+    """Bind explicit follow/pursue language to an existing authored exit. Never invent a destination."""
+    raw = str(text or "").strip()
+    if not raw or not exits or _RE_FOLLOW_UP_PHRASAL.search(raw):
+        return None
+    if _explicit_stay_or_travel_negation(raw):
+        return None
+    low = raw.lower()
+    label_hits: List[str] = []
+    for exit_row in exits:
+        if not isinstance(exit_row, dict):
+            continue
+        label = str(exit_row.get("label") or "").strip().lower()
+        target = str(exit_row.get("target_scene_id") or exit_row.get("targetSceneId") or "").strip()
+        if label and target and label in low:
+            label_hits.append(target)
+    labeled = _unique_exit_target(label_hits)
+    if labeled:
+        return labeled
+
+    follow_match = re.search(r"\b(?:follow|pursue)\b", low)
+    if follow_match:
+        tail = low[follow_match.end() :].strip()
+        target_id = _match_exit(tail, exits)
+        if not target_id and re.match(r"^\s*the\s+", tail):
+            target_id = _match_exit(tail[4:].lstrip(), exits)
+        if target_id:
+            return target_id
+
+    if not looks_like_explicit_leave_or_pursuit_intent(raw) and not follow_match:
+        return None
+
+    player_tokens = set(_content_tokens(raw))
+    if not (player_tokens & _PURSUIT_OBJECT_HINTS):
+        return None
+
+    overlap_hits: List[str] = []
+    for exit_row in exits:
+        if not isinstance(exit_row, dict):
+            continue
+        label = str(exit_row.get("label") or "").strip()
+        target = str(exit_row.get("target_scene_id") or exit_row.get("targetSceneId") or "").strip()
+        if not label or not target:
+            continue
+        overlap = (player_tokens & set(_content_tokens(label))) - {"follow", "pursue", "go", "head"}
+        if len(overlap) >= 2:
+            overlap_hits.append(target)
+    overlapped = _unique_exit_target(overlap_hits)
+    if overlapped:
+        return overlapped
+
+    for clue_text in _authored_pursuit_clue_texts(scene, session):
+        clue_tokens = set(_content_tokens(clue_text))
+        if len(player_tokens & clue_tokens) < 2:
+            continue
+        clue_exit_hits: List[str] = []
+        for exit_row in exits:
+            if not isinstance(exit_row, dict):
+                continue
+            label = str(exit_row.get("label") or "").strip()
+            target = str(exit_row.get("target_scene_id") or exit_row.get("targetSceneId") or "").strip()
+            if not label or not target:
+                continue
+            shared = (set(_content_tokens(label)) & clue_tokens) - {"follow", "pursue"}
+            if shared:
+                clue_exit_hits.append(target)
+        bound = _unique_exit_target(clue_exit_hits)
+        if bound:
+            return bound
+    return None
+
+
+def recover_actionable_stay_leave_or_pursuit(
+    text: str | None,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
+) -> Optional[Dict[str, Any]]:
+    """Yield a stay/leave/travel/pursuit action so dialogue-first cannot recapture it."""
+    raw = str(text or "").strip()
+    if not raw:
+        return None
+    if _has_information_seeking_question(raw):
+        return None
+    if not (
+        looks_like_explicit_stay_intent(raw)
+        or looks_like_explicit_leave_or_pursuit_intent(raw)
+        or _explicit_stay_or_travel_negation(raw)
+    ):
+        return None
+    act = parse_freeform_to_action(
+        raw,
+        scene_envelope,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    if isinstance(act, dict):
+        kind = str(act.get("type") or "").strip().lower()
+        meta = act.get("metadata") if isinstance(act.get("metadata"), dict) else {}
+        dest = str(act.get("target_scene_id") or act.get("targetSceneId") or "").strip()
+        if str(meta.get("intent") or "") == "follow_target":
+            return None
+        if (
+            kind == "travel"
+            and not dest
+            and re.search(r"\bfollow\b", raw, re.IGNORECASE)
+            and not (set(_content_tokens(raw)) & _PURSUIT_OBJECT_HINTS)
+        ):
+            return None
+        if kind in {"scene_transition", "travel"} or str(meta.get("parser_lane") or "") == "explicit_stay":
+            return act
+    if looks_like_explicit_leave_or_pursuit_intent(raw):
+        return _build_action(
+            "travel",
+            raw,
+            raw,
+            metadata={"parser_lane": "unresolved_actionable_travel", "intent": "leave_or_pursuit"},
+        )
+    return None
+
+
+def looks_like_explicit_world_object_action(text: str | None) -> bool:
+    """True when the player clearly inspects, reads, or looks at a world target.
+
+    Information-seeking questions stay conversational even if they mention an object.
+    """
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if _has_information_seeking_question(raw):
+        return False
+    return bool(_RE_EXPLICIT_WORLD_OBJECT_ACTION.search(raw))
+
+
+_RE_SCENE_TRAVEL_DESTINATION = re.compile(
+    r"\b(?:walk|walks|walking|run|runs|running)\s+(?:off\s+)?(?:to|toward|towards|through|into)\b"
+    r"|\b(?:head|heads|heading|go|goes|going|leave|leaves|leaving|travel|travels|traveling|travelling|"
+    r"return|returns|returning|depart|departs|departing)\s+"
+    r"(?:to|for|through|toward|towards|into|back)\b"
+    r"|\b(?:leave|leaves|leaving)\s+through\b"
+    r"|\bi(?:'m| am)\s+leaving\b",
+    re.IGNORECASE,
+)
+_RE_LOCAL_PHYSICAL_MOVEMENT = re.compile(
+    r"\b(?:walk|walks|walking|step|steps|stepping|pace|paces|pacing|move|moves|moving)\s+"
+    r"(?:a\s+few\s+(?:steps|paces)|few\s+(?:steps|paces)|along|beside|closer)\b"
+    r"|\b(?:step|steps|stepping)\s+closer\b"
+    r"|\b(?:pace|paces|pacing)\b",
+    re.IGNORECASE,
+)
+_RE_COMPATIBLE_PERCEPTION_OR_INSPECT = re.compile(
+    r"\b(?:look\s+around|scan|survey|glance\s+around|"
+    r"inspect|examine|study|search|investigate|read|"
+    r"look\s+(?:at|behind|under|in|for|toward|towards)|"
+    r"glance(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards))\b",
+    re.IGNORECASE,
+)
+
+
+def looks_like_scene_travel_destination_intent(text: str | None) -> bool:
+    """True when wording asks for destination/exit travel, not local repositioning."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    return bool(_RE_SCENE_TRAVEL_DESTINATION.search(raw))
+
+
+def looks_like_local_physical_movement(text: str | None) -> bool:
+    """True for in-scene walking/pacing/approach that does not name travel."""
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if _has_information_seeking_question(raw):
+        return False
+    if looks_like_scene_travel_destination_intent(raw):
+        return False
+    return bool(_RE_LOCAL_PHYSICAL_MOVEMENT.search(raw))
+
+
+def looks_like_explicit_physical_or_perception_action(text: str | None) -> bool:
+    """Local movement or listen/perception that should not fall back to untyped GPT."""
+    raw = str(text or "").strip()
+    if not raw or _has_information_seeking_question(raw):
+        return False
+    from game.human_adjacent_focus import looks_like_listen_perception_intent
+
+    if looks_like_scene_travel_destination_intent(raw):
+        return False
+    if looks_like_listen_perception_intent(raw):
+        return True
+    return looks_like_local_physical_movement(raw)
+
+
+def recover_actionable_explicit_world_action(
+    text: str | None,
+    scene_envelope: Optional[Dict[str, Any]] = None,
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    segmented_turn: Optional[Dict[str, Any]] = None,
+) -> Optional[Dict[str, Any]]:
+    """Yield stay/leave/pursuit or an explicit inspect/read/look-at so dialogue-first cannot recapture it."""
+    stay_leave = recover_actionable_stay_leave_or_pursuit(
+        text,
+        scene_envelope,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn,
+    )
+    if stay_leave is not None:
+        return stay_leave
+    raw = str(text or "").strip()
+    if not raw:
+        return None
+    physical_or_perception = looks_like_explicit_physical_or_perception_action(raw)
+    if not looks_like_explicit_world_object_action(raw) and not physical_or_perception:
+        return None
+    act = parse_freeform_to_action(
+        raw,
+        scene_envelope,
+        session=session,
+        world=world,
+        segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+    )
+    if not isinstance(act, dict):
+        return None
+    kind = str(act.get("type") or "").strip().lower()
+    meta = act.get("metadata") if isinstance(act.get("metadata"), dict) else {}
+    lane = str(meta.get("parser_lane") or "")
+    if kind == "investigate":
+        return act
+    if kind == "observe" and (
+        looks_like_explicit_world_object_action(raw) or lane == "human_adjacent_observe"
+    ):
+        return act
+    if kind == "custom" and lane == "local_physical_movement":
+        return act
+    return None
+
+
 def _match_target_to_interactable(target_slug: str, interactables: List[Dict[str, Any]]) -> Optional[str]:
     """Match target slug to an interactable id. Returns interactable id or None."""
     if not target_slug or not interactables:
@@ -459,6 +944,27 @@ def _scene_grounding_terms(scene: Dict[str, Any]) -> List[Dict[str, str]]:
 
 def _ground_scene_investigation_target(target_text: str, scene: Dict[str, Any]) -> Optional[Dict[str, str]]:
     """Resolve an extracted target against scene-authored surfaces only."""
+    from game.referenced_surface import (
+        AUTHORITY_AUTHORED_INTERACTABLE,
+        AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+        classify_referenced_surface,
+    )
+
+    classified = classify_referenced_surface("", scene, explicit_target=target_text)
+    authority = str(classified.get("authority") or "")
+    if authority == AUTHORITY_AUTHORED_INTERACTABLE and classified.get("interactable_id"):
+        return {
+            "kind": "interactable",
+            "text": str(classified.get("label") or classified.get("target") or ""),
+            "target_id": str(classified.get("interactable_id") or ""),
+        }
+    if authority == AUTHORITY_AUTHORED_VISIBLE_FEATURE and classified.get("visible_fact"):
+        fact = str(classified.get("visible_fact") or "")
+        return {
+            "kind": "visible_fact",
+            "text": fact,
+            "target_id": slugify(fact)[:40] or "visible_fact",
+        }
     target_slug = slugify(target_text or "")
     if not target_slug:
         return None
@@ -555,6 +1061,54 @@ def _recover_mixed_scene_object_investigation(
             "mixed_turn_detail_question": question,
             "adjudication_or_detail_question_text": question,
             "recovered_action_clause": action_clause,
+            "scene_grounding_kind": grounding.get("kind"),
+            "scene_grounding_text": grounding.get("text"),
+        },
+    )
+
+
+def recover_interactable_content_question(text: str, scene: Dict[str, Any] | None) -> Optional[Dict[str, Any]]:
+    """Route 'what is posted on the notice' style questions to an authored interactable."""
+    raw = str(text or "").strip()
+    if not raw or not isinstance(scene, dict):
+        return None
+    inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else scene
+    if not isinstance(inner, dict) or not (inner.get("interactables") or []):
+        return None
+    probe = raw
+    if ":" in probe:
+        probe = probe.split(":")[-1].strip() or raw
+    target = ""
+    for pat in _INTERACTABLE_CONTENT_QUESTION_RES:
+        m = pat.search(probe)
+        if not m:
+            continue
+        target = _clean_clause(m.group("target"))
+        if target:
+            break
+    if not target:
+        return None
+    target = re.sub(r"\b(notice\s+board|board|notice)\b.*$", lambda m: m.group(1), target, flags=re.IGNORECASE)
+    grounding = _ground_scene_investigation_target(target, inner)
+    if grounding is None or str(grounding.get("kind") or "") not in {"interactable", "discoverable_clue", "visible_fact"}:
+        return None
+    target_id = str(grounding.get("target_id") or "").strip()
+    if str(grounding.get("kind") or "") != "interactable":
+        matched = _match_target_to_interactable(slugify(target), inner.get("interactables") or [])
+        if matched:
+            target_id = matched
+        else:
+            return None
+    if not target_id:
+        return None
+    return _build_action(
+        "investigate",
+        raw,
+        raw,
+        target_id=target_id,
+        action_id=target_id,
+        metadata={
+            "parser_lane": "interactable_content_question",
             "scene_grounding_kind": grounding.get("kind"),
             "scene_grounding_text": grounding.get("text"),
         },
@@ -1083,6 +1637,19 @@ def parse_freeform_to_action(
     if mixed_investigation is not None:
         return mixed_investigation
 
+    interactable_question = recover_interactable_content_question(t, scene)
+    if interactable_question is not None:
+        return interactable_question
+
+    block_travel = _explicit_stay_or_travel_negation(low)
+    if looks_like_explicit_stay_intent(t) and not _has_information_seeking_question(t):
+        return _build_action(
+            "observe",
+            t,
+            t,
+            metadata={"parser_lane": "explicit_stay", "intent": "stay"},
+        )
+
     # ---- 0. Qualified explicit pursuit (fail-closed) + bare follow-the-lead (session) ----
     q_frag = _extract_qualified_pursuit_target_text(t)
     if q_frag is not None and not isinstance(session, dict):
@@ -1109,7 +1676,12 @@ def parse_freeform_to_action(
     # ---- 0c. Human-adjacent non-social (listen / approach+listen / group watch) → observe ----
     from game.human_adjacent_focus import classify_human_adjacent_intent_family, is_physical_clue_inspection_intent
 
-    if not is_physical_clue_inspection_intent(t):
+    travel_dest_intent = looks_like_scene_travel_destination_intent(t)
+    if (
+        not travel_dest_intent
+        and not is_physical_clue_inspection_intent(t)
+        and not _has_information_seeking_question(t)
+    ):
         ha_fam = classify_human_adjacent_intent_family(t)
         if ha_fam != "none":
             return _build_action(
@@ -1122,37 +1694,89 @@ def parse_freeform_to_action(
                 },
             )
 
-    # ---- 0d. Embedded named-place movement ("… entering the Stone Boar") before generic travel/follow ----
-    from game.scene_destination_binding import try_embedded_named_place_scene_action
+    # ---- 0c2. Local physical movement (not scene-transition travel) → existing custom kind ----
+    if looks_like_local_physical_movement(t) and not _RE_COMPATIBLE_PERCEPTION_OR_INSPECT.search(t):
+        return _build_action(
+            "custom",
+            t,
+            t,
+            metadata={
+                "parser_lane": "local_physical_movement",
+                "intent": "local_movement",
+            },
+        )
 
-    emb = try_embedded_named_place_scene_action(t, scene)
-    if emb is not None:
-        return emb
+    # ---- 0d. Embedded named-place movement ("… entering the Stone Boar") before generic travel/follow ----
+    from game.scene_destination_binding import (
+        resolve_authored_exit_from_player_travel,
+        try_embedded_named_place_scene_action,
+    )
+
+    if not block_travel:
+        emb = try_embedded_named_place_scene_action(t, scene)
+        if emb is not None:
+            return emb
 
     # ---- 1. Travel / scene_transition ----
-    for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):
-        if low.startswith(prefix):
-            dest_hint = t[len(prefix) :].strip()
-            target_id = _match_exit(dest_hint, exits) or _match_exit(t, exits)
+    travel_text = t
+    travel_low = low
+    if not block_travel:
+        stripped = _strip_speaker_commitment_prefix(t)
+        if stripped:
+            travel_text = stripped
+            travel_low = stripped.lower()
+        authored_exit_target = resolve_authored_exit_from_player_travel(t, exits)
+        travel_meta = None
+        if looks_like_explicit_leave_or_pursuit_intent(t):
+            travel_meta = {"parser_lane": "actionable_stay_leave_or_pursuit"}
+        elif authored_exit_target:
+            travel_meta = {"parser_lane": "authored_exit_resolution"}
+        for prefix in sorted(TRAVEL_PREFIXES, key=len, reverse=True):
+            if travel_low.startswith(prefix):
+                dest_hint = travel_text[len(prefix) :].strip()
+                target_id = (
+                    authored_exit_target
+                    or _declared_unique_exit_target_for_dest(dest_hint, exits)
+                    or _declared_unique_exit_target_for_dest(travel_text, exits)
+                    or _declared_unique_exit_target_for_dest(t, exits)
+                    or _match_follow_pursuit_exit(t, exits, scene=scene, session=session)
+                )
+                return _build_action(
+                    "scene_transition" if target_id else "travel",
+                    t,
+                    t,
+                    target_scene_id=target_id,
+                    metadata=travel_meta,
+                )
+        if authored_exit_target:
+            return _build_action(
+                "scene_transition",
+                t,
+                t,
+                target_scene_id=authored_exit_target,
+                metadata=travel_meta,
+            )
+        if travel_dest_intent or looks_like_scene_travel_destination_intent(t):
+            return _build_action(
+                "scene_transition" if authored_exit_target else "travel",
+                t,
+                t,
+                target_scene_id=authored_exit_target,
+                metadata=travel_meta,
+            )
+        if travel_low in TRAVEL_BARE:
+            target_id = _match_exit(travel_text, exits) or _match_exit(t, exits)
             return _build_action(
                 "scene_transition" if target_id else "travel",
                 t,
                 t,
                 target_scene_id=target_id,
             )
-    if low in TRAVEL_BARE:
-        target_id = _match_exit(t, exits)
-        return _build_action(
-            "scene_transition" if target_id else "travel",
-            t,
-            t,
-            target_scene_id=target_id,
-        )
-    # Direction-only: "north", "south", etc. when no prefix
-    if low in ("north", "south", "east", "west") and exits:
-        target_id = _match_exit(low, exits)
-        if target_id:
-            return _build_action("scene_transition", t, t, target_scene_id=target_id)
+        # Direction-only: "north", "south", etc. when no prefix
+        if travel_low in ("north", "south", "east", "west") and exits:
+            target_id = _match_exit(travel_low, exits)
+            if target_id:
+                return _build_action("scene_transition", t, t, target_scene_id=target_id)
 
     # ---- 2. Attack (API routes to combat when in_combat; otherwise falls back to GPT) ----
     for pattern, action_type, extracts in ATTACK_PATTERNS:
@@ -1194,26 +1818,52 @@ def parse_freeform_to_action(
     for pattern, action_type, extracts in INVESTIGATE_PATTERNS:
         m = re.search(pattern, low)
         if m:
+            from game.referenced_surface import (
+                AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+                AUTHORITY_AUTHORED_HIDDEN,
+                AUTHORITY_AUTHORED_INTERACTABLE,
+                AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+                AUTHORITY_UNSUPPORTED,
+                classify_referenced_surface,
+                metadata_from_classification,
+            )
+
             target = None
             if extracts and m.lastindex and m.lastindex >= 2:
                 target = m.group(2).strip() if m.lastindex >= 2 else (m.group(1) if m.lastindex >= 1 else None)
             elif extracts and m.lastindex:
                 target = m.group(1).strip() if m.lastindex >= 1 else None
+            classified = classify_referenced_surface(
+                t,
+                scene,
+                world=world,
+                explicit_target=target,
+            )
             target_slug = slugify(target) if target else None
-            matched_id = _match_target_to_interactable(target_slug, interactables) if target_slug else None
+            matched_id = str(classified.get("interactable_id") or "").strip() or None
+            if not matched_id and str(classified.get("authority") or "") not in {
+                AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+                AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+                AUTHORITY_AUTHORED_HIDDEN,
+                AUTHORITY_UNSUPPORTED,
+                AUTHORITY_AUTHORED_INTERACTABLE,
+            }:
+                matched_id = _match_target_to_interactable(target_slug, interactables) if target_slug else None
             aid = matched_id or (slugify(t) or "investigate")[:40]
-            metadata = None
+            metadata = metadata_from_classification(classified)
             if isinstance(mixed_detail_question, str) and mixed_detail_question.strip() and target:
                 grounding = _ground_scene_investigation_target(target, scene)
                 if grounding is not None:
-                    metadata = {
-                        "parser_lane": "mixed_scene_object_investigation",
-                        "mixed_turn_detail_question": mixed_detail_question.strip(),
-                        "adjudication_or_detail_question_text": mixed_detail_question.strip(),
-                        "recovered_action_clause": _clean_clause(t) or t,
-                        "scene_grounding_kind": grounding.get("kind"),
-                        "scene_grounding_text": grounding.get("text"),
-                    }
+                    metadata.update(
+                        {
+                            "parser_lane": "mixed_scene_object_investigation",
+                            "mixed_turn_detail_question": mixed_detail_question.strip(),
+                            "adjudication_or_detail_question_text": mixed_detail_question.strip(),
+                            "recovered_action_clause": _clean_clause(t) or t,
+                            "scene_grounding_kind": grounding.get("kind"),
+                            "scene_grounding_text": grounding.get("text"),
+                        }
+                    )
             return _build_action(
                 "investigate",
                 t,
@@ -1258,31 +1908,37 @@ def parse_freeform_to_action(
     # ---- 6. Legacy fallbacks from original parse_intent ----
     # Use word-boundary "follow" so "follows" (third person) does not arm this path; never
     # `_match_exit("follow", …)` on unrelated prose — that can latch onto "Follow the … rumor" exits.
-    m_follow = re.search(r"\bfollow\b", low)
-    if m_follow and exits:
-        tail = low[m_follow.end() :].strip()
-        target_id = _match_exit(tail, exits)
-        if not target_id and re.match(r"^\s*the\s+", tail):
-            target_id = _match_exit(tail[4:].lstrip(), exits)
-        if not target_id and re.match(r"^\s*follow\s*[\s\.,;?!]*$", low):
-            target_id = _match_exit("follow", exits)
-        if target_id:
+    if not block_travel:
+        follow_target = _match_follow_pursuit_exit(t, exits, scene=scene, session=session)
+        if follow_target:
             return _build_action(
                 "scene_transition",
                 t,
                 t,
-                target_scene_id=target_id,
+                target_scene_id=follow_target,
                 metadata={"parser_lane": "legacy_follow_exit_match"},
             )
-        return _build_action("interact", t, t, metadata={"intent": "follow_target"})
-    if "leave" in low or "exit" in low:
-        target_id = _match_exit(low, exits)
-        return _build_action(
-            "scene_transition" if target_id else "travel",
-            t,
-            t,
-            target_scene_id=target_id,
-        )
+        m_follow = re.search(r"\bfollow\b", low)
+        if m_follow and exits and not _RE_FOLLOW_UP_PHRASAL.search(low):
+            if re.match(r"^\s*follow\s*[\s\.,;?!]*$", low):
+                target_id = _match_exit("follow", exits)
+                if target_id:
+                    return _build_action(
+                        "scene_transition",
+                        t,
+                        t,
+                        target_scene_id=target_id,
+                        metadata={"parser_lane": "legacy_follow_exit_match"},
+                    )
+            return _build_action("interact", t, t, metadata={"intent": "follow_target"})
+        if "leave" in low or "exit" in low:
+            target_id = _match_exit(low, exits)
+            return _build_action(
+                "scene_transition" if target_id else "travel",
+                t,
+                t,
+                target_scene_id=target_id,
+            )
 
     return None
 
@@ -1426,7 +2082,11 @@ def _resolve_declared_travel_target_scene_id(
     known_scene_ids: set[str],
 ) -> Optional[str]:
     """Resolve affirmed destination: exits first (strict then unique fuzzy), then unique inference, then phrase→id."""
-    tid = _strict_unique_exit_destination(dest, exits)
+    from game.scene_destination_binding import resolve_place_phrase_to_exit_target
+
+    tid = resolve_place_phrase_to_exit_target(dest, exits, known_scene_ids)
+    if not tid:
+        tid = _strict_unique_exit_destination(dest, exits)
     if not tid:
         tid = _declared_unique_exit_target_for_dest(dest, exits)
     if not tid:
@@ -1520,6 +2180,14 @@ _DECLARED_TRAVEL_WITH_DEST_PATTERNS: Tuple[Tuple[re.Pattern[str], str], ...] = t
         (
             r"\b(?:goes|going)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "going_to_Y",
+        ),
+        (
+            r"\b(?:head|heads|heading)\s+back\s+(?:to|towards?)\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
+            "head_back_to_Y",
+        ),
+        (
+            r"\b(?:go|goes|going)\s+back\s+(?:to|towards?)\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
+            "go_back_to_Y",
         ),
         (
             r"\b(?:head|heads|heading)\s+(?:off\s+)?to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",

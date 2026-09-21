@@ -50,17 +50,7 @@ def _collect_def_and_import_hits(tree: ast.AST) -> frozenset[str]:
 # Snapshot: every ``def`` / import alias in ``game/final_emission_*.py`` whose name contains a
 # forbidden substring. Shrink this set as debt is retired; new hits fail the test until listed.
 _EXPECTED_FORBIDDEN_SUBSTRING_SYMBOLS_BY_MODULE: dict[str, frozenset[str]] = {
-    "final_emission_gate.py": frozenset(),
-    "final_emission_repairs.py": frozenset(),
-    "final_emission_boundary_contract.py": frozenset(),
-    "final_emission_contract.py": frozenset(),
-    "final_emission_meta.py": frozenset(),
-    "final_emission_opening_fallback.py": frozenset(),
-    "final_emission_replay_projection.py": frozenset(),
-    "final_emission_text.py": frozenset(),
-    "final_emission_validators.py": frozenset(),
-    "final_emission_sealed_fallback.py": frozenset(),
-    "final_emission_visibility_fallback.py": frozenset(),
+    path.name: frozenset() for path in _GAME.glob("final_emission*.py")
 }
 
 
@@ -75,9 +65,7 @@ def test_final_emission_modules_forbidden_substring_snapshot() -> None:
     paths = sorted(_GAME.glob("final_emission*.py"))
     assert paths, "expected game/final_emission*.py"
     by_name = {p.name: p for p in paths}
-    assert set(by_name) == set(_EXPECTED_FORBIDDEN_SUBSTRING_SYMBOLS_BY_MODULE), (
-        "Add/remove game/final_emission*.py entries in _EXPECTED_FORBIDDEN_SUBSTRING_SYMBOLS_BY_MODULE"
-    )
+    assert set(by_name) == set(_EXPECTED_FORBIDDEN_SUBSTRING_SYMBOLS_BY_MODULE)
     for name, path in by_name.items():
         tree = ast.parse(path.read_text(encoding="utf-8"))
         found = _collect_def_and_import_hits(tree)

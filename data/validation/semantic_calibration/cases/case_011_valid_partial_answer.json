@@ -1,0 +1,16 @@
+{
+  "case_id": "case_011_valid_partial_answer",
+  "category": "positive.valid_partial_answer",
+  "player_input": "Who ordered the strike on the patrol?",
+  "prior_context": "The player has partial leads but no confirmed mastermind.",
+  "gm_response": "No one can name the order-giver yet, but the dock factor paid the alley crew before the strike.",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "The response gives a bounded partial answer and clearly marks the limit of current knowledge.",
+  "provenance": {"kind": "manually_authored_positive_control"},
+  "synthetic": true,
+  "action_type": "question"
+}

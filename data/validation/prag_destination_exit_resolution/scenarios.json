@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.prag_destination_exit_resolution.r1",
+  "description": "PR-AG continuation of R2-MT01-AF. Original PR-AF prompts are preserved; extra turns continue after natural return.",
+  "scenarios": [
+    {
+      "case_id": "R2-MT01-AG",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry_return_continuation",
+      "initial_objective": "Learn the missing-patrol route, pursue it to old_milestone, investigate, return by natural language, then act again at the gate.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate notice board, notice_patrol_route clue, old_milestone destination, authored return exit",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "That missing patrol warning matters. What exactly does it say about where they were last seen?",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "I don't want to rush the northwest track yet. Who last spoke to that patrol before they left?",
+        "Earlier the notice mentioned a mud track. Is that still the official last position?",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "After I start that way, I pause and check whether anything about the patrol warning has changed.",
+        "I look around.",
+        "I examine the milestone.",
+        "I look for signs of the patrol.",
+        "I'll head back to the gate.",
+        "I look around the gate district again."
+      ]
+    }
+  ]
+}

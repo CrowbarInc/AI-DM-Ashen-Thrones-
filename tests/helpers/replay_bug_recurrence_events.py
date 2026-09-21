@@ -47,6 +47,7 @@ GOLDEN_REPLAY_ARTIFACT_SOURCE_PREFIX = "artifacts/golden_replay/"
 DEFAULT_DISALLOWED_ARTIFACT_SOURCE_SUBSTRINGS: tuple[str, ...] = (
     "codex_pytest_tmp",
     "pytest_tmp",
+    "development/tmp",
     "/tmp/",
     "\\tmp\\",
 )
@@ -250,6 +251,9 @@ def is_commit_worthy_recurrence_event(
         return False, "session_event_source"
     if event_source not in active_policy.allowed_event_sources:
         return False, f"unsupported_event_source:{event_source}"
+
+    if source.get("protected_assertion_bridge") is True:
+        return True, "protected_replay_assertion_bridge"
 
     artifact_source = _normalized_artifact_source(source.get("artifact_source"))
     artifact_lower = artifact_source.lower()
@@ -955,6 +959,8 @@ def _row_recurrence_event_metadata(
     row_test_node_id = _non_empty_metadata_value(row.get("test_node_id"))
     if row_test_node_id is not None:
         event_metadata["test_node_id"] = row_test_node_id
+    if _non_empty_metadata_value(row.get("failed_invariant")) is not None:
+        event_metadata["protected_assertion_bridge"] = True
     return event_metadata
 
 

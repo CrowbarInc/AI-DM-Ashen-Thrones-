@@ -1,0 +1,55 @@
+{
+  "schema_version": "rc21-runtime-snapshot.v1",
+  "classification": "CONFIRMED_BY_CURRENT_CODE",
+  "fixture": {
+    "scene_id": "frontier_gate",
+    "loader": "game.storage.load_scene",
+    "speaker_npc_id": "tavern_runner",
+    "narration": "Check with Lirael—she posts the notices. You'll find Lirael near the notice board."
+  },
+  "extraction_gates": {
+    "crier_id_from_addressables_or_active_entities": null,
+    "discoverable_crier_names": [],
+    "current_canon_discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ]
+  },
+  "extracted_lead": {
+    "extraction_source": "scene_anchor:notice_board",
+    "kind": "location",
+    "lead_id": "lead_frontier_gate_notice_board",
+    "label": "Check the notice board",
+    "target_npc_id": null,
+    "target_scene_id": null,
+    "rumor_text": "Check the notice board"
+  },
+  "pending_leads": [
+    {
+      "authoritative_lead_id": "lead_frontier_gate_notice_board",
+      "clue_id": "lead_frontier_gate_notice_board",
+      "leads_to_rumor": "Check the notice board",
+      "text": "Check the notice board"
+    }
+  ],
+  "clue_knowledge_ids": [
+    "narration_ctx_frontier_gate_notice_board",
+    "lead_frontier_gate_notice_board"
+  ],
+  "registry_ids": [
+    "narration_ctx_frontier_gate_notice_board",
+    "lead_frontier_gate_notice_board"
+  ],
+  "absent": [
+    "pending row with leads_to_npc=emergent_town_crier",
+    "registry related_npc_ids containing emergent_town_crier",
+    "Lirael as a bound world/scene entity"
+  ],
+  "notes": [
+    "Lirael is heard in narration and then dropped as an entity.",
+    "The notice-board landmark is what becomes actionable.",
+    "Repeat application is treated as a duplicate clue, not a second NPC pending row."
+  ]
+}

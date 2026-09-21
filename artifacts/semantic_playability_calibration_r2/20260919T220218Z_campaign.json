@@ -1,0 +1,84 @@
+{
+  "report_version": 1,
+  "generated_at": "2026-09-19T22:02:18.752432+00:00",
+  "stamp": "20260919T220218Z",
+  "corpus_id": "ashen_thrones.semantic_playability_calibration.r2",
+  "upstream_dependent_run_gate": {
+    "upstream_runtime_healthy": true,
+    "preflight_available": true,
+    "startup_run_valid": true,
+    "manual_testing_blocked": false,
+    "block_reason": null,
+    "preflight_health_class": "healthy",
+    "preflight_checked_at": "2026-09-19T22:02:17Z"
+  },
+  "cases": [
+    {
+      "case_id": "R2-MT03",
+      "scenario": "runner_rumor_decline_path",
+      "family": "multi_turn_arc",
+      "turn_count": 7,
+      "completed": true,
+      "semantic_results": [
+        "PASS",
+        "FAIL",
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "PASS",
+        "FAIL"
+      ],
+      "artifact": "artifacts/semantic_playability_calibration_r2/runs/20260919T220218Z_R2-MT03/run.json"
+    },
+    {
+      "case_id": "R2-MT04",
+      "scenario": "lirael_redirect_lead_policy",
+      "family": "multi_turn_arc",
+      "turn_count": 7,
+      "completed": true,
+      "semantic_results": [
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "FAIL",
+        "PASS",
+        "PASS",
+        "FAIL"
+      ],
+      "artifact": "artifacts/semantic_playability_calibration_r2/runs/20260919T220218Z_R2-MT04/run.json"
+    },
+    {
+      "case_id": "R2-MT05",
+      "scenario": "unusual_and_impossible_actions",
+      "family": "multi_turn_arc",
+      "turn_count": 7,
+      "completed": true,
+      "semantic_results": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "artifact": "artifacts/semantic_playability_calibration_r2/runs/20260919T220218Z_R2-MT05/run.json"
+    },
+    {
+      "case_id": "R2-MT06",
+      "scenario": "hidden_fact_probe",
+      "family": "multi_turn_arc",
+      "turn_count": 6,
+      "completed": true,
+      "semantic_results": [
+        "PASS",
+        "FAIL",
+        "FAIL",
+        "FAIL",
+        "PASS",
+        "FAIL"
+      ],
+      "artifact": "artifacts/semantic_playability_calibration_r2/runs/20260919T220218Z_R2-MT06/run.json"
+    }
+  ]
+}

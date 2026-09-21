@@ -61,6 +61,7 @@ from game.storage import (
     save_combat,
     load_conditions,
     load_active_scene,
+    load_scene,
     get_effective_scene,
     save_scene,
     activate_scene,
@@ -157,7 +158,13 @@ from game.exploration import (
     resolve_exploration_action,
 )
 from game.adjudication import neutralize_engine_voice_for_player, resolve_adjudication_query
+from game.narration_state_consistency import (
+    apply_destination_arrival_realization_to_gm,
+    apply_stay_leave_narration_agreement_to_gm,
+)
+from game.perception_grounding import apply_perception_non_invention_to_gm
 from game.social import (
+    apply_authored_knowledge_realization_to_gm,
     apply_social_lead_discussion_tracking,
     build_scene_npc_player_snapshot,
     parse_social_intent,
@@ -192,6 +199,7 @@ from game.intent_parser import (
     maybe_build_declared_travel_action,
     maybe_build_passive_interruption_wait_action,
     parse_intent,
+    recover_actionable_explicit_world_action,
     segment_mixed_player_turn,
 )
 from game.prompt_context import build_response_policy
@@ -1618,7 +1626,7 @@ def _apply_authoritative_resolution_state_mutation(
                     sc.pop(k, None)
                 resolution['state_changes'] = sc
         else:
-            print("[ENGINE] Scene transition →", target_scene_id)
+            print("[ENGINE] Scene transition ->", target_scene_id)
             scene, session, combat = _apply_authoritative_scene_transition(target_scene_id, scene, session, combat, world)
             apply_follow_lead_commitment_after_resolved_scene_transition(
                 session,
@@ -1686,8 +1694,26 @@ def _apply_authoritative_resolution_state_mutation(
 
     if resolution.get('kind') == 'investigate':
         # Skip clue discovery when a skill check was run and failed.
-        if not (resolution.get('skill_check') and resolution.get('success') is False):
-            newly_revealed = process_investigation_discovery(scene, session, list_scene_ids=list_scene_ids, world=world)
+        # Also skip when a specific inspect target is classified as non-inspectable.
+        _inv_md = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+        _skip_unrelated_clue = _inv_md.get("skip_unrelated_clue_discovery") is True
+        if (
+            not _skip_unrelated_clue
+            and not (resolution.get('skill_check') and resolution.get('success') is False)
+        ):
+            discovery_scene = scene
+            try:
+                canon = load_scene(str(scene.get("scene", {}).get("id") or ""))
+                canon_clues = list((canon.get("scene") or {}).get("discoverable_clues") or [])
+                discovery_scene = {
+                    **scene,
+                    "scene": {**(scene.get("scene") or {}), "discoverable_clues": canon_clues},
+                }
+            except Exception:
+                discovery_scene = scene
+            newly_revealed = process_investigation_discovery(
+                discovery_scene, session, list_scene_ids=list_scene_ids, world=world
+            )
             for rec in newly_revealed:
                 txt = rec.get('text') if isinstance(rec, dict) else None
                 if isinstance(txt, str) and txt.strip() and txt.strip() not in authoritative_clue_updates:
@@ -3085,6 +3111,34 @@ def _build_gpt_narration_from_authoritative_state(
         discovered_clues=known_clues,
         repair_terminal_player_facing_if_needed=_repair_terminal_player_facing_if_needed,
     )
+    gm = apply_authored_knowledge_realization_to_gm(
+        gm,
+        player_text=user_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=str(((scene or {}).get("scene") or {}).get("id") or "").strip(),
+    )
+    gm = apply_stay_leave_narration_agreement_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        origin_scene_id=str((resolution or {}).get("originating_scene_id") or ""),
+    )
+    gm = apply_destination_arrival_realization_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=user_text,
+    )
+    gm = apply_perception_non_invention_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=user_text,
+    )
     _attach_scene_opening_curated_facts_to_gm(
         gm,
         prompt_payload=prompt_payload if isinstance(prompt_payload, dict) else None,
@@ -4194,6 +4248,35 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         include_resolution_in_sanitizer=True,
         latency_sink=latency_ms,
     )
+    gm = apply_authored_knowledge_realization_to_gm(
+        gm,
+        player_text=fallback_user_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=str((scene.get("scene") or {}).get("id") or "").strip(),
+        extra_facts=authoritative_clue_updates,
+    )
+    gm = apply_stay_leave_narration_agreement_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        origin_scene_id=str((resolution or {}).get("originating_scene_id") or ""),
+    )
+    gm = apply_destination_arrival_realization_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=fallback_user_text,
+    )
+    gm = apply_perception_non_invention_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=fallback_user_text,
+    )
     for _rt in _narr_consistency.get("repaired_discovered_clue_texts") or []:
         if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
             authoritative_clue_updates.append(_rt.strip())
@@ -4470,6 +4553,35 @@ def _complete_opening_turn_persistence_like_chat(
         scene=scene,
         include_resolution_in_sanitizer=_include_res_chat,
         latency_sink=latency_ms,
+    )
+    gm = apply_authored_knowledge_realization_to_gm(
+        gm,
+        player_text=player_text_for_eval,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        scene_id=str((scene.get("scene") or {}).get("id") or "").strip(),
+        extra_facts=authoritative_clue_updates,
+    )
+    gm = apply_stay_leave_narration_agreement_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        origin_scene_id=str((resolution or {}).get("originating_scene_id") or ""),
+    )
+    gm = apply_destination_arrival_realization_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=player_text_for_eval,
+    )
+    gm = apply_perception_non_invention_to_gm(
+        gm,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+        player_text=player_text_for_eval,
     )
     canonical_gm = gm
     if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip().lower() == "scene_opening":
@@ -5130,6 +5242,14 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                 scene,
                 session,
                 world,
+                segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
+            )
+        if parsed is None and not qualified_pursuit_shaped:
+            parsed = recover_actionable_explicit_world_action(
+                classification_text,
+                scene,
+                session=session,
+                world=world,
                 segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
             )
         if parsed is None and not qualified_pursuit_shaped:

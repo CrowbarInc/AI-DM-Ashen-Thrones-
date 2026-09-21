@@ -965,8 +965,13 @@ _FALLBACK_META_VOICE_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"\bthat\s+depends\s+on\s+the\s+roll\b", re.IGNORECASE),
     re.compile(r"\b(?:we|i)\s+don'?t\s+know\s+yet\s+(?:whether|if|who|what|where|why|how)\b", re.IGNORECASE),
 )
+# Knowledge-limit hedges are speaker-bounded ignorance, not fabricated authority.
+# "from what I know" / "all I know" / "what I know" must not match the claim pattern.
 _FALLBACK_FABRICATED_AUTHORITY_PATTERNS: tuple[re.Pattern[str], ...] = (
-    re.compile(r"\bi know\b", re.IGNORECASE),
+    re.compile(
+        r"(?<!\bwhat )(?<!\ball )(?<!\bfar as )(?<!\blittle )\bi know\b",
+        re.IGNORECASE,
+    ),
     re.compile(r"\b(?:the )?record(?:s)? show(?:s)?\b", re.IGNORECASE),
     re.compile(r"\bcanon says\b", re.IGNORECASE),
     re.compile(r"\b(?:the )?(?:system|tool|model) says\b", re.IGNORECASE),

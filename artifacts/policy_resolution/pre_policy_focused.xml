@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="7.170" timestamp="2026-09-19T15:40:59.431221-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_final_emission_meta" name="test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only" time="5.375"><failure message="AssertionError: [&quot;tests\\test_fallback_incidence_report.py:150:'compatibility_local_opening_deterministic'&quot;]&#10;assert [&quot;tests\\test...terministic'&quot;] == []&#10;  &#10;  Left contains one more item: &quot;tests\\test_fallback_incidence_report.py:150:'compatibility_local_opening_deterministic'&quot;&#10;  Use -v to get more diff">tests\test_final_emission_meta.py:2202: in test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only
+    assert literal_offenders == [], literal_offenders
+E   AssertionError: ["tests\\test_fallback_incidence_report.py:150:'compatibility_local_opening_deterministic'"]
+E   assert ["tests\\test...terministic'"] == []
+E     
+E     Left contains one more item: "tests\\test_fallback_incidence_report.py:150:'compatibility_local_opening_deterministic'"
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_social_destination_redirect_leads" name="test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry" time="0.005"><failure message="assert 0 == 1&#10; +  where 0 = len([])">tests\test_social_destination_redirect_leads.py:65: in test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry
+    assert len(npc_pending) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])</failure></testcase><testcase classname="tests.test_social_destination_redirect_leads" name="test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows" time="0.004"><failure message="assert 0 == 1&#10; +  where 0 = len([])">tests\test_social_destination_redirect_leads.py:105: in test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows
+    assert len(npc_pending) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])</failure></testcase><testcase classname="tests.test_social_destination_redirect_leads" name="test_destination_lead_distinct_from_existing_milestone_pending" time="0.003"><failure message="assert 0 == 1&#10; +  where 0 = len([])">tests\test_social_destination_redirect_leads.py:142: in test_destination_lead_distinct_from_existing_milestone_pending
+    assert len(npc) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])</failure></testcase></testsuite></testsuites>

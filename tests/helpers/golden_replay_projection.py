@@ -80,8 +80,6 @@ from game.semantic_mutation_attribution import (
     semantic_mutation_write_site_label,
 )
 
-build_runtime_lineage_events_from_fem = build_fem_runtime_lineage_events
-
 from tests.helpers.transcript_runner import compact_snapshot_summary
 
 from tests.helpers.golden_replay_projection_extractors import (

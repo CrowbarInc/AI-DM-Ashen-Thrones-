@@ -135,9 +135,10 @@ def test_ck_fi_parse_from_bu_csv():
         pytest.skip("BU CSV not present")
     fi = parse_ck_fi_metrics(BU_CSV, repo_root=REPO_ROOT)
     assert fi["available"] is True
-    assert fi["top5_share_pct"] == pytest.approx(20.79, abs=0.01)
-    assert fi["top10_share_pct"] == pytest.approx(32.76, abs=0.01)
-    assert fi["files_above_threshold"] == 39
+    # Current BU inventory snapshot; CI-2 establishes this CSV as the FI authority.
+    assert fi["top5_share_pct"] == pytest.approx(18.30, abs=0.01)
+    assert fi["top10_share_pct"] == pytest.approx(30.70, abs=0.01)
+    assert fi["files_above_threshold"] == 40
     assert "FI top5=" in fi["notes_string"]
 
 

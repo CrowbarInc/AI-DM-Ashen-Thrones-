@@ -26,6 +26,7 @@ POPULATION_PREFIXES: tuple[str, ...] = ("game/", "tests/", "scripts/")
 EXCLUDED_PREFIXES: tuple[str, ...] = (
     "artifacts/",
     "codex_pytest_tmp/",
+    "development/tmp/",
     "docs/audits/",
     ".pytest_cache/",
 )

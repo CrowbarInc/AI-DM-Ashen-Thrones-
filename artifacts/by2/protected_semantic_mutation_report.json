@@ -1,5 +1,24 @@
 {
-  "attribution_gaps": [],
+  "attribution_gaps": [
+    {
+      "first_semantic_mutation_bucket": "unknown",
+      "first_semantic_mutation_source": "broken_checkpoint_continuity",
+      "likely_owner": "global_scene_fallback",
+      "missing_checkpoint": "continuity_join_between_checkpoints",
+      "observed_text_transition": {
+        "final_text_hash": "8d7e1e88dc7b2293",
+        "first_semantic_mutation_after_hash": null,
+        "first_semantic_mutation_before_hash": null,
+        "post_gate_mutation_detected": true
+      },
+      "recommended_by3_instrumentation_target": "add intermediate checkpoint between broken continuity seam",
+      "scenario_id": "thin_answer_action_outcome_final_emission",
+      "semantic_mutation_risk_score": 60,
+      "turn_id": null,
+      "turn_identity": "thin_answer_action_outcome_final_emission|idx:0",
+      "turn_index": 0
+    }
+  ],
   "corpus": "protected_replay",
   "corpus_scenario_ids": [
     "directed_npc_question",
@@ -11,17 +30,25 @@
   ],
   "schema_version": 1,
   "summary": {
-    "attributable_first_mutations": 3,
+    "attributable_first_mutations": 2,
     "bucket_distribution": {
       "fallback": 1,
-      "policy": 1,
-      "sanitizer": 1
+      "policy": 1
     },
-    "first_source_coverage_rate": 1.0,
+    "first_source_coverage_rate": 0.6667,
     "mutated_turns": 3,
-    "representative_high_risk_turns": [],
-    "semantic_mutation_risk_max": 10,
-    "semantic_mutation_risk_mean": 3.33,
+    "representative_high_risk_turns": [
+      {
+        "first_semantic_mutation_bucket": "unknown",
+        "first_semantic_mutation_source": "broken_checkpoint_continuity",
+        "scenario_id": "thin_answer_action_outcome_final_emission",
+        "semantic_mutation_risk_score": 60,
+        "turn_identity": "thin_answer_action_outcome_final_emission|idx:0",
+        "turn_index": 0
+      }
+    ],
+    "semantic_mutation_risk_max": 60,
+    "semantic_mutation_risk_mean": 23.33,
     "top_mutation_sources": [
       {
         "count": 1,
@@ -29,7 +56,7 @@
       },
       {
         "count": 1,
-        "source": "game.output_sanitizer.sanitize_player_facing_output"
+        "source": "broken_checkpoint_continuity"
       },
       {
         "count": 1,
@@ -37,7 +64,7 @@
       }
     ],
     "total_turns": 8,
-    "unknown_first_source_count": 0
+    "unknown_first_source_count": 1
   },
   "turns": [
     {
@@ -109,24 +136,24 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "35391543b1b96b61",
-      "first_semantic_mutation_bucket": "sanitizer",
-      "first_semantic_mutation_checkpoint_id": "sanitizer_output",
-      "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
+      "final_text_hash": "8d7e1e88dc7b2293",
+      "first_semantic_mutation_bucket": "unknown",
+      "first_semantic_mutation_checkpoint_id": "replay_final_text",
+      "first_semantic_mutation_source": "broken_checkpoint_continuity",
       "post_gate_mutation_detected": true,
       "scenario_id": "thin_answer_action_outcome_final_emission",
       "semantic_mutation_changed_count": 1,
-      "semantic_mutation_risk_band": "low",
-      "semantic_mutation_risk_score": 0,
+      "semantic_mutation_risk_band": "elevated",
+      "semantic_mutation_risk_score": 60,
       "semantic_mutation_trace_complete": true,
       "semantic_mutation_unknown_count": 0,
-      "trace_continuity": true,
+      "trace_continuity": false,
       "turn_id": null,
       "turn_identity": "thin_answer_action_outcome_final_emission|idx:0",
       "turn_index": 0
     },
     {
-      "final_text_hash": "343a3ab4400975e2",
+      "final_text_hash": "94d5c9e8b8903c06",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
@@ -137,7 +164,7 @@
       "semantic_mutation_risk_score": 0,
       "semantic_mutation_trace_complete": true,
       "semantic_mutation_unknown_count": 0,
-      "trace_continuity": true,
+      "trace_continuity": false,
       "turn_id": null,
       "turn_identity": "vocative_override_after_prior_continuity|idx:0",
       "turn_index": 0

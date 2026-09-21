@@ -1,0 +1,21 @@
+{
+  "case_id": "case_001_unanswered_direct_question",
+  "category": "known_bad.unanswered_direct_question",
+  "player_input": "Who commands the watch here?",
+  "prior_context": "",
+  "gm_response": "Tavern Runner mutters, the tavern runner replies, voice steady amid the murmur of the crowd.",
+  "expected_semantic_result": "FAIL",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "FAIL"
+  },
+  "rationale": "The player's intelligible factual question is not answered, bounded, refused, or meaningfully addressed.",
+  "provenance": {
+    "kind": "real_runtime_failure",
+    "artifact": "artifacts/simulated_playtest_observability/20260917T221002Z_p1_direct_answer/evaluation.json",
+    "turn_index": 0
+  },
+  "synthetic": false,
+  "action_type": "question",
+  "expected_information_availability": "unknown_to_evaluator"
+}

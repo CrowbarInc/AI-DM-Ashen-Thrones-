@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 
 import game.upstream_response_repairs as upstream_repairs
-from game.final_emission_meta import SEMANTIC_MUTATION_WRITE_SITES_KEY
+from game.observability_attribution_read import SEMANTIC_MUTATION_WRITE_SITES_KEY
 from game.final_emission_response_type import enforce_response_type_contract
 from game.response_policy_enforcement import apply_response_policy_enforcement
 from game.semantic_mutation_attribution import reconcile_semantic_mutation_owner

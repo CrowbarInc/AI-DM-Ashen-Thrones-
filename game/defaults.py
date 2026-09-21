@@ -175,7 +175,7 @@ def default_scene(scene_id: str = 'frontier_gate'):
                     "A ragged stranger hangs back, watching the crowd more than the queue.",
                 ],
                 "discoverable_clues": [
-                    "Closer reading or asking around may reveal who posted the missing-patrol notice—some name the town crier Lirael.",
+                    "Closer reading or asking around may reveal who posted the missing-patrol notice.",
                     "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
                     "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
                     "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
@@ -257,6 +257,56 @@ def default_scene(scene_id: str = 'frontier_gate'):
                 ],
                 "enemies": [],
                 "actions": []
+            }
+        }
+    if scene_id == "old_milestone":
+        return {
+            "scene": {
+                "id": "old_milestone",
+                "location": "Old Milestone",
+                "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+                "mode": "exploration",
+                "visible_facts": [
+                    "A weathered stone milestone leans beside the northwest mud track.",
+                    "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                    "The track continues a short way past the stone before rainwater and brush make the next step unclear.",
+                ],
+                "opening_seed_facts": [
+                    "A weathered stone milestone leans beside the northwest mud track.",
+                    "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+                ],
+                "journal_seed_facts": [
+                    "The northwest mud track reaches an old milestone beyond the gate.",
+                    "The mud around the marker is churned; any trail beyond it is unclear.",
+                ],
+                "discoverable_clues": [
+                    {
+                        "id": "milestone_mud_prints",
+                        "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear.",
+                    }
+                ],
+                "hidden_facts": [],
+                "exits": [
+                    {"label": "Return to Cinderwatch Gate", "target_scene_id": "frontier_gate"},
+                ],
+                "enemies": [],
+                "actions": [],
+                "interactables": [
+                    {
+                        "id": "milestone",
+                        "label": "Weathered milestone",
+                        "aliases": ["old milestone", "stone", "marker", "weathered stone"],
+                        "type": "investigate",
+                        "reveals_clue": "milestone_mud_prints",
+                    },
+                    {
+                        "id": "prints",
+                        "label": "Mud prints",
+                        "aliases": ["footprints", "mud", "track", "mud track", "northwest track"],
+                        "type": "investigate",
+                        "reveals_clue": "milestone_mud_prints",
+                    },
+                ],
             }
         }
     return {

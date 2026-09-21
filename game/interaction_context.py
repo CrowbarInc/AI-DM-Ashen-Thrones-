@@ -1324,10 +1324,13 @@ _NPC_REFERENCE_TITLES: tuple[str, ...] = (
 
 _WORLD_ACTION_DIALOGUE_BLOCKERS: tuple[str, ...] = (
     r"\b(?:i|we)\s+(?:search|sneak|attack|follow|track|cast|inspect|examine|check|investigate)\b",
+    r"\b(?:i|we)\s+(?:look|glance)(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards)\b",
+    r"\b(?:i|we)\s+(?:read|reads)\s+(?:the|a|an|this|that)\b",
     r"\b(?:i|we)\s+(?:grab|seize|shove|push|pull|pin|restrain|force|coerce|threaten)\b",
     r"\b(?:i|we)\s+(?:pick up|open|unlock|break|climb|jump|hide|steal|manipulate)\b",
     # Imperative exploration verbs (no "I …" prefix) must not hijack interlocutor continuity.
-    r"^\s*(?:investigate|inspect|examine|search)\b",
+    r"^\s*(?:investigate|inspect|examine|search|read)\b",
+    r"^\s*(?:look|glance)(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards)\b",
 )
 
 # --- Vocative helpers (implementation); thin re-exports in game.dialogue_targeting ---
@@ -4782,7 +4785,11 @@ _EXPLICIT_NON_SOCIAL_CONTINUITY_ESCAPE_RES: tuple[re.Pattern[str], ...] = (
     ),
     re.compile(r"\b\w+\s+(?:inspects|examines|studies|searches|investigates)\b", re.IGNORECASE),
     re.compile(r"\b(?:look|looks|looking)\s+(?:at|around|over)\b", re.IGNORECASE),
-    re.compile(r"\b(?:glance|glances|glancing)\s+around\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:glance|glances|glancing)\s+(?:around|(?:back\s+)?(?:at|over|toward|towards))\b",
+        re.IGNORECASE,
+    ),
+    re.compile(r"\b(?:read|reads|reading)\s+(?:the|a|an|this|that)\b", re.IGNORECASE),
     re.compile(
         r"\b(?:scan|scans|scanning)\s+(?:the\s+)?(?:area|room|tavern|street|crowd|scene|surroundings|vicinity)\b",
         re.IGNORECASE,

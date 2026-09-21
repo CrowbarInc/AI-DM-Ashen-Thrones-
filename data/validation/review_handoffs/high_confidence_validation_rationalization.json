@@ -1,0 +1,66 @@
+{
+  "campaign_id": "high_confidence_validation_rationalization_20260918",
+  "campaign_name": "High-Confidence Validation Rationalization",
+  "campaign_date": "2026-09-18",
+  "purpose": "Implement only approved high-confidence, low-risk validation authority corrections while preserving execution and uncertain architecture-sensitive evidence.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "Implemented four approved changes. Historical BW/BZ prose/path locks moved from RELEASE_GATE to HISTORICAL_ONLY: 16 test nodes were retired and replaced by two canonical provenance checks, with no unique evidence lost. Automated playability moved from CAMPAIGN_GATE to SUPPORTING_EVIDENCE without changing scoring, thresholds, mandatory gates, evaluator execution, or artifacts. Protected replay remains a hard RELEASE_GATE for controlled structural invariants, with live-model and semantic overclaims removed. Behavioral gauntlet authority is now DIAGNOSTIC beneath semantic calibration, with every axis and reason code preserved. Ownership/import governance and replay-diagnostic consolidation remain deferred. The baseline moved from 49 to 36 failures solely because 13 obsolete documentation failures were rationalized; no product defect was fixed and no new failure appeared.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Replaced 16 BW/BZ historical path/prose/command test nodes with two canonical provenance checks.",
+      "Updated active authority metadata and claim language for playability, protected replay, and behavioral gauntlet without changing their evaluators or execution."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Added the canonical implementation report and corrected current claim language in playability, protected replay, and test guidance."
+    ],
+    "generated_artifacts": [
+      "Added authority-change, retired-test, and before/after baseline ledgers; regenerated portfolio summaries and the review handoff."
+    ]
+  },
+  "testing": {
+    "focused": "128 focused authority, provenance, inventory, evaluator, calibration, portfolio, and handoff-config tests passed.",
+    "broader": "Controlled structural replay: 6 passed, 1 skipped; hard-gate command unchanged.",
+    "full_suite": "Pre: 6,444 collected, 6,296 passed, 49 failed, 99 skipped. Post: 6,440 collected, 6,305 passed, 36 failed, 99 skipped in 470.510 seconds. Pre-change runtime was not retained and is not inferred.",
+    "runtime_validation": "No gameplay rerun was needed; evaluator and evidence execution were covered by focused regression tests.",
+    "model_runtime_boundary": "No model invocation occurred.",
+    "new_regressions": "No new full-suite failure appeared.",
+    "pre_existing_failures": "All 36 remaining failures were present before this campaign and retain their existing family classifications."
+  },
+  "decisions_requiring_human_review": [],
+  "known_problems": {
+    "campaign_specific": [],
+    "pre_existing": [
+      "Thirty-six failures remain across product behavior, architecture, ownership/import governance, replay diagnostics, registry drift, stale expectations, and uncertain policy.",
+      "Ownership/import governance remains quarantined and replay-diagnostic consolidation remains deferred."
+    ]
+  },
+  "missing_concepts": [
+    "State-to-narration consistency, rendered browser workflow validation, long-session semantic authority, and broader semantic calibration remain outside this campaign."
+  ],
+  "does_not_prove": [
+    "That the remaining 36 failures may be ignored or that their root-cause classifications are final.",
+    "That gameplay, production-model semantics, narrative quality, or human playability improved.",
+    "That ownership/import policy or replay-diagnostic consolidation has been resolved.",
+    "That any evaluator threshold, mandatory gate, calibration policy, or GM behavior changed."
+  ],
+  "recommended_next_step": "Review and approve this baseline before selecting a separate campaign. Do not begin ownership/import investigation, broader cleanup, Calibration Round 2, or State-to-Narration Consistency automatically.",
+  "primary_report": "docs/high_confidence_validation_rationalization.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "docs/high_confidence_validation_rationalization.md", "role": "primary_campaign_report", "why": "Documents scope, implementation, evidence preservation, baselines, deferrals, and exact commands.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/validation_rationalization/authority_changes.json", "role": "authority_change_ledger", "why": "Distinguishes claim correction from execution, gating, and evidence-generation changes.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/validation_rationalization/retired_tests.json", "role": "retired_test_ledger", "why": "Accounts for every retired node, replacement authority, provenance, evidence risk, and rollback.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/validation_rationalization/baseline_comparison.json", "role": "baseline_comparison", "why": "Provides exact pre/post suite counts and explains every removed failure.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "data/validation/validation_family_registry.json", "role": "updated_registry", "why": "Records only the authority changes actually implemented and preserves deferred recommendations.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "docs/validation_family_registry.md", "role": "registry_view", "why": "Generated concise view of current portfolio authority.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/validation_portfolio/current_failure_classification.json", "role": "remaining_failure_map", "why": "Maps all 36 remaining failures to families and likely causes.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/validation_portfolio/current_failure_summary.md", "role": "remaining_failure_summary", "why": "Summarizes the more meaningful post-rationalization red baseline.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "docs/playability_validation.md", "role": "authority_documentation", "why": "Records playability as supporting evidence without altering evaluator behavior.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "docs/testing/protected_replay_manifest.md", "role": "authority_documentation", "why": "Records controlled structural replay claim boundaries while retaining hard-gate scope.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "tests/README_TESTS.md", "role": "active_test_guidance", "why": "Records current behavioral-gauntlet, playability, and replay authority language.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "tests/test_high_confidence_validation_rationalization.py", "role": "focused_tests", "why": "Protects provenance, ledgers, authority boundaries, execution preservation, and deferrals.", "behavioral_evidence": false, "human_review_required": false}
+  ],
+  "self_contained_review_test": "PASS: the bundle contains the implementation report, exact pre/post baseline, authority ledger, complete retired-test ledger, updated registry, all remaining-failure classifications, and current claim documents needed to determine what changed, what stayed executable, why 13 failures disappeared, what remains deferred, and that no product defect was fixed."
+}

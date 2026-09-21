@@ -58,6 +58,10 @@ from game.social_exchange_projection import (
     strict_social_deterministic_fallback_family_token,
 )
 from game.social_exchange_emission import build_final_strict_social_response
+from game.final_emission_visibility_fallback import (
+    _should_use_neutral_nonprogress_fallback_instead_of_global_stock,
+    npc_pursuit_neutral_nonprogress_visibility_fallback,
+)
 from game.stage_diff_telemetry import record_stage_snapshot
 
 
@@ -128,6 +132,18 @@ def run_strict_social_composition_trunk(
         scene_id=str(scene_id or "").strip(),
         world=world if isinstance(world, dict) else None,
     )
+    if _should_use_neutral_nonprogress_fallback_instead_of_global_stock(session, eff_resolution):
+        neutral = npc_pursuit_neutral_nonprogress_visibility_fallback()
+        text = neutral.text
+        details = {
+            **details,
+            "used_internal_fallback": True,
+            "fallback_kind": neutral.fallback_kind,
+            "fallback_pool": neutral.fallback_pool,
+            "final_emitted_source": neutral.final_emitted_source,
+            "fallback_strategy": neutral.fallback_strategy,
+            "fallback_candidate_source": neutral.fallback_candidate_source,
+        }
     if (
         dialogue_plan_blocked
         and isinstance(eff_resolution, dict)

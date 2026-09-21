@@ -165,15 +165,23 @@ FRONTIER_GATE_DIRECT_INTRUSION_STABILITY_PROFILE: dict[str, Any] = {
     "continuity_axes_passed": {"narrative_grounding", "branch_coherence"},
 }
 
+FRONTIER_GATE_DIRECT_INTRUSION_MUTATION_KIND_MAX: dict[str, int] = {
+    "fallback_mutation": 7,
+    "final_emission_mutation": 4,
+    "referential_clarity_replacement_mutation": 1,
+    "response_type_repair_mutation": 2,
+    "sealed_replacement_mutation": 4,
+    "speaker_repair_mutation": 1,
+}
+
 FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE: dict[str, Any] = {
     "event_kind_equals": {"fallback_selected": 7},
-    "event_kind_max": {"mutation": 14, "speaker_repair": 1},
-    "mutation_kind_max": {
-        "fallback_mutation": 7,
-        "final_emission_mutation": 4,
-        "response_type_repair_mutation": 2,
-        "speaker_repair_mutation": 1,
-    },
+    "event_kind_max": {"speaker_repair": 1},
+    "mutation_kind_max": dict(FRONTIER_GATE_DIRECT_INTRUSION_MUTATION_KIND_MAX),
+    # The aggregate ceiling is the sum of the governed subtype ceilings above
+    # rather than a separately maintained historical snapshot.
+    "derive_mutation_event_max_from_kind_max": True,
+    "reject_unexpected_mutation_kinds": True,
     "allowed_recurring_keys": {
         "gate_outcome:gate:game.final_emission_gate:accept_unchanged",
         "mutation:gate:game.final_emission_gate:fallback_mutation",
@@ -188,6 +196,10 @@ FRONTIER_GATE_DIRECT_INTRUSION_LINEAGE_PROFILE: dict[str, Any] = {
     | {
         f"fallback_selected:gate:game.final_emission_gate:{subkind}"
         for subkind in SEALED_REPLACEMENT_SUBKINDS
+    }
+    | {
+        f"mutation:gate:game.final_emission_gate:{mutation_kind}"
+        for mutation_kind in FRONTIER_GATE_DIRECT_INTRUSION_MUTATION_KIND_MAX
     },
     "max_recurring_event_count": 25,
 }

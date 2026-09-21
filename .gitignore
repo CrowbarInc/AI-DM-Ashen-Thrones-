@@ -9,6 +9,7 @@
 
 # Virtualenvs
 .venv/
+.venv-broken/
 venv/
 
 # Python cache
@@ -17,8 +18,17 @@ __pycache__/
 .pytest_cache/
 
 
-# Runtime/test artifacts
+# Disposable agent/test output
+development/tmp/
 codex_pytest_tmp*/
+artifacts/*pytest_tmp*/
+artifacts/*pytest_reg*/
+artifacts/*pytest_verify*/
+artifacts/**/pytest_tmp*/
+artifacts/**/pytest_reg*/
+artifacts/**/pytest_verify*/
+artifacts/**/pytest_authority/
+artifacts/**/pytest_related/
 artifacts/scene_canon_hygiene_runtime/
 artifacts/test_inventory_full.json
 

@@ -9,6 +9,7 @@ from game.prompt_context import canonical_interaction_target_npc_id
 from game.response_policy_contracts import response_type_contract_requires_dialogue
 from game.social import (
     apply_social_reply_speaker_grounding,
+    realize_authored_knowledge_answer,
     resolve_grounded_social_speaker,
     topic_pressure_speaker_id_for_social_exchange,
 )
@@ -723,6 +724,27 @@ def apply_social_exchange_retry_fallback_gm(
     if vs:
         interrupt = False
     seed = f"{scene_id}|retry|{player_text}|{uncertainty_source}|{pressure}|{interrupt}|{vs}"
+    authored = realize_authored_knowledge_answer(
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid_rf,
+        player_text=player_text,
+        resolution=resolution if isinstance(resolution, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    )
+    if isinstance(authored, dict) and str(authored.get("text") or "").strip():
+        out["player_facing_text"] = _ensure_sentence_end(str(authored.get("text") or "").strip())
+        out["tags"] = tag_list + [
+            "question_retry_fallback",
+            "authored_knowledge_realization",
+            "social_exchange_retry_fallback",
+            "social_exchange_fallback:authored_knowledge",
+        ]
+        dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+        out["debug_notes"] = (
+            (dbg + " | " if dbg else "")
+            + f"retry_fallback:unresolved_question|retry_fallback:authored_knowledge:{authored.get('source')}"
+        )
+        return out
     line, kind = deterministic_social_fallback_line(
         resolution=resolution,
         uncertainty_source=uncertainty_source,

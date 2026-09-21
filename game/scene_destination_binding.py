@@ -121,6 +121,189 @@ def _declared_unique_exit_target_for_dest(dest: str, exits: List[Dict[str, Any]]
     return None
 
 
+_EXIT_PHRASE_STOPWORDS = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "to",
+        "toward",
+        "towards",
+        "for",
+        "back",
+        "again",
+        "my",
+        "our",
+        "this",
+        "that",
+        "and",
+        "or",
+        "of",
+        "at",
+        "in",
+        "on",
+        "i",
+        "im",
+        "ill",
+        "we",
+        "well",
+        "lets",
+        "please",
+        "just",
+        "then",
+        "along",
+        "available",
+        "here",
+        "there",
+    }
+)
+_TRAVEL_VERB_STOPWORDS = frozenset(
+    {
+        "head",
+        "heads",
+        "heading",
+        "go",
+        "goes",
+        "going",
+        "walk",
+        "walks",
+        "walking",
+        "run",
+        "runs",
+        "running",
+        "travel",
+        "travels",
+        "traveling",
+        "travelling",
+        "move",
+        "moves",
+        "moving",
+        "come",
+        "comes",
+        "coming",
+        "return",
+        "returns",
+        "returning",
+        "take",
+        "takes",
+        "taking",
+        "follow",
+        "follows",
+        "following",
+        "leave",
+        "leaves",
+        "leaving",
+        "depart",
+        "departs",
+        "departing",
+        "enter",
+        "enters",
+        "entering",
+        "journey",
+        "journeys",
+        "pursue",
+        "pursues",
+        "pursuing",
+    }
+)
+_QUESTION_LEAD_RE = re.compile(
+    r"^\s*(?:what|where|why|how|who|which|when)\b",
+    re.IGNORECASE,
+)
+_COMMITMENT_PREFIX_RE = re.compile(
+    r"^\s*(?:(?:fine|alright|all\s+right|okay|ok|right)\s*[.!,]\s*)?"
+    r"(?:(?:i|we)(?:'ll| will|'m| am| are|'re)\s+(?:going\s+to\s+)?|let(?:'s| us)\s+)",
+    re.IGNORECASE,
+)
+_TRAVEL_VERB_PREFIX_RE = re.compile(
+    r"^(?:(?:please\s+)?"
+    r"(?:head|heads|heading|go|goes|going|walk|walks|walking|run|runs|running|"
+    r"travel|travels|traveling|travelling|move|moves|moving|come|comes|coming|"
+    r"return|returns|returning|journey|journeys|enter|enters|entering|"
+    r"follow|follows|following|take|takes|taking|leave|leaves|leaving|"
+    r"depart|departs|departing|pursue|pursues|pursuing)"
+    r"(?:\s+(?:back|off|out|again))?"
+    r"(?:\s+(?:to|toward|towards|for|along|down|through))?"
+    r"(?:\s+the)?"
+    r")(?:\s+|$)",
+    re.IGNORECASE,
+)
+_RETURN_MOTION_RE = re.compile(
+    r"\b(?:head|heads|heading|go|goes|going|walk|walks|walking|come|comes|coming|"
+    r"move|moves|moving|return|returns|returning)\s+back\b"
+    r"|\b(?:return|returns|returning)\b",
+    re.IGNORECASE,
+)
+_EXPLICIT_TRAVEL_COMMITMENT_RE = re.compile(
+    r"\b(?:i(?:'ll| will| am|'m)|we(?:'ll| will| are|'re)|let(?:'s| us))\s+"
+    r"(?:going\s+to\s+)?"
+    r"(?:follow|pursue|leave|return|head(?:ing)?|travel|walk|depart|"
+    r"go\s+(?:to|after|towards?|back)|"
+    r"head(?:ing)?\s+(?:to|for|down|off|out|back)|"
+    r"take\s+(?:the|a)\b)\b",
+    re.IGNORECASE,
+)
+
+
+def _exit_content_tokens(text: str) -> Set[str]:
+    stop = _EXIT_PHRASE_STOPWORDS | _TRAVEL_VERB_STOPWORDS
+    return {
+        tok
+        for tok in re.findall(r"[a-z0-9']+", str(text or "").lower())
+        if tok not in stop and len(tok) >= 3
+    }
+
+
+def _iter_authored_exits(exits: List[Dict[str, Any]]) -> List[tuple[str, str]]:
+    rows: List[tuple[str, str]] = []
+    for ex in exits or []:
+        if not isinstance(ex, dict):
+            continue
+        label = str(ex.get("label") or "").strip()
+        target = str(ex.get("target_scene_id") or ex.get("targetSceneId") or "").strip()
+        if target:
+            rows.append((label, target))
+    return rows
+
+
+def _unique_target(hits: List[str]) -> Optional[str]:
+    uniq = [item for item in dict.fromkeys(hits) if item]
+    return uniq[0] if len(uniq) == 1 else None
+
+
+def _unique_exit_target_from_destination_identity(
+    phrase: str,
+    exits: List[Dict[str, Any]],
+) -> Optional[str]:
+    """Match a destination phrase to exactly one authored exit via id/label tokens."""
+    raw = (phrase or "").strip()
+    if not raw:
+        return None
+    dest_cf = raw.casefold()
+    dest_slug = slugify(raw)
+    dest_tokens = _exit_content_tokens(raw)
+    hits: List[str] = []
+    for label, target in _iter_authored_exits(exits):
+        target_cf = target.casefold()
+        target_slug = slugify(target)
+        label_cf = label.casefold()
+        surface_tokens = _exit_content_tokens(label) | _exit_content_tokens(target.replace("_", " "))
+        matched = False
+        if dest_cf and (dest_cf == target_cf or dest_cf == label_cf):
+            matched = True
+        elif dest_slug and len(dest_slug) >= 4 and (
+            dest_slug == target_slug
+            or dest_slug in target_slug
+            or target_slug in dest_slug
+        ):
+            matched = True
+        elif dest_tokens and dest_tokens <= surface_tokens:
+            matched = True
+        if matched:
+            hits.append(target)
+    return _unique_target(hits)
+
+
 def resolve_place_phrase_to_exit_target(
     phrase: str,
     exits: List[Dict[str, Any]],
@@ -130,8 +313,102 @@ def resolve_place_phrase_to_exit_target(
     tid = _strict_unique_exit_destination(phrase, exits)
     if not tid:
         tid = _declared_unique_exit_target_for_dest(phrase, exits)
+    if not tid:
+        tid = _unique_exit_target_from_destination_identity(phrase, exits)
     if tid and tid in known_scene_ids:
         return tid
+    return None
+
+
+def _strip_travel_commitment_prefix(text: str) -> str:
+    raw = str(text or "").strip()
+    if not raw:
+        return raw
+    match = _COMMITMENT_PREFIX_RE.match(raw)
+    if not match:
+        return raw
+    rest = raw[match.end() :].strip()
+    return rest or raw
+
+
+def extract_travel_destination_phrase(text: str) -> Optional[str]:
+    """Return dest after travel verbs, '' for bare return/back, or None if not travel-shaped."""
+    raw = str(text or "").strip()
+    if not raw:
+        return None
+    work = _strip_travel_commitment_prefix(raw)
+    work = re.sub(r"[.!?]+$", "", work).strip()
+    match = _TRAVEL_VERB_PREFIX_RE.match(work)
+    if match:
+        dest = work[match.end() :].strip(" \t.,;:!?\"'")
+        dest = re.sub(r"^(?:the|a|an)\s+", "", dest, flags=re.IGNORECASE).strip()
+        if dest.casefold() in {"back", "again"}:
+            dest = ""
+        return dest
+    if _RETURN_MOTION_RE.search(work):
+        return ""
+    return None
+
+
+def _looks_like_information_question(text: str) -> bool:
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    if _EXPLICIT_TRAVEL_COMMITMENT_RE.search(raw):
+        return False
+    return bool(_QUESTION_LEAD_RE.search(raw))
+
+
+def _looks_like_return_or_back_intent(text: str) -> bool:
+    return bool(_RETURN_MOTION_RE.search(str(text or "")))
+
+
+def _unique_return_or_single_exit_target(exits: List[Dict[str, Any]]) -> Optional[str]:
+    rows = _iter_authored_exits(exits)
+    if not rows:
+        return None
+    return_hits = [
+        target
+        for label, target in rows
+        if re.search(r"\b(?:return|back)\b", label, flags=re.IGNORECASE)
+    ]
+    unique_return = _unique_target(return_hits)
+    if unique_return:
+        return unique_return
+    unique_all = _unique_target([target for _label, target in rows])
+    return unique_all
+
+
+def resolve_authored_exit_from_player_travel(
+    text: str,
+    exits: List[Dict[str, Any]],
+    known_scene_ids: Optional[Set[str]] = None,
+) -> Optional[str]:
+    """Resolve natural travel/return intent against the current scene's authored exits.
+
+    Consumes only current-scene exit labels and destination ids. Fail closed on
+    ambiguity, unavailable destinations, and information-seeking mentions.
+    """
+    raw = str(text or "").strip()
+    if not raw or not exits:
+        return None
+    if _looks_like_information_question(raw):
+        return None
+    known = set(known_scene_ids) if known_scene_ids is not None else known_scene_ids_from_exits(exits)
+
+    phrases: List[str] = [raw, _strip_travel_commitment_prefix(raw)]
+    dest = extract_travel_destination_phrase(raw)
+    if dest:
+        phrases.append(dest)
+    for phrase in phrases:
+        tid = resolve_place_phrase_to_exit_target(phrase, exits, known)
+        if tid:
+            return tid
+
+    if dest == "" and _looks_like_return_or_back_intent(raw):
+        tid = _unique_return_or_single_exit_target(exits)
+        if tid and tid in known:
+            return tid
     return None
 
 

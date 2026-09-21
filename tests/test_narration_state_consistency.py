@@ -94,10 +94,12 @@ def test_explanation_with_directional_hook_not_left_as_empty_payload():
     )
 
     assert meta["narration_state_mismatch_detected"] is True
-    assert meta["mismatch_repair_applied"] in {"extracted_actionable_leads", "contextual_lead_clues"}
-    assert _social_resolution_carries_information(res)
+    assert meta["mismatch_repair_applied"] == "fail_closed_no_authoritative_provenance"
+    assert not _social_resolution_carries_information(res)
+    assert not get_all_known_clue_ids(session)
     nsc = (res.get("metadata") or {}).get("narration_state_consistency") or {}
     assert nsc.get("narration_state_mismatch_detected") is True
+    assert nsc.get("prose_derived_authority_suppressed") is True
 
 
 def test_truly_empty_refusal_stays_consistent_no_repair():
@@ -186,7 +188,9 @@ def test_named_figure_sets_emergent_actor_hint_flag():
     )
     assert meta["narration_state_mismatch_detected"] is True
     assert meta.get("emergent_actor_hint_detected") is True
-    assert _social_resolution_carries_information(res)
+    assert meta["mismatch_repair_applied"] == "fail_closed_no_authoritative_provenance"
+    assert not _social_resolution_carries_information(res)
+    assert not get_all_known_clue_ids(session)
 
 
 def test_refusal_reply_kind_upgraded_when_narration_has_hooks():

@@ -512,8 +512,7 @@ def build_visibility_non_replacement_route_context(
     )
 
 
-def stamp_visibility_fallback_metadata(
-    meta: MutableMapping[str, Any],
+def visibility_fallback_metadata_updates(
     *,
     validation_passed: Any = _UNSET,
     replacement_applied: Any = _UNSET,
@@ -526,33 +525,34 @@ def stamp_visibility_fallback_metadata(
     fallback_kind: str | None = None,
     fallback_owner_bucket: str | None = None,
     final_emitted_source: str | None = None,
-) -> None:
-    if not isinstance(meta, MutableMapping):
-        return
+) -> dict[str, Any]:
+    updates: dict[str, Any] = {}
     if validation_passed is not _UNSET:
-        meta["visibility_validation_passed"] = validation_passed
+        updates["visibility_validation_passed"] = validation_passed
     if replacement_applied is not _UNSET:
-        meta["visibility_replacement_applied"] = replacement_applied
+        updates["visibility_replacement_applied"] = replacement_applied
     if violation_kinds is not None:
-        meta["visibility_violation_kinds"] = list(violation_kinds)
+        updates["visibility_violation_kinds"] = list(violation_kinds)
     if violation_sample is not None:
-        meta["visibility_violation_sample"] = [dict(item) if isinstance(item, Mapping) else item for item in violation_sample]
+        updates["visibility_violation_sample"] = [dict(item) if isinstance(item, Mapping) else item for item in violation_sample]
     if checked_entities is not None:
-        meta["visibility_checked_entities"] = list(checked_entities)
+        updates["visibility_checked_entities"] = list(checked_entities)
     if checked_facts is not None:
-        meta["visibility_checked_facts"] = list(checked_facts)
+        updates["visibility_checked_facts"] = list(checked_facts)
     if continuity_lead_exemption is not None:
-        meta["visibility_continuity_lead_exemption"] = bool(continuity_lead_exemption)
+        updates["visibility_continuity_lead_exemption"] = bool(continuity_lead_exemption)
     if fallback_pool is not None:
-        meta["visibility_fallback_pool"] = fallback_pool
+        updates["visibility_fallback_pool"] = fallback_pool
     if fallback_kind is not None:
-        meta["visibility_fallback_kind"] = fallback_kind
+        updates["visibility_fallback_kind"] = fallback_kind
     if fallback_owner_bucket is not None:
-        meta["visibility_fallback_owner_bucket"] = fallback_owner_bucket
-    elif fallback_pool is not None or fallback_kind is not None or final_emitted_source is not None:
-        meta["visibility_fallback_owner_bucket"] = visibility_fallback_owner_bucket_from_fields(
-            fallback_pool=fallback_pool or "",
-            fallback_kind=fallback_kind or "",
-            final_emitted_source=final_emitted_source or "",
-        )
+        updates["visibility_fallback_owner_bucket"] = fallback_owner_bucket
+    return updates
+
+
+def stamp_visibility_fallback_metadata(meta: MutableMapping[str, Any], **kwargs: Any) -> None:
+    """Compatibility entry point delegating writes to the canonical visibility owner."""
+    from game.final_emission_visibility_fallback import stamp_visibility_fallback_metadata as stamp
+
+    stamp(meta, **kwargs)
 

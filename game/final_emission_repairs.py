@@ -861,6 +861,29 @@ def _fallback_sentences(text: str) -> List[str]:
     return [s for s in _split_sentences_answer_complete(text) if str(s).strip()]
 
 
+_DANGLING_OPTIONAL_CONNECTOR_TAIL_RE = re.compile(
+    r"(?:"
+    r"\s+(?:from|of|to|at|by|with|about|into|onto)"
+    r"(?:\s+(?:what|where|when|who|which|whom))?"
+    r"|"
+    r"\s+according\s+to"
+    r"|"
+    r"\s+based\s+on"
+    r")(?=[\s.!?\"']*$)",
+    re.IGNORECASE,
+)
+
+
+def _drop_dangling_optional_connectors(text: str) -> str:
+    """If a stripped optional span leaves its connector behind, drop the connector too."""
+    candidate = str(text or "")
+    while True:
+        cleaned = _DANGLING_OPTIONAL_CONNECTOR_TAIL_RE.sub("", candidate)
+        if cleaned == candidate:
+            return cleaned
+        candidate = cleaned
+
+
 def _strip_patterns_from_text(
     text: str,
     *,
@@ -871,6 +894,7 @@ def _strip_patterns_from_text(
         candidate = sentence
         for pattern in patterns:
             candidate = pattern.sub("", candidate)
+        candidate = _drop_dangling_optional_connectors(candidate)
         candidate = re.sub(r"\s+", " ", candidate).strip(" ,;:-")
         candidate = re.sub(r"\s+([,.!?;:])", r"\1", candidate).strip()
         if _fallback_word_count(candidate) >= 2:

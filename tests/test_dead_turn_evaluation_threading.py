@@ -214,7 +214,10 @@ def test_playability_eval_excludes_only_from_fem_dead_turn_source() -> None:
     )
     assert dead_out["gameplay_validation"]["excluded_from_scoring"] is True
     assert dead_out["gameplay_validation"]["run_valid"] is False
-    assert dead_out["overall"] == {"score": 0, "rating": "weak", "passed": False}
+    assert dead_out["overall"]["score"] == 0
+    assert dead_out["overall"]["rating"] == "weak"
+    assert dead_out["overall"]["passed"] is False
+    assert dead_out["overall"]["semantic_result"] == "INVALID_RUN"
 
 
 def test_behavioral_gauntlet_does_not_infer_dead_turn_from_api_error_shape_without_fem() -> None:

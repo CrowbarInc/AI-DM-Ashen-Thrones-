@@ -10,10 +10,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List
 
-from game.final_emission_meta import (
-    FINAL_EMISSION_META_KEY,
-    append_semantic_mutation_write_site,
-)
+from game.final_emission_finalize import record_policy_semantic_write_site_if_changed
 from game.prompt_context import RESPONSE_RULE_PRIORITY
 from game.social_exchange_policy import strict_social_emission_will_apply
 from game.utils import slugify
@@ -247,39 +244,6 @@ def _policy_emission_debug(out: Dict[str, Any]) -> Dict[str, Any]:
         em = {}
         md["emission_debug"] = em
     return em
-
-
-def _record_policy_semantic_write_site_if_changed(
-    before: Dict[str, Any],
-    after: Dict[str, Any],
-    *,
-    policy_identifier: str,
-    mutation_reason: str,
-    write_site_function: str,
-) -> None:
-    before_text = before.get("player_facing_text") if isinstance(before, dict) else ""
-    after_text = after.get("player_facing_text") if isinstance(after, dict) else ""
-    if not isinstance(after, dict) or str(before_text or "") == str(after_text or ""):
-        return
-    fem = after.get(FINAL_EMISSION_META_KEY)
-    if not isinstance(fem, dict):
-        fem = {}
-        after[FINAL_EMISSION_META_KEY] = fem
-    for metadata in (_policy_emission_debug(after), fem):
-        append_semantic_mutation_write_site(
-            metadata,
-            before_text=before_text,
-            after_text=after_text,
-            write_site_family="policy",
-            write_site_file="game/response_policy_enforcement.py",
-            write_site_function=write_site_function,
-            owner="game.response_policy_enforcement",
-            source=policy_identifier,
-            mutation_reason=mutation_reason,
-            selected_active_stream=True,
-            candidate_only=False,
-            compatibility_status="diagnostic_only",
-        )
 
 
 def _apply_must_answer_question_resolution_enforcement(
@@ -1309,83 +1273,27 @@ def _render_passive_pressure_beat(
     source: Dict[str, Any],
     scene_snapshot: Dict[str, Any],
     passive_streak: int,
+    scene_envelope: Dict[str, Any] | None = None,
 ) -> tuple[str, str]:
-    subject = str(source.get("subject") or "").strip() or "someone"
-    position = str(source.get("position") or "").strip()
-    source_key = str(source.get("source") or "").strip()
-    move_from = f" leaves {position} and" if position else ""
-    if source_key == "lead_figure":
-        if passive_streak >= 2:
-            text = (
-                f"{subject}{move_from} comes straight to you before the pause can settle. "
-                f"\"Enough watching,\" they say. \"Ask me now, or lose the trail.\""
-            )
-            return "consequence_or_opportunity", text
-        text = (
-            f"{subject}{move_from} cuts through the crowd and stops at your shoulder. "
-            f"\"You're asking the wrong questions out loud,\" they murmur. \"Walk with me if you want the next name.\""
-        )
-        return "new_actor_entering", text
-    if source_key == "pending_lead":
-        text = (
-            f"The lull breaks when a runner shoulders through the press with news tied to {subject}. "
-            f"\"If you're moving on this, move now,\" they snap. \"The lead is still warm.\""
-        )
-        return "new_information", text
-    if source_key == "visible_figure":
-        if "guard" in subject.lower():
-            if passive_streak >= 2:
-                text = (
-                    f"{subject.capitalize()} pushes off the wall and closes the gap before you can settle back into stillness. "
-                    "\"No more staring,\" he says. \"State your business, or start with the road report now.\""
-                )
-                return "consequence_or_opportunity", text
-            text = (
-                f"{subject.capitalize()} notices you lingering and comes over at once. "
-                "\"If you're waiting on trouble, it already passed the checkpoint,\" he says. \"Take the east-road report or get clear.\""
-            )
-            return "new_actor_entering", text
-        if passive_streak >= 2:
-            text = (
-                f"{subject.capitalize()} finally breaks from watching and comes straight toward you. "
-                "\"You can keep holding still, or you can ask the next useful question,\" they say."
-            )
-            return "consequence_or_opportunity", text
-        text = (
-            f"{subject.capitalize()} notices your attention and crosses the space between you. "
-            "\"If you're looking for something, say it before the trail shifts,\" they say."
-        )
-        return "new_actor_entering", text
-    if source_key == "guard_rumor":
-        if passive_streak >= 2:
-            text = (
-                "The same guard does not let the silence stand a second time. "
-                "\"No more watching,\" he says, closing the distance and jabbing a finger at the east-road line on the notice. "
-                "\"Either tell me who sent you, or get moving before that trail cools for good.\""
-            )
-            return "consequence_or_opportunity", text
-        text = (
-            "A guard peels away from the notice board and squares up to you. "
-            "\"Standing still won't help that patrol,\" he says, stabbing two fingers at the posting. "
-            "\"Tell me what you know, or get on the east-road trail before it dies.\""
-        )
-        return "consequence_or_opportunity", text
-    if source_key in {"engaged_npc", "scene_npc"}:
-        text = (
-            f"{subject} breaks the silence first. "
-            f"\"Waiting won't sharpen this,\" they say. \"Question the runner, work the notice, or follow the road report now.\""
-        )
-        return "consequence_or_opportunity", text
-    if scene_snapshot.get("has_notice_board"):
-        text = (
-            "Fresh ink draws a curse from the guards at the notice board. "
-            "Someone has added a half-hour-old sighting to the missing patrol posting, and every eye nearby shifts toward the east road."
-        )
-        return "new_information", text
-    text = (
-        "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. "
-        "\"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\""
+    from game.perception_grounding import render_grounded_perception_line
+
+    _ = source, passive_streak
+    text = render_grounded_perception_line(
+        scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene_snapshot},
+        player_text="I look around.",
+        resolution={"kind": "observe", "prompt": "I look around."},
+        seed_key="passive-pressure",
     )
+    if not text:
+        facts = scene_snapshot.get("visible_facts") if isinstance(scene_snapshot, dict) else None
+        if isinstance(facts, list):
+            for item in facts:
+                clean = str(item or "").strip()
+                if clean:
+                    text = clean if clean.endswith((".", "!", "?")) else f"{clean}."
+                    break
+    if not text:
+        text = "You take in what is actually present here."
     return "consequence_or_opportunity", text
 
 def escalate_passive_scene(
@@ -1440,6 +1348,7 @@ def escalate_passive_scene(
         source=source,
         scene_snapshot=scene_snapshot,
         passive_streak=passive_streak,
+        scene_envelope=scene_envelope if isinstance(scene_envelope, dict) else None,
     )
     out = dict(gm)
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
@@ -1601,7 +1510,7 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="must_answer",
@@ -1626,7 +1535,7 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="forbid_secret_leak",
@@ -1653,7 +1562,7 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="diegetic_only.no_validator_voice",
@@ -1671,7 +1580,7 @@ def apply_response_policy_enforcement(
                     session=session,
                     scene_envelope=scene_envelope,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="prefer_scene_momentum.topic_pressure",
@@ -1687,7 +1596,7 @@ def apply_response_policy_enforcement(
                     scene_envelope=scene_envelope,
                     resolution=resolution,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="prefer_scene_momentum.passive_scene",
@@ -1700,7 +1609,7 @@ def apply_response_policy_enforcement(
                     session=session,
                     scene_envelope=scene_envelope,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="prefer_scene_momentum.scene_momentum",
@@ -1720,7 +1629,7 @@ def apply_response_policy_enforcement(
                     world=world,
                     resolution=resolution,
                 )
-                _record_policy_semantic_write_site_if_changed(
+                record_policy_semantic_write_site_if_changed(
                     before_policy,
                     out,
                     policy_identifier="prefer_specificity",

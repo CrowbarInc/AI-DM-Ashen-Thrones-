@@ -1,0 +1,167 @@
+{
+  "schema_version": "policy-evidence-manifest.v1",
+  "campaign_id": "rc10_rc21_policy_resolution_20260919",
+  "campaign_type": "POLICY_ANALYSIS_HUMAN_DECISION_SUPPORT",
+  "implementation_performed": false,
+  "policy_choices_made": false,
+  "focused_failures_reconfirmed": [
+    "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+    "tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry",
+    "tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows",
+    "tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending"
+  ],
+  "evidence_classes_used": [
+    "CONFIRMED_BY_CURRENT_CODE",
+    "CONFIRMED_BY_CURRENT_TEST",
+    "CONFIRMED_BY_CURRENT_ARCHITECTURE_DOC",
+    "CONFIRMED_BY_HISTORICAL_ARTIFACT",
+    "INFERRED",
+    "POLICY_JUDGMENT"
+  ],
+  "rc10": {
+    "plain_english": "Who may own the retired opening-fallback authorship label compatibility_local_opening_deterministic?",
+    "current_runtime": "Live opening paths use upstream_prepared_opening_fallback or fail-closed; legacy token maps to unknown-ambiguous.",
+    "current_test": "AST lock forbids raw literals/imports outside tests/helpers/opening_fallback_evidence.py.",
+    "current_offender": "tests/test_fallback_incidence_report.py:150",
+    "options": ["A_evidence_only_fence", "B_diagnostic_raw_token_allowlist", "C_schema_only_contraction"],
+    "architecture_lean": "A_evidence_only_fence",
+    "recommendation": "A_evidence_only_fence",
+    "recommendation_confidence": "HIGH",
+    "player_facing_impact": "none",
+    "evidence": [
+      {
+        "ref": "tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only",
+        "class": "CONFIRMED_BY_CURRENT_TEST",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "tests/test_fallback_incidence_report.py:150",
+        "class": "CONFIRMED_BY_CURRENT_TEST",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "tests/helpers/opening_fallback_evidence.py",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "game/final_emission_ownership_schema.py",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "docs/compatibility_residue_register.md#CR-01",
+        "class": "CONFIRMED_BY_CURRENT_ARCHITECTURE_DOC",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "CK_fallback_authorship_contraction_closeout.md",
+        "class": "CONFIRMED_BY_HISTORICAL_ARTIFACT",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "845e6db CT: Runtime Fallback Incidence Baseline",
+        "class": "CONFIRMED_BY_HISTORICAL_ARTIFACT",
+        "stance": "SUPPORTS_OPTION_B"
+      }
+    ]
+  },
+  "rc21": {
+    "plain_english": "When an NPC redirects the player to a named person or landmark, what official follow-up should the game record?",
+    "current_runtime": "Notice-board location/rumor lead plus registry and clue rows; no emergent_town_crier pending row.",
+    "current_test": "Exactly one pending row with leads_to_npc=emergent_town_crier.",
+    "runtime_snapshot": "artifacts/policy_resolution/rc21_runtime_snapshot.json",
+    "options": [
+      "A_npc_pending_followup",
+      "B_authored_clue_or_landmark_evidence",
+      "C_registry_canonical_projections"
+    ],
+    "architecture_lean": "B_authored_clue_or_landmark_evidence plus C_registry_canonical_projections",
+    "recommendation": "B_keep_C",
+    "recommendation_confidence": "MEDIUM_HIGH",
+    "player_facing_impact": "Whether 'follow Lirael' becomes an official pursuit target.",
+    "evidence": [
+      {
+        "ref": "tests/test_social_destination_redirect_leads.py",
+        "class": "CONFIRMED_BY_CURRENT_TEST",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "artifacts/policy_resolution/rc21_runtime_snapshot.json",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "data/scenes/frontier_gate.json",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "game/clues.py::_scan_scene_anchored_destination_leads",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "game/clues.py::_apply_extracted_social_leads comment",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OTHER"
+      },
+      {
+        "ref": "game/leads.py::apply_engine_lead_signal",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "SUPPORTS_OTHER"
+      },
+      {
+        "ref": "development/campaigns/reconciliation/AR-AD_target_architecture_doctrine.md",
+        "class": "CONFIRMED_BY_CURRENT_ARCHITECTURE_DOC",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "docs/ai_gm_contract.md",
+        "class": "CONFIRMED_BY_CURRENT_ARCHITECTURE_DOC",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "docs/state_authority_model.md",
+        "class": "CONFIRMED_BY_CURRENT_ARCHITECTURE_DOC",
+        "stance": "SUPPORTS_OTHER"
+      },
+      {
+        "ref": "fc73bc8 2026-04-03 test introduction",
+        "class": "CONFIRMED_BY_HISTORICAL_ARTIFACT",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "4d3d71a 2026-04-25 scene canon cleanup",
+        "class": "CONFIRMED_BY_HISTORICAL_ARTIFACT",
+        "stance": "SUPPORTS_OPTION_B"
+      },
+      {
+        "ref": "tests/test_qualified_pursuit_parser.py",
+        "class": "CONFIRMED_BY_CURRENT_TEST",
+        "stance": "SUPPORTS_OPTION_A"
+      },
+      {
+        "ref": "game/defaults.py leftover Lirael discoverable",
+        "class": "CONFIRMED_BY_CURRENT_CODE",
+        "stance": "AMBIGUOUS"
+      }
+    ]
+  },
+  "relationship": {
+    "shared_theme": "Do not let compatibility or narration surfaces become a second owner of meaning.",
+    "rc10_is": "retired-label ownership in tests/diagnostics",
+    "rc21_is": "live follow-up ownership after social redirects",
+    "independent_decisions": true
+  },
+  "files_created": [
+    "artifacts/policy_resolution/rc10_policy_analysis.md",
+    "artifacts/policy_resolution/rc21_policy_analysis.md",
+    "artifacts/policy_resolution/policy_evidence_manifest.json",
+    "artifacts/policy_resolution/policy_decision_summary.md",
+    "artifacts/policy_resolution/rc21_runtime_snapshot.json",
+    "docs/rc10_rc21_policy_resolution_dossier.md",
+    "docs/NEXT_SESSION.md",
+    "handoff/CURRENT_REVIEW.md"
+  ]
+}

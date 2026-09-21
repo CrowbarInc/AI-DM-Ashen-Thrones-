@@ -124,7 +124,27 @@ def test_reassert_scene_opening_accepted_candidate_matches_inline_sequence() -> 
         source=source,
     )
 
-    assert inline_out == helper_out
+    # The legacy inline sequence remains the behavioral comparator. Modern
+    # attribution metadata is governed separately below.
+    assert inline_out["player_facing_text"] == helper_out["player_facing_text"] == accepted
+    assert inline_out["metadata"]["emission_debug"] == helper_out["metadata"]["emission_debug"]
+    for preview_key in ("response_type_candidate_preview", "response_type_emitted_preview"):
+        assert inline_out[FINAL_EMISSION_META_KEY][preview_key] == helper_out[FINAL_EMISSION_META_KEY][preview_key]
+
+    assert "semantic_mutation_write_sites" not in inline_out[FINAL_EMISSION_META_KEY]
+    write_sites = helper_out[FINAL_EMISSION_META_KEY]["semantic_mutation_write_sites"]
+    assert len(write_sites) == 1
+    write_site = write_sites[0]
+    assert write_site["write_site_family"] == "final_emission"
+    assert write_site["write_site_file"] == "game/final_emission_opening_fallback.py"
+    assert write_site["write_site_function"] == "reassert_scene_opening_accepted_candidate"
+    assert write_site["owner"] == "game.final_emission_opening_fallback"
+    assert write_site["source"] == source
+    assert write_site["mutation_reason"] == "accepted_scene_opening_reassertion"
+    assert write_site["compatibility_status"] == "diagnostic_only"
+    assert write_site["selected_active_stream"] is True
+    assert write_site["candidate_only"] is False
+    assert write_site["before_semantic_hash"] != write_site["after_semantic_hash"]
 
 
 def test_reassert_scene_opening_accepted_candidate_noop_when_text_already_matches() -> None:

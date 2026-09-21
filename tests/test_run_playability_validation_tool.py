@@ -18,6 +18,8 @@ _mod = importlib.util.module_from_spec(_spec)
 sys.modules["run_playability_validation_tool"] = _mod
 _spec.loader.exec_module(_mod)
 summary_from_eval = _mod.summary_from_eval
+_write_observability_artifacts = _mod._write_observability_artifacts
+PlayabilityScenario = _mod.PlayabilityScenario
 
 
 def test_summary_from_eval_mirrors_evaluator_slices():
@@ -41,6 +43,9 @@ def test_summary_from_eval_mirrors_evaluator_slices():
         "report_version": 3,
         "scenario_id": "p1_direct_answer",
         "overall": eval_out["overall"],
+        "semantic_result": None,
+        "mandatory_gates": None,
+        "diagnostic_quality": None,
         "axis_scores": {
             "direct_answer": 10,
             "player_intent": 11,
@@ -81,3 +86,61 @@ def test_summary_from_eval_includes_dead_turn_report_when_passed():
     assert s["report_version"] == 3
     assert s["dead_turn_report"]["dead_turn_count"] == 1
     assert "retry_terminal_fallback" in (s["dead_turn_report"].get("banner") or "")
+
+
+def test_observability_artifacts_include_transcript_evaluation_and_state(tmp_path: Path) -> None:
+    spec = PlayabilityScenario(
+        "p_observe",
+        "Observer smoke.",
+        ("What do I see?",),
+    )
+    turns = [
+        {
+            "turn_index": 0,
+            "player_prompt": "What do I see?",
+            "gm_text": "You see the gate.",
+            "resolution_kind": "observe",
+            "api_ok": True,
+            "api_error": None,
+            "playability_eval": {"overall": {"score": 75, "rating": "acceptable", "passed": True}},
+            "narrative_authenticity_eval": {"overall": {"passed": True}},
+            "dead_turn_visibility": {"dead_turn_detected": False},
+            "_final_emission_meta": {"dead_turn": {"is_dead_turn": False}},
+        }
+    ]
+    summary = {
+        "overall": {"score": 75, "rating": "acceptable", "passed": True},
+        "failures": [],
+        "warnings": [],
+        "run_gameplay_validation": {"run_valid": True},
+        "dead_turn_report": {"dead_turn_count": 0},
+    }
+
+    _write_observability_artifacts(
+        run_dir=tmp_path,
+        run_id="run1",
+        spec=spec,
+        started_at="2026-09-17T00:00:00+00:00",
+        finished_at="2026-09-17T00:00:01+00:00",
+        turns=turns,
+        summary=summary,
+        state_before={"session": {"turn_counter": 0}},
+        state_after={"session": {"turn_counter": 1}},
+        apply_reset=True,
+        caller_kind="test",
+        base_url=None,
+        upstream_dependent_run_gate={"startup_run_valid": True},
+    )
+
+    transcript = (tmp_path / "transcript.md").read_text(encoding="utf-8")
+    evaluation = (tmp_path / "evaluation.json").read_text(encoding="utf-8")
+    metadata = (tmp_path / "metadata.json").read_text(encoding="utf-8")
+    assert "### PLAYER" in transcript
+    assert "What do I see?" in transcript
+    assert "You see the gate." in transcript
+    assert '"result": "PASS"' in evaluation
+    assert "semantic_result" in evaluation
+    assert "mandatory_gates" in transcript
+    assert (tmp_path / "state_before.json").is_file()
+    assert (tmp_path / "state_after.json").is_file()
+    assert "fixed scripted natural-language prompts" in metadata

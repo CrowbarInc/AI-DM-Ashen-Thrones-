@@ -22,6 +22,7 @@ PATH_BUCKETS: tuple[str, ...] = (
 GENERATED_ARTIFACT_PREFIXES: tuple[str, ...] = (
     "artifacts/",
     "codex_pytest_tmp",
+    "development/tmp/",
     ".pytest_cache/",
     "htmlcov/",
     ".coverage",
@@ -204,7 +205,7 @@ BUCKET_DEFINITIONS: dict[str, str] = {
     "scripts_tools": "Tooling under `tools/`, `scripts/`, `.github/`, and build/CI/config files.",
     "fixtures_data": "Committed fixtures, snapshots, and scenario inputs under `data/` and `fixtures/`.",
     "generated_artifacts": (
-        "Generated output under `artifacts/`, `codex_pytest_tmp*`, caches, and coverage files."
+        "Generated output under `artifacts/`, `codex_pytest_tmp*`, `development/tmp/`, caches, and coverage files."
     ),
     "unclassified": "Any changed path that does not match a higher-precedence bucket.",
 }

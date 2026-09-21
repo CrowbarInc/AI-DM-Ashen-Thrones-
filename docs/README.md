@@ -102,8 +102,15 @@ compatibility, and verification expectations.
 - `game/` backend modules
 - `data/` runtime state
 - `data/scenes/` scene registry
+- `data/validation/` active validation inputs (not loaded at runtime)
 - `static/` browser UI
+- `artifacts/` generated replay/audit/campaign evidence
+- `development/campaigns/` completed AR/PR/foundation campaign reports
+- `development/reports/` repository-organization and housekeeping reports
+- `development/tmp/` disposable pytest/agent scratch (Git-ignored)
 - `docs/README.md` this file
+- `docs/DEVELOPMENT_CONSTITUTION.md` — **standing development-process authority** (session entry/exit, file placement, and canonical [`docs/NEXT_SESSION.md`](NEXT_SESSION.md) handoff). Does not replace architecture, validation, Product Realization, documentation, or review-handoff authorities.
+- `docs/product_realization_validation.md` — Product Realization validation rule: content may be specific; systems must be general.
 - `docs/convergence_ci_inventory.md` — **canonical governance discovery index** (convergence CI map, local command parity, [split-owner matrix governance](convergence_ci_inventory.md#split-owner-acceptance-matrix-governance); `.github/workflows/convergence-checks.yml`; planner convergence stays in `content-lint.yml`)
 - `docs/audits/closeouts/evaluator_convergence_closeout.md` — evaluator convergence freeze: offline/read-only invariants, intentional overlaps, and future maintenance test slice
 - `docs/scenario_spine_validation.md` — scenario-spine JSON, `evaluate_scenario_spine_session`, CLI `tools/run_scenario_spine_validation.py`, artifacts under `artifacts/scenario_spine_validation/<UTC>/<spine_id>/<branch_id>/` (plus `aggregate_session_health_summary.json` and `aggregate_operator_summary.md` at `…/<spine_id>/` when using `--all-branches`)

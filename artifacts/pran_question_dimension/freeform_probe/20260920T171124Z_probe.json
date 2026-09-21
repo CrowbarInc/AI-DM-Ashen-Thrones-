@@ -1,0 +1,231 @@
+{
+  "stamp": "20260920T171124Z",
+  "turns": [
+    {
+      "player": "I walk over to the tavern runner. Do you know the name of whoever last checked that board?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "identity",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": false,
+          "sufficient": false,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [],
+      "gm": "Tavern Runner mutters, \"Word is, names? I can't say for sure who last checked the board, the tavern runner replies, voice low enough to keep nosy ears at bay. That roster rotates fast, and folks with official business don't linger long. Your best bet might be to ask the guard serjeant\u2014he manages the crowd an\u2026\""
+    },
+    {
+      "player": "When did that missing patrol vanish, exactly?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "time",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": true,
+          "sufficient": false,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [],
+      "gm": "Tavern Runner mutters, \"Word is, that patrol\u2019s been missing since just before dawn,.\""
+    },
+    {
+      "player": "Where was the patrol last seen?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "location",
+      "topic_revealed": "patrol_rumor",
+      "clue_id": "muddy_footprints_northwest",
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": true,
+          "sufficient": true,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest"
+      ],
+      "gm": "\"From what I heard, that patrol was last seen vanishing near some muddy footprints northwest of the crates,\" they say cautiously, eyes darting around as if worried someone might overhear. \"If you want to follow a trail, that's where I'd start.\""
+    },
+    {
+      "player": "Why is the stew even out here in the rain?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "cause",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": false,
+          "sufficient": false,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest"
+      ],
+      "gm": "Tavern Runner grimaces. \"Not something I can say here.\""
+    },
+    {
+      "player": "How many bowls do you have left?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "quantity",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": false,
+          "sufficient": false,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest"
+      ],
+      "gm": "\"All on many is rumor: people say the ledger desk by the west pier sees the real traffic.\""
+    },
+    {
+      "player": "What is posted on that board?",
+      "ok": true,
+      "kind": "investigate",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "general",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": false,
+          "sufficient": true,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest",
+        "notice_patrol_route"
+      ],
+      "gm": "Tavern Runner grimaces. \"Not something I can say here.\" The missing patrol was last seen taking the northwest mud track past the crates."
+    },
+    {
+      "player": "Alright, what does the stew cost then?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "quantity",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": false,
+          "sufficient": false,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest",
+        "notice_patrol_route"
+      ],
+      "gm": "Tavern Runner shakes their head."
+    },
+    {
+      "player": "I turn to the Guard Captain. Who commands the watch here?",
+      "ok": true,
+      "kind": "question",
+      "scene": "frontier_gate",
+      "speaker": "guard_captain",
+      "mode": "social",
+      "dimension": "identity",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest",
+        "notice_patrol_route"
+      ],
+      "gm": "Guard Captain mutters, \"Word is, i can't reveal who exactly commands the watch here, the guard captain says with a tight expression, scanning the crowd carefully. Chain of command is a sensitive matter these days, and discretion is necessary\u2014especially with tensions high around the gate. They pause, voice l\u2026\""
+    },
+    {
+      "player": "I stay with the captain. Who last checked the notice board?",
+      "ok": true,
+      "kind": "observe",
+      "scene": "frontier_gate",
+      "speaker": "guard_captain",
+      "mode": "social",
+      "dimension": "identity",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [],
+      "leads": [
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest",
+        "notice_patrol_route"
+      ],
+      "gm": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+    },
+    {
+      "player": "I step back to the runner. Tell me about the missing patrol.",
+      "ok": true,
+      "kind": "social_probe",
+      "scene": "frontier_gate",
+      "speaker": "tavern_runner",
+      "mode": "social",
+      "dimension": "general",
+      "topic_revealed": null,
+      "clue_id": null,
+      "candidates": [
+        {
+          "id": "patrol_rumor",
+          "relevant": true,
+          "sufficient": true,
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "leads": [
+        "lead_frontier_gate_exit_follow_the_missing_patrol_rumor",
+        "minlead_exit_frontier_gate_old_milestone",
+        "muddy_footprints_northwest",
+        "notice_patrol_route"
+      ],
+      "gm": "Tavern Runner mutters, \"Word is, follow the missing patrol rumor.\""
+    }
+  ]
+}

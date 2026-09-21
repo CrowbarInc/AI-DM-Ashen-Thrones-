@@ -125,6 +125,34 @@ def test_repair_removes_fabricated_authority_without_inventing_replacement_facts
     assert meta.get("fallback_behavior_boundary_semantic_synthesis_skipped") is True
 
 
+def test_repair_preserves_speaker_knowledge_limit_refusal() -> None:
+    raw = 'Coil Warden says, "No. I cannot answer that from what I know."'
+    repaired, meta, validation = _repair(raw)
+    assert validation["fabricated_authority_detected"] is False
+    assert "from what i know" in repaired.lower()
+    assert "from what." not in repaired.lower()
+    assert "remove_fabricated_authority" not in str(meta.get("fallback_behavior_repair_mode") or "")
+
+
+def test_strip_drops_dangling_connector_when_optional_span_is_removed() -> None:
+    import re
+
+    from game.final_emission_repairs import _drop_dangling_optional_connectors, _strip_patterns_from_text
+
+    leftover = _drop_dangling_optional_connectors(
+        'Coil Warden says, "No. I cannot answer that from what."'
+    )
+    assert "from what" not in leftover.lower()
+    assert "cannot answer that" in leftover.lower()
+
+    forced = _strip_patterns_from_text(
+        'Coil Warden says, "I cannot answer that from the records show."',
+        patterns=(re.compile(r"\b(?:the )?record(?:s)? show(?:s)?\b", re.IGNORECASE),),
+    )
+    assert not forced.lower().rstrip(".\"'").endswith(" from")
+    assert "cannot answer that" in forced.lower()
+
+
 @pytest.mark.skip(reason="C2 Block C: fallback_behavior no longer synthesizes bounded-partial prose at the boundary")
 @pytest.mark.parametrize(
     ("source", "raw", "forbidden", "expected"),

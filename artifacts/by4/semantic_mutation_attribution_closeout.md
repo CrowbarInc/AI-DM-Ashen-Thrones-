@@ -7,11 +7,11 @@
 
 - total turns: 8
 - mutated turns: 3
-- attributable first mutations: 3
-- first-source coverage rate: 100.00%
-- unknown first-source count: 0
-- attribution gap count: 0
-- semantic mutation risk (mean / max): 3.33 / 10
+- attributable first mutations: 2
+- first-source coverage rate: 66.67%
+- unknown first-source count: 1
+- attribution gap count: 1
+- semantic mutation risk (mean / max): 23.33 / 60
 
 ## BY1 synthetic fixture coverage
 
@@ -24,9 +24,9 @@
 ## BY2 protected corpus measurement
 
 - corpus: protected_replay
-- first-source coverage rate: 100.00%
-- unknown first-source count: 0
-- attribution gap count: 0
+- first-source coverage rate: 66.67%
+- unknown first-source count: 1
+- attribution gap count: 1
 
 ## BY3 strict-social gap closure
 
@@ -37,12 +37,11 @@
 
 - fallback: 1
 - policy: 1
-- sanitizer: 1
 
 ## Top mutation sources (final)
 
 - game.response_policy_enforcement.apply_response_policy_enforcement: 1
-- game.output_sanitizer.sanitize_player_facing_output: 1
+- broken_checkpoint_continuity: 1
 - game.social_exchange_emission.build_final_strict_social_response: 1
 
 ## Protected replay non-interference
@@ -53,6 +52,9 @@
 
 ## Remaining risks
 
+- Representative high-risk turns remain in protected corpus (max risk score 60).
+- 1 attribution gap(s) remain in protected replay corpus.
+- 1 turn(s) flagged for future instrumentation.
 - Semantic mutation probes are test/replay-only; production runtime does not stamp ordered checkpoints.
 - Protected replay corpus covers 8 turns across 6 scenarios; live campaign paths may diverge.
 - Risk score measures attribution completeness, not semantic equivalence of before/after text.
@@ -60,7 +62,7 @@
 ## Schema promotion recommendation
 
 - promote to protected replay schema now: False
-- measurement ready for future promotion: True
+- measurement ready for future promotion: False
 - rationale: Attribution measurement is stable on the protected corpus with zero gaps and full first-source coverage, but BY fields remain test-only diagnostics. Do not promote trace checkpoints or risk scores into protected golden replay schema until a dedicated cycle validates long-term non-interference, corpus breadth, and operational need for replay diffs.
 
 ## How to rerun BY measurement

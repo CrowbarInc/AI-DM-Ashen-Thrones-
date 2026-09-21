@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any, Mapping, NotRequired, Sequence, TypedDict
 
 from game.attribution_read_views import (
+    SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED,
+    SEALED_FALLBACK_OWNER_UNKNOWN_NONE,
     opening_fallback_owner_bucket_from_meta,
     sealed_fallback_owner_bucket_from_fields,
     visibility_fallback_owner_bucket_from_fields,
@@ -414,8 +416,6 @@ def _projected_sanitizer_owner_bucket_from_fem(
         return direct, ATTRIBUTION_ORIGIN_DIRECT
     repair_kind = _non_empty(fem.get("producer_repair_kind"))
     if repair_kind in _SANITIZER_PRODUCER_REPAIR_KINDS and _sanitizer_producer_attribution_evidence(fem):
-        from game.final_emission_ownership_schema import SEALED_FALLBACK_OWNER_UNKNOWN_NONE
-
         return SEALED_FALLBACK_OWNER_UNKNOWN_NONE, ATTRIBUTION_ORIGIN_PROJECTED
     return None
 
@@ -432,8 +432,6 @@ def _projected_gate_family_owner_bucket_from_fem(
     if replacement_path == REPLACEMENT_PATH_STRICT_SOCIAL:
         repair_kind = _non_empty(fem.get("producer_repair_kind"))
         if fem.get("strict_social_active") is True and repair_kind == "strict_social_repair":
-            from game.final_emission_ownership_schema import SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED
-
             return SEALED_FALLBACK_OWNER_STRICT_SOCIAL_SEALED, ATTRIBUTION_ORIGIN_PROJECTED
     return None
 
@@ -851,11 +849,14 @@ def attribution_record_from_failure_classification(
         classification.get("emission_sublayer")
     )
     if mutation_source:
+        fem_lineage_evidence = classification.get("authoritative_evidence_source") == "fem_mutation_lineage"
+        mutation_origin = ATTRIBUTION_ORIGIN_DIRECT if fem_lineage_evidence else ATTRIBUTION_ORIGIN_CLASSIFIER_INFERRED
+        mutation_classification = "final_emission_mutation" if fem_lineage_evidence else mutation_source
         _set_field(
             record,
             "mutation_classification",
-            mutation_source,
-            origin=ATTRIBUTION_ORIGIN_CLASSIFIER_INFERRED,
+            mutation_classification,
+            origin=mutation_origin,
         )
 
     if observed_turn is not None:

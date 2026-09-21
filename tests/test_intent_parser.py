@@ -114,6 +114,27 @@ def test_investigate_notice_board_resolves():
     assert "notice" in (parsed.get("prompt") or "").lower() or "board" in (parsed.get("prompt") or "").lower()
 
 
+def test_read_notice_board_maps_to_investigate():
+    scene = {
+        "scene": {
+            "id": "frontier_gate",
+            "interactables": [
+                {
+                    "id": "notice_board",
+                    "label": "Notice board",
+                    "aliases": ["notice", "board"],
+                    "type": "investigate",
+                    "reveals_clue": "notice_patrol_route",
+                }
+            ],
+        }
+    }
+    parsed = parse_freeform_to_action("I read the notice board.", scene)
+    assert parsed is not None
+    assert parsed.get("type") == "investigate"
+    assert parsed.get("target_id") == "notice_board"
+
+
 def test_parse_mixed_investigation_question_uses_scene_grounding_metadata():
     scene = {
         "scene": {

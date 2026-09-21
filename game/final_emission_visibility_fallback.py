@@ -60,8 +60,30 @@ from game.final_emission_visibility_metadata import (
     build_visibility_pre_route_metadata_context,
     build_visibility_route_metadata_outcome,
     build_visibility_validation_observation,
-    stamp_visibility_fallback_metadata,
+    visibility_fallback_metadata_updates,
 )
+
+
+def stamp_visibility_fallback_metadata(
+    meta: MutableMapping[str, Any],
+    **kwargs: Any,
+) -> None:
+    """Canonical visibility metadata writer with paired owner-bucket stamping."""
+    if not isinstance(meta, MutableMapping):
+        return
+    updates = visibility_fallback_metadata_updates(**kwargs)
+    explicit_owner = updates.pop("visibility_fallback_owner_bucket", None)
+    meta.update(updates)
+    if explicit_owner is not None:
+        meta["visibility_fallback_owner_bucket"] = explicit_owner
+        return
+    if any(kwargs.get(key) is not None for key in ("fallback_pool", "fallback_kind", "final_emitted_source")):
+        stamp_visibility_fallback_owner_bucket_from_fields(
+            meta,
+            fallback_pool=kwargs.get("fallback_pool"),
+            fallback_kind=kwargs.get("fallback_kind"),
+            final_emitted_source=kwargs.get("final_emitted_source"),
+        )
 
 from game.social import SOCIAL_KINDS
 

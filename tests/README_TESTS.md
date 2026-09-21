@@ -124,7 +124,7 @@ python tools/validation_coverage_audit.py --surface playability
 
 **Post-AER Block C1:** Behavioral Gauntlet, Playability Validation, and AER are **complete** as validation tracks. Consolidation PRs target **orchestration** clarity, **telemetry/meta** normalization, and **test ownership** (**canonical owner** per module, **smoke overlap** only where layers differ)—see `docs/current_focus.md` and `docs/narrative_integrity_architecture.md` (**Post-AER Consolidation Rules**).
 
-**Windows / Codex temp-root note:** `pytest.ini` supplies `--basetemp=codex_pytest_tmp`, so normal pytest runs use a repo-local temporary directory instead of the shared user temp root. This avoids Windows/Codex permission failures like `PermissionError` under `AppData\Local\Temp\pytest-of-...` without changing test behavior. If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`). If neither launcher is on `PATH` in Codex, invoke the available Codex Python with `-m pytest` from the repo root and keep `PYTHONPATH` pointed at `.\.venv\Lib\site-packages`; the repo-local basetemp still comes from `pytest.ini`.
+**Windows / Codex temp-root note:** `pytest.ini` supplies `--basetemp=development/tmp/pytest`, so normal pytest runs use a repo-local temporary directory instead of the shared user temp root. This avoids Windows/Codex permission failures like `PermissionError` under `AppData\Local\Temp\pytest-of-...` without changing test behavior. Legacy leftover `codex_pytest_tmp*` directories may still exist at root and remain Git-ignored. If `pytest` is not on your `PATH`, use `py -3 -m pytest` instead of `pytest` for every command below (for example `py -3 -m pytest -m "not transcript and not slow"`). If neither launcher is on `PATH` in Codex, invoke the available Codex Python with `-m pytest` from the repo root and keep `PYTHONPATH` pointed at `.\.venv\Lib\site-packages`; the repo-local basetemp still comes from `pytest.ini`.
 
 ## Manual gauntlets (outside pytest)
 
@@ -132,7 +132,7 @@ Manual gauntlets are **not** part of pytest selection. Use them after changes th
 
 ## Behavioral gauntlet coverage (complete)
 
-This repo has a **deterministic**, **contract-driven behavioral gauntlet stack** for compact narration-behavior checks (validation track — **complete**). The main pieces are:
+This repo has a **deterministic**, **contract-driven behavioral gauntlet stack** for compact narration-behavior diagnostics. Semantic calibration defines how semantic expectations are interpreted; this gauntlet detects enumerated patterns and is not an independent semantic authority. The main pieces are:
 
 - Evaluator helper: `tests/helpers/behavioral_gauntlet_eval.py`
 - Behavioral smoke tests: `tests/test_behavioral_gauntlet_smoke.py`
@@ -216,7 +216,7 @@ py -3 tools/run_manual_gauntlet.py --list
 
 **Location:** `tests/test_playability_smoke.py`
 
-**Status:** **Complete** as a validation layer—the suite remains the **canonical owner** for turn-scoped playability checks.
+**Status:** Complete as a supporting-evidence layer. The suite remains the canonical executor of turn-scoped playability scoring, but PASS is not independent proof of player-facing acceptability.
 
 **Characteristics:**
 
@@ -226,7 +226,7 @@ py -3 tools/run_manual_gauntlet.py --list
 
 These tests:
 
-- validate behavioral quality
+- score bounded behavioral-quality signals under controlled inputs
 - do **not** enforce exact phrasing
 - rely entirely on `evaluate_playability(...)`
 
@@ -245,13 +245,13 @@ pytest tests/test_playability_smoke.py -q
 
 **Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../docs/convergence_ci_inventory.md) (protected replay CI step, local parity; [split-owner matrix governance](../docs/convergence_ci_inventory.md#split-owner-acceptance-matrix-governance) for cross-family owner literals).
 
-Golden replay protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, compact scenario-spine branch structure, and the protected 20-turn Frontier Gate long-session stability lane. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
+Protected replay is a controlled structural acceptance lane. It protects canonical turn-routing and final-emission invariants across repair cycles: speaker/target selection, route kind, FEM/fallback metadata, scaffold leakage, action/answer survival, compact scenario-spine branch structure, and the protected 20-turn Frontier Gate long-session stability lane. Its GM text is deterministic/stubbed in ordinary CI, so PASS does not establish production-model semantic quality, narrative quality, human playability, or live AI-GM behavior. It does **not** lock exact final prose by default; exact text comparison is opt-in, while structural drift is the primary signal.
 
 Metadata ownership is intentionally split. Golden replay uses `scenario_id`; scenario-spine fixtures use `spine_id`, `branch_id`, and per-turn `turn_id`; the N1 synthetic lane uses `scenario_spine_id` and remains advisory rather than protected golden replay. Text projections are also layer-specific: `player_facing_text` is runtime response output, `gm_text` is snapshot/transcript output, and `final_text` is the golden replay assertion surface.
 
 The Frontier Gate 20-turn social-inquiry replay is protected golden replay backed by `data/validation/scenario_spines/frontier_gate_long_session.json`. Protected replay failure reports may include `source_path`, `branch_id`, and `turn_id` when fixture identity is available.
 
-Protected scenario ownership is declared in [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Protected replay is a required hard-fail CI check in `.github/workflows/convergence-checks.yml`: failure means acceptance-protected replay or its currently co-located golden replay contract coverage failed, so the change must not be accepted until resolved.
+Protected scenario ownership is declared in [`docs/testing/protected_replay_manifest.md`](../docs/testing/protected_replay_manifest.md). Controlled structural replay remains a required hard-fail CI check in `.github/workflows/convergence-checks.yml`: failure means an acceptance-protected structural replay invariant or its currently co-located contract coverage failed, so the change must not be accepted until resolved.
 
 From repo root:
 
@@ -370,7 +370,7 @@ Same thing with an explicit path:
 pytest tests/
 ```
 
-Both commands inherit `--basetemp=codex_pytest_tmp` from `pytest.ini`; do not add a shared user-temp override for local/Codex runs.
+Both commands inherit `--basetemp=development/tmp/pytest` from `pytest.ini`; do not add a shared user-temp override for local/Codex runs.
 
 **Collect only:**
 
@@ -496,7 +496,7 @@ See `tests/TEST_AUDIT.md` → *Consolidation Block 1 — Canonical ownership map
 | **Split-owner matrix refresh (Make)** | `make split-owner-matrix-refresh` |
 | **Split-owner matrix contract** | `python scripts/check_split_owner_acceptance_matrix.py` or `make split-owner-matrix-check` |
 | **Split-owner matrix contract (pytest)** | `python -m pytest tests/test_split_owner_acceptance_matrix_contract.py -q -m split_owner_matrix_contract` |
-| **Full lane** | `pytest` or `pytest tests/` (uses repo-local `codex_pytest_tmp` from `pytest.ini`) |
+| **Full lane** | `pytest` or `pytest tests/` (uses repo-local `development/tmp/pytest` from `pytest.ini`) |
 | **Full lane, collect only** | `pytest --collect-only -q` |
 | **Fast lane** | `pytest -m "not transcript and not slow"` |
 | **Fast lane, collect only** | `pytest --collect-only -m "not transcript and not slow" -q` |

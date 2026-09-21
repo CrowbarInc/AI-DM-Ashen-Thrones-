@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="27.585" timestamp="2026-09-19T14:23:12.815928-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_golden_replay_long_session" name="test_golden_replay_frontier_gate_social_inquiry_25_turn_structural_stability" time="8.573" /><testcase classname="tests.test_golden_replay_long_session" name="test_golden_replay_frontier_gate_social_inquiry_25_turn_resume_persistence_supporting" time="10.232" /><testcase classname="tests.test_golden_replay_long_session" name="test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability" time="6.769"><failure message="AssertionError: scenario_id: 'frontier_gate_direct_intrusion_25_turn_diagnostic'&#10;turn_count: 25&#10;turn[0].player_text: 'I slip toward the narrow alley without announcing myself.'&#10;turn[0].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[0].branch_id: 'branch_direct_intrusion'&#10;turn[0].turn_id: 'act_01'&#10;turn[0].resolution_kind: None&#10;turn[0].route_kind: 'undecided'&#10;turn[0].selected_speaker_id: None&#10;turn[0].final_emitted_source: 'generated_candidate'&#10;turn[0].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[0].response_type_required: 'neutral_narration'&#10;turn[0].response_type_candidate_ok: True&#10;turn[0].response_type_repair_used: False&#10;turn[0].response_type_repair_kind: None&#10;turn[0].upstream_prepared_emission_used: False&#10;turn[0].upstream_prepared_emission_valid: False&#10;turn[0].upstream_prepared_emission_source: None&#10;turn[0].upstream_prepared_emission_reject_reason: None&#10;turn[0].sanitizer_empty_fallback_used: None&#10;turn[0].sanitizer_empty_fallback_source: None&#10;turn[0].sanitizer_empty_fallback_owner: None&#10;turn[0].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[0].sanitizer_lineage_changed_count: None&#10;turn[0].sanitizer_lineage_dropped_count: None&#10;turn[0].sanitizer_lineage_empty_fallback_used: None&#10;turn[0].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[0].sanitizer_strict_social_fallback_used: None&#10;turn[0].sanitizer_strict_social_selection_owner: None&#10;turn[0].sanitizer_strict_social_prose_owner: None&#10;turn[0].sanitizer_strict_social_source: None&#10;turn[0].opening_recovered_via_fallback: False&#10;turn[0].opening_fallback_authorship_source: None&#10;turn[0].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[0].sealed_fallback_owner_bucket: None&#10;turn[0].fallback_family: None&#10;turn[0].fallback_temporal_frame: None&#10;turn[0].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[0].scaffold_leakage: False&#10;turn[0].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[0].snapshot_summary: t0 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[1].player_text: 'I try the warehouse side door when guards look away.'&#10;turn[1].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[1].branch_id: 'branch_direct_intrusion'&#10;turn[1].turn_id: 'act_02'&#10;turn[1].resolution_kind: None&#10;turn[1].route_kind: 'undecided'&#10;turn[1].selected_speaker_id: None&#10;turn[1].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'&#10;turn[1].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[1].response_type_required: 'neutral_narration'&#10;turn[1].response_type_candidate_ok: True&#10;turn[1].response_type_repair_used: False&#10;turn[1].response_type_repair_kind: None&#10;turn[1].upstream_prepared_emission_used: False&#10;turn[1].upstream_prepared_emission_valid: False&#10;turn[1].upstream_prepared_emission_source: None&#10;turn[1].upstream_prepared_emission_reject_reason: None&#10;turn[1].sanitizer_empty_fallback_used: None&#10;turn[1].sanitizer_empty_fallback_source: None&#10;turn[1].sanitizer_empty_fallback_owner: None&#10;turn[1].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[1].sanitizer_lineage_changed_count: None&#10;turn[1].sanitizer_lineage_dropped_count: None&#10;turn[1].sanitizer_lineage_empty_fallback_used: None&#10;turn[1].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[1].sanitizer_strict_social_fallback_used: None&#10;turn[1].sanitizer_strict_social_selection_owner: None&#10;turn[1].sanitizer_strict_social_prose_owner: None&#10;turn[1].sanitizer_strict_social_source: None&#10;turn[1].opening_recovered_via_fallback: False&#10;turn[1].opening_fallback_authorship_source: None&#10;turn[1].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[1].sealed_fallback_owner_bucket: None&#10;turn[1].fallback_family: 'neutral_reply_speaker_grounding_bridge'&#10;turn[1].fallback_temporal_frame: None&#10;turn[1].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]&#10;turn[1].scaffold_leakage: False&#10;turn[1].unavailable: ['selected_speaker_id']&#10;turn[1].snapshot_summary: t1 scene='frontier_gate' interlocutor=None target='-'(-) gm='The moment passes without anyone stepping forward to own that thread.'&#10;turn[2].player_text: 'I palm the notice edge to read what is pasted behind it.'&#10;turn[2].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[2].branch_id: 'branch_direct_intrusion'&#10;turn[2].turn_id: 'act_03'&#10;turn[2].resolution_kind: None&#10;turn[2].route_kind: 'undecided'&#10;turn[2].selected_speaker_id: None&#10;turn[2].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'&#10;turn[2].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[2].response_type_required: 'neutral_narration'&#10;turn[2].response_type_candidate_ok: True&#10;turn[2].response_type_repair_used: False&#10;turn[2].response_type_repair_kind: None&#10;turn[2].upstream_prepared_emission_used: False&#10;turn[2].upstream_prepared_emission_valid: False&#10;turn[2].upstream_prepared_emission_source: None&#10;turn[2].upstream_prepared_emission_reject_reason: None&#10;turn[2].sanitizer_empty_fallback_used: None&#10;turn[2].sanitizer_empty_fallback_source: None&#10;turn[2].sanitizer_empty_fallback_owner: None&#10;turn[2].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[2].sanitizer_lineage_changed_count: None&#10;turn[2].sanitizer_lineage_dropped_count: None&#10;turn[2].sanitizer_lineage_empty_fallback_used: None&#10;turn[2].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[2].sanitizer_strict_social_fallback_used: None&#10;turn[2].sanitizer_strict_social_selection_owner: None&#10;turn[2].sanitizer_strict_social_prose_owner: None&#10;turn[2].sanitizer_strict_social_source: None&#10;turn[2].opening_recovered_via_fallback: False&#10;turn[2].opening_fallback_authorship_source: None&#10;turn[2].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[2].sealed_fallback_owner_bucket: None&#10;turn[2].fallback_family: 'neutral_reply_speaker_grounding_bridge'&#10;turn[2].fallback_temporal_frame: None&#10;turn[2].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]&#10;turn[2].scaffold_leakage: False&#10;turn[2].unavailable: ['selected_speaker_id']&#10;turn[2].snapshot_summary: t2 scene='frontier_gate' interlocutor=None target='-'(-) gm='The moment passes without anyone stepping forward to own that thread.'&#10;turn[3].player_text: 'I confront the threadbare watcher aloud.'&#10;turn[3].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[3].branch_id: 'branch_direct_intrusion'&#10;turn[3].turn_id: 'act_04'&#10;turn[3].resolution_kind: 'social_probe'&#10;turn[3].route_kind: 'dialogue'&#10;turn[3].selected_speaker_id: 'threadbare_watcher'&#10;turn[3].final_emitted_source: 'normalized_social_candidate'&#10;turn[3].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']&#10;turn[3].response_type_required: 'dialogue'&#10;turn[3].response_type_candidate_ok: True&#10;turn[3].response_type_repair_used: False&#10;turn[3].response_type_repair_kind: None&#10;turn[3].upstream_prepared_emission_used: False&#10;turn[3].upstream_prepared_emission_valid: False&#10;turn[3].upstream_prepared_emission_source: None&#10;turn[3].upstream_prepared_emission_reject_reason: None&#10;turn[3].sanitizer_empty_fallback_used: None&#10;turn[3].sanitizer_empty_fallback_source: None&#10;turn[3].sanitizer_empty_fallback_owner: None&#10;turn[3].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[3].sanitizer_lineage_changed_count: None&#10;turn[3].sanitizer_lineage_dropped_count: None&#10;turn[3].sanitizer_lineage_empty_fallback_used: None&#10;turn[3].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[3].sanitizer_strict_social_fallback_used: None&#10;turn[3].sanitizer_strict_social_selection_owner: None&#10;turn[3].sanitizer_strict_social_prose_owner: None&#10;turn[3].sanitizer_strict_social_source: None&#10;turn[3].opening_recovered_via_fallback: False&#10;turn[3].opening_fallback_authorship_source: None&#10;turn[3].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[3].sealed_fallback_owner_bucket: None&#10;turn[3].fallback_family: None&#10;turn[3].fallback_temporal_frame: None&#10;turn[3].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]&#10;turn[3].scaffold_leakage: False&#10;turn[3].unavailable: ['fallback_family']&#10;turn[3].snapshot_summary: t3 scene='frontier_gate' interlocutor='threadbare_watcher' target='threadbare_watcher'(interaction_context.active_interaction_target_id) gm='&quot;Old crossroads—that way.&quot; &quot;Hard to swear to anything in this crowd.&quot;'&#10;turn[4].player_text: 'I press through mud toward the gate serjeant.'&#10;turn[4].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[4].branch_id: 'branch_direct_intrusion'&#10;turn[4].turn_id: 'act_05'&#10;turn[4].resolution_kind: 'social_probe'&#10;turn[4].route_kind: 'dialogue'&#10;turn[4].selected_speaker_id: 'gate_guard'&#10;turn[4].final_emitted_source: 'normalized_social_candidate'&#10;turn[4].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']&#10;turn[4].response_type_required: 'dialogue'&#10;turn[4].response_type_candidate_ok: True&#10;turn[4].response_type_repair_used: False&#10;turn[4].response_type_repair_kind: None&#10;turn[4].upstream_prepared_emission_used: False&#10;turn[4].upstream_prepared_emission_valid: False&#10;turn[4].upstream_prepared_emission_source: None&#10;turn[4].upstream_prepared_emission_reject_reason: None&#10;turn[4].sanitizer_empty_fallback_used: None&#10;turn[4].sanitizer_empty_fallback_source: None&#10;turn[4].sanitizer_empty_fallback_owner: None&#10;turn[4].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[4].sanitizer_lineage_changed_count: None&#10;turn[4].sanitizer_lineage_dropped_count: None&#10;turn[4].sanitizer_lineage_empty_fallback_used: None&#10;turn[4].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[4].sanitizer_strict_social_fallback_used: None&#10;turn[4].sanitizer_strict_social_selection_owner: None&#10;turn[4].sanitizer_strict_social_prose_owner: None&#10;turn[4].sanitizer_strict_social_source: None&#10;turn[4].opening_recovered_via_fallback: False&#10;turn[4].opening_fallback_authorship_source: None&#10;turn[4].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[4].sealed_fallback_owner_bucket: None&#10;turn[4].fallback_family: None&#10;turn[4].fallback_temporal_frame: None&#10;turn[4].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]&#10;turn[4].scaffold_leakage: False&#10;turn[4].unavailable: ['fallback_family']&#10;turn[4].snapshot_summary: t4 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='&quot;Old crossroads—that way.&quot; &quot;I\'ve heard talk, but I won\'t pin that down as truth.&quot;'&#10;turn[5].player_text: 'I shout a blunt question about the missing patrol.'&#10;turn[5].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[5].branch_id: 'branch_direct_intrusion'&#10;turn[5].turn_id: 'act_06'&#10;turn[5].resolution_kind: 'social_probe'&#10;turn[5].route_kind: 'dialogue'&#10;turn[5].selected_speaker_id: None&#10;turn[5].final_emitted_source: 'retry_output'&#10;turn[5].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[5].response_type_required: 'neutral_narration'&#10;turn[5].response_type_candidate_ok: True&#10;turn[5].response_type_repair_used: False&#10;turn[5].response_type_repair_kind: None&#10;turn[5].upstream_prepared_emission_used: False&#10;turn[5].upstream_prepared_emission_valid: False&#10;turn[5].upstream_prepared_emission_source: None&#10;turn[5].upstream_prepared_emission_reject_reason: None&#10;turn[5].sanitizer_empty_fallback_used: None&#10;turn[5].sanitizer_empty_fallback_source: None&#10;turn[5].sanitizer_empty_fallback_owner: None&#10;turn[5].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[5].sanitizer_lineage_changed_count: None&#10;turn[5].sanitizer_lineage_dropped_count: None&#10;turn[5].sanitizer_lineage_empty_fallback_used: None&#10;turn[5].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[5].sanitizer_strict_social_fallback_used: None&#10;turn[5].sanitizer_strict_social_selection_owner: None&#10;turn[5].sanitizer_strict_social_prose_owner: None&#10;turn[5].sanitizer_strict_social_source: None&#10;turn[5].opening_recovered_via_fallback: False&#10;turn[5].opening_fallback_authorship_source: None&#10;turn[5].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[5].sealed_fallback_owner_bucket: None&#10;turn[5].fallback_family: None&#10;turn[5].fallback_temporal_frame: None&#10;turn[5].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'retry_output', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[5].scaffold_leakage: False&#10;turn[5].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[5].snapshot_summary: t5 scene='frontier_gate' interlocutor=None target='-'(-) gm='Nobody owns the moment—yet The gate guard keeps an open posture, waiting to see if you mean business. Someone jabs at...'&#10;turn[6].player_text: 'I offer a low bribe for duty-roster facts.'&#10;turn[6].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[6].branch_id: 'branch_direct_intrusion'&#10;turn[6].turn_id: 'act_07'&#10;turn[6].resolution_kind: None&#10;turn[6].route_kind: 'undecided'&#10;turn[6].selected_speaker_id: None&#10;turn[6].final_emitted_source: 'generated_candidate'&#10;turn[6].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[6].response_type_required: 'neutral_narration'&#10;turn[6].response_type_candidate_ok: True&#10;turn[6].response_type_repair_used: False&#10;turn[6].response_type_repair_kind: None&#10;turn[6].upstream_prepared_emission_used: False&#10;turn[6].upstream_prepared_emission_valid: False&#10;turn[6].upstream_prepared_emission_source: None&#10;turn[6].upstream_prepared_emission_reject_reason: None&#10;turn[6].sanitizer_empty_fallback_used: None&#10;turn[6].sanitizer_empty_fallback_source: None&#10;turn[6].sanitizer_empty_fallback_owner: None&#10;turn[6].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[6].sanitizer_lineage_changed_count: None&#10;turn[6].sanitizer_lineage_dropped_count: None&#10;turn[6].sanitizer_lineage_empty_fallback_used: None&#10;turn[6].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[6].sanitizer_strict_social_fallback_used: None&#10;turn[6].sanitizer_strict_social_selection_owner: None&#10;turn[6].sanitizer_strict_social_prose_owner: None&#10;turn[6].sanitizer_strict_social_source: None&#10;turn[6].opening_recovered_via_fallback: False&#10;turn[6].opening_fallback_authorship_source: None&#10;turn[6].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[6].sealed_fallback_owner_bucket: None&#10;turn[6].fallback_family: None&#10;turn[6].fallback_temporal_frame: None&#10;turn[6].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[6].scaffold_leakage: False&#10;turn[6].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[6].snapshot_summary: t6 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[7].player_text: 'I sprint for the crates when a hooded figure moves.'&#10;turn[7].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[7].branch_id: 'branch_direct_intrusion'&#10;turn[7].turn_id: 'act_08'&#10;turn[7].resolution_kind: None&#10;turn[7].route_kind: 'undecided'&#10;turn[7].selected_speaker_id: None&#10;turn[7].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'&#10;turn[7].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[7].response_type_required: 'neutral_narration'&#10;turn[7].response_type_candidate_ok: True&#10;turn[7].response_type_repair_used: False&#10;turn[7].response_type_repair_kind: None&#10;turn[7].upstream_prepared_emission_used: False&#10;turn[7].upstream_prepared_emission_valid: False&#10;turn[7].upstream_prepared_emission_source: None&#10;turn[7].upstream_prepared_emission_reject_reason: None&#10;turn[7].sanitizer_empty_fallback_used: None&#10;turn[7].sanitizer_empty_fallback_source: None&#10;turn[7].sanitizer_empty_fallback_owner: None&#10;turn[7].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[7].sanitizer_lineage_changed_count: None&#10;turn[7].sanitizer_lineage_dropped_count: None&#10;turn[7].sanitizer_lineage_empty_fallback_used: None&#10;turn[7].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[7].sanitizer_strict_social_fallback_used: None&#10;turn[7].sanitizer_strict_social_selection_owner: None&#10;turn[7].sanitizer_strict_social_prose_owner: None&#10;turn[7].sanitizer_strict_social_source: None&#10;turn[7].opening_recovered_via_fallback: False&#10;turn[7].opening_fallback_authorship_source: None&#10;turn[7].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[7].sealed_fallback_owner_bucket: None&#10;turn[7].fallback_family: 'neutral_reply_speaker_grounding_bridge'&#10;turn[7].fallback_temporal_frame: None&#10;turn[7].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]&#10;turn[7].scaffold_leakage: False&#10;turn[7].unavailable: ['selected_speaker_id']&#10;turn[7].snapshot_summary: t7 scene='frontier_gate' interlocutor=None target='-'(-) gm='The murmur around you never tightens into a single clear voice on that point.'&#10;turn[8].player_text: 'I shoulder past a census clerk blocking the choke cart lane.'&#10;turn[8].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[8].branch_id: 'branch_direct_intrusion'&#10;turn[8].turn_id: 'act_09'&#10;turn[8].resolution_kind: None&#10;turn[8].route_kind: 'undecided'&#10;turn[8].selected_speaker_id: None&#10;turn[8].final_emitted_source: 'generated_candidate'&#10;turn[8].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[8].response_type_required: 'neutral_narration'&#10;turn[8].response_type_candidate_ok: True&#10;turn[8].response_type_repair_used: False&#10;turn[8].response_type_repair_kind: None&#10;turn[8].upstream_prepared_emission_used: False&#10;turn[8].upstream_prepared_emission_valid: False&#10;turn[8].upstream_prepared_emission_source: None&#10;turn[8].upstream_prepared_emission_reject_reason: None&#10;turn[8].sanitizer_empty_fallback_used: None&#10;turn[8].sanitizer_empty_fallback_source: None&#10;turn[8].sanitizer_empty_fallback_owner: None&#10;turn[8].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[8].sanitizer_lineage_changed_count: None&#10;turn[8].sanitizer_lineage_dropped_count: None&#10;turn[8].sanitizer_lineage_empty_fallback_used: None&#10;turn[8].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[8].sanitizer_strict_social_fallback_used: None&#10;turn[8].sanitizer_strict_social_selection_owner: None&#10;turn[8].sanitizer_strict_social_prose_owner: None&#10;turn[8].sanitizer_strict_social_source: None&#10;turn[8].opening_recovered_via_fallback: False&#10;turn[8].opening_fallback_authorship_source: None&#10;turn[8].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[8].sealed_fallback_owner_bucket: None&#10;turn[8].fallback_family: None&#10;turn[8].fallback_temporal_frame: None&#10;turn[8].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[8].scaffold_leakage: False&#10;turn[8].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[8].snapshot_summary: t8 scene='frontier_gate' interlocutor=None target='-'(-) gm='You notice ash Compact census delays have tightened the eastern caravan choke point. Someone jabs at the board in Cin...'&#10;turn[9].player_text: 'I rip a half-torn curfew addendum off the board and read it in the open.'&#10;turn[9].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[9].branch_id: 'branch_direct_intrusion'&#10;turn[9].turn_id: 'act_10'&#10;turn[9].resolution_kind: None&#10;turn[9].route_kind: 'undecided'&#10;turn[9].selected_speaker_id: None&#10;turn[9].final_emitted_source: 'generated_candidate'&#10;turn[9].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[9].response_type_required: 'neutral_narration'&#10;turn[9].response_type_candidate_ok: True&#10;turn[9].response_type_repair_used: False&#10;turn[9].response_type_repair_kind: None&#10;turn[9].upstream_prepared_emission_used: False&#10;turn[9].upstream_prepared_emission_valid: False&#10;turn[9].upstream_prepared_emission_source: None&#10;turn[9].upstream_prepared_emission_reject_reason: None&#10;turn[9].sanitizer_empty_fallback_used: None&#10;turn[9].sanitizer_empty_fallback_source: None&#10;turn[9].sanitizer_empty_fallback_owner: None&#10;turn[9].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[9].sanitizer_lineage_changed_count: None&#10;turn[9].sanitizer_lineage_dropped_count: None&#10;turn[9].sanitizer_lineage_empty_fallback_used: None&#10;turn[9].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[9].sanitizer_strict_social_fallback_used: None&#10;turn[9].sanitizer_strict_social_selection_owner: None&#10;turn[9].sanitizer_strict_social_prose_owner: None&#10;turn[9].sanitizer_strict_social_source: None&#10;turn[9].opening_recovered_via_fallback: False&#10;turn[9].opening_fallback_authorship_source: None&#10;turn[9].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[9].sealed_fallback_owner_bucket: None&#10;turn[9].fallback_family: None&#10;turn[9].fallback_temporal_frame: None&#10;turn[9].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[9].scaffold_leakage: False&#10;turn[9].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[9].snapshot_summary: t9 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[10].player_text: 'I demand the serjeant open the side wicket for inspection now.'&#10;turn[10].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[10].branch_id: 'branch_direct_intrusion'&#10;turn[10].turn_id: 'act_11'&#10;turn[10].resolution_kind: None&#10;turn[10].route_kind: 'undecided'&#10;turn[10].selected_speaker_id: None&#10;turn[10].final_emitted_source: 'generated_candidate'&#10;turn[10].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[10].response_type_required: 'neutral_narration'&#10;turn[10].response_type_candidate_ok: True&#10;turn[10].response_type_repair_used: False&#10;turn[10].response_type_repair_kind: None&#10;turn[10].upstream_prepared_emission_used: False&#10;turn[10].upstream_prepared_emission_valid: False&#10;turn[10].upstream_prepared_emission_source: None&#10;turn[10].upstream_prepared_emission_reject_reason: None&#10;turn[10].sanitizer_empty_fallback_used: None&#10;turn[10].sanitizer_empty_fallback_source: None&#10;turn[10].sanitizer_empty_fallback_owner: None&#10;turn[10].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[10].sanitizer_lineage_changed_count: None&#10;turn[10].sanitizer_lineage_dropped_count: None&#10;turn[10].sanitizer_lineage_empty_fallback_used: None&#10;turn[10].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[10].sanitizer_strict_social_fallback_used: None&#10;turn[10].sanitizer_strict_social_selection_owner: None&#10;turn[10].sanitizer_strict_social_prose_owner: None&#10;turn[10].sanitizer_strict_social_source: None&#10;turn[10].opening_recovered_via_fallback: False&#10;turn[10].opening_fallback_authorship_source: None&#10;turn[10].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[10].sealed_fallback_owner_bucket: None&#10;turn[10].fallback_family: None&#10;turn[10].fallback_temporal_frame: None&#10;turn[10].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[10].scaffold_leakage: False&#10;turn[10].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[10].snapshot_summary: t10 scene='frontier_gate' interlocutor=None target='-'(-) gm='On closer inspection, threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays h...'&#10;turn[11].player_text: 'I claim authority I do not have and stride toward the inner watch post.'&#10;turn[11].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[11].branch_id: 'branch_direct_intrusion'&#10;turn[11].turn_id: 'act_12'&#10;turn[11].resolution_kind: None&#10;turn[11].route_kind: 'undecided'&#10;turn[11].selected_speaker_id: None&#10;turn[11].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'&#10;turn[11].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[11].response_type_required: 'neutral_narration'&#10;turn[11].response_type_candidate_ok: True&#10;turn[11].response_type_repair_used: False&#10;turn[11].response_type_repair_kind: None&#10;turn[11].upstream_prepared_emission_used: False&#10;turn[11].upstream_prepared_emission_valid: False&#10;turn[11].upstream_prepared_emission_source: None&#10;turn[11].upstream_prepared_emission_reject_reason: None&#10;turn[11].sanitizer_empty_fallback_used: None&#10;turn[11].sanitizer_empty_fallback_source: None&#10;turn[11].sanitizer_empty_fallback_owner: None&#10;turn[11].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[11].sanitizer_lineage_changed_count: None&#10;turn[11].sanitizer_lineage_dropped_count: None&#10;turn[11].sanitizer_lineage_empty_fallback_used: None&#10;turn[11].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[11].sanitizer_strict_social_fallback_used: None&#10;turn[11].sanitizer_strict_social_selection_owner: None&#10;turn[11].sanitizer_strict_social_prose_owner: None&#10;turn[11].sanitizer_strict_social_source: None&#10;turn[11].opening_recovered_via_fallback: False&#10;turn[11].opening_fallback_authorship_source: None&#10;turn[11].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[11].sealed_fallback_owner_bucket: None&#10;turn[11].fallback_family: 'neutral_reply_speaker_grounding_bridge'&#10;turn[11].fallback_temporal_frame: None&#10;turn[11].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'speaker_repair', 'stage': 'gate', 'owner': 'game.speaker_contract_enforcement', 'source': 'narrator_neutral_no_allowed_speaker', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'narrator_neutral', 'recurrence_key': 'speaker_repair:gate:game.speaker_contract_enforcement:narrator_neutral', 'notes': ['narrator_neutral_no_allowed_speaker']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.speaker_contract_enforcement', 'source': 'narrator_neutral_no_allowed_speaker', 'gate_path': None, 'mutation_kind': 'speaker_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.speaker_contract_enforcement:speaker_repair_mutation', 'notes': ['narrator_neutral', 'narrator_neutral_no_allowed_speaker']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]&#10;turn[11].scaffold_leakage: False&#10;turn[11].unavailable: ['selected_speaker_id']&#10;turn[11].snapshot_summary: t11 scene='frontier_gate' interlocutor=None target='-'(-) gm='The murmur around you never tightens into a single clear voice on that point.'&#10;turn[12].player_text: 'I jam a crate under the warehouse latch to keep the door from closing.'&#10;turn[12].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[12].branch_id: 'branch_direct_intrusion'&#10;turn[12].turn_id: 'act_13'&#10;turn[12].resolution_kind: None&#10;turn[12].route_kind: 'undecided'&#10;turn[12].selected_speaker_id: None&#10;turn[12].final_emitted_source: 'generated_candidate'&#10;turn[12].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[12].response_type_required: 'neutral_narration'&#10;turn[12].response_type_candidate_ok: True&#10;turn[12].response_type_repair_used: False&#10;turn[12].response_type_repair_kind: None&#10;turn[12].upstream_prepared_emission_used: False&#10;turn[12].upstream_prepared_emission_valid: False&#10;turn[12].upstream_prepared_emission_source: None&#10;turn[12].upstream_prepared_emission_reject_reason: None&#10;turn[12].sanitizer_empty_fallback_used: None&#10;turn[12].sanitizer_empty_fallback_source: None&#10;turn[12].sanitizer_empty_fallback_owner: None&#10;turn[12].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[12].sanitizer_lineage_changed_count: None&#10;turn[12].sanitizer_lineage_dropped_count: None&#10;turn[12].sanitizer_lineage_empty_fallback_used: None&#10;turn[12].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[12].sanitizer_strict_social_fallback_used: None&#10;turn[12].sanitizer_strict_social_selection_owner: None&#10;turn[12].sanitizer_strict_social_prose_owner: None&#10;turn[12].sanitizer_strict_social_source: None&#10;turn[12].opening_recovered_via_fallback: False&#10;turn[12].opening_fallback_authorship_source: None&#10;turn[12].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[12].sealed_fallback_owner_bucket: None&#10;turn[12].fallback_family: None&#10;turn[12].fallback_temporal_frame: None&#10;turn[12].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[12].scaffold_leakage: False&#10;turn[12].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[12].snapshot_summary: t12 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[13].player_text: 'I vault a cordon rope the watch just strung across the mud line.'&#10;turn[13].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[13].branch_id: 'branch_direct_intrusion'&#10;turn[13].turn_id: 'act_14'&#10;turn[13].resolution_kind: None&#10;turn[13].route_kind: 'undecided'&#10;turn[13].selected_speaker_id: None&#10;turn[13].final_emitted_source: 'passive_scene_pressure_fallback'&#10;turn[13].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[13].response_type_required: 'neutral_narration'&#10;turn[13].response_type_candidate_ok: True&#10;turn[13].response_type_repair_used: False&#10;turn[13].response_type_repair_kind: None&#10;turn[13].upstream_prepared_emission_used: False&#10;turn[13].upstream_prepared_emission_valid: False&#10;turn[13].upstream_prepared_emission_source: None&#10;turn[13].upstream_prepared_emission_reject_reason: None&#10;turn[13].sanitizer_empty_fallback_used: None&#10;turn[13].sanitizer_empty_fallback_source: None&#10;turn[13].sanitizer_empty_fallback_owner: None&#10;turn[13].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[13].sanitizer_lineage_changed_count: None&#10;turn[13].sanitizer_lineage_dropped_count: None&#10;turn[13].sanitizer_lineage_empty_fallback_used: None&#10;turn[13].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[13].sanitizer_strict_social_fallback_used: None&#10;turn[13].sanitizer_strict_social_selection_owner: None&#10;turn[13].sanitizer_strict_social_prose_owner: None&#10;turn[13].sanitizer_strict_social_source: None&#10;turn[13].opening_recovered_via_fallback: False&#10;turn[13].opening_fallback_authorship_source: None&#10;turn[13].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[13].sealed_fallback_owner_bucket: 'sealed-gate'&#10;turn[13].fallback_family: 'gate_terminal_repair'&#10;turn[13].fallback_temporal_frame: None&#10;turn[13].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'referential_clarity_hard_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': 'sealed-gate', 'fallback_selection_owner': 'game.final_emission_visibility_fallback', 'fallback_content_owner': 'game.final_emission_sealed_fallback', 'repair_kind': 'passive_scene_pressure_fallback', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:referential_clarity_hard_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': 'referential_clarity_hard_replaced', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:referential_clarity_hard_replaced', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': None, 'mutation_kind': 'referential_clarity_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:referential_clarity_replacement_mutation', 'notes': ['referential_clarity_hard_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]&#10;turn[13].scaffold_leakage: False&#10;turn[13].unavailable: ['selected_speaker_id']&#10;turn[13].snapshot_summary: t13 scene='frontier_gate' interlocutor=None target='-'(-) gm='as you cuts through the crowd and stops at your shoulder. &quot;You\'re asking the wrong questions out loud,&quot; they murmur. ...'&#10;turn[14].player_text: 'I stare down the hooded lurker until they break and run—I pursue.'&#10;turn[14].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[14].branch_id: 'branch_direct_intrusion'&#10;turn[14].turn_id: 'act_15'&#10;turn[14].resolution_kind: None&#10;turn[14].route_kind: 'undecided'&#10;turn[14].selected_speaker_id: None&#10;turn[14].final_emitted_source: 'generated_candidate'&#10;turn[14].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[14].response_type_required: 'neutral_narration'&#10;turn[14].response_type_candidate_ok: True&#10;turn[14].response_type_repair_used: False&#10;turn[14].response_type_repair_kind: None&#10;turn[14].upstream_prepared_emission_used: False&#10;turn[14].upstream_prepared_emission_valid: False&#10;turn[14].upstream_prepared_emission_source: None&#10;turn[14].upstream_prepared_emission_reject_reason: None&#10;turn[14].sanitizer_empty_fallback_used: None&#10;turn[14].sanitizer_empty_fallback_source: None&#10;turn[14].sanitizer_empty_fallback_owner: None&#10;turn[14].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[14].sanitizer_lineage_changed_count: None&#10;turn[14].sanitizer_lineage_dropped_count: None&#10;turn[14].sanitizer_lineage_empty_fallback_used: None&#10;turn[14].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[14].sanitizer_strict_social_fallback_used: None&#10;turn[14].sanitizer_strict_social_selection_owner: None&#10;turn[14].sanitizer_strict_social_prose_owner: None&#10;turn[14].sanitizer_strict_social_source: None&#10;turn[14].opening_recovered_via_fallback: False&#10;turn[14].opening_fallback_authorship_source: None&#10;turn[14].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[14].sealed_fallback_owner_bucket: None&#10;turn[14].fallback_family: None&#10;turn[14].fallback_temporal_frame: None&#10;turn[14].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[14].scaffold_leakage: False&#10;turn[14].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[14].snapshot_summary: t14 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[15].player_text: 'I slam my palm on the roster board and refuse to step back.'&#10;turn[15].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[15].branch_id: 'branch_direct_intrusion'&#10;turn[15].turn_id: 'act_16'&#10;turn[15].resolution_kind: None&#10;turn[15].route_kind: 'undecided'&#10;turn[15].selected_speaker_id: None&#10;turn[15].final_emitted_source: 'generated_candidate'&#10;turn[15].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[15].response_type_required: 'neutral_narration'&#10;turn[15].response_type_candidate_ok: True&#10;turn[15].response_type_repair_used: False&#10;turn[15].response_type_repair_kind: None&#10;turn[15].upstream_prepared_emission_used: False&#10;turn[15].upstream_prepared_emission_valid: False&#10;turn[15].upstream_prepared_emission_source: None&#10;turn[15].upstream_prepared_emission_reject_reason: None&#10;turn[15].sanitizer_empty_fallback_used: None&#10;turn[15].sanitizer_empty_fallback_source: None&#10;turn[15].sanitizer_empty_fallback_owner: None&#10;turn[15].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[15].sanitizer_lineage_changed_count: None&#10;turn[15].sanitizer_lineage_dropped_count: None&#10;turn[15].sanitizer_lineage_empty_fallback_used: None&#10;turn[15].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[15].sanitizer_strict_social_fallback_used: None&#10;turn[15].sanitizer_strict_social_selection_owner: None&#10;turn[15].sanitizer_strict_social_prose_owner: None&#10;turn[15].sanitizer_strict_social_source: None&#10;turn[15].opening_recovered_via_fallback: False&#10;turn[15].opening_fallback_authorship_source: None&#10;turn[15].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[15].sealed_fallback_owner_bucket: None&#10;turn[15].fallback_family: None&#10;turn[15].fallback_temporal_frame: None&#10;turn[15].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[15].scaffold_leakage: False&#10;turn[15].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[15].snapshot_summary: t15 scene='frontier_gate' interlocutor=None target='-'(-) gm=&quot;Nothing new locks in yet; you keep the scene's weight without stepping backward. Someone jabs at the board in Cinderw...&quot;&#10;turn[16].player_text: 'I accuse the gate of hiding patrol losses and let the crowd hear it.'&#10;turn[16].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[16].branch_id: 'branch_direct_intrusion'&#10;turn[16].turn_id: 'act_17'&#10;turn[16].resolution_kind: None&#10;turn[16].route_kind: 'undecided'&#10;turn[16].selected_speaker_id: None&#10;turn[16].final_emitted_source: 'generated_candidate'&#10;turn[16].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[16].response_type_required: 'neutral_narration'&#10;turn[16].response_type_candidate_ok: True&#10;turn[16].response_type_repair_used: False&#10;turn[16].response_type_repair_kind: None&#10;turn[16].upstream_prepared_emission_used: False&#10;turn[16].upstream_prepared_emission_valid: False&#10;turn[16].upstream_prepared_emission_source: None&#10;turn[16].upstream_prepared_emission_reject_reason: None&#10;turn[16].sanitizer_empty_fallback_used: None&#10;turn[16].sanitizer_empty_fallback_source: None&#10;turn[16].sanitizer_empty_fallback_owner: None&#10;turn[16].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[16].sanitizer_lineage_changed_count: None&#10;turn[16].sanitizer_lineage_dropped_count: None&#10;turn[16].sanitizer_lineage_empty_fallback_used: None&#10;turn[16].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[16].sanitizer_strict_social_fallback_used: None&#10;turn[16].sanitizer_strict_social_selection_owner: None&#10;turn[16].sanitizer_strict_social_prose_owner: None&#10;turn[16].sanitizer_strict_social_source: None&#10;turn[16].opening_recovered_via_fallback: False&#10;turn[16].opening_fallback_authorship_source: None&#10;turn[16].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[16].sealed_fallback_owner_bucket: None&#10;turn[16].fallback_family: None&#10;turn[16].fallback_temporal_frame: None&#10;turn[16].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[16].scaffold_leakage: False&#10;turn[16].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[16].snapshot_summary: t16 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[17].player_text: 'I press charcoal rag to the duty chalk slate to lift its markings.'&#10;turn[17].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[17].branch_id: 'branch_direct_intrusion'&#10;turn[17].turn_id: 'act_18'&#10;turn[17].resolution_kind: None&#10;turn[17].route_kind: 'undecided'&#10;turn[17].selected_speaker_id: None&#10;turn[17].final_emitted_source: 'generated_candidate'&#10;turn[17].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[17].response_type_required: 'neutral_narration'&#10;turn[17].response_type_candidate_ok: True&#10;turn[17].response_type_repair_used: False&#10;turn[17].response_type_repair_kind: None&#10;turn[17].upstream_prepared_emission_used: False&#10;turn[17].upstream_prepared_emission_valid: False&#10;turn[17].upstream_prepared_emission_source: None&#10;turn[17].upstream_prepared_emission_reject_reason: None&#10;turn[17].sanitizer_empty_fallback_used: None&#10;turn[17].sanitizer_empty_fallback_source: None&#10;turn[17].sanitizer_empty_fallback_owner: None&#10;turn[17].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[17].sanitizer_lineage_changed_count: None&#10;turn[17].sanitizer_lineage_dropped_count: None&#10;turn[17].sanitizer_lineage_empty_fallback_used: None&#10;turn[17].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[17].sanitizer_strict_social_fallback_used: None&#10;turn[17].sanitizer_strict_social_selection_owner: None&#10;turn[17].sanitizer_strict_social_prose_owner: None&#10;turn[17].sanitizer_strict_social_source: None&#10;turn[17].opening_recovered_via_fallback: False&#10;turn[17].opening_fallback_authorship_source: None&#10;turn[17].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[17].sealed_fallback_owner_bucket: None&#10;turn[17].fallback_family: None&#10;turn[17].fallback_temporal_frame: None&#10;turn[17].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[17].scaffold_leakage: False&#10;turn[17].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[17].snapshot_summary: t17 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[18].player_text: 'I wedge myself in the wicket when they move to shut it on me.'&#10;turn[18].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[18].branch_id: 'branch_direct_intrusion'&#10;turn[18].turn_id: 'act_19'&#10;turn[18].resolution_kind: 'travel'&#10;turn[18].route_kind: 'undecided'&#10;turn[18].selected_speaker_id: None&#10;turn[18].final_emitted_source: 'global_scene_fallback'&#10;turn[18].final_emission_mutation_lineage: ['response_type_repair', 'prepared_emission_selection', 'sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[18].response_type_required: 'action_outcome'&#10;turn[18].response_type_candidate_ok: True&#10;turn[18].response_type_repair_used: True&#10;turn[18].response_type_repair_kind: 'action_outcome_upstream_prepared_repair'&#10;turn[18].upstream_prepared_emission_used: True&#10;turn[18].upstream_prepared_emission_valid: True&#10;turn[18].upstream_prepared_emission_source: 'upstream_prepared_emission.prepared_action_fallback_text'&#10;turn[18].upstream_prepared_emission_reject_reason: None&#10;turn[18].sanitizer_empty_fallback_used: None&#10;turn[18].sanitizer_empty_fallback_source: None&#10;turn[18].sanitizer_empty_fallback_owner: None&#10;turn[18].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[18].sanitizer_lineage_changed_count: None&#10;turn[18].sanitizer_lineage_dropped_count: None&#10;turn[18].sanitizer_lineage_empty_fallback_used: None&#10;turn[18].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[18].sanitizer_strict_social_fallback_used: None&#10;turn[18].sanitizer_strict_social_selection_owner: None&#10;turn[18].sanitizer_strict_social_prose_owner: None&#10;turn[18].sanitizer_strict_social_source: None&#10;turn[18].opening_recovered_via_fallback: False&#10;turn[18].opening_fallback_authorship_source: None&#10;turn[18].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[18].sealed_fallback_owner_bucket: 'sealed-gate'&#10;turn[18].fallback_family: 'gate_terminal_repair'&#10;turn[18].fallback_temporal_frame: None&#10;turn[18].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'response_type_prepared_emission', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'referential_clarity_enforcement', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': 'prepared_repair', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': None, 'mutation_kind': 'response_type_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'notes': ['response_type_prepared_emission']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'prepared_emission_selection', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['prepared_emission_selection']}]&#10;turn[18].scaffold_leakage: False&#10;turn[18].unavailable: ['selected_speaker_id']&#10;turn[18].snapshot_summary: t18 scene='frontier_gate' interlocutor=None target='-'(-) gm='The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol in...'&#10;turn[19].player_text: 'I shove a lantern hook toward the tavern runner to stop them leaving.'&#10;turn[19].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[19].branch_id: 'branch_direct_intrusion'&#10;turn[19].turn_id: 'act_20'&#10;turn[19].resolution_kind: None&#10;turn[19].route_kind: 'action'&#10;turn[19].selected_speaker_id: 'tavern_runner'&#10;turn[19].final_emitted_source: 'generated_candidate'&#10;turn[19].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[19].response_type_required: 'dialogue'&#10;turn[19].response_type_candidate_ok: True&#10;turn[19].response_type_repair_used: False&#10;turn[19].response_type_repair_kind: None&#10;turn[19].upstream_prepared_emission_used: False&#10;turn[19].upstream_prepared_emission_valid: False&#10;turn[19].upstream_prepared_emission_source: None&#10;turn[19].upstream_prepared_emission_reject_reason: None&#10;turn[19].sanitizer_empty_fallback_used: None&#10;turn[19].sanitizer_empty_fallback_source: None&#10;turn[19].sanitizer_empty_fallback_owner: None&#10;turn[19].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[19].sanitizer_lineage_changed_count: None&#10;turn[19].sanitizer_lineage_dropped_count: None&#10;turn[19].sanitizer_lineage_empty_fallback_used: None&#10;turn[19].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[19].sanitizer_strict_social_fallback_used: None&#10;turn[19].sanitizer_strict_social_selection_owner: None&#10;turn[19].sanitizer_strict_social_prose_owner: None&#10;turn[19].sanitizer_strict_social_source: None&#10;turn[19].opening_recovered_via_fallback: False&#10;turn[19].opening_fallback_authorship_source: None&#10;turn[19].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[19].sealed_fallback_owner_bucket: None&#10;turn[19].fallback_family: None&#10;turn[19].fallback_temporal_frame: None&#10;turn[19].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[19].scaffold_leakage: False&#10;turn[19].unavailable: ['fallback_family']&#10;turn[19].snapshot_summary: t19 scene='frontier_gate' interlocutor=None target='-'(-) gm='You notice a tavern runner trades hot stew and rumors near the rain barrel. Someone jabs at the board in Cinderwatch ...'&#10;turn[20].player_text: 'I double back through the alley to flank the serjeant’s blind side.'&#10;turn[20].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[20].branch_id: 'branch_direct_intrusion'&#10;turn[20].turn_id: 'act_21'&#10;turn[20].resolution_kind: None&#10;turn[20].route_kind: 'undecided'&#10;turn[20].selected_speaker_id: None&#10;turn[20].final_emitted_source: 'generated_candidate'&#10;turn[20].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[20].response_type_required: 'neutral_narration'&#10;turn[20].response_type_candidate_ok: True&#10;turn[20].response_type_repair_used: False&#10;turn[20].response_type_repair_kind: None&#10;turn[20].upstream_prepared_emission_used: False&#10;turn[20].upstream_prepared_emission_valid: False&#10;turn[20].upstream_prepared_emission_source: None&#10;turn[20].upstream_prepared_emission_reject_reason: None&#10;turn[20].sanitizer_empty_fallback_used: None&#10;turn[20].sanitizer_empty_fallback_source: None&#10;turn[20].sanitizer_empty_fallback_owner: None&#10;turn[20].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[20].sanitizer_lineage_changed_count: None&#10;turn[20].sanitizer_lineage_dropped_count: None&#10;turn[20].sanitizer_lineage_empty_fallback_used: None&#10;turn[20].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[20].sanitizer_strict_social_fallback_used: None&#10;turn[20].sanitizer_strict_social_selection_owner: None&#10;turn[20].sanitizer_strict_social_prose_owner: None&#10;turn[20].sanitizer_strict_social_source: None&#10;turn[20].opening_recovered_via_fallback: False&#10;turn[20].opening_fallback_authorship_source: None&#10;turn[20].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[20].sealed_fallback_owner_bucket: None&#10;turn[20].fallback_family: None&#10;turn[20].fallback_temporal_frame: None&#10;turn[20].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[20].scaffold_leakage: False&#10;turn[20].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[20].snapshot_summary: t20 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'&#10;turn[21].player_text: 'I kick a loose cobble toward the watch boots to force a reaction.'&#10;turn[21].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[21].branch_id: 'branch_direct_intrusion'&#10;turn[21].turn_id: 'act_22'&#10;turn[21].resolution_kind: 'social_probe'&#10;turn[21].route_kind: 'dialogue'&#10;turn[21].selected_speaker_id: 'gate_guard'&#10;turn[21].final_emitted_source: 'normalized_social_candidate'&#10;turn[21].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']&#10;turn[21].response_type_required: 'dialogue'&#10;turn[21].response_type_candidate_ok: True&#10;turn[21].response_type_repair_used: False&#10;turn[21].response_type_repair_kind: None&#10;turn[21].upstream_prepared_emission_used: False&#10;turn[21].upstream_prepared_emission_valid: False&#10;turn[21].upstream_prepared_emission_source: None&#10;turn[21].upstream_prepared_emission_reject_reason: None&#10;turn[21].sanitizer_empty_fallback_used: None&#10;turn[21].sanitizer_empty_fallback_source: None&#10;turn[21].sanitizer_empty_fallback_owner: None&#10;turn[21].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[21].sanitizer_lineage_changed_count: None&#10;turn[21].sanitizer_lineage_dropped_count: None&#10;turn[21].sanitizer_lineage_empty_fallback_used: None&#10;turn[21].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[21].sanitizer_strict_social_fallback_used: None&#10;turn[21].sanitizer_strict_social_selection_owner: None&#10;turn[21].sanitizer_strict_social_prose_owner: None&#10;turn[21].sanitizer_strict_social_source: None&#10;turn[21].opening_recovered_via_fallback: False&#10;turn[21].opening_fallback_authorship_source: None&#10;turn[21].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[21].sealed_fallback_owner_bucket: None&#10;turn[21].fallback_family: None&#10;turn[21].fallback_temporal_frame: None&#10;turn[21].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]&#10;turn[21].scaffold_leakage: False&#10;turn[21].unavailable: ['fallback_family']&#10;turn[21].snapshot_summary: t21 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='Gate Guard nods once. &quot;Old Millstone. South road.&quot; &quot;You\'re asking for a line I don\'t own.&quot;'&#10;turn[22].player_text: 'I refuse dispersal orders and plant my feet at the notice board.'&#10;turn[22].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[22].branch_id: 'branch_direct_intrusion'&#10;turn[22].turn_id: 'act_23'&#10;turn[22].resolution_kind: 'social_probe'&#10;turn[22].route_kind: 'dialogue'&#10;turn[22].selected_speaker_id: 'gate_guard'&#10;turn[22].final_emitted_source: 'normalized_social_candidate'&#10;turn[22].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']&#10;turn[22].response_type_required: 'dialogue'&#10;turn[22].response_type_candidate_ok: True&#10;turn[22].response_type_repair_used: False&#10;turn[22].response_type_repair_kind: None&#10;turn[22].upstream_prepared_emission_used: False&#10;turn[22].upstream_prepared_emission_valid: False&#10;turn[22].upstream_prepared_emission_source: None&#10;turn[22].upstream_prepared_emission_reject_reason: None&#10;turn[22].sanitizer_empty_fallback_used: None&#10;turn[22].sanitizer_empty_fallback_source: None&#10;turn[22].sanitizer_empty_fallback_owner: None&#10;turn[22].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[22].sanitizer_lineage_changed_count: None&#10;turn[22].sanitizer_lineage_dropped_count: None&#10;turn[22].sanitizer_lineage_empty_fallback_used: None&#10;turn[22].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[22].sanitizer_strict_social_fallback_used: None&#10;turn[22].sanitizer_strict_social_selection_owner: None&#10;turn[22].sanitizer_strict_social_prose_owner: None&#10;turn[22].sanitizer_strict_social_source: None&#10;turn[22].opening_recovered_via_fallback: False&#10;turn[22].opening_fallback_authorship_source: None&#10;turn[22].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[22].sealed_fallback_owner_bucket: None&#10;turn[22].fallback_family: None&#10;turn[22].fallback_temporal_frame: None&#10;turn[22].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]&#10;turn[22].scaffold_leakage: False&#10;turn[22].unavailable: ['fallback_family']&#10;turn[22].snapshot_summary: t22 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='Gate Guard nods once. &quot;Old Millstone. South road.&quot; &quot;I\'ve heard talk, but I won\'t pin that down as truth.&quot;'&#10;turn[23].player_text: 'I grab the crate stack to climb for a roofline view of the gate yard.'&#10;turn[23].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[23].branch_id: 'branch_direct_intrusion'&#10;turn[23].turn_id: 'act_24'&#10;turn[23].resolution_kind: None&#10;turn[23].route_kind: 'action'&#10;turn[23].selected_speaker_id: None&#10;turn[23].final_emitted_source: 'generated_candidate'&#10;turn[23].final_emission_mutation_lineage: ['finalize_packaging']&#10;turn[23].response_type_required: 'action_outcome'&#10;turn[23].response_type_candidate_ok: True&#10;turn[23].response_type_repair_used: False&#10;turn[23].response_type_repair_kind: None&#10;turn[23].upstream_prepared_emission_used: False&#10;turn[23].upstream_prepared_emission_valid: False&#10;turn[23].upstream_prepared_emission_source: None&#10;turn[23].upstream_prepared_emission_reject_reason: None&#10;turn[23].sanitizer_empty_fallback_used: None&#10;turn[23].sanitizer_empty_fallback_source: None&#10;turn[23].sanitizer_empty_fallback_owner: None&#10;turn[23].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[23].sanitizer_lineage_changed_count: None&#10;turn[23].sanitizer_lineage_dropped_count: None&#10;turn[23].sanitizer_lineage_empty_fallback_used: None&#10;turn[23].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[23].sanitizer_strict_social_fallback_used: None&#10;turn[23].sanitizer_strict_social_selection_owner: None&#10;turn[23].sanitizer_strict_social_prose_owner: None&#10;turn[23].sanitizer_strict_social_source: None&#10;turn[23].opening_recovered_via_fallback: False&#10;turn[23].opening_fallback_authorship_source: None&#10;turn[23].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[23].sealed_fallback_owner_bucket: None&#10;turn[23].fallback_family: None&#10;turn[23].fallback_temporal_frame: None&#10;turn[23].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]&#10;turn[23].scaffold_leakage: False&#10;turn[23].unavailable: ['fallback_family', 'selected_speaker_id']&#10;turn[23].snapshot_summary: t23 scene='frontier_gate' interlocutor=None target='-'(-) gm=&quot;Nothing new locks in yet; you keep the scene's weight without stepping backward. Someone jabs at the board in Cinderw...&quot;&#10;turn[24].player_text: 'I break off under whistles, melting into the eastern mud with heat on my heels.'&#10;turn[24].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'&#10;turn[24].branch_id: 'branch_direct_intrusion'&#10;turn[24].turn_id: 'act_25'&#10;turn[24].resolution_kind: None&#10;turn[24].route_kind: 'action'&#10;turn[24].selected_speaker_id: None&#10;turn[24].final_emitted_source: 'anti_reset_local_continuation_fallback'&#10;turn[24].final_emission_mutation_lineage: ['response_type_repair', 'prepared_emission_selection', 'sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']&#10;turn[24].response_type_required: 'action_outcome'&#10;turn[24].response_type_candidate_ok: True&#10;turn[24].response_type_repair_used: True&#10;turn[24].response_type_repair_kind: 'action_outcome_upstream_prepared_repair'&#10;turn[24].upstream_prepared_emission_used: True&#10;turn[24].upstream_prepared_emission_valid: True&#10;turn[24].upstream_prepared_emission_source: 'upstream_prepared_emission.prepared_action_fallback_text'&#10;turn[24].upstream_prepared_emission_reject_reason: None&#10;turn[24].sanitizer_empty_fallback_used: None&#10;turn[24].sanitizer_empty_fallback_source: None&#10;turn[24].sanitizer_empty_fallback_owner: None&#10;turn[24].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;&#10;turn[24].sanitizer_lineage_changed_count: None&#10;turn[24].sanitizer_lineage_dropped_count: None&#10;turn[24].sanitizer_lineage_empty_fallback_used: None&#10;turn[24].sanitizer_lineage_legacy_rewrite_active: False&#10;turn[24].sanitizer_strict_social_fallback_used: None&#10;turn[24].sanitizer_strict_social_selection_owner: None&#10;turn[24].sanitizer_strict_social_prose_owner: None&#10;turn[24].sanitizer_strict_social_source: None&#10;turn[24].opening_recovered_via_fallback: False&#10;turn[24].opening_fallback_authorship_source: None&#10;turn[24].opening_fallback_owner_bucket: 'unknown-ambiguous'&#10;turn[24].sealed_fallback_owner_bucket: 'sealed-gate'&#10;turn[24].fallback_family: 'gate_terminal_repair'&#10;turn[24].fallback_temporal_frame: None&#10;turn[24].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'response_type_prepared_emission', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'action_outcome_upstream_prepared_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': 'prepared_repair', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': None, 'mutation_kind': 'response_type_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'notes': ['response_type_prepared_emission']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'prepared_emission_selection', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['prepared_emission_selection']}]&#10;turn[24].scaffold_leakage: False&#10;turn[24].unavailable: ['selected_speaker_id']&#10;turn[24].snapshot_summary: t24 scene='frontier_gate' interlocutor=None target='-'(-) gm='The guard says, &quot;I do not know enough to answer that.&quot;'&#10;&#10;# Golden Replay 25-Turn Direct-Intrusion Diagnostic Stability&#10;&#10;- Scenario: `frontier_gate_direct_intrusion_25_turn_diagnostic`&#10;- Turns: `25`&#10;- Route frequency: `{'action': 3, 'dialogue': 5, 'undecided': 17}`&#10;- Route changes: `6`&#10;- Speaker frequency: `{'gate_guard': 3, 'tavern_runner': 1, 'threadbare_watcher': 1}`&#10;- Speaker changes / missing: `3` / `20`&#10;- Fallback total count: `7`&#10;- Fallback families: `{'gate_terminal_repair': 3, 'neutral_reply_speaker_grounding_bridge': 4}`&#10;- Fallback owners: `{'sealed-gate': 3}`&#10;- Fallback lineage kinds: `{'referential_clarity_hard_replacement': 1, 'response_type_prepared_emission': 2, 'sealed_unknown_replacement': 4}`&#10;- Max fallback streak: `2`&#10;- Max fallback streak blocking / scene-action nonblocking: `0` / `2`&#10;- Late-window fallback count: `2`&#10;- Fallback unavailable blocking / scene-action speaker optional: `0` / `7`&#10;- Fallback escalation warnings: `[]`&#10;- Mutation turn count: `25`&#10;- Response-delta checked / failed / repaired: `0` / `0` / `0`&#10;- Response-delta kinds: `{}`&#10;- Response-delta unknown count: `0`&#10;- Echo-overlap bands: `{}`&#10;- Unavailable counts: `{'fallback_family': 18, 'selected_speaker_id': 20}`&#10;- Lineage event frequency: `{'fallback_selected': 7, 'gate_outcome': 25, 'mutation': 19, 'speaker_repair': 1}`&#10;- Lineage recurrence: `[{'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'count': 14}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'count': 7}, {'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'count': 4}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'count': 4}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'count': 4}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'count': 4}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'count': 4}, {'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'count': 2}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'count': 2}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'count': 2}]`&#10;- Continuity warnings / violations: `0` / `14`&#10;- Continuity classification: `clean`&#10;- Degradation detected: `False`&#10;- Degradation reasons: `[]`&#10;- Late-window signals: `[]`&#10;&#10;| Turn | Route | Speaker | Fallback | Owner | Mutation | Unavailable | Lineage |&#10;|---:|---|---|---|---|---|---|---|&#10;| 0 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 1 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |&#10;| 2 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |&#10;| 3 | dialogue | threadbare_watcher |  |  | True | fallback_family | gate_outcome, mutation |&#10;| 4 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |&#10;| 5 | dialogue |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 6 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 7 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |&#10;| 8 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 9 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 10 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 11 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, speaker_repair, mutation, mutation, mutation |&#10;| 12 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 13 | undecided |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |&#10;| 14 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 15 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 16 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 17 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 18 | undecided |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |&#10;| 19 | action | tavern_runner |  |  | True | fallback_family | gate_outcome |&#10;| 20 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 21 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |&#10;| 22 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |&#10;| 23 | action |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |&#10;| 24 | action |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |">tests\test_golden_replay_long_session.py:344: in test_golden_replay_frontier_gate_direct_intrusion_25_turn_diagnostic_stability
+    assert_golden_replay_profile_bundle(
+tests\helpers\golden_replay.py:1528: in assert_golden_replay_profile_bundle
+    assert_runtime_lineage_profile(
+tests\helpers\golden_replay.py:1445: in assert_runtime_lineage_profile
+    _assert_mapping_max_values(
+tests\helpers\golden_replay.py:1290: in _assert_mapping_max_values
+    assert int(actual.get(key) or 0) &lt;= value, debug_context
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: scenario_id: 'frontier_gate_direct_intrusion_25_turn_diagnostic'
+E   turn_count: 25
+E   turn[0].player_text: 'I slip toward the narrow alley without announcing myself.'
+E   turn[0].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[0].branch_id: 'branch_direct_intrusion'
+E   turn[0].turn_id: 'act_01'
+E   turn[0].resolution_kind: None
+E   turn[0].route_kind: 'undecided'
+E   turn[0].selected_speaker_id: None
+E   turn[0].final_emitted_source: 'generated_candidate'
+E   turn[0].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[0].response_type_required: 'neutral_narration'
+E   turn[0].response_type_candidate_ok: True
+E   turn[0].response_type_repair_used: False
+E   turn[0].response_type_repair_kind: None
+E   turn[0].upstream_prepared_emission_used: False
+E   turn[0].upstream_prepared_emission_valid: False
+E   turn[0].upstream_prepared_emission_source: None
+E   turn[0].upstream_prepared_emission_reject_reason: None
+E   turn[0].sanitizer_empty_fallback_used: None
+E   turn[0].sanitizer_empty_fallback_source: None
+E   turn[0].sanitizer_empty_fallback_owner: None
+E   turn[0].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[0].sanitizer_lineage_changed_count: None
+E   turn[0].sanitizer_lineage_dropped_count: None
+E   turn[0].sanitizer_lineage_empty_fallback_used: None
+E   turn[0].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[0].sanitizer_strict_social_fallback_used: None
+E   turn[0].sanitizer_strict_social_selection_owner: None
+E   turn[0].sanitizer_strict_social_prose_owner: None
+E   turn[0].sanitizer_strict_social_source: None
+E   turn[0].opening_recovered_via_fallback: False
+E   turn[0].opening_fallback_authorship_source: None
+E   turn[0].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[0].sealed_fallback_owner_bucket: None
+E   turn[0].fallback_family: None
+E   turn[0].fallback_temporal_frame: None
+E   turn[0].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[0].scaffold_leakage: False
+E   turn[0].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[0].snapshot_summary: t0 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[1].player_text: 'I try the warehouse side door when guards look away.'
+E   turn[1].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[1].branch_id: 'branch_direct_intrusion'
+E   turn[1].turn_id: 'act_02'
+E   turn[1].resolution_kind: None
+E   turn[1].route_kind: 'undecided'
+E   turn[1].selected_speaker_id: None
+E   turn[1].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'
+E   turn[1].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[1].response_type_required: 'neutral_narration'
+E   turn[1].response_type_candidate_ok: True
+E   turn[1].response_type_repair_used: False
+E   turn[1].response_type_repair_kind: None
+E   turn[1].upstream_prepared_emission_used: False
+E   turn[1].upstream_prepared_emission_valid: False
+E   turn[1].upstream_prepared_emission_source: None
+E   turn[1].upstream_prepared_emission_reject_reason: None
+E   turn[1].sanitizer_empty_fallback_used: None
+E   turn[1].sanitizer_empty_fallback_source: None
+E   turn[1].sanitizer_empty_fallback_owner: None
+E   turn[1].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[1].sanitizer_lineage_changed_count: None
+E   turn[1].sanitizer_lineage_dropped_count: None
+E   turn[1].sanitizer_lineage_empty_fallback_used: None
+E   turn[1].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[1].sanitizer_strict_social_fallback_used: None
+E   turn[1].sanitizer_strict_social_selection_owner: None
+E   turn[1].sanitizer_strict_social_prose_owner: None
+E   turn[1].sanitizer_strict_social_source: None
+E   turn[1].opening_recovered_via_fallback: False
+E   turn[1].opening_fallback_authorship_source: None
+E   turn[1].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[1].sealed_fallback_owner_bucket: None
+E   turn[1].fallback_family: 'neutral_reply_speaker_grounding_bridge'
+E   turn[1].fallback_temporal_frame: None
+E   turn[1].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]
+E   turn[1].scaffold_leakage: False
+E   turn[1].unavailable: ['selected_speaker_id']
+E   turn[1].snapshot_summary: t1 scene='frontier_gate' interlocutor=None target='-'(-) gm='The moment passes without anyone stepping forward to own that thread.'
+E   turn[2].player_text: 'I palm the notice edge to read what is pasted behind it.'
+E   turn[2].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[2].branch_id: 'branch_direct_intrusion'
+E   turn[2].turn_id: 'act_03'
+E   turn[2].resolution_kind: None
+E   turn[2].route_kind: 'undecided'
+E   turn[2].selected_speaker_id: None
+E   turn[2].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'
+E   turn[2].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[2].response_type_required: 'neutral_narration'
+E   turn[2].response_type_candidate_ok: True
+E   turn[2].response_type_repair_used: False
+E   turn[2].response_type_repair_kind: None
+E   turn[2].upstream_prepared_emission_used: False
+E   turn[2].upstream_prepared_emission_valid: False
+E   turn[2].upstream_prepared_emission_source: None
+E   turn[2].upstream_prepared_emission_reject_reason: None
+E   turn[2].sanitizer_empty_fallback_used: None
+E   turn[2].sanitizer_empty_fallback_source: None
+E   turn[2].sanitizer_empty_fallback_owner: None
+E   turn[2].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[2].sanitizer_lineage_changed_count: None
+E   turn[2].sanitizer_lineage_dropped_count: None
+E   turn[2].sanitizer_lineage_empty_fallback_used: None
+E   turn[2].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[2].sanitizer_strict_social_fallback_used: None
+E   turn[2].sanitizer_strict_social_selection_owner: None
+E   turn[2].sanitizer_strict_social_prose_owner: None
+E   turn[2].sanitizer_strict_social_source: None
+E   turn[2].opening_recovered_via_fallback: False
+E   turn[2].opening_fallback_authorship_source: None
+E   turn[2].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[2].sealed_fallback_owner_bucket: None
+E   turn[2].fallback_family: 'neutral_reply_speaker_grounding_bridge'
+E   turn[2].fallback_temporal_frame: None
+E   turn[2].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]
+E   turn[2].scaffold_leakage: False
+E   turn[2].unavailable: ['selected_speaker_id']
+E   turn[2].snapshot_summary: t2 scene='frontier_gate' interlocutor=None target='-'(-) gm='The moment passes without anyone stepping forward to own that thread.'
+E   turn[3].player_text: 'I confront the threadbare watcher aloud.'
+E   turn[3].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[3].branch_id: 'branch_direct_intrusion'
+E   turn[3].turn_id: 'act_04'
+E   turn[3].resolution_kind: 'social_probe'
+E   turn[3].route_kind: 'dialogue'
+E   turn[3].selected_speaker_id: 'threadbare_watcher'
+E   turn[3].final_emitted_source: 'normalized_social_candidate'
+E   turn[3].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']
+E   turn[3].response_type_required: 'dialogue'
+E   turn[3].response_type_candidate_ok: True
+E   turn[3].response_type_repair_used: False
+E   turn[3].response_type_repair_kind: None
+E   turn[3].upstream_prepared_emission_used: False
+E   turn[3].upstream_prepared_emission_valid: False
+E   turn[3].upstream_prepared_emission_source: None
+E   turn[3].upstream_prepared_emission_reject_reason: None
+E   turn[3].sanitizer_empty_fallback_used: None
+E   turn[3].sanitizer_empty_fallback_source: None
+E   turn[3].sanitizer_empty_fallback_owner: None
+E   turn[3].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[3].sanitizer_lineage_changed_count: None
+E   turn[3].sanitizer_lineage_dropped_count: None
+E   turn[3].sanitizer_lineage_empty_fallback_used: None
+E   turn[3].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[3].sanitizer_strict_social_fallback_used: None
+E   turn[3].sanitizer_strict_social_selection_owner: None
+E   turn[3].sanitizer_strict_social_prose_owner: None
+E   turn[3].sanitizer_strict_social_source: None
+E   turn[3].opening_recovered_via_fallback: False
+E   turn[3].opening_fallback_authorship_source: None
+E   turn[3].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[3].sealed_fallback_owner_bucket: None
+E   turn[3].fallback_family: None
+E   turn[3].fallback_temporal_frame: None
+E   turn[3].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]
+E   turn[3].scaffold_leakage: False
+E   turn[3].unavailable: ['fallback_family']
+E   turn[3].snapshot_summary: t3 scene='frontier_gate' interlocutor='threadbare_watcher' target='threadbare_watcher'(interaction_context.active_interaction_target_id) gm='"Old crossroads—that way." "Hard to swear to anything in this crowd."'
+E   turn[4].player_text: 'I press through mud toward the gate serjeant.'
+E   turn[4].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[4].branch_id: 'branch_direct_intrusion'
+E   turn[4].turn_id: 'act_05'
+E   turn[4].resolution_kind: 'social_probe'
+E   turn[4].route_kind: 'dialogue'
+E   turn[4].selected_speaker_id: 'gate_guard'
+E   turn[4].final_emitted_source: 'normalized_social_candidate'
+E   turn[4].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']
+E   turn[4].response_type_required: 'dialogue'
+E   turn[4].response_type_candidate_ok: True
+E   turn[4].response_type_repair_used: False
+E   turn[4].response_type_repair_kind: None
+E   turn[4].upstream_prepared_emission_used: False
+E   turn[4].upstream_prepared_emission_valid: False
+E   turn[4].upstream_prepared_emission_source: None
+E   turn[4].upstream_prepared_emission_reject_reason: None
+E   turn[4].sanitizer_empty_fallback_used: None
+E   turn[4].sanitizer_empty_fallback_source: None
+E   turn[4].sanitizer_empty_fallback_owner: None
+E   turn[4].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[4].sanitizer_lineage_changed_count: None
+E   turn[4].sanitizer_lineage_dropped_count: None
+E   turn[4].sanitizer_lineage_empty_fallback_used: None
+E   turn[4].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[4].sanitizer_strict_social_fallback_used: None
+E   turn[4].sanitizer_strict_social_selection_owner: None
+E   turn[4].sanitizer_strict_social_prose_owner: None
+E   turn[4].sanitizer_strict_social_source: None
+E   turn[4].opening_recovered_via_fallback: False
+E   turn[4].opening_fallback_authorship_source: None
+E   turn[4].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[4].sealed_fallback_owner_bucket: None
+E   turn[4].fallback_family: None
+E   turn[4].fallback_temporal_frame: None
+E   turn[4].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]
+E   turn[4].scaffold_leakage: False
+E   turn[4].unavailable: ['fallback_family']
+E   turn[4].snapshot_summary: t4 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='"Old crossroads—that way." "I\'ve heard talk, but I won\'t pin that down as truth."'
+E   turn[5].player_text: 'I shout a blunt question about the missing patrol.'
+E   turn[5].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[5].branch_id: 'branch_direct_intrusion'
+E   turn[5].turn_id: 'act_06'
+E   turn[5].resolution_kind: 'social_probe'
+E   turn[5].route_kind: 'dialogue'
+E   turn[5].selected_speaker_id: None
+E   turn[5].final_emitted_source: 'retry_output'
+E   turn[5].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[5].response_type_required: 'neutral_narration'
+E   turn[5].response_type_candidate_ok: True
+E   turn[5].response_type_repair_used: False
+E   turn[5].response_type_repair_kind: None
+E   turn[5].upstream_prepared_emission_used: False
+E   turn[5].upstream_prepared_emission_valid: False
+E   turn[5].upstream_prepared_emission_source: None
+E   turn[5].upstream_prepared_emission_reject_reason: None
+E   turn[5].sanitizer_empty_fallback_used: None
+E   turn[5].sanitizer_empty_fallback_source: None
+E   turn[5].sanitizer_empty_fallback_owner: None
+E   turn[5].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[5].sanitizer_lineage_changed_count: None
+E   turn[5].sanitizer_lineage_dropped_count: None
+E   turn[5].sanitizer_lineage_empty_fallback_used: None
+E   turn[5].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[5].sanitizer_strict_social_fallback_used: None
+E   turn[5].sanitizer_strict_social_selection_owner: None
+E   turn[5].sanitizer_strict_social_prose_owner: None
+E   turn[5].sanitizer_strict_social_source: None
+E   turn[5].opening_recovered_via_fallback: False
+E   turn[5].opening_fallback_authorship_source: None
+E   turn[5].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[5].sealed_fallback_owner_bucket: None
+E   turn[5].fallback_family: None
+E   turn[5].fallback_temporal_frame: None
+E   turn[5].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'retry_output', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[5].scaffold_leakage: False
+E   turn[5].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[5].snapshot_summary: t5 scene='frontier_gate' interlocutor=None target='-'(-) gm='Nobody owns the moment—yet The gate guard keeps an open posture, waiting to see if you mean business. Someone jabs at...'
+E   turn[6].player_text: 'I offer a low bribe for duty-roster facts.'
+E   turn[6].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[6].branch_id: 'branch_direct_intrusion'
+E   turn[6].turn_id: 'act_07'
+E   turn[6].resolution_kind: None
+E   turn[6].route_kind: 'undecided'
+E   turn[6].selected_speaker_id: None
+E   turn[6].final_emitted_source: 'generated_candidate'
+E   turn[6].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[6].response_type_required: 'neutral_narration'
+E   turn[6].response_type_candidate_ok: True
+E   turn[6].response_type_repair_used: False
+E   turn[6].response_type_repair_kind: None
+E   turn[6].upstream_prepared_emission_used: False
+E   turn[6].upstream_prepared_emission_valid: False
+E   turn[6].upstream_prepared_emission_source: None
+E   turn[6].upstream_prepared_emission_reject_reason: None
+E   turn[6].sanitizer_empty_fallback_used: None
+E   turn[6].sanitizer_empty_fallback_source: None
+E   turn[6].sanitizer_empty_fallback_owner: None
+E   turn[6].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[6].sanitizer_lineage_changed_count: None
+E   turn[6].sanitizer_lineage_dropped_count: None
+E   turn[6].sanitizer_lineage_empty_fallback_used: None
+E   turn[6].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[6].sanitizer_strict_social_fallback_used: None
+E   turn[6].sanitizer_strict_social_selection_owner: None
+E   turn[6].sanitizer_strict_social_prose_owner: None
+E   turn[6].sanitizer_strict_social_source: None
+E   turn[6].opening_recovered_via_fallback: False
+E   turn[6].opening_fallback_authorship_source: None
+E   turn[6].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[6].sealed_fallback_owner_bucket: None
+E   turn[6].fallback_family: None
+E   turn[6].fallback_temporal_frame: None
+E   turn[6].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[6].scaffold_leakage: False
+E   turn[6].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[6].snapshot_summary: t6 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[7].player_text: 'I sprint for the crates when a hooded figure moves.'
+E   turn[7].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[7].branch_id: 'branch_direct_intrusion'
+E   turn[7].turn_id: 'act_08'
+E   turn[7].resolution_kind: None
+E   turn[7].route_kind: 'undecided'
+E   turn[7].selected_speaker_id: None
+E   turn[7].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'
+E   turn[7].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[7].response_type_required: 'neutral_narration'
+E   turn[7].response_type_candidate_ok: True
+E   turn[7].response_type_repair_used: False
+E   turn[7].response_type_repair_kind: None
+E   turn[7].upstream_prepared_emission_used: False
+E   turn[7].upstream_prepared_emission_valid: False
+E   turn[7].upstream_prepared_emission_source: None
+E   turn[7].upstream_prepared_emission_reject_reason: None
+E   turn[7].sanitizer_empty_fallback_used: None
+E   turn[7].sanitizer_empty_fallback_source: None
+E   turn[7].sanitizer_empty_fallback_owner: None
+E   turn[7].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[7].sanitizer_lineage_changed_count: None
+E   turn[7].sanitizer_lineage_dropped_count: None
+E   turn[7].sanitizer_lineage_empty_fallback_used: None
+E   turn[7].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[7].sanitizer_strict_social_fallback_used: None
+E   turn[7].sanitizer_strict_social_selection_owner: None
+E   turn[7].sanitizer_strict_social_prose_owner: None
+E   turn[7].sanitizer_strict_social_source: None
+E   turn[7].opening_recovered_via_fallback: False
+E   turn[7].opening_fallback_authorship_source: None
+E   turn[7].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[7].sealed_fallback_owner_bucket: None
+E   turn[7].fallback_family: 'neutral_reply_speaker_grounding_bridge'
+E   turn[7].fallback_temporal_frame: None
+E   turn[7].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]
+E   turn[7].scaffold_leakage: False
+E   turn[7].unavailable: ['selected_speaker_id']
+E   turn[7].snapshot_summary: t7 scene='frontier_gate' interlocutor=None target='-'(-) gm='The murmur around you never tightens into a single clear voice on that point.'
+E   turn[8].player_text: 'I shoulder past a census clerk blocking the choke cart lane.'
+E   turn[8].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[8].branch_id: 'branch_direct_intrusion'
+E   turn[8].turn_id: 'act_09'
+E   turn[8].resolution_kind: None
+E   turn[8].route_kind: 'undecided'
+E   turn[8].selected_speaker_id: None
+E   turn[8].final_emitted_source: 'generated_candidate'
+E   turn[8].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[8].response_type_required: 'neutral_narration'
+E   turn[8].response_type_candidate_ok: True
+E   turn[8].response_type_repair_used: False
+E   turn[8].response_type_repair_kind: None
+E   turn[8].upstream_prepared_emission_used: False
+E   turn[8].upstream_prepared_emission_valid: False
+E   turn[8].upstream_prepared_emission_source: None
+E   turn[8].upstream_prepared_emission_reject_reason: None
+E   turn[8].sanitizer_empty_fallback_used: None
+E   turn[8].sanitizer_empty_fallback_source: None
+E   turn[8].sanitizer_empty_fallback_owner: None
+E   turn[8].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[8].sanitizer_lineage_changed_count: None
+E   turn[8].sanitizer_lineage_dropped_count: None
+E   turn[8].sanitizer_lineage_empty_fallback_used: None
+E   turn[8].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[8].sanitizer_strict_social_fallback_used: None
+E   turn[8].sanitizer_strict_social_selection_owner: None
+E   turn[8].sanitizer_strict_social_prose_owner: None
+E   turn[8].sanitizer_strict_social_source: None
+E   turn[8].opening_recovered_via_fallback: False
+E   turn[8].opening_fallback_authorship_source: None
+E   turn[8].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[8].sealed_fallback_owner_bucket: None
+E   turn[8].fallback_family: None
+E   turn[8].fallback_temporal_frame: None
+E   turn[8].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[8].scaffold_leakage: False
+E   turn[8].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[8].snapshot_summary: t8 scene='frontier_gate' interlocutor=None target='-'(-) gm='You notice ash Compact census delays have tightened the eastern caravan choke point. Someone jabs at the board in Cin...'
+E   turn[9].player_text: 'I rip a half-torn curfew addendum off the board and read it in the open.'
+E   turn[9].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[9].branch_id: 'branch_direct_intrusion'
+E   turn[9].turn_id: 'act_10'
+E   turn[9].resolution_kind: None
+E   turn[9].route_kind: 'undecided'
+E   turn[9].selected_speaker_id: None
+E   turn[9].final_emitted_source: 'generated_candidate'
+E   turn[9].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[9].response_type_required: 'neutral_narration'
+E   turn[9].response_type_candidate_ok: True
+E   turn[9].response_type_repair_used: False
+E   turn[9].response_type_repair_kind: None
+E   turn[9].upstream_prepared_emission_used: False
+E   turn[9].upstream_prepared_emission_valid: False
+E   turn[9].upstream_prepared_emission_source: None
+E   turn[9].upstream_prepared_emission_reject_reason: None
+E   turn[9].sanitizer_empty_fallback_used: None
+E   turn[9].sanitizer_empty_fallback_source: None
+E   turn[9].sanitizer_empty_fallback_owner: None
+E   turn[9].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[9].sanitizer_lineage_changed_count: None
+E   turn[9].sanitizer_lineage_dropped_count: None
+E   turn[9].sanitizer_lineage_empty_fallback_used: None
+E   turn[9].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[9].sanitizer_strict_social_fallback_used: None
+E   turn[9].sanitizer_strict_social_selection_owner: None
+E   turn[9].sanitizer_strict_social_prose_owner: None
+E   turn[9].sanitizer_strict_social_source: None
+E   turn[9].opening_recovered_via_fallback: False
+E   turn[9].opening_fallback_authorship_source: None
+E   turn[9].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[9].sealed_fallback_owner_bucket: None
+E   turn[9].fallback_family: None
+E   turn[9].fallback_temporal_frame: None
+E   turn[9].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[9].scaffold_leakage: False
+E   turn[9].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[9].snapshot_summary: t9 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[10].player_text: 'I demand the serjeant open the side wicket for inspection now.'
+E   turn[10].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[10].branch_id: 'branch_direct_intrusion'
+E   turn[10].turn_id: 'act_11'
+E   turn[10].resolution_kind: None
+E   turn[10].route_kind: 'undecided'
+E   turn[10].selected_speaker_id: None
+E   turn[10].final_emitted_source: 'generated_candidate'
+E   turn[10].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[10].response_type_required: 'neutral_narration'
+E   turn[10].response_type_candidate_ok: True
+E   turn[10].response_type_repair_used: False
+E   turn[10].response_type_repair_kind: None
+E   turn[10].upstream_prepared_emission_used: False
+E   turn[10].upstream_prepared_emission_valid: False
+E   turn[10].upstream_prepared_emission_source: None
+E   turn[10].upstream_prepared_emission_reject_reason: None
+E   turn[10].sanitizer_empty_fallback_used: None
+E   turn[10].sanitizer_empty_fallback_source: None
+E   turn[10].sanitizer_empty_fallback_owner: None
+E   turn[10].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[10].sanitizer_lineage_changed_count: None
+E   turn[10].sanitizer_lineage_dropped_count: None
+E   turn[10].sanitizer_lineage_empty_fallback_used: None
+E   turn[10].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[10].sanitizer_strict_social_fallback_used: None
+E   turn[10].sanitizer_strict_social_selection_owner: None
+E   turn[10].sanitizer_strict_social_prose_owner: None
+E   turn[10].sanitizer_strict_social_source: None
+E   turn[10].opening_recovered_via_fallback: False
+E   turn[10].opening_fallback_authorship_source: None
+E   turn[10].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[10].sealed_fallback_owner_bucket: None
+E   turn[10].fallback_family: None
+E   turn[10].fallback_temporal_frame: None
+E   turn[10].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[10].scaffold_leakage: False
+E   turn[10].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[10].snapshot_summary: t10 scene='frontier_gate' interlocutor=None target='-'(-) gm='On closer inspection, threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays h...'
+E   turn[11].player_text: 'I claim authority I do not have and stride toward the inner watch post.'
+E   turn[11].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[11].branch_id: 'branch_direct_intrusion'
+E   turn[11].turn_id: 'act_12'
+E   turn[11].resolution_kind: None
+E   turn[11].route_kind: 'undecided'
+E   turn[11].selected_speaker_id: None
+E   turn[11].final_emitted_source: 'neutral_reply_speaker_grounding_bridge'
+E   turn[11].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[11].response_type_required: 'neutral_narration'
+E   turn[11].response_type_candidate_ok: True
+E   turn[11].response_type_repair_used: False
+E   turn[11].response_type_repair_kind: None
+E   turn[11].upstream_prepared_emission_used: False
+E   turn[11].upstream_prepared_emission_valid: False
+E   turn[11].upstream_prepared_emission_source: None
+E   turn[11].upstream_prepared_emission_reject_reason: None
+E   turn[11].sanitizer_empty_fallback_used: None
+E   turn[11].sanitizer_empty_fallback_source: None
+E   turn[11].sanitizer_empty_fallback_owner: None
+E   turn[11].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[11].sanitizer_lineage_changed_count: None
+E   turn[11].sanitizer_lineage_dropped_count: None
+E   turn[11].sanitizer_lineage_empty_fallback_used: None
+E   turn[11].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[11].sanitizer_strict_social_fallback_used: None
+E   turn[11].sanitizer_strict_social_selection_owner: None
+E   turn[11].sanitizer_strict_social_prose_owner: None
+E   turn[11].sanitizer_strict_social_source: None
+E   turn[11].opening_recovered_via_fallback: False
+E   turn[11].opening_fallback_authorship_source: None
+E   turn[11].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[11].sealed_fallback_owner_bucket: None
+E   turn[11].fallback_family: 'neutral_reply_speaker_grounding_bridge'
+E   turn[11].fallback_temporal_frame: None
+E   turn[11].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'sealed_unknown_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': 'game.final_emission_gate', 'fallback_content_owner': 'game.final_emission_gate', 'repair_kind': 'strict_social_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': 'replaced_or_sealed', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'speaker_repair', 'stage': 'gate', 'owner': 'game.speaker_contract_enforcement', 'source': 'narrator_neutral_no_allowed_speaker', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'narrator_neutral', 'recurrence_key': 'speaker_repair:gate:game.speaker_contract_enforcement:narrator_neutral', 'notes': ['narrator_neutral_no_allowed_speaker']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'neutral_reply_speaker_grounding_bridge', 'gate_path': None, 'mutation_kind': 'sealed_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'notes': ['sealed_unknown_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.speaker_contract_enforcement', 'source': 'narrator_neutral_no_allowed_speaker', 'gate_path': None, 'mutation_kind': 'speaker_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.speaker_contract_enforcement:speaker_repair_mutation', 'notes': ['narrator_neutral', 'narrator_neutral_no_allowed_speaker']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]
+E   turn[11].scaffold_leakage: False
+E   turn[11].unavailable: ['selected_speaker_id']
+E   turn[11].snapshot_summary: t11 scene='frontier_gate' interlocutor=None target='-'(-) gm='The murmur around you never tightens into a single clear voice on that point.'
+E   turn[12].player_text: 'I jam a crate under the warehouse latch to keep the door from closing.'
+E   turn[12].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[12].branch_id: 'branch_direct_intrusion'
+E   turn[12].turn_id: 'act_13'
+E   turn[12].resolution_kind: None
+E   turn[12].route_kind: 'undecided'
+E   turn[12].selected_speaker_id: None
+E   turn[12].final_emitted_source: 'generated_candidate'
+E   turn[12].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[12].response_type_required: 'neutral_narration'
+E   turn[12].response_type_candidate_ok: True
+E   turn[12].response_type_repair_used: False
+E   turn[12].response_type_repair_kind: None
+E   turn[12].upstream_prepared_emission_used: False
+E   turn[12].upstream_prepared_emission_valid: False
+E   turn[12].upstream_prepared_emission_source: None
+E   turn[12].upstream_prepared_emission_reject_reason: None
+E   turn[12].sanitizer_empty_fallback_used: None
+E   turn[12].sanitizer_empty_fallback_source: None
+E   turn[12].sanitizer_empty_fallback_owner: None
+E   turn[12].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[12].sanitizer_lineage_changed_count: None
+E   turn[12].sanitizer_lineage_dropped_count: None
+E   turn[12].sanitizer_lineage_empty_fallback_used: None
+E   turn[12].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[12].sanitizer_strict_social_fallback_used: None
+E   turn[12].sanitizer_strict_social_selection_owner: None
+E   turn[12].sanitizer_strict_social_prose_owner: None
+E   turn[12].sanitizer_strict_social_source: None
+E   turn[12].opening_recovered_via_fallback: False
+E   turn[12].opening_fallback_authorship_source: None
+E   turn[12].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[12].sealed_fallback_owner_bucket: None
+E   turn[12].fallback_family: None
+E   turn[12].fallback_temporal_frame: None
+E   turn[12].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[12].scaffold_leakage: False
+E   turn[12].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[12].snapshot_summary: t12 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[13].player_text: 'I vault a cordon rope the watch just strung across the mud line.'
+E   turn[13].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[13].branch_id: 'branch_direct_intrusion'
+E   turn[13].turn_id: 'act_14'
+E   turn[13].resolution_kind: None
+E   turn[13].route_kind: 'undecided'
+E   turn[13].selected_speaker_id: None
+E   turn[13].final_emitted_source: 'passive_scene_pressure_fallback'
+E   turn[13].final_emission_mutation_lineage: ['sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[13].response_type_required: 'neutral_narration'
+E   turn[13].response_type_candidate_ok: True
+E   turn[13].response_type_repair_used: False
+E   turn[13].response_type_repair_kind: None
+E   turn[13].upstream_prepared_emission_used: False
+E   turn[13].upstream_prepared_emission_valid: False
+E   turn[13].upstream_prepared_emission_source: None
+E   turn[13].upstream_prepared_emission_reject_reason: None
+E   turn[13].sanitizer_empty_fallback_used: None
+E   turn[13].sanitizer_empty_fallback_source: None
+E   turn[13].sanitizer_empty_fallback_owner: None
+E   turn[13].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[13].sanitizer_lineage_changed_count: None
+E   turn[13].sanitizer_lineage_dropped_count: None
+E   turn[13].sanitizer_lineage_empty_fallback_used: None
+E   turn[13].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[13].sanitizer_strict_social_fallback_used: None
+E   turn[13].sanitizer_strict_social_selection_owner: None
+E   turn[13].sanitizer_strict_social_prose_owner: None
+E   turn[13].sanitizer_strict_social_source: None
+E   turn[13].opening_recovered_via_fallback: False
+E   turn[13].opening_fallback_authorship_source: None
+E   turn[13].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[13].sealed_fallback_owner_bucket: 'sealed-gate'
+E   turn[13].fallback_family: 'gate_terminal_repair'
+E   turn[13].fallback_temporal_frame: None
+E   turn[13].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'referential_clarity_hard_replacement', 'fallback_authorship_source': None, 'fallback_owner_bucket': 'sealed-gate', 'fallback_selection_owner': 'game.final_emission_visibility_fallback', 'fallback_content_owner': 'game.final_emission_sealed_fallback', 'repair_kind': 'passive_scene_pressure_fallback', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:referential_clarity_hard_replacement', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': 'referential_clarity_hard_replaced', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:referential_clarity_hard_replaced', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'passive_scene_pressure_fallback', 'gate_path': None, 'mutation_kind': 'referential_clarity_replacement_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:referential_clarity_replacement_mutation', 'notes': ['referential_clarity_hard_replacement']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'sealed_fallback_replacement', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['sealed_fallback_replacement']}]
+E   turn[13].scaffold_leakage: False
+E   turn[13].unavailable: ['selected_speaker_id']
+E   turn[13].snapshot_summary: t13 scene='frontier_gate' interlocutor=None target='-'(-) gm='as you cuts through the crowd and stops at your shoulder. "You\'re asking the wrong questions out loud," they murmur. ...'
+E   turn[14].player_text: 'I stare down the hooded lurker until they break and run—I pursue.'
+E   turn[14].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[14].branch_id: 'branch_direct_intrusion'
+E   turn[14].turn_id: 'act_15'
+E   turn[14].resolution_kind: None
+E   turn[14].route_kind: 'undecided'
+E   turn[14].selected_speaker_id: None
+E   turn[14].final_emitted_source: 'generated_candidate'
+E   turn[14].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[14].response_type_required: 'neutral_narration'
+E   turn[14].response_type_candidate_ok: True
+E   turn[14].response_type_repair_used: False
+E   turn[14].response_type_repair_kind: None
+E   turn[14].upstream_prepared_emission_used: False
+E   turn[14].upstream_prepared_emission_valid: False
+E   turn[14].upstream_prepared_emission_source: None
+E   turn[14].upstream_prepared_emission_reject_reason: None
+E   turn[14].sanitizer_empty_fallback_used: None
+E   turn[14].sanitizer_empty_fallback_source: None
+E   turn[14].sanitizer_empty_fallback_owner: None
+E   turn[14].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[14].sanitizer_lineage_changed_count: None
+E   turn[14].sanitizer_lineage_dropped_count: None
+E   turn[14].sanitizer_lineage_empty_fallback_used: None
+E   turn[14].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[14].sanitizer_strict_social_fallback_used: None
+E   turn[14].sanitizer_strict_social_selection_owner: None
+E   turn[14].sanitizer_strict_social_prose_owner: None
+E   turn[14].sanitizer_strict_social_source: None
+E   turn[14].opening_recovered_via_fallback: False
+E   turn[14].opening_fallback_authorship_source: None
+E   turn[14].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[14].sealed_fallback_owner_bucket: None
+E   turn[14].fallback_family: None
+E   turn[14].fallback_temporal_frame: None
+E   turn[14].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[14].scaffold_leakage: False
+E   turn[14].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[14].snapshot_summary: t14 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[15].player_text: 'I slam my palm on the roster board and refuse to step back.'
+E   turn[15].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[15].branch_id: 'branch_direct_intrusion'
+E   turn[15].turn_id: 'act_16'
+E   turn[15].resolution_kind: None
+E   turn[15].route_kind: 'undecided'
+E   turn[15].selected_speaker_id: None
+E   turn[15].final_emitted_source: 'generated_candidate'
+E   turn[15].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[15].response_type_required: 'neutral_narration'
+E   turn[15].response_type_candidate_ok: True
+E   turn[15].response_type_repair_used: False
+E   turn[15].response_type_repair_kind: None
+E   turn[15].upstream_prepared_emission_used: False
+E   turn[15].upstream_prepared_emission_valid: False
+E   turn[15].upstream_prepared_emission_source: None
+E   turn[15].upstream_prepared_emission_reject_reason: None
+E   turn[15].sanitizer_empty_fallback_used: None
+E   turn[15].sanitizer_empty_fallback_source: None
+E   turn[15].sanitizer_empty_fallback_owner: None
+E   turn[15].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[15].sanitizer_lineage_changed_count: None
+E   turn[15].sanitizer_lineage_dropped_count: None
+E   turn[15].sanitizer_lineage_empty_fallback_used: None
+E   turn[15].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[15].sanitizer_strict_social_fallback_used: None
+E   turn[15].sanitizer_strict_social_selection_owner: None
+E   turn[15].sanitizer_strict_social_prose_owner: None
+E   turn[15].sanitizer_strict_social_source: None
+E   turn[15].opening_recovered_via_fallback: False
+E   turn[15].opening_fallback_authorship_source: None
+E   turn[15].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[15].sealed_fallback_owner_bucket: None
+E   turn[15].fallback_family: None
+E   turn[15].fallback_temporal_frame: None
+E   turn[15].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[15].scaffold_leakage: False
+E   turn[15].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[15].snapshot_summary: t15 scene='frontier_gate' interlocutor=None target='-'(-) gm="Nothing new locks in yet; you keep the scene's weight without stepping backward. Someone jabs at the board in Cinderw..."
+E   turn[16].player_text: 'I accuse the gate of hiding patrol losses and let the crowd hear it.'
+E   turn[16].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[16].branch_id: 'branch_direct_intrusion'
+E   turn[16].turn_id: 'act_17'
+E   turn[16].resolution_kind: None
+E   turn[16].route_kind: 'undecided'
+E   turn[16].selected_speaker_id: None
+E   turn[16].final_emitted_source: 'generated_candidate'
+E   turn[16].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[16].response_type_required: 'neutral_narration'
+E   turn[16].response_type_candidate_ok: True
+E   turn[16].response_type_repair_used: False
+E   turn[16].response_type_repair_kind: None
+E   turn[16].upstream_prepared_emission_used: False
+E   turn[16].upstream_prepared_emission_valid: False
+E   turn[16].upstream_prepared_emission_source: None
+E   turn[16].upstream_prepared_emission_reject_reason: None
+E   turn[16].sanitizer_empty_fallback_used: None
+E   turn[16].sanitizer_empty_fallback_source: None
+E   turn[16].sanitizer_empty_fallback_owner: None
+E   turn[16].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[16].sanitizer_lineage_changed_count: None
+E   turn[16].sanitizer_lineage_dropped_count: None
+E   turn[16].sanitizer_lineage_empty_fallback_used: None
+E   turn[16].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[16].sanitizer_strict_social_fallback_used: None
+E   turn[16].sanitizer_strict_social_selection_owner: None
+E   turn[16].sanitizer_strict_social_prose_owner: None
+E   turn[16].sanitizer_strict_social_source: None
+E   turn[16].opening_recovered_via_fallback: False
+E   turn[16].opening_fallback_authorship_source: None
+E   turn[16].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[16].sealed_fallback_owner_bucket: None
+E   turn[16].fallback_family: None
+E   turn[16].fallback_temporal_frame: None
+E   turn[16].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[16].scaffold_leakage: False
+E   turn[16].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[16].snapshot_summary: t16 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[17].player_text: 'I press charcoal rag to the duty chalk slate to lift its markings.'
+E   turn[17].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[17].branch_id: 'branch_direct_intrusion'
+E   turn[17].turn_id: 'act_18'
+E   turn[17].resolution_kind: None
+E   turn[17].route_kind: 'undecided'
+E   turn[17].selected_speaker_id: None
+E   turn[17].final_emitted_source: 'generated_candidate'
+E   turn[17].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[17].response_type_required: 'neutral_narration'
+E   turn[17].response_type_candidate_ok: True
+E   turn[17].response_type_repair_used: False
+E   turn[17].response_type_repair_kind: None
+E   turn[17].upstream_prepared_emission_used: False
+E   turn[17].upstream_prepared_emission_valid: False
+E   turn[17].upstream_prepared_emission_source: None
+E   turn[17].upstream_prepared_emission_reject_reason: None
+E   turn[17].sanitizer_empty_fallback_used: None
+E   turn[17].sanitizer_empty_fallback_source: None
+E   turn[17].sanitizer_empty_fallback_owner: None
+E   turn[17].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[17].sanitizer_lineage_changed_count: None
+E   turn[17].sanitizer_lineage_dropped_count: None
+E   turn[17].sanitizer_lineage_empty_fallback_used: None
+E   turn[17].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[17].sanitizer_strict_social_fallback_used: None
+E   turn[17].sanitizer_strict_social_selection_owner: None
+E   turn[17].sanitizer_strict_social_prose_owner: None
+E   turn[17].sanitizer_strict_social_source: None
+E   turn[17].opening_recovered_via_fallback: False
+E   turn[17].opening_fallback_authorship_source: None
+E   turn[17].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[17].sealed_fallback_owner_bucket: None
+E   turn[17].fallback_family: None
+E   turn[17].fallback_temporal_frame: None
+E   turn[17].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[17].scaffold_leakage: False
+E   turn[17].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[17].snapshot_summary: t17 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[18].player_text: 'I wedge myself in the wicket when they move to shut it on me.'
+E   turn[18].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[18].branch_id: 'branch_direct_intrusion'
+E   turn[18].turn_id: 'act_19'
+E   turn[18].resolution_kind: 'travel'
+E   turn[18].route_kind: 'undecided'
+E   turn[18].selected_speaker_id: None
+E   turn[18].final_emitted_source: 'global_scene_fallback'
+E   turn[18].final_emission_mutation_lineage: ['response_type_repair', 'prepared_emission_selection', 'sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[18].response_type_required: 'action_outcome'
+E   turn[18].response_type_candidate_ok: True
+E   turn[18].response_type_repair_used: True
+E   turn[18].response_type_repair_kind: 'action_outcome_upstream_prepared_repair'
+E   turn[18].upstream_prepared_emission_used: True
+E   turn[18].upstream_prepared_emission_valid: True
+E   turn[18].upstream_prepared_emission_source: 'upstream_prepared_emission.prepared_action_fallback_text'
+E   turn[18].upstream_prepared_emission_reject_reason: None
+E   turn[18].sanitizer_empty_fallback_used: None
+E   turn[18].sanitizer_empty_fallback_source: None
+E   turn[18].sanitizer_empty_fallback_owner: None
+E   turn[18].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[18].sanitizer_lineage_changed_count: None
+E   turn[18].sanitizer_lineage_dropped_count: None
+E   turn[18].sanitizer_lineage_empty_fallback_used: None
+E   turn[18].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[18].sanitizer_strict_social_fallback_used: None
+E   turn[18].sanitizer_strict_social_selection_owner: None
+E   turn[18].sanitizer_strict_social_prose_owner: None
+E   turn[18].sanitizer_strict_social_source: None
+E   turn[18].opening_recovered_via_fallback: False
+E   turn[18].opening_fallback_authorship_source: None
+E   turn[18].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[18].sealed_fallback_owner_bucket: 'sealed-gate'
+E   turn[18].fallback_family: 'gate_terminal_repair'
+E   turn[18].fallback_temporal_frame: None
+E   turn[18].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'response_type_prepared_emission', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'referential_clarity_enforcement', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': 'prepared_repair', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'global_scene_fallback', 'gate_path': None, 'mutation_kind': 'response_type_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'notes': ['response_type_prepared_emission']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'prepared_emission_selection', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['prepared_emission_selection']}]
+E   turn[18].scaffold_leakage: False
+E   turn[18].unavailable: ['selected_speaker_id']
+E   turn[18].snapshot_summary: t18 scene='frontier_gate' interlocutor=None target='-'(-) gm='The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol in...'
+E   turn[19].player_text: 'I shove a lantern hook toward the tavern runner to stop them leaving.'
+E   turn[19].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[19].branch_id: 'branch_direct_intrusion'
+E   turn[19].turn_id: 'act_20'
+E   turn[19].resolution_kind: None
+E   turn[19].route_kind: 'action'
+E   turn[19].selected_speaker_id: 'tavern_runner'
+E   turn[19].final_emitted_source: 'generated_candidate'
+E   turn[19].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[19].response_type_required: 'dialogue'
+E   turn[19].response_type_candidate_ok: True
+E   turn[19].response_type_repair_used: False
+E   turn[19].response_type_repair_kind: None
+E   turn[19].upstream_prepared_emission_used: False
+E   turn[19].upstream_prepared_emission_valid: False
+E   turn[19].upstream_prepared_emission_source: None
+E   turn[19].upstream_prepared_emission_reject_reason: None
+E   turn[19].sanitizer_empty_fallback_used: None
+E   turn[19].sanitizer_empty_fallback_source: None
+E   turn[19].sanitizer_empty_fallback_owner: None
+E   turn[19].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[19].sanitizer_lineage_changed_count: None
+E   turn[19].sanitizer_lineage_dropped_count: None
+E   turn[19].sanitizer_lineage_empty_fallback_used: None
+E   turn[19].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[19].sanitizer_strict_social_fallback_used: None
+E   turn[19].sanitizer_strict_social_selection_owner: None
+E   turn[19].sanitizer_strict_social_prose_owner: None
+E   turn[19].sanitizer_strict_social_source: None
+E   turn[19].opening_recovered_via_fallback: False
+E   turn[19].opening_fallback_authorship_source: None
+E   turn[19].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[19].sealed_fallback_owner_bucket: None
+E   turn[19].fallback_family: None
+E   turn[19].fallback_temporal_frame: None
+E   turn[19].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[19].scaffold_leakage: False
+E   turn[19].unavailable: ['fallback_family']
+E   turn[19].snapshot_summary: t19 scene='frontier_gate' interlocutor=None target='-'(-) gm='You notice a tavern runner trades hot stew and rumors near the rain barrel. Someone jabs at the board in Cinderwatch ...'
+E   turn[20].player_text: 'I double back through the alley to flank the serjeant’s blind side.'
+E   turn[20].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[20].branch_id: 'branch_direct_intrusion'
+E   turn[20].turn_id: 'act_21'
+E   turn[20].resolution_kind: None
+E   turn[20].route_kind: 'undecided'
+E   turn[20].selected_speaker_id: None
+E   turn[20].final_emitted_source: 'generated_candidate'
+E   turn[20].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[20].response_type_required: 'neutral_narration'
+E   turn[20].response_type_candidate_ok: True
+E   turn[20].response_type_repair_used: False
+E   turn[20].response_type_repair_kind: None
+E   turn[20].upstream_prepared_emission_used: False
+E   turn[20].upstream_prepared_emission_valid: False
+E   turn[20].upstream_prepared_emission_source: None
+E   turn[20].upstream_prepared_emission_reject_reason: None
+E   turn[20].sanitizer_empty_fallback_used: None
+E   turn[20].sanitizer_empty_fallback_source: None
+E   turn[20].sanitizer_empty_fallback_owner: None
+E   turn[20].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[20].sanitizer_lineage_changed_count: None
+E   turn[20].sanitizer_lineage_dropped_count: None
+E   turn[20].sanitizer_lineage_empty_fallback_used: None
+E   turn[20].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[20].sanitizer_strict_social_fallback_used: None
+E   turn[20].sanitizer_strict_social_selection_owner: None
+E   turn[20].sanitizer_strict_social_prose_owner: None
+E   turn[20].sanitizer_strict_social_source: None
+E   turn[20].opening_recovered_via_fallback: False
+E   turn[20].opening_fallback_authorship_source: None
+E   turn[20].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[20].sealed_fallback_owner_bucket: None
+E   turn[20].fallback_family: None
+E   turn[20].fallback_temporal_frame: None
+E   turn[20].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[20].scaffold_leakage: False
+E   turn[20].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[20].snapshot_summary: t20 scene='frontier_gate' interlocutor=None target='-'(-) gm='The direct intrusion stays anchored: the gate serjeant, roster board, cordon pressure, warehouse latch, muddy crates,...'
+E   turn[21].player_text: 'I kick a loose cobble toward the watch boots to force a reaction.'
+E   turn[21].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[21].branch_id: 'branch_direct_intrusion'
+E   turn[21].turn_id: 'act_22'
+E   turn[21].resolution_kind: 'social_probe'
+E   turn[21].route_kind: 'dialogue'
+E   turn[21].selected_speaker_id: 'gate_guard'
+E   turn[21].final_emitted_source: 'normalized_social_candidate'
+E   turn[21].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']
+E   turn[21].response_type_required: 'dialogue'
+E   turn[21].response_type_candidate_ok: True
+E   turn[21].response_type_repair_used: False
+E   turn[21].response_type_repair_kind: None
+E   turn[21].upstream_prepared_emission_used: False
+E   turn[21].upstream_prepared_emission_valid: False
+E   turn[21].upstream_prepared_emission_source: None
+E   turn[21].upstream_prepared_emission_reject_reason: None
+E   turn[21].sanitizer_empty_fallback_used: None
+E   turn[21].sanitizer_empty_fallback_source: None
+E   turn[21].sanitizer_empty_fallback_owner: None
+E   turn[21].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[21].sanitizer_lineage_changed_count: None
+E   turn[21].sanitizer_lineage_dropped_count: None
+E   turn[21].sanitizer_lineage_empty_fallback_used: None
+E   turn[21].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[21].sanitizer_strict_social_fallback_used: None
+E   turn[21].sanitizer_strict_social_selection_owner: None
+E   turn[21].sanitizer_strict_social_prose_owner: None
+E   turn[21].sanitizer_strict_social_source: None
+E   turn[21].opening_recovered_via_fallback: False
+E   turn[21].opening_fallback_authorship_source: None
+E   turn[21].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[21].sealed_fallback_owner_bucket: None
+E   turn[21].fallback_family: None
+E   turn[21].fallback_temporal_frame: None
+E   turn[21].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]
+E   turn[21].scaffold_leakage: False
+E   turn[21].unavailable: ['fallback_family']
+E   turn[21].snapshot_summary: t21 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='Gate Guard nods once. "Old Millstone. South road." "You\'re asking for a line I don\'t own."'
+E   turn[22].player_text: 'I refuse dispersal orders and plant my feet at the notice board.'
+E   turn[22].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[22].branch_id: 'branch_direct_intrusion'
+E   turn[22].turn_id: 'act_23'
+E   turn[22].resolution_kind: 'social_probe'
+E   turn[22].route_kind: 'dialogue'
+E   turn[22].selected_speaker_id: 'gate_guard'
+E   turn[22].final_emitted_source: 'normalized_social_candidate'
+E   turn[22].final_emission_mutation_lineage: ['finalize_packaging', 'post_gate_mutation_detected']
+E   turn[22].response_type_required: 'dialogue'
+E   turn[22].response_type_candidate_ok: True
+E   turn[22].response_type_repair_used: False
+E   turn[22].response_type_repair_kind: None
+E   turn[22].upstream_prepared_emission_used: False
+E   turn[22].upstream_prepared_emission_valid: False
+E   turn[22].upstream_prepared_emission_source: None
+E   turn[22].upstream_prepared_emission_reject_reason: None
+E   turn[22].sanitizer_empty_fallback_used: None
+E   turn[22].sanitizer_empty_fallback_source: None
+E   turn[22].sanitizer_empty_fallback_owner: None
+E   turn[22].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[22].sanitizer_lineage_changed_count: None
+E   turn[22].sanitizer_lineage_dropped_count: None
+E   turn[22].sanitizer_lineage_empty_fallback_used: None
+E   turn[22].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[22].sanitizer_strict_social_fallback_used: None
+E   turn[22].sanitizer_strict_social_selection_owner: None
+E   turn[22].sanitizer_strict_social_prose_owner: None
+E   turn[22].sanitizer_strict_social_source: None
+E   turn[22].opening_recovered_via_fallback: False
+E   turn[22].opening_fallback_authorship_source: None
+E   turn[22].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[22].sealed_fallback_owner_bucket: None
+E   turn[22].fallback_family: None
+E   turn[22].fallback_temporal_frame: None
+E   turn[22].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'normalized_social_candidate', 'gate_path': 'strict_social_accept', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'post_gate_mutation_detected', 'gate_path': None, 'mutation_kind': 'final_emission_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'notes': ['post_gate_mutation_detected']}]
+E   turn[22].scaffold_leakage: False
+E   turn[22].unavailable: ['fallback_family']
+E   turn[22].snapshot_summary: t22 scene='frontier_gate' interlocutor='gate_guard' target='gate_guard'(interaction_context.active_interaction_target_id) gm='Gate Guard nods once. "Old Millstone. South road." "I\'ve heard talk, but I won\'t pin that down as truth."'
+E   turn[23].player_text: 'I grab the crate stack to climb for a roofline view of the gate yard.'
+E   turn[23].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[23].branch_id: 'branch_direct_intrusion'
+E   turn[23].turn_id: 'act_24'
+E   turn[23].resolution_kind: None
+E   turn[23].route_kind: 'action'
+E   turn[23].selected_speaker_id: None
+E   turn[23].final_emitted_source: 'generated_candidate'
+E   turn[23].final_emission_mutation_lineage: ['finalize_packaging']
+E   turn[23].response_type_required: 'action_outcome'
+E   turn[23].response_type_candidate_ok: True
+E   turn[23].response_type_repair_used: False
+E   turn[23].response_type_repair_kind: None
+E   turn[23].upstream_prepared_emission_used: False
+E   turn[23].upstream_prepared_emission_valid: False
+E   turn[23].upstream_prepared_emission_source: None
+E   turn[23].upstream_prepared_emission_reject_reason: None
+E   turn[23].sanitizer_empty_fallback_used: None
+E   turn[23].sanitizer_empty_fallback_source: None
+E   turn[23].sanitizer_empty_fallback_owner: None
+E   turn[23].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[23].sanitizer_lineage_changed_count: None
+E   turn[23].sanitizer_lineage_dropped_count: None
+E   turn[23].sanitizer_lineage_empty_fallback_used: None
+E   turn[23].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[23].sanitizer_strict_social_fallback_used: None
+E   turn[23].sanitizer_strict_social_selection_owner: None
+E   turn[23].sanitizer_strict_social_prose_owner: None
+E   turn[23].sanitizer_strict_social_source: None
+E   turn[23].opening_recovered_via_fallback: False
+E   turn[23].opening_fallback_authorship_source: None
+E   turn[23].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[23].sealed_fallback_owner_bucket: None
+E   turn[23].fallback_family: None
+E   turn[23].fallback_temporal_frame: None
+E   turn[23].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'generated_candidate', 'gate_path': 'accept_unchanged', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'notes': []}]
+E   turn[23].scaffold_leakage: False
+E   turn[23].unavailable: ['fallback_family', 'selected_speaker_id']
+E   turn[23].snapshot_summary: t23 scene='frontier_gate' interlocutor=None target='-'(-) gm="Nothing new locks in yet; you keep the scene's weight without stepping backward. Someone jabs at the board in Cinderw..."
+E   turn[24].player_text: 'I break off under whistles, melting into the eastern mud with heat on my heels.'
+E   turn[24].source_path: 'data/validation/scenario_spines/frontier_gate_long_session.json'
+E   turn[24].branch_id: 'branch_direct_intrusion'
+E   turn[24].turn_id: 'act_25'
+E   turn[24].resolution_kind: None
+E   turn[24].route_kind: 'action'
+E   turn[24].selected_speaker_id: None
+E   turn[24].final_emitted_source: 'anti_reset_local_continuation_fallback'
+E   turn[24].final_emission_mutation_lineage: ['response_type_repair', 'prepared_emission_selection', 'sealed_fallback_replacement', 'finalize_packaging', 'post_gate_mutation_detected']
+E   turn[24].response_type_required: 'action_outcome'
+E   turn[24].response_type_candidate_ok: True
+E   turn[24].response_type_repair_used: True
+E   turn[24].response_type_repair_kind: 'action_outcome_upstream_prepared_repair'
+E   turn[24].upstream_prepared_emission_used: True
+E   turn[24].upstream_prepared_emission_valid: True
+E   turn[24].upstream_prepared_emission_source: 'upstream_prepared_emission.prepared_action_fallback_text'
+E   turn[24].upstream_prepared_emission_reject_reason: None
+E   turn[24].sanitizer_empty_fallback_used: None
+E   turn[24].sanitizer_empty_fallback_source: None
+E   turn[24].sanitizer_empty_fallback_owner: None
+E   turn[24].sanitizer_lineage_mode: &lt;object object at 0x0000020CFFA64F10&gt;
+E   turn[24].sanitizer_lineage_changed_count: None
+E   turn[24].sanitizer_lineage_dropped_count: None
+E   turn[24].sanitizer_lineage_empty_fallback_used: None
+E   turn[24].sanitizer_lineage_legacy_rewrite_active: False
+E   turn[24].sanitizer_strict_social_fallback_used: None
+E   turn[24].sanitizer_strict_social_selection_owner: None
+E   turn[24].sanitizer_strict_social_prose_owner: None
+E   turn[24].sanitizer_strict_social_source: None
+E   turn[24].opening_recovered_via_fallback: False
+E   turn[24].opening_fallback_authorship_source: None
+E   turn[24].opening_fallback_owner_bucket: 'unknown-ambiguous'
+E   turn[24].sealed_fallback_owner_bucket: 'sealed-gate'
+E   turn[24].fallback_family: 'gate_terminal_repair'
+E   turn[24].fallback_temporal_frame: None
+E   turn[24].runtime_lineage_events: [{'event_type': 'runtime_lineage', 'event_kind': 'fallback_selected', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': None, 'mutation_kind': None, 'fallback_kind': 'response_type_prepared_emission', 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': 'action_outcome_upstream_prepared_repair', 'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'gate_outcome', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': 'prepared_repair', 'mutation_kind': None, 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'notes': []}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'anti_reset_local_continuation_fallback', 'gate_path': None, 'mutation_kind': 'response_type_repair_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'notes': ['response_type_prepared_emission']}, {'event_type': 'runtime_lineage', 'event_kind': 'mutation', 'stage': 'gate', 'owner': 'game.final_emission_gate', 'source': 'prepared_emission_selection', 'gate_path': None, 'mutation_kind': 'fallback_mutation', 'fallback_kind': None, 'fallback_authorship_source': None, 'fallback_owner_bucket': None, 'fallback_selection_owner': None, 'fallback_content_owner': None, 'repair_kind': None, 'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'notes': ['prepared_emission_selection']}]
+E   turn[24].scaffold_leakage: False
+E   turn[24].unavailable: ['selected_speaker_id']
+E   turn[24].snapshot_summary: t24 scene='frontier_gate' interlocutor=None target='-'(-) gm='The guard says, "I do not know enough to answer that."'
+E   
+E   # Golden Replay 25-Turn Direct-Intrusion Diagnostic Stability
+E   
+E   - Scenario: `frontier_gate_direct_intrusion_25_turn_diagnostic`
+E   - Turns: `25`
+E   - Route frequency: `{'action': 3, 'dialogue': 5, 'undecided': 17}`
+E   - Route changes: `6`
+E   - Speaker frequency: `{'gate_guard': 3, 'tavern_runner': 1, 'threadbare_watcher': 1}`
+E   - Speaker changes / missing: `3` / `20`
+E   - Fallback total count: `7`
+E   - Fallback families: `{'gate_terminal_repair': 3, 'neutral_reply_speaker_grounding_bridge': 4}`
+E   - Fallback owners: `{'sealed-gate': 3}`
+E   - Fallback lineage kinds: `{'referential_clarity_hard_replacement': 1, 'response_type_prepared_emission': 2, 'sealed_unknown_replacement': 4}`
+E   - Max fallback streak: `2`
+E   - Max fallback streak blocking / scene-action nonblocking: `0` / `2`
+E   - Late-window fallback count: `2`
+E   - Fallback unavailable blocking / scene-action speaker optional: `0` / `7`
+E   - Fallback escalation warnings: `[]`
+E   - Mutation turn count: `25`
+E   - Response-delta checked / failed / repaired: `0` / `0` / `0`
+E   - Response-delta kinds: `{}`
+E   - Response-delta unknown count: `0`
+E   - Echo-overlap bands: `{}`
+E   - Unavailable counts: `{'fallback_family': 18, 'selected_speaker_id': 20}`
+E   - Lineage event frequency: `{'fallback_selected': 7, 'gate_outcome': 25, 'mutation': 19, 'speaker_repair': 1}`
+E   - Lineage recurrence: `[{'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:accept_unchanged', 'count': 14}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:fallback_mutation', 'count': 7}, {'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:sealed_unknown_replacement', 'count': 4}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:replaced_or_sealed', 'count': 4}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:strict_social_accept', 'count': 4}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:final_emission_mutation', 'count': 4}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:sealed_replacement_mutation', 'count': 4}, {'recurrence_key': 'fallback_selected:gate:game.final_emission_gate:response_type_prepared_emission', 'count': 2}, {'recurrence_key': 'gate_outcome:gate:game.final_emission_gate:prepared_repair', 'count': 2}, {'recurrence_key': 'mutation:gate:game.final_emission_gate:response_type_repair_mutation', 'count': 2}]`
+E   - Continuity warnings / violations: `0` / `14`
+E   - Continuity classification: `clean`
+E   - Degradation detected: `False`
+E   - Degradation reasons: `[]`
+E   - Late-window signals: `[]`
+E   
+E   | Turn | Route | Speaker | Fallback | Owner | Mutation | Unavailable | Lineage |
+E   |---:|---|---|---|---|---|---|---|
+E   | 0 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 1 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |
+E   | 2 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |
+E   | 3 | dialogue | threadbare_watcher |  |  | True | fallback_family | gate_outcome, mutation |
+E   | 4 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |
+E   | 5 | dialogue |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 6 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 7 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |
+E   | 8 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 9 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 10 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 11 | undecided |  | neutral_reply_speaker_grounding_bridge |  | True | selected_speaker_id | fallback_selected, gate_outcome, speaker_repair, mutation, mutation, mutation |
+E   | 12 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 13 | undecided |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |
+E   | 14 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 15 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 16 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 17 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 18 | undecided |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |
+E   | 19 | action | tavern_runner |  |  | True | fallback_family | gate_outcome |
+E   | 20 | undecided |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 21 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |
+E   | 22 | dialogue | gate_guard |  |  | True | fallback_family | gate_outcome, mutation |
+E   | 23 | action |  |  |  | True | fallback_family, selected_speaker_id | gate_outcome |
+E   | 24 | action |  | gate_terminal_repair | sealed-gate | True | selected_speaker_id | fallback_selected, gate_outcome, mutation, mutation |</failure></testcase><testcase classname="tests.test_golden_replay_projection_engine" name="test_cl7_projected_rows_preserve_backup_fields_with_versioned_attribution_extension" time="0.029" /><testcase classname="tests.test_golden_replay_projection_engine" name="test_cl7_flat_projection_ordering_unchanged_from_backup" time="0.026" /><testcase classname="tests.test_golden_replay_projection_engine" name="test_cl7_engine_extraction_helpers_match_previous_implementation" time="0.029" /><testcase classname="tests.test_golden_replay_projection_engine" name="test_cl7_extractor_compatibility_reexports_engine_symbols" time="0.001" /></testsuite></testsuites>

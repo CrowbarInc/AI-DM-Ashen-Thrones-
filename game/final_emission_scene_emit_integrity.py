@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from game.diegetic_fallback_narration import render_travel_arrival_fallback_line
 from game.final_emission_text import _global_narrative_fallback_stock_line
 from game.final_emission_visibility_fallback import (
     VisibilitySelectedFallback,
@@ -212,8 +213,13 @@ def _scene_emit_integrity_global_fallback_selection(
             fallback_candidate_source="scene_emit_integrity_safe_fallback",
             composition_meta=_first_mention_composition_meta(),
         )
+    resolved_arrival = render_travel_arrival_fallback_line(
+        scene if isinstance(scene, dict) else None,
+        seed_key=scene_id or "resolved_transition",
+    )
     return VisibilitySelectedFallback(
-        text=_global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
+        text=resolved_arrival
+        or _global_narrative_fallback_stock_line(scene if isinstance(scene, dict) else None, scene_id=scene_id),
         fallback_pool="global_scene_narrative",
         fallback_kind="narrative_safe_fallback",
         final_emitted_source="global_scene_fallback",

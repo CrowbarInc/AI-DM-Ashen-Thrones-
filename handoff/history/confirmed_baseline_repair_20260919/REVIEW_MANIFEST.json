@@ -1,0 +1,140 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "confirmed_baseline_repair_20260919",
+  "campaign_name": "Confirmed Baseline Repair",
+  "generated_at": "2026-09-19T16:34:18.819777+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 5493,
+      "sha256": "164155163ae83e8716ea1a04e65833be7d4239734604e0cfd5ff73286f74829a"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "docs/confirmed_baseline_repair.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/confirmed_baseline_repair.md",
+      "bundle_path": "support/docs/confirmed_baseline_repair.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 6918,
+      "sha256": "b5170b45387b11b3db3486618a0c17176ce52233497e73c1ab72820745f7f7bf"
+    },
+    {
+      "path": "artifacts/confirmed_baseline_repair/repair_ledger.json",
+      "role": "repair_ledger",
+      "why": "Accounts for all RC outcomes and the exact failure delta.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/confirmed_baseline_repair/repair_ledger.json",
+      "bundle_path": "support/artifacts/confirmed_baseline_repair/repair_ledger.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 16632,
+      "sha256": "a3e7bfcc72799fe22423552567cbb097be3dadeee37348700a5248ad75a0108d"
+    },
+    {
+      "path": "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+      "role": "pre_junit",
+      "why": "Authoritative starting baseline.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+      "bundle_path": "support/artifacts/confirmed_baseline_repair/pre_repair_suite.xml",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1185485,
+      "sha256": "11a55cd6a857cebb23d8268f85c8ac9e2aa8fe99b46c1cf56f54389ae3005139"
+    },
+    {
+      "path": "artifacts/confirmed_baseline_repair/post_repair_suite.xml",
+      "role": "post_junit",
+      "why": "Authoritative ending baseline.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/confirmed_baseline_repair/post_repair_suite.xml",
+      "bundle_path": "support/artifacts/confirmed_baseline_repair/post_repair_suite.xml",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1180088,
+      "sha256": "24c9207dbb61e9526efeb7f614b1d01df2b25f7600ec7166204b7aedcd76b1e4"
+    },
+    {
+      "path": "artifacts/baseline_triage/confirmed_repair_queue.json",
+      "role": "updated_queue",
+      "why": "Preserves original queue and implementation outcomes.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/baseline_triage/confirmed_repair_queue.json",
+      "bundle_path": "support/artifacts/baseline_triage/confirmed_repair_queue.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 9008,
+      "sha256": "d25da1a26883c4f8060aa5fa365d8a302ab526b269efeb957b984ae4270f4cf2"
+    },
+    {
+      "path": "artifacts/baseline_triage/validation_cleanup_queue.json",
+      "role": "frozen_cleanup",
+      "why": "Shows work deliberately left untouched.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/baseline_triage/validation_cleanup_queue.json",
+      "bundle_path": "support/artifacts/baseline_triage/validation_cleanup_queue.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 11094,
+      "sha256": "0cf61f2f3a53fa28635860af7fa0d01ee6dee25148f5a1622eb08807fbac7662"
+    },
+    {
+      "path": "artifacts/baseline_triage/policy_decisions.md",
+      "role": "frozen_policy",
+      "why": "Shows decisions deliberately left unresolved.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/baseline_triage/policy_decisions.md",
+      "bundle_path": "support/artifacts/baseline_triage/policy_decisions.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 2114,
+      "sha256": "2f899a5576b6dcbca5b03825439dc0f64723e840c2d84dcabb011ef6eca5031b"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 9,
+    "zip_size_bytes": "000000311695",
+    "uncompressed_payload_bytes": 2416832,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/confirmed_baseline_repair.json",
+    "canonical_repository_root": "."
+  }
+}

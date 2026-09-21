@@ -226,6 +226,11 @@ def reconcile_final_text_with_structured_state(
     Runs before narration-driven lead supplements, event log persistence consumers, and session/world save
     (caller should invoke this from the finalization pipeline before those steps).
 
+    Authority direction (PR-AJ / RC-21): an authorized structured or scene-anchored extraction may
+    upgrade empty social state. Ordinary narration, named-figure hints, and operational-sounding
+    prose are not provenance. Unsourced contextual extraction is diagnostic only and must not mint
+    ``narration_ctx_…`` gameplay authority.
+
     Mutates ``resolution``, ``session``, optionally ``world`` (via lead landing), and ``gm_output`` when
     a repair is applied. Returns diagnostic dict including ``mismatch_repairs_applied`` (list).
     """
@@ -335,37 +340,18 @@ def reconcile_final_text_with_structured_state(
             soc["topic_revealed"] = tp
         base["mismatch_repair_applied"] = "extracted_actionable_leads"
     else:
-        repairs.append("structured_from_contextual_clues")
-        ctx = extract_contextual_leads_from_text(text)
-        subjects: List[str] = []
-        for c in ctx:
-            if not isinstance(c, dict):
-                continue
-            subj = str(c.get("subject") or "").strip()
-            if not subj:
-                continue
-            if c.get("named") and _subject_is_active_interlocutor(subj, npc_name if npc_name else None, npc_id):
-                continue
-            subjects.append(subj)
-        primary = subjects[0] if subjects else text.strip()[:240]
-        clue_id = f"narration_ctx_{slugify(sid)}_{slugify(primary)[:48] or 'lead'}"
-        resolution["clue_id"] = str(resolution.get("clue_id") or "").strip() or clue_id
-        resolution.setdefault("discovered_clues", [])
-        dc = resolution.get("discovered_clues")
-        if isinstance(dc, list):
-            for t in subjects[:5] if subjects else [primary]:
-                if t and t not in dc:
-                    dc.append(t)
-        soc = resolution.setdefault("social", {})
-        if isinstance(soc, dict):
-            primary_clue_line = str(dc[0] if dc else primary).strip()
-            soc["topic_revealed"] = {
-                "id": syn_topic_id,
-                "text": primary_clue_line or text[:200],
-                "clue_text": primary_clue_line or text[:200],
-                "clue_id": str(resolution.get("clue_id") or "").strip() or None,
-            }
-        base["mismatch_repair_applied"] = "contextual_lead_clues"
+        # PR-AJ: narration may communicate a consequence; it is not provenance.
+        # Contextual extraction remains available for non-authoritative continuity
+        # (see remember_recent_contextual_leads). It must not mint gameplay
+        # authority when no authorized structured/scene-anchored lead exists.
+        repairs.append("fail_closed_no_authoritative_provenance")
+        base["mismatch_repair_applied"] = "fail_closed_no_authoritative_provenance"
+        base["prose_derived_authority_suppressed"] = True
+        base["mismatch_repairs_applied"] = repairs
+        nmeta = resolution.setdefault("metadata", {})
+        if isinstance(nmeta, dict):
+            nmeta["narration_state_consistency"] = dict(base)
+        return base
 
     prior_reply = str((resolution.get("social") or {}).get("reply_kind") or "")
     soc2 = resolution.setdefault("social", {})
@@ -444,3 +430,149 @@ def detect_narration_state_mismatch(
         resolution=resolution,
         gm_output=gm_output,
     )
+
+
+_PLAYER_STAYED_RE = re.compile(
+    r"\b(?:you|your)\s+(?:stay|remain|do\s+not\s+leave|aren't\s+leaving)\b",
+    re.IGNORECASE,
+)
+_PLAYER_DEPARTED_RE = re.compile(
+    r"\b(?:you|your)\s+(?:leave|left|head|follow|set\s+out|take\s+the|"
+    r"act\s+on\s+that|position\s+changes|walk|depart|enter|arrive|"
+    r"turn\s+away|make\s+(?:your\s+)?way|start\s+(?:back|toward|towards|for)|"
+    r"return(?:s|ed)?)\b",
+    re.IGNORECASE,
+)
+_FALSE_ARRIVAL_RE = re.compile(
+    r"\b(?:you|your)\s+(?:arrive|arrived|enter|entered|return(?:s|ed)?\s+to|"
+    r"are\s+(?:now\s+)?(?:at|in|back))\b",
+    re.IGNORECASE,
+)
+
+
+def apply_stay_leave_narration_agreement_to_gm(
+    gm_output: dict | None,
+    *,
+    resolution: dict | None = None,
+    origin_scene_id: str | None = None,
+) -> dict | None:
+    """PR-AE local guarantee: stay/leave/pursuit narration must match the authoritative outcome.
+
+    Does not invent destinations or NPCs. Uses only the resolved action result.
+    """
+    if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
+        return gm_output
+    text = str(gm_output.get("player_facing_text") or "").strip()
+    kind = str(resolution.get("kind") or "").strip().lower()
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    lane = str(meta.get("parser_lane") or "")
+    intent = str(meta.get("intent") or "")
+    prae_turn = lane in {
+        "explicit_stay",
+        "legacy_follow_exit_match",
+        "unresolved_actionable_travel",
+        "actionable_stay_leave_or_pursuit",
+        "authored_exit_resolution",
+    } or intent in {"stay", "leave_or_pursuit"}
+    stay_turn = lane == "explicit_stay" or intent == "stay"
+    resolved = resolution.get("resolved_transition") is True
+    target_id = str(resolution.get("target_scene_id") or "").strip()
+    origin = str(origin_scene_id or "").strip()
+    tags = list(gm_output.get("tags") or []) if isinstance(gm_output.get("tags"), list) else []
+
+    def _mark() -> None:
+        if "stay_leave_narration_agreement" not in tags:
+            tags.append("stay_leave_narration_agreement")
+        gm_output["tags"] = tags
+
+    if stay_turn:
+        if _PLAYER_DEPARTED_RE.search(text):
+            gm_output["player_facing_text"] = "You remain where you are."
+            _mark()
+        return gm_output
+
+    departed = bool(resolved and target_id and (not origin or target_id != origin))
+    if prae_turn and departed:
+        if not text or _PLAYER_STAYED_RE.search(text) or not _PLAYER_DEPARTED_RE.search(text):
+            gm_output["player_facing_text"] = "You act on that decision and leave along the available path."
+            _mark()
+        return gm_output
+
+    if kind in {"travel", "scene_transition"} and not resolved:
+        if _FALSE_ARRIVAL_RE.search(text) or _PLAYER_DEPARTED_RE.search(text):
+            gm_output["player_facing_text"] = "That destination is not available from here."
+            _mark()
+    return gm_output
+
+
+_STUB_SCENE_PHRASE = "blank scene awaiting definition"
+_UNGROUNDED_DESTINATION_STOCK = (
+    "nothing new locks in yet; you keep the scene's weight without stepping backward.",
+    "the exchange doesn't resolve cleanly—you hold your ground while the moment stays sharp between you.",
+    "you get an immediate read on what is there",
+    "the scene answers with an immediate change",
+)
+
+
+def scene_has_usable_destination_content(scene: dict | None) -> bool:
+    """True when an authored destination has more than the default stub placeholder."""
+    inner = _scene_inner(scene or {})
+    summary = str(inner.get("summary") or "").strip()
+    if summary and _STUB_SCENE_PHRASE not in summary.lower():
+        return True
+    facts = inner.get("visible_facts") or []
+    if isinstance(facts, list):
+        for fact in facts:
+            text = str(fact or "").strip()
+            if text and _STUB_SCENE_PHRASE not in text.lower():
+                return True
+    return False
+
+
+def apply_destination_arrival_realization_to_gm(
+    gm_output: dict | None,
+    *,
+    resolution: dict | None = None,
+    scene: dict | None = None,
+    player_text: str = "",
+) -> dict | None:
+    """PR-AF local guarantee: a defined destination must not present the stub placeholder.
+
+    Uses existing arrival/observe fallback helpers. Does not invent NPCs, exits, or fate.
+    Does not replace PR-AE stock movement lines that already agree with departure.
+    """
+    if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
+        return gm_output
+    text = str(gm_output.get("player_facing_text") or "").strip()
+    low = text.lower()
+    ungrounded = _STUB_SCENE_PHRASE in low or any(stock in low for stock in _UNGROUNDED_DESTINATION_STOCK)
+    if not ungrounded:
+        return gm_output
+    if not scene_has_usable_destination_content(scene):
+        return gm_output
+
+    from game.diegetic_fallback_narration import (
+        render_observe_perception_fallback_line,
+        render_travel_arrival_fallback_line,
+    )
+
+    kind = str(resolution.get("kind") or "").strip().lower()
+    resolved = resolution.get("resolved_transition") is True
+    seed = str(player_text or resolution.get("prompt") or "destination").strip() or "destination"
+    if resolved or kind in {"scene_transition", "travel"}:
+        replacement = render_travel_arrival_fallback_line(scene, seed_key=f"praf|arr|{seed}")
+    else:
+        replacement = render_observe_perception_fallback_line(
+            scene,
+            seed_key=f"praf|obs|{seed}",
+            player_text=str(player_text or ""),
+            resolution=resolution,
+        )
+    if not replacement:
+        return gm_output
+    gm_output["player_facing_text"] = replacement
+    tags = list(gm_output.get("tags") or []) if isinstance(gm_output.get("tags"), list) else []
+    if "destination_arrival_realization" not in tags:
+        tags.append("destination_arrival_realization")
+    gm_output["tags"] = tags
+    return gm_output

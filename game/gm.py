@@ -4013,8 +4013,8 @@ def build_messages(
             "recent_player_actions": list(runtime_for_scene.get("recent_player_actions") or []),
         }
         payload["instructions"] = list(payload.get("instructions", [])) + [
-            "The player is pausing or holding position in a tense scene. Do not answer with atmosphere alone.",
-            "Advance the moment with direct interaction pressure: someone approaches, an NPC speaks first, a guard reacts, an interruption lands, or a clue becomes active now.",
+            "The player is pausing or holding position. Realize the currently visible scene.",
+            "Do not invent a person, confrontation, whispered hook, inscription, clue, or route that is not already in the provided scene evidence.",
         ]
     if known_answer_hint:
         payload["known_answer_hint"] = known_answer_hint

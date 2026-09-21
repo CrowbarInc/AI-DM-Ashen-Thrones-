@@ -1,0 +1,41 @@
+{
+  "artifact_version": 1,
+  "run_id": "20260918T011644Z_p3_logical_escalation",
+  "scenario_id": "p3_logical_escalation",
+  "scenario_description": "Logical-escalation axis: observation then pressed detail on the same topic.",
+  "started_at": "2026-09-18T01:17:07.833702+00:00",
+  "finished_at": "2026-09-18T01:17:14.148837+00:00",
+  "simulator": {
+    "runner": "tools/run_playability_validation.py",
+    "player_type": "fixed scripted natural-language prompts",
+    "prompt_count": 2,
+    "prompts": [
+      "What do I see at the gate?",
+      "I press again: what is actually posted on the notice?"
+    ],
+    "entrypoint": "/api/chat",
+    "caller_kind": "in-process TestClient",
+    "base_url": null,
+    "apply_reset_before_scenario": true,
+    "random_seed": null
+  },
+  "artifact_paths": {
+    "transcript_md": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\transcript.md",
+    "evaluation_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\evaluation.json",
+    "state_before_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\state_before.json",
+    "state_after_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\state_after.json",
+    "metadata_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\metadata.json",
+    "legacy_transcript_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\transcript.json",
+    "legacy_summary_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\summary.json",
+    "run_debug_json": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\semantic_validation_calibration\\playability_after\\20260918T011644Z_p3_logical_escalation\\run_debug.json"
+  },
+  "upstream_dependent_run_gate": {
+    "upstream_runtime_healthy": true,
+    "preflight_available": true,
+    "startup_run_valid": true,
+    "manual_testing_blocked": false,
+    "block_reason": null,
+    "preflight_health_class": "healthy",
+    "preflight_checked_at": "2026-09-18T01:16:42Z"
+  }
+}

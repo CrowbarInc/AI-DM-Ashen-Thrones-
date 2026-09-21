@@ -1,0 +1,524 @@
+{
+  "artifact_version": 1,
+  "scenario_id": "notice_observation",
+  "player_strategy": "adversarial",
+  "seed": 1701,
+  "configuration": {
+    "objective": "Read the concrete information posted on the gate notice.",
+    "max_turns": 6,
+    "max_attempts_per_intent": 3
+  },
+  "termination_reason": "legitimate_boundary",
+  "turn_count": 2,
+  "valid_run": true,
+  "unresolved_intents": [],
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_objective": "Read the concrete information posted on the gate notice.",
+      "current_intent": "Read the concrete information posted on the gate notice.",
+      "selected_player_action": "I inspect the notice closely and read what is posted.",
+      "selection_reason": "initial_objective:Read the concrete information posted on the gate notice.",
+      "relevant_prior_context": {
+        "player": "",
+        "gm": ""
+      },
+      "gm_response": "You peer closer at the notice board, the scuffed wood under your fingers rough from countless hands. The posted sheets enumerate new taxes, strict curfew rules, and a stark warning: a patrol has gone missing, last seen taking the northwest mud track past the crates. This tidbit hangs heavy beneath the official decrees, drawing a wary glance from those nearby.",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 60,
+            "text_preview": "You peer closer at the notice board, the scuffed wood under your fingers rough from countless hands. The posted sheets enumerate new taxes, strict curfew rules,"
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "closely",
+              "inspect",
+              "notice",
+              "posted",
+              "read",
+              "what"
+            ],
+            "gm_terms": [
+              "beneath",
+              "board",
+              "closer",
+              "countless",
+              "crates",
+              "curfew",
+              "decrees",
+              "drawing",
+              "enumerate",
+              "fingers",
+              "glance",
+              "gone",
+              "hands",
+              "hangs",
+              "heavy",
+              "last",
+              "missing",
+              "mud",
+              "nearby",
+              "new"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 82,
+        "rating": "strong",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 23,
+          "player_intent": 18,
+          "logical_escalation": 19,
+          "immersion": 22
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 60,
+              "text_preview": "You peer closer at the notice board, the scuffed wood under your fingers rough from countless hands. The posted sheets enumerate new taxes, strict curfew rules,"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "closely",
+                "inspect",
+                "notice",
+                "posted",
+                "read",
+                "what"
+              ],
+              "gm_terms": [
+                "beneath",
+                "board",
+                "closer",
+                "countless",
+                "crates",
+                "curfew",
+                "decrees",
+                "drawing",
+                "enumerate",
+                "fingers",
+                "glance",
+                "gone",
+                "hands",
+                "hangs",
+                "heavy",
+                "last",
+                "missing",
+                "mud",
+                "nearby",
+                "new"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 82,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 19,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.043,
+              "gm_word_count": 60,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 2,
+              "topic_overlap_ratio": 0.333,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 60
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 82,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "investigate",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    },
+    {
+      "turn_index": 1,
+      "player_objective": "Read the concrete information posted on the gate notice.",
+      "current_intent": "contradiction",
+      "selected_player_action": "You described the notice as both weathered and legible. Which parts can I actually read?",
+      "selection_reason": "adversarial_probe:contradiction:prior_semantic_pass",
+      "relevant_prior_context": {
+        "player": "I inspect the notice closely and read what is posted.",
+        "gm": "You peer closer at the notice board, the scuffed wood under your fingers rough from countless hands. The posted sheets enumerate new taxes, strict curfew rules, and a stark warning: a patrol has gone missing, last seen taking the northwest mud track past the crates. This tidbit hangs heavy beneath the official decrees, drawing a wary glance from those nearby."
+      },
+      "gm_response": "The guard says, \"I do not know enough to answer that.\"",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 11,
+            "text_preview": "The guard says, \"I do not know enough to answer that.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "actually",
+              "both",
+              "described",
+              "legible",
+              "notice",
+              "parts",
+              "read",
+              "weathered",
+              "which"
+            ],
+            "gm_terms": [
+              "answer",
+              "enough",
+              "guard",
+              "know",
+              "says"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 4
+          }
+        }
+      },
+      "diagnostic_quality": {
+        "score": 62,
+        "rating": "acceptable",
+        "passed": true,
+        "axis_scores": {
+          "direct_answer": 17,
+          "player_intent": 4,
+          "logical_escalation": 18,
+          "immersion": 23
+        }
+      },
+      "gameplay_runtime_validity": {
+        "run_valid": true,
+        "excluded_from_scoring": false,
+        "invalidation_reason": null,
+        "dead_turn_count": 0,
+        "infra_failure_count": 0,
+        "dead_turn": {
+          "is_dead_turn": false,
+          "dead_turn_reason_codes": [],
+          "dead_turn_class": "none",
+          "validation_playable": true,
+          "manual_test_valid": true
+        },
+        "raw_overall": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 11,
+              "text_preview": "The guard says, \"I do not know enough to answer that.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "actually",
+                "both",
+                "described",
+                "legible",
+                "notice",
+                "parts",
+                "read",
+                "weathered",
+                "which"
+              ],
+              "gm_terms": [
+                "answer",
+                "enough",
+                "guard",
+                "know",
+                "says"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 4
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 62,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 4,
+            "logical_escalation": 18,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 11,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 4,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors.",
+              "Possible thread drift from the established player focus."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 11,
+              "net_new_terms": 5
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [
+            "player_intent: weak (4/25).",
+            "player_intent: GM misses obvious player topic anchors.",
+            "player_intent: Possible thread drift from the established player focus."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 62,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "social_probe",
+      "final_emission_meta": {},
+      "failure_classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED"
+    }
+  ]
+}

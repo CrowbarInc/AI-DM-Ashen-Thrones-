@@ -77,6 +77,9 @@ The owning reference—not the filename—determines whether the path is fixed.
 | Evidence | `docs/audits/evidence/` | Deliberately retained human-readable evidence with no active writer-owned path |
 | Scaffolds and instruction blocks | `docs/audits/scaffolds/` | Cycle scaffolds, execution checklists, and Codex instruction blocks |
 | Generated reports | Writer-declared path, normally `artifacts/` | Do not relocate independently of the generator |
+| Campaign implementation reports | `development/campaigns/` by era | Write AR/PR reports there directly; do not accumulate them at repository root |
+| Organization / housekeeping reports | `development/reports/` | Not runtime or standing governance |
+| Disposable agent/test output | `development/tmp/` | Git-ignored; not evidence |
 | Test and governance contracts | Existing declared path, commonly `docs/testing/`, `docs/audits/`, or `tests/` | Path remains fixed while referenced |
 | Historical audit records | `docs/audits/archived/` for new archival decisions | Existing historical trees may remain in place when migration value is low |
 | Ambiguous material | Existing path, documented in the manifest or closeout | Do not move until ownership is established |

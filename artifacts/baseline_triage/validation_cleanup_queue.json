@@ -1,0 +1,232 @@
+{
+  "schema_version": "baseline-cleanup-queue.v1",
+  "items": [
+    {
+      "id": "CLEANUP-RC-02",
+      "root_cause_cluster": "RC-02",
+      "affected_tests": [
+        "tests/test_bv3e_eligibility_expansion.py::test_canonical_session_log_observe_shape_repairs_when_replayed"
+      ],
+      "defect_type": "STALE_FIXTURE",
+      "affected_subsystem": "obsolete repair-eligibility session fixture",
+      "current_requirement": "docs/audits/BV3D_measurement_validation.md",
+      "recommended_change": "Modernize the canonical fixture without changing eligibility policy.",
+      "validation_required_after_repair": [
+        "tests/test_bv3e_eligibility_expansion.py::test_canonical_session_log_observe_shape_repairs_when_replayed"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "MEDIUM"
+    },
+    {
+      "id": "CLEANUP-RC-03",
+      "root_cause_cluster": "RC-03",
+      "affected_tests": [
+        "tests/test_ck_hotspot_compression_report.py::test_ck_fi_parse_from_bu_csv"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "historical hotspot percentage snapshot",
+      "current_requirement": "docs/audits/CI_2_hotspot_compression_measurement_standard_closeout.md",
+      "recommended_change": "Regenerate the diagnostic snapshot from the current BU inventory.",
+      "validation_required_after_repair": [
+        "tests/test_ck_hotspot_compression_report.py::test_ck_fi_parse_from_bu_csv"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-05",
+      "root_cause_cluster": "RC-05",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "defect_type": "CONFIRMED_VALIDATION_DEFECT",
+      "affected_subsystem": "attribution helper imports sealed owner constants",
+      "current_requirement": "docs/audits/BV10C_fan_in_closeout.md",
+      "recommended_change": "Make the test helper consume attribution_read_views.",
+      "validation_required_after_repair": [
+        "tests/test_compat_import_governance.py::test_bv10_read_cluster_direct_import_guard_non_owners_route_through_facades"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-06",
+      "root_cause_cluster": "RC-06",
+      "affected_tests": [
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_fi_cap_locked"
+      ],
+      "defect_type": "CONFIRMED_VALIDATION_DEFECT",
+      "affected_subsystem": "test-only social compatibility barrel fan-in",
+      "current_requirement": "docs/audits/BV14_closeout.md",
+      "recommended_change": "Import named social authorities in the integration test and recompute the cap.",
+      "validation_required_after_repair": [
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_import_guard_non_owners_route_through_authorities",
+        "tests/test_compat_import_governance.py::test_bv14c_social_exchange_compat_fi_cap_locked"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-07",
+      "root_cause_cluster": "RC-07",
+      "affected_tests": [
+        "tests/test_dead_turn_evaluation_threading.py::test_playability_eval_excludes_only_from_fem_dead_turn_source"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "playability result schema grew diagnostic fields",
+      "current_requirement": "docs/playability_validation.md",
+      "recommended_change": "Assert the authoritative exclusion fields instead of exact whole-dict equality.",
+      "validation_required_after_repair": [
+        "tests/test_dead_turn_evaluation_threading.py::test_playability_eval_excludes_only_from_fem_dead_turn_source"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-08",
+      "root_cause_cluster": "RC-08",
+      "affected_tests": [
+        "tests/test_failure_classification_contract.py::test_classifier_evidence_manifest_matches_optional_contract_fields",
+        "tests/test_failure_classification_contract.py::test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+        "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority"
+      ],
+      "defect_type": "GOVERNANCE_DRIFT",
+      "affected_subsystem": "failure-evidence governance manifests diverged",
+      "current_requirement": "docs/validation_evidence_standard.md",
+      "recommended_change": "Reconcile manifests to the classifier contract and governing-authority document.",
+      "validation_required_after_repair": [
+        "tests/test_failure_classification_contract.py::test_classifier_evidence_manifest_matches_optional_contract_fields",
+        "tests/test_failure_classification_contract.py::test_ao3_dashboard_evidence_manifest_owned_by_classifier_contract",
+        "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-09",
+      "root_cause_cluster": "RC-09",
+      "affected_tests": [
+        "tests/test_final_emission_debt_retirement.py::test_final_emission_modules_forbidden_substring_snapshot"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "final-emission debt snapshot predates later modules",
+      "current_requirement": "docs/audits/BV_maintenance_economics_validation_closeout.md",
+      "recommended_change": "Re-audit and regenerate the debt snapshot against current modules.",
+      "validation_required_after_repair": [
+        "tests/test_final_emission_debt_retirement.py::test_final_emission_modules_forbidden_substring_snapshot"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-14",
+      "root_cause_cluster": "RC-14",
+      "affected_tests": [
+        "tests/test_golden_replay_projection_engine.py::test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "projection backup predates attribution columns",
+      "current_requirement": "docs/audits/CU3_semantic_mutation_evidence_reconciliation.md",
+      "recommended_change": "Replace byte identity with a versioned semantic projection assertion.",
+      "validation_required_after_repair": [
+        "tests/test_golden_replay_projection_engine.py::test_cl7_projected_rows_remain_byte_for_byte_identical_to_backup"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-18",
+      "root_cause_cluster": "RC-18",
+      "affected_tests": [
+        "tests/test_ownership_write_path_governance.py::test_bu8_bu4_production_ownership_write_paths_parity_locked"
+      ],
+      "defect_type": "GOVERNANCE_DRIFT",
+      "affected_subsystem": "ownership write registry is missing discovered paths",
+      "current_requirement": "docs/architecture_ownership_ledger.md",
+      "recommended_change": "Review and register the 29 current production write paths; do not alter ownership policy.",
+      "validation_required_after_repair": [
+        "tests/test_ownership_write_path_governance.py::test_bu8_bu4_production_ownership_write_paths_parity_locked"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-20",
+      "root_cause_cluster": "RC-20",
+      "affected_tests": [
+        "tests/test_protected_replay_registry.py::test_golden_replay_marker_collects_protected_corpus_tests"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "protected replay count lock predates CO102 case",
+      "current_requirement": "docs/testing/protected_replay_manifest.md",
+      "recommended_change": "Update the count assertion to derive from the authoritative protected manifest.",
+      "validation_required_after_repair": [
+        "tests/test_protected_replay_registry.py::test_golden_replay_marker_collects_protected_corpus_tests"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-22",
+      "root_cause_cluster": "RC-22",
+      "affected_tests": [
+        "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "minimum lead source changed from clue to exit",
+      "current_requirement": "docs/narrative_integrity_architecture.md",
+      "recommended_change": "Assert actionable lead semantics rather than the historical source label.",
+      "validation_required_after_repair": [
+        "tests/test_social_lead_landing.py::test_frontier_gate_minimum_actionable_lead_from_exit_when_social_pending_empty"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-24",
+      "root_cause_cluster": "RC-24",
+      "affected_tests": [
+        "tests/test_validation_layer_closeout.py::test_offline_evaluator_import_allowlist_matches_audit_policy"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "offline evaluator allowlist predates attribution read facade",
+      "current_requirement": "docs/validation_layer_separation.md",
+      "recommended_change": "Update the allowlist to the reconciled read-only facade.",
+      "validation_required_after_repair": [
+        "tests/test_validation_layer_closeout.py::test_offline_evaluator_import_allowlist_matches_audit_policy"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    },
+    {
+      "id": "CLEANUP-RC-25",
+      "root_cause_cluster": "RC-25",
+      "affected_tests": [
+        "tests/test_validation_layer_separation_runtime.py::test_final_emission_gate_imports_are_gate_layer_not_evaluator"
+      ],
+      "defect_type": "STALE_EXPECTATION",
+      "affected_subsystem": "runtime import-shape assertion predates gate composition split",
+      "current_requirement": "docs/validation_layer_separation.md",
+      "recommended_change": "Replace the historical module-presence assertion with the current layer invariant.",
+      "validation_required_after_repair": [
+        "tests/test_validation_layer_separation_runtime.py::test_final_emission_gate_imports_are_gate_layer_not_evaluator"
+      ],
+      "risk": "LOW",
+      "priority": "P3",
+      "confidence": "HIGH"
+    }
+  ]
+}

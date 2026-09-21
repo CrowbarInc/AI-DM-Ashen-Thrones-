@@ -73,9 +73,14 @@ def _infer_transition_target_from_prompt(
     """
     if not isinstance(prompt, str) or not prompt.strip():
         return None
+    from game.scene_destination_binding import resolve_authored_exit_from_player_travel
+
+    authored = resolve_authored_exit_from_player_travel(prompt, exits, known_scene_ids)
+    if authored:
+        return authored
     prompt_low = prompt.strip().lower()
     prompt_slug = slugify(prompt_low)
-
+    hits: List[str] = []
     for ex in exits or []:
         if not isinstance(ex, dict):
             continue
@@ -93,7 +98,10 @@ def _infer_transition_target_from_prompt(
             or (target_slug and target_slug in prompt_slug)
         ):
             if target in known_scene_ids:
-                return target
+                hits.append(target)
+    uniq = list(dict.fromkeys(hits))
+    if len(uniq) == 1:
+        return uniq[0]
     return None
 
 
@@ -284,24 +292,65 @@ def resolve_exploration_action(
         else:
             resolved_transition = True  # backward compat: no graph = allow if known
 
+    untargeted_investigate_hint = ""
+    investigate_surface_meta: Dict[str, Any] = {}
     # Check interactables when player investigates: match prompt to interactable id
     if action_type == "investigate":
+        from game.referenced_surface import (
+            AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+            AUTHORITY_AUTHORED_HIDDEN,
+            AUTHORITY_AUTHORED_INTERACTABLE,
+            AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+            AUTHORITY_UNSUPPORTED,
+            AUTHORITY_UNTARGETED,
+            classify_referenced_surface,
+            extract_inspection_target,
+            metadata_from_classification,
+        )
+
         interactables = scene.get("interactables") or []
         prompt_slug = slugify(prompt)
+        action_target = str(normalized_action.get("target_id") or "").strip()
+        extracted_target = extract_inspection_target(raw_player_text or prompt)
+        explicit_target = extracted_target or action_target or None
+        classified = classify_referenced_surface(
+            raw_player_text or prompt,
+            scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene},
+            world=world,
+            explicit_target=explicit_target,
+        )
+        classified_meta = metadata_from_classification(classified)
+        investigate_surface_meta = dict(classified_meta)
+        classified_id = str(classified.get("interactable_id") or "").strip()
+        if str(classified.get("authority") or "") == AUTHORITY_UNTARGETED:
+            untargeted_investigate_hint = (
+                "Player looked or investigated without a grounded discoverable target. "
+                "Narrate only what is already authorized here. Do not invent a clue, lead, "
+                "person, time, or other evidence merely to keep the search productive."
+            )
+        skip_loose_interactable_match = str(classified.get("authority") or "") in {
+            AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+            AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+            AUTHORITY_AUTHORED_HIDDEN,
+            AUTHORITY_UNSUPPORTED,
+        }
         for i in interactables:
             if not isinstance(i, dict):
-                continue
-            i_type = (i.get("type") or "").strip().lower()
-            if i_type != "investigate":
-                continue
-            reveals_clue = i.get("reveals_clue")
-            if not reveals_clue or not isinstance(reveals_clue, str):
                 continue
             i_id = str(i.get("id") or "").strip()
             if not i_id:
                 continue
             i_id_slug = slugify(i_id)
-            if i_id_slug and i_id_slug in prompt_slug:
+            bound_by_classifier = bool(classified_id and i_id == classified_id)
+            if skip_loose_interactable_match and not bound_by_classifier:
+                continue
+            i_type = (i.get("type") or "").strip().lower()
+            if i_type not in {"investigate", "read", "examine", ""} and not bound_by_classifier:
+                continue
+            reveals_clue = i.get("reveals_clue")
+            if not reveals_clue or not isinstance(reveals_clue, str):
+                continue
+            if bound_by_classifier or (i_id_slug and i_id_slug in prompt_slug):
                 scene_id = scene.get("id") or ""
                 if scene_id and is_interactable_resolved(session, scene_id, i_id):
                     result = ExplorationEngineResult(
@@ -318,7 +367,7 @@ def resolve_exploration_action(
                         state_changes={"already_searched": True, "interactable_id": i_id},
                         hint=f"Player has already searched [{i_id}]. Narrate that they find nothing new.",
                         interactable_id=i_id,
-                        metadata={},
+                        metadata=dict(classified_meta),
                     )
                     return result.to_dict()
                 # Skill check authority: engine decides when to roll
@@ -383,6 +432,8 @@ def resolve_exploration_action(
                     ):
                         if key in am:
                             metadata[key] = am[key]
+                metadata.update(classified_meta)
+                metadata["skip_unrelated_clue_discovery"] = False
                 if check_result:
                     metadata["skill_check"] = check_result
                 hidden_fact = resolve_interactable_hidden_fact_text(scene, i)
@@ -412,6 +463,52 @@ def resolve_exploration_action(
                 if metadata.get("skill_check"):
                     d["skill_check"] = metadata["skill_check"]
                 return d
+
+        # No interactable matched; classify remaining inspect targets before generic search.
+        classified_authority = str(classified.get("authority") or "")
+        if classified_authority in {
+            AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+            AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+            AUTHORITY_AUTHORED_HIDDEN,
+            AUTHORITY_UNSUPPORTED,
+            AUTHORITY_AUTHORED_INTERACTABLE,
+        }:
+            hint_map = {
+                AUTHORITY_AUTHORED_VISIBLE_FEATURE: (
+                    "Player inspected an authored visible feature that is not a separate "
+                    "interactable. Narrate only the authorized visible information; do not invent contents."
+                ),
+                AUTHORITY_AUTHORED_ABSTRACT_REFERENCE: (
+                    "Player tried to inspect an abstract spoken reference. Do not instantiate a "
+                    "physical object or invent its contents."
+                ),
+                AUTHORITY_AUTHORED_HIDDEN: (
+                    "Player named a surface that is not currently discoverable. Do not confirm or reveal it."
+                ),
+                AUTHORITY_UNSUPPORTED: (
+                    "Player named a target with no authored surface. Do not invent the object, its "
+                    "contents, a clue, or a lead."
+                ),
+                AUTHORITY_AUTHORED_INTERACTABLE: (
+                    "Player inspected an authored interactable that has no further authored contents."
+                ),
+            }
+            result = ExplorationEngineResult(
+                kind="investigate",
+                action_id=action_id,
+                label=label,
+                prompt=prompt,
+                success=True,
+                resolved_transition=False,
+                target_scene_id=None,
+                clue_id=None,
+                discovered_clues=[],
+                world_updates=None,
+                state_changes={},
+                hint=hint_map[classified_authority],
+                metadata=classified_meta,
+            )
+            return result.to_dict()
 
         # No interactable matched; check if this generic investigate target was already searched
         scene_id = scene.get("id") or ""
@@ -458,7 +555,9 @@ def resolve_exploration_action(
                 "do not force a fresh in-character reply from a prior conversational partner unless the fiction already queued one."
             )
     elif action_type == "investigate":
-        hint = "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate."
+        hint = untargeted_investigate_hint or (
+            "Player is investigating or seeking clues. Narrate what deeper scrutiny reveals; advance discovery if appropriate."
+        )
     elif action_type == "interact":
         hint = "Player is attempting social interaction or probing NPCs. Narrate the encounter or response."
     else:
@@ -541,6 +640,7 @@ def resolve_exploration_action(
                 res_metadata["passive_interruption_wait"] = True
             for key in (
                 "parser_lane",
+                "intent",
                 "mixed_turn_detail_question",
                 "adjudication_or_detail_question_text",
                 "recovered_action_clause",
@@ -552,9 +652,19 @@ def resolve_exploration_action(
                 "implicit_focus_target_id",
                 "implicit_focus_anchor_fact",
                 "nearby_group_continuity_carryover",
+                "referenced_surface_authority",
+                "referenced_surface_target",
+                "referenced_surface_existence",
+                "referenced_surface_visibility",
+                "referenced_surface_inspectability",
+                "referenced_surface_interactable_id",
+                "referenced_surface_visible_fact",
+                "skip_unrelated_clue_discovery",
             ):
                 if key in am:
                     res_metadata[key] = am[key]
+    if investigate_surface_meta:
+        res_metadata.update(investigate_surface_meta)
     if skill_check_result:
         res_metadata["skill_check"] = skill_check_result
     if transition_candidate and binding_meta_subset:
@@ -971,8 +1081,14 @@ def process_investigation_discovery(
     list_scene_ids: Callable[[], List[str]] | None = None,
     world: Dict[str, Any] | None = None,
 ) -> List[Dict[str, Any]]:
-    """For investigate actions: reveal the next undiscovered clue if investigation depth increases.
-    Mutates session (discovered_clues, pending_leads). Returns list of newly revealed clue records.
+    """Reveal the next authored undiscovered clue when investigation depth increases.
+
+    This is a scene-level compatibility conveyor. Callers must skip it when the
+    investigate has no grounded discoverable target (``skip_unrelated_clue_discovery``)
+    or when the clue list is not authored evidence. Overlay-injected rows are not
+    evidence authority.
+
+    Mutates session (discovered_clues, pending_leads). Returns newly revealed records.
     """
     from game.gm import normalize_clue_record  # avoid circular import
     from game.schema_contracts import adapt_legacy_clue, normalize_clue, validate_clue

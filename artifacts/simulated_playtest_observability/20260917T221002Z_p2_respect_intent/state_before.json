@@ -1,0 +1,264 @@
+{
+  "session": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "291a4618303cc55ecc292788",
+    "session_id": "291a4618303cc55ecc292788",
+    "campaign_started": false,
+    "last_saved_at": "2026-09-17T22:10:15.120853Z"
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "topics": [
+          {
+            "id": "patrol_milestone",
+            "text": "The patrol never came back from the old milestone.",
+            "clue_id": "c_patrol_milestone",
+            "leads_to_scene": "old_milestone"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "sell_rumors",
+        "disposition": "friendly",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "tavern",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "combat": {
+    "in_combat": false,
+    "round": 0,
+    "initiative_order": [],
+    "turn_index": 0,
+    "active_actor_id": null,
+    "player_turn_used": false
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "log_entries": []
+}

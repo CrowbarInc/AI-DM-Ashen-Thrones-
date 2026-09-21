@@ -1,0 +1,24 @@
+{
+  "schema_version": "governance-drift-triage.v1",
+  "triage_id": "GD-01",
+  "failing_test": "tests/test_failure_classification_contract.py::test_co98_failure_classification_registry_documents_governing_authority",
+  "exact_assertion": "Governance context (CO98) must appear in docs/audits/BQC4_final_graduation_decision.md",
+  "document": "docs/audits/BQC4_final_graduation_decision.md",
+  "expected_state": "Historical CO98 governance-context heading",
+  "observed_state": "Active generated artifact uses Governance context (CO99)",
+  "protected_requirement": "Failure-classification taxonomy authority remains closed and separate from attribution maturity and recurrence operational graduation; recurrence remains not graduated.",
+  "requirement_authority": [
+    "docs/audits/CG_failure_classification_authority_registry.md",
+    "docs/audits/CO102_live_recurrence_validation_report.md",
+    "docs/audits/BQC4_final_graduation_decision.md",
+    "tests/failure_classification_contract.py"
+  ],
+  "likely_origin": "The validator retained the CO98 handoff label after CO99 added and preserved the generated governance context.",
+  "production_behavior_implicated": false,
+  "classification": "STALE_EXPECTATION",
+  "confidence": "HIGH",
+  "recommended_action": "Update the active validator and test name to CO99 while retaining all substantive cross-authority and non-graduation assertions.",
+  "repair_status": "REPAIRED",
+  "repair_files": ["tests/test_failure_classification_contract.py"],
+  "historical_artifacts_modified": false
+}

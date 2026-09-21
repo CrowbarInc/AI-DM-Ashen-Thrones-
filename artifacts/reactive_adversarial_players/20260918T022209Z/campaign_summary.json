@@ -1,0 +1,36 @@
+{
+  "artifact_version": 1,
+  "total_runs": 1,
+  "valid_runs": 1,
+  "invalid_runs": 0,
+  "total_turns": 1,
+  "semantic_result_counts": {
+    "FAIL": 1
+  },
+  "mandatory_gate_failure_counts": {
+    "player_intent_addressed": 1
+  },
+  "diagnostic_only_warnings": 0,
+  "failure_classification_counts": {
+    "A_KNOWN_EVALUATOR_DETECTED_FAILURE": 1
+  },
+  "failure_clusters": {
+    "player_intent_addressed": [
+      "patrol_knowledge:adversarial:seed=1701"
+    ]
+  },
+  "failure_references": [
+    {
+      "run": "patrol_knowledge:adversarial:seed=1701",
+      "turn_index": 0,
+      "semantic_result": "FAIL",
+      "classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE"
+    }
+  ],
+  "novel_failures_not_in_calibration_corpus": [],
+  "human_review_note": "PASS turns remain review candidates; probable evaluator misses and false positives are not inferred automatically or converted into semantic policy.",
+  "campaign_id": "20260918T022209Z",
+  "run_artifact_paths": [
+    "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\reactive_adversarial_players\\20260918T022209Z\\patrol_knowledge_adversarial_seed1701\\run.json"
+  ]
+}

@@ -36,7 +36,8 @@
 - `source_family`: 7 compliant, 0 non-compliant
 - `repair_kind`: 7 compliant, 0 non-compliant
 - `owner_bucket`: 4 compliant, 0 non-compliant
-- `mutation_classification`: 6 compliant, 0 non-compliant
+- `mutation_classification`: 6 compliant, 1 non-compliant
+  - non-compliant values: `['passive_scene_concrete_beat']`
 
 ## Deprecated Values
 

@@ -1,0 +1,193 @@
+{
+  "stamp": "20260920T203514Z",
+  "turns": [
+    {
+      "player": "I walk over to the tavern runner. Who oiled that hinge last?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "identity",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": "tavern_runner",
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "Tavern Runner grimaces. \"Not something I can say here.\""
+    },
+    {
+      "player": "When did that patrol actually leave?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "time",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": "tavern_runner",
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "Tavern Runner mutters, \"Word is, from what I\u2019ve heard through the grapevine, they were due to leave sometime before dawn, but no one seems to know exactly when or where.\""
+    },
+    {
+      "player": "Where did they go after the crates?",
+      "ok": true,
+      "kind": "travel",
+      "dimension": "location",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "A gate serjeant manages the crowd and keeps one eye on the roster board while threadbare watchers and refugees cluster along the muddy gate line. Tavern Runner trades hot stew and rumors near the rain barrel, while Guard Captain watches with hard, tired discipline."
+    },
+    {
+      "player": "Why is the stew even out here?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "cause",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The guard says, \"I do not know enough to answer that.\""
+    },
+    {
+      "player": "How many bowls are left in that pot?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "quantity",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The murmur around you never tightens into a single clear voice on that point."
+    },
+    {
+      "player": "How much does a bowl of stew cost?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "quantity",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The moment passes without anyone stepping forward to own that thread."
+    },
+    {
+      "player": "Who last checked that board?",
+      "ok": true,
+      "kind": null,
+      "dimension": "identity",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The murmur around you never tightens into a single clear voice on that point."
+    },
+    {
+      "player": "What rumors have you heard about the missing patrol?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "general",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+    },
+    {
+      "player": "What's being done about the missing patrol?",
+      "ok": true,
+      "kind": "question",
+      "dimension": "general",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+    },
+    {
+      "player": "I ask the runner again what the stew costs.",
+      "ok": true,
+      "kind": "question",
+      "dimension": "general",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": "tavern_runner",
+      "malformed": false,
+      "internal_term": false,
+      "leads": [],
+      "gm": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+    },
+    {
+      "player": "I look toward the notice board.",
+      "ok": true,
+      "kind": "discover_clue",
+      "dimension": "general",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "The notice board's worn wooden surface bears scrawled lists of taxes due, curfew rules imposed, and a bold warning about a missing patrol. Among the fresh ink, a recent note catches your eye: the missing patrol was last seen taking the northwest mud track that winds past stacked crates near the gateworks. This new detail might prove crucial for anyone seeking the patrol\u2019s fate or its trail."
+    },
+    {
+      "player": "I ask the runner who last checked that board.",
+      "ok": true,
+      "kind": "question",
+      "dimension": "identity",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": null,
+      "malformed": false,
+      "internal_term": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "Folks come and go\u2014some glance, others fuss\u2014but no one clear stands out as the last."
+    },
+    {
+      "player": "I ask the runner what sits in that pot.",
+      "ok": true,
+      "kind": "question",
+      "dimension": "general",
+      "topic_id": null,
+      "scene": "frontier_gate",
+      "mode": "social",
+      "npc": "tavern_runner",
+      "malformed": false,
+      "internal_term": false,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "Tavern Runner grimaces. \"Not something I can say here.\""
+    }
+  ]
+}

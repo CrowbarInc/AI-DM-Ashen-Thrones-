@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This manifest declares the canonical protected replay set for acceptance review. It is governance-only: it does not change runtime behavior, pytest assertions, markers, selection, or CI wiring.
+This manifest declares the canonical controlled structural replay set for acceptance review. It is governance-only: it does not change runtime behavior, pytest assertions, markers, selection, or CI wiring. Ordinary CI uses deterministic/stubbed GM output; PASS protects the listed structural/runtime invariants and does not establish production-model semantics, narrative quality, or human playability.
 
 **Canonical governance inventory:** [`docs/convergence_ci_inventory.md`](../convergence_ci_inventory.md) (protected replay hard-fail step and local reproduction commands).
 
@@ -21,6 +21,11 @@ Current executable location: the six short protected structural scenarios live i
 `tests/helpers/golden_replay.py`. Historical replay baseline archived under
 `docs/archive/dead_governance/2026-05-31/golden_replay_baseline_2026-05-11.md`; this manifest is
 the sole current protected replay acceptance authority.
+
+The `golden_replay` marker also collects the opt-in CO102 live pipeline validation in
+`tests/test_co102_live_protected_replay_pipeline.py`. It exercises the same protected observation
+pipeline but is not a seventh structural corpus scenario; without its environment flag it remains
+collected and skipped.
 
 Protected replay reproduction command:
 
@@ -184,7 +189,7 @@ Cycle S adds rerun drift measurement and seed-seam audit coverage without promot
 Policy:
 
 - Golden rerun drift scorecards are `ADVISORY` / report-only. They summarize successful-run differences; they do not change protected replay pass/fail behavior.
-- Exact prose identity is not a default protected gate. Exact text comparison remains opt-in for explicitly curated expectations, while protected replay continues to enforce structural and player-facing semantic invariants.
+- Exact prose identity is not a default protected gate. Exact text comparison remains opt-in for explicitly curated expectations, while protected replay continues to enforce structural invariants and explicitly enumerated player-facing survival/shape contracts. These are not broad semantic-quality claims.
 - Semantic delta frequency uses existing `response_delta_*` and FEM metadata only. Cycle S does not add a semantic similarity judge, semantic rewrite behavior, or prose-quality scoring gate.
 - Scenario-spine rerun comparison is advisory and separate from CI hard gates. It compares already-written artifact directories and reports identity, transcript, health, lineage, and text-fingerprint deltas for operator review.
 - The stable-seed audit protects replay-sensitive speaker/fallback/final-emission paths from process-randomized seed seams such as Python `hash(...)`, `random`, `uuid`, or wall-clock `time` inputs.
@@ -209,7 +214,7 @@ Cycle AR adds **owner-oriented drift bucket** reporting on top of existing repla
 Policy:
 
 - `owner_drift_bucket` is an **additive reporting field** on classified failure rows and rerun scorecards. It does not replace `category`, `primary_owner`, `secondary_owner`, measurement drift buckets (`exact_drift`, `structural_drift`, `semantic_drift`), or `replay_tags`.
-- Owner drift buckets are **not acceptance-blocking**. Protected replay pass/fail remains governed by existing structural and semantic invariants only.
+- Owner drift buckets are **not acceptance-blocking**. Protected replay pass/fail remains governed by existing structural invariants and explicitly enumerated player-facing survival/shape contracts only.
 - Rerun scorecard owner drift summaries remain **`ADVISORY`** / `report_only: true` alongside Cycle S rerun drift policy.
 - Lineage-derived `lineage_drift` buckets surface in advisory rerun reports only; lineage owner mismatch remains excluded from protected drift classification unless explicitly promoted in a future cycle.
 

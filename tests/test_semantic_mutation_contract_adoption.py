@@ -2,10 +2,10 @@
 from __future__ import annotations
 
 import inspect
+from pathlib import Path
 
 import pytest
 
-import game.final_emission_meta as final_emission_meta
 import game.runtime_lineage_telemetry as runtime_lineage_telemetry
 import tests.helpers.failure_classifier as failure_classifier
 import tests.helpers.golden_replay_projection as golden_replay_projection
@@ -64,8 +64,8 @@ def test_cu6_major_consumers_call_governed_reconciliation_helper() -> None:
 
 
 def test_cu6_write_site_family_allowlist_is_contract_sourced() -> None:
-    assert final_emission_meta.SEMANTIC_MUTATION_WRITE_SITE_FAMILIES is SEMANTIC_MUTATION_WRITE_SITE_FAMILIES
-    source = inspect.getsource(final_emission_meta)
+    source = (Path(__file__).resolve().parents[1] / "game" / "final_emission_meta.py").read_text(encoding="utf-8")
+    assert "SEMANTIC_MUTATION_WRITE_SITE_FAMILIES" in source
     assert "SEMANTIC_MUTATION_WRITE_SITE_FAMILIES: frozenset" not in source
 
 

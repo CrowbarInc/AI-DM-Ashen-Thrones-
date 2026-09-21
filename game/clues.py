@@ -1016,9 +1016,9 @@ def _crier_npc_id_from_addressables(scene_inner: dict, scene_state: dict) -> str
     for raw in (scene_state.get("emergent_addressables") or []):
         if isinstance(raw, dict):
             rows.append(raw)
-    # Emergent NPCs (e.g. town crier) may appear in active_entities before they are mirrored
-    # into addressables / emergent_addressables; frontier_gate authors Lirael in discoverables
-    # alongside emergent_town_crier in scene_state.
+    # Emergent NPCs (e.g. a town crier) may appear in active_entities before they are mirrored
+    # into addressables / emergent_addressables. Named-crier binding still requires authored
+    # discoverable name evidence; current frontier_gate canon does not author Lirael.
     if isinstance(scene_state, dict):
         seen_active: Set[str] = set()
         for eid in scene_state.get("active_entities") or []:

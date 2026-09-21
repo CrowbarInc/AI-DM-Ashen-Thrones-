@@ -8,6 +8,7 @@ recompute scores, or apply pass/fail thresholds beyond writing evaluator fields 
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import sys
 import urllib.error
@@ -26,6 +27,7 @@ from game.api_upstream_preflight import (  # noqa: E402
     log_upstream_api_preflight_at_startup,
 )
 from game.campaign_reset import apply_new_campaign_hard_reset  # noqa: E402
+from game.storage import load_character, load_combat, load_log, load_session, load_world  # noqa: E402
 from game.upstream_dependent_run_gate import compute_upstream_dependent_run_gate  # noqa: E402
 from game.upstream_dependent_run_gate_presentation import build_upstream_dependent_run_gate_operator  # noqa: E402
 from game.dead_turn_report_visibility import (  # noqa: E402
@@ -82,6 +84,21 @@ SCENARIOS: dict[str, PlayabilityScenario] = {
 
 def _utc_slug() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def _utc_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _state_snapshot() -> dict[str, Any]:
+    """Capture canonical persisted runtime state through existing storage APIs."""
+    return {
+        "session": copy.deepcopy(load_session()),
+        "world": copy.deepcopy(load_world()),
+        "combat": copy.deepcopy(load_combat()),
+        "character": copy.deepcopy(load_character()),
+        "log_entries": copy.deepcopy(load_log()),
+    }
 
 
 def _gm_text_from_chat_payload(payload: Mapping[str, Any]) -> str:
@@ -159,6 +176,9 @@ def summary_from_eval(
         "report_version": 3,
         "scenario_id": scenario_id,
         "overall": eval_out.get("overall"),
+        "semantic_result": eval_out.get("semantic_result"),
+        "mandatory_gates": eval_out.get("mandatory_gates"),
+        "diagnostic_quality": eval_out.get("diagnostic_quality"),
         "axis_scores": axis_scores,
         "failures": summ.get("failures"),
         "warnings": summ.get("warnings"),
@@ -216,6 +236,7 @@ def run_scenario(
     """Return (turn_records, summary_json_dict)."""
     if apply_reset:
         apply_new_campaign_hard_reset()
+    run_scenario._last_state_before = _state_snapshot()  # type: ignore[attr-defined]
 
     turns_out: list[dict[str, Any]] = []
     prior_player = ""
@@ -288,6 +309,276 @@ def run_scenario(
 def _write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def _write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def _reported_result(summary: Mapping[str, Any]) -> str:
+    semantic = summary.get("semantic_result")
+    if isinstance(semantic, str) and semantic:
+        return semantic
+    overall = summary.get("overall") if isinstance(summary.get("overall"), Mapping) else {}
+    return "PASS" if bool(overall.get("passed")) else "FAIL"
+
+
+def _evaluation_artifact(
+    *,
+    spec: PlayabilityScenario,
+    turns: list[dict[str, Any]],
+    summary: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Expose the existing evaluator's criteria without adding new scoring."""
+    return {
+        "artifact_version": 1,
+        "scenario_id": spec.scenario_id,
+        "result": _reported_result(summary),
+        "pass_fail_source": (
+            "summary.overall.passed from the final turn's evaluate_playability(...) output; "
+            "run_gameplay_validation may force overall.passed false for dead-turn/infra invalidation."
+        ),
+        "current_success_definition": {
+            "semantic_result": summary.get("semantic_result"),
+            "mandatory_gates": summary.get("mandatory_gates"),
+            "diagnostic_quality": summary.get("diagnostic_quality"),
+            "overall_passed": (summary.get("overall") or {}).get("passed")
+            if isinstance(summary.get("overall"), Mapping)
+            else None,
+            "overall_score": (summary.get("overall") or {}).get("score")
+            if isinstance(summary.get("overall"), Mapping)
+            else None,
+            "overall_rating": (summary.get("overall") or {}).get("rating")
+            if isinstance(summary.get("overall"), Mapping)
+            else None,
+            "run_gameplay_validation": summary.get("run_gameplay_validation"),
+            "dead_turn_report": summary.get("dead_turn_report"),
+        },
+        "criteria": {
+            "axis_thresholds": {
+                "direct_answer": "axis passes when score >= 15/25",
+                "player_intent": "axis passes when score >= 15/25",
+                "logical_escalation": "axis passes when score >= 15/25",
+                "immersion": "axis passes when score >= 15/25",
+                "overall": "semantic result passes only when run validity, mandatory gates, and diagnostic threshold pass",
+            },
+            "per_turn_evidence": [
+                {
+                    "turn_index": t.get("turn_index"),
+                    "player_prompt": t.get("player_prompt"),
+                    "gm_text": t.get("gm_text"),
+                    "resolution_kind": t.get("resolution_kind"),
+                    "api_ok": t.get("api_ok"),
+                    "api_error": t.get("api_error"),
+                    "playability_eval": t.get("playability_eval"),
+                    "narrative_authenticity_eval": t.get("narrative_authenticity_eval"),
+                    "dead_turn_visibility": t.get("dead_turn_visibility"),
+                    "_final_emission_meta": t.get("_final_emission_meta"),
+                }
+                for t in turns
+            ],
+        },
+        "summary": dict(summary),
+    }
+
+
+def _metadata_artifact(
+    *,
+    spec: PlayabilityScenario,
+    run_id: str,
+    started_at: str,
+    finished_at: str,
+    artifact_dir: Path,
+    apply_reset: bool,
+    caller_kind: str,
+    base_url: str | None,
+    upstream_dependent_run_gate: Mapping[str, Any],
+) -> dict[str, Any]:
+    return {
+        "artifact_version": 1,
+        "run_id": run_id,
+        "scenario_id": spec.scenario_id,
+        "scenario_description": spec.description,
+        "started_at": started_at,
+        "finished_at": finished_at,
+        "simulator": {
+            "runner": "tools/run_playability_validation.py",
+            "player_type": "fixed scripted natural-language prompts",
+            "prompt_count": len(spec.player_prompts),
+            "prompts": list(spec.player_prompts),
+            "entrypoint": "/api/chat",
+            "caller_kind": caller_kind,
+            "base_url": base_url,
+            "apply_reset_before_scenario": apply_reset,
+            "random_seed": None,
+        },
+        "artifact_paths": {
+            "transcript_md": str((artifact_dir / "transcript.md").resolve()),
+            "evaluation_json": str((artifact_dir / "evaluation.json").resolve()),
+            "state_before_json": str((artifact_dir / "state_before.json").resolve()),
+            "state_after_json": str((artifact_dir / "state_after.json").resolve()),
+            "metadata_json": str((artifact_dir / "metadata.json").resolve()),
+            "legacy_transcript_json": str((artifact_dir / "transcript.json").resolve()),
+            "legacy_summary_json": str((artifact_dir / "summary.json").resolve()),
+            "run_debug_json": str((artifact_dir / "run_debug.json").resolve()),
+        },
+        "upstream_dependent_run_gate": dict(upstream_dependent_run_gate),
+    }
+
+
+def _transcript_markdown(
+    *,
+    spec: PlayabilityScenario,
+    run_id: str,
+    started_at: str,
+    finished_at: str,
+    turns: list[dict[str, Any]],
+    summary: Mapping[str, Any],
+    caller_kind: str,
+) -> str:
+    result = _reported_result(summary)
+    overall = summary.get("overall") if isinstance(summary.get("overall"), Mapping) else {}
+    mandatory_gates = summary.get("mandatory_gates") if isinstance(summary.get("mandatory_gates"), Mapping) else {}
+    diagnostic_quality = (
+        summary.get("diagnostic_quality") if isinstance(summary.get("diagnostic_quality"), Mapping) else {}
+    )
+    failures = summary.get("failures") if isinstance(summary.get("failures"), list) else []
+    warnings = summary.get("warnings") if isinstance(summary.get("warnings"), list) else []
+
+    lines = [
+        f"# Simulation Run: {run_id}",
+        "",
+        f"Scenario: {spec.scenario_id}",
+        f"Objective: {spec.description}",
+        "Player: fixed scripted natural-language prompts",
+        f"Transport: {caller_kind} `/api/chat`",
+        "Seed: none",
+        f"Started: {started_at}",
+        f"Finished: {finished_at}",
+        f"Semantic Result: {result}",
+        "",
+    ]
+
+    if mandatory_gates:
+        lines.extend(["# Result", "", f"Semantic Result: {result}", "", "Mandatory Gates:"])
+        for name, gate in mandatory_gates.items():
+            if isinstance(gate, Mapping):
+                lines.append(f"- {name}: `{gate.get('status')}` ({', '.join(map(str, gate.get('reason_codes') or []))})")
+        lines.extend(
+            [
+                "",
+                f"Diagnostic Quality: `{json.dumps(diagnostic_quality, ensure_ascii=False, sort_keys=True)}`",
+                "",
+            ]
+        )
+
+    for t in turns:
+        idx = int(t.get("turn_index") or 0) + 1
+        lines.extend(
+            [
+                f"## Turn {idx}",
+                "",
+                "### PLAYER",
+                "",
+                str(t.get("player_prompt") or ""),
+                "",
+                "### GM",
+                "",
+                str(t.get("gm_text") or ""),
+                "",
+                "### Runtime Notes",
+                "",
+                f"- api_ok: `{t.get('api_ok')}`",
+                f"- api_error: `{t.get('api_error')}`",
+                f"- resolution_kind: `{t.get('resolution_kind')}`",
+            ]
+        )
+        dead = t.get("dead_turn_visibility")
+        if isinstance(dead, Mapping):
+            lines.append(f"- dead_turn_visibility: `{json.dumps(dead, ensure_ascii=False, sort_keys=True)}`")
+        pe = t.get("playability_eval")
+        if isinstance(pe, Mapping):
+            pe_overall = pe.get("overall") if isinstance(pe.get("overall"), Mapping) else {}
+            lines.append(f"- playability_overall: `{json.dumps(pe_overall, ensure_ascii=False, sort_keys=True)}`")
+            lines.append(
+                f"- semantic_result: `{json.dumps(pe.get('semantic_result'), ensure_ascii=False, sort_keys=True)}`"
+            )
+            gates = pe.get("mandatory_gates") if isinstance(pe.get("mandatory_gates"), Mapping) else {}
+            lines.append(f"- mandatory_gates: `{json.dumps(gates, ensure_ascii=False, sort_keys=True)}`")
+        lines.append("")
+
+    lines.extend(
+        [
+            "# Evaluation",
+            "",
+            f"Reported Result: {result}",
+            "",
+            (
+                "The result above is copied from the playability evaluator's semantic authority. "
+                "Mandatory gate failures are not overridden by diagnostic quality scores."
+            ),
+            "",
+            f"Overall: `{json.dumps(overall, ensure_ascii=False, sort_keys=True)}`",
+            f"Mandatory Gates: `{json.dumps(mandatory_gates, ensure_ascii=False, sort_keys=True)}`",
+            f"Diagnostic Quality: `{json.dumps(diagnostic_quality, ensure_ascii=False, sort_keys=True)}`",
+        ]
+    )
+    if failures:
+        lines.extend(["", "Failures:"])
+        lines.extend(f"- {str(item)}" for item in failures)
+    if warnings:
+        lines.extend(["", "Warnings:"])
+        lines.extend(f"- {str(item)}" for item in warnings)
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _write_observability_artifacts(
+    *,
+    run_dir: Path,
+    run_id: str,
+    spec: PlayabilityScenario,
+    started_at: str,
+    finished_at: str,
+    turns: list[dict[str, Any]],
+    summary: Mapping[str, Any],
+    state_before: Mapping[str, Any],
+    state_after: Mapping[str, Any],
+    apply_reset: bool,
+    caller_kind: str,
+    base_url: str | None,
+    upstream_dependent_run_gate: Mapping[str, Any],
+) -> None:
+    _write_json(run_dir / "state_before.json", state_before)
+    _write_json(run_dir / "state_after.json", state_after)
+    _write_json(run_dir / "evaluation.json", _evaluation_artifact(spec=spec, turns=turns, summary=summary))
+    _write_json(
+        run_dir / "metadata.json",
+        _metadata_artifact(
+            spec=spec,
+            run_id=run_id,
+            started_at=started_at,
+            finished_at=finished_at,
+            artifact_dir=run_dir,
+            apply_reset=apply_reset,
+            caller_kind=caller_kind,
+            base_url=base_url,
+            upstream_dependent_run_gate=upstream_dependent_run_gate,
+        ),
+    )
+    _write_text(
+        run_dir / "transcript.md",
+        _transcript_markdown(
+            spec=spec,
+            run_id=run_id,
+            started_at=started_at,
+            finished_at=finished_at,
+            turns=turns,
+            summary=summary,
+            caller_kind=caller_kind,
+        ),
+    )
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -374,15 +665,19 @@ def main(argv: list[str] | None = None) -> int:
     stamp = _utc_slug()
     base_dir: Path = args.artifact_dir
 
-    def _run_batch(chat_call: ChatCaller) -> None:
+    def _run_batch(chat_call: ChatCaller, *, caller_kind: str) -> None:
         for spec in to_run:
             run_dir = base_dir / f"{stamp}_{spec.scenario_id}"
+            started_at = _utc_iso()
             turns, summary = run_scenario(
                 spec,
                 chat_call=chat_call,
                 apply_reset=apply_reset,
                 upstream_dependent_run_gate=gate,
             )
+            state_after = _state_snapshot()
+            finished_at = _utc_iso()
+            state_before = getattr(run_scenario, "_last_state_before", {})
             transcript = {
                 "report_version": 2,
                 "scenario_id": spec.scenario_id,
@@ -414,11 +709,27 @@ def main(argv: list[str] | None = None) -> int:
                     "summary": summary,
                 },
             )
+            _write_observability_artifacts(
+                run_dir=run_dir,
+                run_id=f"{stamp}_{spec.scenario_id}",
+                spec=spec,
+                started_at=started_at,
+                finished_at=finished_at,
+                turns=turns,
+                summary=summary,
+                state_before=state_before if isinstance(state_before, Mapping) else {},
+                state_after=state_after,
+                apply_reset=apply_reset,
+                caller_kind=caller_kind,
+                base_url=args.base_url,
+                upstream_dependent_run_gate=gate,
+            )
             print(f"Wrote {run_dir / 'transcript.json'}")
+            print(f"Wrote {run_dir / 'transcript.md'}")
             print(f"Wrote {run_dir / 'summary.json'}")
 
     if args.base_url:
-        _run_batch(_make_http_caller(args.base_url, timeout_s=args.http_timeout))
+        _run_batch(_make_http_caller(args.base_url, timeout_s=args.http_timeout), caller_kind="http")
     else:
         from fastapi.testclient import TestClient
 
@@ -441,7 +752,7 @@ def main(argv: list[str] | None = None) -> int:
             def chat_call(text: str) -> dict[str, Any]:
                 return _post_json(client, text)
 
-            _run_batch(chat_call)
+            _run_batch(chat_call, caller_kind="in-process TestClient")
 
     return 0
 
