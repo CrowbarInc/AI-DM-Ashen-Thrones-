@@ -51,6 +51,16 @@ def test_looks_like_local_observation_positive_examples() -> None:
         "From the entryway, what can he make out?"
     )
     assert _looks_like_local_observation_question("What do I see from here?")
+    assert _looks_like_local_observation_question("What's nearby?")
+    assert _looks_like_local_observation_question("What's around here?")
+    assert _looks_like_local_observation_question("What is around me?")
+    assert _looks_like_local_observation_question("What can I see nearby?")
+    assert _looks_like_local_observation_question("What can I perceive?")
+    assert _looks_like_local_observation_question("What can I observe?")
+    assert _looks_like_local_observation_question("What can I perceive from here?")
+    assert _looks_like_local_observation_question("What is close by?")
+    assert _looks_like_local_observation_question("What's in this area?")
+    assert _looks_like_local_observation_question("What's in my immediate surroundings?")
 
 
 def test_looks_like_local_observation_negative_examples() -> None:
@@ -67,6 +77,14 @@ def test_looks_like_local_observation_negative_examples() -> None:
     )
     assert not _looks_like_local_observation_question(
         "Who wants to speak with Cinderwatch's newest hero?"
+    )
+    assert not _looks_like_local_observation_question("Who is nearby?")
+    assert not _looks_like_local_observation_question("Is anyone nearby?")
+    assert not _looks_like_local_observation_question("What's around the old milestone?")
+    assert not _looks_like_local_observation_question("What's nearby the brass quay?")
+    assert not _looks_like_local_observation_question("Is there a tavern nearby?")
+    assert not _looks_like_local_observation_question(
+        "What can be perceived from where I stand?"
     )
 
 

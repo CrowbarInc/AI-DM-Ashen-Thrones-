@@ -10,7 +10,16 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from game.clues import get_known_clues_with_presentation
-from game.diegetic_fallback_narration import render_observe_perception_fallback_line
+from game.diegetic_fallback_narration import (
+    _LISTEN_INTENT_FAMILIES,
+    _authored_audible_facts,
+    _visible_fact_strings,
+    fact_mentioned_in_narration,
+    is_targeted_perception,
+    render_observe_perception_fallback_line,
+    text_pulls_non_audible_visible_stock,
+    text_repeats_recent_visible_stock,
+)
 from game.referenced_surface import (
     AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
     AUTHORITY_AUTHORED_HIDDEN,
@@ -23,9 +32,12 @@ from game.referenced_surface import (
     render_referenced_surface_inspection_line,
 )
 from game.interaction_context import inspect as inspect_interaction_context
-from game.storage import get_scene_runtime
+from game.storage import get_scene_runtime, is_known_scene_id, load_scene
 
-PERCEPTION_KINDS = frozenset({"observe", "investigate", "discover_clue", "interact"})
+PERCEPTION_KINDS = frozenset(
+    {"observe", "investigate", "discover_clue", "interact", "already_searched"}
+)
+ALREADY_SEARCHED_NOTHING_NEW_LINE = "Closer looking yields nothing further."
 _SOCIAL_OR_EVENT_KINDS = frozenset(
     {
         "question",
@@ -292,6 +304,55 @@ def _present_npc_texts(
     return out
 
 
+def _visited_scene_ids(session: Mapping[str, Any] | None) -> List[str]:
+    if not isinstance(session, Mapping):
+        return []
+    raw = session.get("visited_scene_ids")
+    if not isinstance(raw, list):
+        return []
+    out: List[str] = []
+    seen: set[str] = set()
+    for item in raw:
+        sid = _clean(item)
+        if sid and sid not in seen:
+            seen.add(sid)
+            out.append(sid)
+    return out
+
+
+def _offscene_geography_texts(
+    session: Mapping[str, Any] | None,
+    current_scene_id: str,
+) -> List[str]:
+    """Authored geography from other visited scenes. Historical, not present-here."""
+    current = _clean(current_scene_id)
+    out: List[str] = []
+    if not current:
+        return out
+    for sid in _visited_scene_ids(session):
+        if sid == current or not is_known_scene_id(sid):
+            continue
+        inner = _inner_scene(load_scene(sid))
+        out.extend(_string_list(inner.get("visible_facts")))
+        summary = _clean(inner.get("summary"))
+        if summary:
+            out.append(summary)
+        location = _clean(inner.get("location"))
+        if location:
+            out.append(location)
+        out.extend(_interactable_texts(inner))
+    if isinstance(session, Mapping):
+        for row in get_known_clues_with_presentation(dict(session)):
+            if not isinstance(row, Mapping):
+                continue
+            source = _clean(row.get("source_scene"))
+            if source and source != current:
+                text = _clean(row.get("text"))
+                if text:
+                    out.append(text)
+    return out
+
+
 def _discovered_clue_texts(
     session: Mapping[str, Any] | None,
     resolution: Mapping[str, Any] | None,
@@ -299,6 +360,7 @@ def _discovered_clue_texts(
 ) -> List[str]:
     out: List[str] = []
     known_ids: set[str] = set()
+    current_sid = _clean(scene_inner.get("id"))
     if isinstance(session, Mapping):
         for row in get_known_clues_with_presentation(dict(session)):
             if not isinstance(row, Mapping):
@@ -306,6 +368,9 @@ def _discovered_clue_texts(
             cid = _clean(row.get("id"))
             if cid:
                 known_ids.add(cid)
+            source = _clean(row.get("source_scene"))
+            if current_sid and source and source != current_sid:
+                continue
             text = _clean(row.get("text"))
             if text:
                 out.append(text)
@@ -385,14 +450,17 @@ def build_perception_evidence_surface(
     discovered = _discovered_clue_texts(session, resolution, inner)
     hidden = _hidden_fact_texts(inner, session)
     undiscovered = _undiscovered_clue_texts(inner, discovered)
+    scene_id = _clean(inner.get("id"))
+    offscene_geography = _offscene_geography_texts(session, scene_id)
     authorized_blob = " ".join([*visible, *interactables, *exits, *npcs, *discovered]).lower()
     return {
-        "scene_id": _clean(inner.get("id")),
+        "scene_id": scene_id,
         "visible_facts": visible,
         "interactable_texts": interactables,
         "exit_texts": exits,
         "present_npc_texts": npcs,
         "discovered_clue_texts": discovered,
+        "offscene_geography_texts": offscene_geography,
         "hidden_fact_texts": hidden,
         "undiscovered_clue_texts": undiscovered,
         "authorized_blob": authorized_blob,
@@ -454,7 +522,138 @@ def classify_perception_invention(
         if span and span in low:
             flags.append("clue_invention")
             break
+    if kind == "observe":
+        for span in _distinctive_spans(list(ev.get("offscene_geography_texts") or [])):
+            if span and span in low and span not in blob:
+                flags.append("prior_scene_geography")
+                break
     return {"unsupported": bool(flags), "flags": flags, "checked": True}
+
+
+_LAST_PERCEPTION_FACTS_KEY = "last_perception_visible_facts"
+_LAST_PERCEPTION_TEXT_KEY = "last_perception_narration"
+
+
+def _normalize_visible_fact_key(fact: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9\s]+", " ", str(fact or "").lower()).split())
+
+
+def collect_recent_player_facing_narration(
+    *,
+    session: Mapping[str, Any] | None = None,
+    scene_id: str = "",
+    max_turns: int = 2,
+) -> str:
+    """Previous perception narration from existing scene runtime. No new memory owner."""
+    del max_turns
+    if not isinstance(session, dict) or not scene_id:
+        return ""
+    runtime = get_scene_runtime(session, scene_id)
+    if not isinstance(runtime, dict):
+        return ""
+    return _clean(runtime.get(_LAST_PERCEPTION_TEXT_KEY))
+
+
+def perception_visible_fact_delta(
+    session: Mapping[str, Any] | None,
+    scene_id: str,
+    current_facts: Sequence[str],
+) -> List[str]:
+    """Facts present now that were absent from the last recorded perception snapshot."""
+    if not isinstance(session, dict) or not scene_id:
+        return []
+    runtime = get_scene_runtime(session, scene_id)
+    prior = runtime.get(_LAST_PERCEPTION_FACTS_KEY) if isinstance(runtime, dict) else None
+    if not isinstance(prior, list) or not prior:
+        return []
+    prior_keys = {_normalize_visible_fact_key(item) for item in prior if _clean(item)}
+    return [fact for fact in current_facts if _clean(fact) and _normalize_visible_fact_key(fact) not in prior_keys]
+
+
+def record_perception_visible_facts(
+    session: Mapping[str, Any] | None,
+    scene_id: str,
+    facts: Sequence[str],
+    *,
+    narration: str = "",
+) -> None:
+    if not isinstance(session, dict) or not scene_id:
+        return
+    runtime = get_scene_runtime(session, scene_id)
+    if isinstance(runtime, dict):
+        runtime[_LAST_PERCEPTION_FACTS_KEY] = [_clean(fact) for fact in facts if _clean(fact)]
+        if _clean(narration):
+            runtime[_LAST_PERCEPTION_TEXT_KEY] = _clean(narration)
+
+
+def observation_recent_use_should_record(
+    *,
+    resolution: Mapping[str, Any] | None = None,
+    player_text: str = "",
+    scene: Mapping[str, Any] | None = None,
+) -> bool:
+    """True when this turn may replace the PR-AS observation recent-use snapshot.
+
+    Social, investigation, listen, and targeted perception do not make unchanged
+    untargeted scene stock newly relevant. They must not overwrite the last
+    untargeted visual-observation narration.
+    """
+    kind = _resolution_kind(resolution)
+    if kind != "observe":
+        return False
+    if _listen_family_from_resolution(resolution, player_text):
+        return False
+    if is_targeted_perception(player_text, scene):
+        return False
+    return True
+
+
+def remember_completed_perception_turn(
+    session: Mapping[str, Any] | None,
+    scene_id: str,
+    scene: Mapping[str, Any] | None,
+    narration: str,
+    *,
+    resolution: Mapping[str, Any] | None = None,
+    player_text: str = "",
+) -> None:
+    """Snapshot untargeted visual-observation recent-use after retry/finalize.
+
+    Intervening non-observation turns keep the prior snapshot. A nothing-new
+    observe refreshes the fact list without discarding stock-bearing narration.
+    """
+    if not observation_recent_use_should_record(
+        resolution=resolution,
+        player_text=player_text,
+        scene=scene,
+    ):
+        return
+    facts = _visible_fact_strings(scene)
+    narration_clean = _clean(narration)
+    mentions_visible_stock = any(
+        fact_mentioned_in_narration(fact, narration_clean) for fact in facts
+    )
+    record_perception_visible_facts(
+        session,
+        scene_id,
+        facts,
+        narration=narration_clean if mentions_visible_stock else "",
+    )
+    if isinstance(session, dict) and scene_id:
+        runtime = get_scene_runtime(session, scene_id)
+        if isinstance(runtime, dict):
+            runtime["last_perception_turn"] = int(session.get("turn_counter") or 0)
+
+
+def _listen_family_from_resolution(resolution: Mapping[str, Any] | None, player_text: str) -> str:
+    md = resolution.get("metadata") if isinstance(resolution, Mapping) else None
+    fam = _clean((md or {}).get("human_adjacent_intent_family")).lower() if isinstance(md, Mapping) else ""
+    if fam in _LISTEN_INTENT_FAMILIES:
+        return fam
+    from game.human_adjacent_focus import classify_human_adjacent_intent_family
+
+    classified = classify_human_adjacent_intent_family(player_text)
+    return classified if classified in _LISTEN_INTENT_FAMILIES else ""
 
 
 def render_grounded_perception_line(
@@ -464,6 +663,8 @@ def render_grounded_perception_line(
     resolution: Mapping[str, Any] | None = None,
     seed_key: str = "perception",
     evidence: Mapping[str, Any] | None = None,
+    recent_narration: str = "",
+    new_visible_facts: Sequence[str] | None = None,
 ) -> str:
     """Useful fail-closed realization from existing scene/clue surfaces."""
     ev = evidence if isinstance(evidence, Mapping) else {}
@@ -477,6 +678,11 @@ def render_grounded_perception_line(
     classified = classification_from_resolution(resolution)
     if not classified.get("authority"):
         classified = classify_referenced_surface(player_text, scene)
+    if kind == "already_searched":
+        surface_line = render_referenced_surface_inspection_line(classified, scene)
+        if surface_line:
+            return surface_line
+        return ALREADY_SEARCHED_NOTHING_NEW_LINE
     if kind == "investigate" and classified.get("authority") in {
         AUTHORITY_AUTHORED_INTERACTABLE,
         AUTHORITY_AUTHORED_VISIBLE_FEATURE,
@@ -492,6 +698,8 @@ def render_grounded_perception_line(
         seed_key=seed_key or "perception",
         player_text=player_text,
         resolution=resolution if isinstance(resolution, Mapping) else None,
+        recent_narration=recent_narration,
+        new_visible_facts=new_visible_facts,
     )
     if line and line.strip():
         return line.strip()
@@ -531,10 +739,47 @@ def apply_perception_non_invention_to_gm(
         world=world,
         resolution=resolution,
     )
+    sid_for_delta = _clean(evidence.get("scene_id"))
+    recent_narration = collect_recent_player_facing_narration(
+        session=session if isinstance(session, dict) else None,
+        scene_id=sid_for_delta,
+    )
+    current_facts = _visible_fact_strings(scene)
+    new_visible_facts = perception_visible_fact_delta(
+        session if isinstance(session, dict) else None,
+        sid_for_delta,
+        current_facts,
+    )
+    listen_fam = _listen_family_from_resolution(resolution, player_text)
+    targeted = is_targeted_perception(player_text, scene)
+    listen_visual_stock = bool(
+        listen_fam
+        and not _authored_audible_facts(scene)
+        and text_pulls_non_audible_visible_stock(text, scene)
+    )
+    same_turn_record = False
+    if isinstance(session, dict) and sid_for_delta:
+        runtime = get_scene_runtime(session, sid_for_delta)
+        stored_turn = runtime.get("last_perception_turn")
+        same_turn_record = stored_turn is not None and int(stored_turn) == int(
+            session.get("turn_counter") or 0
+        )
+    repeated_untargeted_stock = bool(
+        kind == "observe"
+        and not listen_fam
+        and not targeted
+        and recent_narration
+        and not same_turn_record
+        and not new_visible_facts
+        and text_repeats_recent_visible_stock(
+            text, recent_narration=recent_narration, scene=scene
+        )
+    )
     verdict = classify_perception_invention(text, evidence, resolution=resolution)
     classified = classification_from_resolution(resolution)
     if not classified.get("authority"):
         classified = classify_referenced_surface(player_text, scene, world=world)
+    force_already_searched = kind == "already_searched"
     force_surface = kind == "investigate" and (
         classified.get("authority")
         in {
@@ -549,10 +794,26 @@ def apply_perception_non_invention_to_gm(
             and not classified.get("inspectable_text")
         )
     )
-    if not verdict.get("unsupported") and not force_surface:
+    if (
+        not verdict.get("unsupported")
+        and not force_surface
+        and not force_already_searched
+        and not listen_visual_stock
+        and not repeated_untargeted_stock
+    ):
         return gm_output
-    sid = _clean(evidence.get("scene_id")) or "perception"
-    if force_surface:
+    sid = sid_for_delta or "perception"
+    if force_already_searched:
+        replacement = render_grounded_perception_line(
+            scene,
+            player_text=player_text,
+            resolution=resolution,
+            seed_key=f"prah|{sid}|{kind}|{player_text}",
+            evidence=evidence,
+            recent_narration=recent_narration,
+            new_visible_facts=new_visible_facts,
+        )
+    elif force_surface:
         replacement = render_referenced_surface_inspection_line(classified, scene)
     else:
         replacement = render_grounded_perception_line(
@@ -561,12 +822,14 @@ def apply_perception_non_invention_to_gm(
             resolution=resolution,
             seed_key=f"prah|{sid}|{kind}|{player_text}",
             evidence=evidence,
+            recent_narration=recent_narration,
+            new_visible_facts=new_visible_facts,
         )
     if not replacement:
         return gm_output
     gm_output["player_facing_text"] = replacement
     tags = list(gm_output.get("tags") or []) if isinstance(gm_output.get("tags"), list) else []
-    if force_surface:
+    if force_surface or force_already_searched:
         if "referenced_surface_realization" not in tags:
             tags.append("referenced_surface_realization")
     elif "perception_non_invention" not in tags:
@@ -576,16 +839,19 @@ def apply_perception_non_invention_to_gm(
     if not isinstance(meta, dict):
         meta = {}
         gm_output["metadata"] = meta
-    if force_surface:
+    if force_surface or force_already_searched:
         meta["referenced_surface_realization"] = {
             "applied": True,
             "authority": classified.get("authority"),
             "target": classified.get("target"),
+            "kind": kind,
         }
     else:
         meta["perception_non_invention"] = {
             "applied": True,
             "flags": list(verdict.get("flags") or []),
+            "listen_visual_stock": listen_visual_stock,
+            "repeated_untargeted_stock": repeated_untargeted_stock,
         }
     if isinstance(session, dict) and sid:
         _resync_contextual_leads_from_grounded_text(session, sid, replacement)

@@ -4277,6 +4277,21 @@ def action(req: ActionRequest, ui_mode: str = "player"):
         scene=scene if isinstance(scene, dict) else None,
         player_text=fallback_user_text,
     )
+    if str((resolution or {}).get("kind") or "").strip().lower() not in {
+        "scene_opening",
+        "scene_transition",
+        "travel",
+    }:
+        from game.perception_grounding import remember_completed_perception_turn
+
+        remember_completed_perception_turn(
+            session,
+            str((scene.get("scene") or {}).get("id") or "").strip(),
+            scene,
+            str((gm or {}).get("player_facing_text") or ""),
+            resolution=resolution if isinstance(resolution, dict) else None,
+            player_text=fallback_user_text,
+        )
     for _rt in _narr_consistency.get("repaired_discovered_clue_texts") or []:
         if isinstance(_rt, str) and _rt.strip() and _rt.strip() not in authoritative_clue_updates:
             authoritative_clue_updates.append(_rt.strip())
@@ -4583,6 +4598,21 @@ def _complete_opening_turn_persistence_like_chat(
         scene=scene if isinstance(scene, dict) else None,
         player_text=player_text_for_eval,
     )
+    if str((resolution or {}).get("kind") or "").strip().lower() not in {
+        "scene_opening",
+        "scene_transition",
+        "travel",
+    }:
+        from game.perception_grounding import remember_completed_perception_turn
+
+        remember_completed_perception_turn(
+            session,
+            str((scene.get("scene") or {}).get("id") or "").strip(),
+            scene,
+            str((gm or {}).get("player_facing_text") or ""),
+            resolution=resolution if isinstance(resolution, dict) else None,
+            player_text=player_text_for_eval,
+        )
     canonical_gm = gm
     if isinstance(resolution, dict) and str(resolution.get("kind") or "").strip().lower() == "scene_opening":
         metadata = canonical_gm.get("metadata") if isinstance(canonical_gm.get("metadata"), dict) else {}
@@ -5552,6 +5582,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
                     'answer_type': adjudication.get('answer_type'),
                     'requires_check': adjudication.get('requires_check'),
                     'check_request': adjudication.get('check_request'),
+                    'player_facing_text': adjudication.get('player_facing_text'),
                 },
                 'requires_check': bool(adjudication.get('requires_check')),
                 'check_request': adjudication.get('check_request') if isinstance(adjudication.get('check_request'), dict) else None,

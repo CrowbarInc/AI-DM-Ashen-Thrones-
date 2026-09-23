@@ -873,6 +873,40 @@ def is_valid_followup_question(player_text: str) -> bool:
     return any(p.search(low) for p in _VALID_SOCIAL_FOLLOWUP_PATTERNS)
 
 
+_HE_SHE_TOPIC_KEY_RE = re.compile(r"\b(he|she|him|her)\b", re.IGNORECASE)
+
+
+def empty_subject_continues_current_thread(
+    player_text: str,
+    exclude_tokens: set[str] | frozenset[str] | None = None,
+) -> bool:
+    """True when an already-classified immediate follow-up has no subject tokens.
+
+    This reuses ``is_valid_followup_question``. It does not treat an arbitrary
+    pronoun, synonym, or leftover noun as the current topic.
+    """
+    if _question_subject_tokens(player_text, exclude_tokens):
+        return False
+    return is_valid_followup_question(player_text)
+
+
+def empty_subject_retains_topic_pressure_key(
+    player_text: str,
+    exclude_tokens: set[str] | frozenset[str] | None = None,
+) -> bool:
+    """True when the current topic_pressure key should stay put.
+
+    Recognized ellipsis follow-ups and he/she-only questions with no remaining
+    subject tokens keep the existing key. ``they`` / ``it`` already have a
+    separate anaphora bridge and must not become last-answer authority.
+    """
+    if empty_subject_continues_current_thread(player_text, exclude_tokens):
+        return True
+    if _question_subject_tokens(player_text, exclude_tokens):
+        return False
+    return bool(_HE_SHE_TOPIC_KEY_RE.search(str(player_text or "")))
+
+
 def classify_social_followup_dimension(player_text: str) -> str:
     """Minimal deterministic axis for topic-pressure / exhaustion (not a full ontology)."""
     low = " ".join(str(player_text or "").strip().lower().split())
@@ -2413,6 +2447,13 @@ def _load_scene_envelope_for_authored_knowledge(
     return loaded if isinstance(loaded, dict) else None
 
 
+def _stored_answer_is_interruption_narration(text: str) -> bool:
+    """Interruption cutoff prose is not an authoritative answer."""
+    from game.social_exchange_validation import _looks_like_interruption_breakoff_text
+
+    return _looks_like_interruption_breakoff_text(str(text or ""))
+
+
 def select_best_social_answer_candidate(
     *,
     session: dict,
@@ -2476,11 +2517,16 @@ def select_best_social_answer_candidate(
     if tk and isinstance(pressure.get(tk), dict):
         entry = pressure[tk]
         last_ans = str(entry.get("last_answer") or "").strip()
+        if _stored_answer_is_interruption_narration(last_ans):
+            last_ans = ""
+        covers_last = _player_question_covers_stored_thread(
+            text_in, last_ans, exclude_tokens=exclude
+        ) or empty_subject_continues_current_thread(text_in, exclude)
         if (
             last_ans
             and _speaker_aligned()
             and _stored_text_supports_dimension(last_ans, dimension)
-            and _player_question_covers_stored_thread(text_in, last_ans, exclude_tokens=exclude)
+            and covers_last
             and not _topic_anchor_skips_stored_fact(text_in, last_ans)
         ):
             utt = _pick_utterance_from_stored(last_ans, dimension)
@@ -2534,11 +2580,16 @@ def select_best_social_answer_candidate(
     if tk and isinstance(pressure.get(tk), dict):
         entry2 = pressure[tk]
         la2 = str(entry2.get("last_answer") or "").strip()
+        if _stored_answer_is_interruption_narration(la2):
+            la2 = ""
         if (
             la2
             and _speaker_aligned()
             and not _stored_text_supports_dimension(la2, dimension)
-            and _player_question_covers_stored_thread(text_in, la2, exclude_tokens=exclude)
+            and (
+                _player_question_covers_stored_thread(text_in, la2, exclude_tokens=exclude)
+                or empty_subject_continues_current_thread(text_in, exclude)
+            )
             and not _topic_anchor_skips_stored_fact(text_in, la2)
         ):
             low2 = la2.lower()
@@ -2580,7 +2631,7 @@ def realize_authored_knowledge_answer(
         if str(candidate.get("answer_kind") or "") not in ("structured_fact", "reconciled_fact"):
             return False
         fact = str(candidate.get("text") or "").strip()
-        if not fact:
+        if not fact or _stored_answer_is_interruption_narration(fact):
             return False
         if dimension not in ("general", "clarification") and not _stored_text_supports_dimension(fact, dimension):
             return False
@@ -2657,6 +2708,169 @@ def realize_authored_knowledge_answer(
     }
 
 
+_PRICE_INVENTION_RE = re.compile(
+    r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|half|dozen)\s*"
+    r"(?:copper|coppers|silver|gold|coin|coins|pence|penny|marks?)\b"
+    r"|\b(?:copper|coppers|silver|gold)\s+a\s+(?:bowl|ladle|cup|plate|mug|mugful)\b"
+    r"|\b(?:costs?|priced?|sells?\s+for|going\s+for)\s+(?:a\s+)?"
+    r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b",
+    re.IGNORECASE,
+)
+_TIME_INVENTION_RE = re.compile(
+    r"\b(?:dawn|dusk|morning|evening|noon|midnight|o'?clock|yesterday|tomorrow|"
+    r"(?:first|second|third|last)\s+bell|before\s+dawn|after\s+dusk|after\s+midnight)\b",
+    re.IGNORECASE,
+)
+_COUNT_INVENTION_RE = re.compile(
+    r"\b\d+\b"
+    r"|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:dozen|score)\b"
+    r"|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dozen|score)\s+[a-z]+s\b",
+    re.IGNORECASE,
+)
+_REDIRECT_INVENTION_RE = re.compile(
+    r"\b(?:speak|talk)\s+to\s+(?:the\s+)?[A-Za-z]"
+    r"|\bask\s+the\s+[A-Za-z]"
+    r"|\b(?:go|head)\s+to\s+(?:the\s+)?[A-Za-z]",
+    re.IGNORECASE,
+)
+_IDENTITY_INVENTION_RE = re.compile(
+    r"\b(?:Captain|Serjeant|Sergeant|Commander|Lieutenant|Warden|Lord|Lady)\s+[A-Z][a-z]{2,}\b"
+    r"|\b[A-Z][a-z]{2,}\s+[A-Z][a-z]{2,}\b"
+    r"|\b[A-Z][a-z]{2,}\b.{0,80}\b(?:read|used|checked|wrote|posted|signed|repaired|recaulked)\b"
+    r"|\b(?:last\s+(?:read|used|checked|wrote|posted)\s+by)\s+[A-Za-z]",
+)
+
+
+def _quoted_or_full_social_hay(text: str) -> str:
+    raw = str(text or "")
+    quotes = _extract_double_quoted_spans(raw)
+    if not quotes:
+        quotes = re.findall(r"[“”]([^“”]{6,520})[“”]", raw)
+    if quotes:
+        return " ".join(quotes)
+    return raw
+
+
+def _strip_speaker_mentions(text: str, speaker_id: str | None, speaker_name: str | None) -> str:
+    out = str(text or "")
+    for tok in _speaker_tokens_for_question_relevance(None, speaker_id, speaker_name):
+        token = str(tok or "").strip()
+        if len(token) < 3:
+            continue
+        out = re.sub(rf"\b{re.escape(token)}\b", " ", out, flags=re.IGNORECASE)
+    return out
+
+
+def player_facing_invents_unauthored_social_fact(
+    text: str,
+    *,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> bool:
+    """True when player-facing prose asserts a concrete unauthored social fact."""
+    hay = _quoted_or_full_social_hay(text)
+    if not str(hay or "").strip():
+        return False
+    identity_hay = _strip_speaker_mentions(hay, speaker_id, speaker_name)
+    if _PRICE_INVENTION_RE.search(hay):
+        return True
+    if _TIME_INVENTION_RE.search(hay):
+        return True
+    if _COUNT_INVENTION_RE.search(hay):
+        return True
+    if _REDIRECT_INVENTION_RE.search(hay):
+        return True
+    if _IDENTITY_INVENTION_RE.search(identity_hay) or _stored_text_supports_dimension(identity_hay, "identity"):
+        return True
+    return False
+
+
+def _social_turn_is_grounded_absence(
+    *,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    player_text: str,
+    scene_id: str,
+) -> bool:
+    if not isinstance(resolution, dict):
+        return False
+    kind = str(resolution.get("kind") or "").strip().lower()
+    if kind not in {"question", "social_probe"}:
+        return False
+    soc = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+    if not isinstance(soc, dict):
+        return False
+    topic = soc.get("topic_revealed")
+    if isinstance(topic, dict) and (
+        str(topic.get("text") or "").strip() or str(topic.get("id") or "").strip()
+    ):
+        return False
+    sid = str(scene_id or "").strip()
+    nid = str(soc.get("npc_id") or "").strip() or None
+    cand = select_best_social_answer_candidate(
+        session=session if isinstance(session, dict) else {},
+        scene_id=sid,
+        npc_id=nid,
+        topic_key=None,
+        player_text=str(player_text or ""),
+        resolution=resolution,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+    )
+    if str(cand.get("answer_kind") or "") in ("structured_fact", "reconciled_fact", "partial_answer"):
+        return False
+    if kind == "question":
+        return True
+    return str(soc.get("reply_kind") or "").strip().lower() == "refusal"
+
+
+def _apply_grounded_social_absence_realization_to_gm(
+    gm: Dict[str, Any],
+    *,
+    player_text: str,
+    resolution: Dict[str, Any] | None,
+    session: Dict[str, Any] | None,
+    world: Dict[str, Any] | None,
+    scene: Dict[str, Any] | None,
+    scene_id: str,
+) -> Dict[str, Any]:
+    """Preserve a correct grounded social absence through player-facing realization."""
+    if not _social_turn_is_grounded_absence(
+        resolution=resolution,
+        session=session,
+        world=world,
+        scene=scene,
+        player_text=player_text,
+        scene_id=scene_id,
+    ):
+        return gm
+    current = str(gm.get("player_facing_text") or "")
+    soc = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
+    if not player_facing_invents_unauthored_social_fact(
+        current,
+        speaker_id=str(soc.get("npc_id") or "").strip() or None,
+        speaker_name=str(soc.get("npc_name") or "").strip() or None,
+    ):
+        return gm
+    from game.social_exchange_fallback_catalog import strict_social_ownership_terminal_fallback
+
+    replacement = str(strict_social_ownership_terminal_fallback(resolution) or "").strip()
+    if not replacement:
+        return gm
+    out = dict(gm)
+    out["player_facing_text"] = replacement
+    tags = out.get("tags") if isinstance(out.get("tags"), list) else []
+    tag_list = [str(t) for t in tags if isinstance(t, str)]
+    if "grounded_social_absence_realization" not in tag_list:
+        tag_list.append("grounded_social_absence_realization")
+    out["tags"] = tag_list
+    dbg = out.get("debug_notes") if isinstance(out.get("debug_notes"), str) else ""
+    out["debug_notes"] = (dbg + " | " if dbg else "") + "grounded_social_absence_realization:catalog_absence"
+    return out
+
+
 def apply_authored_knowledge_realization_to_gm(
     gm: Dict[str, Any] | None,
     *,
@@ -2668,7 +2882,11 @@ def apply_authored_knowledge_realization_to_gm(
     scene_id: str = "",
     extra_facts: List[str] | None = None,
 ) -> Dict[str, Any]:
-    """Keep murmur/ignorance from concealing a revealable authored fact on this turn."""
+    """Keep murmur/ignorance from concealing a revealable authored fact on this turn.
+
+    When the engine already has a grounded social absence, also keep live-model
+    realization from turning that absence into an unauthored concrete fact.
+    """
     if not isinstance(gm, dict):
         return gm if gm is not None else {}
     sid = str(scene_id or "").strip()
@@ -2712,7 +2930,15 @@ def apply_authored_knowledge_realization_to_gm(
     if isinstance(realized, dict) and str(realized.get("fact_text") or "").strip():
         facts.append(str(realized.get("fact_text") or "").strip())
     if not facts:
-        return gm
+        return _apply_grounded_social_absence_realization_to_gm(
+            gm,
+            player_text=player_text,
+            resolution=resolution,
+            session=session,
+            world=world,
+            scene=scene,
+            scene_id=sid,
+        )
     social = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
     speaker_id = str((social or {}).get("npc_id") or "").strip() or None
     speaker_name = str((social or {}).get("npc_name") or "").strip() or None
@@ -3643,7 +3869,8 @@ def resolve_social_action(
         apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
         fallback_hint = (
             f"Player spoke with {npc_name}. No new information was revealed. "
-            "Narrate a substantive in-turn response (answer, refusal, evasion, or inability), not dead-air stalling."
+            "Narrate a refusal, uncertainty, or inability without inventing facts "
+            "the speaker does not have."
         )
         result = SocialEngineResult(
             kind=action_type,

@@ -1,0 +1,587 @@
+[
+  {
+    "label": "kiln_empty_tavern",
+    "text": "Is there a tavern nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "kiln_porter_tavern",
+    "text": "Is there a tavern nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": [
+      "night_porter"
+    ]
+  },
+  {
+    "label": "kiln_inn",
+    "text": "Is there an inn around here?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "kiln_stables",
+    "text": "Are there stables close by?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "kiln_market",
+    "text": "Is there a market in this area?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "whats_nearby",
+    "text": "What's nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": [
+      "night_porter"
+    ]
+  },
+  {
+    "label": "whats_around",
+    "text": "What's around here?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "who_nearby",
+    "text": "Who is nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": [
+      "night_porter"
+    ]
+  },
+  {
+    "label": "anyone_nearby",
+    "text": "Is anyone nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "earshot",
+    "text": "Is anyone else in earshot?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "In earshot right now: Night Porter."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "scene_presence_or_perception_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": [
+      "night_porter"
+    ]
+  },
+  {
+    "label": "how_far_tavern",
+    "text": "How far is the tavern?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a concrete, in-scene target before I can resolve that."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "reach_before_dark",
+    "text": "Can I reach the tavern before dark?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "gm_feasibility",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "rules",
+    "text": "Do I need to roll Perception?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "roll_requirement_query",
+    "adjudication": {
+      "category": "roll_requirement_query",
+      "answer_type": "check_required",
+      "player_facing_text": "This is uncertain and requires a check. Declare the concrete action/target and resolve it through the engine."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "rules_or_mechanics_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "directed_tavern",
+    "text": "Night Porter, is there a tavern nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "spoken_vocative_address",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": [
+      "night_porter"
+    ]
+  },
+  {
+    "label": "loft_here",
+    "text": "Is there a salt loft nearby?",
+    "scene_id": "salt_loft",
+    "location": "Salt Loft",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "Down to the brine cellar",
+        "target_scene_id": "brine_cellar"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "loft_via_exit",
+    "text": "Is there a salt loft nearby?",
+    "scene_id": "brine_cellar",
+    "location": "Brine Cellar",
+    "parser": {
+      "type": "scene_transition",
+      "lane": "authored_exit_resolution"
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "travel_or_scene_transition_intent",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": "salt_loft",
+    "exits": [
+      {
+        "label": "Up to the salt loft",
+        "target_scene_id": "salt_loft"
+      }
+    ],
+    "npc_ids": []
+  },
+  {
+    "label": "in_tavern",
+    "text": "Is there a tavern nearby?",
+    "scene_id": "rain_barrel_tavern",
+    "location": "Rain Barrel Tavern",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [],
+    "npc_ids": []
+  },
+  {
+    "label": "novel_unknown",
+    "text": "Is there a charcoal lodge nearby?",
+    "scene_id": "ember_kiln",
+    "location": "Ember Kiln Alcove",
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "exit_match_for_subject": null,
+    "exits": [
+      {
+        "label": "To the brass quay",
+        "target_scene_id": "brass_quay"
+      }
+    ],
+    "npc_ids": []
+  }
+]

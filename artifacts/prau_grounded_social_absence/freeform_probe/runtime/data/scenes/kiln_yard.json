@@ -1,0 +1,40 @@
+{
+  "scene": {
+    "id": "kiln_yard",
+    "location": "Kiln Yard",
+    "summary": "A brick kiln, a tally slate, and a night porter.",
+    "visible_facts": [
+      "A brick kiln smokes under a tin roof.",
+      "A tally slate hangs by the kiln door.",
+      "A kettle of mash sits on the porter's brazier."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "addressables": [
+      {
+        "id": "night_porter",
+        "name": "Night Porter",
+        "scene_id": "kiln_yard",
+        "kind": "npc",
+        "addressable": true,
+        "aliases": [
+          "porter"
+        ]
+      }
+    ],
+    "interactables": [
+      {
+        "id": "tally_slate",
+        "label": "Tally slate",
+        "aliases": [
+          "slate",
+          "board"
+        ],
+        "type": "investigate"
+      }
+    ],
+    "exits": [],
+    "enemies": [],
+    "actions": []
+  }
+}

@@ -13,7 +13,7 @@ provenance (:mod:`game.realization_provenance`); both may appear on the same tur
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, List, Mapping, Set, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Set, Tuple
 
 
 _FALLBACK_TEMPLATE_METADATA: Dict[str, Dict[str, str]] = {
@@ -58,11 +58,24 @@ def fallback_template_metadata(template_id: str) -> Dict[str, str]:
 
 
 NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE = "Nothing confirms progress toward that lead yet—the moment stays unresolved."
+OBSERVE_NOTHING_NEW_FALLBACK_LINE = "Nothing new stands out from here."
+
+_UNTARGETED_LEFTOVER_TOKENS: frozenset[str] = frozenset({
+    "again", "still", "once", "more", "after", "that", "here", "there",
+    "scene", "place", "area", "district", "yard", "room", "space",
+})
+
+_LISTEN_INTENT_FAMILIES: frozenset[str] = frozenset({"listen", "approach_listen"})
 
 
 def npc_pursuit_neutral_nonprogress_fallback_line() -> str:
     """Owned literal fallback line for neutral NPC-pursuit nonprogress sealed replacement."""
     return NPC_PURSUIT_NEUTRAL_NONPROGRESS_FALLBACK_LINE
+
+
+def observe_nothing_new_fallback_line() -> str:
+    """Owned line when untargeted observation has no new perceptible information."""
+    return OBSERVE_NOTHING_NEW_FALLBACK_LINE
 
 
 def opening_scene_fallback_template_allowed(template_id: str) -> bool:
@@ -98,6 +111,7 @@ def _inner_scene(scene_or_envelope: Mapping[str, Any] | None) -> Dict[str, Any]:
 
 
 def _visible_fact_strings(scene: Mapping[str, Any] | None) -> List[str]:
+    scene = _inner_scene(scene)
     if not isinstance(scene, Mapping):
         return []
     vf = scene.get("visible_facts")
@@ -413,6 +427,84 @@ def _select_intent_aligned_visible_facts(
     return [fact for fact in chosen if fact]
 
 
+def _normalize_fact_key(fact: str) -> str:
+    return " ".join(_normalize_token_blob(fact).split())
+
+
+def fact_mentioned_in_narration(fact: str, narration: str) -> bool:
+    """True when distinctive fact content already appears in recent player-facing text."""
+    recent = str(narration or "").strip()
+    if not recent or not str(fact or "").strip():
+        return False
+    distinctive = {tok for tok in _content_tokens(fact) if len(tok) >= 5}
+    if len(distinctive) < 3:
+        distinctive = {tok for tok in _content_tokens(fact) if len(tok) >= 4}
+    if not distinctive:
+        return _normalize_fact_key(fact) in _normalize_token_blob(recent)
+    overlap = distinctive & _content_tokens(recent)
+    needed = 3 if len(distinctive) >= 3 else max(1, (len(distinctive) + 1) // 2)
+    return len(overlap) >= min(needed, len(distinctive))
+
+
+def _scene_place_tokens(scene: Mapping[str, Any] | None) -> Set[str]:
+    inner = _inner_scene(scene)
+    blob = " ".join(
+        [
+            str(inner.get("id") or ""),
+            str(inner.get("location") or ""),
+        ]
+    )
+    return _content_tokens(blob)
+
+
+def is_targeted_perception(player_text: str, scene: Mapping[str, Any] | None = None) -> bool:
+    """True when the player names a specific perceptible target, not merely the scene."""
+    leftover = _topic_tokens_from_player_text(player_text) - _UNTARGETED_LEFTOVER_TOKENS
+    leftover -= _scene_place_tokens(scene)
+    return bool(leftover)
+
+
+def _authored_audible_facts(scene: Mapping[str, Any] | None) -> List[str]:
+    return [
+        fact
+        for fact in _visible_fact_strings(scene)
+        if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS)
+    ]
+
+
+def text_pulls_non_audible_visible_stock(
+    text: str,
+    scene: Mapping[str, Any] | None,
+) -> bool:
+    """True when narration restates visual scene stock that is not an audible fact."""
+    blob = str(text or "")
+    if not blob.strip():
+        return False
+    for fact in _visible_fact_strings(scene):
+        if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS):
+            continue
+        if fact_mentioned_in_narration(fact, blob):
+            return True
+    return False
+
+
+def text_repeats_recent_visible_stock(
+    text: str,
+    *,
+    recent_narration: str,
+    scene: Mapping[str, Any] | None,
+) -> bool:
+    """True when current text restates visible facts already present in recent narration."""
+    mentioned = [
+        fact
+        for fact in _visible_fact_strings(scene)
+        if fact_mentioned_in_narration(fact, text)
+    ]
+    if not mentioned or not str(recent_narration or "").strip():
+        return False
+    return all(fact_mentioned_in_narration(fact, recent_narration) for fact in mentioned)
+
+
 def _fact_clause(detail: str) -> str:
     s = str(detail or "").strip()
     if not s:
@@ -467,8 +559,15 @@ def render_observe_perception_fallback_line(
     seed_key: str,
     player_text: str = "",
     resolution: Mapping[str, Any] | None = None,
+    recent_narration: str = "",
+    new_visible_facts: Sequence[str] | None = None,
 ) -> str | None:
-    """Concrete observation from visible facts (no coaching / menus)."""
+    """Concrete observation from visible facts (no coaching / menus).
+
+    Authority decides which facts may be said. Relevance decides which of those
+    facts should be said on this perception turn. Untargeted reinspection may
+    return a nothing-new result instead of replaying the same stock bundle.
+    """
     scene_inner = _inner_scene(scene_or_envelope)
     scene: Dict[str, Any] = dict(scene_inner) if isinstance(scene_inner, dict) else {}
     res_md: Dict[str, Any] = {}
@@ -485,15 +584,14 @@ def render_observe_perception_fallback_line(
 
     pt = str(player_text or "")
     fam = str(res_md.get("human_adjacent_intent_family") or "") or classify_human_adjacent_intent_family(pt)
+    if not fam:
+        inferred = _infer_intent_families(pt)
+        if "listen" in inferred:
+            fam = "listen"
     physical = is_physical_clue_inspection_intent(pt)
     tier = str(res_md.get("implicit_focus_resolution") or "").strip() if isinstance(resolution, Mapping) else ""
 
-    if (
-        isinstance(resolution, Mapping)
-        and fam in {"listen", "approach_listen", "observe_group"}
-        and not physical
-        and (res_md.get("human_adjacent_diegetic_null") is True or tier == "none")
-    ):
+    if fam in _LISTEN_INTENT_FAMILIES and not physical:
         authored_audible = [
             fact
             for fact in _select_intent_aligned_visible_facts(
@@ -502,16 +600,11 @@ def render_observe_perception_fallback_line(
             if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS)
         ]
         if not authored_audible:
-            # Location overlap with a silent crowd is not an audible fact.
-            for fact in _visible_fact_strings(scene):
-                if _keyword_hit_count(str(fact).lower(), _LISTEN_AUDIBLE_KEYWORDS):
-                    authored_audible.append(fact)
-                    break
+            authored_audible = _authored_audible_facts(scene)
         if not authored_audible:
             return diegetic_listen_null_line(seed_key=seed_key)
         scene["visible_facts"] = authored_audible
-
-    if fam in {"listen", "approach_listen", "observe_group"} and not physical and tier not in ("", "none"):
+    elif fam == "observe_group" and not physical and tier not in ("", "none"):
         vf_list = _visible_fact_strings(scene)
         if vf_list:
             scene["visible_facts"] = prioritize_visible_facts_for_human_adjacent(
@@ -520,6 +613,27 @@ def render_observe_perception_fallback_line(
                 implicit_focus_resolution=tier,
                 human_adjacent_intent_family=fam,
             )
+
+    targeted = is_targeted_perception(pt, scene)
+    recent = str(recent_narration or "").strip()
+    changed = [
+        str(fact).strip()
+        for fact in (new_visible_facts or [])
+        if str(fact).strip()
+    ]
+    if fam not in _LISTEN_INTENT_FAMILIES and not targeted and recent:
+        if changed:
+            scene["visible_facts"] = changed
+        else:
+            preview = _select_intent_aligned_visible_facts(
+                scene, player_text=pt, seed_key=seed_key, max_facts=2
+            )
+            if preview and all(fact_mentioned_in_narration(fact, recent) for fact in preview):
+                return observe_nothing_new_fallback_line()
+            if not preview:
+                available = _visible_fact_strings(scene)
+                if available and all(fact_mentioned_in_narration(fact, recent) for fact in available):
+                    return observe_nothing_new_fallback_line()
 
     intent_aligned = _intent_aligned_observe_line(scene, player_text=pt, seed_key=seed_key)
     if intent_aligned:
@@ -699,6 +813,7 @@ def render_nonsocial_terminal_anchor_line(
         scene_or_envelope,
         seed_key=f"anchor|{seed_key}",
         player_text=player_text,
+        recent_narration="",
     )
     if obs:
         return obs
@@ -728,6 +843,7 @@ def render_global_scene_anchor_fallback(
         scene_or_envelope,
         seed_key=f"global|{seed_key}",
         player_text=player_text,
+        recent_narration="",
     )
     if line:
         return line

@@ -1,0 +1,1930 @@
+[
+  {
+    "label": "direct_empty::I look around.",
+    "text": "I look around.",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": "\\b(look\\s+around|scan|survey|glance\\s+around|take\\s+in|watch\\s+the\\s+area)\\b",
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_porter::I look around.",
+    "text": "I look around.",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": "\\b(look\\s+around|scan|survey|glance\\s+around|take\\s+in|watch\\s+the\\s+area)\\b",
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_empty::I look at my surroundings.",
+    "text": "I look at my surroundings.",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "investigate",
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action"
+  },
+  {
+    "label": "direct_porter::I look at my surroundings.",
+    "text": "I look at my surroundings.",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "investigate",
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action"
+  },
+  {
+    "label": "direct_empty::What do I see?",
+    "text": "What do I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_porter::What do I see?",
+    "text": "What do I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_empty::What can I see?",
+    "text": "What can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_porter::What can I see?",
+    "text": "What can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_empty::What's around me?",
+    "text": "What's around me?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what's around me",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "direct_porter::What's around me?",
+    "text": "What's around me?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what's around me",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_empty::What can I perceive?",
+    "text": "What can I perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_porter::What can I perceive?",
+    "text": "What can I perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_empty::What can I perceive around me?",
+    "text": "What can I perceive around me?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_porter::What can I perceive around me?",
+    "text": "What can I perceive around me?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_empty::What can I perceive from here?",
+    "text": "What can I perceive from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_porter::What can I perceive from here?",
+    "text": "What can I perceive from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_empty::What can be perceived from where I stand?",
+    "text": "What can be perceived from where I stand?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_porter::What can be perceived from where I stand?",
+    "text": "What can be perceived from where I stand?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "perception_empty::Describe my surroundings.",
+    "text": "Describe my surroundings.",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "perception_porter::Describe my surroundings.",
+    "text": "Describe my surroundings.",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "no_question_mark",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What do I perceive?",
+    "text": "What do I perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What do I perceive?",
+    "text": "What do I perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i perceive",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can I observe?",
+    "text": "What can I observe?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i observe",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can I observe?",
+    "text": "What can I observe?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i observe",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can I notice?",
+    "text": "What can I notice?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i notice",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can I notice?",
+    "text": "What can I notice?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i notice",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can I make out?",
+    "text": "What can I make out?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i make out",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can I make out?",
+    "text": "What can I make out?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i make out",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can be seen from here?",
+    "text": "What can be seen from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can be seen from here?",
+    "text": "What can be seen from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "near_empty::What can be seen from where I stand?",
+    "text": "What can be seen from where I stand?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can be seen from where I stand?",
+    "text": "What can be seen from where I stand?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "near_empty::What is visible from here?",
+    "text": "What is visible from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What is visible from here?",
+    "text": "What is visible from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "near_empty::What is visible here?",
+    "text": "What is visible here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what is visible here",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What is visible here?",
+    "text": "What is visible here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what is visible here",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::From here, what can I see?",
+    "text": "From here, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "from here, what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::From here, what can I see?",
+    "text": "From here, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "from here, what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::From where I stand, what can I see?",
+    "text": "From where I stand, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::From where I stand, what can I see?",
+    "text": "From where I stand, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::From this spot, what can I see?",
+    "text": "From this spot, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "from this spot, what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::From this spot, what can I see?",
+    "text": "From this spot, what can I see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "from this spot, what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What do I see from here?",
+    "text": "What do I see from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What do I see from here?",
+    "text": "What do I see from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can I see from here?",
+    "text": "What can I see from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can I see from here?",
+    "text": "What can I see from here?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i see",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_empty::What can I discern?",
+    "text": "What can I discern?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i discern",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "near_porter::What can I discern?",
+    "text": "What can I discern?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what can i discern",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_empty::Who can see me?",
+    "text": "Who can see me?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Who can see me?",
+    "text": "Who can see me?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::Can the guard see me?",
+    "text": "Can the guard see me?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Can the guard see me?",
+    "text": "Can the guard see me?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::What does the guard perceive?",
+    "text": "What does the guard perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": "what does the guard",
+    "observe_pattern": null,
+    "miss_reason": "exclude:what does the guard",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::What does the guard perceive?",
+    "text": "What does the guard perceive?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": "what does the guard",
+    "observe_pattern": null,
+    "miss_reason": "exclude:what does the guard",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::What does the guard see?",
+    "text": "What does the guard see?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": "what does the guard",
+    "observe_pattern": null,
+    "miss_reason": "exclude:what does the guard",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::What does the guard see?",
+    "text": "What does the guard see?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": "what does the guard",
+    "observe_pattern": null,
+    "miss_reason": "exclude:what does the guard",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::Can I hear anything?",
+    "text": "Can I hear anything?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "gm_feasibility",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Can I hear anything?",
+    "text": "Can I hear anything?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "gm_feasibility",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::What do I hear?",
+    "text": "What do I hear?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i hear",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::What do I hear?",
+    "text": "What do I hear?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what do i hear",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_empty::Is there a tavern nearby?",
+    "text": "Is there a tavern nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "place_existence_unknown",
+      "player_facing_text": "No nearby tavern is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Is there a tavern nearby?",
+    "text": "Is there a tavern nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "place_existence_unknown",
+      "player_facing_text": "No nearby tavern is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_empty::How far away is the quay?",
+    "text": "How far away is the quay?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a concrete, in-scene target before I can resolve that."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::How far away is the quay?",
+    "text": "How far away is the quay?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::Can I get there before dark?",
+    "text": "Can I get there before dark?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "gm_feasibility",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Can I get there before dark?",
+    "text": "Can I get there before dark?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "action_feasibility_query",
+    "adjudication": {
+      "category": "action_feasibility_query",
+      "answer_type": "needs_concrete_action",
+      "player_facing_text": "I need a more concrete action or target to resolve that procedurally."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "gm_feasibility",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::What's nearby?",
+    "text": "What's nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what's nearby",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::What's nearby?",
+    "text": "What's nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": "observe",
+      "lane": "local_observation_question"
+    },
+    "local_observation_question": true,
+    "emit_observe": true,
+    "positive_span": "what's nearby",
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "classified_local_observation",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "local_scene_observation_query",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_empty::Who is nearby?",
+    "text": "Who is nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Who is nearby?",
+    "text": "Who is nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  },
+  {
+    "label": "contrast_empty::Is anyone nearby?",
+    "text": "Is anyone nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": false,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": "perception_query",
+    "adjudication": {
+      "category": "perception_query",
+      "answer_type": "direct_answer",
+      "player_facing_text": "No nearby NPC presence is currently established in this scene."
+    },
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided"
+  },
+  {
+    "label": "contrast_porter::Is anyone nearby?",
+    "text": "Is anyone nearby?",
+    "scene_id": "ember_kiln",
+    "has_npc": true,
+    "parser": {
+      "type": null,
+      "lane": null
+    },
+    "local_observation_question": false,
+    "emit_observe": false,
+    "positive_span": null,
+    "exclude_span": null,
+    "observe_pattern": null,
+    "miss_reason": "positive_re_miss",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue"
+  }
+]

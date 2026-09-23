@@ -130,7 +130,9 @@ def _action_result_summary(resolution: Dict[str, Any] | None) -> str:
     if kind in {"investigate", "observe"}:
         return "you get an immediate read on what is there"
     if kind in {"travel", "scene_transition"}:
-        return "your position in the scene changes"
+        if bool(resolution.get("resolved_transition")) or state_changes.get("scene_transition_occurred") or state_changes.get("arrived_at_scene"):
+            return "your position in the scene changes"
+        return "the attempt meets resistance"
     return "the situation answers that move right away"
 
 
@@ -159,6 +161,13 @@ def build_minimal_answer_contract_repair_text(
         return "You need a more concrete in-scene action or target before that can be answered."
     if answer_type == "check_required" or bool((resolution or {}).get("requires_check")):
         return "That cannot be answered cleanly until the required check is resolved."
+    authored = str(adjudication.get("player_facing_text") or "").strip()
+    if authored and answer_type in {
+        "direct_answer",
+        "place_existence",
+        "place_existence_unknown",
+    }:
+        return authored
     return "No direct answer is established from the current state yet."
 
 

@@ -1,0 +1,2044 @@
+{
+  "stamp": "20260921T221703Z",
+  "sequences": {
+    "A_scene_a_observe": {
+      "name": "A_scene_a_observe",
+      "final_scene": "ember_kiln",
+      "final_facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "B_a_to_b_observe_current_stock": {
+      "name": "B_a_to_b_observe_current_stock",
+      "final_scene": "brass_quay",
+      "final_facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "C_a_to_b_to_a_observe_current_stock": {
+      "name": "C_a_to_b_to_a_observe_current_stock",
+      "final_scene": "ember_kiln",
+      "final_facing": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head back to the ember kiln.",
+          "facing": "You act on that move, and your position changes with that movement.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "eee64ac352bad0debad70576785b224e",
+          "recent_narration": "",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "ember_kiln",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "72c0e250b6ddc025f26e1232a16d3ab0",
+          "recent_narration": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "D_observe_a_then_b_observe": {
+      "name": "D_observe_a_then_b_observe",
+      "final_scene": "brass_quay",
+      "final_facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 4,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "E_observe_a_then_b_then_a_observe": {
+      "name": "E_observe_a_then_b_then_a_observe",
+      "final_scene": "ember_kiln",
+      "final_facing": "Nothing new stands out from here.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 4,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head back to the ember kiln.",
+          "facing": "You act on that move, and your position changes with that movement.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_last_perception_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_description_hash": "ef0935864fae30682542632514606aa2",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "ember_kiln",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "Nothing new stands out from here.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 5,
+          "other_scene_last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_last_perception_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_description_hash": "90e1f343f631d173f85e7849df853b74",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": true,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "F_known_fail_a_observe_b_observe_model_emits_a_geo": {
+      "name": "F_known_fail_a_observe_b_observe_model_emits_a_geo",
+      "final_scene": "brass_quay",
+      "final_facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 4,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "G_known_fail_return_model_emits_b_geo": {
+      "name": "G_known_fail_return_model_emits_b_geo",
+      "final_scene": "ember_kiln",
+      "final_facing": "Nothing new stands out from here.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 4,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head back to the ember kiln.",
+          "facing": "You act on that move, and your position changes with that movement.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_last_perception_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_description_hash": "ef0935864fae30682542632514606aa2",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Cold ash sits unused in the grate holds the eye, while a cracked lantern hangs above the kiln door stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "ember_kiln",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "Nothing new stands out from here.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 5,
+          "other_scene_last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_last_perception_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_description_hash": "90e1f343f631d173f85e7849df853b74",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": true,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "H_discover_a_clue_then_b_observe_model_emits_a_clue": {
+      "name": "H_discover_a_clue_then_b_observe_model_emits_a_clue",
+      "final_scene": "brass_quay",
+      "final_facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+      "final_kind": "observe",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "discover_clue",
+          "player_text": "I inspect the kiln grate.",
+          "facing": "You inspect the kiln grate, and you turn up a concrete clue.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "5e9b068a5db70e576ad5859ee54d4493",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [
+            {
+              "id": "soot_prints",
+              "source_scene": "ember_kiln",
+              "text": "Soot handprints mark the kiln brick behind the grate."
+            }
+          ],
+          "discovered_clue_texts": [
+            "Soot handprints mark the kiln brick behind the grate.",
+            "Soot handprints mark the kiln brick behind the grate."
+          ],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "On closer inspection, cold ash sits unused in the grate.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "discover_clue",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [
+            {
+              "id": "soot_prints",
+              "source_scene": "ember_kiln",
+              "text": "Soot handprints mark the kiln brick behind the grate."
+            }
+          ],
+          "discovered_clue_texts": [
+            "Soot handprints mark the kiln brick behind the grate."
+          ],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "Copper mooring rings stud the quay stones",
+            "A tide ledger flutters on a rusted nail"
+          ],
+          "last_perception_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "last_perception_turn": 5,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "c634a796f607e5682ade94e60e9eac3e",
+          "recent_narration": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [
+            {
+              "id": "soot_prints",
+              "source_scene": "ember_kiln",
+              "text": "Soot handprints mark the kiln brick behind the grate."
+            }
+          ],
+          "discovered_clue_texts": [
+            "Soot handprints mark the kiln brick behind the grate."
+          ],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": true,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    },
+    "I_whats_nearby_after_a_to_b": {
+      "name": "I_whats_nearby_after_a_to_b",
+      "final_scene": "brass_quay",
+      "final_facing": "No nearby NPC presence is currently established in this scene.",
+      "final_kind": "adjudication_query",
+      "bleed_on_final": false,
+      "bleed_text_would_be_replaced": false,
+      "turns": [
+        {
+          "kind": "observe",
+          "player_text": "I look around.",
+          "facing": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "authoritative_scene_id": "ember_kiln",
+          "visited_scene_ids": [
+            "ember_kiln"
+          ],
+          "previous_scene_id": "brass_quay",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "last_perception_turn": 3,
+          "other_scene_last_perception_narration": "",
+          "other_scene_last_perception_facts": [],
+          "last_description_hash": "428c4478ffcc9106858ef0202d96d4d3",
+          "recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_recent_narration": "",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": true,
+          "authorized_has_quay_unique": false,
+          "authorized_has_kiln_clue": true,
+          "authorized_has_quay_clue": false,
+          "fallback_candidates": [
+            "A cracked lantern hangs above the kiln door.",
+            "Cold ash sits unused in the grate."
+          ],
+          "fallback_if_consulted": "Nothing new stands out from here.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "Copper mooring rings still stud the quay stones beside the kiln door, and a tide ledger flutters on a rusted nail.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": true,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": true,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "observe",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        },
+        {
+          "kind": "scene_transition",
+          "player_text": "I'll head to the brass quay.",
+          "facing": "You reach the deserted quay over black water.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": true,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": true,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "ccac833dba959e272003953a0b0a43c5",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": true,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "scene_transition",
+            "target": null,
+            "target_scene_id": "brass_quay",
+            "resolved_transition": true
+          }
+        },
+        {
+          "kind": "adjudication_query",
+          "player_text": "What's nearby?",
+          "facing": "No nearby NPC presence is currently established in this scene.",
+          "authoritative_scene_id": "brass_quay",
+          "visited_scene_ids": [
+            "ember_kiln",
+            "brass_quay"
+          ],
+          "previous_scene_id": "ember_kiln",
+          "scene_transition_occurred": false,
+          "current_visible_facts": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "observation_target": null,
+          "targeted": false,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "other_scene_last_perception_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "other_scene_last_perception_facts": [
+            "A cracked lantern hangs above the kiln door",
+            "Cold ash sits unused in the grate"
+          ],
+          "last_description_hash": "65a0f5e9d0c106c9a56b31404d97245a",
+          "recent_narration": "",
+          "other_scene_recent_narration": "As you watch the scene, A cracked lantern hangs above the kiln door. Cold ash sits unused in the grate.",
+          "recent_contextual_leads": [],
+          "known_clues": [],
+          "discovered_clue_texts": [],
+          "authorized_has_kiln_unique": false,
+          "authorized_has_quay_unique": true,
+          "authorized_has_kiln_clue": false,
+          "authorized_has_quay_clue": true,
+          "fallback_candidates": [
+            "Copper mooring rings stud the quay stones.",
+            "A tide ledger flutters on a rusted nail."
+          ],
+          "fallback_if_consulted": "A tide ledger flutters on a rusted nail holds the eye, while copper mooring rings stud the quay stones stays impossible to ignore.",
+          "new_visible_facts": [],
+          "verdict_on_actual_facing": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "verdict_on_prior_scene_bleed_text": {
+            "unsupported": false,
+            "flags": [],
+            "checked": true
+          },
+          "grounded_replacement_for_bleed": "The cracked lantern still hangs above the kiln door, and cold ash sits unused in the grate beside the quay stones.",
+          "grounded_replaced_bleed": false,
+          "facing_has_kiln_unique": false,
+          "facing_has_quay_unique": false,
+          "facing_is_nothing_new": false,
+          "kiln_fact_in_recent": false,
+          "quay_fact_in_recent": false,
+          "status_code": 200,
+          "resolution": {
+            "kind": "adjudication_query",
+            "target": null,
+            "target_scene_id": null,
+            "resolved_transition": false
+          }
+        }
+      ]
+    }
+  }
+}

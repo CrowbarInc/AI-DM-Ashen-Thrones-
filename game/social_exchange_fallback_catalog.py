@@ -8,6 +8,8 @@ from game.interaction_context import inspect as inspect_interaction_context, res
 from game.prompt_context import canonical_interaction_target_npc_id
 from game.response_policy_contracts import response_type_contract_requires_dialogue
 from game.social import (
+    _question_subject_tokens,
+    _speaker_tokens_for_question_relevance,
     apply_social_reply_speaker_grounding,
     realize_authored_knowledge_answer,
     resolve_grounded_social_speaker,
@@ -40,12 +42,115 @@ from game.social_exchange_validation import (
 )
 
 
-def _integrity_topic_hook(player_text: str) -> str:
-    from game.gm import _question_content_tokens
+_ASK_SPLIT_RE = re.compile(r"\b(?:ask|asks|asked|asking)\b", re.IGNORECASE)
+_QUESTION_WORD_RE = re.compile(
+    r"\b(?:who|what|where|when|why|how|which|whose)\b",
+    re.IGNORECASE,
+)
+_ABOUT_PHRASE_RE = re.compile(
+    r"\babout\s+((?:(?:the|a|an|that|this|those|these)\s+)?[a-z][a-z\s']{2,40})",
+    re.IGNORECASE,
+)
+_DET_NOUN_RE = re.compile(
+    r"\b(?:the|that|those|this|these|a|an)\s+([a-z]{4,})\b",
+    re.IGNORECASE,
+)
+_QUANTITY_NOUN_RE = re.compile(
+    r"\b(?:how many|how much)\s+([a-z]{4,})\b",
+    re.IGNORECASE,
+)
 
-    hooks = _question_content_tokens(str(player_text or ""))
-    h = str(hooks[0] or "").strip() if hooks else ""
-    return h
+
+def _question_span_for_integrity_hook(player_text: str) -> str:
+    """Asked clause only: drop movement preambles, address, and frame-setting modifiers."""
+    text = " ".join(str(player_text or "").split())
+    if not text:
+        return ""
+    span = text
+    ask_parts = _ASK_SPLIT_RE.split(text)
+    if len(ask_parts) >= 2:
+        tail = ask_parts[-1].strip(" ,.;:!?")
+        if tail:
+            span = tail
+    q = _QUESTION_WORD_RE.search(span)
+    if q:
+        return span[q.start():].strip()
+    about = re.search(r"\babout\b", span, re.IGNORECASE)
+    if about:
+        return span[about.start():].strip()
+    q_full = _QUESTION_WORD_RE.search(text)
+    if q_full:
+        return text[q_full.start():].strip()
+    return span
+
+
+def _speaker_tokens_for_integrity_hook(resolution: Dict[str, Any] | None) -> set[str]:
+    soc = (
+        resolution.get("social")
+        if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict)
+        else {}
+    )
+    return _speaker_tokens_for_question_relevance(
+        None,
+        str(soc.get("npc_id") or "") or None,
+        str(soc.get("npc_name") or "") or None,
+    )
+
+
+def _integrity_hook_token_eligible(tok: str, speaker_tokens: set[str]) -> bool:
+    t = str(tok or "").strip().lower()
+    if len(t) < 4:
+        return False
+    if t in speaker_tokens:
+        return False
+    return bool(_question_subject_tokens(t, speaker_tokens))
+
+
+def _first_eligible_hook_token(tokens: List[str], speaker_tokens: set[str]) -> str:
+    for tok in tokens:
+        if _integrity_hook_token_eligible(tok, speaker_tokens):
+            return str(tok).strip().lower()
+    return ""
+
+
+def _integrity_topic_hook(
+    player_text: str,
+    resolution: Dict[str, Any] | None = None,
+) -> str:
+    """Return a meaningful asked subject, or empty when no trustworthy topic exists.
+
+    Echo leftovers from the whole utterance are not topics. Prefer the asked
+    clause and existing subject-token eligibility over the first surviving word.
+    """
+    speaker_tokens = _speaker_tokens_for_integrity_hook(resolution)
+    span = _question_span_for_integrity_hook(player_text)
+    hay = span or str(player_text or "")
+    low = hay.lower()
+    text = " ".join(str(player_text or "").split())
+    ask_parts = _ASK_SPLIT_RE.split(text)
+    if len(ask_parts) >= 2:
+        tail = ask_parts[-1]
+        if not _QUESTION_WORD_RE.search(tail) and not re.search(r"\babout\b", tail, re.IGNORECASE):
+            return ""
+
+    about = _ABOUT_PHRASE_RE.search(low)
+    if about:
+        phrase_toks = _question_subject_tokens(about.group(1), speaker_tokens)
+        picked = _first_eligible_hook_token(list(reversed(phrase_toks)), speaker_tokens)
+        if picked:
+            return picked
+
+    det_hits = [m.group(1).lower() for m in _DET_NOUN_RE.finditer(low)]
+    picked = _first_eligible_hook_token(list(reversed(det_hits)), speaker_tokens)
+    if picked:
+        return picked
+
+    qty = _QUANTITY_NOUN_RE.search(low)
+    if qty and _integrity_hook_token_eligible(qty.group(1), speaker_tokens):
+        return qty.group(1).lower()
+
+    subjects = _question_subject_tokens(hay, speaker_tokens)
+    return _first_eligible_hook_token(subjects, speaker_tokens)
 
 def minimal_social_emergency_fallback_line(resolution: Dict[str, Any] | None) -> str:
     """Terminal-safe; deterministic variety; must pass as route-legal social without revalidation loops."""
@@ -781,8 +886,9 @@ def social_integrity_fallback_line_candidates(
     rk = str(soc.get("reply_kind") or "").strip().lower()
     po = str(soc.get("probe_outcome") or "").strip().lower()
     pm = str(soc.get("social_probe_move") or "").strip().lower()
-    hook = _integrity_topic_hook(player_text)
-    topic = hook if hook else "that"
+    hook = _integrity_topic_hook(player_text, resolution)
+    topic = hook
+    pronoun = hook if hook else "that"
 
     out: List[Tuple[str, str]] = []
 
@@ -796,40 +902,50 @@ def social_integrity_fallback_line_candidates(
 
     if po in ("actionable_redirect", "actionable_lead_or_redirect"):
         _add_unique(
-            f'{speaker} nods once. "Speak to the ward clerk by the main gate if {topic} still matters to you."',
+            f'{speaker} nods once. "Speak to the ward clerk by the main gate if {pronoun} still matters to you."',
             "integrity_redirect_clerk_gate",
         )
         _add_unique(
-            f'{speaker} mutters, "Word is, the night watch leans on the river gate route when {topic} comes up."',
+            f'{speaker} mutters, "Word is, the night watch leans on the river gate route when {pronoun} comes up."',
             "integrity_redirect_river_gate_rumor",
         )
     if rk == "refusal":
-        _add_unique(
-            f'{speaker} shakes their head. "I won\'t answer that about {topic}—not here."',
-            "integrity_refusal_boundary",
-        )
-        _add_unique(
-            f'{speaker} tightens their jaw. "No names and no favors on {topic}—not from me."',
-            "integrity_refusal_pressure",
-        )
+        if topic:
+            _add_unique(
+                f'{speaker} shakes their head. "I won\'t answer that about {topic}—not here."',
+                "integrity_refusal_boundary",
+            )
+            _add_unique(
+                f'{speaker} tightens their jaw. "No names and no favors on {topic}—not from me."',
+                "integrity_refusal_pressure",
+            )
+        else:
+            _add_unique(
+                f'{speaker} shakes their head. "I won\'t answer that—not here."',
+                "integrity_refusal_boundary",
+            )
+            _add_unique(
+                f'{speaker} tightens their jaw. "No names and no favors—not from me."',
+                "integrity_refusal_pressure",
+            )
     if pm == "transactional":
         _add_unique(
             f'{speaker} pockets the coin without smiling. "Word is, the stable lane stays cheaper than the guild inns—'
-            f'that is what I will say on {topic}."',
+            f'that is what I will say on {pronoun}."',
             "integrity_transactional_partial_rumor",
         )
         _add_unique(
-            f'{speaker} glances away. "If {topic} is what you are buying, ask the harbor clerk—they see who actually pays."',
+            f'{speaker} glances away. "If {pronoun} is what you are buying, ask the harbor clerk—they see who actually pays."',
             "integrity_transactional_redirect_clerk",
         )
     if rk == "explanation" and po not in ("actionable_redirect", "actionable_lead_or_redirect"):
         _add_unique(
-            f'{speaker} keeps their voice low. "All I know on {topic} is rumor: people say the ledger desk by the '
+            f'{speaker} keeps their voice low. "All I know on {pronoun} is rumor: people say the ledger desk by the '
             f'west pier sees the real traffic."',
             "integrity_explanation_rumor_pier",
         )
         _add_unique(
-            f'{speaker} exhales. "I do not keep that answer on {topic}—not from what I know."',
+            f'{speaker} exhales. "I do not keep that answer on {pronoun}—not from what I know."',
             "integrity_explanation_defer_clerk",
         )
 

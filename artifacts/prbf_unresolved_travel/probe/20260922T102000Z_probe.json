@@ -1,0 +1,796 @@
+{
+  "historical_t6": "I'll go chase that closed western cart road you mentioned.",
+  "historical_t6_gm": "The muddy lane west of the gate stretches thin and quiet, slick with recent rain and marked by ruts where carts once passed. You set off briskly, the glint of lanterns fading behind you as the Cinderwatch gate district recedes into the mist. The closed western cart road you aim\u2026",
+  "traces": [
+    {
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": "chase that closed western cart road you mentioned",
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "destination_binding_source": "normalized_action_target",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "use_parser_or_affordance_target_scene_id",
+        "destination_semantic_kind": "explicit_scene_id"
+      },
+      "label": "historical_t6_unknown"
+    },
+    {
+      "input": "I'll follow the missing patrol rumor.",
+      "parse_type": "scene_transition",
+      "parse_target": "old_milestone",
+      "parse_lane": "actionable_stay_leave_or_pursuit",
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": "missing patrol rumor",
+      "authored_exit": "old_milestone",
+      "res_kind": "scene_transition",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "actionable_stay_leave_or_pursuit",
+        "destination_binding_source": "normalized_action_target",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "use_parser_or_affordance_target_scene_id",
+        "destination_semantic_kind": "explicit_scene_id",
+        "destination_compatibility_checked": true,
+        "destination_compatibility_passed": true,
+        "destination_compatibility_failure_reason": null,
+        "blocked_incompatible_scene_transition": false,
+        "destination_compatibility_expected_kind": "generic_travel",
+        "destination_compatibility_actual_kind": ""
+      },
+      "label": "valid_patrol_label"
+    },
+    {
+      "input": "I'll head to the old milestone.",
+      "parse_type": "scene_transition",
+      "parse_target": "old_milestone",
+      "parse_lane": "embedded_named_place_travel",
+      "parse_intent": null,
+      "travel_dest_intent": true,
+      "local_move": false,
+      "extracted_dest": "old milestone",
+      "authored_exit": "old_milestone",
+      "res_kind": "scene_transition",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "embedded_named_place_travel",
+        "embedded_place_phrase": "old milestone",
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [
+          "old_milestone"
+        ],
+        "destination_binding_resolution_reason": "suppress_non_pursuit_target_when_named_place_present_but_unresolved",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "valid_milestone_dest"
+    },
+    {
+      "input": "I'll enter Cinderwatch.",
+      "parse_type": "scene_transition",
+      "parse_target": "market_quarter",
+      "parse_lane": "embedded_named_place_travel",
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": "Cinderwatch",
+      "authored_exit": "market_quarter",
+      "res_kind": "scene_transition",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "embedded_named_place_travel",
+        "embedded_place_phrase": "Cinderwatch",
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [
+          "market_quarter"
+        ],
+        "destination_binding_resolution_reason": "suppress_non_pursuit_target_when_named_place_present_but_unresolved",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "valid_enter_cinderwatch"
+    },
+    {
+      "input": "I go to the frontier gate.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": true,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "named_place_present_but_unresolved_no_target",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "current_location_gate"
+    },
+    {
+      "input": "I go to Cinderwatch Gate District.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": true,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "named_place_present_but_unresolved_no_target",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "current_location_district"
+    },
+    {
+      "input": "I go to the quay.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": true,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "named_place_present_but_unresolved_no_target",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "unknown_quay"
+    },
+    {
+      "input": "I'll go to the glass observatory.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": "actionable_stay_leave_or_pursuit",
+      "parse_intent": null,
+      "travel_dest_intent": true,
+      "local_move": false,
+      "extracted_dest": "glass observatory",
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "actionable_stay_leave_or_pursuit",
+        "destination_binding_source": "explicit_named_place_unresolved",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "named_place_present_but_unresolved_no_target",
+        "destination_semantic_kind": "named_place"
+      },
+      "label": "unknown_glass"
+    },
+    {
+      "input": "I'll take the trail.",
+      "parse_type": "travel",
+      "parse_target": null,
+      "parse_lane": "actionable_stay_leave_or_pursuit",
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": "trail",
+      "authored_exit": null,
+      "res_kind": "travel",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": false,
+      "res_hint": "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "actionable_stay_leave_or_pursuit",
+        "destination_binding_source": "normalized_action_target",
+        "destination_binding_conflict": false,
+        "destination_binding_conflict_candidates": [],
+        "destination_binding_resolution_reason": "use_parser_or_affordance_target_scene_id",
+        "destination_semantic_kind": "explicit_scene_id"
+      },
+      "label": "ambiguous_trail"
+    },
+    {
+      "input": "I go.",
+      "parse_type": null,
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": null,
+      "res_transition": null,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": null,
+      "res_hint": null,
+      "res_state": null,
+      "res_world": null,
+      "res_meta": {},
+      "label": "malformed_bare_go"
+    },
+    {
+      "input": "I head out.",
+      "parse_type": null,
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": null,
+      "res_transition": null,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": null,
+      "res_hint": null,
+      "res_state": null,
+      "res_world": null,
+      "res_meta": {},
+      "label": "malformed_head"
+    },
+    {
+      "input": "I step closer.",
+      "parse_type": "custom",
+      "parse_target": null,
+      "parse_lane": "local_physical_movement",
+      "parse_intent": "local_movement",
+      "travel_dest_intent": false,
+      "local_move": true,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "custom",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": null,
+      "res_hint": "Player took a custom exploration action. Narrate outcome without simply restating the scene summary.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "local_physical_movement",
+        "intent": "local_movement"
+      },
+      "label": "local_step_closer"
+    },
+    {
+      "input": "I pace.",
+      "parse_type": "custom",
+      "parse_target": null,
+      "parse_lane": "local_physical_movement",
+      "parse_intent": "local_movement",
+      "travel_dest_intent": false,
+      "local_move": true,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "custom",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": null,
+      "res_hint": "Player took a custom exploration action. Narrate outcome without simply restating the scene summary.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {
+        "parser_lane": "local_physical_movement",
+        "intent": "local_movement"
+      },
+      "label": "local_pace"
+    },
+    {
+      "input": "I look around.",
+      "parse_type": "observe",
+      "parse_target": null,
+      "parse_lane": null,
+      "parse_intent": null,
+      "travel_dest_intent": false,
+      "local_move": false,
+      "extracted_dest": null,
+      "authored_exit": null,
+      "res_kind": "observe",
+      "res_transition": false,
+      "res_target": null,
+      "res_origin": null,
+      "res_success": null,
+      "res_hint": "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals\u2014avoid repeating the same summary.",
+      "res_state": {},
+      "res_world": null,
+      "res_meta": {},
+      "label": "observe"
+    }
+  ],
+  "stay_leave": [
+    {
+      "in": "The muddy lane west of the gate stretches thin and quiet, slick with recent rain and marked by ruts where carts once passed. You set off briskly, the glint of lanterns fading behind you as the Cinderwatch gate district recedes into the mist. The closed western cart road you aim\u2026",
+      "out": "The muddy lane west of the gate stretches thin and quiet, slick with recent rain and marked by ruts where carts once passed. You set off briskly, the glint of lanterns fading behind you as the Cinderwatch gate district recedes into the mist. The closed western cart road you aim\u2026",
+      "tags": [],
+      "changed": false,
+      "label": "historical_t6_gm"
+    },
+    {
+      "in": "You set off briskly toward the western cart road.",
+      "out": "You set off briskly toward the western cart road.",
+      "tags": [],
+      "changed": false,
+      "label": "set_off_only"
+    },
+    {
+      "in": "You set out briskly toward the western cart road.",
+      "out": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "changed": true,
+      "label": "set_out_only"
+    },
+    {
+      "in": "You leave the gate and walk west.",
+      "out": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "changed": true,
+      "label": "you_leave"
+    },
+    {
+      "in": "You arrive at the closed western cart road.",
+      "out": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "changed": true,
+      "label": "you_arrive"
+    },
+    {
+      "in": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "out": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "tags": [],
+      "changed": false,
+      "label": "scene_stock_no_you"
+    },
+    {
+      "in": "The new ground shows itself: rain, choke traffic, a notice board.",
+      "out": "The new ground shows itself: rain, choke traffic, a notice board.",
+      "tags": [],
+      "changed": false,
+      "label": "new_ground"
+    },
+    {
+      "in": "You leave along the available path.",
+      "out": "You leave along the available path.",
+      "tags": [],
+      "changed": false,
+      "label": "success_leave"
+    },
+    {
+      "in": "You arrive at the old milestone.",
+      "out": "You arrive at the old milestone.",
+      "tags": [],
+      "changed": false,
+      "label": "success_arrive"
+    }
+  ],
+  "integrity": [
+    {
+      "reasons": [],
+      "named": null,
+      "fallback_text": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+      "fallback_pool": "global_scene_narrative",
+      "fallback_kind": "narrative_safe_fallback",
+      "fallback_source": "global_scene_fallback",
+      "arrival_line": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+      "safe_line": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+      "used_safe": false,
+      "used_arrival": true,
+      "label": "unresolved_travel"
+    },
+    {
+      "reasons": [
+        "resolved_transition_target_session_mismatch"
+      ],
+      "named": null,
+      "fallback_text": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+      "fallback_pool": "scene_emit_integrity_neutral",
+      "fallback_kind": "scene_emit_integrity_safe_fallback",
+      "fallback_source": "scene_emit_integrity_safe_fallback",
+      "arrival_line": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+      "safe_line": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+      "used_safe": true,
+      "used_arrival": false,
+      "label": "successful_transition"
+    },
+    {
+      "reasons": [
+        "explicit_named_place_unresolved"
+      ],
+      "named": "explicit_named_place_unresolved",
+      "fallback_text": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+      "fallback_pool": "scene_emit_integrity_neutral",
+      "fallback_kind": "scene_emit_integrity_safe_fallback",
+      "fallback_source": "scene_emit_integrity_safe_fallback",
+      "arrival_line": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+      "safe_line": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+      "used_safe": true,
+      "used_arrival": false,
+      "label": "named_place_unresolved"
+    }
+  ],
+  "http": [
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "The muddy lane west of the gate stretches thin and quiet, slick with recent rain and marked by ruts where carts once passed. You set off briskly, the glint of lanterns fading behind you as the Cinderwatch gate district recedes into the mist. The closed western cart road you aim\u2026",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_historical_gm",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "You set off briskly toward the closed western cart road.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "scene_momentum:consequence_or_opportunity",
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_set_off",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "You set out briskly toward the closed western cart road.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_set_out",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "You arrive at the closed western cart road.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_arrive",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "scene_momentum:consequence_or_opportunity",
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_scene_stock",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll go chase that closed western cart road you mentioned.",
+      "stubbed_gm": "The new ground shows itself: rain, choke traffic, a notice board.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "t6_new_ground",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I go to the quay.",
+      "stubbed_gm": "You arrive at the quay and see mooring rings.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "You go to the quay, and the attempt meets resistance.",
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "scene_momentum:consequence_or_opportunity"
+      ],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "unknown_quay_arrive",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I go to the quay.",
+      "stubbed_gm": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "You go to the quay, and the attempt meets resistance.",
+      "tags": [],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "unknown_quay_stock",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll take the trail.",
+      "stubbed_gm": "You walk the trail until new ground opens.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": "actionable_stay_leave_or_pursuit",
+      "scene_after": "frontier_gate",
+      "facing": "That destination is not available from here.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [
+          "not available from here"
+        ],
+        "implies_success": false
+      },
+      "label": "ambiguous_trail",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I'll head to the old milestone.",
+      "stubbed_gm": "You reach the old milestone and see mud-caked prints.",
+      "kind": "scene_transition",
+      "resolved_transition": true,
+      "target_scene_id": "old_milestone",
+      "originating_scene_id": "frontier_gate",
+      "lane": "embedded_named_place_travel",
+      "scene_after": "old_milestone",
+      "facing": "You reach the old milestone and see mud-caked prints.",
+      "tags": [],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "valid_milestone",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I step closer.",
+      "stubbed_gm": "You take a step closer along the muddy gate line.",
+      "kind": "custom",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": "local_physical_movement",
+      "scene_after": "frontier_gate",
+      "facing": "You step closer, and the situation answers that move right away.",
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "scene_momentum:consequence_or_opportunity"
+      ],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "local_step",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I look around.",
+      "stubbed_gm": "As you watch the scene, a gate serjeant manages the crowd.",
+      "kind": "observe",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "As you watch the scene, a gate serjeant manages the crowd. As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "tags": [
+        "scene_momentum:consequence_or_opportunity",
+        "passive_scene_pressure"
+      ],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "observe",
+      "scene_before": "frontier_gate"
+    },
+    {
+      "status": 200,
+      "input": "I go to the frontier gate.",
+      "stubbed_gm": "You arrive back at the frontier gate.",
+      "kind": "travel",
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "originating_scene_id": null,
+      "lane": null,
+      "scene_after": "frontier_gate",
+      "facing": "You go to the frontier gate, and the attempt meets resistance.",
+      "tags": [
+        "stay_leave_narration_agreement"
+      ],
+      "implies": {
+        "hits": [],
+        "implies_success": false
+      },
+      "label": "current_gate",
+      "scene_before": "frontier_gate"
+    }
+  ]
+}

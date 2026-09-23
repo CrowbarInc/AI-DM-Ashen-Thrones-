@@ -632,6 +632,9 @@ def get_scene_runtime(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
     scene_rt.setdefault('repeated_action_count', 0)
     scene_rt.setdefault('last_resolution_kind', None)
     scene_rt.setdefault('last_description_hash', None)
+    scene_rt.setdefault('last_perception_visible_facts', [])
+    scene_rt.setdefault('last_perception_narration', "")
+    scene_rt.setdefault('last_perception_turn', None)
     scene_rt.setdefault('consumed_action_ids', [])
     # Scene momentum (anti-stall) tracking:
     # - momentum_exchanges_since: number of completed exchanges since last momentum beat

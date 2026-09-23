@@ -490,7 +490,7 @@ def test_spoken_vocative_alright_runner_overrides_refugee_continuity(tmp_path, m
     assert ent.get("continuity_overridden_by_spoken_vocative") is True
 
 
-def test_spoken_vocative_well_captain_overrides_runner_continuity(tmp_path, monkeypatch):
+def test_spoken_vocative_well_guard_overrides_runner_continuity(tmp_path, monkeypatch):
     _seed_scene_runner_refugee_guard(tmp_path, monkeypatch, clear_interaction=False)
     session = storage.load_session()
     session_ctx = session.setdefault("interaction_context", {})
@@ -503,7 +503,7 @@ def test_spoken_vocative_well_captain_overrides_runner_continuity(tmp_path, monk
     rebuild_active_scene_entities(session, world, "scene_investigate", scene_envelope=scene)
     storage._save_json(storage.SESSION_PATH, session)
     session = storage.load_session()
-    raw = "Well, Captain, does the gate stay open after dark?"
+    raw = "Well, Guard, does the gate stay open after dark?"
     seg = segment_mixed_player_turn(raw)
     ent = resolve_directed_social_entry(
         session=session, scene=scene, world=world, segmented_turn=seg, raw_text=raw

@@ -125,12 +125,19 @@ def _inner_scene(scene_or_envelope: Mapping[str, Any] | None) -> Dict[str, Any]:
 
 
 def _stem_token(token: str) -> str:
+    """Collapse ordinary English plurals onto the same token as the singular.
+
+    Strip ``-es`` only for the endings that actually form that plural
+    (``boxes``, ``watches``, ``dishes``, ``classes``). A blanket ``-es``
+    cut turns silent-e nouns into a different stem (``stones`` → ``ston``,
+    ``slates`` → ``slat``) and blocks authored aliases.
+    """
     raw = str(token or "").strip().lower()
     if raw.endswith("ies") and len(raw) > 4:
         return raw[:-3] + "y"
-    if raw.endswith("es") and len(raw) > 4:
+    if raw.endswith(("sses", "xes", "zes", "ches", "shes")) and len(raw) > 4:
         return raw[:-2]
-    if raw.endswith("s") and len(raw) > 3:
+    if raw.endswith("s") and not raw.endswith("ss") and len(raw) > 3:
         return raw[:-1]
     return raw
 
@@ -470,6 +477,7 @@ def metadata_from_classification(classification: Mapping[str, Any] | None) -> Di
         "referenced_surface_inspectability": bool(row.get("inspectability")),
         "referenced_surface_interactable_id": _clean(row.get("interactable_id")),
         "referenced_surface_visible_fact": _clean(row.get("visible_fact")),
+        "referenced_surface_inspectable_text": _clean(row.get("inspectable_text")),
         "skip_unrelated_clue_discovery": skip,
     }
 
@@ -550,7 +558,8 @@ def classification_from_resolution(resolution: Mapping[str, Any] | None) -> Dict
         "visible_fact": _clean(metadata.get("referenced_surface_visible_fact")),
         "hidden_fact": "",
         "abstract_text": "",
-        "inspectable_text": _clean(resolution.get("clue_text")),
+        "inspectable_text": _clean(resolution.get("clue_text"))
+        or _clean(metadata.get("referenced_surface_inspectable_text")),
         "label": _clean(metadata.get("referenced_surface_target")),
         "evidence": authority,
     }

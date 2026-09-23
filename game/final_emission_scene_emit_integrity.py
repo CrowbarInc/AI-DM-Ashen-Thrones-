@@ -131,6 +131,10 @@ def _collect_scene_emit_integrity_failure_reasons(
     ):
         reasons.append("named_place_binding_conflict_unresolved")
 
+    kind = str(flat.get("kind") or "").strip().lower()
+    if kind in _SCENE_EMIT_INTEGRITY_TRAVEL_KINDS and not resolved:
+        reasons.append("unresolved_travel")
+
     return _dedupe_preserve_order(reasons), named
 
 

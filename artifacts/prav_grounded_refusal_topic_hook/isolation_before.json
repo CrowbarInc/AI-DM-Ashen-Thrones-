@@ -1,0 +1,41 @@
+[
+  {
+    "case": "about_night_known",
+    "player": "I ask the night porter when the kiln crew actually left.",
+    "integrity_hook_before": "night",
+    "hook_is_first_content_token": true,
+    "integrity_refusal_line_before": "Night Porter shakes their head. \"I won't answer that about night—not here.\"",
+    "content_tokens": ["night", "porter", "kiln", "crew", "actually", "left"],
+    "subject_tokens_excl_speaker": ["kiln", "crew", "actually", "left"],
+    "speaker_tokens": ["night", "night_porter", "porter"],
+    "topic_revealed": null,
+    "reply_kind": "refusal"
+  },
+  {
+    "case": "about_step_known",
+    "player": "I step back to the tavern runner and ask who last checked that board.",
+    "integrity_hook_before": "step",
+    "hook_is_first_content_token": true,
+    "integrity_refusal_line_before": "Lamp Clerk shakes their head. \"I won't answer that about step—not here.\"",
+    "content_tokens": ["step", "back", "tavern", "runner", "last", "checked", "that", "board"],
+    "note": "Captured from development/tmp/prav_topic_hook_isolation.py before production change."
+  },
+  {
+    "case": "novel_movement",
+    "player": "I amble past the lamp clerk and ask how many barrels remain.",
+    "integrity_hook_before": "amble",
+    "integrity_refusal_line_before": "Lamp Clerk shakes their head. \"I won't answer that about amble—not here.\""
+  },
+  {
+    "case": "novel_temporal",
+    "player": "I ask the lamp clerk this morning how many barrels remain.",
+    "integrity_hook_before": "lamp",
+    "integrity_refusal_line_before": "Lamp Clerk shakes their head. \"I won't answer that about lamp—not here.\""
+  },
+  {
+    "case": "no_content_noun",
+    "player": "I ask the lamp clerk.",
+    "integrity_hook_before": "lamp",
+    "note": "First leftover echo token was the speaker title."
+  }
+]

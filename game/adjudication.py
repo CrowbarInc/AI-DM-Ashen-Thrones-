@@ -15,7 +15,11 @@ from typing import Any, Dict, Optional
 from game.interaction_context import (
     addressable_scene_npc_id_universe,
     canonical_scene_addressable_roster,
+    extract_place_existence_subject,
     is_rules_or_engine_mechanics_question,
+    _looks_like_place_existence_question,
+    _place_existence_content_tokens,
+    _place_existence_subject_matches_present_person,
     resolve_directed_social_entry,
 )
 from game.models import make_check_request
@@ -107,6 +111,149 @@ def _resolve_target_hint(text: str, session: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+def _inner_scene(scene: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not isinstance(scene, dict):
+        return {}
+    inner = scene.get("scene") if isinstance(scene.get("scene"), dict) else scene
+    return inner if isinstance(inner, dict) else {}
+
+
+def _place_tokens_cover_surface(subject: str, *surfaces: str) -> bool:
+    tokens = _place_existence_content_tokens(subject)
+    if not tokens:
+        return False
+    surface_tokens: set[str] = set()
+    for surface in surfaces:
+        surface_tokens.update(_place_existence_content_tokens(surface))
+    if tokens <= surface_tokens:
+        return True
+    for tok in tokens:
+        stem = tok[:-1] if tok.endswith("s") and len(tok) >= 4 else tok
+        if stem not in surface_tokens and f"{stem}s" not in surface_tokens:
+            return False
+    return True
+
+
+def _strip_present_npc_name_spans(text: str, roster: list[dict]) -> str:
+    out = str(text or "")
+    names: list[str] = []
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        name = str(npc.get("name") or "").strip()
+        if len(name) >= 3:
+            names.append(name)
+        for ref in (
+            list(npc.get("aliases") or [])
+            + list(npc.get("address_roles") or [])
+        ):
+            label = str(ref or "").strip()
+            if len(label) >= 3:
+                names.append(label)
+    names.sort(key=len, reverse=True)
+    for name in names:
+        out = re.sub(rf"\b{re.escape(name)}\b", " ", out, flags=re.IGNORECASE)
+    return out
+
+
+def _authoritative_nearby_place_evidence(
+    subject: str,
+    *,
+    scene: Dict[str, Any],
+    session: Dict[str, Any],
+    world: Dict[str, Any],
+) -> Optional[Dict[str, str]]:
+    """Return current-scene or current-exit evidence for a place subject, or None.
+
+    Historical / off-scene knowledge is not nearby authority.
+    """
+    inner = _inner_scene(scene)
+    if not inner or not str(subject or "").strip():
+        return None
+    location = str(inner.get("location") or "").strip()
+    scene_id = str(inner.get("id") or "").strip()
+    if _place_tokens_cover_surface(subject, location, scene_id.replace("_", " ")):
+        return {
+            "kind": "current_scene",
+            "label": location or scene_id.replace("_", " ") or subject,
+        }
+
+    interactables = inner.get("interactables") or []
+    if isinstance(interactables, list):
+        for item in interactables:
+            if not isinstance(item, dict):
+                continue
+            surfaces = [
+                str(item.get("label") or "").strip(),
+                str(item.get("id") or "").replace("_", " "),
+                *[str(alias).strip() for alias in (item.get("aliases") or []) if str(alias).strip()],
+            ]
+            if _place_tokens_cover_surface(subject, *surfaces):
+                label = str(item.get("label") or item.get("id") or subject).strip()
+                return {"kind": "current_scene", "label": label}
+
+    from game.scene_destination_binding import (
+        known_scene_ids_from_exits,
+        resolve_place_phrase_to_exit_target,
+    )
+
+    exits = inner.get("exits") or []
+    if isinstance(exits, list) and exits:
+        core = re.sub(r"^(?:a|an|any|some)\s+", "", subject.strip(), flags=re.IGNORECASE)
+        target = resolve_place_phrase_to_exit_target(
+            core,
+            exits,
+            known_scene_ids_from_exits(exits),
+        )
+        if target:
+            label = target.replace("_", " ")
+            for exit_row in exits:
+                if not isinstance(exit_row, dict):
+                    continue
+                tid = str(exit_row.get("target_scene_id") or exit_row.get("targetSceneId") or "").strip()
+                if tid == target:
+                    exit_label = str(exit_row.get("label") or "").strip()
+                    if exit_label:
+                        label = exit_label
+                    break
+            return {"kind": "known_destination", "label": label, "target_scene_id": target}
+
+    roster = canonical_scene_addressable_roster(
+        world if isinstance(world, dict) else {},
+        scene_id,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        session=session if isinstance(session, dict) else None,
+    )
+    facts = inner.get("visible_facts") or []
+    if isinstance(facts, list):
+        for fact in facts:
+            cleaned = _strip_present_npc_name_spans(str(fact or ""), roster)
+            if _place_tokens_cover_surface(subject, cleaned):
+                return {
+                    "kind": "current_scene",
+                    "label": location or scene_id.replace("_", " ") or subject,
+                }
+    return None
+
+
+def _place_existence_is_person_owned(
+    text: str,
+    *,
+    session: Optional[Dict[str, Any]],
+    world: Optional[Dict[str, Any]],
+    scene: Optional[Dict[str, Any]],
+) -> bool:
+    if not _looks_like_place_existence_question(text):
+        return False
+    subject = extract_place_existence_subject(text) or ""
+    return _place_existence_subject_matches_present_person(
+        subject,
+        session=session if isinstance(session, dict) else None,
+        world=world if isinstance(world, dict) else None,
+        scene=scene if isinstance(scene, dict) else None,
+    )
+
+
 def classify_adjudication_query(
     text: str,
     *,
@@ -124,6 +271,9 @@ def classify_adjudication_query(
 
     When *session*, *world*, and *scene* are provided, directed NPC information
     questions are excluded so they can route to social exchange first.
+
+    Untargeted current-surroundings questions are existing local observation,
+    not earshot / NPC-presence adjudication.
     """
     t = (text or "").strip().lower()
     if not t or "?" not in t:
@@ -149,6 +299,26 @@ def classify_adjudication_query(
         )
         if entry.get("should_route_social"):
             return None
+
+    # Untargeted current-surroundings questions are existing observe, not earshot.
+    from game.interaction_context import _looks_like_local_observation_question
+
+    if _looks_like_local_observation_question(
+        text,
+        session=session if isinstance(session, dict) else None,
+        scene_envelope=scene if isinstance(scene, dict) else None,
+        world=world if isinstance(world, dict) else None,
+    ):
+        return None
+
+    # Place-existence + locality is world knowledge, not earshot roster presence.
+    if _looks_like_place_existence_question(text) and not _place_existence_is_person_owned(
+        text,
+        session=session,
+        world=world,
+        scene=scene,
+    ):
+        return "perception_query"
 
     # Keep this lane explicitly procedural; do not treat ordinary social language
     # (e.g., "I require an audience.") as a mechanics query.
@@ -357,7 +527,59 @@ def resolve_adjudication_query(
             }
         )
 
-    # 2) Earshot/nearby presence queries from scene state.
+    # 2) Place-existence / locality knowledge from current-scene or current-exit authority.
+    if _looks_like_place_existence_question(text) and not _place_existence_is_person_owned(
+        text,
+        session=session,
+        world=world,
+        scene=scene,
+    ):
+        subject = extract_place_existence_subject(text) or "that place"
+        evidence = _authoritative_nearby_place_evidence(
+            subject,
+            scene=scene,
+            session=session,
+            world=world,
+        )
+        if evidence and evidence.get("kind") == "current_scene":
+            label = str(evidence.get("label") or subject).strip() or subject
+            return _finalize_adjudication_result(
+                {
+                    "category": "perception_query",
+                    "answer_type": "place_existence",
+                    "player_facing_text": f"Adjudication: There is a {label} here.",
+                    "requires_check": False,
+                    "check_request": None,
+                }
+            )
+        if evidence and evidence.get("kind") == "known_destination":
+            label = str(evidence.get("label") or subject).strip() or subject
+            return _finalize_adjudication_result(
+                {
+                    "category": "perception_query",
+                    "answer_type": "place_existence",
+                    "player_facing_text": (
+                        f"Adjudication: There is a nearby destination: {label}."
+                    ),
+                    "requires_check": False,
+                    "check_request": None,
+                }
+            )
+        core = re.sub(r"^(?:a|an|any|some)\s+", "", str(subject or "").strip(), flags=re.IGNORECASE)
+        core = core or "that place"
+        return _finalize_adjudication_result(
+            {
+                "category": "perception_query",
+                "answer_type": "place_existence_unknown",
+                "player_facing_text": (
+                    f"Adjudication: No nearby {core} is currently established in this scene."
+                ),
+                "requires_check": False,
+                "check_request": None,
+            }
+        )
+
+    # 3) Earshot/nearby presence queries from scene state.
     if "earshot" in text.lower() or "nearby" in text.lower() or "who can hear" in text.lower():
         names = [str(n.get("name") or n.get("id") or "").strip() for n in npcs_here]
         names = [n for n in names if n]

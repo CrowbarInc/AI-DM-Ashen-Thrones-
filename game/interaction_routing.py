@@ -17,6 +17,7 @@ from game.interaction_context import (
     build_intent_route_debug_social_exchange,
     detect_non_social_continuity_escape,
     evaluate_world_action_social_continuity_break,
+    extract_place_existence_subject,
     find_addressed_npc_id_for_turn,
     find_world_npc_reference_id_in_text,
     inspect as inspect_interaction_context,
@@ -26,6 +27,8 @@ from game.interaction_context import (
     scene_npcs_in_active_scene,
     should_route_addressed_question_to_social,
     _looks_like_local_observation_question,
+    _looks_like_place_existence_question,
+    _place_existence_subject_matches_present_person,
 )
 from game.utils import slugify
 
@@ -341,6 +344,15 @@ def is_directed_dialogue(
         apply_ha_continuity_suppress=True,
     ):
         return False
+    if _looks_like_place_existence_question(clause):
+        subject = extract_place_existence_subject(clause) or ""
+        if not _place_existence_subject_matches_present_person(
+            subject,
+            session=session if isinstance(session, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene=scene if isinstance(scene, dict) else None,
+        ):
+            return False
     if has_dialogue_cue and has_world_reference:
         return True
     if has_dialogue_cue and has_present_character:

@@ -147,7 +147,6 @@ _PERCEPTION_FALLBACK_RESOLUTION_KINDS: frozenset[str] = frozenset(
         "observe",
         "investigate",
         "search",
-        "already_searched",
         "discover_clue",
         "interact",
         "scene_opening",
@@ -1818,9 +1817,53 @@ def _nonsocial_forced_retry_progress_line(
         sid,
         res,
     )
-    if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS and not suppress_intro:
+    if res_kind == "already_searched":
+        from game.perception_grounding import (
+            collect_recent_player_facing_narration,
+            perception_visible_fact_delta,
+            render_grounded_perception_line,
+        )
+
+        recent_narration = collect_recent_player_facing_narration(
+            session=sess, scene_id=sid
+        )
+        inner = env.get("scene") if isinstance(env.get("scene"), dict) else env
+        raw_facts = inner.get("visible_facts") if isinstance(inner, dict) else []
+        current_facts = [str(item).strip() for item in raw_facts if isinstance(item, str) and item.strip()]
+        new_visible_facts = perception_visible_fact_delta(sess, sid, current_facts)
+        searched_line = render_grounded_perception_line(
+            env,
+            player_text=pt,
+            resolution=res,
+            seed_key=seed,
+            recent_narration=recent_narration,
+            new_visible_facts=new_visible_facts,
+        )
+        if isinstance(searched_line, str) and searched_line.strip():
+            return _ensure_terminal_punctuation(searched_line.strip())
+
+    if res_kind in _PERCEPTION_FALLBACK_RESOLUTION_KINDS and (
+        res_kind == "observe" or not suppress_intro
+    ):
+        from game.perception_grounding import (
+            collect_recent_player_facing_narration,
+            perception_visible_fact_delta,
+        )
+
+        recent_narration = collect_recent_player_facing_narration(
+            session=sess, scene_id=sid
+        )
+        inner = env.get("scene") if isinstance(env.get("scene"), dict) else env
+        raw_facts = inner.get("visible_facts") if isinstance(inner, dict) else []
+        current_facts = [str(item).strip() for item in raw_facts if isinstance(item, str) and item.strip()]
+        new_visible_facts = perception_visible_fact_delta(sess, sid, current_facts)
         obs_line = render_observe_perception_fallback_line(
-            env, seed_key=seed, player_text=pt, resolution=res
+            env,
+            seed_key=seed,
+            player_text=pt,
+            resolution=res,
+            recent_narration=recent_narration,
+            new_visible_facts=new_visible_facts,
         )
         if isinstance(obs_line, str) and obs_line.strip():
             return _ensure_terminal_punctuation(obs_line.strip())
@@ -1830,7 +1873,7 @@ def _nonsocial_forced_retry_progress_line(
         if isinstance(arr_line, str) and arr_line.strip():
             return _ensure_terminal_punctuation(arr_line.strip())
 
-    if _is_direct_player_question(pt):
+    if _is_direct_player_question(pt) and res_kind != "observe":
         known_fact = resolve_known_fact_before_uncertainty(
             pt,
             scene_envelope=env,
@@ -2539,7 +2582,15 @@ def select_terminal_retry_fallback_line(
             segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
         )
     )
-    use_social_terminal = bool(_session_social_authority(sess) and soc_terminal_in_scope)
+    res_meta = res.get("metadata") if isinstance((res or {}).get("metadata"), dict) else {}
+    observe_owned = str((res or {}).get("kind") or "").strip().lower() == "observe" or str(
+        res_meta.get("parser_lane") or ""
+    ).strip().lower() == "local_observation_question"
+    use_social_terminal = bool(
+        (not observe_owned)
+        and _session_social_authority(sess)
+        and soc_terminal_in_scope
+    )
 
     line = ""
     source = ""

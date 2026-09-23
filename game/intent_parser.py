@@ -764,7 +764,14 @@ def looks_like_explicit_world_object_action(text: str | None) -> bool:
         return False
     if _has_information_seeking_question(raw):
         return False
-    return bool(_RE_EXPLICIT_WORLD_OBJECT_ACTION.search(raw))
+    obj = _RE_EXPLICIT_WORLD_OBJECT_ACTION.search(raw)
+    if not obj:
+        return False
+    from game.interaction_context import addressed_information_request_starts_before
+
+    if addressed_information_request_starts_before(raw, obj.start()):
+        return False
+    return True
 
 
 _RE_SCENE_TRAVEL_DESTINATION = re.compile(

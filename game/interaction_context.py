@@ -1451,8 +1451,8 @@ _VOCATIVE_BAD_LEADING_SLUGS = frozenset(
 )
 
 # Spoken label -> generic role slug for roster match (scene-local, ambiguity-aware).
+# Rank titles such as captain/serjeant/commander are not aliases of guard.
 _VOCATIVE_TOKEN_TO_GENERIC_ROLE: Dict[str, str] = {
-    "captain": "guard",
     "watchman": "guard",
     "guardsman": "guard",
     "guardswoman": "guard",
@@ -3065,22 +3065,189 @@ def npc_id_from_explicit_generic_role_address(low: str, addressable_npcs: List[D
     return str(m.get("npc_id") or "").strip()
 
 
-def _explicit_addressed_npc_id_leading_or_directed(low: str, roster: List[Dict[str, Any]]) -> str:
-    """Line-leading name/title or ``to/at <ref>`` against roster (no comma required)."""
+_ADDRESS_IDENTITY_STOPWORDS = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "to",
+        "at",
+        "and",
+        "of",
+        "for",
+        "you",
+        "your",
+        "nearby",
+        "this",
+        "that",
+    }
+)
+
+_DIRECTED_ADDRESSEE_PHRASE_RE = re.compile(
+    r"\b(?:to|toward|towards|at)\s+(?:the\s+|a\s+|an\s+)?([a-z0-9][a-z0-9' -]{0,63})",
+    re.IGNORECASE,
+)
+_ADDRESSEE_PHRASE_CUT_RE = re.compile(
+    r"\s+(?:what|who|where|when|why|how|did|does|do|is|are|can|could|would|will|and|then|tell|ask)\b",
+    re.IGNORECASE,
+)
+_ADDRESSEE_PRONOUNS = frozenset({"him", "her", "them", "you", "me", "us", "it"})
+
+
+def _address_identity_tokens(text: str) -> Set[str]:
+    parts = re.findall(
+        r"[a-z0-9]{3,}",
+        str(text or "").lower().replace("_", " ").replace("-", " "),
+    )
+    return {p for p in parts if p not in _ADDRESS_IDENTITY_STOPWORDS}
+
+
+def _npc_address_identity_tokens(npc: Dict[str, Any]) -> Set[str]:
+    out: Set[str] = set()
+    if not isinstance(npc, dict):
+        return out
+    for ref in extract_npc_reference_tokens(npc):
+        out |= _address_identity_tokens(ref)
+    return out
+
+
+def _trim_addressee_phrase(raw: str) -> str:
+    phrase = str(raw or "").strip().lower()
+    if not phrase:
+        return ""
+    phrase = re.split(r"[.,;:!?\"']", phrase, maxsplit=1)[0].strip()
+    phrase = _ADDRESSEE_PHRASE_CUT_RE.split(phrase, maxsplit=1)[0].strip()
+    return phrase
+
+
+def _directed_addressee_phrase(low: str) -> str:
+    last = ""
+    for m in _DIRECTED_ADDRESSEE_PHRASE_RE.finditer(str(low or "").strip().lower()):
+        cand = _trim_addressee_phrase(m.group(1))
+        if cand and cand not in _ADDRESSEE_PRONOUNS:
+            last = cand
+    return last
+
+
+def _best_roster_id_for_address_phrase(
+    phrase: str,
+    roster: List[Dict[str, Any]],
+    addr_ids: Set[str] | None = None,
+) -> str:
+    """Resolve an isolated addressee phrase against authored id/name/alias/role tokens.
+
+    A shorter shared token is not enough when leftover identity words are not
+    authored for that NPC. Ties at the same match length use ``address_priority``.
+    """
+    rest = _strip_leading_articles_and_proximity(phrase)
+    if not rest:
+        return ""
+    phrase_slug = slugify(rest)
+    phrase_tokens = _address_identity_tokens(rest)
+    if not phrase_slug:
+        return ""
+
+    exact: List[Tuple[str, int]] = []
+    covered: List[Tuple[str, int, int]] = []
+
     for npc in roster:
         if not isinstance(npc, dict):
             continue
-        npc_id = str(npc.get("id") or "").strip()
-        if not npc_id:
+        nid = str(npc.get("id") or "").strip()
+        if not nid:
             continue
+        if addr_ids is not None and nid not in addr_ids:
+            continue
+        try:
+            pri = int(npc.get("address_priority", 500))
+        except (TypeError, ValueError):
+            pri = 500
+        name = str(npc.get("name") or "").strip()
+        alias_slugs = {
+            slugify(str(a).strip())
+            for a in (npc.get("aliases") or [])
+            if isinstance(a, str) and str(a).strip()
+        }
+        role_slugs = {
+            slugify(str(r).strip())
+            for r in (npc.get("address_roles") or [])
+            if isinstance(r, str) and str(r).strip()
+        }
+        if (
+            slugify(nid) == phrase_slug
+            or (name and slugify(name) == phrase_slug)
+            or phrase_slug in alias_slugs
+            or phrase_slug in role_slugs
+        ):
+            exact.append((nid, pri))
+            continue
+        npc_tokens = _npc_address_identity_tokens(npc)
+        if phrase_tokens and not phrase_tokens.issubset(npc_tokens):
+            continue
+        longest = 0
+        padded = f" {rest} "
         for ref in extract_npc_reference_tokens(npc):
             if not ref:
                 continue
-            if re.search(rf"^\s*{re.escape(ref)}\b(?:\s*[,:?!-]|\s+)", low):
-                return npc_id
-            if _residual_directed_prep_npc_should_bind(low, ref):
-                return npc_id
-    return ""
+            if rest == ref or f" {ref} " in padded:
+                longest = max(longest, len(ref))
+        if longest:
+            covered.append((nid, pri, longest))
+
+    if exact:
+        best_pri = min(p for _, p in exact)
+        tier = [nid for nid, p in exact if p == best_pri]
+        return tier[0] if len(tier) == 1 else ""
+    if not covered:
+        return ""
+    best_len = max(item[2] for item in covered)
+    long_hits = [item for item in covered if item[2] == best_len]
+    best_pri = min(item[1] for item in long_hits)
+    tier = [item[0] for item in long_hits if item[1] == best_pri]
+    return tier[0] if len(tier) == 1 else ""
+
+
+def _unresolved_explicit_addressee_blocks_sole_npc(
+    text: str,
+    low: str,
+    roster: List[Dict[str, Any]],
+) -> bool:
+    """True when the player named someone/title that the roster cannot authorize."""
+    phrase = ""
+    m = _VOCATIVE_PREFIX_RE.match(str(text or "").strip())
+    if m and _is_plausible_spoken_vocative_label(m.group(1)):
+        phrase = m.group(1).strip()
+    if not phrase:
+        phrase = _directed_addressee_phrase(low)
+    if not phrase:
+        return False
+    return not bool(_best_roster_id_for_address_phrase(phrase, roster))
+
+
+def _explicit_addressed_npc_id_leading_or_directed(low: str, roster: List[Dict[str, Any]]) -> str:
+    """Line-leading name/title or ``to/at <phrase>`` against roster (no comma required)."""
+    line = str(low or "").strip().lower()
+    if not line or not roster:
+        return ""
+    phrase = _directed_addressee_phrase(line)
+    if phrase:
+        first = phrase.split()[0]
+        directed_hit = bool(
+            _directed_prep_npc_hit_for_ref(line, phrase) or _directed_prep_npc_hit_for_ref(line, first)
+        )
+        if directed_hit and not (
+            _residual_directed_prep_npc_should_bind(line, phrase)
+            or _residual_directed_prep_npc_should_bind(line, first)
+        ):
+            return ""
+        return _best_roster_id_for_address_phrase(phrase, roster)
+    m = re.match(r"^\s*([a-z0-9][a-z0-9' -]{0,63})", line)
+    if not m:
+        return ""
+    lead = _trim_addressee_phrase(m.group(1))
+    if not lead:
+        return ""
+    return _best_roster_id_for_address_phrase(lead, roster)
 
 
 def scene_npcs_in_active_scene(scene: Dict[str, Any] | None, world: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -3199,9 +3366,14 @@ def find_world_npc_reference_id_in_text(text: str, world: Dict[str, Any]) -> Opt
         npcs = default_world().get("npcs") or []
     if not isinstance(npcs, list):
         return None
-    for npc in npcs:
-        if not isinstance(npc, dict):
-            continue
+    world_roster = [n for n in npcs if isinstance(n, dict)]
+    directed_phrase = _directed_addressee_phrase(low)
+    if directed_phrase:
+        nid = _best_roster_id_for_address_phrase(directed_phrase, world_roster)
+        if nid and not _residual_slug_npc_binding_suppressed(low, original_text=text):
+            return nid
+        return None
+    for npc in world_roster:
         npc_id = str(npc.get("id") or "").strip()
         npc_name = str(npc.get("name") or "").strip()
         if not npc_id:
@@ -3284,6 +3456,7 @@ def find_addressed_npc_id_for_turn(
     interaction = inspect(session)
     active_target_id = str(interaction.get("active_interaction_target_id") or "").strip()
 
+    directed_phrase = _directed_addressee_phrase(low)
     for npc in roster_canon:
         npc_id = str(npc.get("id") or "").strip()
         npc_name = str(npc.get("name") or "").strip()
@@ -3293,6 +3466,8 @@ def find_addressed_npc_id_for_turn(
         if npc_slug and npc_slug in text_slug:
             if not _residual_slug_npc_binding_suppressed(low, original_text=p):
                 return npc_id
+            continue
+        if directed_phrase:
             continue
         for ref in extract_npc_reference_tokens(npc):
             if not ref:
@@ -3311,7 +3486,25 @@ def find_addressed_npc_id_for_turn(
         only_id = str(roster_canon[0].get("id") or "").strip()
         if world_ref and only_id and world_ref != only_id:
             return None
-        if only_id and (_HAILING_RE.search(low) or _information_seeking_dialogue_line(low)):
+        if only_id and _HAILING_RE.search(low):
+            return only_id
+        if only_id and _information_seeking_dialogue_line(low):
+            # Untargeted current-surroundings questions are existing observe.
+            # Interrogative form plus a sole present NPC is not an address.
+            if _looks_like_local_observation_question(str(text or "")):
+                return None
+            # Undirected place-existence is world/adjudication knowledge, not a hail.
+            if _looks_like_place_existence_question(str(text or "")):
+                subject = extract_place_existence_subject(str(text or "")) or ""
+                if not _place_existence_subject_matches_present_person(
+                    subject,
+                    session=session,
+                    world=w,
+                    scene=envelope,
+                ):
+                    return None
+            if _unresolved_explicit_addressee_blocks_sole_npc(p, low, roster_canon):
+                return None
             return only_id
 
     return None
@@ -3674,9 +3867,24 @@ _LOCAL_OBSERVATION_POSITIVE_RE = re.compile(
         |
         \bwhat(?:'s|\s+is)\s+(?:going\s+on|happening)(?:\s+here|\s+now|\s+around\s+(?:us|here))?\b
         |
-        \bwhat\s+can\s+(?:i|we|he|she|they)\s+(?:see|make\s+out|discern|spot|notice)\b
+        \bwhat\s+can\s+(?:i|we|he|she|they)\s+(?:see|make\s+out|discern|spot|notice|observe|perceive)\b
         |
         \bfrom\s+(?:here|there|this\s+spot|the\s+[^\n,?.!]{1,40}),?\s+what\s+(?:can|do|does)\s+(?:i|we|he|she|they)\s+(?:see|make\s+out|notice|spot)\b
+        |
+        \bwhat(?:'s|\s+is|\s+are)\s+(?:
+            (?:(?:present|located|visible)\s+)?
+            (?:
+                nearby
+                | around(?:\s+(?:here|me|us|this(?:\s+(?:place|spot|area))?))?
+                | close(?:\s+by)?(?:\s+to\s+(?:me|us|here))?
+                | near\s+(?:me|us|here)
+                | here
+                | there\s+(?:nearby|around(?:\s+(?:here|me|us))?|close\s+by)
+                | (?:in\s+)?(?:this|the|my)\s+(?:immediate\s+)?(?:area|vicinity|surroundings)
+            )
+        )
+        (?:\s+(?:right\s+now|at\s+the\s+moment))?
+        (?=\s*[?.!]|\s*$)
     )
     """,
     re.VERBOSE | re.IGNORECASE,
@@ -3694,8 +3902,10 @@ def _looks_like_local_observation_question(
 ) -> bool:
     """True when *text* asks for immediate scene perception, not an NPC knowledge exchange.
 
-    Requires a question mark and a tight positive pattern; excludes explicit role/NPC address
-    (e.g. 'the guard'), lore/knowledge phrasing, and open social solicitations.
+    Requires a question mark and a tight positive pattern covering perception verbs and
+    untargeted current-surroundings complements (nearby / around here / in this area).
+    Excludes explicit role/NPC address (e.g. 'the guard'), lore/knowledge phrasing,
+    named-place locality ('around the quay'), and open social solicitations.
 
     When *apply_ha_continuity_suppress* is True and *session* / *scene_envelope* are set, Block K
     may return False so listen follow-ups are not forced through the generic local-observation lane
@@ -3720,6 +3930,162 @@ def _looks_like_local_observation_question(
         ):
             return False
     return True
+
+
+_PLACE_EXISTENCE_QUESTION_RE = re.compile(
+    r"""
+    \b(?:is|are)\s+there\s+
+    (?:(?P<det>a|an|any|some)\s+)?
+    (?P<subject>.+?)
+    \s+
+    (?:
+        nearby
+        | around(?:\s+(?:here|me|us))?
+        | close(?:\s+by)?
+        | near(?:\s+(?:here|me|us))
+        | in\s+(?:this|the)\s+(?:immediate\s+)?(?:area|vicinity)
+    )
+    \s*[?.!]?\s*$
+    """,
+    re.VERBOSE | re.IGNORECASE,
+)
+_DEFINITE_PLACE_NEARBY_RE = re.compile(
+    r"""
+    \b(?:is|are)\s+(?:the|a|an)\s+(?P<subject>.+?)\s+nearby\s*[?.!]?\s*$
+    """,
+    re.VERBOSE | re.IGNORECASE,
+)
+_PLACE_EXISTENCE_PERSON_SUBJECT_RE = re.compile(
+    r"""
+    ^(?:
+        who|anyone|anybody|someone|somebody|people|persons?|folk|folks|
+        everyone|everybody|one|else|he|she|they|him|her|them
+    )$
+    """,
+    re.VERBOSE | re.IGNORECASE,
+)
+_PLACE_EXISTENCE_STOPWORDS = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "any",
+        "some",
+        "this",
+        "that",
+        "nearby",
+        "around",
+        "here",
+        "there",
+        "close",
+        "near",
+        "me",
+        "us",
+    }
+)
+
+
+def extract_place_existence_subject(text: str) -> Optional[str]:
+    """Return the asked-about subject of an existence+locality question, or None."""
+    raw = str(text or "").strip()
+    if not raw or "?" not in raw:
+        return None
+    match = _PLACE_EXISTENCE_QUESTION_RE.search(raw)
+    if match:
+        det = str(match.group("det") or "").strip()
+        subject = str(match.group("subject") or "").strip(" \t\"',.")
+        if subject:
+            return f"{det} {subject}".strip() if det else subject
+    match = _DEFINITE_PLACE_NEARBY_RE.search(raw)
+    if match:
+        subject = str(match.group("subject") or "").strip(" \t\"',.")
+        if subject:
+            return subject
+    return None
+
+
+def place_existence_subject_is_person_language(subject: str) -> bool:
+    tokens = [
+        tok
+        for tok in re.findall(r"[a-z0-9]+", str(subject or "").lower())
+        if tok not in _PLACE_EXISTENCE_STOPWORDS
+    ]
+    if not tokens:
+        return False
+    return all(_PLACE_EXISTENCE_PERSON_SUBJECT_RE.match(tok) for tok in tokens)
+
+
+def _looks_like_place_existence_question(text: str) -> bool:
+    """True when text asks whether a non-person subject exists nearby / around here.
+
+    Person-presence wording (who / anyone / people) stays with existing earshot
+    adjudication. This is not untargeted local observation.
+    """
+    subject = extract_place_existence_subject(text)
+    if not subject:
+        return False
+    return not place_existence_subject_is_person_language(subject)
+
+
+def _place_existence_content_tokens(text: str) -> set[str]:
+    return {
+        tok
+        for tok in re.findall(r"[a-z0-9]+", str(text or "").lower())
+        if tok not in _PLACE_EXISTENCE_STOPWORDS and len(tok) >= 2
+    }
+
+
+def _place_existence_subject_matches_present_person(
+    subject: str,
+    *,
+    session: Optional[Dict[str, Any]] = None,
+    world: Optional[Dict[str, Any]] = None,
+    scene: Optional[Dict[str, Any]] = None,
+) -> bool:
+    """True when the existence subject names a present NPC, not a leftover title modifier."""
+    tokens = _place_existence_content_tokens(subject)
+    if not tokens:
+        return False
+    envelope = _scene_envelope_for_addressability(
+        session if isinstance(session, dict) else {},
+        scene if isinstance(scene, dict) else None,
+    )
+    scene_id = str(((envelope or {}).get("scene") or {}).get("id") or "").strip()
+    roster = (
+        canonical_scene_addressable_roster(
+            world if isinstance(world, dict) else {},
+            scene_id,
+            scene_envelope=envelope,
+            session=session if isinstance(session, dict) else None,
+        )
+        if scene_id
+        else []
+    )
+    subject_slug = slugify(subject)
+    for npc in roster:
+        if not isinstance(npc, dict):
+            continue
+        npc_id = str(npc.get("id") or "").strip()
+        npc_name = str(npc.get("name") or "").strip()
+        name_tokens = _place_existence_content_tokens(npc_name)
+        if subject_slug and subject_slug == slugify(npc_id):
+            return True
+        if name_tokens and tokens == name_tokens:
+            return True
+        ordered_name = [
+            tok
+            for tok in re.findall(r"[a-z0-9]+", npc_name.lower())
+            if tok in name_tokens
+        ]
+        if ordered_name and tokens == {ordered_name[-1]}:
+            return True
+        for ref in extract_npc_reference_tokens(npc):
+            ref_tokens = _place_existence_content_tokens(ref)
+            if ref_tokens and tokens == ref_tokens:
+                return True
+            if slugify(ref) and subject_slug == slugify(ref):
+                return True
+    return False
 
 
 _LOCAL_OBSERVATION_GOING_ON_HAPPENING_RE = re.compile(
@@ -4086,6 +4452,10 @@ def _resolve_social_address_phrase_to_roster_id(
     if not rest:
         return ""
 
+    owned = _best_roster_id_for_address_phrase(rest, roster, addr_ids)
+    if owned:
+        return owned
+
     syn_to = f"to the {rest}"
     gr = match_generic_role_address(syn_to, roster)
     if not gr.get("ambiguous"):
@@ -4102,22 +4472,7 @@ def _resolve_social_address_phrase_to_roster_id(
     if voc and voc in addr_ids:
         return voc
 
-    best_id = ""
-    best_len = 0
-    for npc in roster:
-        if not isinstance(npc, dict):
-            continue
-        nid = str(npc.get("id") or "").strip()
-        if not nid or nid not in addr_ids:
-            continue
-        for ref in extract_npc_reference_tokens(npc):
-            if len(ref) < 3:
-                continue
-            if re.search(rf"\b{re.escape(ref)}\b", low):
-                if len(ref) > best_len:
-                    best_len = len(ref)
-                    best_id = nid
-    return best_id
+    return ""
 
 
 def resolve_declared_actor_switch(
@@ -4832,6 +5187,31 @@ _DIALOGUE_ACT_BEFORE_ESCAPE_RE = re.compile(
     r"\b(?:i|we)\s+(?:ask|asks|asking|tell|tells|telling|say|says|saying|shout|whispers?|call\s+out)\b",
     re.IGNORECASE,
 )
+_ASK_INFORMATION_RE = re.compile(
+    r"\b(?:ask|asks|asking|question|questioning)\b.+\b(?:who|what|where|when|why|how|which)\b",
+    re.IGNORECASE,
+)
+
+
+def addressed_information_request_starts_before(text: str, boundary: int | None) -> bool:
+    """True when an explicit addressee + WH/ask question begins before *boundary*.
+
+    Distinguishes a vocative or ask-plus-WH question from a player-performed
+    inspect/read of the same mentioned object.
+    """
+    lane = str(text or "").strip().lower()
+    if not lane:
+        return False
+    starts: list[int] = []
+    voc = _INLINE_TOKEN_COMMA_WH_RE.search(lane)
+    if voc:
+        starts.append(voc.start())
+    ask = _ASK_INFORMATION_RE.search(lane)
+    if ask:
+        starts.append(ask.start())
+    if not starts:
+        return False
+    return boundary is None or min(starts) < boundary
 
 
 def _first_regex_match_start(patterns: tuple[re.Pattern[str], ...], text: str) -> int | None:
@@ -4881,6 +5261,8 @@ def dialogue_intent_blocks_explicit_non_social_continuity_escape(
     speech_m = _DIALOGUE_ACT_BEFORE_ESCAPE_RE.search(lane)
     spos = speech_m.start() if speech_m else None
     if spos is not None and (esc_pos is None or spos < esc_pos):
+        return True
+    if addressed_information_request_starts_before(lane, esc_pos):
         return True
     # Mixed turns: brief inspect/scan framing then an in-character question ("… while asking who …").
     if esc_pos is not None and _looks_like_information_seeking_player_question(merged_text):

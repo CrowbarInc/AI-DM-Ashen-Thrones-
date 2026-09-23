@@ -1,0 +1,391 @@
+{
+  "unit": [
+    {
+      "label": "none",
+      "speaker_label": "The guard",
+      "emergency": "The guard says, \"I do not know enough to answer that.\"",
+      "ownership_terminal": "The guard says, \"I do not know enough to answer that.\"",
+      "deterministic": "The guard mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "empty_dict",
+      "speaker_label": "The guard",
+      "emergency": "The guard says, \"I do not know enough to answer that.\"",
+      "ownership_terminal": "The guard says, \"I do not know enough to answer that.\"",
+      "deterministic": "The guard mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "social_empty",
+      "speaker_label": "The guard",
+      "emergency": "The guard says, \"I do not know enough to answer that.\"",
+      "ownership_terminal": "The guard says, \"I do not know enough to answer that.\"",
+      "deterministic": "The guard mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "serjeant_named",
+      "speaker_label": "Gate Serjeant",
+      "emergency": "Gate Serjeant grimaces. \"Not something I can say here.\"",
+      "ownership_terminal": "Gate Serjeant says, \"No. I cannot answer that from what I know.\"",
+      "deterministic": "Gate Serjeant mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "serjeant_id_only",
+      "speaker_label": "Gate Serjeant",
+      "emergency": "Gate Serjeant grimaces. \"Not something I can say here.\"",
+      "ownership_terminal": "Gate Serjeant says, \"No. I cannot answer that from what I know.\"",
+      "deterministic": "Gate Serjeant mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "captain_named",
+      "speaker_label": "Guard Captain",
+      "emergency": "Guard Captain shakes their head. \"I don't know.\"",
+      "ownership_terminal": "Guard Captain shakes their head. \"I don't know.\"",
+      "deterministic": "Guard Captain mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "runner_named",
+      "speaker_label": "Tavern Runner",
+      "emergency": "Tavern Runner grimaces. \"Not something I can say here.\"",
+      "ownership_terminal": "Tavern Runner says, \"No. I cannot answer that from what I know.\"",
+      "deterministic": "Tavern Runner mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "role_named_guard",
+      "speaker_label": "Gate Guard",
+      "emergency": "Gate Guard says, \"I do not know enough to answer that.\"",
+      "ownership_terminal": "Gate Guard says, \"I do not know enough to answer that.\"",
+      "deterministic": "Gate Guard mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "id_only_secret",
+      "speaker_label": "Secret Warden",
+      "emergency": "Secret Warden says, \"I do not know enough to answer that.\"",
+      "ownership_terminal": "Secret Warden says, \"I do not know enough to answer that.\"",
+      "deterministic": "Secret Warden mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "name_only_role",
+      "speaker_label": "Gate Guard",
+      "emergency": "Gate Guard grimaces. \"Not something I can say here.\"",
+      "ownership_terminal": "Gate Guard says, \"No. I cannot answer that from what I know.\"",
+      "deterministic": "Gate Guard mutters. \"Word is, it was messy\u2014but I won't swear to who.\"",
+      "deterministic_kind": "explicit_ignorance"
+    },
+    {
+      "label": "display_names",
+      "guard_captain": "Guard Captain",
+      "tavern_runner": "Tavern Runner",
+      "missing_id": "The guard",
+      "unknown_id": "Secret Warden",
+      "neutral_bridge": "No one at hand answers that directly\u2014the question hangs in the noise."
+    }
+  ],
+  "chat": [
+    {
+      "label": "recovered_look_for_signs_neutral_model",
+      "player": "I look for signs of the patrol.",
+      "scene": "old_milestone",
+      "present_npc_ids": [],
+      "model": "You study the ground and find no fresh sign worth naming.",
+      "kind": "investigate",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": null,
+      "offscene_target": null,
+      "authority_source": null,
+      "facing": "Nothing here matches that. What you can actually see is a weathered stone milestone leans beside the northwest mud track.",
+      "guard_says": false,
+      "tags": [
+        "referenced_surface_realization"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "recovered_look_for_signs_model_guard_line",
+      "player": "I look for signs of the patrol.",
+      "scene": "old_milestone",
+      "present_npc_ids": [],
+      "model": "The guard says, \"I do not know enough to answer that.\"",
+      "kind": "investigate",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": null,
+      "offscene_target": null,
+      "authority_source": null,
+      "facing": "Nothing here matches that. What you can actually see is a weathered stone milestone leans beside the northwest mud track.",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "referenced_surface_realization"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "nearby_question_gate",
+      "player": "What's nearby from here?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "Someone shrugs. \"I do not know.\"",
+      "kind": "question",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": false,
+      "offscene_target": false,
+      "authority_source": null,
+      "facing": "The murmur around you never tightens into a single clear voice on that point.",
+      "guard_says": false,
+      "tags": [
+        "question_retry_fallback",
+        "social_exchange_retry_fallback",
+        "social_exchange_fallback:explicit_ignorance",
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "final_emission_gate_replaced",
+        "final_emission_gate:neutral_speaker_grounding_bridge"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "explicit_serjeant",
+      "player": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "Gate Guard shakes their head. \"I don't know.\"",
+      "kind": "question",
+      "npc_id": "gate_serjeant",
+      "npc_name": "Gate Serjeant",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "Gate Serjeant mutters, \"Word is, the patrol route changed after the Ash Compact census choke worsened.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "explicit_captain",
+      "player": "Guard Captain, who commands the watch here?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "The guard says, \"I do not know enough to answer that.\"",
+      "kind": "question",
+      "npc_id": "guard_captain",
+      "npc_name": "Guard Captain",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "sole_guard_undirected",
+      "player": "Who commands the watch here?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "gate_guard"
+      ],
+      "model": "Someone shrugs. \"I do not know.\"",
+      "kind": "question",
+      "npc_id": "gate_guard",
+      "npc_name": "Gate Guard",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted",
+        "authored_knowledge_realization"
+      ],
+      "debug_notes": "authored_knowledge_realization:resolution:topic_revealed"
+    },
+    {
+      "label": "sole_runner_undirected",
+      "player": "Where did the patrol go?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "tavern_runner"
+      ],
+      "model": "The guard says, \"I do not know enough to answer that.\"",
+      "kind": "question",
+      "npc_id": "tavern_runner",
+      "npc_name": "Tavern Runner",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "\"I do not know that part for certain.\" \"You're asking for a line I don't own.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "multi_undirected",
+      "player": "Who commands the watch here?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "Someone shrugs. \"I do not know.\"",
+      "kind": "question",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": false,
+      "offscene_target": false,
+      "authority_source": null,
+      "facing": "Word is, captain Thoran commands the gate watch tonight.",
+      "guard_says": false,
+      "tags": [
+        "question_retry_fallback",
+        "authored_knowledge_realization",
+        "social_exchange_retry_fallback",
+        "social_exchange_fallback:authored_knowledge"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "no_npc_question_milestone",
+      "player": "Who commands the watch here?",
+      "scene": "old_milestone",
+      "present_npc_ids": [],
+      "model": "Someone shrugs. \"I do not know.\"",
+      "kind": null,
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": null,
+      "offscene_target": null,
+      "authority_source": null,
+      "facing": "On a slower pass, the mud around the marker is churned with faint overlapping prints that fade into the scrub reads clearer while the track continues a short way past the stone before rainwater and brush make the next step unclear keeps pulling the eye.",
+      "guard_says": false,
+      "tags": [
+        "uncertainty:unknown_identity",
+        "uncertainty_source:scene_ambiguity",
+        "question_retry_fallback",
+        "nonsocial_empty_resolution_repair",
+        "retry_exhausted",
+        "final_emission_gate_replaced",
+        "final_emission_gate:narrative_safe_fallback"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "look_around_gate_no_speech_model",
+      "player": "I look around the gate.",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "You take in the muddy approach and the notice board.",
+      "kind": "observe",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": null,
+      "offscene_target": null,
+      "authority_source": null,
+      "facing": "As you watch the scene, one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "guard_says": false,
+      "tags": [
+        "authored_knowledge_realization",
+        "perception_non_invention"
+      ],
+      "debug_notes": "authored_knowledge_realization:npc_topic:guard_captain:watch_command"
+    },
+    {
+      "label": "hidden_display_name",
+      "player": "Ward Sentry, is the north post manned?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "secret_warden"
+      ],
+      "model": "The guard says, \"I do not know enough to answer that.\"",
+      "kind": "question",
+      "npc_id": "secret_warden",
+      "npc_name": "Ward Sentry",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "Ward Sentry mutters, \"Word is, the north post is manned until dusk.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "debug_notes": ""
+    },
+    {
+      "label": "role_address_guard_among_many",
+      "player": "Guard, who commands the watch here?",
+      "scene": "frontier_gate",
+      "present_npc_ids": [
+        "guard_captain",
+        "gate_serjeant",
+        "tavern_runner",
+        "gate_guard"
+      ],
+      "model": "Someone shrugs. \"I do not know.\"",
+      "kind": "question",
+      "npc_id": "guard_captain",
+      "npc_name": "Guard Captain",
+      "target_resolved": true,
+      "offscene_target": null,
+      "authority_source": "explicit_target",
+      "facing": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "guard_says": false,
+      "tags": [
+        "retry_escape_hatch",
+        "forced_retry_fallback",
+        "retry_exhausted"
+      ],
+      "debug_notes": ""
+    }
+  ]
+}

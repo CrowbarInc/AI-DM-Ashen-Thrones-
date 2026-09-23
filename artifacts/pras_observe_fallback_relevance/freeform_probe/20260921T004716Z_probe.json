@@ -1,0 +1,119 @@
+{
+  "stamp": "20260921T004716Z",
+  "turns": [
+    {
+      "player": "I walk a few steps along the muddy gate line and listen",
+      "ok": true,
+      "kind": "observe",
+      "parsed_type": "observe",
+      "lane": "human_adjacent_observe",
+      "ha_family": "approach_listen",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [],
+      "gm": "You catch tone and urgency, but overlapping voices never resolve into distinct speech.",
+      "complete": true,
+      "stock_watchers": false,
+      "stock_serjeant": false,
+      "invented_whisper": false,
+      "nothing_new": false
+    },
+    {
+      "player": "I look around.",
+      "ok": true,
+      "kind": "observe",
+      "parsed_type": "observe",
+      "lane": null,
+      "ha_family": "none",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [],
+      "gm": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "complete": true,
+      "stock_watchers": true,
+      "stock_serjeant": true,
+      "invented_whisper": false,
+      "nothing_new": false
+    },
+    {
+      "player": "I look around again.",
+      "ok": true,
+      "kind": "observe",
+      "parsed_type": "observe",
+      "lane": null,
+      "ha_family": "none",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [],
+      "gm": "Nothing new stands out from here.",
+      "complete": true,
+      "stock_watchers": false,
+      "stock_serjeant": false,
+      "invented_whisper": false,
+      "nothing_new": true
+    },
+    {
+      "player": "I look at the notice board.",
+      "ok": true,
+      "kind": "discover_clue",
+      "parsed_type": "investigate",
+      "lane": null,
+      "ha_family": "none",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "complete": true,
+      "stock_watchers": false,
+      "stock_serjeant": false,
+      "invented_whisper": false,
+      "nothing_new": false
+    },
+    {
+      "player": "I listen.",
+      "ok": true,
+      "kind": "observe",
+      "parsed_type": "observe",
+      "lane": "human_adjacent_observe",
+      "ha_family": "listen",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "A dozen half-conversations brush past your ears; none sharpens enough to follow.",
+      "complete": true,
+      "stock_watchers": false,
+      "stock_serjeant": false,
+      "invented_whisper": false,
+      "nothing_new": false
+    },
+    {
+      "player": "I step back from the board and wait.",
+      "ok": true,
+      "kind": null,
+      "parsed_type": null,
+      "lane": null,
+      "ha_family": "none",
+      "scene": "frontier_gate",
+      "mode": "activity",
+      "npc": null,
+      "leads": [
+        "notice_patrol_route"
+      ],
+      "gm": "Stepping away from the notice board, you blend into the milling crowd. The rain keeps falling, softening the sounds around you. Nearby, the tavern runner calls out again, offering hot stew with a ladle sweeping the air, while a threadbare watcher\u2019s gaze drifts toward the crates northwest of the gate. The patrol\u2019s last known route lingers in the back of your mind, a tangible thread but not yet a path demanding to be followed.",
+      "complete": true,
+      "stock_watchers": false,
+      "stock_serjeant": false,
+      "invented_whisper": false,
+      "nothing_new": false
+    }
+  ]
+}

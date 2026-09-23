@@ -539,7 +539,7 @@ def _forced_interruption_progression_line(
 
     merged_pt = merged_player_prompt_for_gate(resolution, session, sid)
     seed = f"{sid}|interrupt_progression|{signature}|{merged_pt}|rc={int(repeat_count)}"
-    topic = _integrity_topic_hook(merged_pt) or "that"
+    topic = _integrity_topic_hook(merged_pt, resolution) or "that"
     speaker = speaker_label(resolution)
     direct_hint, direct_kind = deterministic_social_fallback_line(
         resolution=resolution,

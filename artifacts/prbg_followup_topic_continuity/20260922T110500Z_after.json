@@ -1,0 +1,2623 @@
+{
+  "recovered": [
+    {
+      "name": "prai_t2_missing_patrol_after_watch",
+      "first": {
+        "case": "prai_t2_missing_patrol_after_watch__t1",
+        "player": "I turn to the Guard Captain. \"Who's in charge of the watch tonight?\"",
+        "parse_type": null,
+        "parse_target": null,
+        "kind": "question",
+        "reply_kind": "answer",
+        "dimension": "identity",
+        "valid_followup": false,
+        "normalize_topic": "topic:captain_charge_guard",
+        "topic_probe": {
+          "tracked": true,
+          "scene_id": "frontier_gate",
+          "topic_key": "topic:captain_charge_guard",
+          "speaker_key": "guard_captain",
+          "repeat_count": 1,
+          "speaker_repeat_count": 1
+        },
+        "npc_id": "guard_captain",
+        "subject_tokens": [
+          "charge",
+          "watch",
+          "tonight"
+        ],
+        "speaker_tokens": [
+          "captain",
+          "guard",
+          "guard_captain"
+        ],
+        "topic_rows": [
+          {
+            "id": "watch_command",
+            "relevant": true,
+            "sufficient": true,
+            "hay_cover": true
+          }
+        ],
+        "next_topic_id": "watch_command",
+        "topic_revealed_id": "watch_command",
+        "topic_revealed_text": "Captain Thoran commands the gate watch tonight.",
+        "revealed_topics": [
+          "watch_command"
+        ],
+        "last_answer_cover": true,
+        "clue_cover": false,
+        "landed_clue_ids": [],
+        "topic_pressure_current": {
+          "topic_key": "topic:captain_charge_guard",
+          "speaker_key": "guard_captain",
+          "turn": 0,
+          "player_text": "I turn to the Guard Captain. \"Who's in charge of the watch tonight?\"",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Guard Captain"
+        },
+        "answer_kind": "structured_fact",
+        "answer_source": "resolution:topic_revealed",
+        "answer_text": "Captain Thoran commands the gate watch tonight.",
+        "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "integrity_hook": "watch",
+        "recent_contextual_leads": []
+      },
+      "second": {
+        "case": "prai_t2_missing_patrol_after_watch__t2",
+        "player": "What are you doing about the missing patrol?",
+        "parse_type": null,
+        "parse_target": null,
+        "kind": "question",
+        "reply_kind": "answer",
+        "dimension": "general",
+        "valid_followup": false,
+        "normalize_topic": "missing_patrol",
+        "topic_probe": {
+          "tracked": true,
+          "scene_id": "frontier_gate",
+          "topic_key": "missing_patrol",
+          "speaker_key": "guard_captain",
+          "repeat_count": 1,
+          "speaker_repeat_count": 1
+        },
+        "npc_id": "guard_captain",
+        "subject_tokens": [
+          "doing",
+          "missing",
+          "patrol"
+        ],
+        "speaker_tokens": [
+          "captain",
+          "guard",
+          "guard_captain"
+        ],
+        "topic_rows": [
+          {
+            "id": "watch_command",
+            "relevant": false,
+            "sufficient": true,
+            "hay_cover": false
+          }
+        ],
+        "next_topic_id": null,
+        "topic_revealed_id": null,
+        "topic_revealed_text": null,
+        "revealed_topics": [
+          "watch_command"
+        ],
+        "last_answer_cover": false,
+        "clue_cover": false,
+        "landed_clue_ids": [],
+        "topic_pressure_current": {
+          "topic_key": "missing_patrol",
+          "speaker_key": "guard_captain",
+          "turn": 0,
+          "player_text": "What are you doing about the missing patrol?",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Guard Captain"
+        },
+        "answer_kind": "refusal",
+        "answer_source": "none",
+        "answer_text": null,
+        "authored_text": null,
+        "integrity_hook": "patrol",
+        "recent_contextual_leads": []
+      }
+    },
+    {
+      "case": "praj_t1_watch_roster",
+      "player": "I turn to the Guard Captain. \"Who keeps the watch roster tonight?\"",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "topic:captain_guard_keep",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:captain_guard_keep",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "keeps",
+        "watch",
+        "roster",
+        "tonight"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": "watch_command",
+      "topic_revealed_id": "watch_command",
+      "topic_revealed_text": "Captain Thoran commands the gate watch tonight.",
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "topic:captain_guard_keep",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "I turn to the Guard Captain. \"Who keeps the watch roster tonight?\"",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "resolution:topic_revealed",
+      "answer_text": "Captain Thoran commands the gate watch tonight.",
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "watch",
+      "recent_contextual_leads": []
+    },
+    {
+      "name": "prai_t6_who_last_spoke_after_patrol",
+      "first": {
+        "case": "prai_t6_who_last_spoke_after_patrol__t1",
+        "player": "I step over to the tavern runner. \"Who commands the watch here?\"",
+        "parse_type": null,
+        "parse_target": null,
+        "kind": "question",
+        "reply_kind": "refusal",
+        "dimension": "identity",
+        "valid_followup": false,
+        "normalize_topic": "topic:command_runner_step",
+        "topic_probe": {
+          "tracked": true,
+          "scene_id": "frontier_gate",
+          "topic_key": "topic:command_runner_step",
+          "speaker_key": "tavern_runner",
+          "repeat_count": 1,
+          "speaker_repeat_count": 1
+        },
+        "npc_id": "tavern_runner",
+        "subject_tokens": [
+          "commands",
+          "watch"
+        ],
+        "speaker_tokens": [
+          "runner",
+          "tavern",
+          "tavern_runner"
+        ],
+        "topic_rows": [
+          {
+            "id": "patrol_rumor",
+            "relevant": false,
+            "sufficient": false,
+            "hay_cover": false
+          },
+          {
+            "id": "stew",
+            "relevant": false,
+            "sufficient": false,
+            "hay_cover": false
+          }
+        ],
+        "next_topic_id": null,
+        "topic_revealed_id": null,
+        "topic_revealed_text": null,
+        "revealed_topics": [],
+        "last_answer_cover": false,
+        "clue_cover": false,
+        "landed_clue_ids": [],
+        "topic_pressure_current": {
+          "topic_key": "topic:command_runner_step",
+          "speaker_key": "tavern_runner",
+          "turn": 0,
+          "player_text": "I step over to the tavern runner. \"Who commands the watch here?\"",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Tavern Runner"
+        },
+        "answer_kind": "refusal",
+        "answer_source": "none",
+        "answer_text": null,
+        "authored_text": null,
+        "integrity_hook": "watch",
+        "recent_contextual_leads": []
+      },
+      "second": {
+        "case": "prai_t6_who_last_spoke_after_patrol__t2",
+        "player": "Who last spoke to that patrol before they left?",
+        "parse_type": null,
+        "parse_target": null,
+        "kind": "question",
+        "reply_kind": "refusal",
+        "dimension": "identity",
+        "valid_followup": false,
+        "normalize_topic": "missing_patrol",
+        "topic_probe": {
+          "tracked": true,
+          "scene_id": "frontier_gate",
+          "topic_key": "topic:command_runner_step",
+          "speaker_key": "tavern_runner",
+          "repeat_count": 2,
+          "speaker_repeat_count": 2
+        },
+        "npc_id": "tavern_runner",
+        "subject_tokens": [
+          "last",
+          "spoke",
+          "patrol",
+          "before",
+          "left"
+        ],
+        "speaker_tokens": [
+          "runner",
+          "tavern",
+          "tavern_runner"
+        ],
+        "topic_rows": [
+          {
+            "id": "patrol_rumor",
+            "relevant": true,
+            "sufficient": false,
+            "hay_cover": true
+          },
+          {
+            "id": "stew",
+            "relevant": false,
+            "sufficient": false,
+            "hay_cover": false
+          }
+        ],
+        "next_topic_id": null,
+        "topic_revealed_id": null,
+        "topic_revealed_text": null,
+        "revealed_topics": [],
+        "last_answer_cover": false,
+        "clue_cover": false,
+        "landed_clue_ids": [],
+        "topic_pressure_current": {
+          "topic_key": "topic:command_runner_step",
+          "speaker_key": "tavern_runner",
+          "turn": 0,
+          "player_text": "Who last spoke to that patrol before they left?",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Tavern Runner"
+        },
+        "answer_kind": "refusal",
+        "answer_source": "none",
+        "answer_text": null,
+        "authored_text": null,
+        "integrity_hook": "patrol",
+        "recent_contextual_leads": []
+      }
+    }
+  ],
+  "watch_matrix": [
+    {
+      "case": "watch_followup_direct_lexical",
+      "player": "Why does Captain Thoran command the gate watch?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:captain_command_gate",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:captain_command_gate",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "thoran",
+        "command",
+        "gate",
+        "watch"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": false,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "topic:captain_command_gate",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Why does Captain Thoran command the gate watch?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "gate",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_reduced_np",
+      "player": "Who commands the watch?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "topic:command_watch",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:command_watch",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "commands",
+        "watch"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "topic:command_watch",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who commands the watch?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "watch",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_predicate_reformulation",
+      "player": "Who is running the watch tonight?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "topic:runn_tonight_watch",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:runn_tonight_watch",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "running",
+        "watch",
+        "tonight"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "topic:runn_tonight_watch",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who is running the watch tonight?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "watch",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_pronoun_he",
+      "player": "Who is he?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who is he?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "Captain Thoran commands the gate watch tonight.",
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_who_is_that",
+      "player": "Who is that?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": true,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who is that?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "Captain Thoran commands the gate watch tonight.",
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_why_is_that",
+      "player": "Why is that?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "clarification",
+      "valid_followup": true,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Why is that?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "Captain Thoran commands the gate watch tonight.",
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_what_do_you_mean",
+      "player": "What do you mean?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "clarification",
+      "valid_followup": true,
+      "normalize_topic": "topic:mean",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "What do you mean?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "Captain Thoran commands the gate watch tonight.",
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_why_did_that_happen",
+      "player": "Why did that happen?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:happen",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "happen"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Why did that happen?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "happen",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_who_did_it",
+      "player": "Who did it?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who did it?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_topic_switch_patrol",
+      "player": "What are you doing about the missing patrol?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "general",
+      "valid_followup": false,
+      "normalize_topic": "missing_patrol",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "doing",
+        "missing",
+        "patrol"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "What are you doing about the missing patrol?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "patrol",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_unrelated_stew",
+      "player": "What does a bowl of stew cost?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "quantity",
+      "valid_followup": false,
+      "normalize_topic": "topic:bowl_cost_stew",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:bowl_cost_stew",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "bowl",
+        "stew",
+        "cost"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "topic:bowl_cost_stew",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "What does a bowl of stew cost?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "bowl",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "watch_followup_unavailable_who_ordered",
+      "player": "Who ordered Thoran to command the watch?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "responsible_party",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "responsible_party",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "ordered",
+        "thoran",
+        "command",
+        "watch"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [],
+      "topic_pressure_current": {
+        "topic_key": "responsible_party",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who ordered Thoran to command the watch?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "watch",
+      "recent_contextual_leads": []
+    }
+  ],
+  "public_clue_matrix": [
+    {
+      "case": "public_clue_direct_lexical",
+      "player": "Where was the missing patrol last seen?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "location",
+      "valid_followup": false,
+      "normalize_topic": "missing_patrol",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "missing",
+        "patrol",
+        "last",
+        "seen"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": true,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Where was the missing patrol last seen?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "missing",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_reduced_np",
+      "player": "Where was the patrol last seen?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "location",
+      "valid_followup": false,
+      "normalize_topic": "missing_patrol",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "patrol",
+        "last",
+        "seen"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": true,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "missing_patrol",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Where was the patrol last seen?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "patrol",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_they_go",
+      "player": "Where did they go?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "location",
+      "valid_followup": false,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Where did they go?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_why_vanish",
+      "player": "Why did they vanish?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:vanish",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "vanish"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Why did they vanish?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "vanish",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_why_shut_down",
+      "player": "Why was it shut down?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:down_shut",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "shut",
+        "down"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "watch_command",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Why was it shut down?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "shut",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_what_happened_next",
+      "player": "What happened next?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "general",
+      "valid_followup": false,
+      "normalize_topic": "topic:happen_next",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:happen_next",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "happened",
+        "next"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:happen_next",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "What happened next?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "happened",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_topic_switch_watch",
+      "player": "Who commands the watch tonight?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "topic:command_tonight_watch",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:command_tonight_watch",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "commands",
+        "watch",
+        "tonight"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:command_tonight_watch",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who commands the watch tonight?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "integrity_hook": "watch",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_unrelated_relic",
+      "player": "Who stole the chapel relic?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "topic:chapel_relic_stole",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "topic:chapel_relic_stole",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "stole",
+        "chapel",
+        "relic"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:chapel_relic_stole",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who stole the chapel relic?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "chapel",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "public_clue_unavailable_who_ordered",
+      "player": "Who ordered the patrol out?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "responsible_party",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "frontier_gate",
+        "topic_key": "responsible_party",
+        "speaker_key": "guard_captain",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "guard_captain",
+      "subject_tokens": [
+        "ordered",
+        "patrol"
+      ],
+      "speaker_tokens": [
+        "captain",
+        "guard",
+        "guard_captain"
+      ],
+      "topic_rows": [
+        {
+          "id": "watch_command",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "watch_command"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": true,
+      "landed_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "responsible_party",
+        "speaker_key": "guard_captain",
+        "turn": 0,
+        "player_text": "Who ordered the patrol out?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Guard Captain"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "patrol",
+      "recent_contextual_leads": []
+    }
+  ],
+  "road_matrix": [
+    {
+      "case": "road_followup_direct_lexical",
+      "player": "Why is the western cart road closed?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:cart_clos_road",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "topic:cart_clos_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "western",
+        "cart",
+        "road",
+        "closed"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": true,
+          "sufficient": false,
+          "hay_cover": true
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": true,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:cart_clos_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why is the western cart road closed?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "western",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_reduced_np",
+      "player": "Why is the road closed?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:clos_road",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "topic:clos_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "road",
+        "closed"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": true,
+          "sufficient": false,
+          "hay_cover": true
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": true,
+      "clue_cover": true,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:clos_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why is the road closed?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "road",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_predicate_reformulation",
+      "player": "Why was it shut down?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:down_shut",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "shut",
+        "down"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why was it shut down?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "shut",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_pronoun_that_happen",
+      "player": "Why did that happen?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:happen",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "happen"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why did that happen?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "happen",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_who_did_it",
+      "player": "Who did it?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": true,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": true,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Who did it?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_who_ordered",
+      "player": "Who ordered it?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "identity",
+      "valid_followup": false,
+      "normalize_topic": "responsible_party",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "ordered"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Who ordered it?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "ordered",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_what_happened_next",
+      "player": "What happened next?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "general",
+      "valid_followup": false,
+      "normalize_topic": "topic:happen_next",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "topic:happen_next",
+        "speaker_key": "night_porter",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "happened",
+        "next"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:happen_next",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "What happened next?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "happened",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_why_is_that",
+      "player": "Why is that?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "clarification",
+      "valid_followup": true,
+      "normalize_topic": "unknown_topic",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why is that?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "The western cart road has been closed since the wagons vanished.",
+      "authored_text": "Night Porter mutters, \"Word is, the western cart road has been closed since the wagons vanished.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_how_come",
+      "player": "How come?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "clarification",
+      "valid_followup": true,
+      "normalize_topic": "topic:come",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "How come?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "topic_pressure:last_answer",
+      "answer_text": "The western cart road has been closed since the wagons vanished.",
+      "authored_text": "Night Porter mutters, \"Word is, the western cart road has been closed since the wagons vanished.\"",
+      "integrity_hook": "",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_topic_switch_mash",
+      "player": "What sits on the brazier?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "answer",
+      "dimension": "general",
+      "valid_followup": false,
+      "normalize_topic": "topic:brazier_sits",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "topic:brazier_sits",
+        "speaker_key": "night_porter",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "sits",
+        "brazier"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": true,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": true,
+          "sufficient": true,
+          "hay_cover": true
+        }
+      ],
+      "next_topic_id": "mash_exists",
+      "topic_revealed_id": "mash_exists",
+      "topic_revealed_text": "A kettle of mash sits on the porter's brazier.",
+      "revealed_topics": [
+        "western_cart_road",
+        "mash_exists"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:brazier_sits",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "What sits on the brazier?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "structured_fact",
+      "answer_source": "resolution:topic_revealed",
+      "answer_text": "A kettle of mash sits on the porter's brazier.",
+      "authored_text": "Night Porter mutters, \"Word is, a kettle of mash sits on the porter's brazier.\"",
+      "integrity_hook": "brazier",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_unrelated_barrels",
+      "player": "How many barrels remain?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "quantity",
+      "valid_followup": false,
+      "normalize_topic": "topic:barrel_many_remain",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "topic:barrel_many_remain",
+        "speaker_key": "night_porter",
+        "repeat_count": 1,
+        "speaker_repeat_count": 1
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "barrels",
+        "remain"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "topic:barrel_many_remain",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "How many barrels remain?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "barrels",
+      "recent_contextual_leads": []
+    },
+    {
+      "case": "road_followup_ambiguous_after_two",
+      "player": "Why did that happen?",
+      "parse_type": null,
+      "parse_target": null,
+      "kind": "question",
+      "reply_kind": "explanation",
+      "dimension": "cause",
+      "valid_followup": false,
+      "normalize_topic": "topic:happen",
+      "topic_probe": {
+        "tracked": true,
+        "scene_id": "kiln_yard",
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "repeat_count": 2,
+        "speaker_repeat_count": 2
+      },
+      "npc_id": "night_porter",
+      "subject_tokens": [
+        "happen"
+      ],
+      "speaker_tokens": [
+        "night",
+        "night_porter",
+        "porter"
+      ],
+      "topic_rows": [
+        {
+          "id": "western_cart_road",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        },
+        {
+          "id": "mash_exists",
+          "relevant": false,
+          "sufficient": false,
+          "hay_cover": false
+        }
+      ],
+      "next_topic_id": null,
+      "topic_revealed_id": null,
+      "topic_revealed_text": null,
+      "revealed_topics": [
+        "western_cart_road",
+        "mash_exists"
+      ],
+      "last_answer_cover": false,
+      "clue_cover": false,
+      "landed_clue_ids": [
+        "clue_kiln_spur"
+      ],
+      "topic_pressure_current": {
+        "topic_key": "western_cart_road",
+        "speaker_key": "night_porter",
+        "turn": 0,
+        "player_text": "Why did that happen?",
+        "interaction_kind": "social",
+        "interaction_mode": "social",
+        "social_intent_class": "social_exchange",
+        "npc_name": "Night Porter"
+      },
+      "answer_kind": "refusal",
+      "answer_source": "none",
+      "answer_text": null,
+      "authored_text": null,
+      "integrity_hook": "happen",
+      "recent_contextual_leads": []
+    }
+  ],
+  "ambiguous": {
+    "case": "ambiguous_two_recent_subjects",
+    "player": "Why did that happen?",
+    "parse_type": null,
+    "parse_target": null,
+    "kind": "question",
+    "reply_kind": "explanation",
+    "dimension": "cause",
+    "valid_followup": false,
+    "normalize_topic": "topic:happen",
+    "topic_probe": {
+      "tracked": true,
+      "scene_id": "kiln_yard",
+      "topic_key": "western_cart_road",
+      "speaker_key": "night_porter",
+      "repeat_count": 2,
+      "speaker_repeat_count": 2
+    },
+    "npc_id": "night_porter",
+    "subject_tokens": [
+      "happen"
+    ],
+    "speaker_tokens": [
+      "night",
+      "night_porter",
+      "porter"
+    ],
+    "topic_rows": [
+      {
+        "id": "western_cart_road",
+        "relevant": false,
+        "sufficient": false,
+        "hay_cover": false
+      },
+      {
+        "id": "mash_exists",
+        "relevant": false,
+        "sufficient": false,
+        "hay_cover": false
+      }
+    ],
+    "next_topic_id": null,
+    "topic_revealed_id": null,
+    "topic_revealed_text": null,
+    "revealed_topics": [
+      "western_cart_road"
+    ],
+    "last_answer_cover": false,
+    "clue_cover": false,
+    "landed_clue_ids": [
+      "clue_kiln_spur"
+    ],
+    "topic_pressure_current": {
+      "topic_key": "western_cart_road",
+      "speaker_key": "night_porter",
+      "turn": 0,
+      "player_text": "Why did that happen?",
+      "interaction_kind": "social",
+      "interaction_mode": "social",
+      "social_intent_class": "social_exchange",
+      "npc_name": "Night Porter"
+    },
+    "answer_kind": "refusal",
+    "answer_source": "none",
+    "answer_text": null,
+    "authored_text": null,
+    "integrity_hook": "happen",
+    "recent_contextual_leads": []
+  },
+  "explicit_switch": {
+    "case": "explicit_switch_to_mash",
+    "player": "What sits on the brazier?",
+    "parse_type": null,
+    "parse_target": null,
+    "kind": "question",
+    "reply_kind": "answer",
+    "dimension": "general",
+    "valid_followup": false,
+    "normalize_topic": "topic:brazier_sits",
+    "topic_probe": {
+      "tracked": true,
+      "scene_id": "kiln_yard",
+      "topic_key": "topic:brazier_sits",
+      "speaker_key": "night_porter",
+      "repeat_count": 1,
+      "speaker_repeat_count": 1
+    },
+    "npc_id": "night_porter",
+    "subject_tokens": [
+      "sits",
+      "brazier"
+    ],
+    "speaker_tokens": [
+      "night",
+      "night_porter",
+      "porter"
+    ],
+    "topic_rows": [
+      {
+        "id": "western_cart_road",
+        "relevant": false,
+        "sufficient": true,
+        "hay_cover": false
+      },
+      {
+        "id": "mash_exists",
+        "relevant": true,
+        "sufficient": true,
+        "hay_cover": true
+      }
+    ],
+    "next_topic_id": "mash_exists",
+    "topic_revealed_id": "mash_exists",
+    "topic_revealed_text": "A kettle of mash sits on the porter's brazier.",
+    "revealed_topics": [
+      "western_cart_road",
+      "mash_exists"
+    ],
+    "last_answer_cover": false,
+    "clue_cover": false,
+    "landed_clue_ids": [],
+    "topic_pressure_current": {
+      "topic_key": "topic:brazier_sits",
+      "speaker_key": "night_porter",
+      "turn": 0,
+      "player_text": "What sits on the brazier?",
+      "interaction_kind": "social",
+      "interaction_mode": "social",
+      "social_intent_class": "social_exchange",
+      "npc_name": "Night Porter"
+    },
+    "answer_kind": "structured_fact",
+    "answer_source": "resolution:topic_revealed",
+    "answer_text": "A kettle of mash sits on the porter's brazier.",
+    "authored_text": "Night Porter mutters, \"Word is, a kettle of mash sits on the porter's brazier.\"",
+    "integrity_hook": "brazier",
+    "recent_contextual_leads": []
+  }
+}

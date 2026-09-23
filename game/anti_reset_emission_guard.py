@@ -232,6 +232,12 @@ def local_exchange_continuation_fallback_line(
     resolution: Dict[str, Any] | None,
 ) -> str:
     """Short, exchange-local beat — not global scene re-establishment."""
+    res_kind = str((resolution or {}).get("kind") or "").strip().lower() if isinstance(resolution, dict) else ""
+    res_meta = resolution.get("metadata") if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict) else {}
+    if res_kind == "observe" or str(res_meta.get("parser_lane") or "").strip().lower() == "local_observation_question":
+        from game.diegetic_fallback_narration import observe_nothing_new_fallback_line
+
+        return observe_nothing_new_fallback_line()
     if isinstance(resolution, dict) and isinstance(world, Mapping):
         eff, _, _ = effective_strict_social_resolution_for_emission(
             resolution,

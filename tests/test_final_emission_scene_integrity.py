@@ -137,13 +137,14 @@ def test_valid_resolved_scene_transition_allows_global_scene_fallback():
 
 
 @pytest.mark.parametrize(
-    "binding_source,expect_block",
+    "binding_source",
     [
-        ("explicit_named_place_unresolved", True),
-        ("explicit_named_place_in_player_text", False),
+        "explicit_named_place_unresolved",
+        "explicit_named_place_in_player_text",
     ],
 )
-def test_named_place_unresolved_suppresses_global_fallback(binding_source: str, expect_block: bool):
+def test_named_place_unresolved_suppresses_global_fallback(binding_source: str):
+    """Unresolved travel must not launder current-scene stock as arrival."""
     session = {"active_scene_id": "frontier_gate"}
     resolution = {
         "kind": "scene_transition",
@@ -173,9 +174,5 @@ def test_named_place_unresolved_suppresses_global_fallback(binding_source: str, 
         scene=gate_scene,
         world={},
     )
-    if expect_block:
-        assert meta.get("scene_integrity_blocked_global_fallback") is True
-        assert meta.get("final_emitted_source") == "scene_emit_integrity_safe_fallback"
-    else:
-        assert meta.get("scene_integrity_blocked_global_fallback") is not True
-        assert meta.get("final_emitted_source") == "global_scene_fallback"
+    assert meta.get("scene_integrity_blocked_global_fallback") is True
+    assert meta.get("final_emitted_source") == "scene_emit_integrity_safe_fallback"

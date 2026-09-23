@@ -466,6 +466,24 @@ def resolve_exploration_action(
 
         # No interactable matched; classify remaining inspect targets before generic search.
         classified_authority = str(classified.get("authority") or "")
+        scene_id = scene.get("id") or ""
+        if scene_id and is_target_searched(session, scene_id, action_id):
+            result = ExplorationEngineResult(
+                kind="already_searched",
+                action_id=action_id,
+                label=label,
+                prompt=prompt,
+                success=False,
+                resolved_transition=False,
+                target_scene_id=None,
+                clue_id=None,
+                discovered_clues=[],
+                world_updates=None,
+                state_changes={"already_searched": True},
+                hint="Player has already searched this. Narrate that they find nothing new.",
+                metadata=dict(classified_meta),
+            )
+            return result.to_dict()
         if classified_authority in {
             AUTHORITY_AUTHORED_VISIBLE_FEATURE,
             AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
@@ -545,7 +563,11 @@ def resolve_exploration_action(
                 "Narrate blocked movement, attempted path, or unresolved travel—do not imply arrival."
             )
         else:
-            hint = "Player expressed travel intent; target scene not resolved. Narrate based on current scene and intent."
+            hint = (
+                "Player expressed travel intent, but no destination could be resolved from here. "
+                "Narrate blocked movement, attempted path, or unresolved travel—do not imply "
+                "departure or arrival."
+            )
     elif action_type == "observe":
         hint = "Player is focusing on observing the current scene. Narrate what stands out or what careful observation reveals—avoid repeating the same summary."
         _am_obs = normalized_action.get("metadata")
@@ -659,6 +681,7 @@ def resolve_exploration_action(
                 "referenced_surface_inspectability",
                 "referenced_surface_interactable_id",
                 "referenced_surface_visible_fact",
+                "referenced_surface_inspectable_text",
                 "skip_unrelated_clue_discovery",
             ):
                 if key in am:

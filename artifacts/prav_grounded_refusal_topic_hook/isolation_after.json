@@ -1,0 +1,387 @@
+[
+  {
+    "case": "about_night_known",
+    "player": "I ask the night porter when the kiln crew actually left.",
+    "kind": "question",
+    "dimension": "time",
+    "npc_id": "night_porter",
+    "npc_name": "Night Porter",
+    "reply_kind": "refusal",
+    "topic_revealed": null,
+    "authored_knowledge": null,
+    "answer_candidate": {
+      "answer_kind": "refusal",
+      "text": null,
+      "source": "none",
+      "confidence": 0.1
+    },
+    "content_tokens": [
+      "night",
+      "porter",
+      "kiln",
+      "crew",
+      "actually",
+      "left"
+    ],
+    "subject_tokens": [
+      "night",
+      "porter",
+      "kiln",
+      "crew",
+      "actually",
+      "left"
+    ],
+    "subject_tokens_excl_speaker": [
+      "kiln",
+      "crew",
+      "actually",
+      "left"
+    ],
+    "speaker_tokens": [
+      "night",
+      "night_porter",
+      "porter"
+    ],
+    "integrity_hook": "kiln",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Night Porter says, \"I do not know enough to answer that.\"",
+    "integrity_refusal_line": "Night Porter shakes their head. \"I won't answer that about kiln\u2014not here.\"",
+    "integrity_kinds": [
+      "integrity_refusal_boundary",
+      "integrity_refusal_pressure",
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "about_step_known",
+    "player": "I step back to the tavern runner and ask who last checked that board.",
+    "kind": "question",
+    "dimension": "identity",
+    "npc_id": "lamp_clerk",
+    "npc_name": "Lamp Clerk",
+    "reply_kind": "refusal",
+    "topic_revealed": null,
+    "authored_knowledge": null,
+    "answer_candidate": {
+      "answer_kind": "refusal",
+      "text": null,
+      "source": "none",
+      "confidence": 0.1
+    },
+    "content_tokens": [
+      "step",
+      "back",
+      "tavern",
+      "runner",
+      "last",
+      "checked",
+      "that",
+      "board"
+    ],
+    "subject_tokens": [
+      "back",
+      "tavern",
+      "runner",
+      "last",
+      "checked",
+      "board"
+    ],
+    "subject_tokens_excl_speaker": [
+      "back",
+      "tavern",
+      "runner",
+      "last",
+      "checked",
+      "board"
+    ],
+    "speaker_tokens": [
+      "clerk",
+      "lamp",
+      "lamp_clerk"
+    ],
+    "integrity_hook": "board",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Lamp Clerk shakes their head. \"I don't know.\"",
+    "integrity_refusal_line": "Lamp Clerk shakes their head. \"I won't answer that about board\u2014not here.\"",
+    "integrity_kinds": [
+      "integrity_refusal_boundary",
+      "integrity_refusal_pressure",
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "about_step_wharf_runner_phrasing",
+    "player": "I step over to the lamp clerk and ask what the broth costs.",
+    "kind": "question",
+    "dimension": "general",
+    "npc_id": "lamp_clerk",
+    "npc_name": "Lamp Clerk",
+    "reply_kind": "answer",
+    "topic_revealed": {
+      "id": "broth_exists",
+      "text": "A kettle of broth sits on the brazier.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "authored_knowledge": {
+      "text": "Lamp Clerk mutters, \"Word is, a kettle of broth sits on the brazier.\"",
+      "source": "resolution:topic_revealed",
+      "answer_kind": "structured_fact",
+      "fact_text": "A kettle of broth sits on the brazier.",
+      "clue_id": null
+    },
+    "answer_candidate": {
+      "answer_kind": "structured_fact",
+      "text": "A kettle of broth sits on the brazier.",
+      "source": "resolution:topic_revealed",
+      "confidence": 0.95
+    },
+    "content_tokens": [
+      "step",
+      "over",
+      "lamp",
+      "clerk",
+      "broth",
+      "costs"
+    ],
+    "subject_tokens": [
+      "lamp",
+      "clerk",
+      "broth",
+      "costs"
+    ],
+    "subject_tokens_excl_speaker": [
+      "broth",
+      "costs"
+    ],
+    "speaker_tokens": [
+      "clerk",
+      "lamp",
+      "lamp_clerk"
+    ],
+    "integrity_hook": "broth",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Lamp Clerk shakes their head. \"I don't know.\"",
+    "integrity_refusal_line": null,
+    "integrity_kinds": [
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "novel_movement",
+    "player": "I amble past the lamp clerk and ask how many barrels remain.",
+    "kind": "question",
+    "dimension": "quantity",
+    "npc_id": "lamp_clerk",
+    "npc_name": "Lamp Clerk",
+    "reply_kind": "refusal",
+    "topic_revealed": null,
+    "authored_knowledge": null,
+    "answer_candidate": {
+      "answer_kind": "refusal",
+      "text": null,
+      "source": "none",
+      "confidence": 0.1
+    },
+    "content_tokens": [
+      "amble",
+      "past",
+      "lamp",
+      "clerk",
+      "many",
+      "barrels",
+      "remain"
+    ],
+    "subject_tokens": [
+      "amble",
+      "past",
+      "lamp",
+      "clerk",
+      "barrels",
+      "remain"
+    ],
+    "subject_tokens_excl_speaker": [
+      "amble",
+      "past",
+      "barrels",
+      "remain"
+    ],
+    "speaker_tokens": [
+      "clerk",
+      "lamp",
+      "lamp_clerk"
+    ],
+    "integrity_hook": "barrels",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Lamp Clerk shakes their head. \"I don't know.\"",
+    "integrity_refusal_line": "Lamp Clerk shakes their head. \"I won't answer that about barrels\u2014not here.\"",
+    "integrity_kinds": [
+      "integrity_refusal_boundary",
+      "integrity_refusal_pressure",
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "novel_temporal",
+    "player": "I ask the lamp clerk this morning how many barrels remain.",
+    "kind": "question",
+    "dimension": "quantity",
+    "npc_id": "lamp_clerk",
+    "npc_name": "Lamp Clerk",
+    "reply_kind": "refusal",
+    "topic_revealed": null,
+    "authored_knowledge": null,
+    "answer_candidate": {
+      "answer_kind": "refusal",
+      "text": null,
+      "source": "none",
+      "confidence": 0.1
+    },
+    "content_tokens": [
+      "lamp",
+      "clerk",
+      "morning",
+      "many",
+      "barrels",
+      "remain"
+    ],
+    "subject_tokens": [
+      "lamp",
+      "clerk",
+      "morning",
+      "barrels",
+      "remain"
+    ],
+    "subject_tokens_excl_speaker": [
+      "morning",
+      "barrels",
+      "remain"
+    ],
+    "speaker_tokens": [
+      "clerk",
+      "lamp",
+      "lamp_clerk"
+    ],
+    "integrity_hook": "barrels",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Lamp Clerk shakes their head. \"I don't know.\"",
+    "integrity_refusal_line": "Lamp Clerk shakes their head. \"I won't answer that about barrels\u2014not here.\"",
+    "integrity_kinds": [
+      "integrity_refusal_boundary",
+      "integrity_refusal_pressure",
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "legitimate_topic",
+    "player": "I ask the night porter what sits on the brazier.",
+    "kind": "question",
+    "dimension": "general",
+    "npc_id": "night_porter",
+    "npc_name": "Night Porter",
+    "reply_kind": "answer",
+    "topic_revealed": {
+      "id": "mash_exists",
+      "text": "A kettle of mash sits on the porter's brazier.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "authored_knowledge": {
+      "text": "Night Porter mutters, \"Word is, a kettle of mash sits on the porter's brazier.\"",
+      "source": "resolution:topic_revealed",
+      "answer_kind": "structured_fact",
+      "fact_text": "A kettle of mash sits on the porter's brazier.",
+      "clue_id": null
+    },
+    "answer_candidate": {
+      "answer_kind": "structured_fact",
+      "text": "A kettle of mash sits on the porter's brazier.",
+      "source": "resolution:topic_revealed",
+      "confidence": 0.95
+    },
+    "content_tokens": [
+      "night",
+      "porter",
+      "sits",
+      "brazier"
+    ],
+    "subject_tokens": [
+      "night",
+      "porter",
+      "sits",
+      "brazier"
+    ],
+    "subject_tokens_excl_speaker": [
+      "sits",
+      "brazier"
+    ],
+    "speaker_tokens": [
+      "night",
+      "night_porter",
+      "porter"
+    ],
+    "integrity_hook": "brazier",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Night Porter says, \"I do not know enough to answer that.\"",
+    "integrity_refusal_line": null,
+    "integrity_kinds": [
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  },
+  {
+    "case": "no_content_noun",
+    "player": "I ask the lamp clerk.",
+    "kind": "question",
+    "dimension": "general",
+    "npc_id": "lamp_clerk",
+    "npc_name": "Lamp Clerk",
+    "reply_kind": "answer",
+    "topic_revealed": {
+      "id": "broth_exists",
+      "text": "A kettle of broth sits on the brazier.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "authored_knowledge": {
+      "text": "Lamp Clerk mutters, \"Word is, a kettle of broth sits on the brazier.\"",
+      "source": "resolution:topic_revealed",
+      "answer_kind": "structured_fact",
+      "fact_text": "A kettle of broth sits on the brazier.",
+      "clue_id": null
+    },
+    "answer_candidate": {
+      "answer_kind": "structured_fact",
+      "text": "A kettle of broth sits on the brazier.",
+      "source": "resolution:topic_revealed",
+      "confidence": 0.95
+    },
+    "content_tokens": [
+      "lamp",
+      "clerk"
+    ],
+    "subject_tokens": [
+      "lamp",
+      "clerk"
+    ],
+    "subject_tokens_excl_speaker": [],
+    "speaker_tokens": [
+      "clerk",
+      "lamp",
+      "lamp_clerk"
+    ],
+    "integrity_hook": "",
+    "hook_is_first_content_token": false,
+    "ownership_terminal": "Lamp Clerk shakes their head. \"I don't know.\"",
+    "integrity_refusal_line": null,
+    "integrity_kinds": [
+      "integrity_deterministic:explicit_ignorance",
+      "integrity_minimal_emergency"
+    ]
+  }
+]

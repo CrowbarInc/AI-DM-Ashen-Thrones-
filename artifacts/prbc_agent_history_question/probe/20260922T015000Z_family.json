@@ -1,0 +1,1945 @@
+[
+  {
+    "label": "inspect_empty::Read the tally slate.",
+    "text": "Read the tally slate.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "inspect_porter::Read the tally slate.",
+    "text": "Read the tally slate.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "inspect_empty::What does the tally slate say?",
+    "text": "What does the tally slate say?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": "interactable_content_question",
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": "interactable_content_question",
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "inspect_porter::What does the tally slate say?",
+    "text": "What does the tally slate say?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": "interactable_content_question",
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": "interactable_content_question",
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "inspect_empty::Look over the tally slate.",
+    "text": "Look over the tally slate.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": null,
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "inspect_porter::Look over the tally slate.",
+    "text": "Look over the tally slate.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": null,
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "inspect_empty::Inspect the tally slate.",
+    "text": "Inspect the tally slate.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": true,
+    "is_world_action": false,
+    "investigate_hits": [
+      "\\b(inspect|examine|study|search|check)\\s+(?:the\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "inspect_porter::Inspect the tally slate.",
+    "text": "Inspect the tally slate.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": false,
+    "explicit_world_object": true,
+    "is_world_action": false,
+    "investigate_hits": [
+      "\\b(inspect|examine|study|search|check)\\s+(?:the\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "non_dialogue_world_action",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "inspect_empty::What's on the duty notice?",
+    "text": "What's on the duty notice?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "duty notice",
+    "content_question_lane": "interactable_content_question",
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "duty_notice",
+      "lane": "interactable_content_question",
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "duty_notice",
+      "line": "Shift change is after the second horn."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "inspect_porter::What's on the duty notice?",
+    "text": "What's on the duty notice?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "duty notice",
+    "content_question_lane": "interactable_content_question",
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "duty_notice",
+      "lane": "interactable_content_question",
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "duty_notice",
+      "line": "Shift change is after the second horn."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "agent_empty::who last read that tally slate",
+    "text": "who last read that tally slate",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_porter::who last read that tally slate",
+    "text": "who last read that tally slate",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_empty::Who last read that tally slate?",
+    "text": "Who last read that tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_porter::Who last read that tally slate?",
+    "text": "Who last read that tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_empty::Who last read the tally slate?",
+    "text": "Who last read the tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_porter::Who last read the tally slate?",
+    "text": "Who last read the tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_empty::Who read the tally slate?",
+    "text": "Who read the tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_porter::Who read the tally slate?",
+    "text": "Who read the tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "agent_empty::Who wrote this notice?",
+    "text": "Who wrote this notice?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "agent_porter::Who wrote this notice?",
+    "text": "Who wrote this notice?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "agent_empty::Who put this here?",
+    "text": "Who put this here?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "agent_porter::Who put this here?",
+    "text": "Who put this here?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "agent_empty::Who moved this crate?",
+    "text": "Who moved this crate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "agent_porter::Who moved this crate?",
+    "text": "Who moved this crate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "agent_empty::Who inspected the crate?",
+    "text": "Who inspected the crate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "agent_porter::Who inspected the crate?",
+    "text": "Who inspected the crate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "hist_empty::When was the tally slate last read?",
+    "text": "When was the tally slate last read?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": null,
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "time",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "hist_porter::When was the tally slate last read?",
+    "text": "When was the tally slate last read?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": null,
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "time",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "hist_empty::Has anyone read this?",
+    "text": "Has anyone read this?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> this?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "this",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "this?",
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "hist_porter::Has anyone read this?",
+    "text": "Has anyone read this?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": false,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> this?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "this",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "this?",
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "general",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "hist_empty::Where did this notice come from?",
+    "text": "Where did this notice come from?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "location",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "hist_porter::Where did this notice come from?",
+    "text": "Where did this notice come from?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "location",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "hist_empty::Who last checked that board?",
+    "text": "Who last checked that board?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "unparsed_or_gpt"
+  },
+  {
+    "label": "hist_porter::Who last checked that board?",
+    "text": "Who last checked that board?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": null,
+      "target_id": null,
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "dialogue_first"
+  },
+  {
+    "label": "dir_empty::Guard, who last read this tally slate?",
+    "text": "Guard, who last read this tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": "mixed_scene_object_investigation",
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "guard_captain",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "dir_porter::Guard, who last read this tally slate?",
+    "text": "Guard, who last read this tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": "mixed_scene_object_investigation",
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "dir_empty::Night Porter, who last read the tally slate?",
+    "text": "Night Porter, who last read the tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "dir_porter::Night Porter, who last read the tally slate?",
+    "text": "Night Porter, who last read the tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "dir_empty::Ask the guard who read this.",
+    "text": "Ask the guard who read this.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> this",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "this",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "this",
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "dir_porter::Ask the guard who read this.",
+    "text": "Ask the guard who read this.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> this",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "this",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "this",
+      "lane": null,
+      "authority": "untargeted"
+    },
+    "social_intent": {
+      "type": "question",
+      "target_id": "guard who read this"
+    },
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "explicit_non_social_action_escapes_social_lock",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "dir_empty::I ask the night porter who last read that tally slate.",
+    "text": "I ask the night porter who last read that tally slate.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "dir_porter::I ask the night porter who last read that tally slate.",
+    "text": "I ask the night porter who last read that tally slate.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": true,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": {
+      "type": "investigate",
+      "lane": null
+    },
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": {
+      "type": "question",
+      "target_id": "night porter who last read that tally slate"
+    },
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_motion_or_ask",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "actionable:investigate"
+  },
+  {
+    "label": "dir_empty::I ask the night porter who last read that tally slate?",
+    "text": "I ask the night porter who last read that tally slate?",
+    "has_npc": false,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "action",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "exploration:investigate"
+  },
+  {
+    "label": "dir_porter::I ask the night porter who last read that tally slate?",
+    "text": "I ask the night porter who last read that tally slate?",
+    "has_npc": true,
+    "info_seeking_has": true,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": true,
+    "investigate_hits": [
+      "\\b(read|reads|reading)\\s+(?:the\\s+|this\\s+|that\\ -> tally slate?",
+      "\\b(look|search|inspect|examine|read)\\b -> (no target)"
+    ],
+    "extract_inspection_target": "tally slate",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "investigate",
+      "target_id": "tally_slate",
+      "lane": null,
+      "authority": "authored_interactable"
+    },
+    "social_intent": {
+      "type": "question",
+      "target_id": "night porter who last read that tally slate?"
+    },
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_motion_or_ask",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "authored_interactable",
+      "inspectability": true,
+      "interactable_id": "tally_slate",
+      "line": "Charcoal ticks mark yesterday's kiln loads."
+    },
+    "predicted_owner": "social_intent:question"
+  },
+  {
+    "label": "dir_empty::I ask the night porter who last checked that slate.",
+    "text": "I ask the night porter who last checked that slate.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "interact",
+      "target_id": "night porter who last checked that slate",
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:interact"
+  },
+  {
+    "label": "dir_porter::I ask the night porter who last checked that slate.",
+    "text": "I ask the night porter who last checked that slate.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "interact",
+      "target_id": "night porter who last checked that slate",
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": {
+      "type": "question",
+      "target_id": "night porter who last checked that slate"
+    },
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_motion_or_ask",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "social_intent:question"
+  },
+  {
+    "label": "dir_empty::I step back to the night porter and ask who last checked that board.",
+    "text": "I step back to the night porter and ask who last checked that board.",
+    "has_npc": false,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "interact",
+      "target_id": "who last checked that board",
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": null,
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": false,
+      "reason": "no_addressable_target",
+      "target_actor_id": null
+    },
+    "addressed_npc_id": null,
+    "is_directed_dialogue": false,
+    "route": "undecided",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "exploration:interact"
+  },
+  {
+    "label": "dir_porter::I step back to the night porter and ask who last checked that board.",
+    "text": "I step back to the night porter and ask who last checked that board.",
+    "has_npc": true,
+    "info_seeking_has": false,
+    "info_seeking_clause": true,
+    "explicit_world_object": false,
+    "is_world_action": false,
+    "investigate_hits": [],
+    "extract_inspection_target": "",
+    "content_question_lane": null,
+    "recover_actionable": null,
+    "parser": {
+      "type": "interact",
+      "target_id": "who last checked that board",
+      "lane": null,
+      "authority": null
+    },
+    "social_intent": {
+      "type": "question",
+      "target_id": "who last checked that board"
+    },
+    "social_dimension": "identity",
+    "adjudication_category": null,
+    "adjudication": null,
+    "social_entry": {
+      "should_route_social": true,
+      "reason": "directed_social_question",
+      "target_actor_id": "night_porter"
+    },
+    "addressed_npc_id": "night_porter",
+    "is_directed_dialogue": true,
+    "route": "dialogue",
+    "surface": {
+      "authority": "untargeted",
+      "inspectability": false,
+      "interactable_id": "",
+      "line": "You look again. Nothing new resolves into evidence. What you can actually see is what is actually present here."
+    },
+    "predicted_owner": "social_intent:question"
+  }
+]

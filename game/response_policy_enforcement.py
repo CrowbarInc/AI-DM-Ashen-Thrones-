@@ -1428,6 +1428,13 @@ def _apply_scene_momentum_enforcement(
     """Third step of ``prefer_scene_momentum`` — momentum beat enforcement."""
     return enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
 
+def _reply_is_interruption_breakoff(reply_text: str) -> bool:
+    """True when reply text is an interruption cutoff, not a stored answer."""
+    from game.social_exchange_validation import _looks_like_interruption_breakoff_text
+
+    return _looks_like_interruption_breakoff_text(str(reply_text or ""))
+
+
 def _commit_topic_progress(
     *,
     session: Dict[str, Any],
@@ -1454,7 +1461,11 @@ def _commit_topic_progress(
         else:
             speaker_entry["low_progress_streak"] = max(0, int(speaker_entry.get("low_progress_streak", 0) or 0) - 1)
             speaker_entry["patience"] = min(3, int(speaker_entry.get("patience", 3) or 3) + 1)
-    entry["last_answer"] = str(reply_text or "").strip()[:480]
+    # Interruption narration is not an answer. Keeping it as last_answer lets a
+    # later realization treat the cutoff as authored knowledge.
+    reply = str(reply_text or "").strip()
+    if reply and not _reply_is_interruption_breakoff(reply):
+        entry["last_answer"] = reply[:480]
 
 def _commit_topic_progress_after_enforcement(
     *,

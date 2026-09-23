@@ -1,0 +1,978 @@
+{
+  "recovered_utterance": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+  "authored_identity": {
+    "current_persisted_world_npcs": [
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "aliases": null
+      }
+    ],
+    "prai_fixture_npcs": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "role": "guard",
+        "aliases": [
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "address_roles": [],
+        "reference_tokens": [
+          "gate",
+          "gate guard",
+          "gate_guard",
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "topics": [
+          "watch_command"
+        ]
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "role": null,
+        "aliases": [
+          "serjeant",
+          "watch serjeant",
+          "gate serjeant"
+        ],
+        "address_roles": [],
+        "reference_tokens": [
+          "gate",
+          "gate serjeant",
+          "gate_serjeant",
+          "serjeant",
+          "watch",
+          "watch serjeant"
+        ],
+        "topics": [
+          "route_change"
+        ]
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "role": null,
+        "aliases": [
+          "runner",
+          "tavern runner"
+        ],
+        "address_roles": [],
+        "reference_tokens": [
+          "runner",
+          "tavern",
+          "tavern runner",
+          "tavern_runner"
+        ],
+        "topics": [
+          "patrol_rumor"
+        ]
+      }
+    ],
+    "frontier_gate_addressables": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "role": null,
+        "aliases": [],
+        "address_roles": [
+          "guard",
+          "watchman",
+          "sentry",
+          "guardsman",
+          "captain"
+        ],
+        "reference_tokens": [
+          "captain",
+          "guard",
+          "guard captain",
+          "guard_captain",
+          "guardsman",
+          "sentry",
+          "watchman"
+        ],
+        "topics": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "role": null,
+        "aliases": [],
+        "address_roles": [
+          "runner",
+          "informant"
+        ],
+        "reference_tokens": [
+          "informant",
+          "runner",
+          "tavern",
+          "tavern runner",
+          "tavern_runner"
+        ],
+        "topics": []
+      },
+      {
+        "id": "refugee",
+        "name": "Ragged stranger",
+        "role": null,
+        "aliases": [
+          "ragged stranger"
+        ],
+        "address_roles": [
+          "stranger",
+          "refugee"
+        ],
+        "reference_tokens": [
+          "ragged",
+          "ragged stranger",
+          "refugee",
+          "stranger"
+        ],
+        "topics": []
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "role": null,
+        "aliases": [],
+        "address_roles": [
+          "watcher"
+        ],
+        "reference_tokens": [
+          "threadbare",
+          "threadbare watcher",
+          "threadbare_watcher",
+          "watcher"
+        ],
+        "topics": []
+      }
+    ],
+    "scene_visible_serjeant_mention": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+    "gate_serjeant_is_authored_identity_of_gate_guard": false,
+    "gate_serjeant_exists_as_distinct_world_npc_in_prai_fixture": true,
+    "gate_serjeant_exists_in_current_persisted_world": false,
+    "gate_guard_exists_in_current_persisted_world": false,
+    "vocative_token_to_generic_role": {
+      "captain": "guard",
+      "watchman": "guard",
+      "guardsman": "guard",
+      "guardswoman": "guard",
+      "sentry": "guard",
+      "guard": "guard",
+      "stranger": "stranger",
+      "refugee": "refugee",
+      "runner": "runner"
+    }
+  },
+  "recovered_prai_fixture_trace": {
+    "input": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+    "segment": {
+      "declared_action_text": "I turn to the Gate Serjeant.",
+      "spoken_text": "Did the census choke change the route?"
+    },
+    "parse": {
+      "kind": null,
+      "target_id": null
+    },
+    "roster_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "guard_captain",
+      "refugee",
+      "threadbare_watcher"
+    ],
+    "declared_switch": {
+      "has_declared_switch": true,
+      "target_actor_id": "gate_guard",
+      "target_source": "declared_action",
+      "reason": "declared_action_phrase_resolved_to_scene_addressable_actor"
+    },
+    "declared_phrase": "the gate serjeant",
+    "declared_phrase_resolved": "gate_guard",
+    "spoken_vocative": {
+      "has_spoken_vocative": false,
+      "target_actor_id": null,
+      "target_source": null,
+      "reason": "no_spoken_vocative_pattern_or_no_roster_match"
+    },
+    "comma_vocative": null,
+    "leading_or_directed": "gate_guard",
+    "generic_role": {},
+    "world_ref": "gate_guard",
+    "directed_hits": [
+      {
+        "npc_id": "gate_guard",
+        "name": "Gate Guard",
+        "matching_refs": [
+          "gate"
+        ],
+        "longest_ref": "gate"
+      },
+      {
+        "npc_id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "matching_refs": [
+          "gate",
+          "gate serjeant"
+        ],
+        "longest_ref": "gate serjeant"
+      }
+    ],
+    "find_addressed": "gate_guard",
+    "dialogue_lock_target": "gate_guard",
+    "authoritative": {
+      "npc_id": "gate_guard",
+      "npc_name": "Gate Guard",
+      "source": "declared_action",
+      "reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "target_resolved": true
+    },
+    "social": {
+      "npc_id": "gate_guard",
+      "npc_name": "Gate Guard",
+      "topic_id": null,
+      "reply_kind": "refusal"
+    },
+    "knowledge_npc_ids": [
+      "gate_guard"
+    ]
+  },
+  "recovered_persisted_world_trace": {
+    "input": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+    "segment": {
+      "declared_action_text": "I turn to the Gate Serjeant.",
+      "spoken_text": "Did the census choke change the route?"
+    },
+    "parse": {
+      "kind": null,
+      "target_id": null
+    },
+    "roster_ids": [
+      "tavern_runner",
+      "guard_captain",
+      "refugee",
+      "threadbare_watcher"
+    ],
+    "declared_switch": {
+      "has_declared_switch": false,
+      "target_actor_id": null,
+      "target_source": null,
+      "reason": "declared_phrase_did_not_resolve_to_addressable_actor"
+    },
+    "declared_phrase": "the gate serjeant",
+    "declared_phrase_resolved": "",
+    "spoken_vocative": {
+      "has_spoken_vocative": false,
+      "target_actor_id": null,
+      "target_source": null,
+      "reason": "no_spoken_vocative_pattern_or_no_roster_match"
+    },
+    "comma_vocative": null,
+    "leading_or_directed": null,
+    "generic_role": {},
+    "world_ref": null,
+    "directed_hits": [],
+    "find_addressed": null,
+    "dialogue_lock_target": "tavern_runner",
+    "authoritative": {
+      "npc_id": null,
+      "npc_name": null,
+      "source": "none",
+      "reason": "no addressable target resolved",
+      "target_resolved": false
+    },
+    "social": {
+      "npc_id": null,
+      "npc_name": null,
+      "topic_id": null,
+      "reply_kind": "reaction"
+    },
+    "knowledge_npc_ids": []
+  },
+  "recovered_default_world_trace": {
+    "input": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+    "segment": {
+      "declared_action_text": "I turn to the Gate Serjeant.",
+      "spoken_text": "Did the census choke change the route?"
+    },
+    "parse": {
+      "kind": null,
+      "target_id": null
+    },
+    "roster_ids": [
+      "guard_captain",
+      "tavern_runner",
+      "refugee",
+      "threadbare_watcher"
+    ],
+    "declared_switch": {
+      "has_declared_switch": false,
+      "target_actor_id": null,
+      "target_source": null,
+      "reason": "declared_phrase_did_not_resolve_to_addressable_actor"
+    },
+    "declared_phrase": "the gate serjeant",
+    "declared_phrase_resolved": "",
+    "spoken_vocative": {
+      "has_spoken_vocative": false,
+      "target_actor_id": null,
+      "target_source": null,
+      "reason": "no_spoken_vocative_pattern_or_no_roster_match"
+    },
+    "comma_vocative": null,
+    "leading_or_directed": null,
+    "generic_role": {},
+    "world_ref": null,
+    "directed_hits": [],
+    "find_addressed": null,
+    "dialogue_lock_target": null,
+    "authoritative": {
+      "npc_id": null,
+      "npc_name": null,
+      "source": "none",
+      "reason": "no addressable target resolved",
+      "target_resolved": false
+    },
+    "social": {
+      "npc_id": null,
+      "npc_name": null,
+      "topic_id": null,
+      "reply_kind": "reaction"
+    },
+    "knowledge_npc_ids": []
+  },
+  "identity_matrix": [
+    {
+      "label": "recovered_gate_serjeant_turn_to",
+      "input": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the gate serjeant",
+      "declared_phrase_resolved": "gate_guard",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "gate"
+          ],
+          "longest_ref": "gate"
+        },
+        {
+          "npc_id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "matching_refs": [
+            "gate",
+            "gate serjeant"
+          ],
+          "longest_ref": "gate serjeant"
+        }
+      ]
+    },
+    {
+      "label": "canonical_gate_guard_turn_to",
+      "input": "I turn to the Gate Guard. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the gate guard",
+      "declared_phrase_resolved": "gate_guard",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "gate guard",
+            "gate"
+          ],
+          "longest_ref": "gate guard"
+        },
+        {
+          "npc_id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "matching_refs": [
+            "gate"
+          ],
+          "longest_ref": "gate"
+        }
+      ]
+    },
+    {
+      "label": "ordinary_guard_role",
+      "input": "I turn to the guard. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the guard",
+      "declared_phrase_resolved": "guard_captain",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {
+        "matched_role": "guard",
+        "npc_id": "guard_captain",
+        "ambiguous": false
+      },
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "guard"
+          ],
+          "longest_ref": "guard"
+        },
+        {
+          "npc_id": "guard_captain",
+          "name": "Guard Captain",
+          "matching_refs": [
+            "guard"
+          ],
+          "longest_ref": "guard"
+        }
+      ]
+    },
+    {
+      "label": "authored_serjeant_alias",
+      "input": "I turn to the serjeant. \"What happened here?\"",
+      "find_addressed": "gate_serjeant",
+      "authoritative_id": "gate_serjeant",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the serjeant",
+      "declared_phrase_resolved": "gate_serjeant",
+      "leading_or_directed": "gate_serjeant",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_serjeant",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "matching_refs": [
+            "serjeant"
+          ],
+          "longest_ref": "serjeant"
+        }
+      ]
+    },
+    {
+      "label": "authored_gate_serjeant_alias",
+      "input": "I turn to the gate serjeant. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the gate serjeant",
+      "declared_phrase_resolved": "gate_guard",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "gate"
+          ],
+          "longest_ref": "gate"
+        },
+        {
+          "npc_id": "gate_serjeant",
+          "name": "Gate Serjeant",
+          "matching_refs": [
+            "gate",
+            "gate serjeant"
+          ],
+          "longest_ref": "gate serjeant"
+        }
+      ]
+    },
+    {
+      "label": "vocative_gate_serjeant",
+      "input": "Gate Serjeant, what happened here?",
+      "find_addressed": "gate_serjeant",
+      "authoritative_id": "gate_serjeant",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": "gate_serjeant",
+      "social_npc_id": "gate_serjeant",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "vocative_serjeant",
+      "input": "Serjeant, what happened here?",
+      "find_addressed": "gate_serjeant",
+      "authoritative_id": "gate_serjeant",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "gate_serjeant",
+      "generic_role": {},
+      "spoken_vocative": "gate_serjeant",
+      "social_npc_id": "gate_serjeant",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "unsupported_captain_when_both_guard_and_serjeant",
+      "input": "Captain, what happened here?",
+      "find_addressed": "guard_captain",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "guard_captain",
+      "generic_role": {},
+      "spoken_vocative": "guard_captain",
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "canonical_guard_captain",
+      "input": "I turn to the Guard Captain. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the guard captain",
+      "declared_phrase_resolved": "guard_captain",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {
+        "matched_role": "guard",
+        "npc_id": "guard_captain",
+        "ambiguous": false
+      },
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "guard"
+          ],
+          "longest_ref": "guard"
+        },
+        {
+          "npc_id": "guard_captain",
+          "name": "Guard Captain",
+          "matching_refs": [
+            "guard",
+            "guard captain"
+          ],
+          "longest_ref": "guard captain"
+        }
+      ]
+    },
+    {
+      "label": "unknown_name_aldric",
+      "input": "Lord Aldric, what happened here?",
+      "find_addressed": null,
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "unsupported_commander_turn_to",
+      "input": "I turn to the Commander. \"What happened here?\"",
+      "find_addressed": null,
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "the commander",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "undirected_what_happened",
+      "input": "What happened here?",
+      "find_addressed": null,
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "ask_the_serjeant",
+      "input": "Ask the serjeant what happened here.",
+      "find_addressed": null,
+      "authoritative_id": "gate_serjeant",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "serjeant",
+      "declared_phrase_resolved": "gate_serjeant",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_serjeant",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "sole_gate_guard_recovered_serjeant",
+      "input": "I turn to the Gate Serjeant. \"Did the census choke change the route?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the gate serjeant",
+      "declared_phrase_resolved": "gate_guard",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "gate"
+          ],
+          "longest_ref": "gate"
+        }
+      ]
+    },
+    {
+      "label": "sole_gate_guard_captain_vocative",
+      "input": "Captain, what happened here?",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": "gate_guard",
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "sole_gate_guard_unknown_name",
+      "input": "Lord Aldric, what happened here?",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "sole_gate_guard_ordinary_guard",
+      "input": "Guard, what happened here?",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {
+        "matched_role": "guard",
+        "npc_id": "gate_guard",
+        "ambiguous": false
+      },
+      "spoken_vocative": "gate_guard",
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "sole_gate_guard_undirected",
+      "input": "What happened here?",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "sole_gate_guard_supported_name",
+      "input": "Gate Guard, what happened here?",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": "gate_guard",
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": []
+    }
+  ],
+  "kiln_matrix": [
+    {
+      "label": "kiln_canonical_porter",
+      "input": "Night Porter, what happened here?",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": "night_porter",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "spoken_vocative": "night_porter"
+    },
+    {
+      "label": "kiln_alias_porter",
+      "input": "Porter, what happened here?",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": "night_porter",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "spoken_vocative": "night_porter"
+    },
+    {
+      "label": "kiln_unsupported_foreman",
+      "input": "Foreman, what happened here?",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": null,
+      "authoritative_source": "none",
+      "authoritative_reason": "no addressable target resolved",
+      "spoken_vocative": null
+    },
+    {
+      "label": "kiln_unsupported_clerk_turn_to",
+      "input": "I turn to the Clerk. \"What happened here?\"",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": null,
+      "authoritative_source": "none",
+      "authoritative_reason": "no addressable target resolved",
+      "spoken_vocative": null
+    },
+    {
+      "label": "kiln_unknown_name",
+      "input": "Lord Aldric, what happened here?",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": null,
+      "authoritative_source": "none",
+      "authoritative_reason": "no addressable target resolved",
+      "spoken_vocative": null
+    },
+    {
+      "label": "kiln_undirected",
+      "input": "What happened here?",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": null,
+      "authoritative_source": "none",
+      "authoritative_reason": "no addressable target resolved",
+      "spoken_vocative": null
+    },
+    {
+      "label": "kiln_supported_turn_to",
+      "input": "I turn to the Night Porter. \"What happened here?\"",
+      "roster_ids": [
+        "night_porter"
+      ],
+      "find_addressed": "night_porter",
+      "authoritative_id": "night_porter",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "spoken_vocative": null
+    }
+  ],
+  "two_guard_matrix": [
+    {
+      "label": "two_turn_to_guard_captain",
+      "input": "I turn to the Guard Captain. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the guard captain",
+      "declared_phrase_resolved": "guard_captain",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {
+        "matched_role": "guard",
+        "npc_id": "guard_captain",
+        "ambiguous": false
+      },
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "guard"
+          ],
+          "longest_ref": "guard"
+        },
+        {
+          "npc_id": "guard_captain",
+          "name": "Guard Captain",
+          "matching_refs": [
+            "guard",
+            "guard captain"
+          ],
+          "longest_ref": "guard captain"
+        }
+      ]
+    },
+    {
+      "label": "two_turn_to_gate_guard",
+      "input": "I turn to the Gate Guard. \"What happened here?\"",
+      "find_addressed": "gate_guard",
+      "authoritative_id": "gate_guard",
+      "authoritative_source": "declared_action",
+      "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+      "declared_phrase": "the gate guard",
+      "declared_phrase_resolved": "gate_guard",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "gate_guard",
+      "social_topic_id": null,
+      "directed_hits": [
+        {
+          "npc_id": "gate_guard",
+          "name": "Gate Guard",
+          "matching_refs": [
+            "gate guard",
+            "gate"
+          ],
+          "longest_ref": "gate guard"
+        }
+      ]
+    },
+    {
+      "label": "two_vocative_captain",
+      "input": "Captain, what happened here?",
+      "find_addressed": "guard_captain",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "guard_captain",
+      "generic_role": {},
+      "spoken_vocative": "guard_captain",
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "two_vocative_guard",
+      "input": "Guard, what happened here?",
+      "find_addressed": "guard_captain",
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "spoken_vocative",
+      "authoritative_reason": "spoken_vocative_resolved_to_addressable_actor",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": "gate_guard",
+      "generic_role": {
+        "matched_role": "guard",
+        "npc_id": "guard_captain",
+        "ambiguous": false
+      },
+      "spoken_vocative": "guard_captain",
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    },
+    {
+      "label": "two_unsupported_serjeant",
+      "input": "Serjeant, what happened here?",
+      "find_addressed": null,
+      "authoritative_id": "guard_captain",
+      "authoritative_source": "continuity",
+      "authoritative_reason": "active_interaction_target_id is scene-addressable",
+      "declared_phrase": "",
+      "declared_phrase_resolved": "",
+      "leading_or_directed": null,
+      "generic_role": {},
+      "spoken_vocative": null,
+      "social_npc_id": "guard_captain",
+      "social_topic_id": null,
+      "directed_hits": []
+    }
+  ]
+}

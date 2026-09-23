@@ -207,7 +207,7 @@ _TRAVEL_VERB_STOPWORDS = frozenset(
     }
 )
 _QUESTION_LEAD_RE = re.compile(
-    r"^\s*(?:what|where|why|how|who|which|when)\b",
+    r"^\s*(?:what|where|why|how|who|which|when|is\s+there|are\s+there)\b",
     re.IGNORECASE,
 )
 _COMMITMENT_PREFIX_RE = re.compile(

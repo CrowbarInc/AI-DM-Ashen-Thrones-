@@ -437,7 +437,7 @@ _PLAYER_STAYED_RE = re.compile(
     re.IGNORECASE,
 )
 _PLAYER_DEPARTED_RE = re.compile(
-    r"\b(?:you|your)\s+(?:leave|left|head|follow|set\s+out|take\s+the|"
+    r"\b(?:you|your)\s+(?:leave|left|head|follow|set\s+(?:out|off)|take\s+the|"
     r"act\s+on\s+that|position\s+changes|walk|depart|enter|arrive|"
     r"turn\s+away|make\s+(?:your\s+)?way|start\s+(?:back|toward|towards|for)|"
     r"return(?:s|ed)?)\b",
@@ -448,6 +448,28 @@ _FALSE_ARRIVAL_RE = re.compile(
     r"are\s+(?:now\s+)?(?:at|in|back))\b",
     re.IGNORECASE,
 )
+# Engine arrival-stock phrasing that asserts a spatial change without you/arrive verbs.
+_IMPLIED_TRANSITION_STOCK_RE = re.compile(
+    r"\bthe new ground shows itself\b",
+    re.IGNORECASE,
+)
+
+
+def _resolution_supports_travel_success(resolution: dict | None) -> bool:
+    """True only when authoritative gameplay state performed a scene transition."""
+    if not isinstance(resolution, dict):
+        return False
+    if resolution.get("resolved_transition") is True:
+        return True
+    state_changes = resolution.get("state_changes")
+    if isinstance(state_changes, dict):
+        if (
+            state_changes.get("scene_transition_occurred")
+            or state_changes.get("scene_changed")
+            or state_changes.get("arrived_at_scene")
+        ):
+            return True
+    return False
 
 
 def apply_stay_leave_narration_agreement_to_gm(
@@ -498,8 +520,12 @@ def apply_stay_leave_narration_agreement_to_gm(
             _mark()
         return gm_output
 
-    if kind in {"travel", "scene_transition"} and not resolved:
-        if _FALSE_ARRIVAL_RE.search(text) or _PLAYER_DEPARTED_RE.search(text):
+    if kind in {"travel", "scene_transition"} and not _resolution_supports_travel_success(resolution):
+        if (
+            _FALSE_ARRIVAL_RE.search(text)
+            or _PLAYER_DEPARTED_RE.search(text)
+            or _IMPLIED_TRANSITION_STOCK_RE.search(text)
+        ):
             gm_output["player_facing_text"] = "That destination is not available from here."
             _mark()
     return gm_output
@@ -557,9 +583,12 @@ def apply_destination_arrival_realization_to_gm(
     )
 
     kind = str(resolution.get("kind") or "").strip().lower()
-    resolved = resolution.get("resolved_transition") is True
+    travel_succeeded = _resolution_supports_travel_success(resolution)
     seed = str(player_text or resolution.get("prompt") or "destination").strip() or "destination"
-    if resolved or kind in {"scene_transition", "travel"}:
+    if kind in {"scene_transition", "travel"} and not travel_succeeded:
+        # Unresolved travel is not an arrival. Scene stock must not mint a transition.
+        return gm_output
+    if travel_succeeded:
         replacement = render_travel_arrival_fallback_line(scene, seed_key=f"praf|arr|{seed}")
     else:
         replacement = render_observe_perception_fallback_line(

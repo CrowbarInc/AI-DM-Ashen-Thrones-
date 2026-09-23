@@ -1,0 +1,34 @@
+{
+  "fixture": "test_transcript_runner_repeated_interruption_beat_forces_progression",
+  "scene": "tavern",
+  "npc": "tavern_runner",
+  "authored_topic": "The patrol never came back from the old milestone.",
+  "turns": [
+    {
+      "player": "Tavern Runner, what happened to the patrol?",
+      "model": "The runner starts to answer, then glances past you as shouting breaks out in the crowd.",
+      "kind": "question",
+      "facing": "Tavern Runner mutters, \"Word is, the patrol never came back from the old milestone.\"",
+      "source": "resolution:topic_revealed",
+      "last_answer_kept": true
+    },
+    {
+      "player": "\"Runner,\" Galinor presses, \"what were you about to say about the patrol?\"",
+      "model": "The runner opens their mouth, then breaks off as a shout cuts across the square.",
+      "kind": "question",
+      "facing": "Tavern Runner mutters, \"Word is, the patrol never came back from the old milestone.\"",
+      "source": "npc_topic:tavern_runner:patrol_milestone",
+      "last_answer_kept": true
+    },
+    {
+      "player": "\"Runner,\" Galinor says, \"ignore the noise and tell me about the patrol.\"",
+      "model": "The runner begins to respond before noise from the crowd pulls their attention away.",
+      "kind": "social_probe",
+      "facing_before_repair": "Tavern Runner mutters, \"Word is, the runner begins to respond before noise from the crowd pulls their attention away.\"",
+      "facing_after_repair": "Tavern Runner mutters, \"Word is, the patrol never came back from the old milestone.\"",
+      "commit_input": "The runner begins to respond before noise from the crowd pulls their attention away.",
+      "last_answer_after": "Tavern Runner mutters, \"Word is, the patrol never came back from the old milestone.\".",
+      "forced_interruption_progression": false
+    }
+  ]
+}

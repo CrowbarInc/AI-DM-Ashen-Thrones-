@@ -1,0 +1,58 @@
+[
+  {
+    "label": "look_neutral_model",
+    "player": "I look around the gate.",
+    "model": "You take in the muddy approach and the notice board.",
+    "kind": "observe",
+    "npc_id": null,
+    "facing": "As you watch the scene, one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+    "tags": [
+      "authored_knowledge_realization",
+      "perception_non_invention"
+    ],
+    "debug_notes": "authored_knowledge_realization:npc_topic:gate_guard:watch_command"
+  },
+  {
+    "label": "look_model_mutters",
+    "player": "I look around the gate.",
+    "model": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "kind": "observe",
+    "npc_id": null,
+    "facing": "As you watch the scene, one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+    "tags": [
+      "authored_knowledge_realization",
+      "perception_non_invention"
+    ],
+    "debug_notes": "authored_knowledge_realization:npc_topic:gate_guard:watch_command"
+  },
+  {
+    "label": "addressed_watch",
+    "player": "Gate Guard, who commands the watch here?",
+    "model": "Gate Guard shakes their head. \"I don't know.\"",
+    "kind": "question",
+    "npc_id": "gate_guard",
+    "facing": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "tags": [
+      "retry_escape_hatch",
+      "forced_retry_fallback",
+      "retry_exhausted",
+      "authored_knowledge_realization"
+    ],
+    "debug_notes": "authored_knowledge_realization:resolution:topic_revealed"
+  },
+  {
+    "label": "present_not_addressed_question",
+    "player": "Who commands the watch here?",
+    "model": "Someone shrugs. \"Couldn't say.\"",
+    "kind": "question",
+    "npc_id": "gate_guard",
+    "facing": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "tags": [
+      "retry_escape_hatch",
+      "forced_retry_fallback",
+      "retry_exhausted",
+      "authored_knowledge_realization"
+    ],
+    "debug_notes": "authored_knowledge_realization:resolution:topic_revealed"
+  }
+]

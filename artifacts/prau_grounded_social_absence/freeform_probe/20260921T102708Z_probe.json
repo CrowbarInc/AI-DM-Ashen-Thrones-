@@ -1,0 +1,83 @@
+{
+  "stamp": "20260921T102708Z",
+  "turns": [
+    {
+      "player": "I ask the night porter how much the mash costs.",
+      "ok": true,
+      "error": null,
+      "kind": "question",
+      "dimension": "quantity",
+      "topic_id": null,
+      "reply_kind": "refusal",
+      "npc": "night_porter",
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "Night Porter says, \"I do not know enough to answer that.\""
+    },
+    {
+      "player": "I ask the night porter when the kiln crew actually left.",
+      "ok": true,
+      "error": null,
+      "kind": "question",
+      "dimension": "time",
+      "topic_id": null,
+      "reply_kind": "refusal",
+      "npc": "night_porter",
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "Night Porter shakes their head. \"I won't answer that about night\u2014not here.\""
+    },
+    {
+      "player": "I ask the night porter how many bricks are left in that stack.",
+      "ok": true,
+      "error": null,
+      "kind": "question",
+      "dimension": "quantity",
+      "topic_id": null,
+      "reply_kind": "refusal",
+      "npc": "night_porter",
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "Night Porter says, \"I do not know enough to answer that.\""
+    },
+    {
+      "player": "I ask the night porter who last read that tally slate.",
+      "ok": true,
+      "error": null,
+      "kind": "investigate",
+      "dimension": "identity",
+      "topic_id": null,
+      "reply_kind": null,
+      "npc": null,
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "You examine the tally slate. Closer looking yields nothing further."
+    },
+    {
+      "player": "I ask the night porter who recaulked the chimney flue, and how many tilers did the job.",
+      "ok": true,
+      "error": null,
+      "kind": "question",
+      "dimension": "identity",
+      "topic_id": null,
+      "reply_kind": "refusal",
+      "npc": "night_porter",
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "Night Porter says, \"I do not know enough to answer that.\""
+    },
+    {
+      "player": "I ask the night porter what sits on the brazier.",
+      "ok": true,
+      "error": null,
+      "kind": "question",
+      "dimension": "general",
+      "topic_id": "mash_exists",
+      "reply_kind": "answer",
+      "npc": "night_porter",
+      "invented_markers": [],
+      "internal_term": false,
+      "gm": "Night Porter mutters, \"Word is, a kettle of mash sits on the porter's brazier.\""
+    }
+  ]
+}

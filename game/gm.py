@@ -10,6 +10,7 @@ from game.exploration import EXPLORATION_KINDS
 from game.social import (
     SOCIAL_KINDS,
     classify_social_followup_dimension,
+    empty_subject_retains_topic_pressure_key,
     explicit_player_topic_anchor_state,
 )
 from game.prompt_context import (
@@ -684,6 +685,13 @@ def register_topic_probe(
     if explicit_player_topic_anchor_state(player).get("active"):
         anaphora_followup = False
     if previous_topic and topic_key != previous_topic and anaphora_followup:
+        topic_key = previous_topic
+    if (
+        previous_topic
+        and topic_key != previous_topic
+        and not explicit_player_topic_anchor_state(player).get("active")
+        and empty_subject_retains_topic_pressure_key(player)
+    ):
         topic_key = previous_topic
     if recent_log is not None and previous_topic and topic_key != previous_topic:
         icx = session.get("interaction_context") if isinstance(session.get("interaction_context"), dict) else {}
@@ -3188,6 +3196,20 @@ def _is_valid_player_facing_fallback_answer(
     return True
 
 
+def _question_resolution_exempt_for_resolved_observe(resolution: Dict[str, Any] | None) -> bool:
+    """Executed observe already answered a perception request; interrogative form is not leftover."""
+    if not isinstance(resolution, dict):
+        return False
+    return str(resolution.get("kind") or "").strip().lower() == "observe"
+
+
+def _question_resolution_exempt_for_resolved_adjudication(resolution: Dict[str, Any] | None) -> bool:
+    """Executed adjudication already answered a procedural question; interrogative form is not leftover."""
+    if not isinstance(resolution, dict):
+        return False
+    return str(resolution.get("kind") or "").strip().lower() == "adjudication_query"
+
+
 def _question_resolution_exempt_for_open_crowd_social(resolution: Dict[str, Any] | None) -> bool:
     """Crowd / open-call social turns are not one-to-one question-resolution contracts."""
     if not isinstance(resolution, dict):
@@ -3249,6 +3271,10 @@ def question_resolution_rule_check(
     if not applies:
         return {"applies": False, "ok": True, "reasons": []}
     if is_scene_directed_watch_question(player):
+        return {"applies": False, "ok": True, "reasons": []}
+    if _question_resolution_exempt_for_resolved_observe(resolution):
+        return {"applies": False, "ok": True, "reasons": []}
+    if _question_resolution_exempt_for_resolved_adjudication(resolution):
         return {"applies": False, "ok": True, "reasons": []}
     if _question_resolution_exempt_for_open_crowd_social(resolution):
         return {"applies": False, "ok": True, "reasons": []}

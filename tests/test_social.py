@@ -309,7 +309,7 @@ def test_listening_invitation_sets_reply_expected_explanation():
     assert social["reply_kind"] == "explanation"
 
 
-def test_question_without_topic_marks_refusal_and_substantive_hint():
+def test_question_without_topic_marks_refusal_and_non_invention_hint():
     world = default_world()
     world["npcs"] = [
         {"id": "runner", "name": "Runner", "location": "gate", "topics": []},
@@ -335,7 +335,10 @@ def test_question_without_topic_marks_refusal_and_substantive_hint():
     social = resolution["social"]
     assert social["npc_reply_expected"] is True
     assert social["reply_kind"] == "refusal"
-    assert "substantive in-turn response" in resolution["hint"]
+    hint = str(resolution.get("hint") or "")
+    assert "no new information was revealed" in hint.lower()
+    assert "without inventing" in hint.lower()
+    assert "answer, refusal, evasion" not in hint.lower()
 
 
 def test_follow_up_without_explicit_target_id_keeps_guard_captain_via_continuity():
