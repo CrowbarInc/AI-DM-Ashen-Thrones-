@@ -235,7 +235,7 @@ def test_short_why_reuses_topic_bucket_and_marks_answer_pressure_followup():
     )
     soc = resolution.get("social") or {}
     assert soc.get("valid_followup_detected") is True
-    assert soc.get("prior_same_dimension_answer_exists") is True
+    assert soc.get("prior_same_dimension_answer_exists") is False
     esc = soc.get("social_escalation") or {}
     assert int(esc.get("escalation_level") or 0) == 2
     assert esc.get("escalation_reason") == "second_attempt_same_topic"
@@ -475,6 +475,8 @@ def test_repeated_same_dimension_after_answer_can_mark_exhausted():
     rt = get_scene_runtime(session, "scene_investigate")
     entry = rt["topic_pressure"]["crossroads_incident"]
     entry["last_answer"] = "Word is, they call her Marla; she brokers for Verevin interests at the crossroads."
+    entry["last_answer_provenance"] = "authored_topic"
+    entry["last_answer_authoritative_text"] = entry["last_answer"]
     entry["previous_probe_dimension"] = "identity"
     entry["last_probe_dimension"] = "identity"
     rt["topic_pressure_current"]["player_text"] = "Who is Marla really working for?"

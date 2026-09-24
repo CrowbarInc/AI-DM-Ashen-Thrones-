@@ -619,9 +619,17 @@ def test_contract_topic_progress_commit_receives_post_enforcement_reply_text() -
         session,
         scene_envelope,
         reply_text,
+        resolution=None,
+        world=None,
     ):
         captured.append(reply_text)
-        return orig_commit(session=session, scene_envelope=scene_envelope, reply_text=reply_text)
+        return orig_commit(
+            session=session,
+            scene_envelope=scene_envelope,
+            reply_text=reply_text,
+            resolution=resolution,
+            world=world,
+        )
 
     with patch.object(rpe_mod, "_commit_topic_progress", side_effect=capture_commit):
         out = gm_mod.apply_response_policy_enforcement(

@@ -1,0 +1,1362 @@
+{
+  "derived": true,
+  "source": "persisted_data/session_log.jsonl",
+  "note": "Navigation index. Missing keys are null. Values are copied from the log and are not inferred.",
+  "session_id": "ba70eb525862575033539357",
+  "turn_counter_at_capture": 8,
+  "entries": [
+    {
+      "log_index": 0,
+      "exchange_role": "campaign_opening",
+      "timestamp": "2026-09-24T00:17:08.223631Z",
+      "player_input": "",
+      "request": {
+        "start_campaign": true,
+        "action_type": "start_campaign"
+      },
+      "segmented_components": {
+        "turn_segmentation": null,
+        "segmented_turn": null,
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": false,
+          "segmented_turn": false,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": "scene_opening",
+      "action_id": "campaign_start_opening_scene",
+      "source_route": "exploration",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": false,
+        "social_npc_id": null,
+        "social_present": false,
+        "grounded_speaker_id": null,
+        "canonical_entry_target_actor_id": null
+      },
+      "route": null,
+      "routed_to": null,
+      "route_reason": null,
+      "intent_route_debug_present": false,
+      "target_actor_or_object": {
+        "social_npc_id": null,
+        "social_target_resolved": null,
+        "canonical_entry_target_actor_id": null,
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": null
+      },
+      "addressed_actor_id": null,
+      "addressed_actor_source": null,
+      "social_intent_class": null,
+      "question_adjudication_text": null,
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": "frontier_gate",
+        "scene_transition_occurred": false
+      },
+      "state_changes": {
+        "opening_scene_turn": true,
+        "arrived_at_scene": true,
+        "new_scene_context_available": true
+      },
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 1
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": null
+      },
+      "resolved_transition": false,
+      "reply_kind": null,
+      "realization_hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "primary_turn",
+        "model_route_family": "default",
+        "model_route_reason": "purpose_primary_turn",
+        "model_retry_attempt": 0,
+        "model_escalated": false,
+        "resolution_prompt_field": "",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 1 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 1 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 1 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": true,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "strict_social_inactive",
+          "fallback_family_used": "scene_opening",
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+        "prepared_action_fallback_text": "You act, and your position changes with that movement."
+      },
+      "intent_classification": {
+        "raw_text": "",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "scene_opening",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "scene_opening_requires_opening_response",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "canonical_entry_path": null,
+      "canonical_entry_reason": null,
+      "social_turn_contract": null,
+      "player_facing_gm_response": "Rain spatters against the soot-dark stone that frames the eastern gate of Cinderwatch, where frayed banners flap wearily on their lines. The muddy approach is clogged with a jostling crowd: refugees draped in threadbare cloaks, creaking wagons overloaded with belongings, and foot traffic pushing toward the guarded choke. Nearby, a tavern runner shouts over the noise, hawking hot stew and whispered rumors for coin. Watching the gate with keen eyes, a figure garbed in threadbare clothes stands unnervingly still, their gaze flicking from the waiting crowd to the gate itself more often than to the queue. Off to one side, a solid notice board displays official proclamations—new taxes, curfew rules etched in bold, and a stark warning about a patrol gone missing in the muddy outskirts. A gate serjeant manages the crowd with hard discipline, their vigilant presence lending weight to the uneasy atmosphere that presses on the assembled travelers and locals.",
+      "raw_evidence": "persisted_data/session_log.jsonl line 1; derived/log_entries/entry_00.json"
+    },
+    {
+      "log_index": 1,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:17:27.164433Z",
+      "player_input": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+      "request": {
+        "chat": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?"
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "adjudication_question_text": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?"
+        },
+        "segmented_turn": null,
+        "embedded_adjudication": {
+          "question": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+          "category": "action_feasibility_query",
+          "answer_type": "needs_concrete_action",
+          "requires_check": null
+        },
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": false,
+          "embedded_adjudication": true
+        }
+      },
+      "kind": "investigate",
+      "action_id": "i_look_to_the_banners_as_i_enter_the_eas",
+      "source_route": "mixed",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": false,
+        "social_npc_id": null,
+        "social_present": false,
+        "grounded_speaker_id": null,
+        "canonical_entry_target_actor_id": null
+      },
+      "route": null,
+      "routed_to": null,
+      "route_reason": null,
+      "intent_route_debug_present": false,
+      "target_actor_or_object": {
+        "social_npc_id": null,
+        "social_target_resolved": null,
+        "canonical_entry_target_actor_id": null,
+        "referenced_surface_target": "",
+        "referenced_surface_interactable_id": "",
+        "active_interaction_target_id": null
+      },
+      "addressed_actor_id": null,
+      "addressed_actor_source": null,
+      "social_intent_class": null,
+      "question_adjudication_text": {
+        "declared_action_text": null,
+        "adjudication_question_text": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+        "spoken_text": null
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 2
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": null
+      },
+      "resolved_transition": false,
+      "reply_kind": null,
+      "realization_hint": "Player looked or investigated without a grounded discoverable target. Narrate only what is already authorized here. Do not invent a clue, lead, person, time, or other evidence merely to keep the search productive.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "strict_social",
+        "model_route_family": "high_precision",
+        "model_route_reason": "purpose_strict_social",
+        "model_retry_attempt": 0,
+        "model_escalated": true,
+        "resolution_prompt_field": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 2 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 2 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 2 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": false,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": true,
+          "coercion_reason": "strict_social_inactive|npc_directed_guard|suppressed_non_social_narration:exploration_resolution_kind",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+        "prepared_action_fallback_text": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an immediate read on what is there."
+      },
+      "intent_classification": {
+        "raw_text": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "canonical_entry_path": null,
+      "canonical_entry_reason": null,
+      "social_turn_contract": null,
+      "player_facing_gm_response": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "raw_evidence": "persisted_data/session_log.jsonl line 2; derived/log_entries/entry_01.json"
+    },
+    {
+      "log_index": 2,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:18:29.734049Z",
+      "player_input": "Looking to the sky, can I make out the time of day despite the rain?",
+      "request": {
+        "chat": "Looking to the sky, can I make out the time of day despite the rain?"
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "adjudication_question_text": "Looking to the sky, can I make out the time of day despite the rain?"
+        },
+        "segmented_turn": null,
+        "embedded_adjudication": {
+          "question": "Looking to the sky, can I make out the time of day despite the rain?",
+          "category": "action_feasibility_query",
+          "answer_type": "needs_concrete_action",
+          "requires_check": null
+        },
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": false,
+          "embedded_adjudication": true
+        }
+      },
+      "kind": "investigate",
+      "action_id": "looking_to_the_sky_can_i_make_out_the_ti",
+      "source_route": "mixed",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": false,
+        "social_npc_id": null,
+        "social_present": false,
+        "grounded_speaker_id": null,
+        "canonical_entry_target_actor_id": null
+      },
+      "route": null,
+      "routed_to": null,
+      "route_reason": null,
+      "intent_route_debug_present": false,
+      "target_actor_or_object": {
+        "social_npc_id": null,
+        "social_target_resolved": null,
+        "canonical_entry_target_actor_id": null,
+        "referenced_surface_target": "",
+        "referenced_surface_interactable_id": "",
+        "active_interaction_target_id": null
+      },
+      "addressed_actor_id": null,
+      "addressed_actor_source": null,
+      "social_intent_class": null,
+      "question_adjudication_text": {
+        "declared_action_text": null,
+        "adjudication_question_text": "Looking to the sky, can I make out the time of day despite the rain?",
+        "spoken_text": null
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 3
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": null
+      },
+      "resolved_transition": false,
+      "reply_kind": null,
+      "realization_hint": "Player looked or investigated without a grounded discoverable target. Narrate only what is already authorized here. Do not invent a clue, lead, person, time, or other evidence merely to keep the search productive.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "primary_turn",
+        "model_route_family": "default",
+        "model_route_reason": "purpose_primary_turn",
+        "model_retry_attempt": 0,
+        "model_escalated": false,
+        "resolution_prompt_field": "Looking to the sky, can I make out the time of day despite the rain?",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 3 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 3 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 3 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": false,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "strict_social_inactive",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+        "prepared_action_fallback_text": "You act on that move, and you get an immediate read on what is there."
+      },
+      "intent_classification": {
+        "raw_text": "Looking to the sky, can I make out the time of day despite the rain?",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "canonical_entry_path": null,
+      "canonical_entry_reason": null,
+      "social_turn_contract": null,
+      "player_facing_gm_response": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "raw_evidence": "persisted_data/session_log.jsonl line 3; derived/log_entries/entry_02.json"
+    },
+    {
+      "log_index": 3,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:19:10.827801Z",
+      "player_input": "I step toward the notice board, particularly interested in the curfew rules. What do they say?",
+      "request": {
+        "chat": "I step toward the notice board, particularly interested in the curfew rules. What do they say?"
+      },
+      "segmented_components": {
+        "turn_segmentation": null,
+        "segmented_turn": null,
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": false,
+          "segmented_turn": false,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": null,
+      "action_id": null,
+      "source_route": "exploration",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": false,
+        "social_npc_id": null,
+        "social_present": false,
+        "grounded_speaker_id": null,
+        "canonical_entry_target_actor_id": null
+      },
+      "route": null,
+      "routed_to": null,
+      "route_reason": null,
+      "intent_route_debug_present": false,
+      "target_actor_or_object": {
+        "social_npc_id": null,
+        "social_target_resolved": null,
+        "canonical_entry_target_actor_id": null,
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": null
+      },
+      "addressed_actor_id": null,
+      "addressed_actor_source": null,
+      "social_intent_class": null,
+      "question_adjudication_text": null,
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": null,
+        "target_scene_id": null,
+        "scene_transition_occurred": null
+      },
+      "state_changes": null,
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 4
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": null,
+        "discovered_clues_added": [],
+        "lead_landing": null
+      },
+      "resolved_transition": null,
+      "reply_kind": null,
+      "realization_hint": null,
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "primary_turn",
+        "model_route_family": "default",
+        "model_route_reason": "purpose_primary_turn",
+        "model_retry_attempt": 0,
+        "model_escalated": false,
+        "resolution_prompt_field": null,
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 4 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 4 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 4 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": false,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "strict_social_inactive",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": true,
+          "answer_completeness_failure_reasons": [
+            "direct_answer_not_frontloaded"
+          ],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+        "prepared_action_fallback_text": "You act on that move, and the situation answers that move right away."
+      },
+      "intent_classification": {
+        "raw_text": "I step toward the notice board, particularly interested in the curfew rules. What do they say?",
+        "labels": [
+          "downtime"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "neutral_narration",
+        "source_route": "exploration",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "no_stricter_authoritative_contract",
+          "question_like_non_hostile_guard"
+        ]
+      },
+      "canonical_entry_path": null,
+      "canonical_entry_reason": null,
+      "social_turn_contract": null,
+      "player_facing_gm_response": "The notice board spells out that the new curfew requires all civilians to be off the streets by dusk until dawn, a strict measure to curb recent unrest and bandit activity. Violators face fines or detainment until morning. This rule accompanies freshly imposed taxes and a posted…",
+      "raw_evidence": "persisted_data/session_log.jsonl line 4; derived/log_entries/entry_03.json"
+    },
+    {
+      "log_index": 4,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:20:14.607170Z",
+      "player_input": "I'll ask anyone near the board, \"Do you have any idea how many hours until dusk?\"",
+      "request": {
+        "chat": "I'll ask anyone near the board, \"Do you have any idea how many hours until dusk?\""
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "spoken_text": "Do you have any idea how many hours until dusk?",
+          "declared_action_text": "I'll ask anyone near the board,"
+        },
+        "segmented_turn": {
+          "spoken_text": "Do you have any idea how many hours until dusk?",
+          "declared_action_text": "I'll ask anyone near the board,"
+        },
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": true,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": "question",
+      "action_id": "question_anyone_near_the_board_do_you_ha",
+      "source_route": "social",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": false,
+        "social_npc_id": null,
+        "social_present": true,
+        "grounded_speaker_id": null,
+        "canonical_entry_target_actor_id": null
+      },
+      "route": null,
+      "routed_to": null,
+      "route_reason": null,
+      "intent_route_debug_present": false,
+      "target_actor_or_object": {
+        "social_npc_id": null,
+        "social_target_resolved": false,
+        "canonical_entry_target_actor_id": null,
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": null
+      },
+      "addressed_actor_id": null,
+      "addressed_actor_source": null,
+      "social_intent_class": "social_exchange",
+      "question_adjudication_text": {
+        "declared_action_text": "I'll ask anyone near the board,",
+        "adjudication_question_text": null,
+        "spoken_text": "Do you have any idea how many hours until dusk?"
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 5
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        }
+      },
+      "resolved_transition": false,
+      "reply_kind": "reaction",
+      "realization_hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "retry_escalation",
+        "model_route_family": "retry_escalation",
+        "model_route_reason": "purpose_retry_escalation",
+        "model_retry_attempt": 1,
+        "model_escalated": true,
+        "resolution_prompt_field": "I'll ask anyone near the board, Do you have any idea how many hours until dusk?",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 5 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 5 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 5 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": false,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "strict_social_inactive",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": true,
+          "answer_completeness_failure_reasons": [
+            "direct_answer_not_frontloaded"
+          ],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": "retry_escape_hatch",
+        "final_route": "forced_retry_fallback",
+        "accepted_via": "forced_fallback",
+        "retry_exhausted": true,
+        "targeted_retry_terminal": true,
+        "retry_failure_class": "unresolved_question",
+        "retry_failure_reasons": [
+          "question_rule:social_exchange_first_sentence_not_speaker_grounded"
+        ],
+        "realization_fallback_family": "retry_terminal_fallback",
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "The guard says, \"I do not know enough to answer that.\"",
+        "prepared_action_fallback_text": "You act on that move, and the attempt meets resistance."
+      },
+      "intent_classification": {
+        "raw_text": "I'll ask anyone near the board, \"Do you have any idea how many hours until dusk?\"",
+        "labels": [
+          "social_probe"
+        ],
+        "allow_discoverable_clues": true,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "neutral_narration",
+        "source_route": "social",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "no_stricter_authoritative_contract",
+          "social_question_guard"
+        ]
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "open_social_solicitation",
+      "social_turn_contract": null,
+      "player_facing_gm_response": "The guard says, \"I do not know enough to answer that.\"",
+      "raw_evidence": "persisted_data/session_log.jsonl line 5; derived/log_entries/entry_04.json"
+    },
+    {
+      "log_index": 5,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:21:39.877342Z",
+      "player_input": "\"Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement.\"",
+      "request": {
+        "chat": "\"Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement.\""
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "spoken_text": "Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement."
+        },
+        "segmented_turn": {
+          "spoken_text": "Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement."
+        },
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": true,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": "question",
+      "action_id": "question_tavern_runner",
+      "source_route": "social",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": null,
+        "social_turn_contract_present": true,
+        "social_npc_id": "tavern_runner",
+        "social_present": true,
+        "grounded_speaker_id": "tavern_runner",
+        "canonical_entry_target_actor_id": "tavern_runner"
+      },
+      "route": "dialogue",
+      "routed_to": "social_exchange",
+      "route_reason": "no_addressable_target",
+      "intent_route_debug_present": true,
+      "target_actor_or_object": {
+        "social_npc_id": "tavern_runner",
+        "social_target_resolved": true,
+        "canonical_entry_target_actor_id": "tavern_runner",
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": "tavern_runner"
+      },
+      "addressed_actor_id": "tavern_runner",
+      "addressed_actor_source": "dialogue_target_resolution",
+      "social_intent_class": "social_exchange",
+      "question_adjudication_text": {
+        "declared_action_text": null,
+        "adjudication_question_text": null,
+        "spoken_text": "Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement."
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 6
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        }
+      },
+      "resolved_transition": false,
+      "reply_kind": "refusal",
+      "realization_hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "strict_social",
+        "model_route_family": "high_precision",
+        "model_route_reason": "purpose_strict_social",
+        "model_retry_attempt": 0,
+        "model_escalated": true,
+        "resolution_prompt_field": "\"Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement.\"",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 6 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 6 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 6 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": true,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "native_resolution",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": true,
+          "answer_completeness_failure_reasons": [
+            "missing_concrete_payload"
+          ],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "Tavern Runner grimaces. \"Not something I can say here.\"",
+        "prepared_action_fallback_text": "You act on that move, and the situation answers that move right away."
+      },
+      "intent_classification": {
+        "raw_text": "\"Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement.\"",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "dialogue",
+        "source_route": "social",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "authoritative_social_target_requires_dialogue",
+          "dialogue_turn_contains_question_expectation",
+          "social_question_guard"
+        ]
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "no_addressable_target",
+      "social_turn_contract": {
+        "social_followup_recovery": "not_applicable",
+        "interlocutor_status": "none",
+        "continuity_status": "broken",
+        "fallback_anchor_source": "none",
+        "reply_owner_actor_id": null,
+        "routing_reason_code": "no_addressable_target",
+        "continuity_basis": "none",
+        "nearby_group_focus_source": "none"
+      },
+      "player_facing_gm_response": "Tavern Runner mutters, \"Word is, the tavern runner shakes their head with a shrug, saying, I don’t have the details on what exactly sparked the curfew. Bandits getting past these gates? That’s not the usual story around here. You might want to ask the guard captain—he keeps a closer eye on that kind of trouble…\"",
+      "raw_evidence": "persisted_data/session_log.jsonl line 6; derived/log_entries/entry_05.json"
+    },
+    {
+      "log_index": 6,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:22:31.251919Z",
+      "player_input": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?",
+      "request": {
+        "chat": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?"
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "declared_action_text": "\"Does that require an appointment?",
+          "adjudication_question_text": "Would he be willing to speak to a newcomer like me?"
+        },
+        "segmented_turn": {
+          "declared_action_text": "\"Does that require an appointment?",
+          "adjudication_question_text": "Would he be willing to speak to a newcomer like me?"
+        },
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": true,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": "question",
+      "action_id": "question_tavern_runner",
+      "source_route": "mixed",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": "tavern_runner",
+        "social_turn_contract_present": true,
+        "social_npc_id": "tavern_runner",
+        "social_present": true,
+        "grounded_speaker_id": "tavern_runner",
+        "canonical_entry_target_actor_id": "tavern_runner"
+      },
+      "route": "dialogue",
+      "routed_to": "social_exchange",
+      "route_reason": "active_interlocutor_followup",
+      "intent_route_debug_present": true,
+      "target_actor_or_object": {
+        "social_npc_id": "tavern_runner",
+        "social_target_resolved": true,
+        "canonical_entry_target_actor_id": "tavern_runner",
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": "tavern_runner"
+      },
+      "addressed_actor_id": "tavern_runner",
+      "addressed_actor_source": "active_interlocutor",
+      "social_intent_class": "social_exchange",
+      "question_adjudication_text": {
+        "declared_action_text": "\"Does that require an appointment?",
+        "adjudication_question_text": "Would he be willing to speak to a newcomer like me?",
+        "spoken_text": null
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 7
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        }
+      },
+      "resolved_transition": false,
+      "reply_kind": "answer",
+      "realization_hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "strict_social",
+        "model_route_family": "high_precision",
+        "model_route_reason": "purpose_strict_social",
+        "model_retry_attempt": 0,
+        "model_escalated": true,
+        "resolution_prompt_field": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 7 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 7 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 7 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": true,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "native_resolution",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "Tavern Runner grimaces. \"Not something I can say here.\"",
+        "prepared_action_fallback_text": "You act on that move, and the situation answers that move right away."
+      },
+      "intent_classification": {
+        "raw_text": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "dialogue",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "authoritative_social_target_requires_dialogue",
+          "dialogue_turn_contains_question_expectation",
+          "social_question_guard"
+        ]
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "social_turn_contract": {
+        "social_followup_recovery": "not_applicable",
+        "interlocutor_status": "retained",
+        "continuity_status": "preserved",
+        "fallback_anchor_source": "active_interlocutor",
+        "reply_owner_actor_id": "tavern_runner",
+        "routing_reason_code": "active_interlocutor_followup",
+        "continuity_basis": "none",
+        "nearby_group_focus_source": "none"
+      },
+      "player_facing_gm_response": "Tavern Runner mutters, \"Word is, he’s the one who handles official talk and might give you an answer.\"",
+      "raw_evidence": "persisted_data/session_log.jsonl line 7; derived/log_entries/entry_06.json"
+    },
+    {
+      "log_index": 7,
+      "exchange_role": "player_turn",
+      "timestamp": "2026-09-24T00:23:06.242189Z",
+      "player_input": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+      "request": {
+        "chat": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\""
+      },
+      "segmented_components": {
+        "turn_segmentation": {
+          "spoken_text": "Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time."
+        },
+        "segmented_turn": {
+          "spoken_text": "Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time."
+        },
+        "embedded_adjudication": null,
+        "availability": {
+          "turn_segmentation": true,
+          "segmented_turn": true,
+          "embedded_adjudication": false
+        }
+      },
+      "kind": "question",
+      "action_id": "question_tavern_runner",
+      "source_route": "social",
+      "selected_semantic_owner": {
+        "reply_owner_actor_id": "tavern_runner",
+        "social_turn_contract_present": true,
+        "social_npc_id": "tavern_runner",
+        "social_present": true,
+        "grounded_speaker_id": "tavern_runner",
+        "canonical_entry_target_actor_id": "tavern_runner"
+      },
+      "route": "dialogue",
+      "routed_to": "social_exchange",
+      "route_reason": "active_interlocutor_followup",
+      "intent_route_debug_present": true,
+      "target_actor_or_object": {
+        "social_npc_id": "tavern_runner",
+        "social_target_resolved": true,
+        "canonical_entry_target_actor_id": "tavern_runner",
+        "referenced_surface_target": null,
+        "referenced_surface_interactable_id": null,
+        "active_interaction_target_id": "tavern_runner"
+      },
+      "addressed_actor_id": "tavern_runner",
+      "addressed_actor_source": "active_interlocutor",
+      "social_intent_class": "social_exchange",
+      "question_adjudication_text": {
+        "declared_action_text": null,
+        "adjudication_question_text": null,
+        "spoken_text": "Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time."
+      },
+      "perception_listen_classification": null,
+      "movement_travel_classification": {
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "scene_transition_occurred": false
+      },
+      "state_changes": {},
+      "approved_state_updates": {
+        "scene_update": null,
+        "world_updates": null,
+        "new_scene_draft": null
+      },
+      "clocks_changed": {
+        "time_pressure": 8
+      },
+      "topic_revealed": null,
+      "clue_lead_changes": {
+        "clue_id": null,
+        "discovered_clues": [],
+        "discovered_clues_added": [],
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        }
+      },
+      "resolved_transition": false,
+      "reply_kind": "refusal",
+      "realization_hint": "Player spoke with Tavern Runner. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "model": {
+        "raw_request_or_response_body_present": false,
+        "gm_raw_output_meta": {
+          "has_output": true
+        },
+        "selected_model": "gpt-4.1-mini",
+        "model_route_purpose": "strict_social",
+        "model_route_family": "high_precision",
+        "model_route_reason": "purpose_strict_social",
+        "model_retry_attempt": 0,
+        "model_escalated": true,
+        "resolution_prompt_field": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+        "evidence_locations": [
+          "persisted_data/session_log.jsonl line 8 gm_output.metadata model_* fields",
+          "persisted_data/session_log.jsonl line 8 log_meta.gm_raw_output_meta",
+          "persisted_data/session_log.jsonl line 8 gm_output.upstream_prepared_emission"
+        ]
+      },
+      "integrity_validator": {
+        "recorded_scalars_from_final_emission_meta": {
+          "candidate_validation_passed": true,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_failure_reasons": [],
+          "coercion_used": false,
+          "coercion_reason": "native_resolution",
+          "fallback_family_used": null,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repair_mode": null,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "final_emission_boundary_repair_used": false
+        },
+        "final_emission_meta_location": "gm_output.internal_state.emission_debug_lane._final_emission_meta",
+        "emission_debug_location": "resolution.metadata.emission_debug",
+        "response_policy_location": "gm_output.response_policy"
+      },
+      "fallback_repair": {
+        "fallback_kind": null,
+        "final_route": null,
+        "accepted_via": null,
+        "retry_exhausted": null,
+        "targeted_retry_terminal": null,
+        "retry_failure_class": null,
+        "retry_failure_reasons": null,
+        "realization_fallback_family": null,
+        "upstream_prepared_emission_realization_fallback_family": "upstream_prepared_emission",
+        "prepared_answer_fallback_text": "Tavern Runner grimaces. \"Not something I can say here.\"",
+        "prepared_action_fallback_text": "You act on that move, and the situation answers that move right away."
+      },
+      "intent_classification": {
+        "raw_text": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+        "labels": [
+          "general"
+        ],
+        "allow_discoverable_clues": false,
+        "confidence": "rule_based"
+      },
+      "response_type_contract": {
+        "required_response_type": "dialogue",
+        "source_route": "social",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "authoritative_social_target_requires_dialogue",
+          "dialogue_turn_contains_question_expectation",
+          "social_question_guard"
+        ]
+      },
+      "canonical_entry_path": "social",
+      "canonical_entry_reason": "active_interlocutor_followup",
+      "social_turn_contract": {
+        "social_followup_recovery": "not_applicable",
+        "interlocutor_status": "retained",
+        "continuity_status": "preserved",
+        "fallback_anchor_source": "active_interlocutor",
+        "reply_owner_actor_id": "tavern_runner",
+        "routing_reason_code": "active_interlocutor_followup",
+        "continuity_basis": "none",
+        "nearby_group_focus_source": "none"
+      },
+      "player_facing_gm_response": "Tavern Runner mutters, \"Word is, but don't expect an easy ear without some introduction.\"",
+      "raw_evidence": "persisted_data/session_log.jsonl line 8; derived/log_entries/entry_07.json"
+    }
+  ]
+}

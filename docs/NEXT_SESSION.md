@@ -17,14 +17,32 @@ Product Realization
 
 ## Last Completed Cycle
 
-`PR-BJ — AI Experience: Speaker Attribution Integrity and Lane Convergence Audit`
+`PR-BK — Unauthored reply text must not become a reusable structured fact.` CLOSED. Not committed.
+
+`PR-BJ` remains the last numbered cycle checkpointed in git (`90fdcc3`).
 
 ## Current Objective
 
-The PR-AS through PR-BJ sibling-defect sequence is closed. `"The guard says"` does not reproduce as a player-facing semantic defect. Do not open another ordinary-play authority or paraphrase micro-cycle. Return to playtesting or to a gameplay capability.
+PR-BK CLOSED. Start a fresh human playtest. Do not continue session `ba70eb525862575033539357`.
+
+Invariant: conversational memory is not structured-fact authority. `topic_pressure.last_answer` may remember a reply. Selection requires provenance `topic_revealed`, `authored_topic`, `clue_knowledge`, or `canonical_fact`, or a match to one of those payloads. `generative_reply` is continuity only. A paraphrase keeps the spoken line in `last_answer` and the payload in `last_answer_authoritative_text`.
+
+Validation baseline after closeout: 7,053 collected, 6,927 passed, 27 failed, 99 skipped. The 27 failures also fail on `90fdcc3`. They are not PR-BK regressions. Inventory: `artifacts/pr_bk/validation_failure_inventory.md`.
 
 ## Established Facts
 
+- Extended playtest session `ba70eb525862575033539357` (log entries 0–7, all `frontier_gate`, Day 1) is audited in `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`. Nine player-facing failures, five causes. No production repair in that audit.
+- Turn 0 opening is correct. Turn 1 is the earliest incorrect decision: untargeted inspection appends `visible_facts[0]` (the notice board) to a banner look. Turn 2 repeats that template for a time-of-day question. There is still no diegetic clock.
+- Turn 3 never binds `notice_board` (`kind` absent, label `downtime`). The model states dusk-until-dawn, fines, detainment, unrest, and bandits. Those details are not authored. Narrative authority does not fail.
+- Turn 4 resolves no NPC and the retry catalog emits `The guard says` via the empty `speaker_label` default. No guard id is stored. That PR-BJ latent helper reached the player on this path. PR-BJ is not reopened as a paraphrase cycle.
+- Turn 5 route reason `no_addressable_target` still dialogue-locks `tavern_runner`, the only world NPC. Turns 6 and 7 correctly continue that interlocutor. The runner’s only authored topic (patrol never returned from the old milestone) is never revealed.
+- `topic_pressure.last_answer` stores those model paragraphs. Turn 6 cites the previous paragraph as `topic_pressure:last_answer` and forces a partial answer. Turn 7 emits `structured_fact_candidate_emission` from its own paragraph. `lead_registry` and `clue_knowledge` stay empty. `recent_contextual_leads` keeps prose fragments.
+- The listen repair, deferred compound execution, and deferred question-only sole-NPC collapse remain as in the mixed-action audit. This session did not listen.
+- The 2026-09-23 human turn at `frontier_gate` asked to move, look, listen, and judge the crowd. Segmentation kept eavesdropping and the first question on the declared clause and peeled the region question. Listen was recognized, then discarded because of `?`. `anyone` opened `scene_open_bid` with no target. Dialogue lock filled `tavern_runner` because persisted `data/world.json` has one world NPC there. Guard Captain ranked first among addressables and was not that fill.
+- The model paragraph invented refugee origins and "wilderland strife". Referential clarity replaced it for ambiguous `their`, not for missing authority. `topic_pressure.last_answer` then re-emitted `Best way to find out lies beyond this gate` inside `Word is`. That line was not the root defect. `Word is` remains aesthetic when the fact is actually owned.
+- Repair: a player listen, eavesdrop, or overhear attempt stays existing human-adjacent `observe` when a question shares the utterance. `Does anyone know` and `Anyone listening?` stay social. Explicit asks stay social. The captured turn now resolves as listen and may realize only the authored stew-and-rumor shout. Movement and the region question stay unexecuted. No origin content was added.
+- Frontier Gate does not author refugee origin, regional mix, dialect, heraldry, wounds, or overheard reasons for flight.
+- Compound N-action execution is still deferred. Question-only turns can still collapse to the sole world NPC. `Is anyone talking about why the refugees fled?` can still bind `refugee`.
 - Architecture Reconciliation Era completed; Campaign 6 chassis closed.
 - Repository organization completed. Campaign reports live under
   `development/campaigns/`. Generated evidence stays in `artifacts/`.
@@ -227,14 +245,33 @@ None. No user decision is required before the next slice.
   through PR-BJ sibling-defect sequence is closed. Do not open PR-BK
   for evaluator wording, dialogue tags, or the latent `The guard`
   helper.
+- Mixed-action audit: a player listen attempt is not discarded because
+  the same utterance also asks a question. That attempt is not retold
+  as solicitation to the sole NPC. Compound execution, origin content,
+  and question-only sole-NPC collapse stay deferred. That audit did not
+  assign PR-BK.
+- PR-BK is CLOSED. Unauthored reply text stored in `topic_pressure.last_answer` is not selectable as a structured fact unless provenance names an authoritative payload. The empty `The guard` label is not this slice. Narrative-authority validation was not changed. `recent_contextual_leads` was not changed.
 - The generalization principle (content may be specific; systems must be
   general) lives in `docs/product_realization_validation.md`.
 
 ## Current Known Defects
 
-No remaining ordinary-play AI Experience semantic integrity defect is
-recommended as a Product Realization sibling cycle. The PR-AS through
-PR-BJ sequence is closed.
+No remaining ordinary-play AI Experience semantic integrity defect from
+the PR-AS through PR-BJ sequence is recommended as another sibling
+cycle.
+
+Gameplay residue from the 2026-09-23 playtest, not opened as a cycle:
+
+- Compound turns still execute one owner. Movement beside listen, and a
+  peeled visual question, stay unexecuted with no player-facing
+  unresolved marker.
+- Question-only turns with no listen attempt can still become a
+  directed question to the sole world NPC.
+- `Is anyone talking about why the refugees fled?` and `Do the refugees
+  seem to come from the same place?` can still bind `refugee`.
+- Same-turn and next-turn model prose in `topic_pressure.last_answer` is now
+  the earned PR-BK slice. Do not treat it as a `Word is` wording cycle.
+  The extended playtest showed the selector using that prose as a structured fact.
 
 Validation residue, not game-behavior cycles:
 
@@ -264,42 +301,62 @@ Unrelated reds observed during PR-AU / PR-AV validation and not absorbed:
 
 ## Authoritative Documents
 
-1. `docs/DEVELOPMENT_CONSTITUTION.md`
-2. `development/campaigns/product_realization/PR-BJ_speaker_attribution_integrity_lane_convergence_audit.md`
-3. `development/campaigns/product_realization/PR-BI_interruption_progression_catalog_residue_reaudit.md`
-4. `development/campaigns/product_realization/PR-BH_addressed_npc_identity_resolution_role_title_convergence.md`
-5. `development/campaigns/product_realization/PR-BG_followup_topic_continuity_public_clue_paraphrase_convergence.md`
-6. `development/campaigns/product_realization/PR-BF_unresolved_travel_narration_authority_scene_stock_integrity.md`
-7. `development/campaigns/product_realization/PR-BE_wait_action_ownership_time_passage_capability_audit.md`
-8. `development/campaigns/product_realization/PR-BD_interactable_reference_resolution_alias_convergence.md`
-9. `development/campaigns/product_realization/PR-BC_agent_history_question_ownership_convergence.md`
-10. `development/campaigns/product_realization/PR-BB_local_observation_classifier_boundary_convergence.md`
-11. `development/campaigns/product_realization/PR-BA_nearby_place_existence_knowledge_ownership.md`
-12. `development/campaigns/product_realization/PR-AZ_question_form_observe_realization_retry_ownership.md`
-13. `development/campaigns/product_realization/PR-AY_local_presence_question_adjudication.md`
-14. `development/campaigns/product_realization/PR-AX_post_return_observation_geographic_integrity.md`
-15. `development/campaigns/product_realization/PR-AW_later_turn_untargeted_observation_restacking.md`
-16. `development/campaigns/product_realization/PR-AV_grounded_refusal_topic_hook_integrity.md`
-17. `development/campaigns/product_realization/PR-AU_grounded_social_absence_live_model_non_invention.md`
-18. `development/campaigns/product_realization/PR-AT_already_searched_truncation.md`
-19. `development/campaigns/product_realization/PR-AS_observe_fallback_relevance_stock_repetition.md`
-20. `development/campaigns/product_realization/PR-AR_perception_narration_authority_audible_non_invention.md`
-21. `development/campaigns/product_realization/PR-AQ_physical_action_typing_compound_perception_realization.md`
-22. `docs/product_realization_validation.md`
-23. `development/campaigns/product_realization/PR-AH_grounded_observation_non_invention.md`
-24. `development/campaigns/product_realization/PR-AJ_authoritative_lead_provenance_social_prose_non_ingestion.md`
-25. `development/campaigns/product_realization/PR-AO_investigation_result_provenance_non_invention.md`
-26. `development/campaigns/product_realization/PR-AP_grounded_refusal_realization_grammar.md`
-27. `development/campaigns/product_realization/PR-AN_question_dimension_answer_sufficiency.md`
-28. `development/campaigns/product_realization/PR-AK_referenced_surface_grounding_inspection_resolution.md`
-29. `docs/state_authority_model.md`
-30. `docs/rc10_rc21_policy_implementation.md`
-31. `docs/semantic_validation_calibration.md`
-32. `development/campaigns/reconciliation/AR-AD_target_architecture_doctrine.md`
-33. `docs/review_handoff_standard.md` (review export only; not this handoff)
-34. `development/README.md` (directory taxonomy only)
+1. `development/campaigns/product_realization/PR-BK_validation_closeout.md` (causal audit: `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`)
+2. `docs/DEVELOPMENT_CONSTITUTION.md`
+3. `development/campaigns/product_realization/human_playtest_mixed_action_ownership_compound_turn_audit.md`
+4. `development/campaigns/product_realization/PR-BJ_speaker_attribution_integrity_lane_convergence_audit.md`
+5. `development/campaigns/product_realization/PR-BI_interruption_progression_catalog_residue_reaudit.md`
+6. `development/campaigns/product_realization/PR-BH_addressed_npc_identity_resolution_role_title_convergence.md`
+7. `development/campaigns/product_realization/PR-BG_followup_topic_continuity_public_clue_paraphrase_convergence.md`
+8. `development/campaigns/product_realization/PR-BF_unresolved_travel_narration_authority_scene_stock_integrity.md`
+9. `development/campaigns/product_realization/PR-BE_wait_action_ownership_time_passage_capability_audit.md`
+10. `development/campaigns/product_realization/PR-BD_interactable_reference_resolution_alias_convergence.md`
+11. `development/campaigns/product_realization/PR-BC_agent_history_question_ownership_convergence.md`
+12. `development/campaigns/product_realization/PR-BB_local_observation_classifier_boundary_convergence.md`
+13. `development/campaigns/product_realization/PR-BA_nearby_place_existence_knowledge_ownership.md`
+14. `development/campaigns/product_realization/PR-AZ_question_form_observe_realization_retry_ownership.md`
+15. `development/campaigns/product_realization/PR-AY_local_presence_question_adjudication.md`
+16. `development/campaigns/product_realization/PR-AX_post_return_observation_geographic_integrity.md`
+17. `development/campaigns/product_realization/PR-AW_later_turn_untargeted_observation_restacking.md`
+18. `development/campaigns/product_realization/PR-AV_grounded_refusal_topic_hook_integrity.md`
+19. `development/campaigns/product_realization/PR-AU_grounded_social_absence_live_model_non_invention.md`
+20. `development/campaigns/product_realization/PR-AT_already_searched_truncation.md`
+21. `development/campaigns/product_realization/PR-AS_observe_fallback_relevance_stock_repetition.md`
+22. `development/campaigns/product_realization/PR-AR_perception_narration_authority_audible_non_invention.md`
+23. `development/campaigns/product_realization/PR-AQ_physical_action_typing_compound_perception_realization.md`
+24. `docs/product_realization_validation.md`
+25. `development/campaigns/product_realization/PR-AH_grounded_observation_non_invention.md`
+26. `development/campaigns/product_realization/PR-AJ_authoritative_lead_provenance_social_prose_non_ingestion.md`
+27. `development/campaigns/product_realization/PR-AO_investigation_result_provenance_non_invention.md`
+28. `development/campaigns/product_realization/PR-AP_grounded_refusal_realization_grammar.md`
+29. `development/campaigns/product_realization/PR-AN_question_dimension_answer_sufficiency.md`
+30. `development/campaigns/product_realization/PR-AK_referenced_surface_grounding_inspection_resolution.md`
+31. `docs/state_authority_model.md`
+32. `docs/rc10_rc21_policy_implementation.md`
+33. `docs/semantic_validation_calibration.md`
+34. `development/campaigns/reconciliation/AR-AD_target_architecture_doctrine.md`
+35. `docs/review_handoff_standard.md` (review export only; not this handoff)
+36. `development/README.md` (directory taxonomy only)
 
 ## Validation Baseline
+
+PR-BK focused probes: `python -m pytest tests/test_unauthored_reply_structured_fact_integrity.py -q --tb=line` — 9 collected, 9 passed, 0 failed, 0 skipped. See `artifacts/pr_bk/semantic_probe_results.md`.
+
+PR-BG and PR-BI suites passed with the same run family. Authoritative fixtures that still select `topic_pressure:last_answer` now carry `last_answer_provenance`. Assertions were not dropped.
+
+Known reds unchanged by this slice: the manifests redirect source label (PR-AO), two speaker-grounding `success is None` assertions (PR-BJ), and the rain-sentence question-resolution mutation test, which stays exempt because the resolution kind is adjudication. `game/gm.py` was not edited.
+
+Historical implementation suite, preserved: 7,053 collected, 6,926 passed, 28 failed, 99 skipped. Closeout reruns (`development/tmp/pr_bk_validation_full_suite_initial.txt` and `..._final.txt`): 7,053 collected, 6,927 passed, 27 failed, 99 skipped. The extra pass is the playability smoke assert, now the authored east-lanes clue. The remaining 27 fail on `90fdcc3` and are unrelated. This is not the previous 6,450 / 6,351 / 0 / 99 baseline.
+
+Of those 28, previously recorded reds include BY3/BY4 generators, frontier-gate golden replay, the manifests redirect source label, the passive suspicious-figure emission, and the two speaker-grounding `success is None` assertions. The rain-sentence policy tests fail because adjudication is exempt from the question-resolution rewrite; `game/gm.py` was not edited. Ownership and inventory failures are duplicate test names in older files, not PR-BK modules. The playability smoke location check now expects the authored east-lanes clue instead of the mock sentence `east gate yard`.
+
+Mixed-action audit, focused only, not a new full-suite baseline: 145 passed, 0 failed.
+Suites: `tests/test_listen_question_not_social_capture.py`,
+human-adjacent listen, broad-address solicitation, perception narration,
+local observation, local presence, question-form observe, and PR-AQ
+physical action. Captured turn after repair is `observe` / listen and
+does not address Tavern Runner.
+Probes: `artifacts/human_playtests/mixed_action_ownership_audit/`.
 
 PR-BJ speaker probe:
 `artifacts/prbj_speaker_attribution/probe/20260922T235900Z_probe.md`.
@@ -379,6 +436,18 @@ realization changes, and the unrelated social reds listed above.
 
 Leave these deferred unless later evidence elevates them:
 
+- Comprehensive compound-intent / N-action execution. The listen-question
+  repair executes the listen attempt and leaves movement and a peeled
+  visual question unresolved. It does not add an action queue.
+- Question-only turns collapsing to the sole world NPC, and role-substring
+  binds such as `refugee` on `Is anyone talking about why the refugees fled?`.
+- Untargeted inspection appending the first visible fact. Evidenced. Not PR-BK.
+- Notice-board content questions that miss `investigate` and are narrated freely.
+- Empty `speaker_label` default `The guard` on a no-target social fallback.
+  It reached the player in the extended playtest. Do not reopen PR-BJ to rename it.
+- Question-only sole-world-NPC dialogue lock. Reproduced on a bare "you". Still not a crowd simulation.
+- A model may still say an unsupported sentence once. Narrative-authority validation was not changed. PR-BK stops that sentence from becoming a reusable structured fact. Do not treat `Word is` as the fix.
+- Authored refugee origins, ambient crowd speech, or a sensory simulation.
 - Richer unknown-destination gameplay (routes, durations, NPC guidance).
   Safe unresolved-travel failure is now the correct terminal.
 - Intentional waiting / in-place time passage as a future gameplay
@@ -580,57 +649,55 @@ Do not treat residual lead-system items as open RC-10/RC-21 questions.
 - PR-BJ's judgment that speaker attribution is sufficiently converged
 - PR-BJ's judgment that the PR-AS through PR-BJ sibling-defect sequence
   is closed
+- PR-BK's decision that `last_answer` continuity is not structured-fact authority
+- PR-BK's refusal to add a knowledge graph, truth checker, or second social memory
+- PR-BK's refusal to delete conversational memory or to blacklist transcript wording
+- The mixed-action audit's refusal to add refugee origins, ambient crowd
+  speech, or N-action execution in order to answer the captured turn
+- The mixed-action audit's treatment of `Does anyone know` and
+  `Anyone listening?` as social, and of a player listen attempt that
+  shares a question as existing perception
 - Repository file-placement taxonomy in the Constitution
 
 ## Recommended Next Action
 
-The PR-AS through PR-BJ sibling-defect sequence is closed. Do not open
-PR-BK. Do not start another paraphrase, speaker-label, evaluator, or
-authority micro-cycle.
+PR-BK CLOSED. Fresh human playtest. Do not continue the contaminated seven-turn session `ba70eb525862575033539357`.
 
-Return to Product Realization playtesting of the ordinary gate-and-road
-loop, or to a gameplay capability already recorded as missing: wait /
-time passage, richer travel, rest / downtime, object history, or a world
-clock. Those are feature slices.
+Invariant: conversational memory is not structured-fact authority. Provenance is `topic_revealed`, `authored_topic`, `clue_knowledge`, or `canonical_fact`. `generative_reply` stays continuity. Final validation baseline: 7,053 collected, 6,927 passed, 27 failed, 99 skipped. Those 27 are pre-existing on `90fdcc3`.
 
-Do not reopen PR-BJ speaker display, PR-BI interruption-answer authority,
-PR-BH identity resolution, PR-BG follow-up continuity, PR-BF
-travel-success eligibility, PR-BE wait/time-passage, PR-BD
-interactable-reference convergence, PR-BC agent-history ownership, PR-BB
-classifier convergence, PR-BA place-existence ownership, PR-AZ retry
-ownership, PR-AY local-observation semantics, PR-AX geographic
-eligibility, PR-AW stamp eligibility, PR-AV topic-hook eligibility,
-PR-AU absence fail-closed, PR-AT truncation, PR-AS relevance comparison,
-PR-AR grounding, PR-AQ typing, PR-AP grammar, PR-AO provenance, or
-PR-AI speaker ownership unless new evidence shows a player-facing
-semantic break.
+Do not open another AI Experience repair from known backlog residue before that playtest. Watch, do not preemptively fix: untargeted inspection emitting unrelated visible stock; notice-board ownership; empty `"The guard"` label; question-only sole-NPC dialogue lock; missing diegetic time; missing authored information; compound-turn execution; one-turn unsupported generative statements / narrative-authority weakness.
 
-No user decision is required. No next sibling-cycle identifier is
-assigned.
+Report: `development/campaigns/product_realization/PR-BK_unauthored_reply_structured_fact_integrity.md`.
+Closeout: `development/campaigns/product_realization/PR-BK_validation_closeout.md`.
+Evidence: `artifacts/pr_bk/`.
+
+Do not reopen PR-BK as a wording cycle, and do not reopen PR-BJ speaker display, PR-BI interruption-answer authority, PR-BH identity resolution, PR-BG follow-up continuity, or earlier settled owners unless new play shows a player-facing semantic break.
+
+No user decision is required. No next sibling-cycle identifier is assigned.
 
 ## Minimum Files for the Next Agent
 
 - `docs/DEVELOPMENT_CONSTITUTION.md`
-- `development/README.md`
-- `development/campaigns/product_realization/PR-BJ_speaker_attribution_integrity_lane_convergence_audit.md`
-- `docs/product_realization_validation.md`
-- the design note for whichever gameplay capability or playtest is chosen
+- `development/campaigns/product_realization/PR-BK_validation_closeout.md`
+- `development/campaigns/product_realization/PR-BK_unauthored_reply_structured_fact_integrity.md`
+- `artifacts/pr_bk/validation_failure_inventory.md`
+- `artifacts/pr_bk/semantic_probe_results.md`
+- `docs/NEXT_SESSION.md`
 
 ## Git / Worktree Caveats
 
 This remains one Git repository. No second repository was created.
 
-The Product Realization checkpoint through PR-AR plus repository
-organization remains committed on `feature/product-realization` (`4c0a454`).
-PR-AS through PR-BJ production, tests, artifacts, reports, and this handoff
-are uncommitted. Do not commit or push unless explicitly asked.
+The Product Realization checkpoint through PR-BJ is committed on
+`feature/product-realization` (`90fdcc3`). PR-BK is uncommitted.
 
-The PR-BE probe did not reset canonical `data/` documents.
-`data/scenes/old_milestone.json` remains intentional PR-AF destination
-content.
-
-Future pytest/agent scratch goes to `development/tmp/` and is Git-ignored.
+Still uncommitted from earlier work, not part of PR-BK: `game/intent_parser.py`,
+`tests/test_listen_question_not_social_capture.py`, the mixed-action and
+extended-playtest reports, and `artifacts/human_playtests/`. Canonical
+`data/session.json`, `data/session_log.jsonl`, `data/world.json`, and
+`data/combat.json` stay dirty from human play. Do not revert them.
+Do not commit or push unless explicitly asked.
 
 ## Last Updated
 
-2026-09-22 / PR-BJ speaker attribution integrity and lane convergence audit
+2026-09-24 / PR-BK validation closeout — PR-BK CLOSED

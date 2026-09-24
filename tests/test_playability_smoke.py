@@ -89,7 +89,7 @@ def test_playability_smoke_direct_answer_pressure(tmp_path, monkeypatch):
     assert da["passed"] is True
     assert da["score"] >= 15
     assert out["overall"]["passed"] is True
-    assert "east gate yard" in t2.lower()
+    assert "east lanes" in t2.lower()
 
 
 def test_playability_smoke_narrowing_player_intent(tmp_path, monkeypatch):

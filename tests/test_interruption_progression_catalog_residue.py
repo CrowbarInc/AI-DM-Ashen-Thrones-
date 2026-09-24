@@ -148,6 +148,9 @@ def test_interruption_shaped_last_answer_is_not_selected_as_fact() -> None:
 
 def test_authorized_last_answer_remains_eligible() -> None:
     session = _session_with_last_answer(AUTHORED)
+    entry = session["scene_runtime"]["tavern"]["topic_pressure"]["topic:happen_patrol_runner"]
+    entry["last_answer_provenance"] = "authored_topic"
+    entry["last_answer_authoritative_text"] = AUTHORED
     cand = select_best_social_answer_candidate(
         session=session,
         scene_id="tavern",

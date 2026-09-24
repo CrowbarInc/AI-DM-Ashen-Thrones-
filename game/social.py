@@ -1701,7 +1701,7 @@ def determine_social_escalation_outcome(
     ap = answer_pressure_details if isinstance(answer_pressure_details, dict) else {}
     pressure_followup = _answer_pressure_thread_followup(ap)
     valid_fu = is_valid_followup_question(pt) or pressure_followup
-    last_ans = str(entry.get("last_answer") or "").strip()
+    last_ans = structured_fact_text_from_topic_pressure(entry)
     prev_probe_dim = str(entry.get("previous_probe_dimension") or "").strip()
     thread_covers = _player_question_covers_stored_thread(
         pt,
@@ -2454,6 +2454,169 @@ def _stored_answer_is_interruption_narration(text: str) -> bool:
     return _looks_like_interruption_breakoff_text(str(text or ""))
 
 
+# Conversational continuity may store any non-cutoff reply. Structured-fact
+# selection may use it only when provenance names an authoritative payload.
+GENERATIVE_LAST_ANSWER_PROVENANCE = "generative_reply"
+AUTHORITATIVE_LAST_ANSWER_PROVENANCE = frozenset(
+    {
+        "topic_revealed",
+        "authored_topic",
+        "clue_knowledge",
+        "canonical_fact",
+    }
+)
+
+
+def _stored_text_matches_authoritative_payload(
+    stored: str,
+    fact: str,
+    *,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> bool:
+    raw = str(stored or "").strip()
+    payload = str(fact or "").strip()
+    if not raw or not payload or _stored_answer_is_interruption_narration(raw):
+        return False
+    if raw.lower() == payload.lower() or payload.lower() in raw.lower():
+        return True
+    return _text_communicates_authored_fact(
+        raw,
+        payload,
+        speaker_id=speaker_id,
+        speaker_name=speaker_name,
+    )
+
+
+def authoritative_social_payloads(
+    *,
+    session: dict | None,
+    scene_id: str,
+    npc_id: str | None,
+    resolution: dict | None,
+    world: dict | None,
+) -> list[tuple[str, str]]:
+    """Authored or already-canonical sentences this speaker may reuse as fact."""
+    out: list[tuple[str, str]] = []
+    seen: set[str] = set()
+
+    def _add(text: Any, source: str) -> None:
+        fact = str(text or "").strip()
+        key = fact.lower()
+        if not fact or key in seen:
+            return
+        seen.add(key)
+        out.append((fact, source))
+
+    for fact in _turn_resolution_authored_facts(resolution if isinstance(resolution, dict) else None):
+        _add(fact, "topic_revealed")
+
+    sess = session if isinstance(session, dict) else {}
+    sid = str(scene_id or "").strip()
+    ck = sess.get("clue_knowledge") if isinstance(sess.get("clue_knowledge"), dict) else {}
+    for rec in ck.values():
+        if not isinstance(rec, dict):
+            continue
+        if sid and str(rec.get("source_scene") or "").strip() not in ("", sid):
+            continue
+        _add(rec.get("text"), "clue_knowledge")
+
+    nid = str(npc_id or "").strip()
+    if nid and isinstance(world, dict) and isinstance(sess, dict):
+        runtime = get_npc_runtime(sess, nid)
+        revealed = {
+            str(item).strip()
+            for item in (runtime.get("revealed_topics") or [])
+            if str(item).strip()
+        }
+        npc = npc_dict_by_id(world, nid)
+        topics = npc.get("topics") or npc.get("knowledge") or [] if isinstance(npc, dict) else []
+        if isinstance(topics, list):
+            for rec in topics:
+                if not isinstance(rec, dict):
+                    continue
+                tid = str(rec.get("id") or "").strip()
+                if revealed and tid not in revealed:
+                    continue
+                if not revealed:
+                    continue
+                _add(rec.get("clue_text") or rec.get("text"), "authored_topic")
+    return out
+
+
+def classify_stored_answer_provenance(
+    reply_text: str,
+    *,
+    session: dict | None,
+    scene_id: str,
+    npc_id: str | None,
+    resolution: dict | None,
+    world: dict | None,
+) -> tuple[str, str]:
+    """Return (provenance, authoritative payload) for a reply about to be remembered.
+
+    Generative prose is still storable as dialogue. It does not become the payload.
+    """
+    reply = str(reply_text or "").strip()
+    if not reply or _stored_answer_is_interruption_narration(reply):
+        return GENERATIVE_LAST_ANSWER_PROVENANCE, ""
+    if _player_facing_is_authored_concealment(reply):
+        return GENERATIVE_LAST_ANSWER_PROVENANCE, ""
+    soc = {}
+    if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict):
+        soc = resolution["social"]
+    if str(soc.get("reply_kind") or "").strip().lower() == "refusal":
+        return GENERATIVE_LAST_ANSWER_PROVENANCE, ""
+    speaker_name = str(soc.get("npc_name") or "").strip() or None
+    for fact, source in authoritative_social_payloads(
+        session=session,
+        scene_id=scene_id,
+        npc_id=npc_id,
+        resolution=resolution,
+        world=world,
+    ):
+        if _stored_text_matches_authoritative_payload(
+            reply,
+            fact,
+            speaker_id=npc_id,
+            speaker_name=speaker_name,
+        ):
+            return source, fact
+    return GENERATIVE_LAST_ANSWER_PROVENANCE, ""
+
+
+def structured_fact_text_from_topic_pressure(
+    entry: dict | None,
+    *,
+    payloads: list[tuple[str, str]] | None = None,
+    speaker_id: str | None = None,
+    speaker_name: str | None = None,
+) -> str:
+    """Fact text eligible for structured selection, or empty when continuity only."""
+    if not isinstance(entry, dict):
+        return ""
+    raw = str(entry.get("last_answer") or "").strip()
+    if _stored_answer_is_interruption_narration(raw):
+        raw = ""
+    payload = str(entry.get("last_answer_authoritative_text") or "").strip()
+    if _stored_answer_is_interruption_narration(payload):
+        payload = ""
+    provenance = str(entry.get("last_answer_provenance") or "").strip()
+    if provenance == GENERATIVE_LAST_ANSWER_PROVENANCE:
+        return payload
+    if provenance in AUTHORITATIVE_LAST_ANSWER_PROVENANCE:
+        return payload or raw
+    for fact, _source in payloads or []:
+        if raw and _stored_text_matches_authoritative_payload(
+            raw,
+            fact,
+            speaker_id=speaker_id,
+            speaker_name=speaker_name,
+        ):
+            return fact
+    return ""
+
+
 def select_best_social_answer_candidate(
     *,
     session: dict,
@@ -2496,6 +2659,13 @@ def select_best_social_answer_candidate(
     pressure = rt.get("topic_pressure") if isinstance(rt.get("topic_pressure"), dict) else {}
     speaker_name = str(((resolution or {}).get("social") or {}).get("npc_name") or "").strip() or None
     exclude = _speaker_tokens_for_question_relevance(None, nid or None, speaker_name)
+    answer_payloads = authoritative_social_payloads(
+        session=session,
+        scene_id=sid,
+        npc_id=nid,
+        resolution=resolution,
+        world=world,
+    )
 
     # --- A: structured topic payload on resolution, then topic pressure last_answer ---
     res_soc = (resolution or {}).get("social") if isinstance((resolution or {}).get("social"), dict) else {}
@@ -2516,9 +2686,12 @@ def select_best_social_answer_candidate(
 
     if tk and isinstance(pressure.get(tk), dict):
         entry = pressure[tk]
-        last_ans = str(entry.get("last_answer") or "").strip()
-        if _stored_answer_is_interruption_narration(last_ans):
-            last_ans = ""
+        last_ans = structured_fact_text_from_topic_pressure(
+            entry,
+            payloads=answer_payloads,
+            speaker_id=nid,
+            speaker_name=speaker_name,
+        )
         covers_last = _player_question_covers_stored_thread(
             text_in, last_ans, exclude_tokens=exclude
         ) or empty_subject_continues_current_thread(text_in, exclude)
@@ -2579,9 +2752,12 @@ def select_best_social_answer_candidate(
     # --- C: explicit redirect lead in last_answer (same topic) without full factual match ---
     if tk and isinstance(pressure.get(tk), dict):
         entry2 = pressure[tk]
-        la2 = str(entry2.get("last_answer") or "").strip()
-        if _stored_answer_is_interruption_narration(la2):
-            la2 = ""
+        la2 = structured_fact_text_from_topic_pressure(
+            entry2,
+            payloads=answer_payloads,
+            speaker_id=nid,
+            speaker_name=speaker_name,
+        )
         if (
             la2
             and _speaker_aligned()

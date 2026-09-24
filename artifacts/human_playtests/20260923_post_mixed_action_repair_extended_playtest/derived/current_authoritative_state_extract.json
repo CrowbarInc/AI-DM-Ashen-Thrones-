@@ -1,0 +1,282 @@
+{
+  "derived": true,
+  "note": "Extract of current authoritative fields from persisted_data/session.json and persisted_data/world.json at capture. Not a historical snapshot.",
+  "session_id": "ba70eb525862575033539357",
+  "campaign_run_id": "ba70eb525862575033539357",
+  "saved_at": "2026-09-24T00:23:06.172189Z",
+  "last_saved_at": "2026-09-24T00:23:06.172189Z",
+  "turn_counter": 8,
+  "current_date": "Day 1",
+  "active_scene_id": "frontier_gate",
+  "visited_scene_ids": [
+    "frontier_gate"
+  ],
+  "clocks": {
+    "suspicion": 0,
+    "unrest": 0,
+    "danger": 0,
+    "occult_instability": 0,
+    "time_pressure": 8
+  },
+  "interaction_context": {
+    "active_interaction_target_id": "tavern_runner",
+    "active_interaction_kind": "social",
+    "interaction_mode": "social",
+    "engagement_level": "engaged",
+    "conversation_privacy": null,
+    "player_position_context": null
+  },
+  "scene_state": {
+    "active_scene_id": "frontier_gate",
+    "active_entities": [
+      "tavern_runner",
+      "guard_captain",
+      "refugee",
+      "threadbare_watcher"
+    ],
+    "entity_presence": {
+      "tavern_runner": "active",
+      "threadbare_watcher": "active",
+      "guard_captain": "active",
+      "refugee": "active"
+    },
+    "current_interlocutor": "tavern_runner",
+    "emergent_addressables": [],
+    "promoted_actor_npc_map": {}
+  },
+  "clue_knowledge": {},
+  "lead_registry": {},
+  "npc_runtime": {
+    "tavern_runner": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [],
+      "last_interaction_turn": 8
+    }
+  },
+  "character_name": "Galinor",
+  "frontier_gate_scene_runtime": {
+    "discovered_clues": [],
+    "discovered_clue_ids": [],
+    "pending_leads": [],
+    "revealed_hidden_facts": [],
+    "suspicion_flags": [],
+    "searched_targets": [
+      "i_look_to_the_banners_as_i_enter_the_eas",
+      "looking_to_the_sky_can_i_make_out_the_ti"
+    ],
+    "resolved_interactables": [],
+    "last_exploration_action_key": "question_tavern_runner",
+    "repeated_action_count": 3,
+    "last_resolution_kind": "question",
+    "last_description_hash": "60e1fdc36231a347de775c81443fe341",
+    "last_perception_visible_facts": [],
+    "last_perception_narration": "",
+    "last_perception_turn": null,
+    "consumed_action_ids": [],
+    "momentum_exchanges_since": 0,
+    "momentum_next_due_in": 3,
+    "momentum_last_kind": "new_information",
+    "passive_action_streak": 0,
+    "recent_player_actions": [
+      {
+        "text": "I'll ask anyone near the board, \"Do you have any idea how many hours until dusk?\"",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 5
+      },
+      {
+        "text": "\"Do you know what incident caused the curfew? I can't imagine bandits easily raiding a gated settlement.\"",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 6
+      },
+      {
+        "text": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 7
+      },
+      {
+        "text": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 8
+      }
+    ],
+    "last_player_action_text": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+    "last_player_action_passive": false,
+    "recent_contextual_leads": [
+      {
+        "key": "active_event_you_might_want_to_ask_the_guard_captain_he",
+        "kind": "active_event",
+        "subject": "you might want to ask the guard captain—he",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 6
+      },
+      {
+        "key": "active_event_tavern_runner_shakes_their_head_again_voice_low_and_cautious",
+        "kind": "active_event",
+        "subject": "tavern runner shakes their head again, voice low and cautious",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 7
+      },
+      {
+        "key": "active_event_best_you_try_asking_the_guard_captain_the_one_keeping_near_the_roster_board",
+        "kind": "active_event",
+        "subject": "best you try asking the guard captain—the one keeping",
+        "position": "near the roster board",
+        "named": false,
+        "positioned": true,
+        "mentions": 1,
+        "last_turn": 7
+      },
+      {
+        "key": "active_event_i_cant_say_for_sure_if_he_mingles_much_with_common_folk_the_tavern_runner_mutters_casting_a_cautious_glance_around",
+        "kind": "active_event",
+        "subject": "\"i can't say for sure if he mingles much with common folk,\" the tavern runner mutters, casting a cautious glance around",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 8
+      },
+      {
+        "key": "active_event_the_guard_captain_tends_to",
+        "kind": "active_event",
+        "subject": "\"the guard captain tends to",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 8
+      },
+      {
+        "key": "scene_npc_tavern_runner",
+        "kind": "scene_npc",
+        "subject": "Tavern Runner",
+        "position": "",
+        "named": true,
+        "positioned": false,
+        "mentions": 3,
+        "last_turn": 8
+      }
+    ],
+    "topic_pressure": {
+      "topic:banner_eastern_enter": {
+        "repeat_count": 0,
+        "low_progress_streak": 0,
+        "progress_score_total": 1.5,
+        "last_answer": "Above the eastern gate of Cinderwatch, frayed banners flap weakly in the rain. The worn cloth is too tattered and soaked to make out clear heraldry or recognizable symbols from your position amidst the crowd. Some faint traces of color and pattern are visible, but nothing definitive enough to identify a house or faction crest. The banners likely once bore the marks of local authorities or nobles, but years of wear and neglect have reduced them to weather-beaten shreds.",
+        "last_turn": 2,
+        "speaker_targets": {
+          "__scene__": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 2
+          }
+        },
+        "previous_probe_dimension": "",
+        "last_probe_dimension": "general",
+        "last_player_input": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?"
+      },
+      "topic:despite_look_make": {
+        "repeat_count": 0,
+        "low_progress_streak": 0,
+        "progress_score_total": 3.8,
+        "last_answer": "The notice board spells out that the new curfew requires all civilians to be off the streets by dusk until dawn, a strict measure to curb recent unrest and bandit activity. Violators face fines or detainment until morning. This rule accompanies freshly imposed taxes and a posted warning about a missing patrol last seen heading northwest. A gate serjeant nearby keeps a watchful eye to enforce these edicts amid the crowd's murmur.",
+        "last_turn": 4,
+        "speaker_targets": {
+          "__scene__": {
+            "repeat_count": 2,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 4
+          }
+        },
+        "previous_probe_dimension": "general",
+        "last_probe_dimension": "general",
+        "last_player_input": "I step toward the notice board, particularly interested in the curfew rules. What do they say?"
+      },
+      "topic:anyone_board_dusk": {
+        "repeat_count": 0,
+        "low_progress_streak": 0,
+        "progress_score_total": 1.5,
+        "last_answer": "I can give you a rough sense from the missing patrol notice on the board, not a clean count. Any exact number shifts with every retelling. Use threadbare watchers and refugees cluster along the muddy gate line to bracket who else is moving in the same pattern.\n\nI can give you a rough sense from the missing patrol notice on the board, not a clean count. Any exact number shifts with every retelling. Use threadbare watchers and refugees cluster along the muddy gate line to brack",
+        "last_turn": 5,
+        "speaker_targets": {
+          "__scene__": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 5
+          }
+        },
+        "previous_probe_dimension": "",
+        "last_probe_dimension": "quantity",
+        "last_player_input": "I'll ask anyone near the board, Do you have any idea how many hours until dusk?"
+      },
+      "topic:bandit_cant_caus": {
+        "repeat_count": 1,
+        "low_progress_streak": 0,
+        "progress_score_total": 3.1,
+        "last_answer": "The tavern runner shakes their head again, voice low and cautious. \"I can’t say if you need an appointment or if he’d speak with a newcomer like you. Best you try asking the guard captain—the one keeping watch near the roster board. He’s the one who handles official talk and might give you an answer.\"",
+        "last_turn": 7,
+        "speaker_targets": {
+          "tavern_runner": {
+            "repeat_count": 2,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 7
+          }
+        },
+        "previous_probe_dimension": "general",
+        "last_probe_dimension": "general",
+        "last_player_input": "\"Does that require an appointment? Would he be willing to speak to a newcomer like me?"
+      },
+      "topic:common_dont_feel": {
+        "repeat_count": 1,
+        "low_progress_streak": 0,
+        "progress_score_total": 1.5,
+        "last_answer": "\"I can't say for sure if he mingles much with common folk,\" the tavern runner mutters, casting a cautious glance around. \"The guard captain tends to keep to himself and his duties. If you want to try, your best bet is to find him near the roster board. But don't expect an easy ear without some introduction.\"",
+        "last_turn": 8,
+        "speaker_targets": {
+          "tavern_runner": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 8
+          }
+        },
+        "previous_probe_dimension": "",
+        "last_probe_dimension": "general",
+        "last_player_input": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\""
+      }
+    },
+    "topic_pressure_last_topic_key": "topic:common_dont_feel",
+    "topic_pressure_current": {
+      "topic_key": "topic:common_dont_feel",
+      "speaker_key": "tavern_runner",
+      "turn": 8,
+      "player_text": "\"Sure, but is he known to meet and mingle with common folk? If he isn't, I don't feel I should waste my time.\"",
+      "interaction_kind": "social",
+      "interaction_mode": "social",
+      "social_intent_class": "social_exchange",
+      "npc_name": "Tavern Runner"
+    }
+  }
+}

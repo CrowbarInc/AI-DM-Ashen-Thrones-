@@ -1,0 +1,2589 @@
+{
+  "timestamp": "2026-09-24T00:17:27.164433Z",
+  "player_input": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+  "request": {
+    "chat": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?"
+  },
+  "resolution": {
+    "kind": "investigate",
+    "action_id": "i_look_to_the_banners_as_i_enter_the_eas",
+    "label": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+    "prompt": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "hint": "Player looked or investigated without a grounded discoverable target. Narrate only what is already authorized here. Do not invent a clue, lead, person, time, or other evidence merely to keep the search productive.",
+    "metadata": {
+      "referenced_surface_authority": "untargeted",
+      "referenced_surface_target": "",
+      "referenced_surface_existence": false,
+      "referenced_surface_visibility": false,
+      "referenced_surface_inspectability": false,
+      "referenced_surface_interactable_id": "",
+      "referenced_surface_visible_fact": "",
+      "referenced_surface_inspectable_text": "",
+      "skip_unrelated_clue_discovery": true,
+      "turn_segmentation": {
+        "adjudication_question_text": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?"
+      },
+      "embedded_adjudication": {
+        "question": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+        "category": "action_feasibility_query",
+        "answer_type": "needs_concrete_action",
+        "requires_check": null
+      },
+      "unknown_legacy_keys": {
+        "noncombat_resolution": {
+          "framework_version": "2026.04.noncombat.v1",
+          "kind": "investigation",
+          "subkind": "investigate",
+          "authority_domain": "scene_state",
+          "deterministic_resolved": true,
+          "requires_check": false,
+          "check_request": null,
+          "outcome_type": "closed",
+          "success_state": "neutral",
+          "discovered_entities": [],
+          "surfaced_facts": [],
+          "state_changes": {},
+          "blocked_reason_codes": [],
+          "ambiguous_reason_codes": [],
+          "unsupported_reason_codes": [],
+          "authoritative_outputs": [
+            {
+              "output_kind": "resolution_trace",
+              "source_engine": "game.exploration",
+              "route": "exploration",
+              "engine_action_id": "i_look_to_the_banners_as_i_enter_the_eas"
+            }
+          ]
+        }
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "escalation_block_reason": "non_hostile_world_action_guard",
+        "strict_target_id": null,
+        "strict_answer_expected": true,
+        "strict_dialogue_expected": false,
+        "action_must_preserve_agency": true,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "emission_debug": {
+        "dialogue_social_plan": {
+          "version": 1,
+          "applies": false,
+          "speaker_id": null,
+          "speaker_name": null,
+          "speaker_source": "unresolved",
+          "dialogue_intent": null,
+          "reply_kind": "unknown",
+          "pressure_state": "none",
+          "relationship_codes": [
+            "unknown"
+          ],
+          "tone_bounds": [
+            "neutral"
+          ],
+          "prohibited_content_codes": [
+            "no_narrator_override",
+            "no_ooc_instructions",
+            "no_player_agency_override",
+            "no_prompt_text"
+          ],
+          "derivation_codes": [
+            "dialogue_social_plan:v1",
+            "intent:ctir_only",
+            "referent_tracking:consumed",
+            "session_hints:bounded",
+            "speaker:unresolved"
+          ],
+          "validator": {
+            "validated": true,
+            "errors": [],
+            "reject_field_names": [
+              "dialogue",
+              "dialogue_line",
+              "gm_guidance",
+              "instructions",
+              "message",
+              "narration",
+              "player_facing_text",
+              "prompt",
+              "system_prompt",
+              "text"
+            ],
+            "allowed_reply_kinds": [
+              "answer",
+              "explanation",
+              "reaction",
+              "refusal",
+              "unknown"
+            ],
+            "allowed_pressure_states": [
+              "high",
+              "low",
+              "moderate",
+              "none"
+            ],
+            "allowed_tone_codes": [
+              "cold",
+              "deferential",
+              "direct",
+              "evasive",
+              "guarded",
+              "hostile",
+              "neutral",
+              "threatening",
+              "warm"
+            ],
+            "allowed_relationship_codes": [
+              "engagement_engaged",
+              "engagement_focused",
+              "engagement_none",
+              "fear_high",
+              "fear_low",
+              "friendly",
+              "hostile",
+              "neutral",
+              "suspicion_high",
+              "suspicion_low",
+              "trust_high",
+              "trust_low",
+              "unfriendly",
+              "unknown"
+            ],
+            "allowed_speaker_alias_resolution_sources": [
+              "continuity_snapshot",
+              "interaction_continuity_contract",
+              "manual_bundle_override",
+              "referent_tracking"
+            ]
+          },
+          "bounded_session_hints": {
+            "active_interaction_target_id": null,
+            "active_interaction_target_name": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          }
+        },
+        "scene_state_anchor": {
+          "enabled": true,
+          "scene_id": "frontier_gate",
+          "counts": {
+            "location": 14,
+            "actor": 4,
+            "player_action": 11
+          }
+        },
+        "context_separation": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "failure_reasons": [],
+          "assertion_flags": {
+            "topic_hijack_background_pressure": false,
+            "pressure_answer_substitution": false,
+            "ambient_pressure_forced_tone_shift": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "pressure_overweighting": false
+          },
+          "repair_hints": [],
+          "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=129;after_len=129;before_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…';after_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…'"
+        },
+        "conversational_memory_window": {
+          "enabled": true,
+          "window_version": "v1",
+          "prioritize_recent_turns": true,
+          "prioritize_active_scene_entities": true,
+          "deprioritize_stale_inactive_elements": true,
+          "allow_explicit_reintroduction": true,
+          "recent_turn_window": 6,
+          "soft_memory_limit": 12,
+          "stale_after_turns": 18,
+          "active_scene_entity_ids": [
+            "guard_captain",
+            "refugee",
+            "tavern_runner",
+            "threadbare_watcher"
+          ],
+          "anchored_interlocutor_id": "",
+          "active_interaction_target_id": "",
+          "explicit_reintroduced_entity_ids": [],
+          "explicit_reintroduced_topics": [],
+          "selection_debug": {
+            "matched_entity_ids": [],
+            "matched_topics": [],
+            "matched_grounded_ids": [],
+            "callback_marker_hit": null,
+            "source_of_activity_anchor": "none",
+            "source_of_recentness": "session.turn_counter",
+            "source_of_reintroductions": "player_text+visibility_aliases"
+          }
+        },
+        "selected_conversational_memory": [
+          {
+            "kind": "recent_turn",
+            "entity_ids": [],
+            "topic_tokens": [],
+            "source_turn": 1,
+            "text": "P:  | G: Rain spatters against the soot-dark stone that frames the eastern gate of Cinderwatch, where frayed banners flap wearily on their lines. The muddy approach is clogged with a jostling crowd: refugees d",
+            "score": 103.71428571428571,
+            "why_selected": [
+              "recency",
+              "recent_turn_kind"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "runner",
+              "tavern"
+            ],
+            "source_turn": 1,
+            "text": "Tavern Runner [scene_npc_tavern_runner]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "crowd",
+              "discipline",
+              "gate",
+              "hard",
+              "manages",
+              "serjeant",
+              "their",
+              "with"
+            ],
+            "source_turn": 1,
+            "text": "gate serjeant manages the crowd with hard discipline, their vigilant presence lending weight to the uneasy atmosphere that presses on the assembled travelers and locals [active_event_gate_serjeant_manages_the_crowd_with_hard_discipline_their_vigilant_presence_lending_weight_to_the_uneasy_atmosphere_that_presses_on_the_assembled_travelers_and_locals]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "board",
+              "notice"
+            ],
+            "source_turn": 1,
+            "text": "notice board [notice_board_notice_board]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "eyes",
+              "figure",
+              "garbed",
+              "gate",
+              "keen",
+              "threadbare",
+              "watching",
+              "with"
+            ],
+            "source_turn": 1,
+            "text": "watching the gate with keen eyes, a figure garbed in threadbare clothes [visible_suspicious_figure_watching_the_gate_with_keen_eyes_a_figure_garbed_in_threadbare_clothes]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          }
+        ],
+        "conversational_memory": {
+          "selected_count": 5
+        },
+        "scene_state_anchor_checked": true,
+        "scene_state_anchor_passed": true,
+        "scene_state_anchor_failed": false,
+        "scene_state_anchor_skip_reason": null,
+        "scene_state_anchor_matched_kinds": [
+          "player_action"
+        ],
+        "scene_state_anchor_failure_reasons": [],
+        "scene_state_anchor_repaired": false,
+        "scene_state_anchor_repair_mode": null,
+        "tone_escalation_checked": true,
+        "tone_escalation_ok": true,
+        "tone_escalation_failed": false,
+        "tone_escalation_failure_reasons": [],
+        "tone_escalation_detected_flags": {
+          "guarded": false,
+          "verbal_pressure": false,
+          "explicit_threat": false,
+          "physical_hostility": false,
+          "combat_initiation": false
+        },
+        "tone_escalation_matched_tone_level": null,
+        "tone_escalation_repaired": false,
+        "tone_escalation_repair_mode": null,
+        "tone_escalation_contract_summary": {
+          "enabled": true,
+          "base_tone": "guarded",
+          "max_allowed_tone": "tense",
+          "allow_verbal_pressure": true,
+          "allow_explicit_threat": false,
+          "allow_physical_hostility": false,
+          "allow_combat_initiation": false,
+          "justification_reasons": [
+            "visible_facts_engagement_or_moderate_topic_pressure",
+            "visible_entity_roles_include_authority_guardship",
+            "resolution_kind_or_mechanical_payload_is_risky"
+          ]
+        },
+        "tone_escalation_contract_resolution_source": "shipped_response_policy",
+        "tone_escalation_violation_before_repair": false,
+        "narrative_authority_checked": true,
+        "narrative_authority_failed": false,
+        "narrative_authority_failure_reasons": [],
+        "narrative_authority_repaired": false,
+        "narrative_authority_repair_mode": null,
+        "narrative_authority_skip_reason": null,
+        "narrative_authority_deferral_mode": null,
+        "narrative_authority_assertion_flags": {
+          "invented_outcome": false,
+          "invented_hidden_fact": false,
+          "invented_intent": false,
+          "overcertain_unresolved_action": false
+        },
+        "anti_railroading": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "failure_reasons": [],
+          "assertion_flags": {
+            "player_decision_override": false,
+            "forced_direction": false,
+            "exclusive_path_claim": false,
+            "lead_plot_gravity": false,
+            "forced_conclusion": false
+          },
+          "repair_hints": []
+        },
+        "anti_railroading_checked": true,
+        "anti_railroading_ok": true,
+        "anti_railroading_failed": false,
+        "anti_railroading_failure_reasons": [],
+        "anti_railroading_assertion_flags": {
+          "player_decision_override": false,
+          "forced_direction": false,
+          "exclusive_path_claim": false,
+          "lead_plot_gravity": false,
+          "forced_conclusion": false
+        },
+        "anti_railroading_repair_hints": [],
+        "anti_railroading_repaired": false,
+        "anti_railroading_repair_mode": null,
+        "anti_railroading_skip_reason": null,
+        "anti_railroading_contract_resolution_source": "shipped",
+        "context_separation_contract_resolution_source": "response_policy",
+        "context_separation_skip_reason": null,
+        "context_separation_checked": true,
+        "context_separation_ok": true,
+        "context_separation_failed": false,
+        "context_separation_failure_reasons": [],
+        "context_separation_assertion_flags": {
+          "topic_hijack_background_pressure": false,
+          "pressure_answer_substitution": false,
+          "ambient_pressure_forced_tone_shift": false,
+          "scene_focus_displaced_by_world_pressure": false,
+          "pressure_overweighting": false
+        },
+        "context_separation_repair_hints": [],
+        "context_separation_repaired": false,
+        "context_separation_repair_mode": null,
+        "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=129;after_len=129;before_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…';after_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…'",
+        "context_separation_passed_after_repair": null,
+        "player_facing_narration_purity": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "violation_keys": [],
+          "repair_hints": [],
+          "repair_modes": [],
+          "preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…"
+        },
+        "player_facing_narration_purity_contract_resolution_source": "response_policy",
+        "player_facing_narration_purity_skip_reason": null,
+        "player_facing_narration_purity_checked": true,
+        "player_facing_narration_purity_failed": false,
+        "player_facing_narration_purity_repaired": false,
+        "player_facing_narration_purity_repair_modes": [],
+        "player_facing_narration_purity_violation_keys": [],
+        "player_facing_narration_purity_repair_hints_used": [],
+        "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+        "player_facing_narration_purity_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "player_facing_narration_purity_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "answer_shape_primacy": {
+          "checked": true,
+          "passed": true,
+          "failure_reasons": []
+        },
+        "answer_shape_primacy_skip_reason": null,
+        "answer_shape_primacy_checked": true,
+        "answer_shape_primacy_failed": false,
+        "answer_shape_primacy_repaired": false,
+        "answer_shape_primacy_repair_mode": null,
+        "answer_shape_primacy_failure_reasons": [],
+        "answer_shape_primacy_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "answer_shape_primacy_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "interaction_continuity_validation": {
+          "ok": true,
+          "enabled": false,
+          "continuity_strength": "none",
+          "violations": [],
+          "warnings": [],
+          "facts": {
+            "anchored_interlocutor_id": "",
+            "anchor_required": false,
+            "speaker_switch_detected": false,
+            "explicit_switch_cue_present": false,
+            "thread_drop_detected": false,
+            "narrator_bridge_present": false,
+            "multi_speaker_pattern_present": false,
+            "dialogue_presence": false
+          },
+          "debug": {
+            "speaker_labels_detected": [],
+            "cue_labels": [],
+            "reason_path": [
+              "contract_disabled_or_strength_none"
+            ]
+          }
+        },
+        "fallback_behavior": {
+          "validation": {
+            "contract_present": false,
+            "checked": true,
+            "passed": false,
+            "uncertainty_active": true
+          },
+          "failure_reasons": [
+            "missing_allowed_fallback_shape"
+          ],
+          "repair_mode": "none"
+        },
+        "fallback_behavior_contract_present": false,
+        "fallback_behavior_checked": true,
+        "fallback_behavior_skip_reason": null,
+        "fallback_behavior_uncertainty_active": true,
+        "fallback_behavior_failed": true,
+        "fallback_behavior_failure_reasons": [
+          "missing_allowed_fallback_shape"
+        ],
+        "fallback_behavior_repaired": false,
+        "fallback_behavior_repair_mode": "none",
+        "fallback_behavior_clarifying_question_used": false,
+        "fallback_behavior_partial_used": false,
+        "fallback_behavior_known_edge_preserved": false,
+        "fallback_behavior_unknown_edge_added": false,
+        "fallback_behavior_next_lead_added": false,
+        "fallback_behavior_meta_voice_stripped": false,
+        "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+        "narration_constraint_debug": {
+          "response_type": {
+            "required": "action_outcome",
+            "contract_source": "response_policy",
+            "candidate_ok": true,
+            "repair_used": true,
+            "repair_kind": "action_outcome_upstream_prepared_repair",
+            "upstream_prepared_absent": false
+          },
+          "visibility": {
+            "contract_present": true,
+            "decision_mode": "validated",
+            "visible_entity_count": 4,
+            "withheld_fact_count": 4,
+            "reason_codes": []
+          },
+          "speaker_selection": {
+            "speaker_id": null,
+            "speaker_name": null,
+            "selection_source": null,
+            "reason_code": "speaker_unresolved",
+            "binding_confident": null
+          }
+        }
+      }
+    },
+    "world_tick_events": [
+      {
+        "type": "faction_pressure",
+        "text": "Ordo Pyric's pressure mounts.",
+        "source": "ordo_pyric"
+      }
+    ]
+  },
+  "gm_output": {
+    "player_facing_text": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "tags": [
+      "referenced_surface_realization",
+      "final_emission_gate_replaced",
+      "final_emission_gate:narrative_safe_fallback",
+      "referential_clarity_enforcement_replaced",
+      "referential_clarity_violation:ambiguous_entity_reference"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "metadata": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_strict_social",
+      "model_route_family": "high_precision",
+      "model_route_purpose": "strict_social",
+      "model_retry_attempt": 0,
+      "model_escalated": true,
+      "model_escalation_trigger": "strict_social",
+      "emission_debug": {
+        "fallback_behavior_contract": {
+          "enabled": true,
+          "uncertainty_active": true,
+          "uncertainty_mode": "mixed",
+          "uncertainty_sources": [
+            "unknown_feasibility"
+          ],
+          "allowed_behaviors": {
+            "ask_clarifying_question": false,
+            "hedge_appropriately": true,
+            "provide_partial_information": true
+          },
+          "prefer_partial_over_question": true
+        },
+        "opening_upstream_prepared_present": false,
+        "opening_upstream_prepared_len": 0,
+        "opening_upstream_prepared_promoted": false,
+        "opening_raw_text_source": "gm_player_facing_text",
+        "scene_state_anchor_checked": true,
+        "scene_state_anchor_passed": true,
+        "scene_state_anchor_failed": false,
+        "scene_state_anchor_skip_reason": null,
+        "scene_state_anchor_matched_kinds": [
+          "player_action"
+        ],
+        "scene_state_anchor_failure_reasons": [],
+        "scene_state_anchor_repaired": false,
+        "scene_state_anchor_repair_mode": null,
+        "tone_escalation_checked": true,
+        "tone_escalation_ok": true,
+        "tone_escalation_failed": false,
+        "tone_escalation_failure_reasons": [],
+        "tone_escalation_detected_flags": {
+          "guarded": false,
+          "verbal_pressure": false,
+          "explicit_threat": false,
+          "physical_hostility": false,
+          "combat_initiation": false
+        },
+        "tone_escalation_matched_tone_level": null,
+        "tone_escalation_repaired": false,
+        "tone_escalation_repair_mode": null,
+        "tone_escalation_contract_summary": {
+          "enabled": true,
+          "base_tone": "guarded",
+          "max_allowed_tone": "tense",
+          "allow_verbal_pressure": true,
+          "allow_explicit_threat": false,
+          "allow_physical_hostility": false,
+          "allow_combat_initiation": false,
+          "justification_reasons": [
+            "visible_facts_engagement_or_moderate_topic_pressure",
+            "visible_entity_roles_include_authority_guardship",
+            "resolution_kind_or_mechanical_payload_is_risky"
+          ]
+        },
+        "tone_escalation_contract_resolution_source": "shipped_response_policy",
+        "tone_escalation_violation_before_repair": false,
+        "narrative_authority_checked": true,
+        "narrative_authority_failed": false,
+        "narrative_authority_failure_reasons": [],
+        "narrative_authority_repaired": false,
+        "narrative_authority_repair_mode": null,
+        "narrative_authority_skip_reason": null,
+        "narrative_authority_deferral_mode": null,
+        "narrative_authority_assertion_flags": {
+          "invented_outcome": false,
+          "invented_hidden_fact": false,
+          "invented_intent": false,
+          "overcertain_unresolved_action": false
+        },
+        "anti_railroading": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "failure_reasons": [],
+          "assertion_flags": {
+            "player_decision_override": false,
+            "forced_direction": false,
+            "exclusive_path_claim": false,
+            "lead_plot_gravity": false,
+            "forced_conclusion": false
+          },
+          "repair_hints": []
+        },
+        "anti_railroading_checked": true,
+        "anti_railroading_ok": true,
+        "anti_railroading_failed": false,
+        "anti_railroading_failure_reasons": [],
+        "anti_railroading_assertion_flags": {
+          "player_decision_override": false,
+          "forced_direction": false,
+          "exclusive_path_claim": false,
+          "lead_plot_gravity": false,
+          "forced_conclusion": false
+        },
+        "anti_railroading_repair_hints": [],
+        "anti_railroading_repaired": false,
+        "anti_railroading_repair_mode": null,
+        "anti_railroading_skip_reason": null,
+        "anti_railroading_contract_resolution_source": "shipped",
+        "context_separation": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "failure_reasons": [],
+          "assertion_flags": {
+            "topic_hijack_background_pressure": false,
+            "pressure_answer_substitution": false,
+            "ambient_pressure_forced_tone_shift": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "pressure_overweighting": false
+          },
+          "repair_hints": [],
+          "debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=129;after_len=129;before_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…';after_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…'"
+        },
+        "context_separation_contract_resolution_source": "response_policy",
+        "context_separation_skip_reason": null,
+        "context_separation_checked": true,
+        "context_separation_ok": true,
+        "context_separation_failed": false,
+        "context_separation_failure_reasons": [],
+        "context_separation_assertion_flags": {
+          "topic_hijack_background_pressure": false,
+          "pressure_answer_substitution": false,
+          "ambient_pressure_forced_tone_shift": false,
+          "scene_focus_displaced_by_world_pressure": false,
+          "pressure_overweighting": false
+        },
+        "context_separation_repair_hints": [],
+        "context_separation_repaired": false,
+        "context_separation_repair_mode": null,
+        "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=129;after_len=129;before_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…';after_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…'",
+        "context_separation_passed_after_repair": null,
+        "player_facing_narration_purity": {
+          "validation": {
+            "checked": true,
+            "passed": true
+          },
+          "violation_keys": [],
+          "repair_hints": [],
+          "repair_modes": [],
+          "preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…"
+        },
+        "player_facing_narration_purity_contract_resolution_source": "response_policy",
+        "player_facing_narration_purity_skip_reason": null,
+        "player_facing_narration_purity_checked": true,
+        "player_facing_narration_purity_failed": false,
+        "player_facing_narration_purity_repaired": false,
+        "player_facing_narration_purity_repair_modes": [],
+        "player_facing_narration_purity_violation_keys": [],
+        "player_facing_narration_purity_repair_hints_used": [],
+        "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+        "player_facing_narration_purity_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "player_facing_narration_purity_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "answer_shape_primacy": {
+          "checked": true,
+          "passed": true,
+          "failure_reasons": []
+        },
+        "answer_shape_primacy_skip_reason": null,
+        "answer_shape_primacy_checked": true,
+        "answer_shape_primacy_failed": false,
+        "answer_shape_primacy_repaired": false,
+        "answer_shape_primacy_repair_mode": null,
+        "answer_shape_primacy_failure_reasons": [],
+        "answer_shape_primacy_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "answer_shape_primacy_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+        "conversational_memory_window": {
+          "enabled": true,
+          "window_version": "v1",
+          "prioritize_recent_turns": true,
+          "prioritize_active_scene_entities": true,
+          "deprioritize_stale_inactive_elements": true,
+          "allow_explicit_reintroduction": true,
+          "recent_turn_window": 6,
+          "soft_memory_limit": 12,
+          "stale_after_turns": 18,
+          "active_scene_entity_ids": [
+            "guard_captain",
+            "refugee",
+            "tavern_runner",
+            "threadbare_watcher"
+          ],
+          "anchored_interlocutor_id": "",
+          "active_interaction_target_id": "",
+          "explicit_reintroduced_entity_ids": [],
+          "explicit_reintroduced_topics": [],
+          "selection_debug": {
+            "matched_entity_ids": [],
+            "matched_topics": [],
+            "matched_grounded_ids": [],
+            "callback_marker_hit": null,
+            "source_of_activity_anchor": "none",
+            "source_of_recentness": "session.turn_counter",
+            "source_of_reintroductions": "player_text+visibility_aliases"
+          }
+        },
+        "selected_conversational_memory": [
+          {
+            "kind": "recent_turn",
+            "entity_ids": [],
+            "topic_tokens": [],
+            "source_turn": 1,
+            "text": "P:  | G: Rain spatters against the soot-dark stone that frames the eastern gate of Cinderwatch, where frayed banners flap wearily on their lines. The muddy approach is clogged with a jostling crowd: refugees d",
+            "score": 103.71428571428571,
+            "why_selected": [
+              "recency",
+              "recent_turn_kind"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "runner",
+              "tavern"
+            ],
+            "source_turn": 1,
+            "text": "Tavern Runner [scene_npc_tavern_runner]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "crowd",
+              "discipline",
+              "gate",
+              "hard",
+              "manages",
+              "serjeant",
+              "their",
+              "with"
+            ],
+            "source_turn": 1,
+            "text": "gate serjeant manages the crowd with hard discipline, their vigilant presence lending weight to the uneasy atmosphere that presses on the assembled travelers and locals [active_event_gate_serjeant_manages_the_crowd_with_hard_discipline_their_vigilant_presence_lending_weight_to_the_uneasy_atmosphere_that_presses_on_the_assembled_travelers_and_locals]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "board",
+              "notice"
+            ],
+            "source_turn": 1,
+            "text": "notice board [notice_board_notice_board]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          },
+          {
+            "kind": "contextual_thread",
+            "entity_ids": [],
+            "topic_tokens": [
+              "eyes",
+              "figure",
+              "garbed",
+              "gate",
+              "keen",
+              "threadbare",
+              "watching",
+              "with"
+            ],
+            "source_turn": 1,
+            "text": "watching the gate with keen eyes, a figure garbed in threadbare clothes [visible_suspicious_figure_watching_the_gate_with_keen_eyes_a_figure_garbed_in_threadbare_clothes]",
+            "score": 85.71428571428571,
+            "why_selected": [
+              "recency"
+            ]
+          }
+        ],
+        "interaction_continuity_validation": {
+          "ok": true,
+          "enabled": false,
+          "continuity_strength": "none",
+          "violations": [],
+          "warnings": [],
+          "facts": {
+            "anchored_interlocutor_id": "",
+            "anchor_required": false,
+            "speaker_switch_detected": false,
+            "explicit_switch_cue_present": false,
+            "thread_drop_detected": false,
+            "narrator_bridge_present": false,
+            "multi_speaker_pattern_present": false,
+            "dialogue_presence": false
+          },
+          "debug": {
+            "speaker_labels_detected": [],
+            "cue_labels": [],
+            "reason_path": [
+              "contract_disabled_or_strength_none"
+            ]
+          }
+        },
+        "fallback_behavior": {
+          "validation": {
+            "contract_present": false,
+            "checked": true,
+            "passed": false,
+            "uncertainty_active": true
+          },
+          "failure_reasons": [
+            "missing_allowed_fallback_shape"
+          ],
+          "repair_mode": "none"
+        },
+        "fallback_behavior_contract_present": false,
+        "fallback_behavior_checked": true,
+        "fallback_behavior_skip_reason": null,
+        "fallback_behavior_uncertainty_active": true,
+        "fallback_behavior_failed": true,
+        "fallback_behavior_failure_reasons": [
+          "missing_allowed_fallback_shape"
+        ],
+        "fallback_behavior_repaired": false,
+        "fallback_behavior_repair_mode": "none",
+        "fallback_behavior_clarifying_question_used": false,
+        "fallback_behavior_partial_used": false,
+        "fallback_behavior_known_edge_preserved": false,
+        "fallback_behavior_unknown_edge_added": false,
+        "fallback_behavior_next_lead_added": false,
+        "fallback_behavior_meta_voice_stripped": false,
+        "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+        "opening_selector_source_used": null,
+        "opening_selector_selected_facts": null,
+        "opening_curated_facts": null,
+        "opening_final_fallback_basis": null,
+        "opening_final_basis_matches_selector": false,
+        "narration_constraint_debug": {
+          "response_type": {
+            "required": "action_outcome",
+            "contract_source": "response_policy",
+            "candidate_ok": true,
+            "repair_used": true,
+            "repair_kind": "action_outcome_upstream_prepared_repair",
+            "upstream_prepared_absent": false
+          },
+          "visibility": {
+            "contract_present": true,
+            "decision_mode": "validated",
+            "visible_entity_count": 4,
+            "withheld_fact_count": 4,
+            "reason_codes": []
+          },
+          "speaker_selection": {
+            "speaker_id": null,
+            "speaker_name": null,
+            "selection_source": null,
+            "reason_code": "speaker_unresolved",
+            "binding_confident": null
+          }
+        },
+        "final_speaker_observation": {
+          "status": "unattributed",
+          "canonical_speaker_id": null,
+          "emitted_label": null,
+          "resolution_source": null,
+          "confidence": "low",
+          "candidates": [],
+          "routing_speaker_id": null,
+          "contract_primary_speaker_id": null,
+          "reconcile_speaker_id": null,
+          "notes": [
+            "no_emitted_speaker_label"
+          ]
+        },
+        "pre_gate_text_len": 162,
+        "post_final_emission_gate_text_len": 122,
+        "narration_state_consistency_before_preview": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+        "post_narration_state_consistency_text_len": 122,
+        "narration_state_consistency_changed_text": false,
+        "narration_state_consistency_after_preview": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+        "gm_output_player_facing_len": 162,
+        "final_emission_text_preview": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "response_payload_text_preview": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "log_payload_text_preview": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "canonical_gm_object_id": 2906272967040
+      },
+      "response_policy_enforcement_applied": true,
+      "referenced_surface_realization": {
+        "applied": true,
+        "authority": "untargeted",
+        "target": "",
+        "kind": "investigate"
+      },
+      "narration_seam": {
+        "path_kind": "resolved_turn_ctir_bundle",
+        "ctir_backed": true,
+        "bundle_required": true,
+        "plan_driven": true,
+        "emergency_nonplan_output": false,
+        "explicit_nonplan_model_narration": false,
+        "same_turn_retry_messages_reused": false,
+        "continuation": {
+          "is_continuation_turn": true,
+          "continuation_path_kind": "pressure_driven_continuation",
+          "requires_plan_driven_continuation": true,
+          "allows_nonplan_output": false,
+          "reason_codes": [
+            "opening_reason:none",
+            "ctir_backed_plan_driven",
+            "plan_active_pressures_present"
+          ],
+          "continuation_plan_verified": true,
+          "continuation_plan_failure_reason": null,
+          "continuation_source": "narrative_plan_bundle",
+          "continuation_enforcement_applied": true
+        }
+      },
+      "planner_convergence_report": {
+        "enabled": true,
+        "owner_module": "game.api",
+        "path_label": "action_outcome",
+        "ctir_present": true,
+        "ctir_stamp": "2:2a4ab548280:27f7efe5",
+        "narrative_plan_present": true,
+        "narrative_plan_stamp": "2:2a4ab548280:27f7efe5",
+        "stamp_matches": true,
+        "prompt_consumes_plan": true,
+        "raw_state_prompt_bypass_detected": false,
+        "emergency_nonplan_allowed": false,
+        "failure_codes": []
+      },
+      "stage_diff_telemetry": {
+        "snapshots": [
+          {
+            "stage": "final_emission_gate_entry",
+            "player_facing_fingerprint": "8ae6c33fcd1b89833701",
+            "player_facing_preview": "Nothing new resolves into evidence. The guard shrugs. \"Couldn't tell you—only rumors from the road.\"",
+            "text_len": 100,
+            "final_route": null,
+            "fallback_kind": null,
+            "accepted_via": null,
+            "response_type": null,
+            "resolution_kind": null,
+            "active_target_id": null,
+            "reply_kind": null,
+            "fallback_source": null,
+            "fallback_stage": null,
+            "repair_flags": [],
+            "retry_flags": {
+              "retry_exhausted": false,
+              "targeted_retry_terminal": false
+            }
+          },
+          {
+            "stage": "final_emission_gate_exit",
+            "player_facing_fingerprint": "8bd31948ffd7930a67f9",
+            "player_facing_preview": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inqu…",
+            "text_len": 122,
+            "final_route": "replaced",
+            "fallback_kind": null,
+            "accepted_via": null,
+            "response_type": null,
+            "resolution_kind": null,
+            "active_target_id": null,
+            "reply_kind": null,
+            "fallback_source": null,
+            "fallback_stage": null,
+            "repair_flags": [],
+            "retry_flags": {
+              "retry_exhausted": false,
+              "targeted_retry_terminal": false
+            },
+            "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat"
+          }
+        ],
+        "transitions": []
+      }
+    },
+    "scene_state_anchor_contract": {
+      "enabled": true,
+      "required_any_of": [
+        "location",
+        "actor",
+        "player_action"
+      ],
+      "minimum_anchor_hits": 1,
+      "scene_id": "frontier_gate",
+      "scene_location_label": "Cinderwatch Gate District",
+      "location_tokens": [
+        "frontier_gate",
+        "frontier gate",
+        "cinderwatch gate district",
+        "cinderwatch gate",
+        "gate district",
+        "notice",
+        "board",
+        "lists",
+        "taxes",
+        "curfew",
+        "rules",
+        "warning",
+        "missing",
+        "patrol"
+      ],
+      "actor_tokens": [
+        "guard captain",
+        "ragged stranger",
+        "tavern runner",
+        "threadbare watcher"
+      ],
+      "player_action_tokens": [
+        "investigate",
+        "i_look_to_the_banners_as_i_enter_the_eas",
+        "i look to the banners as i enter the eas",
+        "look",
+        "banners",
+        "enter",
+        "eastern",
+        "gate",
+        "can",
+        "make",
+        "out"
+      ],
+      "preferred_repair_order": [
+        "actor",
+        "player_action",
+        "location"
+      ],
+      "debug_reason": "scene_state_anchor: loc=14 actor=4 player_action=11 enabled=True",
+      "debug_sources": {
+        "location": [
+          "scene.id",
+          "scene.location",
+          "visible_facts"
+        ],
+        "actor": [
+          "narration_visibility.visible_entity_names",
+          "visible_entity_aliases"
+        ],
+        "player_action": [
+          "resolution.kind",
+          "resolution.action_id",
+          "scene_runtime.last_player_action_text"
+        ]
+      }
+    },
+    "conversational_memory_window": {
+      "enabled": true,
+      "window_version": "v1",
+      "prioritize_recent_turns": true,
+      "prioritize_active_scene_entities": true,
+      "deprioritize_stale_inactive_elements": true,
+      "allow_explicit_reintroduction": true,
+      "recent_turn_window": 6,
+      "soft_memory_limit": 12,
+      "stale_after_turns": 18,
+      "active_scene_entity_ids": [
+        "guard_captain",
+        "refugee",
+        "tavern_runner",
+        "threadbare_watcher"
+      ],
+      "anchored_interlocutor_id": "",
+      "active_interaction_target_id": "",
+      "explicit_reintroduced_entity_ids": [],
+      "explicit_reintroduced_topics": [],
+      "selection_debug": {
+        "matched_entity_ids": [],
+        "matched_topics": [],
+        "matched_grounded_ids": [],
+        "callback_marker_hit": null,
+        "source_of_activity_anchor": "none",
+        "source_of_recentness": "session.turn_counter",
+        "source_of_reintroductions": "player_text+visibility_aliases"
+      }
+    },
+    "selected_conversational_memory": [
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 1,
+        "text": "P:  | G: Rain spatters against the soot-dark stone that frames the eastern gate of Cinderwatch, where frayed banners flap wearily on their lines. The muddy approach is clogged with a jostling crowd: refugees d",
+        "score": 103.71428571428571,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      },
+      {
+        "kind": "contextual_thread",
+        "entity_ids": [],
+        "topic_tokens": [
+          "runner",
+          "tavern"
+        ],
+        "source_turn": 1,
+        "text": "Tavern Runner [scene_npc_tavern_runner]",
+        "score": 85.71428571428571,
+        "why_selected": [
+          "recency"
+        ]
+      },
+      {
+        "kind": "contextual_thread",
+        "entity_ids": [],
+        "topic_tokens": [
+          "crowd",
+          "discipline",
+          "gate",
+          "hard",
+          "manages",
+          "serjeant",
+          "their",
+          "with"
+        ],
+        "source_turn": 1,
+        "text": "gate serjeant manages the crowd with hard discipline, their vigilant presence lending weight to the uneasy atmosphere that presses on the assembled travelers and locals [active_event_gate_serjeant_manages_the_crowd_with_hard_discipline_their_vigilant_presence_lending_weight_to_the_uneasy_atmosphere_that_presses_on_the_assembled_travelers_and_locals]",
+        "score": 85.71428571428571,
+        "why_selected": [
+          "recency"
+        ]
+      },
+      {
+        "kind": "contextual_thread",
+        "entity_ids": [],
+        "topic_tokens": [
+          "board",
+          "notice"
+        ],
+        "source_turn": 1,
+        "text": "notice board [notice_board_notice_board]",
+        "score": 85.71428571428571,
+        "why_selected": [
+          "recency"
+        ]
+      },
+      {
+        "kind": "contextual_thread",
+        "entity_ids": [],
+        "topic_tokens": [
+          "eyes",
+          "figure",
+          "garbed",
+          "gate",
+          "keen",
+          "threadbare",
+          "watching",
+          "with"
+        ],
+        "source_turn": 1,
+        "text": "watching the gate with keen eyes, a figure garbed in threadbare clothes [visible_suspicious_figure_watching_the_gate_with_keen_eyes_a_figure_garbed_in_threadbare_clothes]",
+        "score": 85.71428571428571,
+        "why_selected": [
+          "recency"
+        ]
+      }
+    ],
+    "response_policy": {
+      "rule_priority_order": [
+        "ANSWER THE PLAYER",
+        "DO NOT CONTRADICT AUTHORITATIVE STATE",
+        "DO NOT LEAK HIDDEN FACTS / SECRETS",
+        "DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT",
+        "PRESERVE PLAYER AGENCY — DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS",
+        "IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER",
+        "WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING",
+        "KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY",
+        "MAINTAIN DIEGETIC VOICE (no validator/system voice)",
+        "KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING",
+        "PRESERVE SCENE MOMENTUM",
+        "ADD SPECIFICITY / FLAVOR / POLISH"
+      ],
+      "must_answer": true,
+      "forbid_state_invention": true,
+      "forbid_secret_leak": true,
+      "allow_partial_answer": true,
+      "response_delta": {
+        "enabled": false,
+        "delta_required": false,
+        "delta_must_come_early": false,
+        "trigger_source": "none",
+        "topic_tokens": [],
+        "press_depth": 0,
+        "previous_player_input": null,
+        "previous_answer_snippet": null,
+        "overlap_ratio": null,
+        "allowed_delta_kinds": [],
+        "forbid_semantic_restatement": false,
+        "forbid_repackaged_nonanswer": false,
+        "allow_short_bridge_before_delta": false,
+        "require_delta_when_answer_required": false,
+        "expected_delta_shape": "none",
+        "trace": {
+          "question_detected_from_player_text": true,
+          "follow_up_pressure_detected": false,
+          "follow_up_press_depth": 0,
+          "follow_up_overlap_ratio": null,
+          "prior_answer_available": false,
+          "answer_completeness_required": true,
+          "social_lock": false,
+          "active_target_id": null,
+          "answer_pressure_followup_detected": false,
+          "strict_social_answer_seek_override": false,
+          "same_interlocutor_followup": false,
+          "answer_pressure_suppressed_because": [
+            "no_active_interlocutor",
+            "no_prior_log_exchange",
+            "not_question_or_answer_pressure"
+          ],
+          "answer_pressure_family": null,
+          "answer_pressure_anchor_kind": null,
+          "contradiction_followup_detected": false,
+          "explanation_followup_detected": false,
+          "insufficiency_followup_detected": false,
+          "short_followup_anchor_detected": false,
+          "anchor_tokens_extracted": [],
+          "anchor_token_matched": null,
+          "anchor_followup_detected": false,
+          "explanation_of_recent_anchor_followup": false,
+          "recent_reference_clarification_detected": false,
+          "recent_reference_kind": null,
+          "recent_reference_phrase_matched": null,
+          "clarification_prompt_shape": null,
+          "correction_reask_followup_detected": false,
+          "answer_pressure_reasons": [],
+          "trigger_source": "none",
+          "resolution_kind": "investigate",
+          "uncertainty_suggests_partial": true,
+          "suppressed_because": [
+            "no_follow_up_pressure"
+          ]
+        }
+      },
+      "diegetic_only": true,
+      "prefer_scene_momentum": true,
+      "prefer_specificity": true,
+      "no_validator_voice": {
+        "enabled": true,
+        "applies_to": "standard_narration",
+        "rule": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.",
+        "prohibited_perspectives": [
+          "canon_validation",
+          "evidence_review",
+          "system_limitation",
+          "tool_access",
+          "model_identity",
+          "rules_explanation_outside_oc_or_adjudication"
+        ],
+        "rules_explanation_only_in": [
+          "oc",
+          "adjudication"
+        ]
+      },
+      "scene_momentum_due": false,
+      "uncertainty": {
+        "enabled": true,
+        "categories": [
+          "unknown_identity",
+          "unknown_location",
+          "unknown_motive",
+          "unknown_method",
+          "unknown_quantity",
+          "unknown_feasibility"
+        ],
+        "sources": [
+          "npc_ignorance",
+          "scene_ambiguity",
+          "procedural_insufficiency"
+        ],
+        "answer_shape": [
+          "known_edge",
+          "unknown_edge",
+          "next_lead"
+        ],
+        "context_inputs": [
+          "turn_context",
+          "speaker",
+          "scene_snapshot"
+        ]
+      },
+      "answer_completeness": {
+        "enabled": true,
+        "trace": {
+          "trigger_source": "player_direct_question",
+          "active_target_id": null,
+          "active_npc_reply_kind": null,
+          "question_detected_from_player_text": true,
+          "answer_pressure_followup_detected": false,
+          "strict_social_answer_seek_override": false,
+          "same_interlocutor_followup": false,
+          "answer_pressure_suppressed_because": [
+            "no_active_interlocutor",
+            "no_prior_log_exchange",
+            "not_question_or_answer_pressure"
+          ],
+          "answer_pressure_family": null,
+          "answer_pressure_anchor_kind": null,
+          "contradiction_followup_detected": false,
+          "explanation_followup_detected": false,
+          "insufficiency_followup_detected": false,
+          "short_followup_anchor_detected": false,
+          "anchor_tokens_extracted": [],
+          "anchor_token_matched": null,
+          "anchor_followup_detected": false,
+          "explanation_of_recent_anchor_followup": false,
+          "recent_reference_clarification_detected": false,
+          "recent_reference_kind": null,
+          "recent_reference_phrase_matched": null,
+          "clarification_prompt_shape": null,
+          "correction_reask_followup_detected": false,
+          "answer_pressure_reasons": [],
+          "partial_answer_permitted": true
+        },
+        "player_direct_question": true,
+        "answer_required": true,
+        "answer_must_come_first": true,
+        "expected_voice": "narrator",
+        "expected_answer_shape": "bounded_partial",
+        "allowed_partial_reasons": [
+          "uncertainty",
+          "lack_of_knowledge",
+          "gated_information"
+        ],
+        "forbid_deflection": true,
+        "forbid_generic_nonanswer": true,
+        "require_concrete_payload": true,
+        "concrete_payload_any_of": [
+          "name",
+          "place",
+          "fact",
+          "direction",
+          "condition",
+          "next_lead"
+        ],
+        "answer_exposition_plan": {
+          "enabled": true,
+          "answer_required": true,
+          "answer_intent": "direct_answer",
+          "source": {
+            "derived_from_ctir": true,
+            "ctir_sections": [],
+            "derivation_codes": [
+              "answer_exposition_plan:derive",
+              "answer_intent:direct_answer"
+            ]
+          },
+          "facts": [],
+          "constraints": {
+            "forbid_invention": true,
+            "forbid_hidden_truth_leak": true,
+            "forbid_prompt_layer_reasoning": true,
+            "allowed_partial_reasons": [
+              "uncertainty",
+              "lack_of_knowledge",
+              "gated_information"
+            ]
+          },
+          "voice": {
+            "expected_voice": "narrator",
+            "delivery_mode": "plain_answer"
+          },
+          "delivery": {
+            "answer_must_come_first": true,
+            "max_sentences_hint": null,
+            "must_include_fact_ids": [],
+            "optional_fact_ids": [],
+            "forbidden_moves": [
+              "no_answer_burying",
+              "no_deflection",
+              "no_generic_fallback",
+              "no_generic_nonanswer"
+            ]
+          },
+          "debug": {
+            "derivation_codes": [
+              "answer_exposition_plan:derive",
+              "answer_intent:direct_answer"
+            ]
+          }
+        }
+      },
+      "planner_seam_trace": {
+        "head_state": {
+          "legacy_no_ctir_only": false,
+          "non_ctir_semantic_path": false,
+          "ctir_backed_head_state": true
+        }
+      },
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "tone_escalation": {
+        "enabled": true,
+        "scene_id": "frontier_gate",
+        "active_speaker_id": null,
+        "base_tone": "guarded",
+        "max_allowed_tone": "tense",
+        "allow_guarded_refusal": true,
+        "allow_verbal_pressure": true,
+        "allow_explicit_threat": false,
+        "allow_physical_hostility": false,
+        "allow_combat_initiation": false,
+        "justification_flags": {
+          "player_used_aggressive_action": false,
+          "player_used_coercive_social_action": false,
+          "player_persisted_after_refusal": false,
+          "scene_has_active_tension": true,
+          "scene_has_authority_pressure": true,
+          "scene_has_visible_hostile_actor": false,
+          "combat_active": false,
+          "resolution_is_risky": true,
+          "npc_already_hostile_in_state": false
+        },
+        "justification_reasons": [
+          "visible_facts_engagement_or_moderate_topic_pressure",
+          "visible_entity_roles_include_authority_guardship",
+          "resolution_kind_or_mechanical_payload_is_risky"
+        ],
+        "preferred_deescalations": [
+          "Tighten diction and body language without 'or else' phrasing.",
+          "Use deadlines, policy, or reputation risk as leverage."
+        ],
+        "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
+        "debug_inputs": {
+          "scene_id": "frontier_gate",
+          "has_session": true,
+          "has_world": true,
+          "has_resolution": true,
+          "has_narration_visibility": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "recent_log_len": 1
+        },
+        "debug_flags": {
+          "base_rank": 1,
+          "max_rank": 2,
+          "recent_player_text_latest_len": 0,
+          "resolution_kind": "investigate",
+          "normalized_action_type": null,
+          "prior_refusal_seen_in_log": false,
+          "topic_pressure": 0,
+          "combat_active_inferred": false
+        }
+      },
+      "narrative_authority": {
+        "enabled": true,
+        "authoritative_outcome_available": false,
+        "resolution_kind": "investigate",
+        "success_state_available": false,
+        "mechanical_result_available": false,
+        "active_speaker_id": null,
+        "active_target_id": null,
+        "visible_fact_strings": [
+          "the notice board lists taxes, curfew rules, and a warning about a missing patrol",
+          "a gate serjeant manages the crowd and keeps one eye on the roster board",
+          "a tavern runner trades hot stew and rumors near the rain barrel",
+          "threadbare watchers and refugees cluster along the muddy gate line",
+          "ash compact census delays have tightened the eastern caravan choke point"
+        ],
+        "hidden_fact_strings_present": true,
+        "discoverable_hinting_allowed": true,
+        "forbid_unresolved_outcome_assertions": true,
+        "forbid_hidden_fact_assertions": true,
+        "forbid_npc_intent_assertions_without_basis": true,
+        "allow_bounded_intent_reading_only_when_player_asked": false,
+        "allowed_deferrals": [
+          "ask_for_roll",
+          "bounded_uncertainty",
+          "branch_outcome"
+        ],
+        "preferred_deferral_order": [
+          "ask_for_roll",
+          "branch_outcome",
+          "bounded_uncertainty"
+        ],
+        "debug_reason": "narrative_authority: authoritative_outcome=False kind='investigate' mechanical_risky=True",
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_narration_visibility": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "has_session_view": true
+        },
+        "debug_flags": {
+          "mechanical_risky": true,
+          "pending_player_roll": false,
+          "anchor_contract_enabled": true
+        }
+      },
+      "forbid_unjustified_narrative_authority": true,
+      "anti_railroading": {
+        "enabled": true,
+        "forbid_player_decision_override": true,
+        "forbid_forced_direction": true,
+        "forbid_exclusive_path_claims_without_basis": true,
+        "forbid_lead_to_plot_gravity_upgrade": true,
+        "allow_directional_language_from_resolved_transition": false,
+        "allow_exclusivity_from_authoritative_resolution": false,
+        "allow_commitment_language_when_player_explicitly_committed": false,
+        "surfaced_lead_ids": [],
+        "surfaced_lead_labels": [],
+        "allowed_lead_roles": [
+          "option",
+          "hook",
+          "rumor",
+          "pressure",
+          "opportunity",
+          "constraint"
+        ],
+        "forbidden_lead_roles": [
+          "destiny",
+          "required_path",
+          "main_plot",
+          "only_real_way_forward"
+        ],
+        "debug_reason": "anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=0",
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_narration_obligations": true,
+          "has_session_view": true,
+          "has_scene_state_anchor_contract": true,
+          "has_speaker_selection_contract": true,
+          "has_narrative_authority_contract": true,
+          "has_prompt_leads": true,
+          "has_active_pending_leads": true,
+          "has_follow_surface": false,
+          "player_text_nonempty": true,
+          "obligation_hints": {
+            "must_advance_scene": true,
+            "scene_momentum_due": false,
+            "is_opening_scene": false
+          }
+        },
+        "debug_flags": {
+          "resolved_transition": false,
+          "authoritative_resolution_outcome": false,
+          "player_commitment_detected": false,
+          "surfaced_lead_count": 0,
+          "scene_state_anchor_contract_present": true,
+          "narrative_authority_contract_present": true,
+          "speaker_contract_present": true
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "scene_focus_summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. investigate investigate Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+        "interaction_kind": "investigate",
+        "player_intent_summary": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+        "primary_topics": [
+          "look",
+          "banners",
+          "enter",
+          "eastern",
+          "gate",
+          "make",
+          "heraldry",
+          "frontier_gate",
+          "frontier gate",
+          "cinderwatch gate district",
+          "cinderwatch gate",
+          "gate district",
+          "notice",
+          "board",
+          "lists",
+          "taxes",
+          "curfew",
+          "rules",
+          "warning",
+          "missing",
+          "patrol",
+          "guard captain",
+          "ragged stranger",
+          "tavern runner",
+          "threadbare watcher",
+          "investigate",
+          "i_look_to_the_banners_as_i_enter_the_eas",
+          "i look to the banners as i enter the eas",
+          "can",
+          "out"
+        ],
+        "allowed_contextual_topics": [],
+        "ambient_pressure_topics": [
+          "Rival noble houses competing for territory and influence.",
+          "Religious orders attempting to control or suppress dangerous magic.",
+          "Criminal syndicates dominating trade, smuggling, and urban power."
+        ],
+        "forbid_topic_hijack": true,
+        "forbid_pressure_answer_substitution": true,
+        "forbid_unearned_tone_shift_from_background_pressure": true,
+        "allow_brief_pressure_coloring": true,
+        "allow_optional_consequence_signposting": true,
+        "max_pressure_sentences_without_player_prompt": 2,
+        "tone_escalation_contract": {
+          "enabled": true,
+          "scene_id": "frontier_gate",
+          "active_speaker_id": null,
+          "base_tone": "guarded",
+          "max_allowed_tone": "tense",
+          "allow_guarded_refusal": true,
+          "allow_verbal_pressure": true,
+          "allow_explicit_threat": false,
+          "allow_physical_hostility": false,
+          "allow_combat_initiation": false,
+          "justification_flags": {
+            "player_used_aggressive_action": false,
+            "player_used_coercive_social_action": false,
+            "player_persisted_after_refusal": false,
+            "scene_has_active_tension": true,
+            "scene_has_authority_pressure": true,
+            "scene_has_visible_hostile_actor": false,
+            "combat_active": false,
+            "resolution_is_risky": true,
+            "npc_already_hostile_in_state": false
+          },
+          "justification_reasons": [
+            "visible_facts_engagement_or_moderate_topic_pressure",
+            "visible_entity_roles_include_authority_guardship",
+            "resolution_kind_or_mechanical_payload_is_risky"
+          ],
+          "preferred_deescalations": [
+            "Tighten diction and body language without 'or else' phrasing.",
+            "Use deadlines, policy, or reputation risk as leverage."
+          ],
+          "debug_reason": "tone_escalation: base_rank=1 max_rank=2 combat_active=False hostile_npc=False",
+          "debug_inputs": {
+            "scene_id": "frontier_gate",
+            "has_session": true,
+            "has_world": true,
+            "has_resolution": true,
+            "has_narration_visibility": true,
+            "has_scene_state_anchor_contract": true,
+            "has_speaker_selection_contract": true,
+            "recent_log_len": 1
+          },
+          "debug_flags": {
+            "base_rank": 1,
+            "max_rank": 2,
+            "recent_player_text_latest_len": 0,
+            "resolution_kind": "investigate",
+            "normalized_action_type": null,
+            "prior_refusal_seen_in_log": false,
+            "topic_pressure": 0,
+            "combat_active_inferred": false
+          }
+        },
+        "debug_inputs": {
+          "has_resolution": true,
+          "has_session_view": true,
+          "has_scene_envelope": true,
+          "has_scene_summary": true,
+          "has_turn_summary": true,
+          "has_speaker_selection_contract": true,
+          "has_scene_state_anchor_contract": true,
+          "has_narration_visibility": true,
+          "has_tone_escalation_contract": true,
+          "has_compressed_world_pressures": true,
+          "has_prompt_leads": true,
+          "has_active_pending_leads": true,
+          "has_follow_surface": false,
+          "player_text_nonempty": true,
+          "primary_topic_count": 30,
+          "ambient_pressure_topic_count": 3
+        },
+        "debug_flags": {
+          "player_seeks_world_danger_info": false,
+          "scene_summary_crisis": false,
+          "interaction_kind_worldish": true,
+          "authoritative_or_consequence_relevant": false,
+          "pressure_focus_allowed": true,
+          "tone_allow_verbal_pressure": true,
+          "tone_allow_explicit_threat": false
+        },
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=30 ambient=3"
+      },
+      "player_facing_narration_purity": {
+        "enabled": true,
+        "diegetic_only": true,
+        "allow_structured_choice_labels": false,
+        "allow_explicit_ui_references": false,
+        "allow_meta_transition_bridges": false,
+        "forbid_scaffold_headers": true,
+        "forbid_coaching_language": true,
+        "forbid_engine_choice_framing": true,
+        "forbid_non_diegetic_action_prompting": true,
+        "response_type_required": null,
+        "interaction_kind": null
+      },
+      "social_response_structure": {
+        "enabled": false,
+        "applies_to_response_type": "dialogue",
+        "require_spoken_dialogue_shape": false,
+        "discourage_expository_monologue": false,
+        "require_natural_cadence": false,
+        "allow_brief_action_beats": true,
+        "allow_brief_refusal_or_uncertainty": true,
+        "max_contiguous_expository_lines": null,
+        "max_dialogue_paragraphs_before_break": null,
+        "prefer_single_speaker_turn": false,
+        "forbid_bulleted_or_list_like_dialogue": false,
+        "required_response_type": "action_outcome",
+        "debug_reason": "response_type_not_dialogue:action_outcome",
+        "debug_inputs": {
+          "scene_id": "frontier_gate",
+          "response_type_contract_source": "response_policy"
+        }
+      },
+      "interaction_continuity": {
+        "enabled": false,
+        "continuity_strength": "none",
+        "preserve_conversational_thread": false,
+        "preserve_context_continuity": false,
+        "drop_interlocutor_requires_explicit_break": false,
+        "speaker_switch_requires_explicit_cue": false,
+        "allow_narrator_bridge": true,
+        "interaction_mode": "none",
+        "interaction_kind": "",
+        "active_interaction_target_id": "",
+        "current_interlocutor": "",
+        "anchored_interlocutor_id": "",
+        "conversation_privacy": "",
+        "engagement_level": "none",
+        "speaker_selection_contract": {
+          "primary_speaker_id": null,
+          "primary_speaker_name": null,
+          "primary_speaker_source": null,
+          "allowed_speaker_ids": [],
+          "continuity_locked": false,
+          "continuity_lock_reason": null,
+          "speaker_switch_allowed": true,
+          "speaker_switch_reason": "no_authoritative_pin",
+          "generic_fallback_forbidden": true,
+          "forbidden_fallback_labels": [
+            "ragged stranger",
+            "stranger",
+            "someone nearby",
+            "someone in the crowd",
+            "a voice nearby",
+            "a passerby",
+            "a bystander",
+            "an onlooker",
+            "a figure nearby",
+            "someone anonymous"
+          ],
+          "interruption_allowed": false,
+          "interruption_requires_scene_event": false,
+          "offscene_speakers_forbidden": true,
+          "debug": {
+            "merged_player_prompt_preview": "",
+            "strict_social_active": false,
+            "authoritative_source": "none",
+            "authoritative_reason": "no addressable target resolved",
+            "grounding_reason_code": "empty_actor_id",
+            "grounding_fallback_applied": false,
+            "neutral_reply_bridge": true,
+            "why_speaker_chosen": "authoritative_target_unresolved",
+            "why_continuity_locked_or_not": null,
+            "why_switch_permitted_or_not": "no_authoritative_pin",
+            "interruption_tracker_active": false,
+            "resolution_path": "full_authoritative_resolve_plus_grounding"
+          }
+        },
+        "continuity_reasons": [],
+        "break_signals_present": [],
+        "debug": {
+          "source_of_anchor": "none",
+          "scene_scope_validated": true,
+          "response_type_required": "action_outcome"
+        }
+      },
+      "fallback_behavior": {
+        "enabled": true,
+        "uncertainty_active": true,
+        "uncertainty_sources": [
+          "unknown_feasibility"
+        ],
+        "uncertainty_mode": "mixed",
+        "allowed_behaviors": {
+          "ask_clarifying_question": false,
+          "hedge_appropriately": true,
+          "provide_partial_information": true
+        },
+        "disallowed_behaviors": {
+          "invented_certainty": true,
+          "fabricated_authority": true,
+          "meta_system_explanations": true
+        },
+        "diegetic_only": true,
+        "max_clarifying_questions": 1,
+        "prefer_partial_over_question": true,
+        "require_partial_to_state_known_edge": true,
+        "require_partial_to_state_unknown_edge": true,
+        "require_partial_to_offer_next_lead": true,
+        "allowed_hedge_forms": [
+          "I can't swear to it, but",
+          "From what I saw,",
+          "As far as rumor goes,",
+          "Looks like",
+          "Hard to tell, but"
+        ],
+        "forbidden_hedge_forms": [
+          "I lack enough information to answer confidently.",
+          "The system cannot confirm that.",
+          "Canon proves it.",
+          "As an AI, I don't know.",
+          "There is insufficient context available."
+        ],
+        "allowed_authority_bases": [
+          "direct_observation",
+          "established_report",
+          "rumor_marked_as_rumor",
+          "visible_evidence"
+        ],
+        "forbidden_authority_bases": [
+          "unsupported_named_culprit",
+          "unsupported_exact_location",
+          "unsupported_motive_as_fact",
+          "unsupported_procedural_certainty",
+          "system_or_canon_claims"
+        ],
+        "debug": {
+          "activation_reasons": [
+            "answer_completeness_requires_bounded_partial",
+            "answer_completeness_allows_uncertainty_partial",
+            "answer_completeness_detects_lack_of_knowledge",
+            "answer_completeness_detects_gated_information",
+            "narrative_authority_requires_outcome_deferral"
+          ],
+          "partial_preferred": true,
+          "clarifying_question_allowed": false
+        }
+      },
+      "narrative_authenticity": {
+        "enabled": true,
+        "version": 1,
+        "mode": "advisory_prompt_with_gate_enforcement",
+        "allow_restate_for_continuity": true,
+        "max_anchor_reuse_clauses": 1,
+        "forbid_scene_narration_echo_as_dialogue": true,
+        "forbid_low_signal_generic_reply": true,
+        "forbid_adjacent_phrase_reuse": true,
+        "require_meaningful_change_on_followup": true,
+        "signal_sources": [
+          "new_information",
+          "new_perspective",
+          "new_reaction",
+          "new_boundary_of_uncertainty",
+          "new_actionable_next_step"
+        ],
+        "anti_goals": {
+          "do_not_force_verbosity": true,
+          "do_not_invent_facts": true,
+          "do_not_override_fallback_correctness": true
+        },
+        "fallback_compatibility": {
+          "may_be_brief_under_uncertainty": true,
+          "may_refuse_or_partially_answer_if_other_contracts_require": true,
+          "brevity_alone_is_not_failure": true
+        },
+        "rumor_realism": {
+          "enabled": true,
+          "apply_on_secondhand_or_rumor_turns": true,
+          "forbid_verbatim_scene_to_rumor_reuse": true,
+          "forbid_recent_narration_to_dialogue_reuse": true,
+          "require_one_of": [
+            "source_limitation",
+            "uncertainty_or_distortion",
+            "perspective_or_bias",
+            "net_new_detail"
+          ],
+          "allow_partial_fact_overlap": true,
+          "forbid_identical_phrasing_even_when_overlap_allowed": true,
+          "fallback_compatibility": {
+            "allow_brief_bounded_partial_under_uncertainty": true,
+            "do_not_fail_for_brevity_alone": true,
+            "allow_source_limited_refusal": true
+          }
+        },
+        "trace": {
+          "response_delta_contract_active": false,
+          "topic_follow_up_active": false,
+          "answer_completeness_required": true,
+          "dialogue_shape_expected": false,
+          "prior_turn_gm_snippet_for_overlap": "Rain spatters against the soot-dark stone that frames the eastern gate of Cinderwatch, where frayed banners flap wearily on their lines. The muddy approach is clogged with a jostling crowd: refugees d",
+          "player_text_len": 79,
+          "rumor_turn_active": false,
+          "rumor_turn_reason_codes": [],
+          "rumor_trigger_spans": []
+        }
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [
+          "guard_captain",
+          "refugee",
+          "tavern_runner",
+          "threadbare_watcher"
+        ],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      }
+    },
+    "upstream_prepared_emission": {
+      "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+      "prepared_action_fallback_text": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an immediate read on what is there.",
+      "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
+      "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
+      "semantic_mutation_write_sites": [
+        {
+          "mutation_id": "07046bbcdb25",
+          "write_site_family": "repair",
+          "write_site_file": "game/upstream_response_repairs.py",
+          "write_site_function": "build_upstream_prepared_emission_payload",
+          "before_semantic_hash": "e3b0c44298fc1c14",
+          "after_semantic_hash": "75e471cc6f23dc31",
+          "selected_active_stream": false,
+          "candidate_only": true,
+          "owner": "game.upstream_response_repairs",
+          "source": "prepared_answer_fallback_text",
+          "mutation_reason": "candidate_creation:answer_upstream_prepared_repair",
+          "compatibility_status": "diagnostic_only"
+        },
+        {
+          "mutation_id": "c58af34de387",
+          "write_site_family": "repair",
+          "write_site_file": "game/upstream_response_repairs.py",
+          "write_site_function": "build_upstream_prepared_emission_payload",
+          "before_semantic_hash": "e3b0c44298fc1c14",
+          "after_semantic_hash": "fc10bb964e8043a2",
+          "selected_active_stream": false,
+          "candidate_only": true,
+          "owner": "game.upstream_response_repairs",
+          "source": "prepared_action_fallback_text",
+          "mutation_reason": "candidate_creation:action_outcome_upstream_prepared_repair",
+          "compatibility_status": "diagnostic_only"
+        }
+      ],
+      "realization_fallback_family": "upstream_prepared_emission"
+    },
+    "internal_state": {
+      "emission_debug_lane": {
+        "debug_notes": "Heraldry detail is obscured by weather and distance; no clear identification possible without closer examination or specific vantage. | model_route:high_precision:purpose_strict_social:gpt-4.1-mini | model_escalated:strict_social | final_emission_gate:replaced:fallback_behavior_unsatisfied_after_repair | final_emission_gate:referential_clarity_replaced:ambiguous_entity_reference",
+        "_final_emission_meta": {
+          "final_route": "replaced",
+          "reply_kind": "",
+          "strict_social_active": false,
+          "coercion_used": true,
+          "active_interlocutor_id": null,
+          "npc_id": null,
+          "normalization_ran": false,
+          "candidate_validation_passed": false,
+          "deterministic_social_fallback_attempted": false,
+          "deterministic_social_fallback_passed": false,
+          "final_emitted_source": "global_scene_fallback",
+          "post_gate_mutation_detected": true,
+          "final_text_preview": "The new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inqui…",
+          "coercion_reason": "strict_social_inactive|npc_directed_guard|suppressed_non_social_narration:exploration_resolution_kind",
+          "fallback_family_used": null,
+          "fallback_temporal_frame": null,
+          "rejection_reasons_sample": [
+            "fallback_behavior_unsatisfied_after_repair"
+          ],
+          "strict_social_suppressed_non_social_turn": true,
+          "strict_social_suppression_reason": "exploration_resolution_kind",
+          "anti_reset_intro_suppressed": false,
+          "opening_fallback_context_source": null,
+          "opening_fallback_basis_count": 0,
+          "opening_fallback_context_missing": false,
+          "opening_fallback_failed_closed": false,
+          "opening_curated_facts_present": false,
+          "opening_curated_facts_count": 0,
+          "opening_curated_facts_source": null,
+          "opening_selector_source_used": null,
+          "opening_selector_selected_facts": null,
+          "opening_curated_facts": null,
+          "opening_final_fallback_basis": null,
+          "opening_final_basis_matches_selector": false,
+          "realization_fallback_family": "gate_terminal_repair",
+          "sealed_fallback_owner_bucket": "sealed-gate",
+          "response_type_required": "action_outcome",
+          "response_type_contract_source": "response_policy",
+          "response_type_candidate_ok": true,
+          "response_type_repair_used": true,
+          "response_type_repair_kind": "action_outcome_upstream_prepared_repair",
+          "response_type_rejection_reasons": [
+            "action_outcome_replaced_by_dialogue"
+          ],
+          "non_hostile_escalation_blocked": false,
+          "opening_generic_action_repair_blocked": false,
+          "opening_specific_repair_used": false,
+          "opening_validation_failed": false,
+          "opening_failure_reasons": [],
+          "opening_recovered_via_fallback": false,
+          "opening_fallback_compatibility_local_disabled": false,
+          "opening_fallback_missing_upstream_prepared_payload": false,
+          "opening_fallback_missing_curated_facts": false,
+          "opening_fallback_upstream_payload_unusable": false,
+          "opening_fallback_upstream_payload_recovered": false,
+          "opening_upstream_prepare_attach_build_failed": false,
+          "opening_upstream_prepare_attach_failure_exc_type": null,
+          "opening_upstream_prepare_attach_no_usable_payload_after_attempt": false,
+          "blocked_repair_kind": null,
+          "opening_repair_source": "not_opening",
+          "opening_fallback_authorship_source": null,
+          "response_type_upstream_prepared_absent": false,
+          "upstream_prepared_emission_used": true,
+          "upstream_prepared_emission_valid": true,
+          "upstream_prepared_emission_source": "upstream_prepared_emission.prepared_action_fallback_text",
+          "upstream_prepared_emission_reject_reason": null,
+          "final_emission_boundary_repair_used": false,
+          "final_emission_boundary_semantic_repair_disabled": true,
+          "opening_fallback_owner_bucket": null,
+          "semantic_mutation_write_sites": [
+            {
+              "mutation_id": "07046bbcdb25",
+              "write_site_family": "repair",
+              "write_site_file": "game/upstream_response_repairs.py",
+              "write_site_function": "build_upstream_prepared_emission_payload",
+              "before_semantic_hash": "e3b0c44298fc1c14",
+              "after_semantic_hash": "75e471cc6f23dc31",
+              "selected_active_stream": false,
+              "candidate_only": true,
+              "owner": "game.upstream_response_repairs",
+              "source": "prepared_answer_fallback_text",
+              "mutation_reason": "candidate_creation:answer_upstream_prepared_repair",
+              "compatibility_status": "diagnostic_only"
+            },
+            {
+              "mutation_id": "c58af34de387",
+              "write_site_family": "repair",
+              "write_site_file": "game/upstream_response_repairs.py",
+              "write_site_function": "build_upstream_prepared_emission_payload",
+              "before_semantic_hash": "e3b0c44298fc1c14",
+              "after_semantic_hash": "fc10bb964e8043a2",
+              "selected_active_stream": false,
+              "candidate_only": true,
+              "owner": "game.upstream_response_repairs",
+              "source": "prepared_action_fallback_text",
+              "mutation_reason": "candidate_creation:action_outcome_upstream_prepared_repair",
+              "compatibility_status": "diagnostic_only"
+            },
+            {
+              "mutation_id": "336b4dce3016",
+              "write_site_family": "repair",
+              "write_site_file": "game/final_emission_response_type.py",
+              "write_site_function": "enforce_response_type_contract",
+              "before_semantic_hash": "8ae6c33fcd1b8983",
+              "after_semantic_hash": "fc10bb964e8043a2",
+              "selected_active_stream": true,
+              "candidate_only": false,
+              "owner": "game.final_emission_response_type",
+              "source": "upstream_prepared_emission.prepared_action_fallback_text",
+              "mutation_reason": "candidate_selected:action_outcome_upstream_prepared_repair",
+              "compatibility_status": "diagnostic_only",
+              "repair_family": "action_outcome_upstream_prepared_repair"
+            }
+          ],
+          "answer_completeness_checked": true,
+          "answer_completeness_failed": false,
+          "answer_completeness_failure_reasons": [],
+          "answer_completeness_repaired": false,
+          "answer_completeness_repair_mode": null,
+          "answer_completeness_expected_voice": "narrator",
+          "answer_completeness_skip_reason": null,
+          "answer_exposition_plan_checked": true,
+          "answer_exposition_plan_present": true,
+          "answer_exposition_plan_valid": true,
+          "answer_exposition_plan_passed": true,
+          "answer_exposition_plan_failure_reasons": [],
+          "answer_exposition_plan_required_fact_ids": [],
+          "answer_exposition_plan_repair_modes": [],
+          "response_delta_checked": false,
+          "response_delta_failed": false,
+          "response_delta_failure_reasons": [],
+          "response_delta_repaired": false,
+          "response_delta_repair_mode": null,
+          "response_delta_kind_detected": null,
+          "response_delta_echo_overlap_ratio": null,
+          "response_delta_skip_reason": "response_delta_disabled",
+          "response_delta_trigger_source": "none",
+          "social_response_structure_checked": false,
+          "social_response_structure_applicable": false,
+          "social_response_structure_passed": true,
+          "social_response_structure_failure_reasons": [],
+          "social_response_structure_repair_applied": false,
+          "social_response_structure_repair_changed_text": false,
+          "social_response_structure_repair_passed": null,
+          "social_response_structure_repair_mode": null,
+          "social_response_structure_skip_reason": null,
+          "social_response_structure_inspect": null,
+          "social_response_structure_boundary_semantic_repair_disabled": false,
+          "narrative_authenticity_checked": false,
+          "narrative_authenticity_failed": false,
+          "narrative_authenticity_failure_reasons": [],
+          "narrative_authenticity_repaired": false,
+          "narrative_authenticity_repair_applied": false,
+          "narrative_authenticity_repair_mode": null,
+          "narrative_authenticity_repair_modes": [],
+          "narrative_authenticity_skip_reason": "fallback_uncertainty_brief_compat",
+          "narrative_authenticity_reason_codes": [],
+          "narrative_authenticity_metrics": null,
+          "narrative_authenticity_evidence": null,
+          "narrative_authenticity_status": null,
+          "narrative_authenticity_trace": null,
+          "narrative_authenticity_relaxation_flags": null,
+          "narrative_authenticity_rumor_relaxed_low_signal": false,
+          "narrative_authenticity_boundary_semantic_repair_disabled": false,
+          "narrative_authority_checked": true,
+          "narrative_authority_failed": false,
+          "narrative_authority_failure_reasons": [],
+          "narrative_authority_repaired": false,
+          "narrative_authority_repair_mode": null,
+          "narrative_authority_skip_reason": null,
+          "narrative_authority_deferral_mode": null,
+          "narrative_authority_assertion_flags": {
+            "invented_outcome": false,
+            "invented_hidden_fact": false,
+            "invented_intent": false,
+            "overcertain_unresolved_action": false
+          },
+          "tone_escalation_checked": true,
+          "tone_escalation_ok": true,
+          "tone_escalation_failed": false,
+          "tone_escalation_failure_reasons": [],
+          "tone_escalation_detected_flags": {
+            "guarded": false,
+            "verbal_pressure": false,
+            "explicit_threat": false,
+            "physical_hostility": false,
+            "combat_initiation": false
+          },
+          "tone_escalation_matched_tone_level": null,
+          "tone_escalation_repaired": false,
+          "tone_escalation_repair_mode": null,
+          "tone_escalation_contract_summary": {
+            "enabled": true,
+            "base_tone": "guarded",
+            "max_allowed_tone": "tense",
+            "allow_verbal_pressure": true,
+            "allow_explicit_threat": false,
+            "allow_physical_hostility": false,
+            "allow_combat_initiation": false,
+            "justification_reasons": [
+              "visible_facts_engagement_or_moderate_topic_pressure",
+              "visible_entity_roles_include_authority_guardship",
+              "resolution_kind_or_mechanical_payload_is_risky"
+            ]
+          },
+          "tone_escalation_contract_resolution_source": "shipped_response_policy",
+          "tone_escalation_violation_before_repair": false,
+          "anti_railroading_checked": true,
+          "anti_railroading_ok": true,
+          "anti_railroading_failed": false,
+          "anti_railroading_failure_reasons": [],
+          "anti_railroading_assertion_flags": {
+            "player_decision_override": false,
+            "forced_direction": false,
+            "exclusive_path_claim": false,
+            "lead_plot_gravity": false,
+            "forced_conclusion": false
+          },
+          "anti_railroading_repair_hints": [],
+          "anti_railroading_repaired": false,
+          "anti_railroading_repair_mode": null,
+          "anti_railroading_skip_reason": null,
+          "anti_railroading_contract_resolution_source": "shipped",
+          "context_separation_contract_resolution_source": "response_policy",
+          "context_separation_skip_reason": null,
+          "context_separation_checked": true,
+          "context_separation_ok": true,
+          "context_separation_failed": false,
+          "context_separation_failure_reasons": [],
+          "context_separation_assertion_flags": {
+            "topic_hijack_background_pressure": false,
+            "pressure_answer_substitution": false,
+            "ambient_pressure_forced_tone_shift": false,
+            "scene_focus_displaced_by_world_pressure": false,
+            "pressure_overweighting": false
+          },
+          "context_separation_repair_hints": [],
+          "context_separation_repaired": false,
+          "context_separation_repair_mode": null,
+          "context_separation_debug_reason_marker": "cs_violations=none;repair_applied=False;pass_after=None;before_len=129;after_len=129;before_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…';after_head='You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…'",
+          "context_separation_passed_after_repair": null,
+          "player_facing_narration_purity_contract_resolution_source": "response_policy",
+          "player_facing_narration_purity_skip_reason": null,
+          "player_facing_narration_purity_checked": true,
+          "player_facing_narration_purity_failed": false,
+          "player_facing_narration_purity_repaired": false,
+          "player_facing_narration_purity_repair_modes": [],
+          "player_facing_narration_purity_violation_keys": [],
+          "player_facing_narration_purity_repair_hints_used": [],
+          "player_facing_narration_purity_collapsed_to_diegetic_core": false,
+          "player_facing_narration_purity_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "player_facing_narration_purity_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "answer_shape_primacy_skip_reason": null,
+          "answer_shape_primacy_checked": true,
+          "answer_shape_primacy_failed": false,
+          "answer_shape_primacy_repaired": false,
+          "answer_shape_primacy_repair_mode": null,
+          "answer_shape_primacy_failure_reasons": [],
+          "answer_shape_primacy_preview_before": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "answer_shape_primacy_preview_after": "You look to the banners as I enter the Eastern Gate; can I make out the heraldry, and you get an…",
+          "scene_state_anchor_checked": true,
+          "scene_state_anchor_passed": true,
+          "scene_state_anchor_failed": false,
+          "scene_state_anchor_skip_reason": null,
+          "scene_state_anchor_matched_kinds": [
+            "player_action"
+          ],
+          "scene_state_anchor_failure_reasons": [],
+          "scene_state_anchor_repaired": false,
+          "scene_state_anchor_repair_mode": null,
+          "scene_state_anchor_upstream_debug": {},
+          "fallback_behavior_contract_present": false,
+          "fallback_behavior_checked": true,
+          "fallback_behavior_skip_reason": null,
+          "fallback_behavior_uncertainty_active": true,
+          "fallback_behavior_failed": true,
+          "fallback_behavior_failure_reasons": [
+            "missing_allowed_fallback_shape"
+          ],
+          "fallback_behavior_repaired": false,
+          "fallback_behavior_repair_mode": "none",
+          "fallback_behavior_clarifying_question_used": false,
+          "fallback_behavior_partial_used": false,
+          "fallback_behavior_known_edge_preserved": false,
+          "fallback_behavior_unknown_edge_added": false,
+          "fallback_behavior_next_lead_added": false,
+          "fallback_behavior_meta_voice_stripped": false,
+          "fallback_behavior_boundary_semantic_synthesis_skipped": true,
+          "final_emission_semantic_repair_skipped": true,
+          "final_emission_semantic_repair_skip_reason": "finalize_packaging_only_no_sentence_recompose",
+          "referential_clarity_upstream_repair_attempted": false,
+          "referential_clarity_upstream_repair_applied": false,
+          "referential_clarity_upstream_repair_eligible": false,
+          "referential_clarity_upstream_repair_entity_id": null,
+          "referential_clarity_unrepaired_violation_count": 0,
+          "passive_scene_concrete_beat_satisfier_attempted": false,
+          "passive_scene_concrete_beat_satisfier_applied": false,
+          "passive_scene_concrete_beat_satisfier_eligible": false,
+          "passive_scene_concrete_beat_type": null,
+          "passive_scene_pressure_fallback_avoided": false,
+          "first_mention_validation_passed": true,
+          "first_mention_replacement_applied": false,
+          "first_mention_violation_kinds": [],
+          "first_mention_checked_entities": [],
+          "first_mention_leading_pronoun_detected": false,
+          "first_mention_first_explicit_entity_offset": null,
+          "first_mention_fallback_strategy": null,
+          "first_mention_fallback_candidate_source": null,
+          "opening_scene_first_mention_preference_used": false,
+          "first_mention_composition_used": false,
+          "first_mention_composition_layers": {
+            "environment": null,
+            "motion": null,
+            "entities": []
+          },
+          "referential_clarity_validation_passed": false,
+          "referential_clarity_replacement_applied": true,
+          "referential_clarity_violation_kinds": [
+            "ambiguous_entity_reference"
+          ],
+          "referential_clarity_checked_entities": [
+            {
+              "entity_id": "guard_captain",
+              "display_label": "guard captain",
+              "aliases": [
+                "guard captain",
+                "guard",
+                "the guard",
+                "watchman",
+                "the watchman",
+                "sentry",
+                "the sentry",
+                "guardsman",
+                "the guardsman",
+                "captain",
+                "the captain"
+              ],
+              "entity_kind": "npc"
+            },
+            {
+              "entity_id": "refugee",
+              "display_label": "ragged stranger",
+              "aliases": [
+                "ragged stranger",
+                "stranger",
+                "the stranger",
+                "refugee",
+                "the refugee"
+              ],
+              "entity_kind": "scene_actor"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "display_label": "tavern runner",
+              "aliases": [
+                "tavern runner",
+                "runner",
+                "the runner",
+                "informant",
+                "the informant"
+              ],
+              "entity_kind": "npc"
+            },
+            {
+              "entity_id": "threadbare_watcher",
+              "display_label": "threadbare watcher",
+              "aliases": [
+                "threadbare watcher",
+                "watcher",
+                "the watcher"
+              ],
+              "entity_kind": "scene_actor"
+            }
+          ],
+          "referential_clarity_violation_sample": [
+            {
+              "kind": "ambiguous_entity_reference",
+              "token": "itself",
+              "candidate_entity_ids": [],
+              "candidate_aliases": [],
+              "sentence_text": "the new ground shows itself: rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry",
+              "offset": 21
+            }
+          ],
+          "referential_clarity_local_substitution_attempted": false,
+          "referential_clarity_local_substitution_applied": false,
+          "referential_clarity_local_substitution_token": null,
+          "referential_clarity_local_substitution_replacement": null,
+          "referential_clarity_repair_entity_id": null,
+          "referential_clarity_fallback_avoided": false,
+          "referential_clarity_fallback_after_failed_local_repair": false,
+          "referential_clarity_bv3e_repair_mode": null,
+          "visibility_validation_passed": true,
+          "visibility_replacement_applied": false,
+          "visibility_violation_kinds": [],
+          "visibility_violation_sample": [],
+          "visibility_checked_entities": [],
+          "visibility_checked_facts": [],
+          "first_mention_strict_social_grounded_speaker_exemption_entity_id": null,
+          "final_emission_mutation_lineage": [
+            "response_type_repair",
+            "prepared_emission_selection",
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ],
+          "producer_repair_kind": "referential_clarity_enforcement",
+          "visibility_fallback_owner_bucket": "sealed-gate",
+          "referent_validation_ran": false,
+          "referent_validation_input_source": "missing",
+          "referent_violation_categories": [],
+          "referent_repair_allowed_label": null,
+          "referent_repair_label_source": null,
+          "referent_repair_applied": false,
+          "referent_repair_strategy": null,
+          "referent_repair_skipped_reason": "no_referent_inputs",
+          "unresolved_referent_ambiguity": false,
+          "referent_boundary_semantic_repair_disabled": false,
+          "narrative_mode_output_mode": null,
+          "narrative_mode_output_checked": false,
+          "narrative_mode_output_passed": true,
+          "narrative_mode_output_failure_reasons": [],
+          "narrative_mode_output_skip_reason": "narrative_mode_contract_absent",
+          "narrative_mode_output_validator_version": 1,
+          "narrative_mode_output_repairable": false,
+          "acceptance_quality_trace": {
+            "acceptance_quality_version": 1,
+            "acceptance_quality_checked": false,
+            "acceptance_quality_passed": true,
+            "acceptance_quality_reason_codes": [],
+            "acceptance_quality_repair_applied": false,
+            "acceptance_quality_evidence": {
+              "reason": "acceptance_quality_contract_disabled",
+              "skipped": true
+            }
+          },
+          "acceptance_quality_version": 1,
+          "acceptance_quality_checked": false,
+          "acceptance_quality_passed": true,
+          "acceptance_quality_reason_codes": [],
+          "acceptance_quality_repair_applied": false,
+          "acceptance_quality_evidence": {
+            "reason": "acceptance_quality_contract_disabled",
+            "skipped": true
+          },
+          "acceptance_quality_failure_reasons": [],
+          "acceptance_quality_repair_modes": [],
+          "interaction_continuity_validation": {
+            "ok": true,
+            "enabled": false,
+            "continuity_strength": "none",
+            "violations": [],
+            "warnings": [],
+            "facts": {
+              "anchored_interlocutor_id": "",
+              "anchor_required": false,
+              "speaker_switch_detected": false,
+              "explicit_switch_cue_present": false,
+              "thread_drop_detected": false,
+              "narrator_bridge_present": false,
+              "multi_speaker_pattern_present": false,
+              "dialogue_presence": false
+            },
+            "debug": {
+              "speaker_labels_detected": [],
+              "cue_labels": [],
+              "reason_path": [
+                "contract_disabled_or_strength_none"
+              ]
+            }
+          },
+          "scene_integrity_checked": true,
+          "scene_integrity_passed": true,
+          "scene_integrity_failure_reasons": [],
+          "scene_integrity_blocked_global_fallback": false,
+          "scene_integrity_named_destination": null,
+          "final_emission_fast_path_used": false,
+          "output_sanitization_applied": false,
+          "finalize_route_illegal_strip_applied": false,
+          "sentence_decompression_applied": false,
+          "sentence_fragment_repair_applied": false,
+          "sentence_micro_smoothing_applied": false,
+          "final_emission_finalize_semantic_repair_used": false,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          }
+        }
+      }
+    },
+    "_player_facing_emission_finalized": true
+  },
+  "log_meta": {
+    "player_input": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+    "intent_classification": {
+      "raw_text": "I look to the banners as I enter the Eastern Gate; can I make out the heraldry?",
+      "labels": [
+        "general"
+      ],
+      "allow_discoverable_clues": false,
+      "confidence": "rule_based"
+    },
+    "gm_prompt_context_summary": {
+      "scene_id": "frontier_gate",
+      "scene_mode": "social",
+      "response_mode": "standard",
+      "response_type_contract": {
+        "required_response_type": "action_outcome",
+        "source_route": "mixed",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "resolved_world_action_requires_action_outcome",
+          "non_hostile_world_action_guard"
+        ]
+      },
+      "exploration": {
+        "action_id": "i_look_to_the_banners_as_i_enter_the_eas",
+        "kind": "investigate",
+        "scene_transition_occurred": false
+      }
+    },
+    "gm_raw_output_meta": {
+      "has_output": true
+    },
+    "approved_state_updates": {
+      "scene_update": null,
+      "world_updates": null,
+      "new_scene_draft": null
+    },
+    "rejected_state_updates": [],
+    "discovered_clues_added": [],
+    "surfaced_clues_in_narration_non_authoritative": [],
+    "clocks_changed": {
+      "time_pressure": 2
+    },
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "mixed",
+      "allow_escalation": false,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    }
+  }
+}

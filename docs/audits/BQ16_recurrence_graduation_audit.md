@@ -82,7 +82,7 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 - `portfolio_analytics_present` (observability): current `True`, target `True`, status `met`
 - `governance_analytics_present` (observability): current `True`, target `True`, status `met`
 - `lifecycle_analytics_present` (observability): current `True`, target `True`, status `met`
-- `governance_health_target_met` (governance): current `36.4`, target `80.0`, status `unmet`
+- `governance_health_target_met` (governance): current `36.3`, target `80.0`, status `unmet`
 - `watchlist_operational` (governance): current `True`, target `True`, status `met`
 - `ownership_accountability_present` (governance): current `True`, target `True`, status `met`
 - `retirement_tracking_present` (governance): current `True`, target `True`, status `met`

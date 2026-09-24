@@ -570,6 +570,33 @@ def _has_information_seeking_question(text: str | None) -> bool:
     return first in _QUESTION_LEAD_TOKENS
 
 
+def _player_listen_attempt(text: str | None) -> bool:
+    """True when the player is attempting to listen, eavesdrop, or overhear.
+
+    A question in the same utterance does not erase that attempt. A solicitation
+    whose listen-word is only ``anyone listening`` / ``who's listening`` is not
+    the player's perception attempt.
+    """
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    from game.human_adjacent_focus import looks_like_listen_perception_intent
+
+    if not looks_like_listen_perception_intent(raw):
+        return False
+    low = raw.lower()
+    if re.search(
+        r"\b(?:eavesdrop(?:ping)?|overhear(?:ing)?|listen\s+in|listen\s+for|(?:i|we)\s+listen(?:ing)?)\b",
+        low,
+    ):
+        return True
+    solicitation = re.search(
+        r"\b(?:anyone|anybody|somebody|someone|who(?:'s|s)?)\s+listening\b",
+        low,
+    )
+    return bool(re.search(r"\blistening\b", low) and not solicitation)
+
+
 def looks_like_explicit_actionable_stay_leave_or_pursuit(text: str | None) -> bool:
     """Chat routing: sufficiently clear stay/leave/pursuit that must not be stolen as social follow-up."""
     raw = str(text or "").strip()
@@ -822,14 +849,21 @@ def looks_like_local_physical_movement(text: str | None) -> bool:
 def looks_like_explicit_physical_or_perception_action(text: str | None) -> bool:
     """Local movement or listen/perception that should not fall back to untyped GPT."""
     raw = str(text or "").strip()
-    if not raw or _has_information_seeking_question(raw):
+    if not raw:
         return False
     from game.human_adjacent_focus import looks_like_listen_perception_intent
 
+    question = _has_information_seeking_question(raw)
+    # A co-present question must not discard a player listen attempt. It still
+    # blocks local movement and solicitations such as "Anyone listening?"
+    if question and not _player_listen_attempt(raw):
+        return False
     if looks_like_scene_travel_destination_intent(raw):
         return False
-    if looks_like_listen_perception_intent(raw):
+    if looks_like_listen_perception_intent(raw) and (not question or _player_listen_attempt(raw)):
         return True
+    if question:
+        return False
     return looks_like_local_physical_movement(raw)
 
 
@@ -1684,10 +1718,11 @@ def parse_freeform_to_action(
     from game.human_adjacent_focus import classify_human_adjacent_intent_family, is_physical_clue_inspection_intent
 
     travel_dest_intent = looks_like_scene_travel_destination_intent(t)
+    question_blocks_perception = _has_information_seeking_question(t) and not _player_listen_attempt(t)
     if (
         not travel_dest_intent
         and not is_physical_clue_inspection_intent(t)
-        and not _has_information_seeking_question(t)
+        and not question_blocks_perception
     ):
         ha_fam = classify_human_adjacent_intent_family(t)
         if ha_fam != "none":

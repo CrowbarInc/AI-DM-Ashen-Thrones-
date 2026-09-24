@@ -1440,8 +1440,11 @@ def _commit_topic_progress(
     session: Dict[str, Any],
     scene_envelope: Dict[str, Any],
     reply_text: str,
+    resolution: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
 ) -> None:
     from game.gm import _get_topic_pressure_context, _topic_progress_score
+    from game.social import classify_stored_answer_provenance
 
     ctx = _get_topic_pressure_context(session=session, scene_envelope=scene_envelope)
     if not ctx:
@@ -1466,18 +1469,33 @@ def _commit_topic_progress(
     reply = str(reply_text or "").strip()
     if reply and not _reply_is_interruption_breakoff(reply):
         entry["last_answer"] = reply[:480]
+        provenance, payload = classify_stored_answer_provenance(
+            reply,
+            session=session,
+            scene_id=str(ctx.get("scene_id") or ""),
+            npc_id=str(ctx.get("speaker_key") or "").strip() or None,
+            resolution=resolution,
+            world=world,
+        )
+        entry["last_answer_provenance"] = provenance
+        if payload:
+            entry["last_answer_authoritative_text"] = payload[:480]
 
 def _commit_topic_progress_after_enforcement(
     *,
     session: Dict[str, Any],
     scene_envelope: Dict[str, Any],
     reply_text: str,
+    resolution: Dict[str, Any] | None = None,
+    world: Dict[str, Any] | None = None,
 ) -> None:
     """Post-loop topic bookkeeping from enforced reply text (ordering-sensitive)."""
     _commit_topic_progress(
         session=session,
         scene_envelope=scene_envelope,
         reply_text=reply_text,
+        resolution=resolution,
+        world=world,
     )
 
 def apply_response_policy_enforcement(
@@ -1652,6 +1670,8 @@ def apply_response_policy_enforcement(
         session=session,
         scene_envelope=scene_envelope,
         reply_text=str(out.get("player_facing_text") or ""),
+        resolution=resolution if isinstance(resolution, dict) else None,
+        world=world if isinstance(world, dict) else None,
     )
     if isinstance(policy, dict):
         _snapshot_response_policy_and_project_fallback_contract(out, policy)

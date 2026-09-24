@@ -1,0 +1,85 @@
+---
+pid: 20284
+cwd: |
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm
+---
+PS C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm> .\.venv\Scripts\python.exe run.py
+Startup cwd: C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm
+.env path: C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.env
+.env exists: True
+OPENAI_API_KEY configured: True
+Uvicorn reload enabled: True
+OpenAI API billing/health preflight runs during FastAPI worker startup; watch for [API preflight] lines and the following [upstream_dependent_run_gate] summary (BHC3 operator surface).
+INFO:     Will watch for changes in these directories: ['C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [28452] using StatReload
+INFO:     Started server process [12556]
+INFO:     Waiting for application startup.
+[API preflight] ok health_class=healthy checked_at=2026-09-24T00:14:12Z
+[upstream_dependent_run_gate] healthy - startup_run_valid=true; preflight_available=true; live-upstream gameplay evidence may be treated as valid.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:64062 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /static/styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56996 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64062 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[SESSION RESET] runtime state cleared
+[API] New campaign started ec79b93a51bc6b5da11507c0
+INFO:     127.0.0.1:61490 - "POST /api/new_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61490 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61490 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61490 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:59488 - "POST /api/start_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59488 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59488 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+INFO:     127.0.0.1:65489 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65489 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65489 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[SESSION RESET] runtime state cleared
+[API] New campaign started ba70eb525862575033539357
+INFO:     127.0.0.1:56618 - "POST /api/new_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56618 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56618 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56618 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:56618 - "POST /api/start_campaign?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56618 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56618 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+INFO:     127.0.0.1:54075 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54075 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54075 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:60687 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60687 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60687 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+INFO:     127.0.0.1:55916 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55916 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55916 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY] selected_strategy= unresolved_question attempt= 1 reasons= ['question_rule:social_exchange_first_sentence_not_speaker_grounded']
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+[RETRY] validation_failed selected_strategy= unresolved_question attempt= 1 reasons= ['question_rule:social_exchange_first_sentence_not_speaker_grounded'] action=deterministic_fallback
+[RETRY] fallback_result selected_strategy= unresolved_question attempt= 1 status= failed
+[RETRY ESCAPE HATCH] class=unresolved_question attempts=1
+STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": false, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+INFO:     127.0.0.1:54552 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54552 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54552 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+INFO:     127.0.0.1:52264 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52264 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52264 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+INFO:     127.0.0.1:59542 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59542 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59542 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+INFO:     127.0.0.1:50471 - "POST /api/chat?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50471 - "GET /api/state?ui_mode=player HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50471 - "GET /api/log?ui_mode=player HTTP/1.1" 200 OK

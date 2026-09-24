@@ -21,10 +21,10 @@
 
 # Trajectory Activation
 
-- Snapshot count: `34`
+- Snapshot count: `37`
 - Trajectory available: `true`
-- Portfolio risk change: `20.2000`
-- Governance health change: `-18.8000`
+- Portfolio risk change: `20.8000`
+- Governance health change: `-18.9000`
 - Lifecycle health change: `-15.0000`
 - Operational readiness change: `-7.5000`
 - Effectiveness change: `-0.0400`

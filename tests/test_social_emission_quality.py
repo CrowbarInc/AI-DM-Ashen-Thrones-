@@ -67,7 +67,13 @@ def test_emission_quality_lirael_who_next_then_where_preserves_grounded_location
     """
     session, world, sid = _base_session_scene()
     rt = get_scene_runtime(session, sid)
-    rt["topic_pressure"] = {"lirael_thread": {"last_answer": _LIRAEL_LAST_ANSWER}}
+    rt["topic_pressure"] = {
+        "lirael_thread": {
+            "last_answer": _LIRAEL_LAST_ANSWER,
+            "last_answer_provenance": "authored_topic",
+            "last_answer_authoritative_text": _LIRAEL_LAST_ANSWER,
+        }
+    }
     rt["topic_pressure_current"] = {"topic_key": "lirael_thread", "speaker_key": ""}
 
     rt["last_player_action_text"] = (
@@ -129,6 +135,11 @@ def test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_f
     rt["topic_pressure"] = {
         "manifest_thread": {
             "last_answer": (
+                "If manifests matter, speak to the harbor clerk; they work the late ledger "
+                "from a desk by the west pier."
+            ),
+            "last_answer_provenance": "authored_topic",
+            "last_answer_authoritative_text": (
                 "If manifests matter, speak to the harbor clerk; they work the late ledger "
                 "from a desk by the west pier."
             ),
@@ -215,6 +226,10 @@ def test_clipped_candidate_loses_to_topic_pressure_last_answer():
     rt["topic_pressure"] = {
         "east_market": {
             "last_answer": (
+                "They ran from the east market square down the long lane toward the river gate and the old patrol checkpoint."
+            ),
+            "last_answer_provenance": "authored_topic",
+            "last_answer_authoritative_text": (
                 "They ran from the east market square down the long lane toward the river gate and the old patrol checkpoint."
             ),
         }
@@ -377,6 +392,10 @@ def test_strict_social_emission_meta_records_preference_decision():
             "last_answer": (
                 "They left the east market by the south road toward the river docks and the night watch post."
             ),
+            "last_answer_provenance": "authored_topic",
+            "last_answer_authoritative_text": (
+                "They left the east market by the south road toward the river docks and the night watch post."
+            ),
         }
     }
     # Empty speaker_key: alignment check in select_best_social_answer_candidate must not depend
@@ -416,7 +435,13 @@ def test_strict_social_emission_meta_records_preference_decision():
 def test_select_best_grounded_social_answer_text_returns_engine_snippet():
     session, _world, sid = _base_session_scene()
     rt = get_scene_runtime(session, sid)
-    rt["topic_pressure"] = {"t1": {"last_answer": "The east gate is where they were seen last."}}
+    rt["topic_pressure"] = {
+        "t1": {
+            "last_answer": "The east gate is where they were seen last.",
+            "last_answer_provenance": "authored_topic",
+            "last_answer_authoritative_text": "The east gate is where they were seen last.",
+        }
+    }
     rt["topic_pressure_current"] = {"topic_key": "t1", "speaker_key": ""}
     resolution = {
         "kind": "question",

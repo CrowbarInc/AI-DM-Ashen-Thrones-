@@ -175,6 +175,7 @@ def test_mystery_question_still_matches_topic_pressure_without_anchor():
                 'The Tavern Runner narrows their eyes. "He\'s known as Caden. A dangerous man, tied to House Verevin. '
                 'They say he was last seen lingering near the old milestone, possibly tied to the missing patrol."'
             ),
+            "last_answer_provenance": "authored_topic",
             "last_turn": 5,
             "speaker_targets": {"tavern_runner": {"repeat_count": 1, "last_turn": 5}},
         }
