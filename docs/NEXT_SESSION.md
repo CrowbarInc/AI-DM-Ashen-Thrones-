@@ -17,20 +17,37 @@ Product Realization
 
 ## Last Completed Cycle
 
-`PR-BK — Unauthored reply text must not become a reusable structured fact.` CLOSED. Not committed.
+`PR-BL — Unparsed movement must not narrate or commit a spatial transition.` CLOSED. Not checkpointed. Do not commit unless asked.
 
-`PR-BJ` remains the last numbered cycle checkpointed in git (`90fdcc3`).
+PR-BK remains closed at `5555a66`. PR-BF remains settled.
 
 ## Current Objective
 
-PR-BK CLOSED. Start a fresh human playtest. Do not continue session `ba70eb525862575033539357`.
+PR-BL is closed. Stop. Do not start PR-BM.
 
-Invariant: conversational memory is not structured-fact authority. `topic_pressure.last_answer` may remember a reply. Selection requires provenance `topic_revealed`, `authored_topic`, `clue_knowledge`, or `canonical_fact`, or a match to one of those payloads. `generative_reply` is continuity only. A paraphrase keeps the spoken line in `last_answer` and the payload in `last_answer_authoritative_text`.
+The next action is a fresh human playtest. Do not continue session `735ebd1cfb4567c4f97df6dc`.
 
-Validation baseline after closeout: 7,053 collected, 6,927 passed, 27 failed, 99 skipped. The 27 failures also fail on `90fdcc3`. They are not PR-BK regressions. Inventory: `artifacts/pr_bk/validation_failure_inventory.md`.
+Invariant: generative narration may decorate an authoritative gameplay result. It may not create one. No successful scene transition means no successful spatial-transition narration and no generative `scene_update` commitment of that transition. The success signal is `resolved_transition is True`, or `state_changes.scene_transition_occurred`, `scene_changed`, or `arrived_at_scene`. Parser coverage is not that signal.
+
+Directional `proceed` reaches the existing travel owner when a compass direction or a route/destination follows. `proceed with` and `proceed to <verb>` do not. A bare compass direction does not select an authored exit. Same-scene movement and same-scene facts remain.
+
+Session `735ebd1cfb4567c4f97df6dc` is the evidence that earned PR-BL. Do not continue it. The journey it narrated is the failure class this slice closed.
+
+PR-BK invariant, unchanged: conversational memory is not structured-fact authority. `generative_reply` is continuity only.
 
 ## Established Facts
 
+- PR-BL is closed. Directional `proceed` is in the existing travel-verb family. `I proceed northwest` is unresolved travel. `I proceed toward the bell loft` and `I follow the missing patrol rumor` still transition through the existing exit resolver. `I proceed with the inspection` is not scene travel. Local `I walk a few steps closer` stays `custom`.
+- The narration owner is `apply_stay_leave_narration_agreement_to_gm`. It runs when `resolved_transition` is not success, including when the resolution dict is missing. A transition claim becomes `That destination is not available from here.` Local repositioning is left alone. Engine stock `The new ground shows itself` is still rejected for unresolved travel by the PR-BF kind check, and is not treated as a transition on discover-clue turns.
+- Scene-update policy lives in `omit_unowned_transition_scene_update`, called from `_apply_post_gm_updates` after the structural validator. A transition claim is dropped. Clues, hidden facts, and `exploration` / `travel` mode attached to that claim are dropped. A same-scene visible fact is kept. Nouns are not promoted to interactables.
+- Report: `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`. Evidence: `artifacts/pr_bl/`.
+- Post-PR-BK session `735ebd1cfb4567c4f97df6dc`: 9 human turns plus opening, scene `frontier_gate` throughout, no crash. Audit: `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md`. Evidence: `artifacts/human_playtests/post_pr_bk_state_narration_audit/`.
+- Four independent causes. (1) Turn 06 `I proceed North-West` parsed as `None`, so PR-BF never ran; generative narration and adopted `scene_update` created a journey, crates, sheds, lanterns, and broken banners. Turns 07–09 depend on that. (2) Notice board advertises curfews and has one reveal, the patrol route; turn 02 bound the board and emitted that clue for an hours question. (3) Turn 03 addressed Tavern Runner correctly and replaced a refusal with the patrol clue. (4) Turn 05 `to the watch` rebound `gate_guard` over the runner.
+- Turn 00 opening and turn 04's quantity refusal are acceptable. Turn 04 is correct / awkward.
+- PR-BK remains closed. No structured-fact emission of generative prose. Turn 07 spoke the clue payload, not the stored banner paragraph.
+- PR-BF remains settled. The human turn was not travel kind, so PR-BF's kind check never ran. PR-BL covers that missing-resolution path. Do not reopen PR-BF.
+- The rumor exit `Follow the missing patrol rumor` → `old_milestone` already binds follow/pursue and "old milestone" phrasing. Bare `northwest` stays unresolved. `proceed` never enters that owner.
+- The session's immediate direction was state ↔ narration integrity when no transition succeeded. PR-BL closed that slice. Out of scope remains: a new travel engine, curfew text, noun promotion, social relevance, interlocutor policy.
 - Extended playtest session `ba70eb525862575033539357` (log entries 0–7, all `frontier_gate`, Day 1) is audited in `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`. Nine player-facing failures, five causes. No production repair in that audit.
 - Turn 0 opening is correct. Turn 1 is the earliest incorrect decision: untargeted inspection appends `visible_facts[0]` (the notice board) to a banner look. Turn 2 repeats that template for a time-of-day question. There is still no diegetic clock.
 - Turn 3 never binds `notice_board` (`kind` absent, label `downtime`). The model states dusk-until-dawn, fines, detainment, unrest, and bandits. Those details are not authored. Narrative authority does not fail.
@@ -301,8 +318,8 @@ Unrelated reds observed during PR-AU / PR-AV validation and not absorbed:
 
 ## Authoritative Documents
 
-1. `development/campaigns/product_realization/PR-BK_validation_closeout.md` (causal audit: `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`)
-2. `docs/DEVELOPMENT_CONSTITUTION.md`
+1. `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md` (evidence: `artifacts/human_playtests/post_pr_bk_state_narration_audit/`)
+2. `development/campaigns/product_realization/PR-BK_validation_closeout.md` (causal audit: `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`)
 3. `development/campaigns/product_realization/human_playtest_mixed_action_ownership_compound_turn_audit.md`
 4. `development/campaigns/product_realization/PR-BJ_speaker_attribution_integrity_lane_convergence_audit.md`
 5. `development/campaigns/product_realization/PR-BI_interruption_progression_catalog_residue_reaudit.md`
@@ -339,6 +356,8 @@ Unrelated reds observed during PR-AU / PR-AV validation and not absorbed:
 36. `development/README.md` (directory taxonomy only)
 
 ## Validation Baseline
+
+PR-BL full suite: 7,065 collected, 6,937 passed, 29 failed, 99 skipped. Log: `development/tmp/pr_bl_full_suite_2.txt`. Twelve of those tests are new. The PR-BK 27 failures are still the inventory in `artifacts/pr_bk/validation_failure_inventory.md`. Two extra failures are Windows `PermissionError` on pytest temp `session.json` renames and pass when run alone. They are not PR-BL regressions. Focused: PR-BL 12 passed, PR-BF 14 passed, PR-BK 9 passed. Details: `artifacts/pr_bl/regression_results.md`.
 
 PR-BK focused probes: `python -m pytest tests/test_unauthored_reply_structured_fact_integrity.py -q --tb=line` — 9 collected, 9 passed, 0 failed, 0 skipped. See `artifacts/pr_bk/semantic_probe_results.md`.
 
@@ -652,6 +671,10 @@ Do not treat residual lead-system items as open RC-10/RC-21 questions.
 - PR-BK's decision that `last_answer` continuity is not structured-fact authority
 - PR-BK's refusal to add a knowledge graph, truth checker, or second social memory
 - PR-BK's refusal to delete conversational memory or to blacklist transcript wording
+- PR-BL's decision that narration may decorate an authoritative transition and may not create one
+- PR-BL's refusal to add a travel router, geography database, route planner, or noun-to-interactable promotion
+- PR-BL's refusal to bind a bare compass direction to an authored exit
+- PR-BL's refusal to discard every `scene_update` when no transition occurred
 - The mixed-action audit's refusal to add refugee origins, ambient crowd
   speech, or N-action execution in order to answer the captured turn
 - The mixed-action audit's treatment of `Does anyone know` and
@@ -661,43 +684,33 @@ Do not treat residual lead-system items as open RC-10/RC-21 questions.
 
 ## Recommended Next Action
 
-PR-BK CLOSED. Fresh human playtest. Do not continue the contaminated seven-turn session `ba70eb525862575033539357`.
+Stop. Do not start PR-BM.
 
-Invariant: conversational memory is not structured-fact authority. Provenance is `topic_revealed`, `authored_topic`, `clue_knowledge`, or `canonical_fact`. `generative_reply` stays continuity. Final validation baseline: 7,053 collected, 6,927 passed, 27 failed, 99 skipped. Those 27 are pre-existing on `90fdcc3`.
+Run a fresh human playtest. Do not continue session `735ebd1cfb4567c4f97df6dc`. The point of that playtest is to see which remaining limitation is dominant after the movement state/narration failure is gone.
 
-Do not open another AI Experience repair from known backlog residue before that playtest. Watch, do not preemptively fix: untargeted inspection emitting unrelated visible stock; notice-board ownership; empty `"The guard"` label; question-only sole-NPC dialogue lock; missing diegetic time; missing authored information; compound-turn execution; one-turn unsupported generative statements / narrative-authority weakness.
+Deferred candidates, not preselected: notice-board subject versus payload; social relevance preferring a known fact over a grounded refusal; `to the watch` interlocutor rebind; empty `The guard` fallback; compound action execution; world time; missing authored content.
 
-Report: `development/campaigns/product_realization/PR-BK_unauthored_reply_structured_fact_integrity.md`.
-Closeout: `development/campaigns/product_realization/PR-BK_validation_closeout.md`.
-Evidence: `artifacts/pr_bk/`.
+PR-BL report: `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`.
 
-Do not reopen PR-BK as a wording cycle, and do not reopen PR-BJ speaker display, PR-BI interruption-answer authority, PR-BH identity resolution, PR-BG follow-up continuity, or earlier settled owners unless new play shows a player-facing semantic break.
-
-No user decision is required. No next sibling-cycle identifier is assigned.
+PR-BK's invariant still stands: conversational memory is not structured-fact authority. Do not reopen PR-BK, PR-BF, or PR-BL without new causal evidence.
 
 ## Minimum Files for the Next Agent
 
 - `docs/DEVELOPMENT_CONSTITUTION.md`
-- `development/campaigns/product_realization/PR-BK_validation_closeout.md`
-- `development/campaigns/product_realization/PR-BK_unauthored_reply_structured_fact_integrity.md`
-- `artifacts/pr_bk/validation_failure_inventory.md`
-- `artifacts/pr_bk/semantic_probe_results.md`
 - `docs/NEXT_SESSION.md`
+- `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`
+- `artifacts/pr_bl/`
+- `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md`
 
 ## Git / Worktree Caveats
 
 This remains one Git repository. No second repository was created.
 
-The Product Realization checkpoint through PR-BJ is committed on
-`feature/product-realization` (`90fdcc3`). PR-BK is uncommitted.
+The Product Realization checkpoint through PR-BK is `5555a66`.
+PR-BL is implemented and not committed.
 
-Still uncommitted from earlier work, not part of PR-BK: `game/intent_parser.py`,
-`tests/test_listen_question_not_social_capture.py`, the mixed-action and
-extended-playtest reports, and `artifacts/human_playtests/`. Canonical
-`data/session.json`, `data/session_log.jsonl`, `data/world.json`, and
-`data/combat.json` stay dirty from human play. Do not revert them.
-Do not commit or push unless explicitly asked.
+Canonical `data/session.json`, `data/session_log.jsonl`, `data/world.json`, and `data/combat.json` were already dirty from human play. Golden-replay artifacts were already dirty. Do not revert them. Do not commit or push unless explicitly asked. Do not modify `artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest/`.
 
 ## Last Updated
 
-2026-09-24 / PR-BK validation closeout — PR-BK CLOSED
+2026-09-26 / PR-BL closeout. Unparsed movement no longer narrates or commits a spatial transition. Fresh human playtest is next. PR-BK and PR-BF remain settled.

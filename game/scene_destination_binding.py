@@ -204,6 +204,9 @@ _TRAVEL_VERB_STOPWORDS = frozenset(
         "pursue",
         "pursues",
         "pursuing",
+        "proceed",
+        "proceeds",
+        "proceeding",
     }
 )
 _QUESTION_LEAD_RE = re.compile(
@@ -331,6 +334,60 @@ def _strip_travel_commitment_prefix(text: str) -> str:
     return rest or raw
 
 
+# Directional proceed joins the existing travel-verb family. Manner ("with") and
+# purpose infinitives ("to question") stay outside scene travel.
+_DIRECTIONAL_PROCEED_RE = re.compile(
+    r"(?:^|[,;]\s*)(?:i|we)(?:'ll|\s+will)?(?:\s+(?:am|are))?\s+"
+    r"proceed(?:s|ing)?\s+(?P<rest>.+)$",
+    re.IGNORECASE,
+)
+_PROCEED_COMPASS_RE = re.compile(
+    r"^(?:north|south|east|west)(?:[-\s]?(?:north|south|east|west))?\b",
+    re.IGNORECASE,
+)
+_PROCEED_ROUTE_PREP_RE = re.compile(
+    r"^(?:toward|towards|along|down|into|through|for|to)\b",
+    re.IGNORECASE,
+)
+_PROCEED_PURPOSE_INFINITIVE_RE = re.compile(
+    r"^to\s+(?!the\b|a\b|an\b)",
+    re.IGNORECASE,
+)
+
+
+def _proceed_destination_rest(text: str) -> Optional[str]:
+    """Destination remainder after directional proceed, or None when proceed is not scene travel."""
+    raw = str(text or "").strip()
+    if not raw:
+        return None
+    work = _strip_travel_commitment_prefix(raw)
+    work = re.sub(r"[.!?]+$", "", work).strip()
+    match = _DIRECTIONAL_PROCEED_RE.search(work)
+    if not match:
+        return None
+    rest = str(match.group("rest") or "").strip()
+    rest = re.split(r"\s*,\s*", rest, maxsplit=1)[0].strip(" \t.,;:!?\"'")
+    if not rest or re.match(r"^with\b", rest, flags=re.IGNORECASE):
+        return None
+    if _PROCEED_PURPOSE_INFINITIVE_RE.match(rest):
+        return None
+    if not (_PROCEED_COMPASS_RE.match(rest) or _PROCEED_ROUTE_PREP_RE.match(rest)):
+        return None
+    rest = re.sub(
+        r"^(?:toward|towards|along|down|into|through|for|to)\s+",
+        "",
+        rest,
+        flags=re.IGNORECASE,
+    ).strip()
+    rest = re.sub(r"^(?:the|a|an)\s+", "", rest, flags=re.IGNORECASE).strip()
+    return rest or None
+
+
+def looks_like_directional_proceed_travel(text: str | None) -> bool:
+    """True when proceed carries a compass direction or a route/destination, not a local task."""
+    return _proceed_destination_rest(text) is not None
+
+
 def extract_travel_destination_phrase(text: str) -> Optional[str]:
     """Return dest after travel verbs, '' for bare return/back, or None if not travel-shaped."""
     raw = str(text or "").strip()
@@ -345,6 +402,9 @@ def extract_travel_destination_phrase(text: str) -> Optional[str]:
         if dest.casefold() in {"back", "again"}:
             dest = ""
         return dest
+    proceed_dest = _proceed_destination_rest(work)
+    if proceed_dest is not None:
+        return proceed_dest
     if _RETURN_MOTION_RE.search(work):
         return ""
     return None

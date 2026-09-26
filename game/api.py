@@ -161,6 +161,7 @@ from game.adjudication import neutralize_engine_voice_for_player, resolve_adjudi
 from game.narration_state_consistency import (
     apply_destination_arrival_realization_to_gm,
     apply_stay_leave_narration_agreement_to_gm,
+    omit_unowned_transition_scene_update,
 )
 from game.perception_grounding import apply_perception_non_invention_to_gm
 from game.social import (
@@ -1242,6 +1243,10 @@ def _apply_post_gm_updates(
             **scene_update_gateway_trace,
         )
         if isinstance(scene_update_effect, PostGmSceneUpdateEffect):
+            su = omit_unowned_transition_scene_update(
+                su,
+                resolution if isinstance(resolution, dict) else None,
+            ) or {}
             overlay = get_runtime_scene_overlay(session, scene_id)
             visible_add = overlay.setdefault('visible_facts_add', [])
             for fact in su.get('visible_facts_add', []) or []:

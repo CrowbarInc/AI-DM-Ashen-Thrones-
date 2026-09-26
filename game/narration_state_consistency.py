@@ -472,6 +472,92 @@ def _resolution_supports_travel_success(resolution: dict | None) -> bool:
     return False
 
 
+_UNRESOLVED_TRAVEL_TERMINAL = "That destination is not available from here."
+
+# Player-progression claims. Local repositioning (closer, beside, a few steps,
+# the other side of the room) does not match. Not a sentence blacklist.
+_UNOWNED_SPATIAL_TRANSITION_RE = re.compile(
+    r"\byou(?:'ve|\s+have)\s+reached\s+(?:the|a|an)\s+"
+    r"(?!understanding\b|agreement\b|conclusion\b|decision\b|point\b|end\b|impasse\b)"
+    r"|\byou\s+arrive(?:d|s)?\b"
+    r"|\byou\s+enter(?:ed|s)?\s+(?:the|a|an)\s+(?!conversation\b|discussion\b|debate\b|negotiation\b|argument\b)"
+    r"|\bleave\s+(?:the\s+)?(?:\w+\s+){0,4}behind\b"
+    r"|\byou\s+set\s+off\b"
+    r"|\byou\s+set\s+out\s+(?:for|toward|towards|along|down)\b"
+    r"|\bproceed(?:s|ing)?\s+(?:down|along|into|toward|towards|past|onward|north|south|east|west)\b"
+    r"|\blead(?:s|ing)?\s+you\s+(?:past|along|into|toward|towards|down|north|south|east|west)\b"
+    r"|\b(?:track|road|path|lane|trail|route)\s+stretches\s+ahead\b"
+    r"|\bfollow(?:s|ing)?\s+(?:the\s+)?(?:\w+\s+){0,4}(?:track|road|path|lane|trail|route)\s+into\b"
+    r"|\bsteps?\s+into\s+(?:the|a|an)\s+(?:\w+\s+){0,4}?"
+    r"(?:stretch|countryside|district|wilderness|wilds|distance|road|track|path|lane|trail)\b"
+    r"|\byou\s+(?:head|travel|journey)s?\s+(?:down|along|into)\s+(?:the\s+)?"
+    r"(?:\w+\s+){0,3}(?:road|track|path|lane|trail|route)\b",
+    re.IGNORECASE,
+)
+
+
+def text_asserts_unowned_spatial_transition(text: str | None) -> bool:
+    """True when prose claims a spatial transition succeeded.
+
+    Movement wording alone is not enough. The claim has to be arrival, departure
+    into other geography, or progress along a route. Same-scene steps do not match.
+    """
+    raw = str(text or "").strip()
+    if not raw:
+        return False
+    return bool(_UNOWNED_SPATIAL_TRANSITION_RE.search(raw))
+
+
+def omit_unowned_transition_scene_update(
+    scene_update: dict | None,
+    resolution: dict | None = None,
+) -> dict | None:
+    """Drop generative scene_update fields that would commit a failed transition.
+
+    Same-scene facts that do not assert a transition stay. Structural shape
+    validation remains the caller's job.
+    """
+    if not isinstance(scene_update, dict):
+        return scene_update
+    if _resolution_supports_travel_success(resolution):
+        return scene_update
+
+    def _strings(key: str) -> list[str]:
+        value = scene_update.get(key)
+        if not isinstance(value, list):
+            return []
+        return [item for item in value if isinstance(item, str)]
+
+    visible = _strings("visible_facts_add")
+    clues = _strings("discoverable_clues_add")
+    hidden = _strings("hidden_facts_add")
+    package_asserts = any(
+        text_asserts_unowned_spatial_transition(item) for item in (visible + clues + hidden)
+    )
+    if not package_asserts:
+        return scene_update
+
+    cleaned = dict(scene_update)
+    cleaned["visible_facts_add"] = [
+        item for item in visible if not text_asserts_unowned_spatial_transition(item)
+    ]
+    # A transition claim in the same payload makes accompanying new clues,
+    # hidden facts, and destination mode part of the invented journey.
+    cleaned["discoverable_clues_add"] = []
+    cleaned["hidden_facts_add"] = []
+    mode = cleaned.get("mode")
+    if isinstance(mode, str) and mode.strip().lower() in {"exploration", "travel"}:
+        cleaned.pop("mode", None)
+    if (
+        cleaned.get("visible_facts_add") == visible
+        and cleaned.get("discoverable_clues_add") == clues
+        and cleaned.get("hidden_facts_add") == hidden
+        and cleaned.get("mode", None) == scene_update.get("mode")
+    ):
+        return scene_update
+    return cleaned
+
+
 def apply_stay_leave_narration_agreement_to_gm(
     gm_output: dict | None,
     *,
@@ -481,10 +567,14 @@ def apply_stay_leave_narration_agreement_to_gm(
     """PR-AE local guarantee: stay/leave/pursuit narration must match the authoritative outcome.
 
     Does not invent destinations or NPCs. Uses only the resolved action result.
+    A missing resolution is not a successful transition.
     """
-    if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
+    if not isinstance(gm_output, dict):
         return gm_output
     text = str(gm_output.get("player_facing_text") or "").strip()
+    has_resolution = isinstance(resolution, dict)
+    if not has_resolution:
+        resolution = {}
     kind = str(resolution.get("kind") or "").strip().lower()
     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
     lane = str(meta.get("parser_lane") or "")
@@ -526,7 +616,13 @@ def apply_stay_leave_narration_agreement_to_gm(
             or _PLAYER_DEPARTED_RE.search(text)
             or _IMPLIED_TRANSITION_STOCK_RE.search(text)
         ):
-            gm_output["player_facing_text"] = "That destination is not available from here."
+            gm_output["player_facing_text"] = _UNRESOLVED_TRAVEL_TERMINAL
+            _mark()
+    # Kind is not a success signal. Unparsed and custom turns can still narrate a journey.
+    if not _resolution_supports_travel_success(resolution if has_resolution else None):
+        current = str(gm_output.get("player_facing_text") or "")
+        if text_asserts_unowned_spatial_transition(current):
+            gm_output["player_facing_text"] = _UNRESOLVED_TRAVEL_TERMINAL
             _mark()
     return gm_output
 

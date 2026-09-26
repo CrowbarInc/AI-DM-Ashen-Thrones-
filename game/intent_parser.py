@@ -831,7 +831,11 @@ def looks_like_scene_travel_destination_intent(text: str | None) -> bool:
     raw = str(text or "").strip()
     if not raw:
         return False
-    return bool(_RE_SCENE_TRAVEL_DESTINATION.search(raw))
+    from game.scene_destination_binding import looks_like_directional_proceed_travel
+
+    return bool(
+        _RE_SCENE_TRAVEL_DESTINATION.search(raw) or looks_like_directional_proceed_travel(raw)
+    )
 
 
 def looks_like_local_physical_movement(text: str | None) -> bool:
@@ -1769,7 +1773,9 @@ def parse_freeform_to_action(
             travel_low = stripped.lower()
         authored_exit_target = resolve_authored_exit_from_player_travel(t, exits)
         travel_meta = None
-        if looks_like_explicit_leave_or_pursuit_intent(t):
+        from game.scene_destination_binding import looks_like_directional_proceed_travel
+
+        if looks_like_explicit_leave_or_pursuit_intent(t) or looks_like_directional_proceed_travel(t):
             travel_meta = {"parser_lane": "actionable_stay_leave_or_pursuit"}
         elif authored_exit_target:
             travel_meta = {"parser_lane": "authored_exit_resolution"}
@@ -2275,6 +2281,14 @@ _DECLARED_TRAVEL_WITH_DEST_PATTERNS: Tuple[Tuple[re.Pattern[str], str], ...] = t
             r"\b(?:ride|rides|riding|march|marches|marching)\s+to\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
             "ride_march_to_Y",
         ),
+        (
+            r"\bproceed(?:s|ing)?\s+(?:toward|towards|along|down|into|through|for|to\s+the)\s+(?:the\s+)?(.+?)(?:\s*[.,;?!]|$)",
+            "proceed_to_Y",
+        ),
+        (
+            r"\bproceed(?:s|ing)?\s+((?:north|south|east|west)(?:[-\s]?(?:north|south|east|west))?)\b",
+            "proceed_compass",
+        ),
     )
 )
 
@@ -2291,6 +2305,7 @@ def _declared_travel_match_starts_with_travel_verb(m: re.Match) -> bool:
             r"(?:goes|going|go)\s+|(?:travel|travels|traveling|travelling)\s+|"
             r"(?:head|heads|heading)\s+|(?:leave|leaves|leaving)\b|"
             r"(?:move|moves|moving)\s+|(?:walk|walks|walking|run|runs|running)\s+|"
+            r"(?:proceed|proceeds|proceeding)\s+|"
             r"(?:journey|journeys|journeying)\s+|(?:return|returns|returning)\s+|"
             r"(?:depart|departs|departing)\s+|(?:ride|rides|riding|march|marches|marching)\s+",
             head,
