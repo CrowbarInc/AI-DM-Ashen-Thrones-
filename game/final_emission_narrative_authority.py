@@ -26,6 +26,7 @@ from game.narrative_authority import (
 )
 from game.response_policy_contracts import _last_player_input
 from game.social_exchange_policy import merged_player_prompt_for_gate
+from game.bounded_improvisation import IMPROVISATION_AUTHORITY_KEY, gm_has_valid_bounded_improvisation
 
 
 def is_shipped_full_narrative_authority_contract(candidate: Any) -> bool:
@@ -218,6 +219,10 @@ def skip_narrative_authority_layer(
         return "response_type_contract_failed"
     if narrative_authority_policy_disabled(gm_output):
         return "narrative_authority_policy_disabled"
+    bi_eval = gm_output.get(IMPROVISATION_AUTHORITY_KEY) if isinstance(gm_output, dict) else None
+    bi_rejected_count = int(bi_eval.get("rejected_count") or 0) if isinstance(bi_eval, dict) else 0
+    if gm_has_valid_bounded_improvisation(gm_output) and bi_rejected_count == 0:
+        return "validated_bounded_improvisation"
     if not isinstance(contract, dict):
         return "no_full_contract"
     if not contract.get("enabled"):

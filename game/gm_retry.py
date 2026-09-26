@@ -47,6 +47,7 @@ from game.stage_diff_telemetry import (
     snapshot_turn_stage,
 )
 from game.turn_packet import get_turn_packet, resolve_turn_packet_contract, resolve_turn_packet_for_gate
+from game.bounded_improvisation import gm_has_valid_bounded_improvisation
 
 from game.gm import (
     _looks_like_follow_up_find_request,
@@ -1455,6 +1456,27 @@ def detect_retry_failures(
                 "reasons": forbidden_generic_hits,
             }
         )
+
+    if gm_has_valid_bounded_improvisation(gm_reply):
+        suppressible = {"unresolved_question", "npc_contract_failure", "scene_stall", "followup_soft_repetition"}
+        kept: List[Dict[str, Any]] = []
+        for failure in failures:
+            fc = str(failure.get("failure_class") or "").strip()
+            if fc in suppressible:
+                continue
+            kept.append(failure)
+        if len(kept) != len(failures):
+            md = gm_reply.setdefault("metadata", {}) if isinstance(gm_reply, dict) else {}
+            if isinstance(md, dict):
+                em = md.setdefault("emission_debug", {})
+                if isinstance(em, dict):
+                    em["bounded_improvisation_retry_suppressed"] = True
+                    em["bounded_improvisation_retry_suppressed_classes"] = [
+                        str(f.get("failure_class") or "")
+                        for f in failures
+                        if str(f.get("failure_class") or "").strip() in suppressible
+                    ]
+            failures = kept
 
     return failures
 

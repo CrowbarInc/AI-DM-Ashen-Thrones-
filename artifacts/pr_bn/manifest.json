@@ -1,0 +1,26 @@
+{
+  "cycle": "PR-BN",
+  "title": "Bounded DM Improvisational Authority",
+  "base_head": "a5bfdd9e0376173c5aeb4fc762ada259e24bd638",
+  "contents": [
+    "docs/audits/PR-BN_bounded_dm_improvisational_authority.md",
+    "artifacts/pr_bn/diagnostic_scenario_evidence.json",
+    "artifacts/pr_bn/manifest.json"
+  ],
+  "implementation_files": [
+    "game/bounded_improvisation.py",
+    "game/gm.py",
+    "game/api.py",
+    "game/prompt_context.py",
+    "game/gm_retry.py",
+    "game/final_emission_narrative_authority.py",
+    "game/response_policy_enforcement.py",
+    "tests/test_bounded_improvisation_authority.py"
+  ],
+  "focused_core_test_result": "177 passed",
+  "wide_targeted_test_result": "230 passed, 2 failed, 1 warning",
+  "known_wide_failures": [
+    "tests/test_social_speaker_grounding.py::test_transcript_runner_asks_about_aldric_followup_stays_runner",
+    "tests/test_social_speaker_grounding.py::test_transcript_where_is_aldric_repeated_followups_stay_runner"
+  ]
+}

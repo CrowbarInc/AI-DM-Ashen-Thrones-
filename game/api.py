@@ -229,6 +229,10 @@ from game.clues import (
     get_all_known_clue_texts,
     get_known_clues_with_presentation,
 )
+from game.bounded_improvisation import (
+    attach_bounded_improvisation_evaluation,
+    promote_accepted_bounded_improvisation,
+)
 from game.ctir_runtime import (
     build_runtime_ctir_for_narration,
     detach_ctir,
@@ -1164,6 +1168,34 @@ def _apply_post_gm_updates(
     repeated description guard, detect surfaced clues (telemetry only), and narration-based social leads.
 
     Returns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."""
+    improvisation_promotion: dict[str, Any] = {}
+    if isinstance(gm, dict) and isinstance(session, dict):
+        improvisation_promotion = promote_accepted_bounded_improvisation(
+            gm,
+            session=session,
+            scene=scene if isinstance(scene, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
+        _record_post_gm_mutation_trace(
+            session,
+            operation="promote_bounded_improvisation",
+            source="gm_bounded_improvisation_proposals",
+            affected_domains=[PLAYER_VISIBLE_STATE, INTERACTION_STATE],
+            derived_from_model_or_post_emission=True,
+            authority="bounded_improvisation",
+            scene_id=str(scene.get("scene", {}).get("id") or session.get("active_scene_id") or "").strip() or None,
+            resolution=resolution,
+            adoption_status=(
+                "bounded_improvisation_promoted"
+                if int(improvisation_promotion.get("promoted_count") or 0) > 0
+                else "no_bounded_improvisation_promoted"
+            ),
+            accepted_count=improvisation_promotion.get("accepted_count"),
+            promoted_count=improvisation_promotion.get("promoted_count"),
+            rejected_count=improvisation_promotion.get("rejected_count"),
+            promoted_ids=improvisation_promotion.get("promoted_ids"),
+        )
     if isinstance(session, dict) and isinstance(gm, dict):
         if not _gm_response_policy_enforcement_marker_present(gm):
             audit_scene_id = None
@@ -1577,6 +1609,8 @@ def _apply_post_gm_updates(
             **emergent_gateway_trace,
         )
     session["emergent_actor_debug"] = emergent_debug
+    if isinstance(improvisation_promotion, dict):
+        session["last_bounded_improvisation_promotion"] = dict(improvisation_promotion)
 
     return (scene, session, combat, surfaced_in_text, narration_social_leads)
 
@@ -2559,6 +2593,17 @@ def _build_gpt_narration_from_authoritative_state(
         )
         return prioritized
 
+    def _attach_bounded_improvisation_authority(gm_dict: dict | None) -> dict | None:
+        if not isinstance(gm_dict, dict):
+            return gm_dict
+        return attach_bounded_improvisation_evaluation(
+            gm_dict,
+            session=session,
+            scene=scene,
+            world=world,
+            resolution=resolution if isinstance(resolution, dict) else None,
+        )
+
     def _repair_terminal_player_facing_if_needed(
         gm_dict: dict,
         *,
@@ -2766,6 +2811,7 @@ def _build_gpt_narration_from_authoritative_state(
             world=world,
             resolution=resolution,
         )
+        gm = _attach_bounded_improvisation_authority(gm)
         _accumulate_latency(latency_sink, "gpt_call", _elapsed_ms(initial_gpt_started))
         retry_attempt = 0
         social_dialogue_turn = _social_dialogue_turn()
@@ -2794,6 +2840,7 @@ def _build_gpt_narration_from_authoritative_state(
                     world=world,
                     resolution=resolution,
                 )
+                gm_retry = _attach_bounded_improvisation_authority(gm_retry)
                 _ = _elapsed_ms(retry_gpt_started)
                 retried_api_error = _extract_upstream_api_error(gm_retry)
                 if retried_api_error:
@@ -2896,6 +2943,7 @@ def _build_gpt_narration_from_authoritative_state(
                 world=world,
                 resolution=resolution,
             )
+            gm_retry = _attach_bounded_improvisation_authority(gm_retry)
             _ = _elapsed_ms(retry_gpt_started)
             loop_api_err = _extract_upstream_api_error(gm_retry)
             if loop_api_err:
@@ -3009,6 +3057,7 @@ def _build_gpt_narration_from_authoritative_state(
                     resolution=resolution,
                     segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
                 )
+                gm_retry = _attach_bounded_improvisation_authority(gm_retry)
                 _accumulate_latency(latency_sink, "fallback_repair", _elapsed_ms(deterministic_started))
                 fallback_failures = _failures_after_social_answer_priority(
                     detect_retry_failures(
@@ -3144,6 +3193,7 @@ def _build_gpt_narration_from_authoritative_state(
         scene=scene if isinstance(scene, dict) else None,
         player_text=user_text,
     )
+    gm = _attach_bounded_improvisation_authority(gm)
     _attach_scene_opening_curated_facts_to_gm(
         gm,
         prompt_payload=prompt_payload if isinstance(prompt_payload, dict) else None,

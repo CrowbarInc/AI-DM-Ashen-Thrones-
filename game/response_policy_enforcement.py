@@ -14,6 +14,12 @@ from game.final_emission_finalize import record_policy_semantic_write_site_if_ch
 from game.prompt_context import RESPONSE_RULE_PRIORITY
 from game.social_exchange_policy import strict_social_emission_will_apply
 from game.utils import slugify
+from game.bounded_improvisation import (
+    IMPROVISATION_AUTHORITY_KEY,
+    IMPROVISATION_PROPOSAL_KEY,
+    attach_bounded_improvisation_evaluation,
+    normalize_improvisation_proposal,
+)
 
 # ``gm["metadata"][GM_METADATA_RESPONSE_POLICY_ENFORCEMENT_APPLIED]`` is set by
 # :func:`apply_response_policy_enforcement`. Post-GM adoption checks this for a
@@ -174,6 +180,26 @@ def validate_gm_state_update(
         # Sanitize/derive id.
         draft['id'] = draft['id'] or slugify(draft['location'] or 'new_scene')
         gm['new_scene_draft'] = draft
+
+    raw_props = gm.get(IMPROVISATION_PROPOSAL_KEY)
+    if isinstance(raw_props, list):
+        cleaned_props: list[dict[str, Any]] = []
+        for raw in raw_props[:12]:
+            norm = normalize_improvisation_proposal(raw)
+            if norm is not None:
+                cleaned_props.append(norm)
+        gm[IMPROVISATION_PROPOSAL_KEY] = cleaned_props or None
+    elif raw_props is not None:
+        gm[IMPROVISATION_PROPOSAL_KEY] = None
+        debug_reasons.append("validator:improvisation_proposals_not_list")
+    gm.pop(IMPROVISATION_AUTHORITY_KEY, None)
+    gm = attach_bounded_improvisation_evaluation(
+        gm,
+        session=session if isinstance(session, dict) else None,
+        scene=scene_envelope if isinstance(scene_envelope, dict) else None,
+        world=None,
+        resolution=None,
+    )
 
     if debug_reasons:
         dbg = gm.get('debug_notes')

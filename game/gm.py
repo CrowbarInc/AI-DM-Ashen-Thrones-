@@ -247,6 +247,18 @@ Return valid JSON only with this shape:
 {
   "player_facing_text": "string",
   "tags": ["string"],
+  "improvisation_proposals": null | [
+    {
+      "kind": "incidental_fact|npc_claim|consequential_proposal",
+      "category": "sensory_detail|food_composition|mundane_service_detail|background_npc_detail|mannerism|local_color|environmental_elaboration|social_connective|ordinary_personal_detail|rumor|hearsay|uncertain_claim|speculation|opinion",
+      "content": "string",
+      "scope": "turn|scene|session",
+      "consequence_level": "none|low|incidental",
+      "source": "dm_improvisation|npc:<id>|observation",
+      "speaker_id": null | "npc_id",
+      "epistemic_status": null | "known|grounded|rumor|hearsay|uncertain|speculative"
+    }
+  ],
   "scene_update": null | {
     "visible_facts_add": ["string"],
     "discoverable_clues_add": ["string"],
@@ -282,6 +294,13 @@ Return valid JSON only with this shape:
   },
   "debug_notes": "string"
 }
+
+BOUNDED IMPROVISATION AUTHORITY:
+You may invent ordinary low-consequence details only by expressing them in player_facing_text AND adding a matching improvisation_proposals entry.
+Use kind "incidental_fact" for mundane sensory/service/background details such as food composition, mannerisms, local color, ordinary refusals, and low-stakes connective social detail.
+Use kind "npc_claim" for something a speaker reports, believes, or speculates; set epistemic_status to rumor/hearsay/uncertain/speculative unless it is grounded in supplied state.
+Do not use bounded improvisation for mechanics, inventory changes, clues, hidden facts, secret passages, factions, major geography/history, quest-critical facts, or player decisions. Mark such attempted material as consequential_proposal rather than presenting it as truth.
+Accepted bounded improvisation is runtime continuity only; it is not authored world truth.
 """
 
 
@@ -3207,7 +3226,12 @@ def _question_resolution_exempt_for_resolved_adjudication(resolution: Dict[str, 
     """Executed adjudication already answered a procedural question; interrogative form is not leftover."""
     if not isinstance(resolution, dict):
         return False
-    return str(resolution.get("kind") or "").strip().lower() == "adjudication_query"
+    if str(resolution.get("kind") or "").strip().lower() != "adjudication_query":
+        return False
+    adjudication = resolution.get("adjudication")
+    if not isinstance(adjudication, dict):
+        return False
+    return bool(str(adjudication.get("player_facing_text") or "").strip())
 
 
 def _question_resolution_exempt_for_open_crowd_social(resolution: Dict[str, Any] | None) -> bool:

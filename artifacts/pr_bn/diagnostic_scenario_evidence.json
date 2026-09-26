@@ -1,0 +1,84 @@
+{
+  "cycle": "PR-BN",
+  "date": "2026-09-26",
+  "base_head": "a5bfdd9e0376173c5aeb4fc762ada259e24bd638",
+  "diagnostic_scenarios": [
+    {
+      "id": "A_incidental_detail",
+      "prompt_shape": "Player asks about an ordinary un-authored service/environment detail.",
+      "example": "What is in the soup?",
+      "expected": "DM may establish a compatible mundane answer.",
+      "evidence": "tests/test_bounded_improvisation_authority.py::test_incidental_detail_promotes_and_projects_for_consistency"
+    },
+    {
+      "id": "B_consistency",
+      "prompt_shape": "Player later asks about the invented detail.",
+      "example": "What was in that soup again?",
+      "expected": "Accepted detail is projected back into prompt context.",
+      "evidence": "prompt_projection_for_bounded_improvisation returns the accepted scene entry."
+    },
+    {
+      "id": "C_npc_rumor",
+      "prompt_shape": "Player asks an NPC for local gossip.",
+      "example": "Any road gossip?",
+      "expected": "NPC claim can persist as hearsay without becoming world truth.",
+      "evidence": "tests/test_bounded_improvisation_authority.py::test_npc_rumor_persists_as_claim_not_world_truth"
+    },
+    {
+      "id": "D_follow_up",
+      "prompt_shape": "Player asks who said the rumor.",
+      "example": "Who told you that?",
+      "expected": "speaker_id/source/epistemic_status are retained for coherent follow-up.",
+      "evidence": "NPC claim entries preserve source and speaker_id."
+    },
+    {
+      "id": "E_consequentially_unsafe",
+      "prompt_shape": "Candidate invents a quest-critical secret.",
+      "example": "A secret passage under the pump leads to the duke's vault.",
+      "expected": "Rejected as consequential.",
+      "evidence": "content:consequential_terms rejection."
+    },
+    {
+      "id": "F_contradiction",
+      "prompt_shape": "Candidate contradicts a previously accepted incidental fact.",
+      "example": "The soup is not barley, leek, and pepper broth.",
+      "expected": "Rejected as contradictory.",
+      "evidence": "content:contradicts_existing rejection."
+    },
+    {
+      "id": "G_mechanical_authority",
+      "prompt_shape": "Candidate invents mechanical effect or currency/inventory outcome.",
+      "example": "The bowl costs 3 cp and removes 1 hp of fatigue.",
+      "expected": "Rejected; engine remains authoritative.",
+      "evidence": "content:mechanical_authority rejection."
+    },
+    {
+      "id": "H_final_emission",
+      "prompt_shape": "Valid typed incidental invention reaches the player.",
+      "example": "The tea smells of mint and smoke.",
+      "expected": "Narrative-authority layer recognizes clean accepted bounded proposal.",
+      "evidence": "skip reason validated_bounded_improvisation."
+    },
+    {
+      "id": "I_retry",
+      "prompt_shape": "Valid bounded improvisation lacks authored provenance.",
+      "example": "Stablehand gives ordinary horse detail.",
+      "expected": "Retry does not collapse the answer solely for lacking authored source.",
+      "evidence": "detect_retry_failures suppresses unresolved_question/npc_contract/scene_stall for valid bounded proposal."
+    }
+  ],
+  "test_results": {
+    "focused_core": {
+      "command": "$env:PYTHONPATH='.\\.venv\\Lib\\site-packages'; & 'C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' -m pytest tests\\test_bounded_improvisation_authority.py tests\\test_gm_retry.py tests\\test_prompt_context.py tests\\test_response_policy_enforcement_mutation.py tests\\test_final_emission_gate_diagnostics.py tests\\test_world_updates_and_clue_normalization.py -q --tb=short --basetemp=codex_pytest_tmp_bn_reg5",
+      "result": "177 passed"
+    },
+    "wide_targeted": {
+      "command": "$env:PYTHONPATH='.\\.venv\\Lib\\site-packages'; & 'C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' -m pytest tests\\test_state_authority.py tests\\test_narrative_authority_rules.py tests\\test_social.py tests\\test_social_speaker_grounding.py tests\\test_social_target_authority_regressions.py tests\\test_social_interaction_authority.py tests\\test_strict_social_emergency_fallback_dialogue.py tests\\test_final_emission_narrative_mode_output.py tests\\test_final_emission_visibility.py tests\\test_final_emission_validators.py tests\\test_anti_railroading_retry_alignment.py tests\\test_transcript_regression.py -q --tb=short --basetemp=codex_pytest_tmp_bn_reg4",
+      "result": "230 passed, 2 failed, 1 warning",
+      "failures": [
+        "tests/test_social_speaker_grounding.py::test_transcript_runner_asks_about_aldric_followup_stays_runner",
+        "tests/test_social_speaker_grounding.py::test_transcript_where_is_aldric_repeated_followups_stay_runner"
+      ]
+    }
+  }
+}

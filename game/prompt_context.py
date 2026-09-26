@@ -173,6 +173,7 @@ from game.state_channels import (
     assert_no_debug_keys_in_prompt_payload,
     project_public_payload,
 )
+from game.bounded_improvisation import prompt_projection_for_bounded_improvisation
 from game.planner_ctir_projection import (
     ANSWER_COMPLETENESS_PARTIAL_REASONS,
     CONCRETE_PAYLOAD_KINDS,
@@ -2898,6 +2899,10 @@ def build_narration_context(
 
     payload: Dict[str, Any] = {
         'instructions': instructions,
+        'bounded_improvisation': prompt_projection_for_bounded_improvisation(
+            session if isinstance(session, Mapping) else None,
+            scene_id=scene_pub_id or None,
+        ),
         'dialogue_social_plan': (
             copy.deepcopy(_bdsp)
             if (ctir_obj is not None and bundle_stamp_ok and isinstance(_bdsp, dict))
