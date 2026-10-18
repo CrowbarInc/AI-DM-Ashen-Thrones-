@@ -90,7 +90,7 @@ def test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip(
 
 
 @pytest.mark.parametrize('case', HOLDOUTS, ids=lambda c:c['id'])
-def test_frozen_holdout(case):
+def test_frozen_holdout__pr_eg_r2c_speech_adoption(case):
     freeze=json.loads((H/'freeze.json').read_text())
     assert hashlib.sha256((H/'frozen_holdouts.json').read_bytes()).hexdigest()==freeze['sha256']
     session={}; q=case['question']

@@ -372,7 +372,7 @@ def test_http_repeated_observe_and_targeted_followup(tmp_path, monkeypatch):
     assert _complete(_facing(listen))
 
 
-def test_generic_engine_has_no_frontier_gate_special_case():
+def test_generic_engine_has_no_frontier_gate_special_case__observe_fallback_relevance_stock_repetition():
     text = Path("game/diegetic_fallback_narration.py").read_text(encoding="utf-8")
     lowered = text.lower()
     assert "threadbare watchers" not in lowered

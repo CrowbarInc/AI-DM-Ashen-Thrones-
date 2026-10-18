@@ -5,3 +5,5 @@ pydantic>=2.10.0
 python-multipart>=0.0.12
 python-dotenv>=0.21.0
 pytest>=8.0.0
+# Directly imported by preflight tests; newer OpenAI releases use httpx2 instead.
+httpx>=0.28.0

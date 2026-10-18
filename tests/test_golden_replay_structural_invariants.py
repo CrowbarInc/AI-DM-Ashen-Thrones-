@@ -46,13 +46,14 @@ def test_golden_replay_directed_npc_question_structural_invariants(tmp_path, mon
         setup_fn=seed_investigator_runner_world,
     )
 
-    assert captured_prompts
     assert result["turn_count"] == 1
     turn = result["turns"][0]
+    # Host-authorized speech may resolve without a generation request.
+    assert captured_prompts or turn.get("accepted_delivery")
     assert turn.get("selected_speaker_id") == "runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_speaker_observation_expectation("runner"),
+        protected_social_speaker_observation_expectation("runner", accepted_delivery=turn.get("accepted_delivery")),
         scenario_id="directed_npc_question",
         debug_context=format_golden_replay_debug(result),
     )
@@ -88,7 +89,7 @@ def test_golden_replay_vocative_override_after_prior_continuity_structural_invar
     assert turn.get("selected_speaker_id") == "guard"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_speaker_observation_expectation("guard"),
+        protected_social_speaker_observation_expectation("guard", accepted_delivery=turn.get("accepted_delivery")),
         scenario_id="vocative_override_after_prior_continuity",
         debug_context=debug_context,
     )
@@ -114,7 +115,7 @@ def test_golden_replay_wrong_speaker_strict_social_emission_structural_invariant
     assert turn.get("selected_speaker_id") == "runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_speaker_observation_expectation("runner"),
+        protected_social_speaker_observation_expectation("runner", accepted_delivery=turn.get("accepted_delivery")),
         scenario_id="wrong_speaker_strict_social_emission",
         debug_context=debug_context,
     )
@@ -185,6 +186,7 @@ def test_golden_replay_sanitizer_scaffold_leakage_structural_invariants(tmp_path
     assert_protected_golden_turn_observation(
         turn,
         protected_structural_expectation(
+            accepted_delivery=turn.get("accepted_delivery"),
             require_present=("final_text", "scaffold_leakage"),
             allow_unavailable=(
                 "fallback_family",
@@ -233,7 +235,7 @@ def test_golden_replay_lead_followup_with_dialogue_lock_structural_invariants(tm
     assert turn.get("selected_speaker_id") == "tavern_runner"
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_speaker_observation_expectation("tavern_runner"),
+        protected_social_speaker_observation_expectation("tavern_runner", accepted_delivery=turn.get("accepted_delivery")),
         scenario_id="lead_followup_with_dialogue_lock",
         debug_context=debug_context,
     )

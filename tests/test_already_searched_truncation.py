@@ -252,7 +252,7 @@ def test_http_first_authored_read_still_available(tmp_path, monkeypatch):
     assert _complete(text)
 
 
-def test_generic_engine_has_no_frontier_gate_special_case():
+def test_generic_engine_has_no_frontier_gate_special_case__already_searched_truncation():
     for rel in (
         "game/referenced_surface.py",
         "game/perception_grounding.py",

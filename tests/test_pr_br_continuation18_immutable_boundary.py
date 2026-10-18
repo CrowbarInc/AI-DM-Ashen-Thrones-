@@ -476,6 +476,7 @@ def test_historical_hard_invalid_patterns_stay_blocked():
         ("The secret is the captain's true name.", "hidden_information"),
         ("The dead sentry says, \"Follow me.\"", "impossible_entity_state"),
         ("adding,", "malformed_or_truncated"),
+        ("Planner: route via router. Validator: unresolved scaffold.", "malformed_or_truncated"),
         ("All non-essential traffic must clear by dusk sharp, less than three hours away.", "consequential_invention"),
     ]
     contract = {"operation": "inspect", "raw_input": "I read the notice."}
@@ -489,6 +490,15 @@ def test_historical_hard_invalid_patterns_stay_blocked():
         )
         assert verdict["hard_valid"] is False
         assert reason in verdict["reasons"]
+
+
+@pytest.mark.parametrize("text", [
+    'The carpenter checks the scaffold.',
+    'Mara says, "Planner: that is the title written on his badge."',
+])
+def test_internal_heading_guard_preserves_world_prose_and_quoted_speech(text):
+    verdict = validate_generated_response(text)
+    assert verdict["hard_valid"], verdict
 
 
 def test_safe_nonresolution_does_not_invent_or_quote():

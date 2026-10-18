@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Mapping
+import os
+from datetime import datetime, timezone
 
 from tests.helpers.failure_dashboard_drift import (
     rerun_drift_scorecard_requested,
@@ -54,10 +56,31 @@ def write_requested_dashboard_artifacts(
 
     written: list[Path] = []
 
+    env_map = env if env is not None else os.environ
+    current_report = env_map.get("ASHEN_PROTECTED_REPLAY_REPORT_PATH")
     if exitstatus != 0:
-        failure_report = write_protected_replay_failure_report_if_present(command_used=command_used)
+        report_kwargs = {}
+        if current_report:
+            report_kwargs = {"path": current_report, "side_effect_artifact_root": Path(current_report).parent}
+        failure_report = write_protected_replay_failure_report_if_present(command_used=command_used, **report_kwargs)
         if failure_report is not None:
             written.append(failure_report)
+        elif current_report:
+            # Collection/import failures have no protected assertion rows. Write
+            # a fresh run summary rather than publishing a checked-in old report.
+            path = Path(current_report)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                "# Protected Replay Execution Failure\n\n"
+                f"- Generated at: `{datetime.now(timezone.utc).isoformat()}`\n"
+                f"- Command: `{command_used}`\n"
+                f"- Pytest exit status: `{exitstatus}`\n"
+                "- Protected assertion failures recorded: `0`\n\n"
+                "No protected assertion report was produced by this execution. "
+                "Inspect pytest-output.txt and pytest.xml for collection, setup, or other failures.\n",
+                encoding="utf-8",
+            )
+            written.append(path)
 
     if exitstatus == 0 and rerun_drift_scorecard_requested(env):
         scorecards = recorded_rerun_drift_scorecards()

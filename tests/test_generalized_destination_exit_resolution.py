@@ -153,7 +153,7 @@ def test_ambiguous_shared_noun_does_not_guess():
         assert resolution.get("resolved_transition") is not True
 
 
-def test_unavailable_destination_is_not_invented():
+def test_unavailable_destination_is_not_invented__generalized_destination_exit_resolution():
     parsed = parse_freeform_to_action("I'll go to the glass observatory.", MOSSY)
     assert _target(parsed) == ""
     resolution = _parse_and_resolve("I'll go to the glass observatory.", MOSSY)

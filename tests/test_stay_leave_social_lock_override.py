@@ -169,7 +169,7 @@ def test_follow_person_is_not_stolen_as_unresolved_travel():
     assert parsed is None
 
 
-def test_unavailable_destination_is_not_invented():
+def test_unavailable_destination_is_not_invented__stay_leave_social_lock_override():
     parsed = recover_actionable_stay_leave_or_pursuit(
         "I'll go to House Verevin.",
         _gate_scene(),

@@ -464,7 +464,7 @@ def test_fallback_nothing_new_still_uses_recent_stock_narration():
     assert later == observe_nothing_new_fallback_line()
 
 
-def test_generic_engine_has_no_frontier_gate_special_case():
+def test_generic_engine_has_no_frontier_gate_special_case__later_turn_untargeted_observation_restacking():
     text = (
         Path("game/perception_grounding.py").read_text(encoding="utf-8")
         + Path("game/diegetic_fallback_narration.py").read_text(encoding="utf-8")

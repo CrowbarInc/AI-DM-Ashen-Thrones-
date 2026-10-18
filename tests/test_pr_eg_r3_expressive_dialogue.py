@@ -104,7 +104,7 @@ def _finish(line, audit, case, question, social=None):
 
 
 @pytest.mark.parametrize("case", HOLDOUTS, ids=lambda case: case["id"])
-def test_frozen_holdout(case, monkeypatch):
+def test_frozen_holdout__pr_eg_r3_expressive_dialogue(case, monkeypatch):
     assert hashlib.sha256((H / "frozen_holdouts.json").read_bytes()).hexdigest() == FREEZE["sha256"]
     calls = _stub(monkeypatch, case["candidate"])
     session = {}

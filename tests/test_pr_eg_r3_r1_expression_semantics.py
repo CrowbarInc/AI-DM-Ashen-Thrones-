@@ -311,7 +311,7 @@ def test_partial_fact_reaches_the_player_without_topic_promotion(tmp_path, monke
 
 
 @pytest.mark.parametrize("case", HOLDOUTS, ids=lambda case: case["id"])
-def test_frozen_holdout(case, monkeypatch):
+def test_frozen_holdout__pr_eg_r3_r1_expression_semantics(case, monkeypatch):
     assert hashlib.sha256((H / "frozen_holdouts.json").read_bytes()).hexdigest() == FREEZE["sha256"]
     if case["kind"] == "characterization":
         calls = _stub(monkeypatch, case["candidate"])

@@ -410,7 +410,7 @@ def test_whats_nearby_after_travel_does_not_emit_prior_scene_geography(tmp_path,
     assert "lantern hangs above the kiln" not in facing.lower()
 
 
-def test_generic_engine_has_no_frontier_gate_special_case():
+def test_generic_engine_has_no_frontier_gate_special_case__post_return_observation_geographic_integrity():
     text = "".join(path.read_text(encoding="utf-8") for path in GENERIC_ENGINE_FILES)
     lowered = text.lower()
     assert "threadbare watchers" not in lowered

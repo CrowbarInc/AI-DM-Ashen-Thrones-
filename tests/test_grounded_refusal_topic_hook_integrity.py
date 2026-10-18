@@ -526,7 +526,7 @@ def test_no_hardcoded_step_or_night_special_case_in_hook_owner():
         assert term.lower() not in helper.lower(), f"{term} in PR-AV hook helper"
 
 
-def test_no_frontier_gate_special_case_in_touched_engine():
+def test_no_frontier_gate_special_case_in_touched_engine__grounded_refusal_topic_hook_integrity():
     catalog = Path("game/social_exchange_fallback_catalog.py").read_text(encoding="utf-8")
     start = catalog.find("def _question_span_for_integrity_hook")
     end = catalog.find("def minimal_social_emergency_fallback_line")

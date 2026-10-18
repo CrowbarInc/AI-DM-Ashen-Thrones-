@@ -582,7 +582,7 @@ def test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing(tmp_path, 
     assert res.get("clue_id") in {None, ""}
 
 
-def test_anti_overfitting_generic_helpers_have_no_calibration_special_case():
+def test_anti_overfitting_generic_helpers_have_no_calibration_special_case__investigation_result_provenance_non_invention():
     for path in GENERIC_ENGINE_FILES:
         text = path.read_text(encoding="utf-8")
         lowered = text.lower()

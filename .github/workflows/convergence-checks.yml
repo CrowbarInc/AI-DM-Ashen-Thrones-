@@ -46,14 +46,19 @@ jobs:
 
       - name: Pytest - controlled structural replay acceptance
         id: protected_replay
-        run: python -m pytest -m golden_replay -q
+        shell: bash
+        env:
+          ASHEN_PROTECTED_REPLAY_REPORT_PATH: ${{ runner.temp }}/protected-replay/replay_failure_report.md
+        run: |
+          mkdir -p "$RUNNER_TEMP/protected-replay"
+          python -m pytest -m golden_replay -q --junitxml="$RUNNER_TEMP/protected-replay/pytest.xml" 2>&1 | tee "$RUNNER_TEMP/protected-replay/pytest-output.txt"
 
       - name: Upload protected replay failure report
         if: failure() && steps.protected_replay.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: protected-replay-failure-report
-          path: artifacts/golden_replay/replay_failure_report.md
+          path: ${{ runner.temp }}/protected-replay/
           if-no-files-found: warn
 
       - name: Pytest — evaluator convergence closeout

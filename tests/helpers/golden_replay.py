@@ -94,6 +94,7 @@ def protected_structural_expectation(
     disallow_global_scene_fallback: bool = False,
     no_scaffold: bool = True,
     extra_no_scaffold_terms: tuple[str, ...] = (),
+    accepted_delivery: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Compose common protected replay structural expectation fragments."""
     out: dict[str, Any] = {}
@@ -123,12 +124,27 @@ def protected_structural_expectation(
     if no_scaffold:
         out.update(_protected_no_scaffold_expectation(extra_terms=extra_no_scaffold_terms))
 
+    if accepted_delivery is not None:
+        # Sealed host delivery bypasses the legacy gate. Check the actual delivery
+        # contract instead of inventing gate/fallback telemetry for an unrun stage.
+        out["allow_unavailable"] = list(dict.fromkeys([
+            *out.get("allow_unavailable", []),
+            "response_type_required", "response_type_candidate_ok", "response_type_repair_used",
+        ]))
+        out.setdefault("equals", {}).update({
+            "accepted_delivery.integrity_valid": True,
+            "accepted_delivery.text_matches_final": True,
+            "accepted_delivery.record.immutable": True,
+            "accepted_delivery.record.hard_validation.hard_valid": True,
+        })
+
     return out
 
 
 def protected_social_speaker_observation_expectation(
     selected_speaker_id: str,
     *,
+    accepted_delivery: Mapping[str, Any] | None = None,
     allow_unavailable: tuple[str, ...] | list[str] = (
         "fallback_family",
         "final_emitted_source",
@@ -140,12 +156,16 @@ def protected_social_speaker_observation_expectation(
     ),
 ) -> dict[str, Any]:
     """Protected replay fragment for consuming speaker identity without owning social routing detail."""
-    return protected_structural_expectation(
+    out = protected_structural_expectation(
         require_present=("final_text", "selected_speaker_id"),
         allow_unavailable=allow_unavailable,
         equals={"selected_speaker_id": selected_speaker_id},
         no_scaffold=False,
+        accepted_delivery=accepted_delivery,
     )
+    if accepted_delivery is not None:
+        out["equals"]["accepted_delivery.record.speaker_id"] = selected_speaker_id
+    return out
 
 
 _BX_PARITY_ALLOW_UNAVAILABLE: tuple[str, ...] = (

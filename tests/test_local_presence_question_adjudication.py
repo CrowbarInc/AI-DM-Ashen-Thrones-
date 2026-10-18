@@ -387,7 +387,7 @@ def test_offscene_clue_classifier_still_rejects_present_here_geography():
     assert "prior_scene_geography" in verdict["flags"]
 
 
-def test_generic_engine_has_no_frontier_gate_special_case():
+def test_generic_engine_has_no_frontier_gate_special_case__local_presence_question_adjudication():
     text = "".join(path.read_text(encoding="utf-8") for path in GENERIC_ENGINE_FILES)
     lowered = text.lower()
     assert "threadbare watchers" not in lowered

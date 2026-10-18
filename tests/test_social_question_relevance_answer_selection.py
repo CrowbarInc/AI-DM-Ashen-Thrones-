@@ -648,7 +648,7 @@ def test_calibration_http_stew_question_does_not_mint_patrol_lead(tmp_path, monk
     assert ((data.get("resolution") or {}).get("social") or {}).get("topic_revealed") in (None, {})
 
 
-def test_anti_overfitting_generic_helpers_have_no_calibration_special_case():
+def test_anti_overfitting_generic_helpers_have_no_calibration_special_case__social_question_relevance_answer_selection():
     for fn in (
         authored_topic_relevant_to_question,
         _question_subject_tokens,

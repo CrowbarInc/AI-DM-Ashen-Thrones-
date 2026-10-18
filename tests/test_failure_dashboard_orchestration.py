@@ -216,3 +216,19 @@ def test_report_hub_delegates_orchestration_writer(monkeypatch, tmp_path: Path) 
     written = report_module.write_requested_dashboard_artifacts(exitstatus=0, env={"ALL": "1"})
 
     assert written == [dashboard_path]
+
+
+def test_current_ci_report_replaces_stale_output_on_collection_failure(tmp_path, monkeypatch):
+    path = tmp_path / "run" / "replay_failure_report.md"
+    path.parent.mkdir()
+    path.write_text("stale Windows report from June", encoding="utf-8")
+    monkeypatch.setattr(report_module, "write_protected_replay_failure_report_if_present", lambda **kwargs: None)
+    written = write_requested_dashboard_artifacts(
+        exitstatus=2, command_used="python -m pytest -m golden_replay -q",
+        env={"ASHEN_PROTECTED_REPLAY_REPORT_PATH": str(path)},
+    )
+    assert path in written
+    report = path.read_text(encoding="utf-8")
+    assert "Pytest exit status: `2`" in report
+    assert "Protected assertion failures recorded: `0`" in report
+    assert "stale Windows" not in report

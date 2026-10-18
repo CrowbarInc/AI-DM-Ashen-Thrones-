@@ -105,7 +105,7 @@ def _scan_evaluator_imports(rel: str, bucket: str | None, subs: set[str]) -> lis
     findings: list[Finding] = []
     if bucket != "evaluator":
         return findings
-    allowed = {"final_emission_meta", "validation_layer_contracts", "telemetry_vocab"}
+    allowed = {"final_emission_meta", "observability_attribution_read", "validation_layer_contracts", "telemetry_vocab"}
     bad = sorted(subs - allowed)
     for mod in bad:
         sev = "likely_drift"
@@ -191,7 +191,7 @@ _AEP_SDK_MARKERS: Final[tuple[str, ...]] = (
 )
 
 
-def _scan_answer_exposition_ownership(rel: str, source: str) -> list[Finding]:
+def _scan_answer_exposition_ownership(rel: str, source: str, *, gate_calls: set[str] | None = None) -> list[Finding]:
     """Heuristics for the Answer/Exposition Convergence chain ownership contract.
 
     Flags:
@@ -367,7 +367,9 @@ def _scan_answer_exposition_ownership(rel: str, source: str) -> list[Finding]:
 
     # 5) Gate must run the AEP layer and must retain final-text recheck (candidate_satisfies_*).
     if name == "final_emission_gate.py":
-        if "_apply_answer_exposition_plan_layer" not in source or "_merge_answer_exposition_plan_meta" not in source:
+        if gate_calls is None:
+            gate_calls = _called_names(source)
+        if not {"_apply_answer_exposition_plan_layer", "_merge_answer_exposition_plan_meta"} <= gate_calls:
             findings.append(
                 Finding(
                     "answer_exposition_enforcement_missing",
@@ -376,7 +378,7 @@ def _scan_answer_exposition_ownership(rel: str, source: str) -> list[Finding]:
                     "Gate no longer wires `_apply_answer_exposition_plan_layer` and/or FEM merge `_merge_answer_exposition_plan_meta` (chain broken).",
                 )
             )
-        if "candidate_satisfies_answer_contract(" not in source:
+        if "candidate_satisfies_answer_contract" not in gate_calls:
             findings.append(
                 Finding(
                     "final_text_recheck_removed",
@@ -482,6 +484,35 @@ def collect_py_files(scan_roots: list[Path]) -> list[Path]:
     return files
 
 
+def _called_names(source: str) -> set[str]:
+    """Read actual call sites, excluding imports, comments and function definitions."""
+    return {
+        node.func.id if isinstance(node.func, ast.Name) else node.func.attr
+        for node in ast.walk(ast.parse(source))
+        if isinstance(node, ast.Call) and isinstance(node.func, (ast.Name, ast.Attribute))
+    }
+
+
+def _reachable_gate_calls(path: Path) -> set[str]:
+    """Follow the gate's local emission-module imports after its module split."""
+    pending = [path]
+    seen: set[Path] = set()
+    calls: set[str] = set()
+    while pending:
+        module = pending.pop()
+        if module in seen or not module.is_file():
+            continue
+        seen.add(module)
+        source = module.read_text(encoding="utf-8")
+        calls.update(_called_names(source))
+        pending.extend(
+            path.parent / (name + ".py")
+            for name in _game_submodules_imported(source)
+            if name.startswith("final_emission_")
+        )
+    return calls
+
+
 def run_audit(
     *,
     scan_roots: list[Path],
@@ -515,7 +546,8 @@ def run_audit(
         findings.extend(_scan_planner_imports(rel, bucket, subs))
         findings.extend(_text_heuristics(rel, bucket, source))
         findings.extend(_duplicate_ownership_phrase(source, rel))
-        findings.extend(_scan_answer_exposition_ownership(rel, source))
+        gate_calls = _reachable_gate_calls(path) if path.name == "final_emission_gate.py" else None
+        findings.extend(_scan_answer_exposition_ownership(rel, source, gate_calls=gate_calls))
 
     benign: list[str] = []
     if len(split_note) == 3:

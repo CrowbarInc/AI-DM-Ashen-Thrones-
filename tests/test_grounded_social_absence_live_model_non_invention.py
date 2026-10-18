@@ -435,7 +435,7 @@ def test_invention_detector_does_not_flag_catalog_absence():
     )
 
 
-def test_no_frontier_gate_special_case_in_touched_engine():
+def test_no_frontier_gate_special_case_in_touched_engine__grounded_social_absence_live_model_non_invention():
     for path in GENERIC_ENGINE_FILES:
         blob = path.read_text(encoding="utf-8")
         added = blob

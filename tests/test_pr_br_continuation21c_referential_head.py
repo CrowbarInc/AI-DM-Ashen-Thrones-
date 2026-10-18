@@ -369,7 +369,7 @@ def test_player_input_integration():
             assert stored.isdisjoint({"muddy lane", "muddy lane northwest", "inn to see", "wagon", "underbrush"})
 
 
-def test_historical_player_turns_do_not_persist_malformed_people():
+def test_historical_player_turns_do_not_persist_malformed_people__pr_br_continuation21c_referential_head():
     forbidden = {
         "exact coin modest fee so i",
         "first local i pass",

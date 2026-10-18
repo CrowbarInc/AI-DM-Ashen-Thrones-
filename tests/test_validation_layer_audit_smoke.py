@@ -66,6 +66,24 @@ def test_validation_layer_audit_strict_succeeds_when_clean_extra_root(tmp_path: 
     assert proc.returncode == 0, proc.stderr + proc.stdout
 
 
+def test_split_gate_audit_follows_calls_and_still_detects_removed_recheck(tmp_path: Path) -> None:
+    (tmp_path / "final_emission_gate.py").write_text(
+        "from game.final_emission_generic_exit import emit\ndef gate():\n    emit()\n", encoding="utf-8",
+    )
+    helper = tmp_path / "final_emission_generic_exit.py"
+    helper.write_text(
+        "def emit():\n    _apply_answer_exposition_plan_layer()\n"
+        "    _merge_answer_exposition_plan_meta()\n    candidate_satisfies_answer_contract('text')\n",
+        encoding="utf-8",
+    )
+    proc = _run_audit("--scan-root", str(tmp_path), "--strict", "--json")
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    helper.write_text(helper.read_text(encoding="utf-8").replace("    candidate_satisfies_answer_contract('text')\n", ""), encoding="utf-8")
+    proc = _run_audit("--scan-root", str(tmp_path), "--strict", "--json")
+    assert proc.returncode == 2
+    assert any(f["category"] == "final_text_recheck_removed" for f in json.loads(proc.stdout)["findings"])
+
+
 def test_aep_audit_flags_prompt_context_constructing_answer_exposition_plan(tmp_path: Path) -> None:
     # prompt_context must be transport/render-only for AEP facts.
     bad = tmp_path / "prompt_context.py"

@@ -55,7 +55,7 @@ def test_co102_live_protected_replay_records_session_failure_artifacts(tmp_path,
     turn = result["turns"][0]
     assert_protected_golden_turn_observation(
         turn,
-        protected_social_speaker_observation_expectation("merchant"),
+        protected_social_speaker_observation_expectation("merchant", accepted_delivery=turn.get("accepted_delivery")),
         scenario_id="wrong_speaker_strict_social_emission",
         debug_context=format_golden_replay_debug(result),
     )

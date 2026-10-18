@@ -314,7 +314,7 @@ def test_new_incidental_replaces_the_previous_interlocutor():
     assert _binding(contract)["label"] == "tired porter"
 
 
-def test_historical_player_turns_do_not_persist_malformed_people():
+def test_historical_player_turns_do_not_persist_malformed_people__pr_br_continuation21b_referential_personhood():
     forbidden = {
         "exact coin modest fee so i",
         "first local i pass",

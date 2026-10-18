@@ -215,6 +215,9 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
         sanitizer_trace,
         ("sanitizer_boundary_mode", "mode"),
     ) or lookup_observation_path(payload, "gm_output.metadata.sanitizer_boundary_mode")
+    # Lookup's identity sentinel belongs inside the adapter, never in observations.
+    if sanitizer_mode is MISSING:
+        sanitizer_mode = None
     sanitizer_event_count = len(sanitizer_debug) if sanitizer_debug else None
     sanitizer_changed_count, sanitizer_dropped_count = _sanitizer_debug_change_counts(sanitizer_debug)
     sanitizer_rewrite_used = bool(sanitizer_changed_count) if sanitizer_changed_count is not None else None
@@ -280,7 +283,19 @@ def project_turn_observation(turn_payload: Mapping[str, Any]) -> dict[str, Any]:
     semantic_summary = project_semantic_mutation_summary(
         semantic_trace if isinstance(semantic_trace, Mapping) else None
     )
+    from game.immutable_valid_response import accepted_record, verify_delivery_record
+
+    gm_output = payload.get("gm_output")
+    delivery_record = accepted_record(gm_output) if isinstance(gm_output, Mapping) else None
+    accepted_delivery = None
+    if delivery_record is not None:
+        accepted_delivery = {
+            "record": delivery_record,
+            "integrity_valid": verify_delivery_record(delivery_record),
+            "text_matches_final": normalize_golden_text(delivery_record.get("text")) == normalize_golden_text(final_text),
+        }
     observed = {
+        "accepted_delivery": accepted_delivery,
         "scenario_id": scenario_id,
         "turn_index": snap.get("turn_index"),
         "player_text": snap.get("player_text"),

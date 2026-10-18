@@ -722,7 +722,7 @@ def test_calibration_stew_cost_is_quantity_absence_not_price_invention():
     assert authored_answer_sufficient_for_question("What does the stew cost?", {"id": "stew", "text": STEW_RELATED}) is False
 
 
-def test_anti_overfitting_generic_helpers_have_no_calibration_special_case():
+def test_anti_overfitting_generic_helpers_have_no_calibration_special_case__question_dimension_answer_sufficiency():
     for fn in (
         authored_answer_sufficient_for_question,
         authored_topic_relevant_to_question,

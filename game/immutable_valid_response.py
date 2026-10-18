@@ -117,6 +117,10 @@ _HARD_META_VOICE_RE = re.compile(
     r"\bas (?:a )?(?:language )?model\b|\bmy (?:system|training data|tools?)\b",
     re.IGNORECASE,
 )
+_INTERNAL_STAGE_LABEL_RE = re.compile(
+    r"(?:^|[.!?\n])\s*(?:planner|router|validator|adjudication|scaffold)\s*:",
+    re.IGNORECASE,
+)
 _YOU_RE = re.compile(r"\byou\b", re.IGNORECASE)
 _NO_ONE_RE = re.compile(r"\bno one\b", re.IGNORECASE)
 _HTML_RE = re.compile(r"</?(?:b|i|em|strong|br|p)\s*/?>", re.IGNORECASE)
@@ -668,7 +672,9 @@ def validate_generated_response(
         reasons.append("interaction_incomplete")
     if operation in {"inspect", "perceive", "act", "follow"} and response_attributes_npc_speech(raw):
         reasons.append("unsolicited_npc_speech")
-    if _HARD_META_VOICE_RE.search(raw):
+    # Reject explicit internal stage headings before sealing. A later sanitizer
+    # cannot strip them without violating accepted-response integrity.
+    if _HARD_META_VOICE_RE.search(raw) or _INTERNAL_STAGE_LABEL_RE.search(_outside_quotes(raw)):
         reasons.append("malformed_or_truncated")
 
     explicit = _explicit_addressee(player, referents)

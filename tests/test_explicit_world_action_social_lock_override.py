@@ -496,7 +496,7 @@ def test_http_t13_glance_back_at_notice_board_is_world_action(tmp_path, monkeypa
     assert "word is" not in _facing(data).lower()
 
 
-def test_anti_overfitting_generic_helpers_have_no_calibration_special_case():
+def test_anti_overfitting_generic_helpers_have_no_calibration_special_case__explicit_world_action_social_lock_override():
     import inspect as pyinspect
 
     from game import intent_parser
