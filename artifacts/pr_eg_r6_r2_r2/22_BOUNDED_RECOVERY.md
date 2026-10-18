@@ -1,0 +1,3 @@
+# 22 — Bounded Recovery
+
+No routine retries or validation provider calls. Recovery only normalizes explicit empty requested slots and compact named schemas, and completes an omitted target from unique host active focus when no ambiguity was proposed. Forged or cross-conversation IDs never normalize into authority. [game/conversational_referents.py:108](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/conversational_referents.py:108>); [game/semantic_correspondence.py:43](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/semantic_correspondence.py:43>)

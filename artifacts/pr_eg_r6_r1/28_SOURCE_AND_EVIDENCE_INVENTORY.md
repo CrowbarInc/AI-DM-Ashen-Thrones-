@@ -1,0 +1,36 @@
+# 28 SOURCE AND EVIDENCE INVENTORY
+
+Cycle source changes:
+
+- game/api.py
+- game/clues.py
+- game/conversational_continuity.py
+- game/dialogue_authority.py
+- game/gm_resolution_decision.py
+- game/immutable_valid_response.py
+- game/player_interpretation_bridge.py
+- game/referenced_surface.py
+- game/social.py
+- game/unified_semantic_planning.py
+
+Tools/tests: `tools/qualify_pr_eg_r6_r1.py`, `tools/compare_pr_eg_r6_r1.py`, `tools/write_pr_eg_r6_r1_review.py`, `tests/test_pr_eg_r6_r1_disclosure_boundary.py`.
+
+`production.patch` and baseline overlay isolate this cycle from the dirty Git baseline. Package manifest hashes enumerate included reports, source, tests, traces and synthetic state. No `.env`, credential, real campaign save, or broad repository archive belongs in the bundle.
+
+| Path | Source and policy / bypass assessment | Source link |
+|---|---|---|
+| Legacy question / imperative | NPC topics/knowledge; speaker/source row. Common authorization before relevance and again before reveal mutation. Revealed flags cannot override policy. | [game/social.py:1611](../../game/social.py#L1611) |
+| Unified semantic plan | Same authored rows; hidden eligibility now derives from common source authorization. Planner migration gate is unchanged; provider source IDs grant nothing. | [game/unified_semantic_planning.py:614](../../game/unified_semantic_planning.py#L614) |
+| Partial answer | Host NPC topic rows checked before partial-source choice. Final seal checks an authorized proposition even without a promoted topic. | [game/dialogue_authority.py:258](../../game/dialogue_authority.py#L258) |
+| Stored authored answer / strict retry | Present/allowed knowledge identities retain existing speaker rules; each enumerated NPC source now checks common permission. | [game/social.py:2392](../../game/social.py#L2392) |
+| Historical speech / GM quotation | Current source revalidation for topic-linked history; missing legacy proof denied. History without a topic currently accepts an existing delivery digest/source marker; this is not full provenance reconstruction. | [game/conversational_continuity.py:605](../../game/conversational_continuity.py#L605) |
+| Direct supplied clarification | Topic-linked prior speech is rechecked against the actual NPC source. Missing source authority returns safe contextual speech. | [game/conversational_continuity.py:549](../../game/conversational_continuity.py#L549) |
+| Commitment reuse | Stored propositions require a current NPC source; nonconsequential host commitments carry a bounded scope marker. Older unmarked commitments are not proof. | [game/dialogue_authority.py:167](../../game/dialogue_authority.py#L167) |
+| Expression | Existing bounded proposition/operation validation remains. No new provider call for permission. Six unsupported consequential candidate categories tested. | [game/expressive_dialogue.py:754](../../game/expressive_dialogue.py#L754) |
+| Narration grounding corpus | Authored NPC topics used as a grounding corpus now exclude denied records. Cross-speaker and all semantic narration combinations have not been exhaustively qualified. | [game/gm_resolution_decision.py:367](../../game/gm_resolution_decision.py#L367) |
+| Interpretation bridge | Only permitted NPC authored passages can ground unresolved subject annotations. | [game/player_interpretation_bridge.py:127](../../game/player_interpretation_bridge.py#L127) |
+| Referenced abstract surface | List-shaped topics/knowledge now filter through common permission. Mapping-shaped knowledge is a remaining schema/projection audit limitation. | [game/referenced_surface.py:293](../../game/referenced_surface.py#L293) |
+| Preseal authored projection | World-backed NPC topic check occurs before projecting a selected fact into narration. | [game/immutable_valid_response.py:1122](../../game/immutable_valid_response.py#L1122) |
+| Final host adoption / seal | Production callers supply world. Topic, semantic authorized text, or dialogue authorized proposition is rebound before final sealing. Pure callers without source evidence fail closed. | [game/immutable_valid_response.py:1469](../../game/immutable_valid_response.py#L1469) |
+| Discovered clue / lead writes | Rebind source against world before first write; reject unsupported clue text/IDs. Existing deterministic IDs and idempotence retained. | [game/clues.py:1894](../../game/clues.py#L1894) |
+| Save/load / reconstructed state | Serialization is unchanged. Read-time source checks protect explicitly linked restricted records; no destructive migration or cleansing of historical R6 files was performed. | [game/storage.py:221](../../game/storage.py#L221) |

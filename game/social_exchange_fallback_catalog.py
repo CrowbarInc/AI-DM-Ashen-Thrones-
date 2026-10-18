@@ -5,6 +5,7 @@ import re
 from typing import Any, Dict, List, Literal, Tuple
 
 from game.interaction_context import inspect as inspect_interaction_context, resolve_authoritative_social_target
+from game.live_resolution import interaction_obligation_from_resolution, obligation_preserving_fallback_line
 from game.prompt_context import canonical_interaction_target_npc_id
 from game.response_policy_contracts import response_type_contract_requires_dialogue
 from game.social import (
@@ -154,11 +155,19 @@ def _integrity_topic_hook(
 
 def minimal_social_emergency_fallback_line(resolution: Dict[str, Any] | None) -> str:
     """Terminal-safe; deterministic variety; must pass as route-legal social without revalidation loops."""
+    obligation = interaction_obligation_from_resolution(resolution)
+    if obligation and str(obligation.get("kind") or "") != "question":
+        return obligation_preserving_fallback_line(resolution)
     social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip()
     speaker = speaker_label(resolution)
+    obligation = interaction_obligation_from_resolution(resolution)
+    try:
+        turn_offset = int(obligation.get("turn_index") or 0) if obligation else 0
+    except (TypeError, ValueError):
+        turn_offset = 0
     seed = f"{npc_id}|{speaker}"
-    idx = _deterministic_index(seed, 3)
+    idx = (_deterministic_index(seed, 3) + turn_offset) % 3
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
         f'{speaker} says, "I do not know enough to answer that."',
@@ -188,11 +197,19 @@ def _strict_social_emergency_fallback_npc_dialogue_substantive(
 
 def lawful_strict_social_dialogue_emergency_fallback_line(resolution: Dict[str, Any] | None) -> str:
     """Compact NPC reply pool for strict-social terminal fallback application."""
+    obligation = interaction_obligation_from_resolution(resolution)
+    if obligation and str(obligation.get("kind") or "") != "question":
+        return obligation_preserving_fallback_line(resolution)
     social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip()
     speaker = speaker_label(resolution)
+    obligation = interaction_obligation_from_resolution(resolution)
+    try:
+        turn_offset = int(obligation.get("turn_index") or 0) if obligation else 0
+    except (TypeError, ValueError):
+        turn_offset = 0
     seed = f"lawful_dialogue_emergency|{npc_id}|{speaker}"
-    idx = _deterministic_index(seed, 4)
+    idx = (_deterministic_index(seed, 4) + turn_offset) % 4
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
         f'{speaker} says, "I do not know enough to answer that."',
@@ -304,11 +321,19 @@ def strict_social_ownership_terminal_fallback(resolution: Dict[str, Any] | None)
 
     Deterministic; intended to bypass further validation loops when no SOCIAL sentences remain.
     """
+    obligation = interaction_obligation_from_resolution(resolution)
+    if obligation and str(obligation.get("kind") or "") != "question":
+        return obligation_preserving_fallback_line(resolution)
     social = resolution.get("social") if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) else {}
     npc_id = str(social.get("npc_id") or "").strip()
     speaker = speaker_label(resolution)
+    obligation = interaction_obligation_from_resolution(resolution)
+    try:
+        turn_offset = int(obligation.get("turn_index") or 0) if obligation else 0
+    except (TypeError, ValueError):
+        turn_offset = 0
     seed = f"ownership_terminal|{npc_id}|{speaker}"
-    idx = _deterministic_index(seed, 3)
+    idx = (_deterministic_index(seed, 3) + turn_offset) % 3
     lines = (
         f'{speaker} shakes their head. "I don\'t know."',
         f'{speaker} says, "I do not know enough to answer that."',
@@ -353,6 +378,8 @@ def deterministic_social_fallback_line(
         options, kind = interruption, "interruption"
     elif pressure_active:
         options, kind = pressure_refusal, "pressure_refusal"
+    elif interaction_obligation_from_resolution(resolution):
+        return obligation_preserving_fallback_line(resolution), "obligation_preserving"
     elif uncertainty_source == "procedural_insufficiency":
         options, kind = evasive, "refusal_evasion"
     elif uncertainty_source == "npc_ignorance":

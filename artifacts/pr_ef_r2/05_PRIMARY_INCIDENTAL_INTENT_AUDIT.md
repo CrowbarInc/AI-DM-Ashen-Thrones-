@@ -1,0 +1,9 @@
+# 05 — Primary/Incidental Intent Audit
+
+normalize_social_scope operates within the existing production interpretation normalization. It accepts one INTERPRETED, NPC-owned ASK with a target; only a wholly described orientation/attention gesture to that same canonical target is incidental. Its nominal must match target words, and sequencing/weapon/conditional terms cannot enter the gesture grammar. Original raw provider output remains intact; normalized incidental_context preserves the description. Malformed record shapes remain adapter errors.
+
+Unresolved phrases contained in the declared question subject may be treated as topics only when the remaining operation is that single targeted ASK. A missing target, explicit clarification status, unrelated unresolved person, independent MOVE, weapon draw, threat or unlocking prerequisite remains represented and unexecuted until existing compound validation permits it. Tests include draw sword, unlock door, then leave, unknown addressee and secondary movement. Clarification now retains proposed secondary intentions even when a provider labels a conditional request SESSION rather than MIXED.
+
+An additional captured gesture exposed head (body noun) being matched by the existing movement shortcut. Possessive body-part uses of head no longer count as the movement verb. The existing semantic call can then classify the whole request; bounded head orientation normalizes like facing/glancing. No exact holdout sentence or NPC name is a production key. The original PR-EC sequence/dependency and save/load tests remain in the comparison family.
+
+Additional semantic ownership errors remain: incorrect GM labels, implicit NPC context, correction purpose and ambiguity. Preserving a consequential request during clarification is behavioral success even if the strict label is not MIXED; label metrics are reported separately.

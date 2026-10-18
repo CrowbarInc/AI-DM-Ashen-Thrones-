@@ -41,6 +41,36 @@ def _unhealthy_status() -> dict[str, Any]:
     }
 
 
+def _healthy_status() -> dict[str, Any]:
+    return {
+        "ok": True,
+        "health_class": "healthy",
+        "retryable": None,
+        "status_code": None,
+        "error_code": None,
+        "message_excerpt": None,
+        "checked_at": "2026-04-12T00:05:00Z",
+        "invalidates_upstream_dependent_runs": False,
+    }
+
+
+def _redirect_storage(monkeypatch: pytest.MonkeyPatch, base: Path) -> None:
+    monkeypatch.setattr(st, "BASE_DIR", base)
+    monkeypatch.setattr(st, "DATA_DIR", base / "data")
+    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
+    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
+    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
+    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
+    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
+    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
+    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
+    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
+    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
+    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
+        (st.SCENES_DIR / f"{sid}.json").write_text(json.dumps(default_scene(sid), indent=2), encoding="utf-8")
+
+
 def test_gate_healthy_from_cache(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
 
@@ -88,26 +118,17 @@ def test_new_campaign_blocked_before_reset_when_preflight_unhealthy(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
-    base = tmp_path
-    monkeypatch.setattr(st, "BASE_DIR", base)
-    monkeypatch.setattr(st, "DATA_DIR", base / "data")
-    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
-    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
-    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
-    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
-    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
-    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
-    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
-    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
-    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
-    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
-        (st.SCENES_DIR / f"{sid}.json").write_text(json.dumps(default_scene(sid), indent=2), encoding="utf-8")
+    _redirect_storage(monkeypatch, tmp_path)
 
     def fake_log() -> None:
         pre._set_latest_upstream_api_preflight(_unhealthy_status())
 
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", fake_log)
+    monkeypatch.setattr(
+        api_mod,
+        "run_upstream_api_preflight",
+        lambda: pre._set_latest_upstream_api_preflight(_unhealthy_status()) or _unhealthy_status(),
+    )
 
     with TestClient(app) as client:
         before = client.get("/api/state")
@@ -128,25 +149,73 @@ def test_new_campaign_blocked_before_reset_when_preflight_unhealthy(
     assert rid_after == rid_before
 
 
+def test_new_campaign_rechecks_stale_unhealthy_preflight_and_recovers(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+    _redirect_storage(monkeypatch, tmp_path)
+    pre._set_latest_upstream_api_preflight(_unhealthy_status())
+
+    calls: list[int] = []
+
+    def recovered_preflight() -> dict[str, Any]:
+        calls.append(1)
+        healthy = _healthy_status()
+        pre._set_latest_upstream_api_preflight(healthy)
+        return healthy
+
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr(api_mod, "run_upstream_api_preflight", recovered_preflight)
+
+    with TestClient(app) as client:
+        r = client.post("/api/new_campaign")
+
+    assert calls == [1]
+    assert r.status_code == 200
+    data = r.json()
+    gate = data.get("upstream_dependent_run_gate") or {}
+    assert gate.get("manual_testing_blocked") is False
+    assert gate.get("startup_run_valid") is True
+    assert gate.get("preflight_health_class") == "healthy"
+    op = data.get("upstream_dependent_run_gate_operator") or {}
+    assert op.get("upstream_gate_disposition") == "healthy"
+    latest = pre.get_latest_upstream_api_preflight()
+    assert latest is not None
+    assert latest.get("health_class") == "healthy"
+
+
+def test_new_campaign_preserves_block_when_recheck_still_unhealthy(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.delenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", raising=False)
+    _redirect_storage(monkeypatch, tmp_path)
+    pre._set_latest_upstream_api_preflight(_unhealthy_status())
+
+    def still_unhealthy_preflight() -> dict[str, Any]:
+        status = _unhealthy_status()
+        status["checked_at"] = "2026-04-12T00:06:00Z"
+        pre._set_latest_upstream_api_preflight(status)
+        return status
+
+    monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+    monkeypatch.setattr(api_mod, "run_upstream_api_preflight", still_unhealthy_preflight)
+
+    with TestClient(app) as client:
+        r = client.post("/api/new_campaign")
+
+    assert r.status_code == 503
+    body = r.json()
+    gate = body.get("upstream_dependent_run_gate") or {}
+    assert gate.get("manual_testing_blocked") is True
+    assert gate.get("startup_run_valid") is False
+    assert gate.get("preflight_health_class") == "insufficient_quota"
+
+
 def test_new_campaign_ok_includes_gate_when_preflight_skipped_default(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """Default pytest env skips preflight; new campaign still works with explicit not-checked gate."""
-    base = tmp_path
-    monkeypatch.setattr(st, "BASE_DIR", base)
-    monkeypatch.setattr(st, "DATA_DIR", base / "data")
-    monkeypatch.setattr(st, "SCENES_DIR", st.DATA_DIR / "scenes")
-    monkeypatch.setattr(st, "CHARACTER_PATH", st.DATA_DIR / "character.json")
-    monkeypatch.setattr(st, "CAMPAIGN_PATH", st.DATA_DIR / "campaign.json")
-    monkeypatch.setattr(st, "SESSION_PATH", st.DATA_DIR / "session.json")
-    monkeypatch.setattr(st, "WORLD_PATH", st.DATA_DIR / "world.json")
-    monkeypatch.setattr(st, "COMBAT_PATH", st.DATA_DIR / "combat.json")
-    monkeypatch.setattr(st, "CONDITIONS_PATH", st.DATA_DIR / "conditions.json")
-    monkeypatch.setattr(st, "SESSION_LOG_PATH", st.DATA_DIR / "session_log.jsonl")
-    st.DATA_DIR.mkdir(parents=True, exist_ok=True)
-    st.SCENES_DIR.mkdir(parents=True, exist_ok=True)
-    for sid in ("frontier_gate", "market_quarter", "old_milestone"):
-        (st.SCENES_DIR / f"{sid}.json").write_text(json.dumps(default_scene(sid), indent=2), encoding="utf-8")
+    _redirect_storage(monkeypatch, tmp_path)
 
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
 

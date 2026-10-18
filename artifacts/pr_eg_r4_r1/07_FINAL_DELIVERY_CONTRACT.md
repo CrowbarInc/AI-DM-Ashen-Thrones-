@@ -1,0 +1,3 @@
+# 07 — Final Delivery Contract
+
+Reuse metadata.accepted_response. Contains exact text, speaker/speaker_id, addressee, subject/target, operation, authority source/result, hard validation and reasons, provenance, adoption status, contract/turn identity, expression revision when present, proposition identity when present, and integrity_digest. Private immutable JSON is the pinned form of that same record, excluding only mutable skipped-mutator telemetry and the digest field itself. It is neither canonical state nor another history. SHA256 detects accidental mutation; it is not a signature against malicious code with process access.

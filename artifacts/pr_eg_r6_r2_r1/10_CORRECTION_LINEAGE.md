@@ -1,0 +1,3 @@
+# 10 — Correction Lineage
+
+A correction creates a new immutable intent interpretation, parent ID, revision increment, changed-field list and originating turn/delivery identity. Earlier intent proposition and delivered player/NPC text remain intact. Only lifecycle flags on historical referent records change; the existing delivered history active flag also changes as before. [game/conversational_referents.py:206](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/conversational_referents.py:206>); [tests/test_pr_eg_r6_r2_r1_referents.py:100](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/tests/test_pr_eg_r6_r2_r1_referents.py:100>).

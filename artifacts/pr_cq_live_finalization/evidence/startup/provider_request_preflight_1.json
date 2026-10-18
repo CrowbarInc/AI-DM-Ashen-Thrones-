@@ -1,0 +1,22 @@
+{
+  "model": "gpt-4.1-mini",
+  "kind": "preflight",
+  "retry_attempt": 0,
+  "retry_reason": null,
+  "create_kwarg_keys": [
+    "max_output_tokens",
+    "model",
+    "temperature",
+    "timeout"
+  ],
+  "provider_input": [
+    {
+      "role": "system",
+      "content": "You are an infrastructure health probe. Reply with exactly: OK"
+    },
+    {
+      "role": "user",
+      "content": "ping"
+    }
+  ]
+}

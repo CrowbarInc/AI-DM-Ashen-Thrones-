@@ -1,0 +1,34 @@
+{
+  "response_id": "resp_0ab33b7f83afa216006ac57d9d2d1487d283ab1381223012b4",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 26142,
+    "output_tokens": 295,
+    "total_tokens": 26437,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 4.118,
+  "input_chars": 112293,
+  "recipe_present": true,
+  "retry_context_present": true,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail.",
+    "declared_claims": null,
+    "tags": [
+      "social.reply_kind:refusal",
+      "npc_guarded_response"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"The baker glances at you, a faint smile hinting at secrets kept close. \\\"I don't rightly say which loaf I keep for myself,\\\" they say, their voice low and careful, unwilling to share that small detail.\",\n  \"player_facing_text\": \"The baker glances at you, a faint smile hinting at secrets kept close. \\\"I don't rightly say which loaf I keep for myself,\\\" they say, their voice low and careful, unwilling to share that small detail.\",\n  \"tags\": [\"social.reply_kind:refusal\", \"npc_guarded_response\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker's smile is slight and reserved, suggesting a cautious nature.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"grounded\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Refusal response aligned with resolution decision; avoided narrating unauthorized factual disclosure.\"\n}"
+  }
+}

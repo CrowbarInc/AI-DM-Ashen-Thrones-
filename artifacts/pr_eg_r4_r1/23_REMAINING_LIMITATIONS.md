@@ -1,0 +1,3 @@
+# 23 — Remaining Limitations
+
+The 25 inherited failures remain outside this integrity repair. General dialogue quality, repeated/irrelevant authored facts, personal preference inconsistency, broad natural-language addressee interpretation and the legacy retry cost remain unresolved. No full 180-turn evaluation, statistical reliability guarantee, hostile-code cryptographic guarantee or architectural reassessment. Full process restart was not tested; real storage snapshot and save/load client continuation were. Failed initial fresh attempt is preserved; it is not counted as a passing qualification. Final action-history-only addition is separately qualified with controlled structured API tests.

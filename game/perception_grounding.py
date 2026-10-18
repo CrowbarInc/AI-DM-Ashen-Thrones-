@@ -717,6 +717,43 @@ def render_grounded_perception_line(
     return "You take in what is actually present here."
 
 
+def realize_local_observation_line(
+    scene: Mapping[str, Any] | None,
+    *,
+    session: Mapping[str, Any] | None = None,
+    world: Mapping[str, Any] | None = None,
+    resolution: Mapping[str, Any] | None = None,
+    player_text: str = "",
+) -> str:
+    """Deterministic local-presence answer for an already selected perception contract."""
+    evidence = build_perception_evidence_surface(
+        scene=scene,
+        session=session,
+        world=world,
+        resolution=resolution,
+    )
+    scene_id = _clean(evidence.get("scene_id"))
+    recent = collect_recent_player_facing_narration(
+        session=session if isinstance(session, dict) else None,
+        scene_id=scene_id,
+    )
+    current_facts = _visible_fact_strings(scene)
+    new_facts = perception_visible_fact_delta(
+        session if isinstance(session, dict) else None,
+        scene_id,
+        current_facts,
+    )
+    return render_grounded_perception_line(
+        scene,
+        player_text=player_text,
+        resolution=resolution,
+        seed_key=f"local-observation|{scene_id}|{player_text}",
+        evidence=evidence,
+        recent_narration=recent,
+        new_visible_facts=new_facts,
+    )
+
+
 def apply_perception_non_invention_to_gm(
     gm_output: dict | None,
     *,
@@ -728,6 +765,10 @@ def apply_perception_non_invention_to_gm(
 ) -> dict | None:
     """Replace unsupported perception invention with grounded scene realization."""
     if not isinstance(gm_output, dict) or not isinstance(resolution, Mapping):
+        return gm_output
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm_output, "apply_perception_non_invention_to_gm"):
         return gm_output
     kind = _resolution_kind(resolution)
     if kind not in PERCEPTION_KINDS:
@@ -827,6 +868,95 @@ def apply_perception_non_invention_to_gm(
         )
     if not replacement:
         return gm_output
+    from game.resolution_contract import semantic_line_view
+
+    current_view = semantic_line_view(text, resolution)
+    replacement_view = semantic_line_view(replacement, resolution)
+    authority = str(classified.get("authority") or "")
+    authority_overrides = authority in {
+        AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+        AUTHORITY_AUTHORED_HIDDEN,
+        AUTHORITY_UNSUPPORTED,
+        AUTHORITY_AUTHORED_VISIBLE_FEATURE,
+        AUTHORITY_AUTHORED_INTERACTABLE,
+    }
+    if (
+        not authority_overrides
+        and current_view.get("status") == "legitimate_nonresolution"
+        and replacement_view.get("status") == "unsatisfied"
+    ):
+        metadata = gm_output.setdefault("metadata", {})
+        if isinstance(metadata, dict):
+            debug = metadata.setdefault("emission_debug", {})
+            if isinstance(debug, dict):
+                debug["semantic_preservation"] = {
+                    "contract_id": current_view.get("contract_id"),
+                    "requested_dimension": current_view.get("dimension"),
+                    "candidate_contract_status": current_view.get("status"),
+                    "semantic_payload_preserved": True,
+                    "replacement_selected": False,
+                    "replacement_contract_compatible": False,
+                    "rejection_reason": "perception_stock_incompatible_with_contract",
+                }
+        return gm_output
+    from game.live_resolution import obligation_preserving_fallback_line
+    from game.resolution_contract import assess_contract_satisfaction, contract_mapping_from_resolution
+
+    contract = contract_mapping_from_resolution(resolution)
+    contract_dims = {str(item) for item in (contract.get("dimensions") or []) if str(item).strip()}
+    if contract.get("dimension"):
+        contract_dims.add(str(contract.get("dimension")))
+    strict_perception = contract_dims & {"sound", "smell", "wear", "use", "change"}
+    from game.resolution_contract import prefer_stronger_resolution
+
+    blocking_authority = authority in {
+        AUTHORITY_AUTHORED_ABSTRACT_REFERENCE,
+        AUTHORITY_AUTHORED_HIDDEN,
+        AUTHORITY_UNSUPPORTED,
+    }
+    contract_op = str(contract.get("operation") or "")
+    from game.resolution_contract import semantic_line_view
+
+    social_kept = contract_op in {"ask", "act", "confirm", "repeat"} and bool(
+        semantic_line_view(text, resolution).get("keeps_answer")
+    )
+    # Unsupported perception and inspect/perceive authority blocks are explicit
+    # invalidations. A social answer that already resolves its contract is not.
+    override_keep = (not social_kept) and (
+        bool(verdict.get("unsupported"))
+        or (blocking_authority and contract_op in {"inspect", "perceive", ""})
+    )
+    kept_perception, perception_precedence = prefer_stronger_resolution(
+        text,
+        replacement,
+        resolution,
+        invalidated=bool(verdict.get("unsupported") or blocking_authority),
+    )
+    if perception_precedence.get("downgrade_rejected") and not override_keep:
+        gm_output["player_facing_text"] = kept_perception
+        metadata = gm_output.setdefault("metadata", {})
+        if isinstance(metadata, dict):
+            debug = metadata.setdefault("emission_debug", {})
+            if isinstance(debug, dict):
+                debug["outcome_precedence"] = perception_precedence
+        return gm_output
+    if strict_perception and str(contract.get("operation") or "") in {"perceive", "inspect"}:
+        def _meets(candidate: str) -> bool:
+            return assess_contract_satisfaction(candidate, contract).get("status") in {
+                "satisfied",
+                "legitimate_nonresolution",
+                "partial",
+            }
+
+        if not _meets(replacement) and not authority_overrides:
+            if _meets(text) and not override_keep:
+                return gm_output
+            fallback = obligation_preserving_fallback_line(resolution).strip()
+            if fallback and _meets(fallback):
+                replacement = fallback
+    from game.resolution_contract import invalidate_best_safe_candidate
+
+    invalidate_best_safe_candidate(gm_output, reason="grounding_contradiction", candidate=text)
     gm_output["player_facing_text"] = replacement
     tags = list(gm_output.get("tags") or []) if isinstance(gm_output.get("tags"), list) else []
     if force_surface or force_already_searched:

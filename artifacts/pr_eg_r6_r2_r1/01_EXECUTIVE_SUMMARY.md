@@ -1,0 +1,3 @@
+# 01 — Executive Summary
+
+C — REFERENT CONTINUITY BELOW ACCEPTANCE. Implemented bounded host-owned question IDs, correction deltas, lineage, active focus, persisted answer statuses and post-seal commits under the existing default-off gate. Final regressions: 431 passed, 5 inherited failed, no new failures. Primary fresh-provider qualification: 120 turns / 8 groups; corrections 7/13, follow-ups 18/28, false clarifications 22/120. Additional unchanged predecessor holdouts: 29 turns / 2 groups. Separate-process save/load correction passed. Observed integrity checks passed within their documented scope. Acceptance thresholds remain unmet.

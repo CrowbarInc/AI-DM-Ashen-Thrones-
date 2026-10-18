@@ -1,0 +1,31 @@
+{
+  "response_id": "resp_00e2b9d21e95a5db006ac3de49e90c87d29abb288d179654a4",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 21977,
+    "output_tokens": 413,
+    "total_tokens": 22390,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 4.861,
+  "input_chars": 94626,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is indeed split, and its leather hanger is torn. These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains uncertain.",
+    "declared_claims": null,
+    "tags": [],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_db5ec0aa65c3\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's wooden yoke is split.\"\n    },\n    {\n      \"declaration_id\": \"rc_b31ecb1fd1c7\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's leather hanger is torn.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is indeed split, and its leather hanger is torn. These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains uncertain.\",\n  \"player_facing_text\": \"The bell's wooden yoke is indeed split, and its leather hanger is torn. These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains uncertain.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Answer grounded in visible facts without assuming motive or specific cause.\"\n}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "frozen": "2026-10-16",
+  "note": "Scored after the run. Do not edit these expectations to match provider output.",
+  "global_forbidden": [
+    "not been established in the information available to you",
+    "cannot carry out",
+    "speech authority",
+    "which person, object, or pending action",
+    "available actions",
+    "the password is",
+    "i'll pay",
+    "ten silver"
+  ],
+  "primary": {
+    "checks": {
+      "3": {"contain": ["north road"], "forbid": ["couldn't tell you", "could not tell you"], "max_retries": 0, "max_narration": 0},
+      "4": {"contain": ["north road"], "max_retries": 0},
+      "5": {"contain_any": ["morning", "evening", "prefer"], "forbid": ["do not know enough", "don't know enough"], "max_retries": 0, "max_narration": 1},
+      "8": {"forbid": ["blacksmith", "i forged", "the password"]},
+      "9": {"forbid": ["cannot undo", "already resolved"], "contain_any": ["road", "north"]},
+      "10": {"forbid": ["cannot carry out", "i'll pay", "ten silver", "the quest"]},
+      "11": {"forbid": ["cannot carry out", "i'll pay", "ten silver", "the quest"]},
+      "13": {"contain_any": ["arrive", "street", "north"]},
+      "14": {"forbid": ["which person, object", "says,"], "contain_any": ["not here", "mara"]},
+      "15": {"contain": ["north road"], "forbid": ["says,"]}
+    }
+  },
+  "second": {
+    "checks": {
+      "2": {"contain_any": ["north road", "could not", "couldn't"]},
+      "3": {"contain": ["north road"], "max_retries": 0, "max_narration": 0},
+      "4": {"contain_any": ["morning", "evening", "prefer"], "forbid": ["do not know enough"], "max_retries": 0},
+      "7": {"forbid": ["cannot undo", "already resolved"], "contain_any": ["road", "north"]},
+      "8": {"forbid": ["cannot carry out", "i'll pay", "ten silver", "the quest"]},
+      "11": {"forbid": ["which person, object", "says,"], "contain_any": ["north road", "not here", "mara"]},
+      "12": {"contain_any": ["north road", "mara"], "forbid": ["says,"]}
+    }
+  }
+}

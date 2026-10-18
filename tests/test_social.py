@@ -309,7 +309,7 @@ def test_listening_invitation_sets_reply_expected_explanation():
     assert social["reply_kind"] == "explanation"
 
 
-def test_question_without_topic_marks_refusal_and_non_invention_hint():
+def test_question_without_topic_marks_consequential_unknown_and_non_invention_hint():
     world = default_world()
     world["npcs"] = [
         {"id": "runner", "name": "Runner", "location": "gate", "topics": []},
@@ -334,9 +334,11 @@ def test_question_without_topic_marks_refusal_and_non_invention_hint():
     )
     social = resolution["social"]
     assert social["npc_reply_expected"] is True
-    assert social["reply_kind"] == "refusal"
+    assert social["reply_kind"] == "unknown"
+    assert social["reply_plan_kind"] == "consequential_information_request"
+    assert social["absence_of_authored_topic_forces_refusal"] is False
     hint = str(resolution.get("hint") or "")
-    assert "no new information was revealed" in hint.lower()
+    assert "no authored answer available" in hint.lower()
     assert "without inventing" in hint.lower()
     assert "answer, refusal, evasion" not in hint.lower()
 

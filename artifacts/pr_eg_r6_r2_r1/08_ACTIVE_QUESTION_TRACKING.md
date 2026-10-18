@@ -1,0 +1,3 @@
+# 08 — Active Question Tracking
+
+prior_semantic_plan reads active question memory before delivered-history fallback. Unknown/partial answers retain the question's predicate and missing argument. Rejected corrections cannot overwrite active focus. Local semantic-focus measure: {'count': 111, 'denominator': 120, 'rate': 0.925}; it penalizes failed correction/new-question acquisition in addition to loss of a stored focus. Pure storage preservation alone would overstate continuity. [game/unified_semantic_planning.py:252](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:252>).

@@ -1,0 +1,34 @@
+{
+  "scene": {
+    "id": "bread_stall",
+    "location": "Bread stall",
+    "summary": "A baker stands at a bread stall.",
+    "mode": "exploration",
+    "visible_facts": [
+      "A baker stands beside loaves at a bread stall."
+    ],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "addressables": [
+      {
+        "id": "baker",
+        "name": "Baker",
+        "scene_id": "bread_stall",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "baker",
+          "vendor"
+        ],
+        "aliases": [
+          "baker"
+        ]
+      }
+    ],
+    "interactables": []
+  }
+}

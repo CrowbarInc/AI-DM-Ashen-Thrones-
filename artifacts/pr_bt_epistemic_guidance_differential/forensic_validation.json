@@ -1,0 +1,1631 @@
+{
+  "cases": [
+    {
+      "label": "BS_P1",
+      "text": "The bronze bell's wooden yoke is split, and its leather hanger torn. This damage could suggest gradual wear from frequent use or recent stress that strained these components, though exactly when or how this happened remains unclear.",
+      "hard_valid": true,
+      "violations": [],
+      "claim_results": [
+        {
+          "text": "This damage could suggest gradual wear from frequent use or recent stress that strained these components, though exactly when or how this happened remains unclear.",
+          "authorized": true,
+          "reasons": [
+            "authorized_qualified_inference"
+          ],
+          "relation": "epistemic_status",
+          "status": "inferred"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "The bronze bell's wooden yoke is split, and its leather hanger torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bronze bell's wooden yoke is split"
+            ]
+          }
+        },
+        {
+          "text": "This damage could suggest gradual wear from frequent use or recent stress that strained these components, though exactly when or how this happened remains unclear.",
+          "flags": {
+            "unknown_slot": true,
+            "epistemic_limit": false,
+            "epistemic_parent": true,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": true,
+            "uncertain_frame": true,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": true,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "This damage could suggest gradual wear from",
+              "that strained these components",
+              "this happened remains unclear"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "infer",
+          "authority": "observation",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred",
+            "subject": "chapel bell",
+            "scope": "qualified_possibilities_only"
+          }
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+        "Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BT_P1_initial",
+      "text": "The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+      "hard_valid": false,
+      "violations": [
+        {
+          "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+          "reasons": [
+            "unsupported_narrator_lead"
+          ]
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+          "authorized": false,
+          "reasons": [
+            "unsupported_narrator_lead"
+          ],
+          "relation": "gameplay_lead",
+          "status": "unresolved"
+        },
+        {
+          "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+          "authorized": true,
+          "reasons": [
+            "authorized_qualified_inference"
+          ],
+          "relation": "epistemic_status",
+          "status": "inferred"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "The bell's wooden yoke is split, and its leather hanger is torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bell's wooden yoke is split"
+            ]
+          }
+        },
+        {
+          "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": true,
+            "uncertain_frame": true,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": true,
+            "evidential": true,
+            "certainty_upgrade": false,
+            "unsupported_lead": true,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "This damage could suggest that the bell",
+              "the elements"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "infer",
+          "authority": "observation",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred",
+            "subject": "chapel bell",
+            "scope": "qualified_possibilities_only"
+          }
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+        "Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BT_P1_retry",
+      "text": "The bell's wooden yoke is split, and its leather hanger is torn. Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+      "hard_valid": false,
+      "violations": [
+        {
+          "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+          "reasons": [
+            "unsupported_narrator_lead"
+          ]
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+          "authorized": false,
+          "reasons": [
+            "unsupported_narrator_lead"
+          ],
+          "relation": "gameplay_lead",
+          "status": "unresolved"
+        },
+        {
+          "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+          "authorized": true,
+          "reasons": [
+            "authorized_qualified_inference"
+          ],
+          "relation": "epistemic_status",
+          "status": "inferred"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "The bell's wooden yoke is split, and its leather hanger is torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bell's wooden yoke is split"
+            ]
+          }
+        },
+        {
+          "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": true,
+            "qualified_inference": true,
+            "uncertain_frame": true,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": true,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "that the bell has been under considerable",
+              "the exact cause or history of this"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "infer",
+          "authority": "observation",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred",
+            "subject": "chapel bell",
+            "scope": "qualified_possibilities_only"
+          }
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+        "Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BS_P3",
+      "text": "The bell's wooden yoke is indeed split, and its leather hanger torn. However, whether these damages were caused deliberately is uncertain from the visible evidence alone.",
+      "hard_valid": true,
+      "violations": [],
+      "claim_results": [],
+      "sentences": [
+        {
+          "text": "The bell's wooden yoke is indeed split, and its leather hanger torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bell's wooden yoke is indeed split"
+            ]
+          }
+        },
+        {
+          "text": "However, whether these damages were caused deliberately is uncertain from the visible evidence alone.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": true,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "the visible evidence alone"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BT_P3_initial",
+      "text": "The bell's wooden yoke is indeed split, and its leather hanger is torn. These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+      "hard_valid": false,
+      "violations": [
+        {
+          "text": "These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+          "reasons": [
+            "unauthorized_certainty_upgrade"
+          ]
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+          "authorized": false,
+          "reasons": [
+            "unauthorized_certainty_upgrade"
+          ],
+          "relation": "epistemic_status",
+          "status": "unresolved"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "The bell's wooden yoke is indeed split, and its leather hanger is torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bell's wooden yoke is indeed split"
+            ]
+          }
+        },
+        {
+          "text": "These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": true,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": true,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": []
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BT_P3_retry",
+      "text": "The bronze bell's wooden yoke is split, and its leather hanger is torn. While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+      "hard_valid": false,
+      "violations": [
+        {
+          "text": "While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+          "reasons": [
+            "unauthorized_certainty_upgrade"
+          ]
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+          "authorized": false,
+          "reasons": [
+            "unauthorized_certainty_upgrade"
+          ],
+          "relation": "epistemic_status",
+          "status": "unresolved"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "The bronze bell's wooden yoke is split, and its leather hanger is torn.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The bronze bell's wooden yoke is split"
+            ]
+          }
+        },
+        {
+          "text": "While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": true,
+            "unsupported_lead": false,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "that can be determined from the appearance"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BS_P2",
+      "text": "\"Ah, that's a bit of a secret I keep close to the vest,\" the baker says, glancing away briefly before meeting your eyes again. \"I prefer not to say which loaf I keep for myself—it just wouldn't feel right to share that.\"",
+      "hard_valid": true,
+      "violations": [],
+      "claim_results": [
+        {
+          "text": "\"Ah, that's a bit of a secret I keep close to the vest,\" the baker says, glancing away briefly before meeting your eyes again.",
+          "authorized": true,
+          "reasons": [
+            "epistemically_qualified"
+          ],
+          "relation": "epistemic_status",
+          "status": "world_truth"
+        },
+        {
+          "text": "\"I prefer not to say which loaf I keep for myself—it just wouldn't feel right to share that.",
+          "authorized": true,
+          "reasons": [
+            "epistemically_qualified"
+          ],
+          "relation": "epistemic_status",
+          "status": "world_truth"
+        }
+      ],
+      "sentences": [
+        {
+          "text": "\"Ah, that's a bit of a secret I keep close to the vest,\" the baker says, glancing away briefly before meeting your eyes again.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "the vest",
+              "the baker says"
+            ]
+          }
+        },
+        {
+          "text": "\"I prefer not to say which loaf I keep for myself—it just wouldn't feel right to share that.\"",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": []
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "world.npcs.0",
+          "authority": "world_truth",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth"
+          }
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "answer_relations": []
+    },
+    {
+      "label": "BT_P2",
+      "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+      "hard_valid": true,
+      "violations": [],
+      "claim_results": [],
+      "sentences": [
+        {
+          "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself.",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": false,
+            "definite_phrases": [
+              "The baker glances around the busy stall"
+            ]
+          }
+        },
+        {
+          "text": "Every batch here is for the customers.\"",
+          "flags": {
+            "unknown_slot": false,
+            "epistemic_limit": false,
+            "epistemic_parent": false,
+            "authorized_epistemic_limit": false,
+            "decision_allows_epistemic_limit": false,
+            "decision_allows_inference": false,
+            "qualified_inference": false,
+            "uncertain_frame": false,
+            "narrator_modal": false,
+            "generated_lead": false,
+            "specific_lead": false,
+            "causal": false,
+            "evidential": false,
+            "certainty_upgrade": false,
+            "unsupported_lead": false,
+            "ungrounded_definite": true,
+            "definite_phrases": [
+              "the customers"
+            ]
+          }
+        }
+      ],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "world.npcs.0",
+          "authority": "world_truth",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth"
+          }
+        }
+      ],
+      "unresolved_qualifiers": [],
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "answer_relations": []
+    }
+  ],
+  "lexical_on_p1_decision": [
+    {
+      "text": "This damage could suggest gradual wear from frequent use or recent stress that strained these components, though exactly when or how this happened remains unclear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": true,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "This damage could suggest gradual wear from",
+          "that strained these components",
+          "this happened remains unclear"
+        ]
+      }
+    },
+    {
+      "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unsupported_narrator_lead"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": true,
+        "evidential": true,
+        "certainty_upgrade": false,
+        "unsupported_lead": true,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "This damage could suggest that the bell",
+          "the elements"
+        ]
+      }
+    },
+    {
+      "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unsupported_narrator_lead"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": true,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that the bell has been under considerable",
+          "the exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage remains unclear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that the bell has been under considerable",
+          "the exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause or history of this damage is not clear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause or history of this damage remains unclear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause remains unclear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": true,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause remains unclear"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause is not clear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause is not clear"
+        ]
+      }
+    },
+    {
+      "text": "Whether these damages were caused deliberately is uncertain from the visible evidence alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the visible evidence alone"
+        ]
+      }
+    },
+    {
+      "text": "These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unauthorized_certainty_upgrade"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": true,
+        "unsupported_lead": false,
+        "ungrounded_definite": false,
+        "definite_phrases": []
+      }
+    },
+    {
+      "text": "These damages are visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": false,
+        "definite_phrases": []
+      }
+    },
+    {
+      "text": "While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unauthorized_certainty_upgrade"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": true,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that can be determined from the appearance"
+        ]
+      }
+    },
+    {
+      "text": "While these damages are visible, whether they were caused deliberately cannot be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the appearance alone"
+        ]
+      }
+    },
+    {
+      "text": "Whether they were caused deliberately cannot be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the appearance alone"
+        ]
+      }
+    },
+    {
+      "text": "Whether they were caused deliberately is not something that can be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": true,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that can be determined from the appearance"
+        ]
+      }
+    }
+  ],
+  "lexical_on_p3_decision": [
+    {
+      "text": "This damage could suggest gradual wear from frequent use or recent stress that strained these components, though exactly when or how this happened remains unclear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": true,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "This damage could suggest gradual wear from",
+          "that strained these components",
+          "this happened remains unclear"
+        ]
+      }
+    },
+    {
+      "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unauthorized_causal_relation",
+          "unauthorized_evidential_relation",
+          "unsupported_narrator_lead"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": true,
+        "evidential": true,
+        "certainty_upgrade": false,
+        "unsupported_lead": true,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "This damage could suggest that the bell",
+          "the elements"
+        ]
+      }
+    },
+    {
+      "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unsupported_narrator_lead"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": true,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that the bell has been under considerable",
+          "the exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage remains unclear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": true,
+        "uncertain_frame": true,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that the bell has been under considerable",
+          "the exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause or history of this damage is not clear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause or history of this damage remains unclear from observation alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause or history of this"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause remains unclear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": true,
+        "epistemic_limit": true,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause remains unclear"
+        ]
+      }
+    },
+    {
+      "text": "The exact cause is not clear.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "The exact cause is not clear"
+        ]
+      }
+    },
+    {
+      "text": "Whether these damages were caused deliberately is uncertain from the visible evidence alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the visible evidence alone"
+        ]
+      }
+    },
+    {
+      "text": "These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unauthorized_certainty_upgrade"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": true,
+        "unsupported_lead": false,
+        "ungrounded_definite": false,
+        "definite_phrases": []
+      }
+    },
+    {
+      "text": "These damages are visible, though whether they were caused deliberately remains uncertain from appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": false,
+        "definite_phrases": []
+      }
+    },
+    {
+      "text": "While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.",
+      "hard_valid": false,
+      "reasons": [
+        [
+          "unauthorized_certainty_upgrade"
+        ]
+      ],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": true,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that can be determined from the appearance"
+        ]
+      }
+    },
+    {
+      "text": "While these damages are visible, whether they were caused deliberately cannot be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the appearance alone"
+        ]
+      }
+    },
+    {
+      "text": "Whether they were caused deliberately cannot be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": true,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "the appearance alone"
+        ]
+      }
+    },
+    {
+      "text": "Whether they were caused deliberately is not something that can be determined from the appearance alone.",
+      "hard_valid": true,
+      "reasons": [],
+      "flags": {
+        "unknown_slot": false,
+        "epistemic_limit": false,
+        "epistemic_parent": false,
+        "authorized_epistemic_limit": false,
+        "decision_allows_epistemic_limit": false,
+        "decision_allows_inference": false,
+        "qualified_inference": false,
+        "uncertain_frame": false,
+        "narrator_modal": false,
+        "generated_lead": false,
+        "specific_lead": false,
+        "causal": false,
+        "evidential": false,
+        "certainty_upgrade": false,
+        "unsupported_lead": false,
+        "ungrounded_definite": true,
+        "definite_phrases": [
+          "that can be determined from the appearance"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+[
+  {
+    "id": "F01",
+    "expected_clear": true,
+    "actual_clear": true,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "western archive",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "object"
+          ],
+          "source": "visible_catalog:object"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Archivist Iona"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F02",
+    "expected_clear": true,
+    "actual_clear": true,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "Keeper Sol",
+          "role": "addressee",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "speaker"
+          ],
+          "source": "explicit_canonical"
+        },
+        {
+          "annotation": "copper bridge",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "object"
+          ],
+          "source": "visible_catalog:object"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Keeper Sol"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F03",
+    "expected_clear": false,
+    "actual_clear": false,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "that place",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Warden Elin"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F04",
+    "expected_clear": false,
+    "actual_clear": false,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "one of them",
+          "role": "addressee",
+          "status": "AMBIGUOUS",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "address_npc",
+        "target_resolution": "ambiguous",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "conflict_status": "unresolved",
+        "conflict_details": {
+          "provider_target": "speaker"
+        },
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Guide Fen or Other Guard? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Guide Fen"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F05",
+    "expected_clear": false,
+    "actual_clear": false,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "vanished envoy",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Steward Ori"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F06",
+    "expected_clear": true,
+    "actual_clear": true,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "eastern tower",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "object"
+          ],
+          "source": "visible_catalog:object"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Scout Yara"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F07",
+    "expected_clear": false,
+    "actual_clear": true,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "obsidian palace",
+          "role": "subject",
+          "status": "NOT_APPLICABLE",
+          "explicit": false,
+          "candidates": [],
+          "source": "npc:speaker:fact"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Warden Neri"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": false
+  },
+  {
+    "id": "F08",
+    "expected_clear": false,
+    "actual_clear": false,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "that road",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Sentry Pell"
+          },
+          {
+            "entity_id": "other",
+            "label": "Other Guard"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": true
+  },
+  {
+    "id": "F09",
+    "expected_clear": true,
+    "actual_clear": true,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "bronze brazier",
+          "role": "target",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "object"
+          ],
+          "source": "visible_catalog:object"
+        }
+      ],
+      "addressee": null,
+      "operation": "INSPECT"
+    },
+    "passed": true
+  },
+  {
+    "id": "F10",
+    "expected_clear": false,
+    "actual_clear": false,
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "that room",
+          "role": "target",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": null,
+      "operation": "MOVE"
+    },
+    "passed": true
+  }
+]

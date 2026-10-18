@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-10T01:48:31.656293+00:00",
+  "provider": "OpenAI",
+  "billing_path": "Official OpenAI Python SDK Responses API (client.responses.create). No OPENAI_BASE_URL override in process environment or call_gpt.",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "models": {
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+    "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+    "RETRY_ESCALATION_MODEL_NAME": "gpt-4.1-mini"
+  },
+  "enable_model_routing": true,
+  "published_prices_usd_per_million": {
+    "gpt-4.1-mini": {
+      "input_per_million": 0.4,
+      "cached_input_per_million": 0.1,
+      "output_per_million": 1.6
+    },
+    "gpt-4o-mini": {
+      "input_per_million": 0.15,
+      "cached_input_per_million": 0.075,
+      "output_per_million": 0.6
+    }
+  },
+  "price_source": "https://developers.openai.com/api/docs/pricing.md",
+  "hard_budget": {
+    "max_completed_turns": 8,
+    "max_provider_requests": 12,
+    "max_combined_tokens": 300000
+  },
+  "expected_cost_at_token_ceiling_usd": {
+    "assumption": "All 300,000 tokens billed as gpt-4.1-mini, 95 percent input and 5 percent output, no cache. Cached input would cost less.",
+    "estimate_usd": 0.138
+  },
+  "unknown_unpriced_models": [],
+  "api_key_present": true,
+  "production_data_untouched_intent": true
+}

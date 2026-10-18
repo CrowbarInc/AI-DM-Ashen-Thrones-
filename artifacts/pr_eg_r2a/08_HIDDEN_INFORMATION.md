@@ -1,0 +1,9 @@
+# 08 — Hidden Information
+
+Four distinct conditions are represented: NPC ignorance of a world-authored maker; NPC knows password but withholds; identity exists but player lacks disclosure entitlement; world fact not established at all. A valid unknown answer must preserve that difference: “I don't know the password” contradicts the withheld posture here, while “I know but won't share it” is allowed. Hidden values are excluded from generator and semantic-validator contexts; C receives only entitlement/status, not a puzzle solution to reconstruct.
+
+The corpus includes identities, treasure locations, private future betrayal, mystery solution, credentials, attribution and hidden entrances. Additional patrol and faction cases are in expansions and rumors. These test unauthorized asserted content, not actual secret-body matching or resistance to inference from a realistic private database.
+
+LOCAL: the helper preseal retained “The password you need is ember” in the synthetic withheld resolution. The real resolver in the chat probe instead determined refusal, requested zero narration calls and delivered “I couldn't answer that.” These results are compatible because they exercise different authority/routing scope. Do not label the helper leak a complete handler leak. C never reached the hidden-category development cases before stopping, and has no hidden holdout result. B source-exact policy prevents delivery but does not demonstrate flexible semantic withholding. Host validation may retain restricted identifiers/entitlements for checking; the generator should never receive secret bodies merely to support validation.
+
+Evidence: STATIC = current source inspection; LOCAL = executed existing host functions with disposable fixtures; FRESH = new Responses API call; REPLAY = reuse of retained provider result; INFERENCE = recommendation beyond observed sample. No experiment changes production code. ABSTAIN prohibits delivery; it is not a safe acceptance.

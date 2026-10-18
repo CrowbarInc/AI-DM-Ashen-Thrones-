@@ -1,0 +1,3 @@
+# 03 — Original Failure Reproduction
+
+original_reproduction.json freezes actual run_preserve_if_valid → _finalize_player_facing_for_turn → repeated authoritative-fact preservation → record_delivered_exchange. Candidate is rejected for conflicting_target_authorities and wrong_interlocutor; fallback is selected; downstream helper replaces it with Clerk Oren’s bell answer; recorder stores replacement. Last valid point: terminal validation result. First divergence: _preserve_authoritative_resolution_facts_after_gate assigning candidate. Original source evidence remains byte-identical: historical_preservation.json.

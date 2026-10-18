@@ -571,6 +571,10 @@ def apply_stay_leave_narration_agreement_to_gm(
     """
     if not isinstance(gm_output, dict):
         return gm_output
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm_output, "apply_stay_leave_narration_agreement_to_gm"):
+        return gm_output
     text = str(gm_output.get("player_facing_text") or "").strip()
     has_resolution = isinstance(resolution, dict)
     if not has_resolution:
@@ -665,6 +669,10 @@ def apply_destination_arrival_realization_to_gm(
     """
     if not isinstance(gm_output, dict) or not isinstance(resolution, dict):
         return gm_output
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm_output, "apply_destination_arrival_realization_to_gm"):
+        return gm_output
     text = str(gm_output.get("player_facing_text") or "").strip()
     low = text.lower()
     ungrounded = _STUB_SCENE_PHRASE in low or any(stock in low for stock in _UNGROUNDED_DESTINATION_STOCK)
@@ -695,6 +703,35 @@ def apply_destination_arrival_realization_to_gm(
         )
     if not replacement:
         return gm_output
+    from game.resolution_contract import (
+        invalidate_best_safe_candidate,
+        note_response_stage,
+        prefer_stronger_resolution,
+        remember_satisfied_candidate,
+    )
+
+    remember_satisfied_candidate(gm_output, text, resolution)
+    kept, precedence = prefer_stronger_resolution(text, replacement, resolution)
+    # A stub or ungrounded destination line is not a resolvable answer to protect.
+    if precedence.get("downgrade_rejected") and _STUB_SCENE_PHRASE not in low:
+        note_response_stage(
+            gm_output,
+            stage="destination_arrival",
+            reason="destination_arrival_would_reduce_contract",
+            before=text,
+            after=kept,
+            resolution=resolution,
+        )
+        return gm_output
+    invalidate_best_safe_candidate(gm_output, reason="grounding_contradiction", candidate=text)
+    note_response_stage(
+        gm_output,
+        stage="destination_arrival",
+        reason="destination_arrival_realization",
+        before=text,
+        after=replacement,
+        resolution=resolution,
+    )
     gm_output["player_facing_text"] = replacement
     tags = list(gm_output.get("tags") or []) if isinstance(gm_output.get("tags"), list) else []
     if "destination_arrival_realization" not in tags:

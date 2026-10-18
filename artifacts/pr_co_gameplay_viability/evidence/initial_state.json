@@ -1,0 +1,257 @@
+{
+  "turn_counter": 1,
+  "active_scene_id": "frontier_gate",
+  "interaction_context": {
+    "active_interaction_target_id": null,
+    "active_interaction_kind": null,
+    "interaction_mode": "none",
+    "engagement_level": "none",
+    "conversation_privacy": null,
+    "player_position_context": null
+  },
+  "discourse_focus": null,
+  "known_clues": null,
+  "contextual_leads": [],
+  "scene": {
+    "id": "frontier_gate",
+    "location": "Cinderwatch Gate District",
+    "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+    "mode": "social",
+    "visible_facts": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "hidden_facts": [
+      "An agent of a noble house is watching new arrivals from the square's edge.",
+      "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+      "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "A spotter above the lane is matching faces to a written list paid for in silver."
+    ],
+    "discoverable_clues": [
+      "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+      "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+      "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+      "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+      "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+      "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+      "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+      "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+    ],
+    "exits": [
+      {
+        "label": "Enter Cinderwatch",
+        "target_scene_id": "market_quarter"
+      },
+      {
+        "label": "Follow the missing patrol rumor",
+        "target_scene_id": "old_milestone"
+      }
+    ],
+    "enemies": [],
+    "addressables": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "guard",
+          "watchman",
+          "sentry",
+          "guardsman",
+          "captain"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "scene_id": "frontier_gate",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 1,
+        "address_roles": [
+          "runner",
+          "informant"
+        ],
+        "aliases": []
+      },
+      {
+        "id": "refugee",
+        "name": "Ragged stranger",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 2,
+        "address_roles": [
+          "stranger",
+          "refugee"
+        ],
+        "aliases": [
+          "ragged stranger"
+        ]
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "scene_id": "frontier_gate",
+        "kind": "scene_actor",
+        "addressable": true,
+        "address_priority": 3,
+        "address_roles": [
+          "watcher"
+        ],
+        "aliases": []
+      }
+    ],
+    "interactables": []
+  },
+  "world": {
+    "npcs": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "location": "frontier_gate",
+        "role": "guard",
+        "affiliation": "cinderwatch",
+        "disposition": "neutral",
+        "current_agenda": "patrol_gate",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "patrol",
+            "text": "A patrol went missing near the old milestone."
+          }
+        ],
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "role": "informant",
+        "affiliation": "ash_cowl",
+        "disposition": "friendly",
+        "current_agenda": "sell_rumors",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          }
+        ],
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "clues": {},
+    "world_flags": []
+  },
+  "character": {
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "conditions": []
+  }
+}

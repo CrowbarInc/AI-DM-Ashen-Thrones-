@@ -1,0 +1,11 @@
+# 23 — Remaining Questions
+
+Unresolved: how to authorize harmless relationship expression without durable social inference; how to model actor/trigger/beneficiary for conditional offers; how to preserve belief modality under simplification and negation; how to prove extraction includes causal links and presuppositions; how to retain knowledge-withholding without falsely asserting ignorance; and how to invalidate an approved response after source state changes.
+
+Missing evidence: independent human-authored/adjudicated corpus, full atom-level ground truth, alternative world/entity contexts, randomized batch order effects, robust prompt-injection corpus, local/smaller-model comparison, independent semantic model architecture, stopped C repetition/holdout/mixed/hidden evaluation, actual structured free generation, integrated hybrid generation/validation, fresh-provider HTTP-to-delivery preservation, private secret-body matching, cross-save contradiction handling and realistic player-perceived cost/latency.
+
+Architecture: whether resolver can emit bounded allowed proposition forms without duplicating world semantics; whether a final identity certificate survives all response composition branches; where late personal-ignorance recovery must revalidate; how to retain immutable response metadata across API paths; and which existing validator soft flags should remain advisory. Existing source proves seams exist, not that these changes are trivial or safe.
+
+The practical consequence test needs explicit policy for vague opinion and persistence; words alone cannot settle it. Zero observed unsafe accepts under pervasive abstention is not evidence of useful safe generative dialogue. A safer, narrower design may be feasible but has not been qualified. Repeating failed C with different prompts requires a new approved investigation and new holdout; no automatic R3/PR-EH continuation.
+
+Evidence: STATIC = current source inspection; LOCAL = executed existing host functions with disposable fixtures; FRESH = new Responses API call; REPLAY = reuse of retained provider result; INFERENCE = recommendation beyond observed sample. No experiment changes production code. ABSTAIN prohibits delivery; it is not a safe acceptance.

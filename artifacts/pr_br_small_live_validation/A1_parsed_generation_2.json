@@ -1,0 +1,66 @@
+{
+  "player_facing_text": "The wooden beam of the loom is deeply cracked, a clear sign of structural weakness that could compromise the loom's function or safety. The iron brace meant to support the beam is bent out of shape, suggesting either forceful impact or prolonged strain under heavy stress. Together, these damages hint that the loom has suffered significant wear or rough handling, possibly diminishing its usefulness unless repaired.",
+  "tags": [
+    "scene_momentum:new_information"
+  ],
+  "scene_update": null,
+  "activate_scene_id": null,
+  "new_scene_draft": null,
+  "world_updates": null,
+  "suggested_action": null,
+  "debug_notes": "Authoritative visible facts about the damage are realized with detail about likely causes and consequences, adding sensory texture and advancing the investigation momentum. | model_route:default:purpose_primary_turn:gpt-4.1-mini",
+  "metadata": {
+    "output_form": "structured",
+    "realization_envelope": {
+      "schema_version": 1,
+      "declared_claims": [
+        {
+          "declaration_id": "rc_9deeeafa5043",
+          "declaration_mode": "realize",
+          "source_claim_id": null,
+          "semantic_identity": {},
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "modality": "established",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "ordinary_predicate",
+          "text": "The wooden loom beam is cracked."
+        },
+        {
+          "declaration_id": "rc_49829b26c2ee",
+          "declaration_mode": "realize",
+          "source_claim_id": null,
+          "semantic_identity": {},
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "modality": "established",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "ordinary_predicate",
+          "text": "The loom's iron brace is bent."
+        }
+      ],
+      "narration": "The wooden beam of the loom is deeply cracked, a clear sign of structural weakness that could compromise the loom's function or safety. The iron brace meant to support the beam is bent out of shape, suggesting either forceful impact or prolonged strain under heavy stress. Together, these damages hint that the loom has suffered significant wear or rough handling, possibly diminishing its usefulness unless repaired.",
+      "structured_contract_present": true,
+      "legacy_fallback": false
+    },
+    "selected_model": "gpt-4.1-mini",
+    "model_route_reason": "purpose_primary_turn",
+    "model_route_family": "default",
+    "model_route_purpose": "primary_turn",
+    "model_retry_attempt": 0,
+    "model_escalated": false,
+    "model_escalation_trigger": null
+  },
+  "improvisation_proposals": [
+    {
+      "kind": "incidental_fact",
+      "category": "environmental_elaboration",
+      "content": "Dust motes drift slowly through the workshop light, settling on the cracked beam and bent brace, highlighting how long the damage may have gone unrepaired.",
+      "scope": "turn",
+      "consequence_level": "incidental",
+      "source": "dm_improvisation",
+      "speaker_id": null,
+      "epistemic_status": "grounded"
+    }
+  ]
+}

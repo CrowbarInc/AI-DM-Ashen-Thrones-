@@ -1,0 +1,5 @@
+# 05 — Continuation and Context Audit
+
+Semantic CONFIRMATION delegates to the existing pending owner and revalidates scene/bridge eligibility. Context updates retain remaining steps rather than deleting them. No-context assent clarifies; stale-scene assent expires. After persisted withdrawal, repeated assent cannot execute canceled movement. Corrections with one grounded replacement and a current compound revise its first unexecuted step, preserve later steps and request approval; invalid replacement does not execute. Without relevant context, correction asks for a restated action. Withdrawal never rolls back committed facts.
+
+Ambiguous reference with selected scene evidence still clarifies if status is non-INTERPRETED or references remain unresolved. An interpreted GM clarification with public answer evidence is answered. Final recorded audit exposed this narrow distinction; a regression test and exact-final-code fresh full conversation follow the gate repair. Tests cover disk round-trip, nonduplication, stale context, new explicit intentions and missing context.

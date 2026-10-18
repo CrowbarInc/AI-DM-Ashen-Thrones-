@@ -1,0 +1,5 @@
+# 07 — Conversational Relevance
+
+Controlled preference follow-up initially became “I don't know”; final host speech retains “I prefer the evening.”. Existing supplied clarifications and known repeats reuse their established statements; actual-storage clarification repeated twice remains the north-road statement. Unknown facts receive inability, hidden requests withheld wording, and existing negotiation decisions make no reward promise.
+
+FROZEN H6: “Can you repeat that in simpler words?” receives inability instead of the archive statement. No expectation or implementation was retuned against H6. LIVE primary 3 “Can you repeat that?” similarly fails. Both conversations lose their road topic and fail security disclosure/recall. Preference follow-ups, explicit reward declines and unknown maker questions work in this sample; exact repeated preference wording is rigid. Relevant answer correctness therefore remains inadequate. Generic ignorance counts as failure when an answer was available; zero provider calls is not a quality success.

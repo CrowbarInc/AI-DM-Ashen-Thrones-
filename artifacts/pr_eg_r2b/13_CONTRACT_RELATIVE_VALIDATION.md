@@ -1,0 +1,11 @@
+# 13 — Contract Relative Validation
+
+A: current validate_generated_response without experimental contract metadata. B: same production validator with experimental contract in resolution.metadata.authorized_speech_contract and existing authored_corpus populated from permitted facts. No new reader was invented; A/B equality demonstrates that merely attaching metadata does not establish enforcement. Both already receive the selected fixture facts through ordinary arguments. They are direct validator measurements, not final handler adoption.
+
+C: conservative exact whole-proposition or closed harmless-personal-syntax control, otherwise ABSTAIN. It never accepts based on absence of forbidden words or model source labels. It is intentionally too restrictive for natural dialogue. D: independent narrow semantic check against explicit propositions/posture/acts, with every candidate treated as untrusted. E: replay hybrid, C ACCEPT else D; no integrated hybrid or independent provider call. All 112 A–D cases measured; E is explicitly recombination.
+
+Historical D: safe acceptance 35/42, unsafe acceptance 2/55, 7 false rejections, 0 abstentions, plus 2/5 unresolved cases accepted. Its failure to abstain on uncertainty matters. Historical C: 4/42 safe accepted, 0/55 unsafe accepted, 98/102 total abstentions. A and B each accept 38/55 unsafe historical candidates. These synthetic figures do not imply whole-production rates.
+
+Contradictions, causal additions, rumors, conditional promises, hidden requests and mixed claims are covered by frozen categories; category_metrics.json preserves every category/split/strategy denominator. All five historical mixed unsafe candidates are rejected by D; this does not rescue the permission-rule failure. A/B have mixed failures retained by id. Provider source claims do not authorize content; a host-owned contract must still have a sound adoption policy.
+
+Evidence classes: STATIC = current source inspection; LOCAL = executed current production functions with disposable fixtures and external wire doubles; FRESH = new provider request; HISTORICAL = retained predecessor evidence; REPLAY = recombination of measured results; INFERENCE = proposed design; UNVERIFIED = not exercised. No fresh full-production API test was performed.

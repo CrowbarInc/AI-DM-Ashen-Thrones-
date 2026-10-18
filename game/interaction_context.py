@@ -3673,6 +3673,18 @@ _SCENE_PRESENCE_OR_SCOPE_QUERY_RE = re.compile(
     re.IGNORECASE,
 )
 
+_SCENE_SENSORY_OR_OBJECT_QUERY_RE = re.compile(
+    r"\b(?:"
+    r"what\s+(?:ordinary\s+)?(?:sounds?|smells?|sights?)\b|"
+    r"what\s+(?:does|do)\s+.+?\s+look\s+like\b|"
+    r"what\s+can\s+i\s+learn\s+from\s+(?:its|their|the)\s+(?:wear|marks?|use)\b|"
+    r"what\s+changes?\s+around\s+(?:me|us)\b|"
+    r"what\s+can\s+i\s+directly\s+see\b|"
+    r"(?:give|show)\s+me\s+(?:one|a)\s+concrete\s+visible\s+detail\b"
+    r")",
+    re.IGNORECASE,
+)
+
 
 def _scene_id_from_envelope(scene_envelope: Optional[Dict[str, Any]]) -> str:
     if not isinstance(scene_envelope, dict):
@@ -4833,6 +4845,15 @@ _BROAD_ADDRESS_LEXICAL: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bi\s+address\s+the\s+room\b", re.IGNORECASE), "i_address_the_room"),
     (re.compile(r"\bfor\s+anyone\b", re.IGNORECASE), "for_anyone"),
     (re.compile(r"\bvolunteer(?:s|ed)?\s+to\s+talk\b", re.IGNORECASE), "volunteer_to_talk"),
+    (
+        re.compile(
+            r"\b(?:greet|ask|approach|speak\s+to|talk\s+to)\s+(?:the\s+)?"
+            r"(?:nearest\s+)?(?:approachable\s+)?(?:local|person|someone)\b",
+            re.IGNORECASE,
+        ),
+        "open_nearby_interlocutor",
+    ),
+    (re.compile(r"\bask\s+(?:a|the)\s+local\b", re.IGNORECASE), "ask_a_local"),
 )
 
 
@@ -5125,10 +5146,29 @@ def _merged_text_has_self_directed_world_outcome_question(low: str) -> bool:
     return any(p.search(low) for p in _WORLD_ACTION_SOCIAL_BREAK_SELF_OUTCOME_RES)
 
 
+# A question can name a watch as the interlocutor's topic ("harder to keep watch?")
+# without the player character taking up that watch. Statements such as
+# "He keeps watching the gate" remain player-performed observation.
+_PLAYER_PERFORMED_WATCH_RE = re.compile(
+    r"\b(?:i|we|i'll|we'll|i'm|we're)\b.{0,48}\b(?:keep|keeps|keeping|watch|watches|watching)\b"
+    r"|\b(?:he|she|they)\s+(?:keeps|keeping|watches|watching)\b",
+    re.IGNORECASE,
+)
+
+
 def _merged_text_has_self_directed_sustained_observation(low: str) -> bool:
+    """True when the player character takes up a watch.
+
+    Ordinary questions that only mention keeping watch stay with the current
+    interlocutor. They are not self-directed observation.
+    """
     if not low.strip():
         return False
-    return any(p.search(low) for p in _WORLD_ACTION_SOCIAL_BREAK_SELF_OBSERVE_RES)
+    if not any(p.search(low) for p in _WORLD_ACTION_SOCIAL_BREAK_SELF_OBSERVE_RES):
+        return False
+    if "?" in low and not _PLAYER_PERFORMED_WATCH_RE.search(low):
+        return False
+    return True
 
 
 # Narrow deterministic signals: inspect / manipulate / observe the environment or props,
@@ -5779,10 +5819,13 @@ def resolve_directed_social_entry(
     segmented_turn: dict | None,
     raw_text: str,
 ) -> dict:
-    """Single pre-classification decision: should this turn enter the social pipeline first?
+    """Discourse preprocessor for addressability and continuity.
 
-    Runs before adjudication / perception / feasibility classification. Uses
-    :func:`is_actor_addressable_in_current_scene` as the only addressability check for the
+    It may name a candidate addressee. It does not own the turn's operation.
+    After an authoritative Resolution Contract exists, social resolution is
+    selected from that contract.
+
+    :func:`is_actor_addressable_in_current_scene` is the only addressability check for the
     resolved target.
 
     Returns keys: should_route_social, target_actor_id, target_source, reason, spoken_text,
@@ -5922,7 +5965,10 @@ def resolve_directed_social_entry(
             continuity_break_applied=continuity_break_applied,
         )
 
-    if "?" in t and _SCENE_PRESENCE_OR_SCOPE_QUERY_RE.search(low):
+    if (
+        _SCENE_PRESENCE_OR_SCOPE_QUERY_RE.search(low)
+        or _SCENE_SENSORY_OR_OBJECT_QUERY_RE.search(low)
+    ):
         if (
             not _explicit_address_or_role_cue_in_line(low, roster, merged_text=t)
             and not _npc_id_from_directed_motion_or_ask_phrases(low, roster)

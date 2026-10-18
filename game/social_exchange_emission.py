@@ -35,6 +35,7 @@ from game.interaction_context import (
     set_social_exchange_interruption_tracker,
 )
 from game.response_policy_contracts import response_type_contract_requires_dialogue
+from game.resolution_contract import semantic_line_view
 from game.social import (
     apply_social_reply_speaker_grounding,
     classify_social_question_dimension,
@@ -1235,6 +1236,97 @@ def _apply_social_emission_integrity_guard(
 
     return accepted_text, meta
 
+_CONSEQUENTIAL_SENTENCE_RE = re.compile(
+    r"\b(?:traitor|conspiracy|murderer|secret vault|hidden passage|true motive)\b",
+    re.IGNORECASE,
+)
+
+
+def _repair_semantic_payload(text: str, resolution: Dict[str, Any] | None) -> tuple[str, bool]:
+    """Drop an unauthorized consequential sentence and rebind a speaker wrapper.
+
+    The quoted or remaining answer is kept. This does not invent a new fact.
+    """
+    raw = _collapse_ws(text)
+    changed = False
+    parts = [part for part in _split_sentences(raw) if part]
+    kept = [part for part in parts if not _CONSEQUENTIAL_SENTENCE_RE.search(part)]
+    if kept and len(kept) < len(parts):
+        raw = _collapse_ws(" ".join(kept))
+        changed = True
+    quotes = re.findall(r'"([^"]{8,})"', raw)
+    payload = _collapse_ws(" ".join(quote.strip() for quote in quotes if quote.strip()))
+    speaker = speaker_label(resolution if isinstance(resolution, dict) else None)
+    if payload and speaker:
+        wrapped = f'{speaker} says, "{payload}"'
+        if wrapped.strip() != _collapse_ws(text):
+            return wrapped, True
+    if changed and speaker and '"' not in raw:
+        return f'{speaker} says, "{raw}"', True
+    return (raw if changed else text), changed
+
+
+def _preservation_meta(view: Dict[str, Any], *, repair: bool, preserved: bool, replaced: bool, compatible: bool | None) -> Dict[str, Any]:
+    return {
+        "contract_id": view.get("contract_id"),
+        "requested_dimension": view.get("dimension"),
+        "requested_operation": view.get("operation"),
+        "candidate_contract_status": view.get("status"),
+        "candidate_authority_result": view.get("authority_result"),
+        "repair_attempted": bool(repair),
+        "semantic_payload_preserved": bool(preserved),
+        "replacement_selected": bool(replaced),
+        "replacement_contract_compatible": compatible,
+    }
+
+
+def _contract_compatible_line(text: str, resolution: Dict[str, Any] | None) -> bool:
+    view = semantic_line_view(text, resolution)
+    return bool(view.get("compatible")) and view.get("status") != "unsatisfied"
+
+
+def _recover_satisfying_social_candidate(
+    candidate_text: str,
+    filtered_text: str,
+    *,
+    resolution: Dict[str, Any] | None,
+    tags: Optional[List[str]],
+    session: Optional[Dict[str, Any]],
+    scene_id: str,
+) -> str:
+    """Keep a contract-satisfying candidate when the ownership filter substituted a miss."""
+    if not isinstance(resolution, dict):
+        return ""
+    candidate_view = semantic_line_view(candidate_text, resolution)
+    if not candidate_view.get("keeps_answer"):
+        return ""
+    if semantic_line_view(filtered_text, resolution).get("keeps_answer"):
+        return ""
+    repaired, _changed = _repair_semantic_payload(candidate_text, resolution)
+    options: list[str] = []
+    for raw in (repaired, candidate_text):
+        if not str(raw or "").strip():
+            continue
+        owned = apply_strict_social_sentence_ownership_filter(
+            raw,
+            resolution=resolution,
+            tags=tags,
+            session=session,
+            scene_id=scene_id,
+        )
+        if semantic_line_view(owned, resolution).get("keeps_answer"):
+            options.append(owned)
+        if semantic_line_view(raw, resolution).get("keeps_answer"):
+            options.append(raw)
+    for option in options:
+        try:
+            _assert_all_sentences_strict_social_or_interruption(option, resolution)
+        except AssertionError:
+            continue
+        return _normalize_gate_text(option)
+    return ""
+
+
 def build_final_strict_social_response(
     candidate_text: str,
     *,
@@ -1313,6 +1405,8 @@ def build_final_strict_social_response(
             world=world if isinstance(world, dict) else None,
             tag_list=tag_list,
         )
+        if st_illegal and not _contract_compatible_line(st_illegal, res):
+            st_illegal = None
         if st_illegal:
             st_illegal, interrupt_meta_illegal = apply_interruption_repeat_guard(
                 st_illegal,
@@ -1336,6 +1430,16 @@ def build_final_strict_social_response(
         scene_id=sid,
     )
     text = _normalize_gate_text(filtered)
+    recovered = _recover_satisfying_social_candidate(
+        candidate_text,
+        text,
+        resolution=res,
+        tags=tag_list or None,
+        session=sess,
+        scene_id=sid,
+    )
+    if recovered:
+        text = recovered
 
     low = text.lower()
     banned_any_route = (
@@ -1355,6 +1459,25 @@ def build_final_strict_social_response(
         )
     )
 
+    blocking_reasons = [reason for reason in reasons if not str(reason).startswith("first_sentence_illegal:")]
+    resolved_view = semantic_line_view(text, res)
+    payload_repaired = False
+    if resolved_view.get("keeps_answer") and not blocking_reasons:
+        repaired, did_repair = _repair_semantic_payload(candidate_text, res)
+        if did_repair:
+            repaired_filtered = apply_strict_social_sentence_ownership_filter(
+                repaired,
+                resolution=res,
+                tags=tag_list or None,
+                session=sess,
+                scene_id=sid,
+            )
+            repaired_text = _normalize_gate_text(repaired_filtered)
+            if semantic_line_view(repaired_text, res).get("keeps_answer"):
+                text = repaired_text
+                payload_repaired = True
+        reasons = []
+
     if not reasons:
         soc_ok = res.get("social") if isinstance(res, dict) and isinstance(res.get("social"), dict) else {}
         prefer_structured = bool(
@@ -1365,7 +1488,7 @@ def build_final_strict_social_response(
                 or soc_ok.get("refusal_suppressed_by_structured_fact") is True
             )
         )
-        if prefer_structured and isinstance(res, dict) and _looks_like_strict_social_terminal_placeholder(text):
+        if prefer_structured and isinstance(res, dict) and _looks_like_strict_social_terminal_placeholder(text) and not semantic_line_view(text, res).get("keeps_answer"):
             st = _try_emit_structured_fact_strict_line(
                 resolution=res,
                 session=sess,
@@ -1373,6 +1496,8 @@ def build_final_strict_social_response(
                 world=world if isinstance(world, dict) else None,
                 tag_list=tag_list,
             )
+            if st and not _contract_compatible_line(st, res):
+                st = None
             if st:
                 st, interrupt_meta = apply_interruption_repeat_guard(
                     st,
@@ -1387,14 +1512,33 @@ def build_final_strict_social_response(
                     **_structured_fact_emission_details(),
                     **interrupt_meta,
                 }
-        pref_text, pref_meta = _prefer_resolved_social_answer_over_candidate(
-            text,
-            resolution=res,
-            session=sess,
-            scene_id=sid,
-            world=world if isinstance(world, dict) else None,
-            tags=tag_list,
-        )
+        kept_view = semantic_line_view(text, res)
+        if kept_view.get("keeps_answer"):
+            pref_text = text
+            pref_meta = {
+                "candidate_quality_degraded": False,
+                "resolved_answer_preferred": False,
+                "resolved_answer_source": None,
+                "resolved_answer_preference_reason": None,
+                **_preservation_meta(kept_view, repair=payload_repaired, preserved=True, replaced=False, compatible=True),
+            }
+        else:
+            pref_text, pref_meta = _prefer_resolved_social_answer_over_candidate(
+                text,
+                resolution=res,
+                session=sess,
+                scene_id=sid,
+                world=world if isinstance(world, dict) else None,
+                tags=tag_list,
+            )
+            pref_view = semantic_line_view(pref_text, res)
+            if pref_text != text and not _contract_compatible_line(pref_text, res):
+                pref_text = text
+                pref_meta = {
+                    **pref_meta,
+                    "resolved_answer_preferred": False,
+                    **_preservation_meta(kept_view, repair=False, preserved=True, replaced=False, compatible=False),
+                }
         text = pref_text
         merged_pt_ig = merged_player_prompt_for_gate(res, sess, sid)
         text, integ_meta = _apply_social_emission_integrity_guard(
@@ -1421,6 +1565,8 @@ def build_final_strict_social_response(
             if _normalize_gate_text(candidate_text).strip() == text.strip()
             else "normalized_social_candidate"
         )
+        if payload_repaired:
+            final_emitted_source = "semantic_payload_repair"
         if pref_meta.get("resolved_answer_preferred"):
             final_emitted_source = "resolved_grounded_social_answer"
         if integ_meta.get("social_emission_integrity_replaced"):
@@ -1440,6 +1586,43 @@ def build_final_strict_social_response(
             **interrupt_meta,
         }
 
+    repaired, did_repair = _repair_semantic_payload(candidate_text, res)
+    if did_repair and isinstance(res, dict):
+        repaired_filtered = apply_strict_social_sentence_ownership_filter(
+            repaired,
+            resolution=res,
+            tags=tag_list or None,
+            session=sess,
+            scene_id=sid,
+        )
+        repaired_text = _normalize_gate_text(repaired_filtered)
+        repaired_view = semantic_line_view(repaired_text, res)
+        repaired_reasons = hard_reject_social_exchange_text(
+            repaired_text,
+            resolution=res,
+            session=sess,
+            scene_id=sid,
+            world=world if isinstance(world, dict) else None,
+        ) if repaired_view.get("keeps_answer") else ["semantic_payload_not_retained"]
+        if repaired_view.get("keeps_answer") and not repaired_reasons:
+            _assert_all_sentences_strict_social_or_interruption(repaired_text, res)
+            return repaired_text, {
+                "used_internal_fallback": False,
+                "fallback_kind": "semantic_payload_repair",
+                "rejection_reasons": reasons,
+                "final_emitted_source": "semantic_payload_repair",
+                "deterministic_attempted": False,
+                "deterministic_passed": False,
+                "fallback_pool": "none",
+                "route_illegal_intercepted": False,
+                "intercepted_preview": "",
+                "candidate_quality_degraded": False,
+                "resolved_answer_preferred": False,
+                "resolved_answer_source": None,
+                "resolved_answer_preference_reason": "repaired_speaker_or_consequential_span",
+                **_preservation_meta(repaired_view, repair=True, preserved=True, replaced=False, compatible=True),
+            }
+
     if isinstance(res, dict):
         st2 = _try_emit_structured_fact_strict_line(
             resolution=res,
@@ -1448,6 +1631,8 @@ def build_final_strict_social_response(
             world=world if isinstance(world, dict) else None,
             tag_list=tag_list,
         )
+        if st2 and not _contract_compatible_line(st2, res):
+            st2 = None
         if st2:
             st2, interrupt_meta = apply_interruption_repeat_guard(
                 st2,
@@ -1479,6 +1664,15 @@ def build_final_strict_social_response(
         interruption_active=interruption_active,
         seed=seed,
     )
+    contract_fallback = False
+    if isinstance(res, dict) and not _contract_compatible_line(fallback_text, res):
+        from game.live_resolution import obligation_preserving_fallback_line
+
+        alternate = obligation_preserving_fallback_line(res)
+        if _contract_compatible_line(alternate, res):
+            fallback_text = alternate
+            fallback_kind = "contract_compatible_inability"
+            contract_fallback = True
     deterministic_passed = replacement_is_route_legal_social(
         fallback_text,
         resolution=res,
@@ -1486,7 +1680,7 @@ def build_final_strict_social_response(
         scene_id=sid,
         world=world if isinstance(world, dict) else None,
     )
-    final_emitted_source = "deterministic_social_fallback"
+    final_emitted_source = "contract_compatible_inability" if contract_fallback else "deterministic_social_fallback"
     if not deterministic_passed:
         fallback_text = minimal_social_emergency_fallback_line(res)
         fallback_kind = "emergency_social_minimal"

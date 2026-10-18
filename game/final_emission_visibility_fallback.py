@@ -1200,6 +1200,18 @@ def apply_visibility_enforcement(
         active_interlocutor=active_interlocutor,
     )
     visibility_hard_replacement_plan = visibility_hard_replacement_context.replacement_plan
+    from game.resolution_contract import prefer_stronger_resolution
+
+    kept_visible, visible_precedence = prefer_stronger_resolution(
+        candidate_text,
+        visibility_hard_replacement_plan.fallback_text,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+    )
+    meta["outcome_precedence"] = visible_precedence
+    if visible_precedence.get("downgrade_rejected"):
+        out["player_facing_text"] = kept_visible
+        meta["visibility_downgrade_rejected"] = True
+        return out
     out["player_facing_text"] = visibility_hard_replacement_plan.fallback_text
     tags = out.get("tags") if isinstance(out.get("tags"), list) else []
     out["tags"] = _dedupe_preserve_order(
@@ -1630,6 +1642,8 @@ def apply_referential_clarity_enforcement(
             )
             return out
 
+    from game.resolution_contract import prefer_stronger_resolution
+
     referential_clarity_selected_fallback = standard_visibility_safe_fallback(
         gm_output=out,
         session=session,
@@ -1648,6 +1662,17 @@ def apply_referential_clarity_enforcement(
             emit_integrity_response_type_required or meta.get("response_type_required") or ""
         ),
     )
+    kept_answer, precedence = prefer_stronger_resolution(
+        candidate_text,
+        referential_clarity_selected_fallback.text,
+        eff_resolution if isinstance(eff_resolution, dict) else None,
+    )
+    meta["outcome_precedence"] = precedence
+    if precedence.get("downgrade_rejected"):
+        out["player_facing_text"] = kept_answer
+        meta["referential_clarity_replacement_applied"] = False
+        meta["referential_clarity_downgrade_rejected"] = True
+        return out
     assert_final_emission_mutation_allowed(
         "hard_replace_illegal_output_with_sealed_fallback",
         source="gate._apply_referential_clarity_enforcement",

@@ -1,0 +1,169 @@
+[
+  {
+    "fixture_id": "P1",
+    "response_operation": "bounded_interpretation",
+    "declaration_expectation": "optional_bounded_inference",
+    "consequential_realization_required": false,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "gm_resolution_decision.epistemic_acts",
+      "gm_resolution_decision.epistemic_acts.semantic_identity.scope"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "bounded interpretation remains structured"
+  },
+  {
+    "fixture_id": "P2",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequential_realization_required": false,
+    "selected_envelope": "narration_only",
+    "declaration_channel_exposed": false,
+    "selection_authority_source": [
+      "resolution_contract.interlocutor_id",
+      "gm_resolution_decision.epistemic_acts",
+      "gm_resolution_decision.permitted_state_mutations"
+    ],
+    "expected": "narration_only",
+    "actual": "narration_only",
+    "pass": true,
+    "notes": "ordinary incidental NPC dialogue"
+  },
+  {
+    "fixture_id": "P3",
+    "response_operation": "player_hypothesis_discussion",
+    "declaration_expectation": "hypothesis_discussion_not_required",
+    "consequential_realization_required": false,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "resolution_contract.raw_input"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "player hypothesis intentionally unchanged"
+  },
+  {
+    "fixture_id": "G1",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequential_realization_required": false,
+    "selected_envelope": "narration_only",
+    "declaration_channel_exposed": false,
+    "selection_authority_source": [
+      "resolution_contract.interlocutor_id",
+      "gm_resolution_decision.epistemic_acts",
+      "gm_resolution_decision.permitted_state_mutations"
+    ],
+    "expected": "narration_only",
+    "actual": "narration_only",
+    "pass": true,
+    "notes": "ordinary NPC chat"
+  },
+  {
+    "fixture_id": "G2",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequential_realization_required": false,
+    "selected_envelope": "narration_only",
+    "declaration_channel_exposed": false,
+    "selection_authority_source": [
+      "resolution_contract.interlocutor_id",
+      "gm_resolution_decision.epistemic_acts",
+      "gm_resolution_decision.permitted_state_mutations"
+    ],
+    "expected": "narration_only",
+    "actual": "narration_only",
+    "pass": true,
+    "notes": "ordinary hesitation or deflection"
+  },
+  {
+    "fixture_id": "G3",
+    "response_operation": "bounded_interpretation",
+    "declaration_expectation": "optional_bounded_inference",
+    "consequential_realization_required": false,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "gm_resolution_decision.epistemic_acts",
+      "gm_resolution_decision.epistemic_acts.semantic_identity.scope"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "bounded inference"
+  },
+  {
+    "fixture_id": "G4",
+    "response_operation": "player_hypothesis_discussion",
+    "declaration_expectation": "hypothesis_discussion_not_required",
+    "consequential_realization_required": false,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "resolution_contract.raw_input"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "player hypothesis held back this cycle"
+  },
+  {
+    "fixture_id": "G5",
+    "response_operation": "consequential_realization",
+    "declaration_expectation": "required_for_authorized_realization",
+    "consequential_realization_required": true,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "gm_resolution_decision.permitted_state_mutations",
+      "gm_resolution_decision.outcome_classification",
+      "gm_resolution_decision.realization_claims.source_ref",
+      "gm_resolution_decision.executable_obligations.mutation_owner"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "consequential NPC fact"
+  },
+  {
+    "fixture_id": "G6",
+    "response_operation": "consequential_realization",
+    "declaration_expectation": "required_for_authorized_realization",
+    "consequential_realization_required": true,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "gm_resolution_decision.permitted_state_mutations",
+      "gm_resolution_decision.outcome_classification",
+      "gm_resolution_decision.realization_claims.source_ref",
+      "gm_resolution_decision.executable_obligations.mutation_owner"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "consequential world realization"
+  },
+  {
+    "fixture_id": "consequential_control",
+    "response_operation": "consequential_realization",
+    "declaration_expectation": "required_for_authorized_realization",
+    "consequential_realization_required": true,
+    "selected_envelope": "structured_realization",
+    "declaration_channel_exposed": true,
+    "selection_authority_source": [
+      "gm_resolution_decision.permitted_state_mutations",
+      "gm_resolution_decision.outcome_classification",
+      "gm_resolution_decision.realization_claims.source_ref",
+      "gm_resolution_decision.executable_obligations.mutation_owner"
+    ],
+    "expected": "structured_realization",
+    "actual": "structured_realization",
+    "pass": true,
+    "notes": "NPC speech does not force narration-only"
+  }
+]

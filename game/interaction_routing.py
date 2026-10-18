@@ -376,6 +376,13 @@ def choose_interaction_route(
     Canonical social entry is computed in :func:`game.interaction_context.resolve_directed_social_entry`
     (pass *canonical_social_entry* from /api/chat to avoid duplicate work).
     """
+    if (
+        isinstance(canonical_social_entry, dict)
+        and canonical_social_entry.get("should_route_social") is False
+        and str(canonical_social_entry.get("reason") or "")
+        == "scene_presence_or_perception_query"
+    ):
+        return "action"
     directed_dialogue = is_directed_dialogue(
         text,
         scene=scene,

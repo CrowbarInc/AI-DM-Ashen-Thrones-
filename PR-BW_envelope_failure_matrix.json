@@ -1,0 +1,72 @@
+{
+  "schema": "PR-BW_envelope_failure_matrix_v1",
+  "model_api_calls": 0,
+  "probes": [
+    {
+      "probe_id": "P1",
+      "expected_response_mode": "bounded_interpretation",
+      "declaration_needed": "optional_bounded_inference",
+      "declaration_emitted": true,
+      "declaration_semantically_valid": true,
+      "narration_semantically_valid": false,
+      "narration_adds_new_semantics": true,
+      "semantic_delta_categories": ["temporal_implication", "history_duration"],
+      "empty_declaration_possible": true,
+      "provider_exposes_consequential_operations": true,
+      "validator_result": "reject_then_retry_accept",
+      "retry_triggered": true,
+      "initial_player_facing_quality_without_invalid_structure": "probably_useful_if_over_time_removed",
+      "salvageability": "S2",
+      "primary_root_cause": "C_DECLARATION_NARRATION_SEMANTIC_DECOUPLING",
+      "secondary_root_causes": [
+        "D_FIELD_DESCRIPTION_SALIENCE_IMBALANCE",
+        "F_MODEL_RESIDUAL_STOCHASTICITY"
+      ],
+      "confidence": "medium_high",
+      "notes": "Declaration was accepted bounded inference; narration added unsupported over-time/history content."
+    },
+    {
+      "probe_id": "P2",
+      "expected_response_mode": "incidental_dialogue",
+      "declaration_needed": false,
+      "declaration_emitted": true,
+      "declaration_semantically_valid": false,
+      "narration_semantically_valid": "not_reached_by_validator_attempt_1_but_independently_playable",
+      "narration_adds_new_semantics": false,
+      "semantic_delta_categories": ["unnecessary_structured_authorship"],
+      "empty_declaration_possible": true,
+      "provider_exposes_consequential_operations": true,
+      "validator_result": "reject_then_retry_accept",
+      "retry_triggered": true,
+      "initial_player_facing_quality_without_invalid_structure": "probably_valid_playable",
+      "salvageability": "S1",
+      "primary_root_cause": "A_UNIVERSAL_SCHEMA_AFFORDANCE",
+      "secondary_root_causes": [
+        "B_REQUIRED_FIELD_COMPLETION_PRESSURE",
+        "D_FIELD_DESCRIPTION_SALIENCE_IMBALANCE"
+      ],
+      "confidence": "high",
+      "notes": "Recipe said reply_not_required and do not declare the reply; model still emitted realize/authored_world_fact/established."
+    },
+    {
+      "probe_id": "P3",
+      "expected_response_mode": "player_hypothesis_discussion",
+      "declaration_needed": false,
+      "declaration_emitted": false,
+      "declaration_semantically_valid": true,
+      "narration_semantically_valid": true,
+      "narration_adds_new_semantics": false,
+      "semantic_delta_categories": [],
+      "empty_declaration_possible": true,
+      "provider_exposes_consequential_operations": true,
+      "validator_result": "initial_accept",
+      "retry_triggered": false,
+      "initial_player_facing_quality_without_invalid_structure": "valid_playable_slightly_cautious",
+      "salvageability": "S3",
+      "primary_root_cause": "none",
+      "secondary_root_causes": [],
+      "confidence": "high",
+      "notes": "Positive control: empty declarations with conditional hypothesis discussion worked under the same universal envelope."
+    }
+  ]
+}

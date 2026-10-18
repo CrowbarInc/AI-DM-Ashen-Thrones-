@@ -1,0 +1,33 @@
+{
+  "response_id": "resp_0926127abab144d7006ac41d68881487d28db895396ca8107c",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 23308,
+    "output_tokens": 322,
+    "total_tokens": 23630,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 3.07,
+  "input_chars": 100297,
+  "recipe_present": true,
+  "retry_context_present": true,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is split, its surface showing clear evidence of damage. The leather hanger appears torn, frayed at the edges. These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.",
+    "declared_claims": null,
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"The bell's wooden yoke is split, its surface showing clear evidence of damage. The leather hanger appears torn, frayed at the edges. These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.\",\n  \"player_facing_text\": \"The bell's wooden yoke is split, its surface showing clear evidence of damage. The leather hanger appears torn, frayed at the edges. These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.\",\n  \"tags\": [\"scene_momentum:consequence_or_opportunity\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The wood has a weathered texture with thin cracks radiating outward from the split, and the leather is dry and cracked in places.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Narration respects authorized visible facts without asserting cause or history; adds bounded incidental sensory details only.\"\n}"
+  }
+}

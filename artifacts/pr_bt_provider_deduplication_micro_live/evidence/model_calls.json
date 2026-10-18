@@ -1,0 +1,208 @@
+[
+  {
+    "index": 1,
+    "probe": null,
+    "kind": "preflight",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:32.461573+00:00",
+    "input_chars": 134,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": false,
+    "retry_context_present": false,
+    "raw_output": "OK",
+    "response_id": "resp_0690adbc475cab78006ac37c866c3887d28970817a2d534b1b",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 2,
+      "total_tokens": 26,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:31:36.558865+00:00",
+    "latency_seconds": 4.097
+  },
+  {
+    "index": 2,
+    "probe": "P1",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:36.949770+00:00",
+    "input_chars": 93859,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"inferred_damage_cause_001\",\n      \"declaration_mode\": \"propose\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_db5ec0aa65c3\", \"rc_b31ecb1fd1c7\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"gm_inference\",\n      \"epistemic_status\": \"inferred\",\n      \"modality\": \"possible\",\n      \"realization_role\": \"MAY_STATE\",\n      \"relation_kind\": \"epistemic_status\",\n      \"text\": \"The split wooden yoke and torn leather hanger might indicate wear over time or strain from heavy use or poor maintenance.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.\",\n  \"player_facing_text\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.\",\n  \"tags\": [],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The wood shows signs of age with faint cracks spreading from the split, and the leather hanger smells faintly of dampness and neglect.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Interpretation infers plausible causes of wooden yoke split and leather hanger tear while respecting uncertainty and avoiding unwarranted certainty.\"\n}",
+    "response_id": "resp_0d3771c2459ffc4c006ac37c89a49c87d29e1df4d769fb5053",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 21849,
+      "output_tokens": 464,
+      "total_tokens": 22313,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:31:41.516251+00:00",
+    "latency_seconds": 4.567
+  },
+  {
+    "index": 3,
+    "probe": "P1",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:41.821247+00:00",
+    "input_chars": 99745,
+    "roles": [
+      "system",
+      "user",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": true,
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"The bell's wooden yoke is split, and its leather hanger is torn. Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.\",\n  \"player_facing_text\": \"The bell's wooden yoke is split, and its leather hanger is torn. Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.\",\n  \"tags\": [\"scene_momentum:consequence_or_opportunity\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The air carries a faint, musty scent from the aged wood and worn leather, hinting at the bell's long service in the belfry.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Repaired unauthorized inference; limited explanation to qualified possibility only.\"\n}",
+    "response_id": "resp_0f8370842d6fc02a006ac37c8e8da487d2bcdfc87a15d256b3",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 23201,
+      "output_tokens": 313,
+      "total_tokens": 23514,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:31:44.857185+00:00",
+    "latency_seconds": 3.036
+  },
+  {
+    "index": 4,
+    "probe": "P2",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:45.334092+00:00",
+    "input_chars": 104777,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"dc_001\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_2bb408577206\",\n      \"premise_claim_ids\": [\"rc_9ab69105465f\"],\n      \"semantic_identity\": {\n        \"kind\": \"entity\",\n        \"subject\": \"baker\",\n        \"relation\": \"speaks\"\n      },\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"refusal\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The baker shakes their head slightly, unwilling to say which loaf they keep for themselves.\"\n    }\n  ],\n  \"narration\": \"The baker glances around the busy stall, then replies with a guarded tone, \\\"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\\\"\",\n  \"player_facing_text\": \"The baker glances around the busy stall, then replies with a guarded tone, \\\"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\\\"\",\n  \"tags\": [\"social.reply_kind:refusal\", \"npc:baker\", \"scene:bread_stall\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker shifts uneasily, not eager to disclose personal preferences.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Baker refuses to answer which loaf they keep for themselves, preserving player agency and not revealing facts beyond established scene information.\"\n}",
+    "response_id": "resp_0d090b0344f1c6be006ac37c92037487d285461301893a1531",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24431,
+      "output_tokens": 458,
+      "total_tokens": 24889,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:31:50.701646+00:00",
+    "latency_seconds": 5.367
+  },
+  {
+    "index": 5,
+    "probe": "P3",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:51.164101+00:00",
+    "input_chars": 94074,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_db5ec0aa65c3\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's wooden yoke is split.\"\n    },\n    {\n      \"declaration_id\": \"rc_b31ecb1fd1c7\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's leather hanger is torn.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is indeed split, and its leather hanger is torn. These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.\",\n  \"player_facing_text\": \"The bell's wooden yoke is indeed split, and its leather hanger is torn. These damages are clearly visible, though whether they were caused deliberately remains uncertain from appearance alone.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Directly confirmed visible physical damage; no authorization to infer intent or cause.\"\n}",
+    "response_id": "resp_09df4373639cd1f4006ac37c97da2c87d2b61534af4947387b",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 21874,
+      "output_tokens": 410,
+      "total_tokens": 22284,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:31:54.836673+00:00",
+    "latency_seconds": 3.673
+  },
+  {
+    "index": 6,
+    "probe": "P3",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T10:31:55.012672+00:00",
+    "input_chars": 99512,
+    "roles": [
+      "system",
+      "user",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": true,
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"The bronze bell's wooden yoke is split, and its leather hanger is torn. While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.\",\n  \"player_facing_text\": \"The bronze bell's wooden yoke is split, and its leather hanger is torn. While these damages are clearly visible, whether they were caused deliberately is not something that can be determined from the appearance alone.\",\n  \"tags\": [\"scene_momentum:consequence_or_opportunity\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The cracked wood and ragged leather scent faintly of dust and old smoke, suggesting neglect rather than fresh damage.\",\n      \"scope\": \"scene\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Repaired by removing any direct claim or narration that improperly asserted cause or intent for the damage, respecting uncertainty.\"\n}",
+    "response_id": "resp_071f280967b6f805006ac37c9bb53487d29b24aabd38eec342",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 23134,
+      "output_tokens": 297,
+      "total_tokens": 23431,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T10:32:00.036226+00:00",
+    "latency_seconds": 5.024
+  }
+]

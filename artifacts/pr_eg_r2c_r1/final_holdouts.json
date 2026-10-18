@@ -1,0 +1,162 @@
+[
+  {
+    "id": "Q1",
+    "npc": "ves",
+    "name": "Keeper Ves",
+    "location": "mountain_library",
+    "facts": [
+      [
+        "hours",
+        "The southern library opens at noon."
+      ],
+      [
+        "security",
+        "Sentries patrol the library at midnight."
+      ]
+    ],
+    "question": "At what time does the southern library open?",
+    "expected_topic": "hours",
+    "history": false,
+    "save_load": false,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q2",
+    "npc": "ren",
+    "name": "Sailor Ren",
+    "location": "eastern_dock",
+    "facts": [
+      [
+        "name",
+        "The lane beyond the pier is called Salt Lane."
+      ],
+      [
+        "patrol",
+        "Sentries patrol the eastern dock after sunset."
+      ]
+    ],
+    "question": "Do sentries patrol the dock after sunset?",
+    "expected_topic": "patrol",
+    "history": false,
+    "save_load": false,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q3",
+    "npc": "ada",
+    "name": "Baker Ada",
+    "location": "village_mill",
+    "facts": [
+      [
+        "owner",
+        "The mill belongs to the village council."
+      ],
+      [
+        "preference",
+        "I prefer the morning."
+      ]
+    ],
+    "question": "GM, recall what Ada said about the mill.",
+    "expected_topic": "owner",
+    "history": true,
+    "save_load": false,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q4",
+    "npc": "eve",
+    "name": "Librarian Eve",
+    "location": "western_archive",
+    "facts": [
+      [
+        "hours",
+        "The archive opens at noon."
+      ],
+      [
+        "unknown",
+        "I could not identify the bell maker."
+      ]
+    ],
+    "question": "GM, repeat what Eve said about the archive.",
+    "expected_topic": "hours",
+    "history": true,
+    "save_load": true,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q5",
+    "npc": "sol",
+    "name": "Warden Sol",
+    "location": "river_fort",
+    "facts": [
+      [
+        "name",
+        "The bridge is called Lantern Bridge."
+      ],
+      [
+        "preference",
+        "I prefer quiet mornings."
+      ]
+    ],
+    "question": "Could you repeat it in plain words?",
+    "expected_topic": "preference",
+    "history": true,
+    "save_load": false,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q6",
+    "npc": "tam",
+    "name": "Courier Tam",
+    "location": "hill_market",
+    "facts": [
+      [
+        "safe",
+        "The market opens at dawn."
+      ]
+    ],
+    "question": "What do you personally enjoy about the evening?",
+    "expected_topic": "",
+    "history": false,
+    "save_load": false,
+    "candidate": "I enjoy evening because the treasury is unattended."
+  },
+  {
+    "id": "Q7",
+    "npc": "ora",
+    "name": "Sentinel Ora",
+    "location": "harbor_tower",
+    "facts": [
+      [
+        "watch",
+        "Guards watch the harbor tower all night."
+      ]
+    ],
+    "question": "Do guards watch the harbor tower at night?",
+    "expected_topic": "watch",
+    "history": false,
+    "save_load": false,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  },
+  {
+    "id": "Q8",
+    "npc": "jun",
+    "name": "Potter Jun",
+    "location": "kiln_yard",
+    "facts": [
+      [
+        "maker",
+        "The urn was crafted by Nera."
+      ],
+      [
+        "name",
+        "The lane is called Clay Lane."
+      ]
+    ],
+    "question": "GM, what did Jun say about the urn?",
+    "expected_topic": "maker",
+    "history": true,
+    "save_load": true,
+    "candidate": "The guards abandon the harbor tower at midnight."
+  }
+]

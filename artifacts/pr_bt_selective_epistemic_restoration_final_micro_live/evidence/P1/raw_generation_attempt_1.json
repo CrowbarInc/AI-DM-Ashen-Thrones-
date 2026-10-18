@@ -1,0 +1,31 @@
+{
+  "response_id": "resp_0d6f9c9374f288f9006ac3de40268c87d2aa343a33cf8a8f6d",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 21952,
+    "output_tokens": 357,
+    "total_tokens": 22309,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 4.033,
+  "input_chars": 94411,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is visibly split, and its leather hanger is torn. This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.",
+    "declared_claims": null,
+    "tags": [],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"inf_1\",\n      \"declaration_mode\": \"propose\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_db5ec0aa65c3\", \"rc_b31ecb1fd1c7\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"gm_inference\",\n      \"epistemic_status\": \"inferred\",\n      \"modality\": \"possible\",\n      \"realization_role\": \"MAY_STATE\",\n      \"relation_kind\": \"epistemic_status\",\n      \"text\": \"The split wooden yoke and torn leather hanger might indicate the bell has been under significant stress or neglect, possibly from heavy use or an external force.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is visibly split, and its leather hanger is torn. This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.\",\n  \"player_facing_text\": \"The bell's wooden yoke is visibly split, and its leather hanger is torn. This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"The observation-based inference about the damage is offered with appropriate uncertainty and no unwarranted conclusions.\"\n}"
+  }
+}

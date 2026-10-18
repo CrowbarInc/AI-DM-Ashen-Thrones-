@@ -1364,11 +1364,25 @@ def detect_retry_failures(
             failures.append(failure_payload)
 
     echo_reasons: List[str] = []
+    res_md = resolution.get("metadata") if isinstance(resolution, dict) and isinstance(resolution.get("metadata"), dict) else {}
+    obligation = res_md.get("interaction_obligation") if isinstance(res_md.get("interaction_obligation"), dict) else {}
+    obligation_kind = str(obligation.get("kind") or "").strip().lower()
+    action_progress = bool(
+        obligation_kind == "action_request"
+        and re.search(
+            r"\b(?:open(?:s|ed)?|close(?:s|d)?|pull(?:s|ed)?|push(?:es|ed)?|knock(?:s|ed)?|"
+            r"yield(?:s|ed)?|catch(?:es)?|move(?:s|d)?|hold(?:s)?|block(?:s|ed)?|refus(?:es|ed)|"
+            r"fail(?:s|ed)?|cannot|can't|does not|doesn't)\b",
+            reply_text,
+            re.IGNORECASE,
+        )
+    )
     if opening_sentence_echoes_player_input(reply_text, player_text):
-        if not (strict_social and _strict_social_speaker_led_opening_for_retry(reply_text, resolution)):
+        if not action_progress and not (strict_social and _strict_social_speaker_led_opening_for_retry(reply_text, resolution)):
             echo_reasons.append("echo_or_repetition:opening_overlap")
     if opening_sentence_overlaps_player_quote(reply_text, player_text):
-        echo_reasons.append("echo_or_repetition:quoted_speech_overlap")
+        if not action_progress:
+            echo_reasons.append("echo_or_repetition:quoted_speech_overlap")
     echo_reasons.extend(detect_stock_warning_filler_repetition(reply_text))
     if echo_reasons:
         failures.append(
@@ -1403,6 +1417,14 @@ def detect_retry_failures(
         reply_text=reply_text,
     )
     if topic_pressure.get("applies") and not topic_pressure.get("ok"):
+        from game.resolution_contract import assess_contract_satisfaction, contract_mapping_from_resolution
+
+        pressure_contract = contract_mapping_from_resolution(resolution)
+        if pressure_contract:
+            pressure_status = assess_contract_satisfaction(reply_text, pressure_contract).get("status")
+            if pressure_status in {"satisfied", "partial", "legitimate_nonresolution"}:
+                topic_pressure = {"applies": True, "ok": True, "reasons": []}
+    if topic_pressure.get("applies") and not topic_pressure.get("ok"):
         failures.append(
             {
                 "failure_class": "topic_pressure_escalation",
@@ -1432,6 +1454,16 @@ def detect_retry_failures(
         )
 
     scene_stall = scene_stall_check(gm_reply=gm_reply, session=session, scene_envelope=scene_envelope)
+    if scene_stall.get("applies") and not scene_stall.get("ok"):
+        from game.resolution_contract import assess_contract_satisfaction, contract_mapping_from_resolution
+
+        stall_contract = contract_mapping_from_resolution(resolution)
+        stall_view = (
+            assess_contract_satisfaction(reply_text, stall_contract) if stall_contract.get("contract_id") else {}
+        )
+        # A necessary clarification is the resolution. Scene momentum must not replace it.
+        if stall_view.get("resolution_kind") == "clarification":
+            scene_stall = {"applies": True, "ok": True, "reasons": []}
     if scene_stall.get("applies") and not scene_stall.get("ok"):
         failures.append(
             {
@@ -2828,7 +2860,17 @@ def force_terminal_retry_fallback(
             _emit_terminal_retry_result(out)
             return out
 
-    out["player_facing_text"] = _ensure_terminal_punctuation(str(line).strip())
+    from game.resolution_contract import prefer_stronger_resolution, remember_satisfied_candidate
+
+    source_text = str(original_text or (base_gm or {}).get("player_facing_text") or "")
+    remember_satisfied_candidate(out, source_text, res)
+    kept_line, precedence = prefer_stronger_resolution(source_text, str(line or "").strip(), res)
+    metadata = out.setdefault("metadata", {})
+    if isinstance(metadata, dict):
+        debug = metadata.setdefault("emission_debug", {})
+        if isinstance(debug, dict):
+            debug["outcome_precedence"] = precedence
+    out["player_facing_text"] = _ensure_terminal_punctuation(str(kept_line).strip())
     out["final_route"] = "forced_retry_fallback"
     out["fallback_kind"] = "retry_escape_hatch"
     out["accepted_via"] = "forced_fallback"

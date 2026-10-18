@@ -561,6 +561,10 @@ def apply_spoken_state_refinement_cash_out(
     """
     if not isinstance(gm_output, dict) or not isinstance(session, dict):
         return gm_output
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm_output, "apply_spoken_state_refinement_cash_out"):
+        return gm_output
     sid = str(scene_id or "").strip()
     if not sid:
         return gm_output

@@ -1,0 +1,9 @@
+# 08 — Authority and Persistence Audit
+
+The continuous replay records full world comparisons and per-turn session key differences. GM description, established lantern follow-up, NPC appearance question, GM clarification, explanation and withdrawal do not advance turn count or change world state. Bounded conversation context and save timestamps may change. Social exchanges may change existing NPC runtime/disclosure and clocks; inspection discloses the authored lantern mark only through the resolver; movement changes scene through the existing transition owner.
+
+Turn six serializes and reloads the persisted context in the same campaign. Every subsequent HTTP request reloads session data. Existing save/load and runtime-persistence suites pass. Pending withdrawal after reload is tested explicitly; completed steps are removed from the remaining sequence before it is saved. Unsupported deferred work cannot be approved by a later yes. An explicit new character declaration is not blocked by expired scene-scoped clarification.
+
+Provider evidence excludes private topics and undiscovered clues. Previously disclosed NPC topic evidence comes only from an existing resolver's logged topic payload. Social recall rechecks current speaker identity, authored topic equality, selected evidence ID and `revealed_topics` before repeating it. It cannot add a topic or cause NPC compliance.
+
+Limit: a live holdout was incorrectly classified as NPC ASK, so the current system still cannot guarantee that every GM-intended question avoids social/world mutation. This is an unresolved PR-EF defect, not a passing authority claim. Active campaign files were not intentionally read into fixtures or written; a full active-data hash snapshot was not taken at task start, so byte-for-byte preservation is not independently claimed.

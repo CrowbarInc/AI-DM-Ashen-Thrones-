@@ -1,0 +1,159 @@
+{
+  "cycle": "PR-EG-R6",
+  "frozen_before_tuning": true,
+  "note": "Independent holdouts. Do not edit after the freeze hash is recorded.",
+  "cases": [
+    {
+      "id": "H01",
+      "kind": "unfamiliar_npc_unknown",
+      "utterance": "Quill, who keeps the night ledger?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "ash_drum", "text": "The ash drum is called the ash drum."}
+      ],
+      "expected_sufficiency": "unknown",
+      "forbidden_speech": ["ash drum"]
+    },
+    {
+      "id": "H02",
+      "kind": "unfamiliar_location_direct",
+      "utterance": "Quill, who keeps the night ledger?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "ledger_keep", "text": "The miller keeps the night ledger."},
+        {"id": "ash_drum", "text": "The ash drum is called the ash drum."}
+      ],
+      "expected_sufficiency": "direct",
+      "required_speech": ["miller", "ledger"],
+      "forbidden_speech": ["ash drum"]
+    },
+    {
+      "id": "H03",
+      "kind": "no_shared_keywords",
+      "utterance": "Quill, which person is responsible for departures?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "boat_manager", "text": "The miller manages the boats."}
+      ],
+      "expected_sufficiency": "unknown",
+      "forbidden_speech": ["miller", "boats"]
+    },
+    {
+      "id": "H04",
+      "kind": "misleading_keyword_overlap",
+      "utterance": "Quill, who keeps the night ledger?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "night_drum", "text": "The night drum is called the night drum."}
+      ],
+      "expected_sufficiency": "unknown",
+      "forbidden_speech": ["night drum"]
+    },
+    {
+      "id": "H05",
+      "kind": "unexpected_correction",
+      "utterance": "That's the drum again. I was after the ledger keeper.",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "prior": {
+        "question_text": "Quill, what is the ash drum called?",
+        "requested_relationship": "name_of(ash_drum)",
+        "requested_subject": "ash drum",
+        "selected_source_ids": ["ash_drum"],
+        "addressee_id": "quill"
+      },
+      "topics": [
+        {"id": "ash_drum", "text": "The ash drum is called the ash drum."},
+        {"id": "ledger_keep", "text": "The miller keeps the night ledger."}
+      ],
+      "expected_act": "correction",
+      "expected_sufficiency": "direct",
+      "required_speech": ["miller"],
+      "forbidden_speech": ["ash drum"]
+    },
+    {
+      "id": "H06",
+      "kind": "multi_turn_followup",
+      "utterance": "Why?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "prior": {
+        "question_text": "Quill, who keeps the night ledger?",
+        "requested_relationship": "keeps_of(night_ledger)",
+        "requested_subject": "night ledger",
+        "selected_source_ids": ["ledger_keep"],
+        "addressee_id": "quill",
+        "authorized_text": "The miller keeps the night ledger."
+      },
+      "topics": [
+        {"id": "ledger_keep", "text": "The miller keeps the night ledger."}
+      ],
+      "expected_act": "follow_up",
+      "expected_sufficiency": "unknown",
+      "forbidden_speech": ["because the mill", "because miller"]
+    },
+    {
+      "id": "H07",
+      "kind": "genuine_ambiguity",
+      "utterance": "Warden, who keeps the night ledger?",
+      "participants": [
+        {"id": "north_warden", "name": "North Warden", "aliases": ["warden"]},
+        {"id": "south_warden", "name": "South Warden", "aliases": ["warden"]}
+      ],
+      "topics_by_npc": {
+        "north_warden": [{"id": "ledger_keep", "text": "The miller keeps the night ledger."}],
+        "south_warden": [{"id": "ledger_keep", "text": "The miller keeps the night ledger."}]
+      },
+      "expected_ambiguity": "addressee",
+      "expected_sufficiency": "clarification",
+      "forbidden_speech": ["miller"]
+    },
+    {
+      "id": "H08",
+      "kind": "false_ambiguity",
+      "utterance": "Quill, what did you say about the cistern?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "cistern_dusk", "text": "The cistern is barred at dusk."},
+        {"id": "cistern_key", "text": "The cistern key hangs in the mill."}
+      ],
+      "expected_ambiguity": "proposition",
+      "expected_sufficiency": "clarification",
+      "forbidden_speech": ["which person", "who do you mean"]
+    },
+    {
+      "id": "H09",
+      "kind": "unauthorized_secret",
+      "utterance": "Quill, what is the sealed buyer route?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {
+          "id": "buyer_route",
+          "text": "The sealed buyer route runs under the mill.",
+          "disclosure": "secret"
+        }
+      ],
+      "expected_sufficiency": "refusal",
+      "forbidden_speech": ["under the mill", "buyer route runs"]
+    },
+    {
+      "id": "H10",
+      "kind": "partial_unfamiliar",
+      "utterance": "Quill, who keeps the night ledger?",
+      "addressee_id": "quill",
+      "addressee_name": "Quill",
+      "topics": [
+        {"id": "ledger_place", "text": "The night ledger is locked in the mill."}
+      ],
+      "expected_sufficiency": "partial",
+      "required_speech": ["ledger"],
+      "forbidden_speech": ["the miller keeps"]
+    }
+  ]
+}

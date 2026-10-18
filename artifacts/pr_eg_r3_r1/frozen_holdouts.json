@@ -1,0 +1,125 @@
+[
+  {
+    "id": "R1H01",
+    "kind": "characterization",
+    "npc_id": "warden_ivo",
+    "name": "Warden Ivo",
+    "question": "Why do you prefer the dawn?",
+    "established": "I prefer the dawn.",
+    "candidate": "I find the dawn peaceful, and it is a little easier for me to think when things feel quiet.",
+    "expect": "adopt",
+    "required": ["dawn", "think"],
+    "forbidden": ["guard", "captain", "silver"]
+  },
+  {
+    "id": "R1H02",
+    "kind": "characterization",
+    "npc_id": "warden_ivo",
+    "name": "Warden Ivo",
+    "question": "Why do you prefer the dawn?",
+    "established": "I prefer the dawn.",
+    "candidate": "I prefer the dawn because the captain leaves the harbor unattended.",
+    "expect": "reject",
+    "required": ["dawn"],
+    "forbidden": ["captain", "unattended", "harbor"]
+  },
+  {
+    "id": "R1H03",
+    "kind": "paraphrase",
+    "npc_id": "miller_os",
+    "name": "Miller Os",
+    "question": "Say that in simpler words.",
+    "fallback": "Miller Os mutters, \"Word is, the lane beyond the mill is the south road.\"",
+    "candidate": "The lane past the mill is called the south road.",
+    "expect": "adopt",
+    "required": ["south road", "mill"],
+    "forbidden": ["street", "capital"]
+  },
+  {
+    "id": "R1H04",
+    "kind": "paraphrase",
+    "npc_id": "miller_os",
+    "name": "Miller Os",
+    "question": "Put that another way.",
+    "fallback": "Miller Os mutters, \"Word is, the lane beyond the mill is the south road.\"",
+    "candidate": "The lane past the mill is called the south street.",
+    "expect": "reject",
+    "required": ["south road"],
+    "forbidden": ["south street"]
+  },
+  {
+    "id": "R1H05",
+    "kind": "alias",
+    "npc_id": "miller_os",
+    "name": "Miller Os",
+    "question": "Say that in plainer words.",
+    "proposition": "The lane beyond the mill is the harbor road.",
+    "aliases": ["harbour road"],
+    "candidate": "The lane past the mill is called the harbour road.",
+    "expect": "adopt",
+    "required": ["harbour road"],
+    "forbidden": ["street"]
+  },
+  {
+    "id": "R1H06",
+    "kind": "rumor",
+    "npc_id": "sister_quen",
+    "name": "Sister Quen",
+    "question": "Say that in simpler words.",
+    "proposition": "I have heard the council may own the ferry.",
+    "candidate": "The council owns the ferry.",
+    "expect": "reject",
+    "required": ["heard", "may"],
+    "forbidden": []
+  },
+  {
+    "id": "R1H07",
+    "kind": "partial",
+    "npc_id": "sister_quen",
+    "name": "Sister Quen",
+    "question": "Is the west gate ever left unattended?",
+    "fact": "Sentries watch the west gate throughout the night.",
+    "expect": "partial",
+    "required": ["sentries", "west gate", "couldn't say"],
+    "forbidden": ["never", "yes", "no"]
+  },
+  {
+    "id": "R1H08",
+    "kind": "equivalent",
+    "npc_id": "miller_os",
+    "name": "Miller Os",
+    "question": "What did you mean by the south road?",
+    "statements": [
+      "The lane beyond the mill is the south road.",
+      "The lane just past the mill is called the south road."
+    ],
+    "expect": "same_proposition",
+    "required": ["south road"],
+    "forbidden": ["which earlier remark"]
+  },
+  {
+    "id": "R1H09",
+    "kind": "distinct",
+    "npc_id": "miller_os",
+    "name": "Miller Os",
+    "question": "What did you mean by the road?",
+    "statements": [
+      "The lane beyond the mill is the south road.",
+      "The east lane is the mill road."
+    ],
+    "expect": "ambiguous",
+    "required": ["which earlier remark"],
+    "forbidden": []
+  },
+  {
+    "id": "R1H10",
+    "kind": "exact",
+    "npc_id": "sister_quen",
+    "name": "Sister Quen",
+    "question": "GM, what exactly did she say about the gate?",
+    "statement": "Sentries watch the west gate throughout the night.",
+    "expect": "exact",
+    "required": ["Sentries watch the west gate throughout the night."],
+    "forbidden": ["unattended"]
+  }
+]

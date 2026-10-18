@@ -1,0 +1,3 @@
+# 14 — Follow-Up After Uncertainty
+
+When a bound unknown/refusal is followed by attribution/explanation/evidence/speech clarification, host emits bounded uncertainty and selects no new source. No informant is invented. Active original question remains addressable. Provider expression may phrase this as 'I don't know who told me'; this is safe but less clear than the host line explaining the earlier lack of knowledge. [game/unified_semantic_planning.py:1004](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:1004>); [artifacts/pr_eg_r6_r2_r1/raw_examples.json:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r1/raw_examples.json:1>).

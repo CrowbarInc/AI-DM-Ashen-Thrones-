@@ -1,0 +1,79 @@
+{
+  "schema": "pr_br_interpretation_fixture_v1",
+  "purpose": "Recorded shapes for Continuation 11. Tests replay these through the deterministic validator. No live inference.",
+  "cases": [
+    {
+      "id": "A_on_duty_compound",
+      "raw_player_text": "I look for someone on duty and ask what a traveler has to do to pass the gate tonight.",
+      "discourse_context": {},
+      "canonical_referents": [],
+      "expect": {
+        "validation_status": "abstained",
+        "operation": "unresolved",
+        "forbidden_identity": "duty",
+        "abstention_reason_any": ["unresolved_compound_intent", "conflicting_operations", "target_not_canonical"]
+      }
+    },
+    {
+      "id": "C_clause_span_with_referent",
+      "raw_player_text": "I examine it up close and try to work out what people use it for.",
+      "discourse_context": {
+        "active_inspected": {"id": "notice_board", "label": "notice board", "kind": "object"}
+      },
+      "canonical_referents": [
+        {"type": "object", "id": "notice_board", "label": "notice board", "source": "scene"}
+      ],
+      "expect": {
+        "validation_status": "validated",
+        "canonical_contains": "notice",
+        "forbidden_identity": "up close"
+      }
+    },
+    {
+      "id": "E_unknown_pronoun",
+      "raw_player_text": "I inspect it.",
+      "discourse_context": {},
+      "canonical_referents": [],
+      "expect": {
+        "validation_status": "abstained",
+        "forbidden_identity": "it",
+        "abstention_reason_any": ["insufficient_discourse_context", "target_not_canonical", "malformed_target_span"]
+      }
+    },
+    {
+      "id": "G_known_entity",
+      "raw_player_text": "I examine the notice board.",
+      "discourse_context": {},
+      "canonical_referents": [
+        {"type": "object", "id": "notice_board", "label": "notice board", "source": "scene"}
+      ],
+      "expect": {
+        "validation_status": "validated",
+        "canonical_contains": "notice",
+        "operation_any": ["inspect", "perceive"]
+      }
+    },
+    {
+      "id": "model_fake_duty",
+      "mode": "proposal",
+      "proposal": {
+        "raw_input": "I look for someone on duty and ask what a traveler has to do.",
+        "source": "model_assisted",
+        "primary_operation": "ask",
+        "raw_target_text": "duty",
+        "proposed_target_id": "duty",
+        "confidence": "1.0",
+        "target_capture": "model"
+      },
+      "discourse_context": {},
+      "canonical_referents": [
+        {"type": "object", "id": "notice_board", "label": "notice board", "source": "scene"}
+      ],
+      "expect": {
+        "validation_status": "abstained",
+        "reason": "target_not_canonical",
+        "discourse_commit_allowed": false
+      }
+    }
+  ]
+}

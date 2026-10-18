@@ -1,0 +1,49 @@
+{
+  "declared_claims": [
+    {
+      "declaration_id": "claim_cause_of_loom_strain",
+      "declaration_mode": "realize",
+      "source_claim_id": null,
+      "semantic_identity": {},
+      "provenance_requested": "authored_world_fact",
+      "epistemic_status": "unresolved",
+      "modality": "unresolved",
+      "realization_role": "MUST_PRESERVE_UNCERTAINTY",
+      "relation_kind": "epistemic_status",
+      "text": "The precise cause of the prolonged strain on the wooden loom is unknown"
+    },
+    {
+      "declaration_id": "claim_inspect_loom_for_cause",
+      "declaration_mode": "propose",
+      "source_claim_id": null,
+      "semantic_identity": {},
+      "provenance_requested": "npc_claim",
+      "epistemic_status": "possible",
+      "modality": "possible",
+      "realization_role": "MAY_INFER",
+      "relation_kind": "gameplay_lead",
+      "text": "Inspecting the cracked wooden loom beam closely might reveal overlooked details explaining the cause of the strain"
+    }
+  ],
+  "narration": "The cracked wooden loom beam and bent iron brace indicate significant structural stress, but the exact cause of this prolonged strain remains unclear. It could stem from repeated heavy use, flawed craftsmanship, or external forces applied over time. To uncover more, you might examine the cracked beam more thoroughly—there could be subtle signs others have missed that hint at what broke the loom's support.",
+  "player_facing_text": "The cracked wooden loom beam and bent iron brace indicate significant structural stress, but the exact cause of this prolonged strain remains unclear. It could stem from repeated heavy use, flawed craftsmanship, or external forces applied over time. To uncover more, you might examine the cracked beam more thoroughly—there could be subtle signs others have missed that hint at what broke the loom's support.",
+  "tags": ["scene_momentum:new_information"],
+  "improvisation_proposals": [
+    {
+      "kind": "incidental_fact",
+      "category": "sensory_detail",
+      "content": "The cracked beam emits a faint woody scent mixed with faint dust and old oil, hinting at long-term use and neglect.",
+      "scope": "turn",
+      "consequence_level": "incidental",
+      "source": "dm_improvisation",
+      "speaker_id": null,
+      "epistemic_status": "known"
+    }
+  ],
+  "scene_update": null,
+  "activate_scene_id": null,
+  "new_scene_draft": null,
+  "world_updates": null,
+  "suggested_action": null,
+  "debug_notes": "Bounded partial answer maintaining uncertainty about cause, suggesting next investigative lead at the cracked beam."
+}

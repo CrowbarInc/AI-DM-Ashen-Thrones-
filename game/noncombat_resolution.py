@@ -386,6 +386,27 @@ def _narration_constraints(raw: Dict[str, Any], route: ResolutionRoute) -> Dict[
         rk = social.get("reply_kind")
         if isinstance(rk, str) and rk.strip():
             nc["reply_kind"] = rk.strip()[:64]
+        for key in (
+            "reply_plan_kind",
+            "npc_speech_authority",
+            "objective_world_fact_authority",
+        ):
+            val = social.get(key)
+            if isinstance(val, str) and val.strip():
+                nc[key] = val.strip()[:96]
+        for key in (
+            "incidental_subjective_allowed",
+            "absence_of_authored_topic_forces_refusal",
+            "declared_claims_expected",
+            "durable_state_mutation_allowed",
+        ):
+            if key in social:
+                nc[key] = bool(social.get(key))
+        authority = social.get("dialogue_authority")
+        if isinstance(authority, dict):
+            from game.dialogue_authority import authority_codes
+
+            nc["dialogue_authority"] = authority_codes(authority)
     if raw.get("resolved_transition") is True:
         nc["scene_transition_occurred"] = True
     meta = raw.get("metadata") if isinstance(raw.get("metadata"), dict) else {}

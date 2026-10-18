@@ -120,7 +120,14 @@ def test_scene_transition_with_known_target_activates_before_narration(tmp_path,
     assert data.get("ok") is True
     assert data.get("session", {}).get("active_scene_id") == "scene_b"
     assert data.get("scene", {}).get("scene", {}).get("id") == "scene_b"
-    assert call_gpt_invoked_with_scene_id and call_gpt_invoked_with_scene_id[-1] == "scene_b"
+    facing = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+    skipped = "provider_narration_skipped" in ((data.get("gm_output") or {}).get("tags") or [])
+    if skipped:
+        assert "arrive" in facing.casefold()
+        assert "street narrows" not in facing.casefold()
+        assert call_gpt_invoked_with_scene_id == []
+    else:
+        assert call_gpt_invoked_with_scene_id and call_gpt_invoked_with_scene_id[-1] == "scene_b"
 
 
 def test_observe_engine_result_with_literal_empty_session_world():

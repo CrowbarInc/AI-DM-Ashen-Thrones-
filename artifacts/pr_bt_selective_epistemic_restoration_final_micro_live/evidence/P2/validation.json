@@ -1,0 +1,203 @@
+{
+  "attempt_1": {
+    "text": "The baker glances at the loaves with a tight smile and shakes their head. \"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+    "reasons": [],
+    "gm_resolution_decision_audit": {
+      "decision_id": "rc_d4c97cad4722",
+      "hard_valid": true,
+      "declaration_validation": {
+        "schema_version": 1,
+        "structured_contract_present": true,
+        "hard_valid": true,
+        "accepted_claims": [
+          {
+            "text": "The baker politely refuses to say which loaf they usually keep for themselves.",
+            "semantic_identity": {
+              "kind": "entity",
+              "subject": "baker",
+              "subject_aliases": [
+                "Baker"
+              ],
+              "relation": "exists",
+              "value": "present",
+              "authority": "world_truth",
+              "premise_claim_ids": []
+            },
+            "provenance": "authored_world_fact",
+            "authority": "world_truth",
+            "epistemic_status": "established",
+            "relation_kind": "observation",
+            "persistence": "world_truth",
+            "authorized": true,
+            "source_ref": "world.npcs.0",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "accepted_declared_realization"
+            ],
+            "premise_claim_ids": []
+          }
+        ],
+        "rejected_claims": [],
+        "violations": []
+      },
+      "narration_validation": {
+        "decision_id": "rc_d4c97cad4722",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "\"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "hearsay"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "\"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "hearsay"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "hearsay",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          }
+        ]
+      },
+      "violations": [],
+      "proposed_facts": [
+        {
+          "text": "\"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+          "provenance": "npc_claim",
+          "consequence": "epistemic",
+          "authorized": true,
+          "reason_codes": [
+            "epistemically_qualified"
+          ],
+          "authority": "claim_only",
+          "persistence": "claim_only",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "hearsay"
+          }
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "The baker politely refuses to say which loaf they usually keep for themselves.",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth",
+            "premise_claim_ids": []
+          },
+          "provenance": "authored_world_fact",
+          "authority": "world_truth",
+          "epistemic_status": "established",
+          "relation_kind": "observation",
+          "persistence": "world_truth",
+          "authorized": true,
+          "source_ref": "world.npcs.0",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "accepted_declared_realization"
+          ],
+          "premise_claim_ids": []
+        },
+        {
+          "text": "\"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "hearsay"
+          },
+          "provenance": "npc_claim",
+          "authority": "claim_only",
+          "epistemic_status": "hearsay",
+          "relation_kind": "epistemic_status",
+          "persistence": "claim_only",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "epistemically_qualified"
+          ]
+        }
+      ],
+      "accepted_realized_claims": [
+        {
+          "text": "The baker politely refuses to say which loaf they usually keep for themselves.",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth",
+            "premise_claim_ids": []
+          },
+          "provenance": "authored_world_fact",
+          "authority": "world_truth",
+          "epistemic_status": "established",
+          "relation_kind": "observation",
+          "persistence": "world_truth",
+          "authorized": true,
+          "source_ref": "world.npcs.0",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "accepted_declared_realization"
+          ],
+          "premise_claim_ids": []
+        }
+      ]
+    }
+  },
+  "attempt_2": null,
+  "retry_context": "",
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker glances at the loaves with a tight smile and shakes their head. \"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded."
+  },
+  "hard_validation_attempt_1": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [],
+    "text": "The baker glances at the loaves with a tight smile and shakes their head. \"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded."
+  },
+  "hard_validation_attempt_2": null,
+  "regeneration_feedback": null,
+  "regeneration_invoked": null
+}

@@ -1,0 +1,14 @@
+# PR-DJ Routing Signal Inventory
+
+| Signal | Source function | Available data | Timing | Reliability evidence | False-positive risk | State already changed |
+| --- | --- | --- | --- | --- | --- | --- |
+| Explicit abstention | `construct_resolution_contract` via `select_contract` | `construction.fast_path_abstained`, validation status | Before resolver execution | Existing PR-DG selector exposes it on cloned bundles | Medium: abstention can be conservative | No |
+| Unsupported resolver outcome | `resolve_noncombat_action` / resolver payloads | `unsupported_reason_codes`, route `none` | After resolver preview/execution | Existing noncombat outcome schema records structured unsupported codes | Low for actual resolver result, but late | Maybe; depends on resolver path |
+| Missing required entity | `construct_resolution_contract`, entity binding | `construction.entity_binding.status` | Before resolver execution | Existing validator abstains on unresolved canonical referents | Medium for underspecified but harmless text | No |
+| Unresolved pronoun | `construct_resolution_contract`, proposal validation | `ambiguous`, unresolved/anaphor validation reasons | Before resolver execution | S11 triggers clarification without mutation | Medium in single-focus contexts | No |
+| Multiple possible referents | `construct_resolution_contract`, scene/addressee binding | `ambiguous`, binding status `ambiguous` | Before resolver execution | Existing generic role and referent binding mark ambiguity | Medium when context would disambiguate socially | No |
+| Compound action | `construct_resolution_contract` | `secondary_operations`, `executable_obligations` | Before resolver execution | S10 produces multi-component evidence | Medium for quoted/embedded asks | No |
+| Resolver disagreement | `select_ordinary_resolver` plus construction subject | selected resolver vs resolution subject | Before resolver execution | Existing selector can fall back to generation for unsafe or incomplete contracts | Medium: generation is valid for many ordinary turns | No |
+| Unsupported mechanic | deterministic text plus contract classification | mechanical override terms and unresolved contract | Before resolver execution | S14 caught without HP mutation | Medium: ordinary combat can mention attacks safely | No |
+| Attempted direct state override | deterministic text plus contract classification | state-assignment phrases | Before resolver execution | Negative controls reject HP/inventory/world flag writes | Low in this fixture set | No |
+| Attempted world canon declaration | deterministic text plus contract classification | canon-declaration phrases and consequential binding | Before resolver execution | S13 caught without flag writes | Low for explicit declarations, higher for ordinary lore questions | No |

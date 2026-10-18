@@ -53,13 +53,14 @@ CONSEQUENTIAL_TERMS = re.compile(
     r"\b("
     r"secret|hidden|quest|clue|conspiracy|traitor|allegiance|faction|army|military|"
     r"passage|tunnel|vault|artifact|relic|curse|prophecy|murderer|monster|spy|cult|"
-    r"king|duke|baron|captain|major|war|invasion|assassin"
+    r"king|duke|baron|captain|major|war|invasion|assassin|"
+    r"bootprints?|footprints?|tracks?|broken twigs?|snapped branches?|watchtower|fork"
     r")\b",
     re.IGNORECASE,
 )
 MECHANICAL_TERMS = re.compile(
     r"\b("
-    r"roll|dc|damage|hit points?|hp|gold pieces?|gp|silver pieces?|sp|coppers?|cp|"
+    r"roll|dc|damage|hit points?|hp|"
     r"inventory|condition|spell slot|initiative|armor class|ac|success|failure"
     r")\b",
     re.IGNORECASE,
@@ -207,7 +208,7 @@ def normalize_improvisation_proposal(raw: Any) -> dict[str, Any] | None:
     if not content:
         return None
     epistemic_status = _clean_token(raw.get("epistemic_status") or raw.get("epistemic"), default="")
-    return {
+    normalized = {
         "kind": kind,
         "category": category,
         "content": content,
@@ -217,6 +218,13 @@ def normalize_improvisation_proposal(raw: Any) -> dict[str, Any] | None:
         "speaker_id": _clean_text(raw.get("speaker_id") or raw.get("speaker"), limit=80),
         "epistemic_status": epistemic_status,
     }
+    contract_id = _clean_text(raw.get("satisfies_contract_id"), limit=80)
+    dimension = _clean_token(raw.get("requested_dimension"), default="")
+    if contract_id:
+        normalized["satisfies_contract_id"] = contract_id
+    if dimension:
+        normalized["requested_dimension"] = dimension
+    return normalized
 
 
 def validate_bounded_improvisation_proposal(
@@ -245,6 +253,12 @@ def validate_bounded_improvisation_proposal(
         reasons.append("kind:consequential")
     if MECHANICAL_TERMS.search(content):
         reasons.append("content:mechanical_authority")
+    from game.proposition_authority import PRICE_OFFICIAL, price_class
+
+    if price_class(content) == PRICE_OFFICIAL and kind == INCIDENTAL_KIND:
+        reasons.append("content:official_levy")
+    if price_class(content) == PRICE_OFFICIAL and kind == NPC_CLAIM_KIND and epistemic in {"known", "grounded"}:
+        reasons.append("npc_claim:grounded_consequential_claim")
     if HIDDEN_INFO_TERMS.search(content):
         reasons.append("content:hidden_information")
     if kind == INCIDENTAL_KIND:
@@ -267,6 +281,14 @@ def validate_bounded_improvisation_proposal(
         kind_res = str(resolution.get("kind") or "").strip().lower()
         if kind_res in {"attack", "spell", "skill_check", "enemy_attack"} and kind != NPC_CLAIM_KIND:
             reasons.append("resolution:mechanical_lane")
+        metadata = resolution.get("metadata")
+        contract = metadata.get("resolution_contract") if isinstance(metadata, Mapping) else None
+        if (
+            isinstance(contract, Mapping)
+            and contract.get("epistemic_mode") == "consequential_protected"
+            and kind == INCIDENTAL_KIND
+        ):
+            reasons.append("contract:consequential_protected")
     accepted = not reasons
     scene_id = _scene_id_from_scene(scene, session)
     entry = None
@@ -287,6 +309,10 @@ def validate_bounded_improvisation_proposal(
             "authority": "bounded_improvisation",
             "truth_status": "not_world_truth" if kind == NPC_CLAIM_KIND else "runtime_incidental",
         }
+        if norm.get("satisfies_contract_id"):
+            entry["satisfies_contract_id"] = norm.get("satisfies_contract_id")
+        if norm.get("requested_dimension"):
+            entry["requested_dimension"] = norm.get("requested_dimension")
     return BoundedImprovisationDecision(dict(norm), accepted, reasons, entry)
 
 
@@ -381,6 +407,16 @@ def promote_accepted_bounded_improvisation(
     world: Mapping[str, Any] | None,
     resolution: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
+    from game.immutable_valid_response import accepted_record, effects_allowed
+
+    if accepted_record(gm) is not None and not effects_allowed(gm):
+        return {
+            "promoted_count": 0,
+            "rejected_count": 0,
+            "accepted_count": 0,
+            "promoted_ids": [],
+            "blocked_reason": "rejected_or_unaccepted_candidate",
+        }
     evaluation = (
         gm.get(IMPROVISATION_AUTHORITY_KEY)
         if isinstance(gm, Mapping) and isinstance(gm.get(IMPROVISATION_AUTHORITY_KEY), Mapping)

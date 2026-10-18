@@ -1,0 +1,22 @@
+{
+  "measurements": {
+    "roles": [
+      "system",
+      "user"
+    ],
+    "input_chars": 134,
+    "recipe_present": false,
+    "retry_context_present": false
+  },
+  "decision_facing_answer_recipe": null,
+  "provider_input": [
+    {
+      "role": "system",
+      "content": "You are an infrastructure health probe. Reply with exactly: OK"
+    },
+    {
+      "role": "user",
+      "content": "ping"
+    }
+  ]
+}

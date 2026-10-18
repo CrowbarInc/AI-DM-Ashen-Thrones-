@@ -1,0 +1,3 @@
+# 07 — Test Corpus Design
+
+132 labeled cases. Tags overlap. Counts: correction 40, follow-up 41, multi-role cases across harbor, chapel, kiln, mine, ferry, and map situations, ambiguity 13 genuine plus explicit and false-ambiguity controls. Situations use distinct wording: coppicing, caulking, surety, glass-tax rolls, shaft tallies, speaker/recipient reversals, debtor/creditor swaps, and restricted ciphers. They are not the predecessor's reliquary script with names swapped. Authorized public sources and secret topics are separate fields. Secret strings are `gray-lantern`, `salt-ledger-key`, and `iron-moth`.

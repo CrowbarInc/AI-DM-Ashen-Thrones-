@@ -1522,11 +1522,12 @@ def test_final_emission_passive_pressure_restores_recent_suspicious_figure_from_
         world=default_world(),
     )
     low = out["player_facing_text"].lower()
-    assert "the tattered man" in low
-    assert "cuts through the crowd" in low or "comes straight to you" in low
+    # No observe contract: the gate does not invent an approach by the stored lead.
+    assert "the tattered man" not in low
+    assert "cuts through the crowd" not in low
+    assert "comes straight to you" not in low
     assert "for a breath, the scene holds" not in low
-    meta = final_emission_meta_from_output(out) or {}
-    assert meta.get("final_emitted_source") == "passive_scene_pressure_fallback"
+    assert "scrape of boots" in low
 
 
 def test_clue_advice_sludge_intercepted_for_strict_npc_question():

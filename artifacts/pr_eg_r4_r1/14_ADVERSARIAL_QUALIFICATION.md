@@ -1,0 +1,3 @@
+# 14 — Adversarial Qualification
+
+Focused result: 63 passed. Tests include unsupported security claims, promises/rewards, hidden disclosure, entity/speaker substitution, conflicting authorities, five post-gate preservation helpers, exact metadata/digest restoration, legacy missing-adoption retry, exact long commitment, snapshot persistence and both API seams. Existing bounded-expression tests cover accepted characterization, paraphrase, uncertainty and refusal. Fresh rejected expression evidence: fresh_rejected_candidates.json (5 candidates); raw outputs, decision and fallback remain in live_turns.json. Canonical audit finds 0 unauthorized changes. No controlled output is counted as fresh.

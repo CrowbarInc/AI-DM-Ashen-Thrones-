@@ -1,0 +1,3 @@
+# 05 UNIFIED PROVENANCE CONTRACT
+
+Categories live beside the existing authority record: `world_source`, `host_operation`, `bounded_expression`, and `verified_history` ([game/dialogue_authority.py:14](../../game/dialogue_authority.py#L14)). Each record from [game/dialogue_authority.py:235](../../game/dialogue_authority.py#L235) carries category, speaker, addressee, operation, proposition, source id, epistemic status, validation, provenance id, and policy version `pr-eg-r6-r1-r1`. The final digest still covers the accepted response, including this provenance object. Provider text cannot mint the record.

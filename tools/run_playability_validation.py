@@ -140,6 +140,7 @@ def _build_eval_payload(
     prior_gm: str,
     debug_traces: Any,
     gm_output: Mapping[str, Any] | None,
+    resolution_contract: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     out: dict[str, Any] = {
         "player_prompt": player_prompt,
@@ -153,6 +154,8 @@ def _build_eval_payload(
         out["debug_traces"] = debug_traces
     if isinstance(gm_output, Mapping):
         out["gm_output"] = dict(gm_output)
+    if isinstance(resolution_contract, Mapping) and resolution_contract.get("contract_id"):
+        out["resolution_contract"] = dict(resolution_contract)
     return out
 
 

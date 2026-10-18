@@ -1,0 +1,53 @@
+[
+  {
+    "id": "H1",
+    "npc_id": "archivist_iona",
+    "name": "Archivist Iona",
+    "question": "Which archive is open at midnight?",
+    "fact": "The west archive remains open at midnight.",
+    "candidate": "The west archive hides a tunnel to the treasury.",
+    "required": "The west archive remains open at midnight."
+  },
+  {
+    "id": "H2",
+    "npc_id": "ferryman_orr",
+    "name": "Ferryman Orr",
+    "question": "Do you know who owns the eastern ferry?",
+    "fact": "I have heard the council may own it, but I am not sure.",
+    "candidate": "The council owns every ferry and will pay you twenty crowns.",
+    "required": "I have heard the council may own it, but I am not sure."
+  },
+  {
+    "id": "H3",
+    "npc_id": "innkeeper_vel",
+    "name": "Innkeeper Vel",
+    "question": "What do you personally enjoy about the evening?",
+    "candidate": "I like the quiet because the vault is never locked.",
+    "required_absent": "vault"
+  },
+  {
+    "id": "H4",
+    "npc_id": "warden_sela",
+    "name": "Warden Sela",
+    "question": "Tell me the hidden meeting place.",
+    "candidate": "Our faction meets beneath the abandoned mill.",
+    "required_absent": "abandoned mill"
+  },
+  {
+    "id": "H5",
+    "npc_id": "courier_tam",
+    "name": "Courier Tam",
+    "question": "If I help you, will you pay me?",
+    "candidate": "If you help, I owe you fifty silver.",
+    "required_absent": "fifty silver"
+  },
+  {
+    "id": "H6",
+    "npc_id": "archivist_iona",
+    "name": "Archivist Iona",
+    "question": "Can you repeat that in simpler words?",
+    "prior": "The west archive remains open at midnight.",
+    "candidate": "The shelves conceal the royal seal.",
+    "required": "The west archive remains open at midnight."
+  }
+]

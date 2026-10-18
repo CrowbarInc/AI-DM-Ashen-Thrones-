@@ -1,0 +1,4195 @@
+{
+  "method": "json.dumps(..., ensure_ascii=False, default=str) character counts against saved PR-BS provider_request_attempt_generation_1.json files; live token counts copied from PR-BS model_calls/digests; no model/API calls.",
+  "probes": {
+    "P1": {
+      "provider_input_chars": 110450,
+      "system_chars": 12975,
+      "user_content_chars": 91859,
+      "live_input_tokens": 25208,
+      "player": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?"
+    },
+    "P2": {
+      "provider_input_chars": 121438,
+      "system_chars": 12975,
+      "user_content_chars": 102010,
+      "live_input_tokens": 27795,
+      "player": "Baker, which loaf do you usually keep for yourself?"
+    },
+    "P3": {
+      "provider_input_chars": 110665,
+      "system_chars": 12975,
+      "user_content_chars": 92100,
+      "live_input_tokens": 25233,
+      "player": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?"
+    }
+  },
+  "components": [
+    {
+      "name": "system_prompt",
+      "source": "game.gm.SYSTEM_PROMPT",
+      "classification": "A/E",
+      "static_dynamic_type": "STATIC",
+      "canonical_owner": "game.gm.SYSTEM_PROMPT",
+      "duplication_status": "duplicates instructions and response_policy prose",
+      "proposed_disposition": "consolidate static operational rules; keep schema/authority essentials",
+      "risk": "medium quality risk; deterministic payload tests plus micro-live needed",
+      "chars": {
+        "P1": 12975,
+        "P2": 12975,
+        "P3": 12975
+      }
+    },
+    {
+      "name": "provider_input_serialized",
+      "source": "provider request envelope",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 110450,
+        "P2": 121438,
+        "P3": 110665
+      }
+    },
+    {
+      "name": "user_payload_serialized",
+      "source": "provider request envelope",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 91859,
+        "P2": 102010,
+        "P3": 92100
+      }
+    },
+    {
+      "name": "active_interlocutor",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 4,
+        "P2": 277,
+        "P3": 4
+      }
+    },
+    {
+      "name": "active_topic_anchor",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 75,
+        "P2": 75,
+        "P3": 75
+      }
+    },
+    {
+      "name": "anti_railroading_contract",
+      "source": "prompt payload key",
+      "classification": "A/E",
+      "static_dynamic_type": "STATIC_POLICY_PROJECTION",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "duplicates response_policy.anti_railroading and instructions",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1451,
+        "P2": 1451,
+        "P3": 1451
+      }
+    },
+    {
+      "name": "bounded_improvisation",
+      "source": "prompt payload key",
+      "classification": "A",
+      "static_dynamic_type": "STATIC_POLICY_PROJECTION",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 359,
+        "P2": 359,
+        "P3": 359
+      }
+    },
+    {
+      "name": "campaign",
+      "source": "storage campaign",
+      "classification": "B/G",
+      "static_dynamic_type": "STATIC",
+      "canonical_owner": "storage campaign",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1057,
+        "P2": 1057,
+        "P3": 1057
+      }
+    },
+    {
+      "name": "character",
+      "source": "storage character",
+      "classification": "B",
+      "static_dynamic_type": "STATIC_OR_SESSION_GROWING",
+      "canonical_owner": "storage character",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1059,
+        "P2": 1059,
+        "P3": 1059
+      }
+    },
+    {
+      "name": "clues",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 63,
+        "P2": 63,
+        "P3": 63
+      }
+    },
+    {
+      "name": "combat",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 20,
+        "P2": 20,
+        "P3": 20
+      }
+    },
+    {
+      "name": "context_separation_contract",
+      "source": "response_policy.context_separation",
+      "classification": "E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "response_policy.context_separation",
+      "duplication_status": "duplicates response_policy.context_separation",
+      "proposed_disposition": "remove top-level mirror if response_policy retained",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 3509,
+        "P2": 3359,
+        "P3": 3437
+      }
+    },
+    {
+      "name": "conversational_memory_window",
+      "source": "game.conversational_memory_window contract",
+      "classification": "C/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.conversational_memory_window contract",
+      "duplication_status": "duplicated in response_policy",
+      "proposed_disposition": "keep in runtime/policy, shrink provider copy",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 725,
+        "P2": 886,
+        "P3": 725
+      }
+    },
+    {
+      "name": "decision_facing_answer_recipe",
+      "source": "game.gm_resolution_decision projection",
+      "classification": "A",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.gm_resolution_decision projection",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "keep",
+      "risk": "high if removed",
+      "chars": {
+        "P1": 2356,
+        "P2": 1876,
+        "P3": 1691
+      }
+    },
+    {
+      "name": "dialogue_social_plan",
+      "source": "game.dialogue_social_plan / narration plan bundle",
+      "classification": "B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "game.dialogue_social_plan / narration plan bundle",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1649,
+        "P2": 557,
+        "P3": 1649
+      }
+    },
+    {
+      "name": "discoverable_hinting",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 4,
+        "P2": 4,
+        "P3": 4
+      }
+    },
+    {
+      "name": "fallback_behavior",
+      "source": "prompt payload key",
+      "classification": "B/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "duplicates response_policy.fallback_behavior and instruction prose",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1315,
+        "P2": 1403,
+        "P3": 1482
+      }
+    },
+    {
+      "name": "first_mention_contract",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 159,
+        "P2": 159,
+        "P3": 159
+      }
+    },
+    {
+      "name": "follow_up_pressure",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "SESSION_GROWING_BOUNDED",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 4,
+        "P2": 180,
+        "P3": 4
+      }
+    },
+    {
+      "name": "gm_resolution_decision",
+      "source": "game.gm_resolution_decision canonical decision",
+      "classification": "C/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.gm_resolution_decision canonical decision",
+      "duplication_status": "partly projected by recipe and claims",
+      "proposed_disposition": "possibly provider-reduce after recipe validation",
+      "risk": "medium until live validated",
+      "chars": {
+        "P1": 1073,
+        "P2": 1184,
+        "P3": 1073
+      }
+    },
+    {
+      "name": "instructions",
+      "source": "game.prompt_context/build_messages prompt instructions",
+      "classification": "A/E/F",
+      "static_dynamic_type": "MIXED_STATIC_TURN_SPECIFIC",
+      "canonical_owner": "game.prompt_context/build_messages prompt instructions",
+      "duplication_status": "major duplicate of system prompt and response_policy objects",
+      "proposed_disposition": "first implementation slice: dedupe policy prose against shipped policy objects",
+      "risk": "low-medium if deduped where exact object remains",
+      "chars": {
+        "P1": 25788,
+        "P2": 26675,
+        "P3": 25856
+      }
+    },
+    {
+      "name": "interaction_continuity",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 230,
+        "P2": 245,
+        "P3": 230
+      }
+    },
+    {
+      "name": "interaction_continuity_contract",
+      "source": "prompt payload key",
+      "classification": "B/E",
+      "static_dynamic_type": "SESSION_GROWING_BOUNDED",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "duplicates response_policy.interaction_continuity and turn_packet contracts",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1805,
+        "P2": 2157,
+        "P3": 1808
+      }
+    },
+    {
+      "name": "interlocutor_lead_behavior_hints",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 2
+      }
+    },
+    {
+      "name": "interlocutor_lead_context",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 270,
+        "P2": 273,
+        "P3": 270
+      }
+    },
+    {
+      "name": "lead_context",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "SESSION_GROWING_BOUNDED",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 337,
+        "P2": 337,
+        "P3": 337
+      }
+    },
+    {
+      "name": "mechanical_resolution",
+      "source": "live resolution object / provider copy",
+      "classification": "B/C/D",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "live resolution object / provider copy",
+      "duplication_status": "provider copy still carries debug/emission fields in some turns",
+      "proposed_disposition": "scrub debug/provider-irrelevant metadata; keep necessary outcome",
+      "risk": "low for debug fields, high for resolved outcome fields",
+      "chars": {
+        "P1": 662,
+        "P2": 6253,
+        "P3": 1126
+      }
+    },
+    {
+      "name": "narration_obligations",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 402,
+        "P2": 404,
+        "P3": 402
+      }
+    },
+    {
+      "name": "narration_visibility",
+      "source": "visibility contract",
+      "classification": "A",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "visibility contract",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 242,
+        "P2": 229,
+        "P3": 242
+      }
+    },
+    {
+      "name": "narrative_plan",
+      "source": "game.narration_plan_bundle / narrative_planning projection",
+      "classification": "B/E/G",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.narration_plan_bundle / narrative_planning projection",
+      "duplication_status": "partially duplicates mode/visibility/policy guidance",
+      "proposed_disposition": "keep conditional compact projection; avoid duplicating policy text",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 4472,
+        "P2": 4965,
+        "P3": 4244
+      }
+    },
+    {
+      "name": "opening_curated_facts",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 2
+      }
+    },
+    {
+      "name": "opening_inputs_are_curated",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 5,
+        "P2": 5,
+        "P3": 5
+      }
+    },
+    {
+      "name": "opening_narration_obligations",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 101,
+        "P2": 101,
+        "P3": 101
+      }
+    },
+    {
+      "name": "opening_scene_realization",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 177,
+        "P2": 177,
+        "P3": 177
+      }
+    },
+    {
+      "name": "opening_selector_selected_facts",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 2
+      }
+    },
+    {
+      "name": "opening_selector_source_used",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 6,
+        "P2": 6,
+        "P3": 6
+      }
+    },
+    {
+      "name": "player_expression_contract",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 210,
+        "P2": 210,
+        "P3": 210
+      }
+    },
+    {
+      "name": "player_facing_narration_purity_contract",
+      "source": "prompt payload key",
+      "classification": "A/E",
+      "static_dynamic_type": "STATIC_POLICY_PROJECTION",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 369,
+        "P2": 373,
+        "P3": 369
+      }
+    },
+    {
+      "name": "player_input",
+      "source": "current user text",
+      "classification": "A",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "current user text",
+      "duplication_status": "also appears in recipe/requested_answer, turn_packet.player_text, turn_summary/mechanical_resolution",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 69,
+        "P2": 53,
+        "P3": 129
+      }
+    },
+    {
+      "name": "recent_log",
+      "source": "selected conversational memory legacy projection",
+      "classification": "B/E",
+      "static_dynamic_type": "SESSION_GROWING_BOUNDED",
+      "canonical_owner": "selected conversational memory legacy projection",
+      "duplication_status": "duplicates selected_conversational_memory",
+      "proposed_disposition": "replace with selected_conversational_memory or vice versa, not both",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 2
+      }
+    },
+    {
+      "name": "referent_clause_prompt_hints",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 0,
+        "P2": 502,
+        "P3": 0
+      }
+    },
+    {
+      "name": "referent_tracking",
+      "source": "game.referent_tracking artifact",
+      "classification": "B/C/D",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.referent_tracking artifact",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1250,
+        "P2": 3005,
+        "P3": 1250
+      }
+    },
+    {
+      "name": "resolution_contract",
+      "source": "game.resolution_contract",
+      "classification": "A/C",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.resolution_contract",
+      "duplication_status": "partly projected by recipe and turn_summary",
+      "proposed_disposition": "keep compact until recipe fully covers request contract",
+      "risk": "medium",
+      "chars": {
+        "P1": 569,
+        "P2": 723,
+        "P3": 537
+      }
+    },
+    {
+      "name": "response_policy",
+      "source": "game.response_policy + game.prompt_context projection",
+      "classification": "B/C/E",
+      "static_dynamic_type": "MIXED_STATIC_TURN_SPECIFIC",
+      "canonical_owner": "game.response_policy + game.prompt_context projection",
+      "duplication_status": "duplicated by top-level contract mirrors and turn_packet.response_policy",
+      "proposed_disposition": "keep canonical object, consider compact model projection",
+      "risk": "medium; validators use runtime object, model still needs some rules",
+      "chars": {
+        "P1": 20630,
+        "P2": 21237,
+        "P3": 20913
+      }
+    },
+    {
+      "name": "response_type_contract",
+      "source": "prompt payload key",
+      "classification": "A/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 389,
+        "P2": 416,
+        "P3": 388
+      }
+    },
+    {
+      "name": "scene",
+      "source": "storage scene public projection",
+      "classification": "A/B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "storage scene public projection",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1731,
+        "P2": 1630,
+        "P3": 1705
+      }
+    },
+    {
+      "name": "scene_advancement",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 101,
+        "P2": 101,
+        "P3": 101
+      }
+    },
+    {
+      "name": "scene_state_anchor_contract",
+      "source": "prompt payload key",
+      "classification": "A/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 870,
+        "P2": 930,
+        "P3": 741
+      }
+    },
+    {
+      "name": "selected_conversational_memory",
+      "source": "game.conversational_memory_window",
+      "classification": "B",
+      "static_dynamic_type": "SESSION_GROWING_BOUNDED",
+      "canonical_owner": "game.conversational_memory_window",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 2
+      }
+    },
+    {
+      "name": "session",
+      "source": "storage session compressed projection",
+      "classification": "C/D",
+      "static_dynamic_type": "SESSION_GROWING",
+      "canonical_owner": "storage session compressed projection",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 340,
+        "P2": 353,
+        "P3": 340
+      }
+    },
+    {
+      "name": "social_context",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 175,
+        "P2": 779,
+        "P3": 175
+      }
+    },
+    {
+      "name": "social_response_structure_contract",
+      "source": "prompt payload key",
+      "classification": "B/E",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 628,
+        "P2": 623,
+        "P3": 634
+      }
+    },
+    {
+      "name": "speaker_selection",
+      "source": "speaker contract / prompt_context",
+      "classification": "A/B",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "speaker contract / prompt_context",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 1241,
+        "P2": 1455,
+        "P3": 1269
+      }
+    },
+    {
+      "name": "transition",
+      "source": "prompt payload key",
+      "classification": "B",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 535,
+        "P2": 529,
+        "P3": 535
+      }
+    },
+    {
+      "name": "turn_packet",
+      "source": "game.turn_packet",
+      "classification": "C/D/E",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "game.turn_packet",
+      "duplication_status": "duplicates response_policy plus contracts already top-level",
+      "proposed_disposition": "remove from provider or project tiny model-facing subset; keep runtime/traces",
+      "risk": "low AI risk for debug/duplicate fields; medium if contracts removed wholesale",
+      "chars": {
+        "P1": 10676,
+        "P2": 10640,
+        "P3": 10910
+      }
+    },
+    {
+      "name": "turn_summary",
+      "source": "prompt_context turn summary",
+      "classification": "A",
+      "static_dynamic_type": "TURN_SPECIFIC",
+      "canonical_owner": "prompt_context turn summary",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 456,
+        "P2": 385,
+        "P3": 449
+      }
+    },
+    {
+      "name": "uncertainty_hint",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 4,
+        "P2": 4,
+        "P3": 4
+      }
+    },
+    {
+      "name": "world",
+      "source": "storage world compressed projection",
+      "classification": "B",
+      "static_dynamic_type": "WORLD_GROWING",
+      "canonical_owner": "storage world compressed projection",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 349,
+        "P2": 349,
+        "P3": 349
+      }
+    },
+    {
+      "name": "world_progression_summary",
+      "source": "prompt payload key",
+      "classification": "G",
+      "static_dynamic_type": "CONDITIONALLY_PRESENT",
+      "canonical_owner": "unknown / see source",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 200,
+        "P2": 200,
+        "P3": 288
+      }
+    },
+    {
+      "name": "world_state",
+      "source": "world progression projection",
+      "classification": "B",
+      "static_dynamic_type": "WORLD_GROWING",
+      "canonical_owner": "world progression projection",
+      "duplication_status": "not a dominant duplication or not assessed as duplicate",
+      "proposed_disposition": "retain unless later slice proves provider projection can be smaller",
+      "risk": "low/uncertain; validate if changed",
+      "chars": {
+        "P1": 51,
+        "P2": 51,
+        "P3": 51
+      }
+    }
+  ],
+  "nested_breakdowns": {
+    "P1": {
+      "response_policy": [
+        {
+          "name": "context_separation",
+          "chars": 3509
+        },
+        {
+          "name": "answer_completeness",
+          "chars": 2079
+        },
+        {
+          "name": "interaction_continuity",
+          "chars": 1805
+        },
+        {
+          "name": "response_delta",
+          "chars": 1762
+        },
+        {
+          "name": "narrative_authenticity",
+          "chars": 1608
+        },
+        {
+          "name": "tone_escalation",
+          "chars": 1477
+        },
+        {
+          "name": "anti_railroading",
+          "chars": 1451
+        },
+        {
+          "name": "fallback_behavior",
+          "chars": 1315
+        },
+        {
+          "name": "narrative_authority",
+          "chars": 1157
+        },
+        {
+          "name": "rule_priority_order",
+          "chars": 743
+        },
+        {
+          "name": "conversational_memory_window",
+          "chars": 725
+        },
+        {
+          "name": "no_validator_voice",
+          "chars": 633
+        },
+        {
+          "name": "social_response_structure",
+          "chars": 628
+        },
+        {
+          "name": "player_facing_narration_purity",
+          "chars": 369
+        },
+        {
+          "name": "uncertainty",
+          "chars": 355
+        },
+        {
+          "name": "response_type_contract",
+          "chars": 198
+        },
+        {
+          "name": "planner_seam_trace",
+          "chars": 111
+        },
+        {
+          "name": "scene_momentum_due",
+          "chars": 5
+        },
+        {
+          "name": "must_answer",
+          "chars": 4
+        },
+        {
+          "name": "forbid_state_invention",
+          "chars": 4
+        },
+        {
+          "name": "forbid_secret_leak",
+          "chars": 4
+        },
+        {
+          "name": "allow_partial_answer",
+          "chars": 4
+        },
+        {
+          "name": "diegetic_only",
+          "chars": 4
+        },
+        {
+          "name": "prefer_scene_momentum",
+          "chars": 4
+        },
+        {
+          "name": "prefer_specificity",
+          "chars": 4
+        },
+        {
+          "name": "forbid_unjustified_narrative_authority",
+          "chars": 4
+        }
+      ],
+      "turn_packet": [
+        {
+          "name": "response_policy",
+          "chars": 6022
+        },
+        {
+          "name": "contracts",
+          "chars": 3753
+        },
+        {
+          "name": "debug",
+          "chars": 287
+        },
+        {
+          "name": "referent_tracking_compact",
+          "chars": 132
+        },
+        {
+          "name": "route",
+          "chars": 114
+        },
+        {
+          "name": "player_text",
+          "chars": 69
+        },
+        {
+          "name": "continuity",
+          "chars": 40
+        },
+        {
+          "name": "fallback",
+          "chars": 29
+        },
+        {
+          "name": "scene_id",
+          "chars": 15
+        },
+        {
+          "name": "resolution_kind",
+          "chars": 13
+        },
+        {
+          "name": "turn_id",
+          "chars": 4
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "narrative_plan": [
+        {
+          "name": "narrative_roles",
+          "chars": 1232
+        },
+        {
+          "name": "answer_exposition_plan",
+          "chars": 680
+        },
+        {
+          "name": "action_outcome",
+          "chars": 642
+        },
+        {
+          "name": "transition_node",
+          "chars": 535
+        },
+        {
+          "name": "narrative_mode_contract",
+          "chars": 462
+        },
+        {
+          "name": "scene_anchors",
+          "chars": 215
+        },
+        {
+          "name": "required_new_information",
+          "chars": 185
+        },
+        {
+          "name": "active_pressures",
+          "chars": 151
+        },
+        {
+          "name": "role_allocation",
+          "chars": 74
+        },
+        {
+          "name": "narrative_mode",
+          "chars": 16
+        },
+        {
+          "name": "allowable_entity_references",
+          "chars": 2
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "mechanical_resolution": [
+        {
+          "name": "action_outcome",
+          "chars": 642
+        }
+      ],
+      "gm_resolution_decision": [
+        {
+          "name": "realization_claims",
+          "chars": 772
+        },
+        {
+          "name": "executable_obligations",
+          "chars": 75
+        },
+        {
+          "name": "outcome_classification",
+          "chars": 26
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "unresolved_qualifiers",
+          "chars": 2
+        },
+        {
+          "name": "answer_relations",
+          "chars": 2
+        },
+        {
+          "name": "permitted_state_mutations",
+          "chars": 2
+        }
+      ],
+      "resolution_contract": [
+        {
+          "name": "constraint",
+          "chars": 265
+        },
+        {
+          "name": "dimensions",
+          "chars": 18
+        },
+        {
+          "name": "authority",
+          "chars": 17
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "dimension",
+          "chars": 16
+        },
+        {
+          "name": "target",
+          "chars": 13
+        },
+        {
+          "name": "subject",
+          "chars": 13
+        },
+        {
+          "name": "request_kind",
+          "chars": 9
+        },
+        {
+          "name": "operation",
+          "chars": 9
+        },
+        {
+          "name": "expected_resolution",
+          "chars": 8
+        },
+        {
+          "name": "interlocutor",
+          "chars": 4
+        }
+      ],
+      "decision_facing_answer_recipe": [
+        {
+          "name": "declaration_guidance",
+          "chars": 524
+        },
+        {
+          "name": "required_content",
+          "chars": 422
+        },
+        {
+          "name": "forbidden_upgrades",
+          "chars": 304
+        },
+        {
+          "name": "permitted_inference",
+          "chars": 251
+        },
+        {
+          "name": "answer_strategy",
+          "chars": 172
+        },
+        {
+          "name": "requested_answer",
+          "chars": 168
+        },
+        {
+          "name": "incidental_improvisation_guidance",
+          "chars": 100
+        },
+        {
+          "name": "unresolved_content",
+          "chars": 37
+        },
+        {
+          "name": "schema",
+          "chars": 34
+        },
+        {
+          "name": "authority_owner",
+          "chars": 24
+        },
+        {
+          "name": "inference_modality",
+          "chars": 10
+        },
+        {
+          "name": "projection_only",
+          "chars": 4
+        },
+        {
+          "name": "permitted_content",
+          "chars": 2
+        }
+      ],
+      "scene": [
+        {
+          "name": "public",
+          "chars": 423
+        },
+        {
+          "name": "layering_rules",
+          "chars": 392
+        },
+        {
+          "name": "intent",
+          "chars": 319
+        },
+        {
+          "name": "runtime",
+          "chars": 255
+        },
+        {
+          "name": "gm_only",
+          "chars": 53
+        },
+        {
+          "name": "clue_visibility",
+          "chars": 50
+        },
+        {
+          "name": "clue_records",
+          "chars": 38
+        },
+        {
+          "name": "discoverable_clues",
+          "chars": 2
+        },
+        {
+          "name": "visible_clues",
+          "chars": 2
+        },
+        {
+          "name": "discovered_clues",
+          "chars": 2
+        },
+        {
+          "name": "pending_leads",
+          "chars": 2
+        }
+      ],
+      "world": [
+        {
+          "name": "progression_counts",
+          "chars": 101
+        },
+        {
+          "name": "recent_events",
+          "chars": 71
+        },
+        {
+          "name": "world_state",
+          "chars": 51
+        },
+        {
+          "name": "faction_names",
+          "chars": 47
+        }
+      ],
+      "session": [
+        {
+          "name": "active_scene_id",
+          "chars": 15
+        },
+        {
+          "name": "response_mode",
+          "chars": 10
+        },
+        {
+          "name": "interaction_mode",
+          "chars": 6
+        },
+        {
+          "name": "engagement_level",
+          "chars": 6
+        },
+        {
+          "name": "active_interaction_target_id",
+          "chars": 4
+        },
+        {
+          "name": "active_interaction_target_name",
+          "chars": 4
+        },
+        {
+          "name": "active_interaction_kind",
+          "chars": 4
+        },
+        {
+          "name": "conversation_privacy",
+          "chars": 4
+        },
+        {
+          "name": "player_position_context",
+          "chars": 4
+        },
+        {
+          "name": "turn_counter",
+          "chars": 1
+        },
+        {
+          "name": "visited_scene_count",
+          "chars": 1
+        }
+      ],
+      "selected_conversational_memory": [],
+      "recent_log": [],
+      "referent_tracking": [
+        {
+          "name": "debug",
+          "chars": 396
+        },
+        {
+          "name": "pronoun_resolution",
+          "chars": 155
+        },
+        {
+          "name": "interaction_target_continuity",
+          "chars": 150
+        },
+        {
+          "name": "forbidden_or_unresolved_patterns",
+          "chars": 85
+        },
+        {
+          "name": "referential_ambiguity_class",
+          "chars": 11
+        },
+        {
+          "name": "active_interaction_target",
+          "chars": 4
+        },
+        {
+          "name": "continuity_subject",
+          "chars": 4
+        },
+        {
+          "name": "continuity_object",
+          "chars": 4
+        },
+        {
+          "name": "single_unambiguous_entity",
+          "chars": 4
+        },
+        {
+          "name": "active_entities",
+          "chars": 2
+        },
+        {
+          "name": "active_entity_order",
+          "chars": 2
+        },
+        {
+          "name": "active_speaker_candidates",
+          "chars": 2
+        },
+        {
+          "name": "allowed_named_references",
+          "chars": 2
+        },
+        {
+          "name": "safe_explicit_fallback_labels",
+          "chars": 2
+        },
+        {
+          "name": "version",
+          "chars": 1
+        },
+        {
+          "name": "ambiguity_risk",
+          "chars": 1
+        }
+      ],
+      "instructions": [
+        {
+          "index": 0,
+          "chars": 232,
+          "prefix": "WORLD SIMULATION (bounded engine slice): Faction pressure ash_cowl: 3 | Faction pressure house_verevin: 3 | Faction pressure ordo_pyric: 2 | Faction agenda ash_cowl: 1 | Faction ag"
+        },
+        {
+          "index": 1,
+          "chars": 840,
+          "prefix": "When rules conflict, resolve them in this order: answer the player; preserve authoritative state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden tru"
+        },
+        {
+          "index": 2,
+          "chars": 92,
+          "prefix": "Always answer the player. Prefer partial truth over refusal. Never output meta explanations."
+        },
+        {
+          "index": 3,
+          "chars": 345,
+          "prefix": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the syste"
+        },
+        {
+          "index": 4,
+          "chars": 95,
+          "prefix": "Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones."
+        },
+        {
+          "index": 5,
+          "chars": 94,
+          "prefix": "Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration."
+        },
+        {
+          "index": 6,
+          "chars": 812,
+          "prefix": "ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. When answer_required is true, answer_must_come_first requires the first sentence to deliver the "
+        },
+        {
+          "index": 7,
+          "chars": 234,
+          "prefix": "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply per active interlocutor; when narrator, still lead with the answ"
+        },
+        {
+          "index": 8,
+          "chars": 293,
+          "prefix": "When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate the prior answer. Add net-new value via allowed_delta_kinds "
+        },
+        {
+          "index": 9,
+          "chars": 121,
+          "prefix": "VISIBILITY CONTRACT (MANDATORY): Use narration_visibility as the hard scope for entity references and factual assertions."
+        },
+        {
+          "index": 10,
+          "chars": 78,
+          "prefix": "You MUST NOT reference entities outside narration_visibility.visible_entities."
+        },
+        {
+          "index": 11,
+          "chars": 114,
+          "prefix": "You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted."
+        },
+        {
+          "index": 12,
+          "chars": 49,
+          "prefix": "You MUST NOT reveal hidden or undiscovered facts."
+        },
+        {
+          "index": 13,
+          "chars": 104,
+          "prefix": "Discoverable facts may be hinted at (discoverable_hinting is true), but not asserted as confirmed truth."
+        },
+        {
+          "index": 14,
+          "chars": 71,
+          "prefix": "If uncertain whether something is visible or known, omit or reframe it."
+        },
+        {
+          "index": 15,
+          "chars": 54,
+          "prefix": "Only visible or addressable entities may act or speak."
+        },
+        {
+          "index": 16,
+          "chars": 155,
+          "prefix": "FIRST-MENTION CONTRACT (MANDATORY): Visibility scope controls who/what may be referenced; first-mention contract controls how first references are phrased."
+        },
+        {
+          "index": 17,
+          "chars": 51,
+          "prefix": "The first reference to any entity MUST be explicit."
+        },
+        {
+          "index": 18,
+          "chars": 66,
+          "prefix": "A first reference MUST use a visible name or a visible descriptor."
+        },
+        {
+          "index": 19,
+          "chars": 76,
+          "prefix": "A first reference MUST include grounding by location, behavior, or relation."
+        },
+        {
+          "index": 20,
+          "chars": 54,
+          "prefix": "Pronouns MAY be used only after explicit introduction."
+        },
+        {
+          "index": 21,
+          "chars": 180,
+          "prefix": "You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts."
+        },
+        {
+          "index": 22,
+          "chars": 303,
+          "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a current actor or speaker allowed by auth"
+        },
+        {
+          "index": 23,
+          "chars": 54,
+          "prefix": "Avoid floating, abstract, or scene-detached narration."
+        },
+        {
+          "index": 24,
+          "chars": 290,
+          "prefix": "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural shaping alongside existing contracts. It does not replace CTIR, r"
+        },
+        {
+          "index": 25,
+          "chars": 348,
+          "prefix": "Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus the same-turn shipped slices already used at this seam (`res"
+        },
+        {
+          "index": 26,
+          "chars": 201,
+          "prefix": "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with `scene_state_anchor_contract` and narration visibility—do not contradict auth"
+        },
+        {
+          "index": 27,
+          "chars": 224,
+          "prefix": "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, scene_tension_codes, world/clock summaries) together with `narration_obligati"
+        },
+        {
+          "index": 28,
+          "chars": 186,
+          "prefix": "Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this turn—without inventing facts beyond visibility and narrative auth"
+        },
+        {
+          "index": 29,
+          "chars": 530,
+          "prefix": "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) for published entity_id handles when non-empty—not whom to"
+        },
+        {
+          "index": 30,
+          "chars": 335,
+          "prefix": "Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract (anchors, closed-set opening_reason, visible_fact anchor ids/c"
+        },
+        {
+          "index": 31,
+          "chars": 791,
+          "prefix": "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries `emphasis_band` plus closed-set `signals` (and small bounded"
+        },
+        {
+          "index": 32,
+          "chars": 373,
+          "prefix": "N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narr"
+        },
+        {
+          "index": 33,
+          "chars": 320,
+          "prefix": "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from `narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
+        },
+        {
+          "index": 34,
+          "chars": 341,
+          "prefix": "NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as planning-only bounded data. Treat each family's `emphasis_band` "
+        },
+        {
+          "index": 35,
+          "chars": 422,
+          "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_op"
+        },
+        {
+          "index": 36,
+          "chars": 72,
+          "prefix": "Use campaign and world state to keep political and strategic continuity."
+        },
+        {
+          "index": 37,
+          "chars": 123,
+          "prefix": "Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation."
+        },
+        {
+          "index": 38,
+          "chars": 196,
+          "prefix": "Forbidden generic phrases are disallowed: \"In this city...\", \"Times are tough...\", \"Trust is hard to come by...\", \"You'll need to prove yourself...\" — rewrite into specific names/l"
+        },
+        {
+          "index": 39,
+          "chars": 299,
+          "prefix": "QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Op"
+        },
+        {
+          "index": 40,
+          "chars": 237,
+          "prefix": "If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and response_policy.uncertainty.sources, then compose it from response_policy.uncer"
+        },
+        {
+          "index": 41,
+          "chars": 161,
+          "prefix": "Ground uncertainty with response_policy.uncertainty.context_inputs: uncertainty_hint.turn_context, uncertainty_hint.speaker, and uncertainty_hint.scene_snapshot."
+        },
+        {
+          "index": 42,
+          "chars": 172,
+          "prefix": "If uncertainty_hint.speaker.role is npc, keep the reply attributable to that NPC and limited to what they could plausibly know, hear, point to, or direct the player toward."
+        },
+        {
+          "index": 43,
+          "chars": 163,
+          "prefix": "If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording."
+        },
+        {
+          "index": 44,
+          "chars": 167,
+          "prefix": "If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity."
+        },
+        {
+          "index": 45,
+          "chars": 165,
+          "prefix": "Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now."
+        },
+        {
+          "index": 46,
+          "chars": 115,
+          "prefix": "Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer."
+        },
+        {
+          "index": 47,
+          "chars": 132,
+          "prefix": "If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice."
+        },
+        {
+          "index": 48,
+          "chars": 348,
+          "prefix": "PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1–2 c"
+        },
+        {
+          "index": 49,
+          "chars": 111,
+          "prefix": "If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id."
+        },
+        {
+          "index": 50,
+          "chars": 76,
+          "prefix": "If the player meaningfully changes the world, you may provide world_updates."
+        },
+        {
+          "index": 51,
+          "chars": 134,
+          "prefix": "If the player text implies a clear mechanical action, suggested_action may be filled for UI assistance, but narration remains primary."
+        },
+        {
+          "index": 52,
+          "chars": 107,
+          "prefix": "When interaction_continuity has an active target, treat that NPC as the default conversational counterpart."
+        },
+        {
+          "index": 53,
+          "chars": 124,
+          "prefix": "Non-addressed NPCs should not casually interject; if they interrupt, present it as a notable event with scene justification."
+        },
+        {
+          "index": 54,
+          "chars": 183,
+          "prefix": "If conversation_privacy or player_position_context implies private exchange (for example lowered_voice), reduce casual eavesdropping/interjection unless scene facts justify otherwi"
+        },
+        {
+          "index": 55,
+          "chars": 167,
+          "prefix": "Follow authoritative engine state for who is present, player positioning, scene transitions, and check outcomes; narrate outcomes without inventing structured results."
+        },
+        {
+          "index": 56,
+          "chars": 144,
+          "prefix": "Treat player input as an action declaration: default to third-person phrasing and preserve the user's expression format instead of rewriting it."
+        },
+        {
+          "index": 57,
+          "chars": 210,
+          "prefix": "Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, \"Keep your voice down.\"); do not treat the quote alone as the entire action when surr"
+        },
+        {
+          "index": 58,
+          "chars": 150,
+          "prefix": "Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics."
+        },
+        {
+          "index": 59,
+          "chars": 323,
+          "prefix": "If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, "
+        },
+        {
+          "index": 60,
+          "chars": 251,
+          "prefix": "If narration_obligations.active_npc_reply_expected is true, complete the active NPC's substantive in-turn reply now unless a pending engine check prompt already takes precedence, o"
+        },
+        {
+          "index": 61,
+          "chars": 154,
+          "prefix": "If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor's reply and the immediate exchange over general scene recap."
+        },
+        {
+          "index": 62,
+          "chars": 119,
+          "prefix": "Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal)."
+        },
+        {
+          "index": 63,
+          "chars": 163,
+          "prefix": "If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling."
+        },
+        {
+          "index": 64,
+          "chars": 300,
+          "prefix": "If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertaint"
+        },
+        {
+          "index": 65,
+          "chars": 328,
+          "prefix": "NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usa"
+        },
+        {
+          "index": 66,
+          "chars": 115,
+          "prefix": "When answering a player question, give a direct answer first. Do not replace the answer with narrative description."
+        },
+        {
+          "index": 67,
+          "chars": 175,
+          "prefix": "Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror."
+        },
+        {
+          "index": 68,
+          "chars": 94,
+          "prefix": "Do not restate or paraphrase the player's input. Always continue forward with new information."
+        },
+        {
+          "index": 69,
+          "chars": 60,
+          "prefix": "Do not repeat the player's spoken line. React to it instead."
+        },
+        {
+          "index": 70,
+          "chars": 275,
+          "prefix": "If narration_obligations.avoid_input_echo or narration_obligations.avoid_player_action_restatement is true, do not restate or lightly paraphrase player_input (for example, \"Galinor"
+        },
+        {
+          "index": 71,
+          "chars": 205,
+          "prefix": "If narration_obligations.prefer_structured_turn_summary is true, continue from resolved world state, scene advancement, and NPC intent/reply obligations rather than narrating that "
+        },
+        {
+          "index": 72,
+          "chars": 45,
+          "prefix": "Keep the narration to 1-4 concise paragraphs."
+        },
+        {
+          "index": 73,
+          "chars": 94,
+          "prefix": "Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing."
+        },
+        {
+          "index": 74,
+          "chars": 215,
+          "prefix": "LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied—do not invent leads, facts, or journal summaries. Turn compact rows into light, actionable nudges ("
+        },
+        {
+          "index": 75,
+          "chars": 164,
+          "prefix": "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null."
+        },
+        {
+          "index": 76,
+          "chars": 197,
+          "prefix": "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details b"
+        },
+        {
+          "index": 77,
+          "chars": 178,
+          "prefix": "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency."
+        },
+        {
+          "index": 78,
+          "chars": 165,
+          "prefix": "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads."
+        },
+        {
+          "index": 79,
+          "chars": 241,
+          "prefix": "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as pros"
+        },
+        {
+          "index": 80,
+          "chars": 140,
+          "prefix": "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action."
+        },
+        {
+          "index": 81,
+          "chars": 178,
+          "prefix": "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context."
+        },
+        {
+          "index": 82,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing regis"
+        },
+        {
+          "index": 83,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond t"
+        },
+        {
+          "index": 84,
+          "chars": 204,
+          "prefix": "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / r"
+        },
+        {
+          "index": 85,
+          "chars": 199,
+          "prefix": "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current"
+        },
+        {
+          "index": 86,
+          "chars": 233,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): Obey the top-level `speaker_selection` object. When `primary_speaker_id` is non-null, treat that NPC as the default voice for substantive qu"
+        },
+        {
+          "index": 87,
+          "chars": 228,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `allowed_speaker_ids` is empty — do not attribute quoted speech to any NPC; remain narrator-neutral. Do not invent incidental speakers or cr"
+        },
+        {
+          "index": 88,
+          "chars": 285,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true — do not use generic unnamed stand-ins (for example 'ragged stranger', 'stranger', 'someone nearby', 's"
+        },
+        {
+          "index": 89,
+          "chars": 396,
+          "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn—prioritize it over older or omitted chat material. Do"
+        },
+        {
+          "index": 90,
+          "chars": 236,
+          "prefix": "NARRATIVE MODE (STRUCTURAL DELTA): Canonical mode is `narrative_plan.narrative_mode_contract.mode` (action_outcome); obey its prompt_obligations and forbidden_moves as machine code"
+        },
+        {
+          "index": 91,
+          "chars": 112,
+          "prefix": "struct:action_outcome:lead_early_with_the_authoritative_result_signal_before_atmosphere_or_scene_setting_padding"
+        },
+        {
+          "index": 92,
+          "chars": 54,
+          "prefix": "struct:action_outcome:foreground_state_change_salience"
+        },
+        {
+          "index": 93,
+          "chars": 99,
+          "prefix": "struct:action_outcome:do_not_treat_unresolved_engine_check_prompts_as_if_the_outcome_already_landed"
+        },
+        {
+          "index": 94,
+          "chars": 63,
+          "prefix": "struct:contract_obligation:avoid_exposition_before_result_lands"
+        },
+        {
+          "index": 95,
+          "chars": 51,
+          "prefix": "struct:contract_obligation:lead_with_outcome_signal"
+        },
+        {
+          "index": 96,
+          "chars": 57,
+          "prefix": "struct:contract_obligation:preserve_state_change_salience"
+        },
+        {
+          "index": 97,
+          "chars": 73,
+          "prefix": "struct:contract_forbidden_moves:no_generic_fallback|no_resultless_outcome"
+        },
+        {
+          "index": 98,
+          "chars": 556,
+          "prefix": "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. Do not introd"
+        },
+        {
+          "index": 99,
+          "chars": 554,
+          "prefix": "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. Do not assert unresolved outcomes as se"
+        },
+        {
+          "index": 100,
+          "chars": 459,
+          "prefix": "FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. Either give a bounded partial answer or,"
+        },
+        {
+          "index": 101,
+          "chars": 1684,
+          "prefix": "ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. Do not decide the player character's action for them. Do not turn a surfac"
+        },
+        {
+          "index": 102,
+          "chars": 788,
+          "prefix": "CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. "
+        },
+        {
+          "index": 103,
+          "chars": 681,
+          "prefix": "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. Speak only in player-facing dieget"
+        },
+        {
+          "index": 104,
+          "chars": 226,
+          "prefix": "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not us"
+        },
+        {
+          "index": 105,
+          "chars": 696,
+          "prefix": "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if"
+        },
+        {
+          "index": 106,
+          "chars": 165,
+          "prefix": "ANSWER RECIPE: Follow decision_facing_answer_recipe for this turn. It projects gm_resolution_decision and does not add authority. The decision wins if they disagree."
+        }
+      ]
+    },
+    "P2": {
+      "response_policy": [
+        {
+          "name": "context_separation",
+          "chars": 3359
+        },
+        {
+          "name": "answer_completeness",
+          "chars": 2257
+        },
+        {
+          "name": "interaction_continuity",
+          "chars": 2157
+        },
+        {
+          "name": "response_delta",
+          "chars": 1721
+        },
+        {
+          "name": "narrative_authenticity",
+          "chars": 1629
+        },
+        {
+          "name": "tone_escalation",
+          "chars": 1462
+        },
+        {
+          "name": "anti_railroading",
+          "chars": 1451
+        },
+        {
+          "name": "fallback_behavior",
+          "chars": 1403
+        },
+        {
+          "name": "narrative_authority",
+          "chars": 1136
+        },
+        {
+          "name": "conversational_memory_window",
+          "chars": 886
+        },
+        {
+          "name": "rule_priority_order",
+          "chars": 743
+        },
+        {
+          "name": "no_validator_voice",
+          "chars": 633
+        },
+        {
+          "name": "social_response_structure",
+          "chars": 623
+        },
+        {
+          "name": "player_facing_narration_purity",
+          "chars": 373
+        },
+        {
+          "name": "uncertainty",
+          "chars": 356
+        },
+        {
+          "name": "response_type_contract",
+          "chars": 231
+        },
+        {
+          "name": "planner_seam_trace",
+          "chars": 111
+        },
+        {
+          "name": "prefer_scene_momentum",
+          "chars": 5
+        },
+        {
+          "name": "scene_momentum_due",
+          "chars": 5
+        },
+        {
+          "name": "must_answer",
+          "chars": 4
+        },
+        {
+          "name": "forbid_state_invention",
+          "chars": 4
+        },
+        {
+          "name": "forbid_secret_leak",
+          "chars": 4
+        },
+        {
+          "name": "allow_partial_answer",
+          "chars": 4
+        },
+        {
+          "name": "diegetic_only",
+          "chars": 4
+        },
+        {
+          "name": "prefer_specificity",
+          "chars": 4
+        },
+        {
+          "name": "forbid_unjustified_narrative_authority",
+          "chars": 4
+        }
+      ],
+      "turn_packet": [
+        {
+          "name": "response_policy",
+          "chars": 6012
+        },
+        {
+          "name": "contracts",
+          "chars": 3741
+        },
+        {
+          "name": "debug",
+          "chars": 287
+        },
+        {
+          "name": "referent_tracking_compact",
+          "chars": 130
+        },
+        {
+          "name": "route",
+          "chars": 123
+        },
+        {
+          "name": "player_text",
+          "chars": 53
+        },
+        {
+          "name": "continuity",
+          "chars": 40
+        },
+        {
+          "name": "fallback",
+          "chars": 29
+        },
+        {
+          "name": "scene_id",
+          "chars": 13
+        },
+        {
+          "name": "resolution_kind",
+          "chars": 10
+        },
+        {
+          "name": "turn_id",
+          "chars": 4
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "narrative_plan": [
+        {
+          "name": "narrative_roles",
+          "chars": 1316
+        },
+        {
+          "name": "answer_exposition_plan",
+          "chars": 798
+        },
+        {
+          "name": "narrative_mode_contract",
+          "chars": 657
+        },
+        {
+          "name": "action_outcome",
+          "chars": 624
+        },
+        {
+          "name": "transition_node",
+          "chars": 529
+        },
+        {
+          "name": "scene_anchors",
+          "chars": 237
+        },
+        {
+          "name": "active_pressures",
+          "chars": 213
+        },
+        {
+          "name": "required_new_information",
+          "chars": 182
+        },
+        {
+          "name": "role_allocation",
+          "chars": 74
+        },
+        {
+          "name": "allowable_entity_references",
+          "chars": 47
+        },
+        {
+          "name": "narrative_mode",
+          "chars": 10
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "mechanical_resolution": [
+        {
+          "name": "metadata",
+          "chars": 3305
+        },
+        {
+          "name": "social",
+          "chars": 2395
+        },
+        {
+          "name": "hint",
+          "chars": 155
+        },
+        {
+          "name": "label",
+          "chars": 53
+        },
+        {
+          "name": "prompt",
+          "chars": 53
+        },
+        {
+          "name": "action_id",
+          "chars": 16
+        },
+        {
+          "name": "kind",
+          "chars": 10
+        },
+        {
+          "name": "resolved_transition",
+          "chars": 5
+        },
+        {
+          "name": "requires_check",
+          "chars": 5
+        },
+        {
+          "name": "success",
+          "chars": 4
+        },
+        {
+          "name": "target_scene_id",
+          "chars": 4
+        },
+        {
+          "name": "clue_id",
+          "chars": 4
+        },
+        {
+          "name": "world_updates",
+          "chars": 4
+        },
+        {
+          "name": "discovered_clues",
+          "chars": 2
+        },
+        {
+          "name": "state_changes",
+          "chars": 2
+        }
+      ],
+      "gm_resolution_decision": [
+        {
+          "name": "realization_claims",
+          "chars": 884
+        },
+        {
+          "name": "executable_obligations",
+          "chars": 75
+        },
+        {
+          "name": "outcome_classification",
+          "chars": 25
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "unresolved_qualifiers",
+          "chars": 2
+        },
+        {
+          "name": "answer_relations",
+          "chars": 2
+        },
+        {
+          "name": "permitted_state_mutations",
+          "chars": 2
+        }
+      ],
+      "resolution_contract": [
+        {
+          "name": "constraint",
+          "chars": 460
+        },
+        {
+          "name": "authority",
+          "chars": 17
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "request_kind",
+          "chars": 9
+        },
+        {
+          "name": "expected_resolution",
+          "chars": 8
+        },
+        {
+          "name": "target",
+          "chars": 7
+        },
+        {
+          "name": "interlocutor",
+          "chars": 7
+        },
+        {
+          "name": "subject",
+          "chars": 7
+        },
+        {
+          "name": "operation",
+          "chars": 5
+        },
+        {
+          "name": "dimension",
+          "chars": 4
+        },
+        {
+          "name": "dimensions",
+          "chars": 2
+        }
+      ],
+      "decision_facing_answer_recipe": [
+        {
+          "name": "declaration_guidance",
+          "chars": 469
+        },
+        {
+          "name": "required_content",
+          "chars": 407
+        },
+        {
+          "name": "forbidden_upgrades",
+          "chars": 171
+        },
+        {
+          "name": "incidental_improvisation_guidance",
+          "chars": 160
+        },
+        {
+          "name": "answer_strategy",
+          "chars": 121
+        },
+        {
+          "name": "requested_answer",
+          "chars": 100
+        },
+        {
+          "name": "permitted_inference",
+          "chars": 72
+        },
+        {
+          "name": "schema",
+          "chars": 34
+        },
+        {
+          "name": "authority_owner",
+          "chars": 24
+        },
+        {
+          "name": "inference_modality",
+          "chars": 6
+        },
+        {
+          "name": "projection_only",
+          "chars": 4
+        },
+        {
+          "name": "permitted_content",
+          "chars": 2
+        },
+        {
+          "name": "unresolved_content",
+          "chars": 2
+        }
+      ],
+      "scene": [
+        {
+          "name": "layering_rules",
+          "chars": 392
+        },
+        {
+          "name": "public",
+          "chars": 387
+        },
+        {
+          "name": "intent",
+          "chars": 270
+        },
+        {
+          "name": "runtime",
+          "chars": 239
+        },
+        {
+          "name": "gm_only",
+          "chars": 53
+        },
+        {
+          "name": "clue_visibility",
+          "chars": 50
+        },
+        {
+          "name": "clue_records",
+          "chars": 38
+        },
+        {
+          "name": "discoverable_clues",
+          "chars": 2
+        },
+        {
+          "name": "visible_clues",
+          "chars": 2
+        },
+        {
+          "name": "discovered_clues",
+          "chars": 2
+        },
+        {
+          "name": "pending_leads",
+          "chars": 2
+        }
+      ],
+      "world": [
+        {
+          "name": "progression_counts",
+          "chars": 101
+        },
+        {
+          "name": "recent_events",
+          "chars": 71
+        },
+        {
+          "name": "world_state",
+          "chars": 51
+        },
+        {
+          "name": "faction_names",
+          "chars": 47
+        }
+      ],
+      "session": [
+        {
+          "name": "active_scene_id",
+          "chars": 13
+        },
+        {
+          "name": "response_mode",
+          "chars": 10
+        },
+        {
+          "name": "engagement_level",
+          "chars": 9
+        },
+        {
+          "name": "active_interaction_kind",
+          "chars": 8
+        },
+        {
+          "name": "interaction_mode",
+          "chars": 8
+        },
+        {
+          "name": "active_interaction_target_id",
+          "chars": 7
+        },
+        {
+          "name": "active_interaction_target_name",
+          "chars": 7
+        },
+        {
+          "name": "conversation_privacy",
+          "chars": 4
+        },
+        {
+          "name": "player_position_context",
+          "chars": 4
+        },
+        {
+          "name": "turn_counter",
+          "chars": 1
+        },
+        {
+          "name": "visited_scene_count",
+          "chars": 1
+        }
+      ],
+      "selected_conversational_memory": [],
+      "recent_log": [],
+      "referent_tracking": [
+        {
+          "name": "debug",
+          "chars": 848
+        },
+        {
+          "name": "clause_referent_plan",
+          "chars": 702
+        },
+        {
+          "name": "interaction_target_continuity",
+          "chars": 396
+        },
+        {
+          "name": "pronoun_resolution",
+          "chars": 177
+        },
+        {
+          "name": "continuity_subject",
+          "chars": 108
+        },
+        {
+          "name": "active_entities",
+          "chars": 101
+        },
+        {
+          "name": "single_unambiguous_entity",
+          "chars": 78
+        },
+        {
+          "name": "safe_explicit_fallback_labels",
+          "chars": 56
+        },
+        {
+          "name": "allowed_named_references",
+          "chars": 49
+        },
+        {
+          "name": "active_entity_order",
+          "chars": 9
+        },
+        {
+          "name": "active_speaker_candidates",
+          "chars": 9
+        },
+        {
+          "name": "active_interaction_target",
+          "chars": 7
+        },
+        {
+          "name": "referential_ambiguity_class",
+          "chars": 6
+        },
+        {
+          "name": "continuity_object",
+          "chars": 4
+        },
+        {
+          "name": "forbidden_or_unresolved_patterns",
+          "chars": 2
+        },
+        {
+          "name": "version",
+          "chars": 1
+        },
+        {
+          "name": "ambiguity_risk",
+          "chars": 1
+        }
+      ],
+      "instructions": [
+        {
+          "index": 0,
+          "chars": 232,
+          "prefix": "WORLD SIMULATION (bounded engine slice): Faction pressure ash_cowl: 3 | Faction pressure house_verevin: 3 | Faction pressure ordo_pyric: 2 | Faction agenda ash_cowl: 1 | Faction ag"
+        },
+        {
+          "index": 1,
+          "chars": 840,
+          "prefix": "When rules conflict, resolve them in this order: answer the player; preserve authoritative state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden tru"
+        },
+        {
+          "index": 2,
+          "chars": 92,
+          "prefix": "Always answer the player. Prefer partial truth over refusal. Never output meta explanations."
+        },
+        {
+          "index": 3,
+          "chars": 345,
+          "prefix": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the syste"
+        },
+        {
+          "index": 4,
+          "chars": 95,
+          "prefix": "Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones."
+        },
+        {
+          "index": 5,
+          "chars": 94,
+          "prefix": "Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration."
+        },
+        {
+          "index": 6,
+          "chars": 812,
+          "prefix": "ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. When answer_required is true, answer_must_come_first requires the first sentence to deliver the "
+        },
+        {
+          "index": 7,
+          "chars": 234,
+          "prefix": "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply per active interlocutor; when narrator, still lead with the answ"
+        },
+        {
+          "index": 8,
+          "chars": 293,
+          "prefix": "When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate the prior answer. Add net-new value via allowed_delta_kinds "
+        },
+        {
+          "index": 9,
+          "chars": 121,
+          "prefix": "VISIBILITY CONTRACT (MANDATORY): Use narration_visibility as the hard scope for entity references and factual assertions."
+        },
+        {
+          "index": 10,
+          "chars": 78,
+          "prefix": "You MUST NOT reference entities outside narration_visibility.visible_entities."
+        },
+        {
+          "index": 11,
+          "chars": 114,
+          "prefix": "You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted."
+        },
+        {
+          "index": 12,
+          "chars": 49,
+          "prefix": "You MUST NOT reveal hidden or undiscovered facts."
+        },
+        {
+          "index": 13,
+          "chars": 104,
+          "prefix": "Discoverable facts may be hinted at (discoverable_hinting is true), but not asserted as confirmed truth."
+        },
+        {
+          "index": 14,
+          "chars": 71,
+          "prefix": "If uncertain whether something is visible or known, omit or reframe it."
+        },
+        {
+          "index": 15,
+          "chars": 54,
+          "prefix": "Only visible or addressable entities may act or speak."
+        },
+        {
+          "index": 16,
+          "chars": 155,
+          "prefix": "FIRST-MENTION CONTRACT (MANDATORY): Visibility scope controls who/what may be referenced; first-mention contract controls how first references are phrased."
+        },
+        {
+          "index": 17,
+          "chars": 51,
+          "prefix": "The first reference to any entity MUST be explicit."
+        },
+        {
+          "index": 18,
+          "chars": 66,
+          "prefix": "A first reference MUST use a visible name or a visible descriptor."
+        },
+        {
+          "index": 19,
+          "chars": 76,
+          "prefix": "A first reference MUST include grounding by location, behavior, or relation."
+        },
+        {
+          "index": 20,
+          "chars": 54,
+          "prefix": "Pronouns MAY be used only after explicit introduction."
+        },
+        {
+          "index": 21,
+          "chars": 180,
+          "prefix": "You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts."
+        },
+        {
+          "index": 22,
+          "chars": 303,
+          "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a current actor or speaker allowed by auth"
+        },
+        {
+          "index": 23,
+          "chars": 54,
+          "prefix": "Avoid floating, abstract, or scene-detached narration."
+        },
+        {
+          "index": 24,
+          "chars": 432,
+          "prefix": "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this turn. You MUST NOT choose the speaker, dec"
+        },
+        {
+          "index": 25,
+          "chars": 290,
+          "prefix": "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural shaping alongside existing contracts. It does not replace CTIR, r"
+        },
+        {
+          "index": 26,
+          "chars": 348,
+          "prefix": "Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus the same-turn shipped slices already used at this seam (`res"
+        },
+        {
+          "index": 27,
+          "chars": 201,
+          "prefix": "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with `scene_state_anchor_contract` and narration visibility—do not contradict auth"
+        },
+        {
+          "index": 28,
+          "chars": 224,
+          "prefix": "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, scene_tension_codes, world/clock summaries) together with `narration_obligati"
+        },
+        {
+          "index": 29,
+          "chars": 186,
+          "prefix": "Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this turn—without inventing facts beyond visibility and narrative auth"
+        },
+        {
+          "index": 30,
+          "chars": 530,
+          "prefix": "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) for published entity_id handles when non-empty—not whom to"
+        },
+        {
+          "index": 31,
+          "chars": 335,
+          "prefix": "Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract (anchors, closed-set opening_reason, visible_fact anchor ids/c"
+        },
+        {
+          "index": 32,
+          "chars": 791,
+          "prefix": "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries `emphasis_band` plus closed-set `signals` (and small bounded"
+        },
+        {
+          "index": 33,
+          "chars": 373,
+          "prefix": "N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narr"
+        },
+        {
+          "index": 34,
+          "chars": 320,
+          "prefix": "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from `narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
+        },
+        {
+          "index": 35,
+          "chars": 341,
+          "prefix": "NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as planning-only bounded data. Treat each family's `emphasis_band` "
+        },
+        {
+          "index": 36,
+          "chars": 203,
+          "prefix": "N3 bundle upstream: optional `emphasis_band` one-step bump for consequence (validated plan metadata only). CTIR, narration visibility, and shipped contracts still win on conflict; "
+        },
+        {
+          "index": 37,
+          "chars": 72,
+          "prefix": "Use campaign and world state to keep political and strategic continuity."
+        },
+        {
+          "index": 38,
+          "chars": 123,
+          "prefix": "Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation."
+        },
+        {
+          "index": 39,
+          "chars": 196,
+          "prefix": "Forbidden generic phrases are disallowed: \"In this city...\", \"Times are tough...\", \"Trust is hard to come by...\", \"You'll need to prove yourself...\" — rewrite into specific names/l"
+        },
+        {
+          "index": 40,
+          "chars": 299,
+          "prefix": "QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Op"
+        },
+        {
+          "index": 41,
+          "chars": 163,
+          "prefix": "If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording."
+        },
+        {
+          "index": 42,
+          "chars": 167,
+          "prefix": "If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity."
+        },
+        {
+          "index": 43,
+          "chars": 115,
+          "prefix": "Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer."
+        },
+        {
+          "index": 44,
+          "chars": 132,
+          "prefix": "If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice."
+        },
+        {
+          "index": 45,
+          "chars": 348,
+          "prefix": "PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1–2 c"
+        },
+        {
+          "index": 46,
+          "chars": 111,
+          "prefix": "If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id."
+        },
+        {
+          "index": 47,
+          "chars": 76,
+          "prefix": "If the player meaningfully changes the world, you may provide world_updates."
+        },
+        {
+          "index": 48,
+          "chars": 134,
+          "prefix": "If the player text implies a clear mechanical action, suggested_action may be filled for UI assistance, but narration remains primary."
+        },
+        {
+          "index": 49,
+          "chars": 107,
+          "prefix": "When interaction_continuity has an active target, treat that NPC as the default conversational counterpart."
+        },
+        {
+          "index": 50,
+          "chars": 124,
+          "prefix": "Non-addressed NPCs should not casually interject; if they interrupt, present it as a notable event with scene justification."
+        },
+        {
+          "index": 51,
+          "chars": 183,
+          "prefix": "If conversation_privacy or player_position_context implies private exchange (for example lowered_voice), reduce casual eavesdropping/interjection unless scene facts justify otherwi"
+        },
+        {
+          "index": 52,
+          "chars": 167,
+          "prefix": "Follow authoritative engine state for who is present, player positioning, scene transitions, and check outcomes; narrate outcomes without inventing structured results."
+        },
+        {
+          "index": 53,
+          "chars": 144,
+          "prefix": "Treat player input as an action declaration: default to third-person phrasing and preserve the user's expression format instead of rewriting it."
+        },
+        {
+          "index": 54,
+          "chars": 210,
+          "prefix": "Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, \"Keep your voice down.\"); do not treat the quote alone as the entire action when surr"
+        },
+        {
+          "index": 55,
+          "chars": 150,
+          "prefix": "Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics."
+        },
+        {
+          "index": 56,
+          "chars": 323,
+          "prefix": "If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, "
+        },
+        {
+          "index": 57,
+          "chars": 251,
+          "prefix": "If narration_obligations.active_npc_reply_expected is true, complete the active NPC's substantive in-turn reply now unless a pending engine check prompt already takes precedence, o"
+        },
+        {
+          "index": 58,
+          "chars": 154,
+          "prefix": "If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor's reply and the immediate exchange over general scene recap."
+        },
+        {
+          "index": 59,
+          "chars": 119,
+          "prefix": "Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal)."
+        },
+        {
+          "index": 60,
+          "chars": 163,
+          "prefix": "If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling."
+        },
+        {
+          "index": 61,
+          "chars": 300,
+          "prefix": "If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertaint"
+        },
+        {
+          "index": 62,
+          "chars": 328,
+          "prefix": "NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usa"
+        },
+        {
+          "index": 63,
+          "chars": 115,
+          "prefix": "When answering a player question, give a direct answer first. Do not replace the answer with narrative description."
+        },
+        {
+          "index": 64,
+          "chars": 175,
+          "prefix": "Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror."
+        },
+        {
+          "index": 65,
+          "chars": 94,
+          "prefix": "Do not restate or paraphrase the player's input. Always continue forward with new information."
+        },
+        {
+          "index": 66,
+          "chars": 60,
+          "prefix": "Do not repeat the player's spoken line. React to it instead."
+        },
+        {
+          "index": 67,
+          "chars": 275,
+          "prefix": "If narration_obligations.avoid_input_echo or narration_obligations.avoid_player_action_restatement is true, do not restate or lightly paraphrase player_input (for example, \"Galinor"
+        },
+        {
+          "index": 68,
+          "chars": 205,
+          "prefix": "If narration_obligations.prefer_structured_turn_summary is true, continue from resolved world state, scene advancement, and NPC intent/reply obligations rather than narrating that "
+        },
+        {
+          "index": 69,
+          "chars": 45,
+          "prefix": "Keep the narration to 1-4 concise paragraphs."
+        },
+        {
+          "index": 70,
+          "chars": 94,
+          "prefix": "Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing."
+        },
+        {
+          "index": 71,
+          "chars": 224,
+          "prefix": "SOCIAL INTERACTION LOCK: Do not use ambient scene narration, scene-wide uncertainty pools, or momentum/pressure beats as the main voice. The active interlocutor must carry this tur"
+        },
+        {
+          "index": 72,
+          "chars": 215,
+          "prefix": "LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied—do not invent leads, facts, or journal summaries. Turn compact rows into light, actionable nudges ("
+        },
+        {
+          "index": 73,
+          "chars": 164,
+          "prefix": "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null."
+        },
+        {
+          "index": 74,
+          "chars": 197,
+          "prefix": "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details b"
+        },
+        {
+          "index": 75,
+          "chars": 178,
+          "prefix": "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency."
+        },
+        {
+          "index": 76,
+          "chars": 165,
+          "prefix": "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads."
+        },
+        {
+          "index": 77,
+          "chars": 241,
+          "prefix": "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as pros"
+        },
+        {
+          "index": 78,
+          "chars": 140,
+          "prefix": "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action."
+        },
+        {
+          "index": 79,
+          "chars": 178,
+          "prefix": "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context."
+        },
+        {
+          "index": 80,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing regis"
+        },
+        {
+          "index": 81,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond t"
+        },
+        {
+          "index": 82,
+          "chars": 204,
+          "prefix": "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / r"
+        },
+        {
+          "index": 83,
+          "chars": 199,
+          "prefix": "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current"
+        },
+        {
+          "index": 84,
+          "chars": 253,
+          "prefix": "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. Use knowledge_scope as the boundary for what they know firsthand. Topics outside those anchors must be hearsay, u"
+        },
+        {
+          "index": 85,
+          "chars": 145,
+          "prefix": "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges."
+        },
+        {
+          "index": 86,
+          "chars": 186,
+          "prefix": "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; do not present full certainty or insider completeness they would not"
+        },
+        {
+          "index": 87,
+          "chars": 239,
+          "prefix": "NAMING CONTINUITY (engine): Active interlocutor canonical id is 'baker', display name 'Baker'. Keep this name/title stable across turns unless engine state changes it; do not regre"
+        },
+        {
+          "index": 88,
+          "chars": 233,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): Obey the top-level `speaker_selection` object. When `primary_speaker_id` is non-null, treat that NPC as the default voice for substantive qu"
+        },
+        {
+          "index": 89,
+          "chars": 189,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): Only these NPC ids may carry quoted NPC dialogue this turn: ['baker']. Do not give spoken lines to anyone else (including newly invented cha"
+        },
+        {
+          "index": 90,
+          "chars": 396,
+          "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn—prioritize it over older or omitted chat material. Do"
+        },
+        {
+          "index": 91,
+          "chars": 230,
+          "prefix": "NARRATIVE MODE (STRUCTURAL DELTA): Canonical mode is `narrative_plan.narrative_mode_contract.mode` (dialogue); obey its prompt_obligations and forbidden_moves as machine codes. Shi"
+        },
+        {
+          "index": 92,
+          "chars": 67,
+          "prefix": "struct:dialogue:preserve_active_interlocutor_and_speaker_continuity"
+        },
+        {
+          "index": 93,
+          "chars": 81,
+          "prefix": "struct:dialogue:suppress_scenic_recap_unless_scene_change_signals_apply_this_turn"
+        },
+        {
+          "index": 94,
+          "chars": 96,
+          "prefix": "struct:dialogue:social_response_structure_enabled_obey_shipped_response_policy_object_shape_only"
+        },
+        {
+          "index": 95,
+          "chars": 53,
+          "prefix": "struct:contract_obligation:keep_reply_speaker_carried"
+        },
+        {
+          "index": 96,
+          "chars": 59,
+          "prefix": "struct:contract_obligation:preserve_interlocutor_continuity"
+        },
+        {
+          "index": 97,
+          "chars": 45,
+          "prefix": "struct:contract_obligation:reply_kind:refusal"
+        },
+        {
+          "index": 98,
+          "chars": 69,
+          "prefix": "struct:contract_obligation:suppress_scenic_recap_unless_scene_changes"
+        },
+        {
+          "index": 99,
+          "chars": 85,
+          "prefix": "struct:contract_forbidden_moves:no_dialogue_without_speaker_basis|no_generic_fallback"
+        },
+        {
+          "index": 100,
+          "chars": 556,
+          "prefix": "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. Do not introd"
+        },
+        {
+          "index": 101,
+          "chars": 554,
+          "prefix": "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. Do not assert unresolved outcomes as se"
+        },
+        {
+          "index": 102,
+          "chars": 459,
+          "prefix": "FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. Either give a bounded partial answer or,"
+        },
+        {
+          "index": 103,
+          "chars": 1684,
+          "prefix": "ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. Do not decide the player character's action for them. Do not turn a surfac"
+        },
+        {
+          "index": 104,
+          "chars": 788,
+          "prefix": "CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. "
+        },
+        {
+          "index": 105,
+          "chars": 681,
+          "prefix": "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. Speak only in player-facing dieget"
+        },
+        {
+          "index": 106,
+          "chars": 226,
+          "prefix": "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not us"
+        },
+        {
+          "index": 107,
+          "chars": 696,
+          "prefix": "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if"
+        },
+        {
+          "index": 108,
+          "chars": 477,
+          "prefix": "SOCIAL RESPONSE STRUCTURE (POLICY): When response_policy.social_response_structure.enabled is true, obey that object; deterministic enforcement will use it later. NPC/social lines "
+        },
+        {
+          "index": 109,
+          "chars": 165,
+          "prefix": "ANSWER RECIPE: Follow decision_facing_answer_recipe for this turn. It projects gm_resolution_decision and does not add authority. The decision wins if they disagree."
+        },
+        {
+          "index": 110,
+          "chars": 153,
+          "prefix": "Player spoke with Baker. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have."
+        }
+      ]
+    },
+    "P3": {
+      "response_policy": [
+        {
+          "name": "context_separation",
+          "chars": 3437
+        },
+        {
+          "name": "answer_completeness",
+          "chars": 2369
+        },
+        {
+          "name": "interaction_continuity",
+          "chars": 1808
+        },
+        {
+          "name": "response_delta",
+          "chars": 1724
+        },
+        {
+          "name": "narrative_authenticity",
+          "chars": 1608
+        },
+        {
+          "name": "fallback_behavior",
+          "chars": 1482
+        },
+        {
+          "name": "anti_railroading",
+          "chars": 1451
+        },
+        {
+          "name": "tone_escalation",
+          "chars": 1422
+        },
+        {
+          "name": "narrative_authority",
+          "chars": 1141
+        },
+        {
+          "name": "rule_priority_order",
+          "chars": 743
+        },
+        {
+          "name": "conversational_memory_window",
+          "chars": 725
+        },
+        {
+          "name": "social_response_structure",
+          "chars": 634
+        },
+        {
+          "name": "no_validator_voice",
+          "chars": 633
+        },
+        {
+          "name": "player_facing_narration_purity",
+          "chars": 369
+        },
+        {
+          "name": "uncertainty",
+          "chars": 355
+        },
+        {
+          "name": "response_type_contract",
+          "chars": 196
+        },
+        {
+          "name": "planner_seam_trace",
+          "chars": 111
+        },
+        {
+          "name": "scene_momentum_due",
+          "chars": 5
+        },
+        {
+          "name": "must_answer",
+          "chars": 4
+        },
+        {
+          "name": "forbid_state_invention",
+          "chars": 4
+        },
+        {
+          "name": "forbid_secret_leak",
+          "chars": 4
+        },
+        {
+          "name": "allow_partial_answer",
+          "chars": 4
+        },
+        {
+          "name": "diegetic_only",
+          "chars": 4
+        },
+        {
+          "name": "prefer_scene_momentum",
+          "chars": 4
+        },
+        {
+          "name": "prefer_specificity",
+          "chars": 4
+        },
+        {
+          "name": "forbid_unjustified_narrative_authority",
+          "chars": 4
+        }
+      ],
+      "turn_packet": [
+        {
+          "name": "response_policy",
+          "chars": 6083
+        },
+        {
+          "name": "contracts",
+          "chars": 3814
+        },
+        {
+          "name": "debug",
+          "chars": 348
+        },
+        {
+          "name": "referent_tracking_compact",
+          "chars": 132
+        },
+        {
+          "name": "player_text",
+          "chars": 129
+        },
+        {
+          "name": "route",
+          "chars": 114
+        },
+        {
+          "name": "continuity",
+          "chars": 40
+        },
+        {
+          "name": "fallback",
+          "chars": 29
+        },
+        {
+          "name": "scene_id",
+          "chars": 15
+        },
+        {
+          "name": "turn_id",
+          "chars": 4
+        },
+        {
+          "name": "resolution_kind",
+          "chars": 4
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "narrative_plan": [
+        {
+          "name": "narrative_roles",
+          "chars": 1036
+        },
+        {
+          "name": "answer_exposition_plan",
+          "chars": 842
+        },
+        {
+          "name": "action_outcome",
+          "chars": 601
+        },
+        {
+          "name": "transition_node",
+          "chars": 535
+        },
+        {
+          "name": "narrative_mode_contract",
+          "chars": 488
+        },
+        {
+          "name": "scene_anchors",
+          "chars": 215
+        },
+        {
+          "name": "active_pressures",
+          "chars": 151
+        },
+        {
+          "name": "role_allocation",
+          "chars": 75
+        },
+        {
+          "name": "narrative_mode",
+          "chars": 19
+        },
+        {
+          "name": "required_new_information",
+          "chars": 2
+        },
+        {
+          "name": "allowable_entity_references",
+          "chars": 2
+        },
+        {
+          "name": "version",
+          "chars": 1
+        }
+      ],
+      "mechanical_resolution": [
+        {
+          "name": "metadata",
+          "chars": 752
+        },
+        {
+          "name": "world_tick_events",
+          "chars": 196
+        },
+        {
+          "name": "prompt",
+          "chars": 129
+        }
+      ],
+      "gm_resolution_decision": [
+        {
+          "name": "realization_claims",
+          "chars": 772
+        },
+        {
+          "name": "executable_obligations",
+          "chars": 75
+        },
+        {
+          "name": "outcome_classification",
+          "chars": 26
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "unresolved_qualifiers",
+          "chars": 2
+        },
+        {
+          "name": "answer_relations",
+          "chars": 2
+        },
+        {
+          "name": "permitted_state_mutations",
+          "chars": 2
+        }
+      ],
+      "resolution_contract": [
+        {
+          "name": "constraint",
+          "chars": 260
+        },
+        {
+          "name": "authority",
+          "chars": 17
+        },
+        {
+          "name": "contract_id",
+          "chars": 17
+        },
+        {
+          "name": "target",
+          "chars": 13
+        },
+        {
+          "name": "subject",
+          "chars": 13
+        },
+        {
+          "name": "operation",
+          "chars": 10
+        },
+        {
+          "name": "request_kind",
+          "chars": 9
+        },
+        {
+          "name": "expected_resolution",
+          "chars": 8
+        },
+        {
+          "name": "interlocutor",
+          "chars": 4
+        },
+        {
+          "name": "dimension",
+          "chars": 4
+        },
+        {
+          "name": "dimensions",
+          "chars": 2
+        }
+      ],
+      "decision_facing_answer_recipe": [
+        {
+          "name": "required_content",
+          "chars": 422
+        },
+        {
+          "name": "declaration_guidance",
+          "chars": 409
+        },
+        {
+          "name": "requested_answer",
+          "chars": 182
+        },
+        {
+          "name": "incidental_improvisation_guidance",
+          "chars": 100
+        },
+        {
+          "name": "forbidden_upgrades",
+          "chars": 79
+        },
+        {
+          "name": "permitted_inference",
+          "chars": 72
+        },
+        {
+          "name": "answer_strategy",
+          "chars": 51
+        },
+        {
+          "name": "schema",
+          "chars": 34
+        },
+        {
+          "name": "authority_owner",
+          "chars": 24
+        },
+        {
+          "name": "inference_modality",
+          "chars": 6
+        },
+        {
+          "name": "projection_only",
+          "chars": 4
+        },
+        {
+          "name": "permitted_content",
+          "chars": 2
+        },
+        {
+          "name": "unresolved_content",
+          "chars": 2
+        }
+      ],
+      "scene": [
+        {
+          "name": "public",
+          "chars": 423
+        },
+        {
+          "name": "layering_rules",
+          "chars": 392
+        },
+        {
+          "name": "intent",
+          "chars": 321
+        },
+        {
+          "name": "runtime",
+          "chars": 227
+        },
+        {
+          "name": "gm_only",
+          "chars": 53
+        },
+        {
+          "name": "clue_visibility",
+          "chars": 50
+        },
+        {
+          "name": "clue_records",
+          "chars": 38
+        },
+        {
+          "name": "discoverable_clues",
+          "chars": 2
+        },
+        {
+          "name": "visible_clues",
+          "chars": 2
+        },
+        {
+          "name": "discovered_clues",
+          "chars": 2
+        },
+        {
+          "name": "pending_leads",
+          "chars": 2
+        }
+      ],
+      "world": [
+        {
+          "name": "progression_counts",
+          "chars": 101
+        },
+        {
+          "name": "recent_events",
+          "chars": 71
+        },
+        {
+          "name": "world_state",
+          "chars": 51
+        },
+        {
+          "name": "faction_names",
+          "chars": 47
+        }
+      ],
+      "session": [
+        {
+          "name": "active_scene_id",
+          "chars": 15
+        },
+        {
+          "name": "response_mode",
+          "chars": 10
+        },
+        {
+          "name": "interaction_mode",
+          "chars": 6
+        },
+        {
+          "name": "engagement_level",
+          "chars": 6
+        },
+        {
+          "name": "active_interaction_target_id",
+          "chars": 4
+        },
+        {
+          "name": "active_interaction_target_name",
+          "chars": 4
+        },
+        {
+          "name": "active_interaction_kind",
+          "chars": 4
+        },
+        {
+          "name": "conversation_privacy",
+          "chars": 4
+        },
+        {
+          "name": "player_position_context",
+          "chars": 4
+        },
+        {
+          "name": "turn_counter",
+          "chars": 1
+        },
+        {
+          "name": "visited_scene_count",
+          "chars": 1
+        }
+      ],
+      "selected_conversational_memory": [],
+      "recent_log": [],
+      "referent_tracking": [
+        {
+          "name": "debug",
+          "chars": 396
+        },
+        {
+          "name": "pronoun_resolution",
+          "chars": 155
+        },
+        {
+          "name": "interaction_target_continuity",
+          "chars": 150
+        },
+        {
+          "name": "forbidden_or_unresolved_patterns",
+          "chars": 85
+        },
+        {
+          "name": "referential_ambiguity_class",
+          "chars": 11
+        },
+        {
+          "name": "active_interaction_target",
+          "chars": 4
+        },
+        {
+          "name": "continuity_subject",
+          "chars": 4
+        },
+        {
+          "name": "continuity_object",
+          "chars": 4
+        },
+        {
+          "name": "single_unambiguous_entity",
+          "chars": 4
+        },
+        {
+          "name": "active_entities",
+          "chars": 2
+        },
+        {
+          "name": "active_entity_order",
+          "chars": 2
+        },
+        {
+          "name": "active_speaker_candidates",
+          "chars": 2
+        },
+        {
+          "name": "allowed_named_references",
+          "chars": 2
+        },
+        {
+          "name": "safe_explicit_fallback_labels",
+          "chars": 2
+        },
+        {
+          "name": "version",
+          "chars": 1
+        },
+        {
+          "name": "ambiguity_risk",
+          "chars": 1
+        }
+      ],
+      "instructions": [
+        {
+          "index": 0,
+          "chars": 319,
+          "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, faction_pressure:house_verevin | Faction pressure ash_cowl: 3 | Faction pressure hous"
+        },
+        {
+          "index": 1,
+          "chars": 840,
+          "prefix": "When rules conflict, resolve them in this order: answer the player; preserve authoritative state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden tru"
+        },
+        {
+          "index": 2,
+          "chars": 92,
+          "prefix": "Always answer the player. Prefer partial truth over refusal. Never output meta explanations."
+        },
+        {
+          "index": 3,
+          "chars": 345,
+          "prefix": "Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the syste"
+        },
+        {
+          "index": 4,
+          "chars": 95,
+          "prefix": "Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones."
+        },
+        {
+          "index": 5,
+          "chars": 94,
+          "prefix": "Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration."
+        },
+        {
+          "index": 6,
+          "chars": 812,
+          "prefix": "ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. When answer_required is true, answer_must_come_first requires the first sentence to deliver the "
+        },
+        {
+          "index": 7,
+          "chars": 234,
+          "prefix": "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply per active interlocutor; when narrator, still lead with the answ"
+        },
+        {
+          "index": 8,
+          "chars": 293,
+          "prefix": "When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate the prior answer. Add net-new value via allowed_delta_kinds "
+        },
+        {
+          "index": 9,
+          "chars": 121,
+          "prefix": "VISIBILITY CONTRACT (MANDATORY): Use narration_visibility as the hard scope for entity references and factual assertions."
+        },
+        {
+          "index": 10,
+          "chars": 78,
+          "prefix": "You MUST NOT reference entities outside narration_visibility.visible_entities."
+        },
+        {
+          "index": 11,
+          "chars": 114,
+          "prefix": "You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted."
+        },
+        {
+          "index": 12,
+          "chars": 49,
+          "prefix": "You MUST NOT reveal hidden or undiscovered facts."
+        },
+        {
+          "index": 13,
+          "chars": 104,
+          "prefix": "Discoverable facts may be hinted at (discoverable_hinting is true), but not asserted as confirmed truth."
+        },
+        {
+          "index": 14,
+          "chars": 71,
+          "prefix": "If uncertain whether something is visible or known, omit or reframe it."
+        },
+        {
+          "index": 15,
+          "chars": 54,
+          "prefix": "Only visible or addressable entities may act or speak."
+        },
+        {
+          "index": 16,
+          "chars": 155,
+          "prefix": "FIRST-MENTION CONTRACT (MANDATORY): Visibility scope controls who/what may be referenced; first-mention contract controls how first references are phrased."
+        },
+        {
+          "index": 17,
+          "chars": 51,
+          "prefix": "The first reference to any entity MUST be explicit."
+        },
+        {
+          "index": 18,
+          "chars": 66,
+          "prefix": "A first reference MUST use a visible name or a visible descriptor."
+        },
+        {
+          "index": 19,
+          "chars": 76,
+          "prefix": "A first reference MUST include grounding by location, behavior, or relation."
+        },
+        {
+          "index": 20,
+          "chars": 54,
+          "prefix": "Pronouns MAY be used only after explicit introduction."
+        },
+        {
+          "index": 21,
+          "chars": 180,
+          "prefix": "You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts."
+        },
+        {
+          "index": 22,
+          "chars": 303,
+          "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a current actor or speaker allowed by auth"
+        },
+        {
+          "index": 23,
+          "chars": 54,
+          "prefix": "Avoid floating, abstract, or scene-detached narration."
+        },
+        {
+          "index": 24,
+          "chars": 290,
+          "prefix": "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural shaping alongside existing contracts. It does not replace CTIR, r"
+        },
+        {
+          "index": 25,
+          "chars": 348,
+          "prefix": "Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus the same-turn shipped slices already used at this seam (`res"
+        },
+        {
+          "index": 26,
+          "chars": 201,
+          "prefix": "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with `scene_state_anchor_contract` and narration visibility—do not contradict auth"
+        },
+        {
+          "index": 27,
+          "chars": 224,
+          "prefix": "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, scene_tension_codes, world/clock summaries) together with `narration_obligati"
+        },
+        {
+          "index": 28,
+          "chars": 186,
+          "prefix": "Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this turn—without inventing facts beyond visibility and narrative auth"
+        },
+        {
+          "index": 29,
+          "chars": 530,
+          "prefix": "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) for published entity_id handles when non-empty—not whom to"
+        },
+        {
+          "index": 30,
+          "chars": 335,
+          "prefix": "Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract (anchors, closed-set opening_reason, visible_fact anchor ids/c"
+        },
+        {
+          "index": 31,
+          "chars": 791,
+          "prefix": "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries `emphasis_band` plus closed-set `signals` (and small bounded"
+        },
+        {
+          "index": 32,
+          "chars": 373,
+          "prefix": "N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narr"
+        },
+        {
+          "index": 33,
+          "chars": 320,
+          "prefix": "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from `narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
+        },
+        {
+          "index": 34,
+          "chars": 341,
+          "prefix": "NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as planning-only bounded data. Treat each family's `emphasis_band` "
+        },
+        {
+          "index": 35,
+          "chars": 422,
+          "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2–3 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_op"
+        },
+        {
+          "index": 36,
+          "chars": 72,
+          "prefix": "Use campaign and world state to keep political and strategic continuity."
+        },
+        {
+          "index": 37,
+          "chars": 123,
+          "prefix": "Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation."
+        },
+        {
+          "index": 38,
+          "chars": 196,
+          "prefix": "Forbidden generic phrases are disallowed: \"In this city...\", \"Times are tough...\", \"Trust is hard to come by...\", \"You'll need to prove yourself...\" — rewrite into specific names/l"
+        },
+        {
+          "index": 39,
+          "chars": 299,
+          "prefix": "QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Op"
+        },
+        {
+          "index": 40,
+          "chars": 237,
+          "prefix": "If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and response_policy.uncertainty.sources, then compose it from response_policy.uncer"
+        },
+        {
+          "index": 41,
+          "chars": 161,
+          "prefix": "Ground uncertainty with response_policy.uncertainty.context_inputs: uncertainty_hint.turn_context, uncertainty_hint.speaker, and uncertainty_hint.scene_snapshot."
+        },
+        {
+          "index": 42,
+          "chars": 172,
+          "prefix": "If uncertainty_hint.speaker.role is npc, keep the reply attributable to that NPC and limited to what they could plausibly know, hear, point to, or direct the player toward."
+        },
+        {
+          "index": 43,
+          "chars": 163,
+          "prefix": "If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording."
+        },
+        {
+          "index": 44,
+          "chars": 167,
+          "prefix": "If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity."
+        },
+        {
+          "index": 45,
+          "chars": 165,
+          "prefix": "Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now."
+        },
+        {
+          "index": 46,
+          "chars": 115,
+          "prefix": "Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer."
+        },
+        {
+          "index": 47,
+          "chars": 132,
+          "prefix": "If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice."
+        },
+        {
+          "index": 48,
+          "chars": 348,
+          "prefix": "PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1–2 c"
+        },
+        {
+          "index": 49,
+          "chars": 111,
+          "prefix": "If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id."
+        },
+        {
+          "index": 50,
+          "chars": 76,
+          "prefix": "If the player meaningfully changes the world, you may provide world_updates."
+        },
+        {
+          "index": 51,
+          "chars": 134,
+          "prefix": "If the player text implies a clear mechanical action, suggested_action may be filled for UI assistance, but narration remains primary."
+        },
+        {
+          "index": 52,
+          "chars": 107,
+          "prefix": "When interaction_continuity has an active target, treat that NPC as the default conversational counterpart."
+        },
+        {
+          "index": 53,
+          "chars": 124,
+          "prefix": "Non-addressed NPCs should not casually interject; if they interrupt, present it as a notable event with scene justification."
+        },
+        {
+          "index": 54,
+          "chars": 183,
+          "prefix": "If conversation_privacy or player_position_context implies private exchange (for example lowered_voice), reduce casual eavesdropping/interjection unless scene facts justify otherwi"
+        },
+        {
+          "index": 55,
+          "chars": 167,
+          "prefix": "Follow authoritative engine state for who is present, player positioning, scene transitions, and check outcomes; narrate outcomes without inventing structured results."
+        },
+        {
+          "index": 56,
+          "chars": 144,
+          "prefix": "Treat player input as an action declaration: default to third-person phrasing and preserve the user's expression format instead of rewriting it."
+        },
+        {
+          "index": 57,
+          "chars": 210,
+          "prefix": "Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, \"Keep your voice down.\"); do not treat the quote alone as the entire action when surr"
+        },
+        {
+          "index": 58,
+          "chars": 150,
+          "prefix": "Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics."
+        },
+        {
+          "index": 59,
+          "chars": 323,
+          "prefix": "If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, "
+        },
+        {
+          "index": 60,
+          "chars": 251,
+          "prefix": "If narration_obligations.active_npc_reply_expected is true, complete the active NPC's substantive in-turn reply now unless a pending engine check prompt already takes precedence, o"
+        },
+        {
+          "index": 61,
+          "chars": 154,
+          "prefix": "If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor's reply and the immediate exchange over general scene recap."
+        },
+        {
+          "index": 62,
+          "chars": 119,
+          "prefix": "Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal)."
+        },
+        {
+          "index": 63,
+          "chars": 163,
+          "prefix": "If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling."
+        },
+        {
+          "index": 64,
+          "chars": 300,
+          "prefix": "If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertaint"
+        },
+        {
+          "index": 65,
+          "chars": 328,
+          "prefix": "NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usa"
+        },
+        {
+          "index": 66,
+          "chars": 115,
+          "prefix": "When answering a player question, give a direct answer first. Do not replace the answer with narrative description."
+        },
+        {
+          "index": 67,
+          "chars": 175,
+          "prefix": "Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror."
+        },
+        {
+          "index": 68,
+          "chars": 94,
+          "prefix": "Do not restate or paraphrase the player's input. Always continue forward with new information."
+        },
+        {
+          "index": 69,
+          "chars": 60,
+          "prefix": "Do not repeat the player's spoken line. React to it instead."
+        },
+        {
+          "index": 70,
+          "chars": 275,
+          "prefix": "If narration_obligations.avoid_input_echo or narration_obligations.avoid_player_action_restatement is true, do not restate or lightly paraphrase player_input (for example, \"Galinor"
+        },
+        {
+          "index": 71,
+          "chars": 205,
+          "prefix": "If narration_obligations.prefer_structured_turn_summary is true, continue from resolved world state, scene advancement, and NPC intent/reply obligations rather than narrating that "
+        },
+        {
+          "index": 72,
+          "chars": 45,
+          "prefix": "Keep the narration to 1-4 concise paragraphs."
+        },
+        {
+          "index": 73,
+          "chars": 94,
+          "prefix": "Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing."
+        },
+        {
+          "index": 74,
+          "chars": 215,
+          "prefix": "LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied—do not invent leads, facts, or journal summaries. Turn compact rows into light, actionable nudges ("
+        },
+        {
+          "index": 75,
+          "chars": 164,
+          "prefix": "When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null."
+        },
+        {
+          "index": 76,
+          "chars": 197,
+          "prefix": "When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC—without fabricating details b"
+        },
+        {
+          "index": 77,
+          "chars": 178,
+          "prefix": "Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders—only as implied by those rows; do not invent urgency."
+        },
+        {
+          "index": 78,
+          "chars": 165,
+          "prefix": "Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)—do not restate full buckets or dump all leads."
+        },
+        {
+          "index": 79,
+          "chars": 241,
+          "prefix": "follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as pros"
+        },
+        {
+          "index": 80,
+          "chars": 140,
+          "prefix": "If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action."
+        },
+        {
+          "index": 81,
+          "chars": 178,
+          "prefix": "If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene—without inventing facts beyond lead_context."
+        },
+        {
+          "index": 82,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads—within knowledge_scope and without inventing regis"
+        },
+        {
+          "index": 83,
+          "chars": 190,
+          "prefix": "If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)—without inventing facts beyond t"
+        },
+        {
+          "index": 84,
+          "chars": 204,
+          "prefix": "If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene—grounded in unlocked_by_lead_id / r"
+        },
+        {
+          "index": 85,
+          "chars": 199,
+          "prefix": "If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current"
+        },
+        {
+          "index": 86,
+          "chars": 233,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): Obey the top-level `speaker_selection` object. When `primary_speaker_id` is non-null, treat that NPC as the default voice for substantive qu"
+        },
+        {
+          "index": 87,
+          "chars": 228,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `allowed_speaker_ids` is empty — do not attribute quoted speech to any NPC; remain narrator-neutral. Do not invent incidental speakers or cr"
+        },
+        {
+          "index": 88,
+          "chars": 285,
+          "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true — do not use generic unnamed stand-ins (for example 'ragged stranger', 'stranger', 'someone nearby', 's"
+        },
+        {
+          "index": 89,
+          "chars": 396,
+          "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn—prioritize it over older or omitted chat material. Do"
+        },
+        {
+          "index": 90,
+          "chars": 239,
+          "prefix": "NARRATIVE MODE (STRUCTURAL DELTA): Canonical mode is `narrative_plan.narrative_mode_contract.mode` (exposition_answer); obey its prompt_obligations and forbidden_moves as machine c"
+        },
+        {
+          "index": 91,
+          "chars": 89,
+          "prefix": "struct:exposition_answer:lead_with_clear_information_when_answer_completeness_requires_it"
+        },
+        {
+          "index": 92,
+          "chars": 81,
+          "prefix": "struct:exposition_answer:prioritize_direct_information_delivery_over_mood_setting"
+        },
+        {
+          "index": 93,
+          "chars": 92,
+          "prefix": "struct:exposition_answer:avoid_implying_a_mechanical_action_resolution_beat_if_none_occurred"
+        },
+        {
+          "index": 94,
+          "chars": 39,
+          "prefix": "struct:contract_obligation:answer_first"
+        },
+        {
+          "index": 95,
+          "chars": 59,
+          "prefix": "struct:contract_obligation:avoid_invented_action_resolution"
+        },
+        {
+          "index": 96,
+          "chars": 58,
+          "prefix": "struct:contract_obligation:prioritize_information_delivery"
+        },
+        {
+          "index": 97,
+          "chars": 69,
+          "prefix": "struct:contract_forbidden_moves:no_answer_burying|no_generic_fallback"
+        },
+        {
+          "index": 98,
+          "chars": 556,
+          "prefix": "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. Do not introd"
+        },
+        {
+          "index": 99,
+          "chars": 554,
+          "prefix": "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. Do not assert unresolved outcomes as se"
+        },
+        {
+          "index": 100,
+          "chars": 459,
+          "prefix": "FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. Either give a bounded partial answer or,"
+        },
+        {
+          "index": 101,
+          "chars": 1684,
+          "prefix": "ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. Do not decide the player character's action for them. Do not turn a surfac"
+        },
+        {
+          "index": 102,
+          "chars": 788,
+          "prefix": "CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. "
+        },
+        {
+          "index": 103,
+          "chars": 681,
+          "prefix": "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. Speak only in player-facing dieget"
+        },
+        {
+          "index": 104,
+          "chars": 226,
+          "prefix": "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not us"
+        },
+        {
+          "index": 105,
+          "chars": 696,
+          "prefix": "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if"
+        },
+        {
+          "index": 106,
+          "chars": 165,
+          "prefix": "ANSWER RECIPE: Follow decision_facing_answer_recipe for this turn. It projects gm_resolution_decision and does not add authority. The decision wins if they disagree."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+# 14 — Regression Comparison
+
+```json
+{
+  "baseline_counts": {
+    "passed": 550,
+    "failed": 26
+  },
+  "final_counts": {
+    "passed": 584,
+    "failed": 25
+  },
+  "baseline_failures": [
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages",
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration",
+    "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H6]",
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_strict_social_hidden_mutation_detected",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_wrong_speaker_fixture_has_attributable_trace",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_report_schema_and_gap_closure",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_generate_repo_artifacts"
+  ],
+  "final_failures": [
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages",
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration",
+    "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_strict_social_hidden_mutation_detected",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_wrong_speaker_fixture_has_attributable_trace",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_report_schema_and_gap_closure",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_generate_repo_artifacts"
+  ],
+  "new_failures": [],
+  "resolved": [
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H6]"
+  ],
+  "newly_passing": [
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H6]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T01]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T02]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T03]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T04]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T05]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T06]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T07]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T08]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T09]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T10]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T11]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T12]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T13]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T14]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T15]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T16]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T17]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T18]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T19]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T20]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T21]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T22]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T23]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T24]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T25]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T26]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T27]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T28]",
+    "tests.test_pr_eg_r2c_speech_adoption::test_grounding_multiple_owned_topics_and_speakers",
+    "tests.test_pr_eg_r2c_speech_adoption::test_exact_recall_keeps_long_delivered_statement_and_uncertainty",
+    "tests.test_pr_eg_r2c_speech_adoption::test_watch_fact_does_not_answer_when_watch_is_absent",
+    "tests.test_pr_eg_r2c_speech_adoption::test_historical_watch_reference_does_not_discover_competing_road",
+    "tests.test_pr_eg_r2c_speech_adoption::test_provider_evidence_cannot_recall_fact_for_incompatible_question"
+  ],
+  "lost_baseline_passes": [],
+  "changed_expectations": []
+}
+```
+
+The baseline is rerun, not copied from historical counts. Combined results include the original 23-file selection and five additional relevance/strict-social owners. No expectations changed. Initial exploratory failures and the generic-question compatibility regression remain in post.xml, complete_final.xml and supplementary comparisons; final identities are qualification_final.xml. The full repository suite was not run. Inherited failures were not repaired outside cycle scope.

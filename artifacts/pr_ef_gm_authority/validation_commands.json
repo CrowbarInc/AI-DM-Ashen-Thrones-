@@ -1,0 +1,93 @@
+{
+  "baseline": {
+    "env": {
+      "ASHEN_DISABLE_PROVIDER_CALLS": "1"
+    },
+    "argv": [
+      ".venv/Scripts/python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_ea_conversational_orchestration.py",
+      "tests/test_pr_eb_conversational_continuity.py",
+      "tests/test_turn_pipeline_shared.py",
+      "tests/test_pr_du_player_pipeline.py",
+      "tests/test_pr_dq_ic_ooc_messages.py",
+      "tests/test_social.py",
+      "tests/test_pr_br_qualifier_movement_mixed_intent.py",
+      "tests/test_exploration_resolution.py",
+      "tests/test_exploration_skill_checks.py",
+      "tests/test_unparsed_movement_state_narration_integrity.py",
+      "tests/test_save_load.py",
+      "tests/test_runtime_persistence_regression_suite_obj14.py",
+      "tests/test_final_emission_gate.py",
+      "tests/test_final_emission_response_type.py",
+      "tests/test_pr_ec_movement_partial_intent.py",
+      "tests/test_pr_ed_provider_efficiency.py",
+      "--tb=line",
+      "-q",
+      "--basetemp=development/tmp/pr_ef_baseline_unrestricted",
+      "--junitxml=artifacts/pr_ef_gm_authority/baseline_junit.xml",
+      "--override-ini=addopts="
+    ]
+  },
+  "final": {
+    "env": {
+      "ASHEN_DISABLE_PROVIDER_CALLS": "1"
+    },
+    "argv": [
+      ".venv/Scripts/python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_ea_conversational_orchestration.py",
+      "tests/test_pr_eb_conversational_continuity.py",
+      "tests/test_turn_pipeline_shared.py",
+      "tests/test_pr_du_player_pipeline.py",
+      "tests/test_pr_dq_ic_ooc_messages.py",
+      "tests/test_social.py",
+      "tests/test_pr_br_qualifier_movement_mixed_intent.py",
+      "tests/test_exploration_resolution.py",
+      "tests/test_exploration_skill_checks.py",
+      "tests/test_unparsed_movement_state_narration_integrity.py",
+      "tests/test_save_load.py",
+      "tests/test_runtime_persistence_regression_suite_obj14.py",
+      "tests/test_final_emission_gate.py",
+      "tests/test_final_emission_response_type.py",
+      "tests/test_pr_ec_movement_partial_intent.py",
+      "tests/test_pr_ed_provider_efficiency.py",
+      "tests/test_pr_ef_gm_authority.py",
+      "--tb=line",
+      "-q",
+      "--basetemp=development/tmp/pr_ef_final4",
+      "--junitxml=artifacts/pr_ef_gm_authority/final_junit.xml",
+      "--override-ini=addopts="
+    ]
+  },
+  "profiling": {
+    "baseline": [
+      ".venv/Scripts/python.exe",
+      "tools/measure_pr_ed_turn_profile.py",
+      "--out",
+      "artifacts/pr_ef_gm_authority/baseline_profile.json"
+    ],
+    "after": [
+      ".venv/Scripts/python.exe",
+      "tools/measure_pr_ed_turn_profile.py",
+      "--out",
+      "artifacts/pr_ef_gm_authority/final_profile.json"
+    ],
+    "env": {
+      "TEMP": "development/tmp (absolute)",
+      "TMP": "development/tmp (absolute)"
+    }
+  },
+  "live": [
+    ".venv/Scripts/python.exe -u tools/validate_pr_ef.py --live --out artifacts/pr_ef_gm_authority/live_ten_turns.json",
+    ".venv/Scripts/python.exe -u tools/validate_pr_ef.py --live --call-limit 9 --out artifacts/pr_ef_gm_authority/live_final_ten_turns.json",
+    ".venv/Scripts/python.exe -u tools/validate_pr_ef.py --live --holdouts --call-limit 12 --out artifacts/pr_ef_gm_authority/live_holdouts.json"
+  ],
+  "replay": ".venv/Scripts/python.exe -u tools/validate_pr_ef.py --replay artifacts/pr_ef_gm_authority/live_final_ten_turns.json --out artifacts/pr_ef_gm_authority/final_recorded_http_ten_turns.json",
+  "intermediate_storage_failure": "A prior comparison run hit the inherited nondeterministic WinError 5 atomic session replace signature in the new GM-refusal continuity test. Preserved in intermediate_final2_with_transient_storage_failure.xml; rerun classification is reported independently.",
+  "production_holdout_replay": ".venv/Scripts/python.exe -u artifacts/pr_ef_gm_authority/replay_holdouts.py"
+}

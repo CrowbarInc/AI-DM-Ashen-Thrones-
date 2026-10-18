@@ -1,0 +1,80 @@
+# 13 — Targeted Tests
+
+66 focused checks pass. T01–T28 are represented by reference matrix, actual HTTP handoff, adoption and continuity tests. Multiple rows share seams; these are not 28 independent provider conversations. Earlier-topic and speaker-specific GM recall also retain the unchanged R1 owner checks. Exact identities:
+
+
+
+```json
+{
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T01-I ask Sergeant Mara whether guards watch the north gate at night.-annotations0-sergeant_mara-ASK-remaining0]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T02-I ask Sergeant Mara whether guards watch the north gate at night.-annotations1-sergeant_mara-ASK-remaining1]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T03-I ask Sergeant Mara whether guards watch the north gate at night.-annotations2-sergeant_mara-ASK-remaining2]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T04-I ask Sergeant Mara whether guards watch the north gate at night.-annotations3-sergeant_mara-ASK-remaining3]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T05-I ask Sergeant Mara about that place.-annotations4-sergeant_mara-ASK-remaining4]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T06-I ask one of them about the north gate.-annotations5-sergeant_mara-ASK-remaining5]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T07-I ask a guard about the road.-annotations6-sergeant_mara-ASK-remaining6]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T08-I ask Sergeant Mara about that room.-annotations7-sergeant_mara-ASK-remaining7]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T09-I ask Sergeant Mara about the absent king.-annotations8-sergeant_mara-ASK-remaining8]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T10-I ask Sergeant Mara who made the north gate.-annotations9-sergeant_mara-ASK-remaining9]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T11-I ask Sergeant Mara about the north gate password.-annotations10-sergeant_mara-ASK-remaining10]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T12-I ask Sergeant Mara whether guards watch the north gate at night.-annotations11-sergeant_mara-ASK-remaining11]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T15-I ask one of them about the road.-annotations12-sergeant_mara-ASK-remaining12]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T24-I ask Sergeant Mara whether guards watch the north gate at night.-annotations13-corporal_bren-ASK-remaining13]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T26-Go to that room.-annotations14-courtyard_gate-MOVE-remaining14]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T27-I inspect the courtyard lantern.-annotations15-courtyard_lantern-INSPECT-remaining15]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_targeted_reference_matrix[T28-I ask Sergeant Mara whether guards watch the north gate at night.-annotations16-sergeant_mara-ASK-remaining16]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T14-I ask Sergeant Mara whether guards watch the north gate at night.-annotations0-Guards watch the north gate throughout the night.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T25-I ask Sergeant Mara whether guards watch the north gate at night.-annotations1-Guards watch the north gate throughout the night.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T10-I ask Sergeant Mara who made the north gate.-annotations2-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T11-I ask Sergeant Mara what the north gate password is.-annotations3-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T05-I ask Sergeant Mara about that place.-annotations4-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T06-I ask one of them about the north gate.-annotations5-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_http_resolver_handoff[T09-I ask Sergeant Mara about the absent king.-annotations6-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_adoption_still_excludes_unsafe_candidate[T13]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_adoption_still_excludes_unsafe_candidate[T21]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_adoption_still_excludes_unsafe_candidate[T22]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T16-Guards watch the north gate throughout the night.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T17-Which subject do you mean?]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T18-I don't know who made it.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T19-The street beyond the gate is the north road.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T20-Guards watch the north gate throughout the night.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_continuity_classes[T23-Guards watch the north gate throughout the night.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F01]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F02]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F03]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F04]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F05]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F06]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F07]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F08]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F09]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_frozen_holdouts[F10]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C01]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C02]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C03]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_T17_actual_http_pending_clarification[Can you repeat that?]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_T17_actual_http_pending_clarification[What did you mean by that?]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_T17_actual_http_pending_clarification[Say that again in simpler words.]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_status_holdout[S01]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_status_holdout[S02]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_status_holdout[S03]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_status_holdout[S04]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_status_holdout[S05]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_structured_role_and_stale_status_http[INTERPRETED-refs0-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_structured_role_and_stale_status_http[CLARIFICATION_REQUIRED-refs1-sergeant_mara]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_structured_role_and_stale_status_http[CLARIFICATION_REQUIRED-refs2-None]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_final_independent_annotation_holdout[N01]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_final_independent_annotation_holdout[N02]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_final_independent_annotation_holdout[N03]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_final_independent_annotation_holdout[N04]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_final_independent_annotation_holdout[N05]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_irrelevant_annotations_reach_existing_resolver[weather]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_irrelevant_annotations_reach_existing_resolver[obsidian palace]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_literal_role_is_not_addressee_metadata[L01]": "passed",
+  "tests.test_pr_eg_r2c_r2_reference_eligibility::test_literal_role_is_not_addressee_metadata[L02]": "passed"
+}
+```
+
+
+
+Assertions inspect record/scene/state immutability, per-annotation decisions, target correction, resolver-owned source identity, accepted/history text, no narration/retry, actual save/load and pending clarification preservation. F07's revised compatibility assertion is explicitly not independent qualification; final N01–N05 qualify the new contract.

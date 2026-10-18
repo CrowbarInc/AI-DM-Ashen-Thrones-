@@ -1,0 +1,112 @@
+{
+  "halt": null,
+  "completed_turn_ids": [
+    "T1",
+    "T2"
+  ],
+  "attempted_turn_ids": [
+    "T1",
+    "T2"
+  ],
+  "provider_requests": 4,
+  "combined_tokens": 108690,
+  "accounting_failed": false,
+  "calls": [
+    {
+      "index": 1,
+      "turn": "startup",
+      "kind": "preflight",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "response_model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 24,
+        "output_tokens": 2,
+        "total_tokens": 26,
+        "cached_input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "latency_seconds": 1.775,
+      "error": null,
+      "parsed_narration": "OK"
+    },
+    {
+      "index": 2,
+      "turn": "T1",
+      "kind": "generation",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "response_model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 30877,
+        "output_tokens": 66,
+        "total_tokens": 30943,
+        "cached_input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "latency_seconds": 1.994,
+      "error": null,
+      "parsed_narration": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary."
+    },
+    {
+      "index": 3,
+      "turn": "T2",
+      "kind": "generation",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "response_model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 34561,
+        "output_tokens": 117,
+        "total_tokens": 34678,
+        "cached_input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "latency_seconds": 2.007,
+      "error": null,
+      "parsed_narration": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty."
+    },
+    {
+      "index": 4,
+      "turn": "T2",
+      "kind": "generation",
+      "retry_attempt": 1,
+      "retry_reason": "hard_invalid",
+      "response_model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 42960,
+        "output_tokens": 83,
+        "total_tokens": 43043,
+        "cached_input_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "latency_seconds": 2.312,
+      "error": null,
+      "parsed_narration": "The guard captain's eyes flick to the notice board, their expression guarded. \"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain."
+    }
+  ]
+}

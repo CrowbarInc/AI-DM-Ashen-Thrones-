@@ -1,0 +1,160 @@
+{
+  "turn": "T1",
+  "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+  "http_status": 200,
+  "error": null,
+  "halt_after": null,
+  "severe_mutations": [],
+  "wall_seconds": 2.608,
+  "trace": {
+    "player_facing_text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+    "gm_tags": [],
+    "selected_resolver_hits": [
+      {
+        "path": ".session.debug_traces[18].selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": ".session.debug_traces[18].resolution.metadata.selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": ".debug_traces[18].selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": ".debug_traces[18].resolution.metadata.selected_resolver",
+        "value": "social"
+      }
+    ],
+    "topic_revealed_hits": [
+      {
+        "path": ".session.last_action_debug.resolver_result.social.topic_revealed",
+        "value": null
+      },
+      {
+        "path": ".session.debug_traces[18].resolution.social.topic_revealed",
+        "value": null
+      },
+      {
+        "path": ".debug.resolver_result.social.topic_revealed",
+        "value": null
+      },
+      {
+        "path": ".debug_traces[18].resolution.social.topic_revealed",
+        "value": null
+      }
+    ],
+    "operation": null,
+    "interlocutor_id": null,
+    "outcome_classification": null,
+    "validation": {
+      "regeneration_invoked": null,
+      "regeneration_feedback": null,
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary."
+      },
+      "attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+        "violations": []
+      },
+      "attempt_2": null,
+      "accepted_provenance": "initial_generation",
+      "accepted_text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+      "accepted_authority_result": "accepted",
+      "accepted_attempt": 1,
+      "immutable": true,
+      "tags_note": null
+    },
+    "compact_classification": null,
+    "compact_resolution_path": null,
+    "interaction_after": null,
+    "clues": null,
+    "latency_ms": null,
+    "provider_request_count": 1,
+    "generation_count": 1,
+    "interpretation_count": 0,
+    "retry_count": 0,
+    "provider_candidates": [
+      {
+        "index": 2,
+        "kind": "generation",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 30877,
+          "output_tokens": 66,
+          "total_tokens": 30943,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 1.994,
+        "error": null,
+        "parsed_narration": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+        "raw_output": "{\"narration\": \"The guard captain shrugs, rain pattering off their soaked cloak. \\\"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\\\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.\"}"
+      }
+    ],
+    "npc_runtime_before": {},
+    "npc_runtime_after": {
+      "guard_captain": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [],
+        "last_interaction_turn": 2
+      },
+      "tavern_runner": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [],
+        "last_interaction_turn": null
+      }
+    },
+    "known_clues_before": null,
+    "known_clues_after": null,
+    "visible_facts_before": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "visible_facts_after": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "turn_counter_before": 1,
+    "turn_counter_after": 2,
+    "active_scene_before": "frontier_gate",
+    "active_scene_after": "frontier_gate",
+    "interaction_context_after": {
+      "active_interaction_target_id": "guard_captain",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "wall_seconds": 2.608
+  }
+}

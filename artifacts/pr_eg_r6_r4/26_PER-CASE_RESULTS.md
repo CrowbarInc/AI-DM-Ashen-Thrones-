@@ -1,0 +1,5 @@
+# 26 — Per-Case Results
+
+`per_case_results.jsonl` contains all core and supplemental case IDs, immutable expected labels, actual bindings/classes/qualifiers/source selections, audited scores and comparability flags. Original raw prompts/responses and original first-pass scores remain in the official run files. Secondary retains actual question propositions plus native production outcomes.
+
+Success requires exact class and expected bindings (case/article normalized, with order-independent candidate lists), qualifier preservation, source eligibility and no forbidden bindings. False acceptance means a positive result on a nonanswer, an unsupported binding, strengthened qualifier, or a false DIRECT class. It does not mean merely omitting a binding. False rejection means an answerable case produces no positive class; omissions in a positive result are reported separately. Supplemental guard_direct credits its literal source location after an independent reread found a missing semantic annotation (E17). Initial scores and labels remain intact. Denominators are case count for rates and explicit expected-class count for each stratum.

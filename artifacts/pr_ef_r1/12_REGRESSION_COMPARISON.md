@@ -1,0 +1,44 @@
+# 12 — Regression Comparison
+
+Baseline 271 pass/30 fail; final 293 pass/26 fail. Added R1 checks: 18, all passing. Inherited failing IDs 25; resolved 5; new 1; changed normalized inherited signatures 0.
+
+Commands, exact IDs/signatures and raw results: baseline/final_command.json, JUnit and regression_comparison.json. Historical 256/30 -> 271/30 remain historical. This is the established representative family, not the entire repository suite.
+
+New failing IDs:
+- tests.test_pr_du_player_pipeline::test_pr_du_four_action_sequence_and_ooc_through_production_chat
+
+New PR-DU assertion expects literal notice board. State/inspection are correct, but final text says The board names the north road past the waystation. This presentation regression is retained and counted, not silently reclassified as a test pass. No new authority/persistence failure in the latest full comparison.
+
+Resolved inherited IDs:
+- tests.test_turn_pipeline_shared::test_chat_action_outcome_contract_survives_inside_active_social_scene
+- tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]
+- tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]
+- tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]
+- tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]
+
+Remaining inherited failing IDs:
+- tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration
+- tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+- tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages
+- tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent
+- tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange
+- tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]
+- tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]
+- tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+- tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+- tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback
+- tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+- tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+- tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+- tests.test_turn_pipeline_shared::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair
+- tests.test_turn_pipeline_shared::test_chat_repeated_social_questions_keep_npc_uncertainty_voice
+- tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit
+- tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+- tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+- tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first
+- tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only
+- tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+- tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+- tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+- tests.test_turn_pipeline_shared::test_pipeline_strict_social_ragged_stranger_fallback_repaired
+- tests.test_turn_pipeline_shared::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical

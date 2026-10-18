@@ -432,6 +432,29 @@ def classify_adjudication_query(
     return None
 
 
+_FAMILY_CATEGORY = {
+    "earshot": "perception_query",
+    "nearby_presence": "perception_query",
+    "place_location": "perception_query",
+    "feasibility": "action_feasibility_query",
+    "state_query": "state_query",
+    "roll_mechanical": "roll_requirement_query",
+    "generic_adjudication": "state_query",
+}
+
+
+def _availability_subject(text: str) -> str:
+    """Noun the contract already asked about. Not a route decision."""
+    match = re.search(
+        r"\b(supplies|shelter|tavern|inn|lodging|water|food)\b",
+        str(text or ""),
+        re.IGNORECASE,
+    )
+    if not match:
+        return ""
+    return str(match.group(1) or "").strip()
+
+
 def resolve_adjudication_query(
     text: str,
     *,
@@ -440,21 +463,33 @@ def resolve_adjudication_query(
     world: Dict[str, Any],
     character: Dict[str, Any],
     has_active_interaction: bool = False,
+    resolver_family: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
     """Resolve an adjudication query from authoritative state only.
 
     Returns None when text is not an adjudication query.
+
+    ``resolver_family`` is set only after an authoritative Resolution Contract
+    has already chosen the family. In that mode the raw text is content for the
+    chosen resolver. It does not reclassify the turn, and a place or feasibility
+    family cannot fall through into the earshot roster.
     """
     _ = character  # Reserved for future skill/context checks.
-    category = classify_adjudication_query(
-        text,
-        has_active_interaction=has_active_interaction,
-        session=session,
-        world=world,
-        scene=scene,
-    )
-    if category is None:
-        return None
+    forced = str(resolver_family or "").strip()
+    if forced:
+        category = _FAMILY_CATEGORY.get(forced)
+        if not category:
+            return None
+    else:
+        category = classify_adjudication_query(
+            text,
+            has_active_interaction=has_active_interaction,
+            session=session,
+            world=world,
+            scene=scene,
+        )
+        if category is None:
+            return None
 
     scene_id = str(((scene or {}).get("scene") or {}).get("id") or "").strip()
     npcs_here = _in_scene_npcs(world, scene_id)
@@ -528,13 +563,14 @@ def resolve_adjudication_query(
         )
 
     # 2) Place-existence / locality knowledge from current-scene or current-exit authority.
-    if _looks_like_place_existence_question(text) and not _place_existence_is_person_owned(
+    place_question = _looks_like_place_existence_question(text) and not _place_existence_is_person_owned(
         text,
         session=session,
         world=world,
         scene=scene,
-    ):
-        subject = extract_place_existence_subject(text) or "that place"
+    )
+    if forced == "place_location" or (not forced and place_question):
+        subject = extract_place_existence_subject(text) or _availability_subject(text) or "that place"
         evidence = _authoritative_nearby_place_evidence(
             subject,
             scene=scene,
@@ -580,7 +616,12 @@ def resolve_adjudication_query(
         )
 
     # 3) Earshot/nearby presence queries from scene state.
-    if "earshot" in text.lower() or "nearby" in text.lower() or "who can hear" in text.lower():
+    # A contract-selected place, roll, feasibility, or state family must not
+    # fall through into this roster because the utterance also contains "nearby".
+    presence_tokens = (
+        "earshot" in text.lower() or "nearby" in text.lower() or "who can hear" in text.lower()
+    )
+    if forced in {"earshot", "nearby_presence"} or (not forced and presence_tokens):
         names = [str(n.get("name") or n.get("id") or "").strip() for n in npcs_here]
         names = [n for n in names if n]
         ctx = session.get("interaction_context") or {}

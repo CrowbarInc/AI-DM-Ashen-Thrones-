@@ -1,0 +1,7 @@
+# 05 — Speech Adoption Authority
+
+AUTHORIZATION_HOST_SPEECH is represented by accepted_response.speech_adoption = AUTHORIZED_HOST_SPEECH, with authorization_source, speaker_id, text, canonical=false, and the existing immutable fields. Generated text that differs is marked UNAUTHORIZED_GENERATED_CANDIDATE and discarded. Exact host wording can be selected regardless of a matching candidate. No broad AUTHORIZED_GENERATED_EXPRESSION category is enabled. A return of None means this nonmechanical ask lane is inapplicable, not a grant to invent information.
+
+Selection: explicit delivered-repeat/clarification binding first; then resolver-selected topic; then existing authority player_line (commitment or uncertainty/refusal); then the existing bounded personal line; then knowledge-appropriate inability. Explicit reuse precedes a topic because the resolver can select an unrelated topic during clarification. That differs from the suggested topic-first priority, and live evidence exposes unresolved mismatches between topic discovery and speech selection.
+
+Resolved speaker identity is required. Pending checks, non-ask operations, explicit authority conflicts, ambiguous contracts, mismatched interlocutors and executable primary obligations do not take this bypass. Existing mechanical authority remains responsible. Host text supplies no new world grant, generated paraphrase or inferred information. Continuity decisions retain their existing host authorization and are sealed through the same final-response constructor.

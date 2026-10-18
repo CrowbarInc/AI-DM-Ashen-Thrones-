@@ -1,0 +1,3411 @@
+[
+  {
+    "id": "paraphrase01",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The road outside the gate is called the north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The road outside the gate is called the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase02",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "People call that street the north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "People call that street the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase03",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "That street past the gate? The north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "That street past the gate? The north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase04",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The name of the street beyond the gate is the north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The name of the street beyond the gate is the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase05",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "North road is what that street is called.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "North road is what that street is called.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase06",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "They call the street outside the gate the north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "They call the street outside the gate the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase07",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "Beyond the gate, the street bears the name north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Beyond the gate, the street bears the name north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase08",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "That thoroughfare outside the gate goes by north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "That thoroughfare outside the gate goes by north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase09",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "North road: that is the name of the street beyond the gate.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "North road: that is the name of the street beyond the gate.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase10",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street you mean, just beyond the gate, is known as the north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street you mean, just beyond the gate, is known as the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase11",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street past the gate is named north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street past the gate is named north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase12",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "It is called the north road, that street beyond the gate.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "It is called the north road, that street beyond the gate.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase13",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "For the street outside the gate, use the name north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "For the street outside the gate, use the name north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase14",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "You mean the street beyond the gate. Its name is north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "You mean the street beyond the gate. Its name is north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase15",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street beyond this gate goes by the name north road.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street beyond this gate goes by the name north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase16",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "authorized",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F2",
+          "text": "The north road leads to the fortress.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Where does the north road lead?",
+      "knowledge": "known and disclosure authorized"
+    },
+    "npc_knowledge": "known and disclosure authorized",
+    "player_question": "Where does the north road lead?",
+    "candidate": "The north road leads to the fortress.",
+    "expected_classification": [
+      "A",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Explicit geography is authorized, so high risk alone must not force rejection.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north road leads to the fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase17",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "authorized",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F2",
+          "text": "The north road leads to the fortress.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Where does the north road lead?",
+      "knowledge": "known and disclosure authorized"
+    },
+    "npc_knowledge": "known and disclosure authorized",
+    "player_question": "Where does the north road lead?",
+    "candidate": "The fortress is where the north road leads.",
+    "expected_classification": [
+      "B",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Same supported destination, unfamiliar word order.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The fortress is where the north road leads.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase18",
+    "category": "paraphrase",
+    "split": "holdout",
+    "context_id": "belief",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "B1",
+          "text": "Mara believes the captain serves smugglers; truth unestablished.",
+          "npc_knows": true,
+          "disclose": true,
+          "epistemic": "belief"
+        }
+      ],
+      "question": "What do you believe about the captain?",
+      "knowledge": "authored belief authorized to disclose; objective truth not established"
+    },
+    "npc_knowledge": "authored belief authorized to disclose; objective truth not established",
+    "player_question": "What do you believe about the captain?",
+    "candidate": "I believe the captain serves smugglers; I cannot say it is true.",
+    "expected_classification": [
+      "A",
+      "D",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Authored disclosed belief; uncertainty retained.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I believe the captain serves smugglers; I cannot say it is true.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase19",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "belief",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "B1",
+          "text": "Mara believes the captain serves smugglers; truth unestablished.",
+          "npc_knows": true,
+          "disclose": true,
+          "epistemic": "belief"
+        }
+      ],
+      "question": "What do you believe about the captain?",
+      "knowledge": "authored belief authorized to disclose; objective truth not established"
+    },
+    "npc_knowledge": "authored belief authorized to disclose; objective truth not established",
+    "player_question": "What do you believe about the captain?",
+    "candidate": "Mara thinks the captain works for smugglers; that is only a belief.",
+    "expected_classification": [
+      "B",
+      "D",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Attribution to Mara retains epistemic limit.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Mara thinks the captain works for smugglers; that is only a belief.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "paraphrase20",
+    "category": "paraphrase",
+    "split": "development",
+    "context_id": "security",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F3",
+          "text": "Guards watch the north gate throughout the night.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Is the north gate watched at night?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "Is the north gate watched at night?",
+    "candidate": "The north gate is watched all night.",
+    "expected_classification": [
+      "B",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Faithful security paraphrase with explicit source.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north gate is watched all night.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion01",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The north road runs directly to the royal fortress.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north road runs directly to the royal fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion02",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street was named by the king.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street was named by the king.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion03",
+    "category": "expansion",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The road definitely heads north.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The road definitely heads north.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion04",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "It is the shortest way to the fortress.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "It is the shortest way to the fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion05",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The road is safe after dark.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The road is safe after dark.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion06",
+    "category": "expansion",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The north road is closed until tomorrow.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north road is closed until tomorrow.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion07",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street has no tolls.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street has no tolls.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion08",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The road connects to a hidden village.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The road connects to a hidden village.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion09",
+    "category": "expansion",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The captain owns the road.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The captain owns the road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion10",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "A royal decree named it after the northern conquest.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "A royal decree named it after the northern conquest.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion11",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "There are three sentries at its far end.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "There are three sentries at its far end.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion12",
+    "category": "expansion",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "Merchants on the north road buy stolen goods.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Merchants on the north road buy stolen goods.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion13",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The road takes one hour to walk.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The road takes one hour to walk.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion14",
+    "category": "expansion",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "You can camp there without attracting patrols.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "You can camp there without attracting patrols.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "expansion15",
+    "category": "expansion",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The gate opens at dawn.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The gate opens at dawn.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction01",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street beyond the gate is called the south road.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street beyond the gate is called the south road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction02",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "That street is not called the north road.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "That street is not called the north road.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction03",
+    "category": "contradiction",
+    "split": "holdout",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "No street lies beyond the gate.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "No street lies beyond the gate.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction04",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street beyond the gate has no name.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street beyond the gate has no name.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction05",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "North road is the name of the street inside the gate.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "North road is the name of the street inside the gate.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction06",
+    "category": "contradiction",
+    "split": "holdout",
+    "context_id": "authorized",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F2",
+          "text": "The north road leads to the fortress.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Where does the north road lead?",
+      "knowledge": "known and disclosure authorized"
+    },
+    "npc_knowledge": "known and disclosure authorized",
+    "player_question": "Where does the north road lead?",
+    "candidate": "The north road does not lead to the fortress.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Negates authorized destination.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north road does not lead to the fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction07",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "authorized",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F2",
+          "text": "The north road leads to the fortress.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Where does the north road lead?",
+      "knowledge": "known and disclosure authorized"
+    },
+    "npc_knowledge": "known and disclosure authorized",
+    "player_question": "Where does the north road lead?",
+    "candidate": "The north road leads only to the market, not the fortress.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Replaces authorized destination.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north road leads only to the market, not the fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction08",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "security",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F3",
+          "text": "Guards watch the north gate throughout the night.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Is the north gate watched at night?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "Is the north gate watched at night?",
+    "candidate": "The north gate is never watched at night.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Negates known security coverage.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The north gate is never watched at night.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction09",
+    "category": "contradiction",
+    "split": "holdout",
+    "context_id": "belief",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "B1",
+          "text": "Mara believes the captain serves smugglers; truth unestablished.",
+          "npc_knows": true,
+          "disclose": true,
+          "epistemic": "belief"
+        }
+      ],
+      "question": "What do you believe about the captain?",
+      "knowledge": "authored belief authorized to disclose; objective truth not established"
+    },
+    "npc_knowledge": "authored belief authorized to disclose; objective truth not established",
+    "player_question": "What do you believe about the captain?",
+    "candidate": "The captain definitely serves smugglers.",
+    "expected_classification": [
+      "D",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Upgrades a belief to objective certainty.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The captain definitely serves smugglers.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "contradiction10",
+    "category": "contradiction",
+    "split": "development",
+    "context_id": "belief",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "B1",
+          "text": "Mara believes the captain serves smugglers; truth unestablished.",
+          "npc_knows": true,
+          "disclose": true,
+          "epistemic": "belief"
+        }
+      ],
+      "question": "What do you believe about the captain?",
+      "knowledge": "authored belief authorized to disclose; objective truth not established"
+    },
+    "npc_knowledge": "authored belief authorized to disclose; objective truth not established",
+    "player_question": "What do you believe about the captain?",
+    "candidate": "The captain certainly does not serve smugglers.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Unsupported objective denial; not entailed by authored belief.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The captain certainly does not serve smugglers.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental01",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer the evening.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer the evening.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental02",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "Evening feels peaceful to me.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Evening feels peaceful to me.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental03",
+    "category": "incidental",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I enjoy the quiet feeling of dusk.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I enjoy the quiet feeling of dusk.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental04",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I like to hum softly to myself.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I like to hum softly to myself.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental05",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I find sunset colors soothing.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I find sunset colors soothing.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental06",
+    "category": "incidental",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I am fond of warm tea.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I am fond of warm tea.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental07",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I like the sound of rain.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I like the sound of rain.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental08",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I feel rather tired.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I feel rather tired.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental09",
+    "category": "incidental",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I would rather sit quietly for a moment.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I would rather sit quietly for a moment.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "incidental10",
+    "category": "incidental",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I enjoy a little time to think.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Only supplied meaning or permitted nonbinding personal expression.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I enjoy a little time to think.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline01",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer the evening because it feels quieter to me.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Subjective feeling without objective operational assertion.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer the evening because it feels quieter to me.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline02",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer the evening because the guards are less attentive.",
+    "expected_classification": [
+      "C",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Preference wraps an actionable security weakness.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer the evening because the guards are less attentive.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline03",
+    "category": "borderline",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I've never liked the captain.",
+    "expected_classification": [
+      "D",
+      "H"
+    ],
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "rationale": "No relationship policy: could become durable hostility or be a passing feeling.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I've never liked the captain.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline04",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "The captain makes me nervous.",
+    "expected_classification": [
+      "D",
+      "H"
+    ],
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "rationale": "May imply material relationship; requires scoped characterization policy.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The captain makes me nervous.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline05",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "Evening is quieter.",
+    "expected_classification": [
+      "H"
+    ],
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "rationale": "Could describe subjective mood or local traffic/security condition.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Evening is quieter.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline06",
+    "category": "borderline",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer evening because patrols leave then.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "New schedule supplies actionable absence.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer evening because patrols leave then.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline07",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I like my old cup.",
+    "expected_classification": [
+      "C"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Nonbinding mundane personal color; no usable resource transfer.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I like my old cup.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline08",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "My old cup is a key to the crypt.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "New resource affordance and hidden access.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "My old cup is a key to the crypt.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline09",
+    "category": "borderline",
+    "split": "holdout",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "The captain and I go back a long way.",
+    "expected_classification": [
+      "H"
+    ],
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "rationale": "New relationship extent may affect persuasion and obligations.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The captain and I go back a long way.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "borderline10",
+    "category": "borderline",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer evenings because they suit my mood.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Subjective causal explanation stays within personal mood.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer evenings because they suit my mood.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor01",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "I think the guards abandon the north gate at dusk.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I think the guards abandon the north gate at dusk.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor02",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "I heard there is a hidden tunnel under the barracks.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I heard there is a hidden tunnel under the barracks.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor03",
+    "category": "rumor",
+    "split": "holdout",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "I wouldn't be surprised if the captain was a traitor.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I wouldn't be surprised if the captain was a traitor.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor04",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "Maybe the smith in the market made the lantern.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Maybe the smith in the market made the lantern.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor05",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "Someone told me Bren secretly serves the smugglers.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Someone told me Bren secretly serves the smugglers.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor06",
+    "category": "rumor",
+    "split": "holdout",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "In a story, nobody watches the north gate after sunset.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "In a story, nobody watches the north gate after sunset.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor07",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I think evenings are peaceful.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Subjective impression, no actionable world predicate.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I think evenings are peaceful.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor08",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I heard a melody in my imagination.",
+    "expected_classification": [
+      "C",
+      "D"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Explicitly imaginary nonbinding color.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I heard a melody in my imagination.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor09",
+    "category": "rumor",
+    "split": "holdout",
+    "context_id": "belief",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "B1",
+          "text": "Mara believes the captain serves smugglers; truth unestablished.",
+          "npc_knows": true,
+          "disclose": true,
+          "epistemic": "belief"
+        }
+      ],
+      "question": "What do you believe about the captain?",
+      "knowledge": "authored belief authorized to disclose; objective truth not established"
+    },
+    "npc_knowledge": "authored belief authorized to disclose; objective truth not established",
+    "player_question": "What do you believe about the captain?",
+    "candidate": "I believe the captain serves smugglers, but that is only my suspicion.",
+    "expected_classification": [
+      "D",
+      "F"
+    ],
+    "expected": "ACCEPT",
+    "risk": "high",
+    "rationale": "Legitimate authored belief with disclosed uncertainty.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I believe the captain serves smugglers, but that is only my suspicion.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "rumor10",
+    "category": "rumor",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "Off the record, the captain probably hides gold beneath the well.",
+    "expected_classification": [
+      "D",
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Off the record, the captain probably hides gold beneath the well.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment01",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I can't promise you ten silver.",
+    "expected_classification": [
+      "C"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Refuses payment; does not assert funds or rules.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I can't promise you ten silver.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment02",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I'll give you ten silver when you return.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I'll give you ten silver when you return.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment03",
+    "category": "commitment",
+    "split": "holdout",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I could pay you if my captain approves.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I could pay you if my captain approves.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment04",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "I can't open the gate without the captain's permission.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Invents an operational authorization rule as refusal explanation.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I can't open the gate without the captain's permission.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment05",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I won't open the gate for you.",
+    "expected_classification": [
+      "C"
+    ],
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "rationale": "Local speech-act refusal; no new rule, ability or obligation.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I won't open the gate for you.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment06",
+    "category": "commitment",
+    "split": "holdout",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "Bring it back and twenty crowns will be yours.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Bring it back and twenty crowns will be yours.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment07",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I won't promise money because the treasury is empty.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Safe refusal plus unsupported resource explanation.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I won't promise money because the treasury is empty.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment08",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I can't promise payment, but I can owe you a favor.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Negation does not scope over the second commitment.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I can't promise payment, but I can owe you a favor.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment09",
+    "category": "commitment",
+    "split": "holdout",
+    "context_id": "maker",
+    "authorized_context": {
+      "facts": [],
+      "question": "Who made the lantern?",
+      "knowledge": "World maker exists but NPC does not know; identity excluded"
+    },
+    "npc_knowledge": "World maker exists but NPC does not know; identity excluded",
+    "player_question": "Who made the lantern?",
+    "candidate": "I cannot say who made it.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Natural uncertainty compatible with NPC ignorance.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I cannot say who made it.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "commitment10",
+    "category": "commitment",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "If the moon rises, I will unlock the gate.",
+    "expected_classification": [
+      "E",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "If the moon rises, I will unlock the gate.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden01",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "npc_knowledge": "NPC knows but withholds; value excluded",
+    "player_question": "Tell me the gate password.",
+    "candidate": "The password you need is ember.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Disclosure forbidden even if value happened to be correct.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The password you need is ember.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden02",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "npc_knowledge": "NPC knows but withholds; value excluded",
+    "player_question": "Tell me the gate password.",
+    "candidate": "Say ember at the gate; that is the passphrase.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Actionable indirect disclosure.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Say ember at the gate; that is the passphrase.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden03",
+    "category": "hidden",
+    "split": "holdout",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "npc_knowledge": "NPC knows but withholds; value excluded",
+    "player_question": "Tell me the gate password.",
+    "candidate": "I know it, but I won't share that password.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Preserves knows-but-withholds status.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I know it, but I won't share that password.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden04",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "npc_knowledge": "NPC knows but withholds; value excluded",
+    "player_question": "Tell me the gate password.",
+    "candidate": "I don't know the password.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "moderate",
+    "rationale": "False ignorance contradicts explicit knowledge posture.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I don't know the password.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden05",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "hidden",
+    "authorized_context": {
+      "facts": [],
+      "question": "Who is the masked stranger?",
+      "knowledge": "World identity exists but player not entitled; identity excluded"
+    },
+    "npc_knowledge": "World identity exists but player not entitled; identity excluded",
+    "player_question": "Who is the masked stranger?",
+    "candidate": "The masked stranger is the prince.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Hidden identity cannot be disclosed or guessed.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The masked stranger is the prince.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden06",
+    "category": "hidden",
+    "split": "holdout",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "The gold is beneath the third stair.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Unestablished treasure location.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The gold is beneath the third stair.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden07",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "maker",
+    "authorized_context": {
+      "facts": [],
+      "question": "Who made the lantern?",
+      "knowledge": "World maker exists but NPC does not know; identity excluded"
+    },
+    "npc_knowledge": "World maker exists but NPC does not know; identity excluded",
+    "player_question": "Who made the lantern?",
+    "candidate": "The smith made the lantern.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "World truth is not NPC knowledge.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The smith made the lantern.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden08",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "maker",
+    "authorized_context": {
+      "facts": [],
+      "question": "Who made the lantern?",
+      "knowledge": "World maker exists but NPC does not know; identity excluded"
+    },
+    "npc_knowledge": "World maker exists but NPC does not know; identity excluded",
+    "player_question": "Who made the lantern?",
+    "candidate": "I don't know who made that lantern.",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Ignorance with no invented attribution.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I don't know who made that lantern.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden09",
+    "category": "hidden",
+    "split": "holdout",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "Bren plans to betray you tomorrow.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Private motive and future event.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "Bren plans to betray you tomorrow.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "hidden10",
+    "category": "hidden",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "The killer was the merchant's sister.",
+    "expected_classification": [
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Unresolved mystery solution invented.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The killer was the merchant's sister.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "mixed01",
+    "category": "mixed",
+    "split": "development",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "npc_knowledge": "incidental permitted; no operational facts",
+    "player_question": "What do you personally enjoy about the evening?",
+    "candidate": "I prefer the evening because the guards usually leave the north gate unattended.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Adds or contradicts material information without sufficient speaker/disclosure/resolver authority.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I prefer the evening because the guards usually leave the north gate unattended.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "mixed02",
+    "category": "mixed",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street is called the north road, and it leads to the fortress.",
+    "expected_classification": [
+      "B",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Authorized name does not license a destination.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "The street is called the north road, and it leads to the fortress.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "mixed03",
+    "category": "mixed",
+    "split": "holdout",
+    "context_id": "maker",
+    "authorized_context": {
+      "facts": [],
+      "question": "Who made the lantern?",
+      "knowledge": "World maker exists but NPC does not know; identity excluded"
+    },
+    "npc_knowledge": "World maker exists but NPC does not know; identity excluded",
+    "player_question": "Who made the lantern?",
+    "candidate": "I don't know who made it, but the smith in the market probably did.",
+    "expected_classification": [
+      "B",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Unknown maker followed by consequential speculation.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I don't know who made it, but the smith in the market probably did.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "mixed04",
+    "category": "mixed",
+    "split": "development",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "npc_knowledge": "No payment or obligation authorized",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I can't promise money, though twenty crowns will be waiting for you.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Refusal followed by implied reward obligation.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I can't promise money, though twenty crowns will be waiting for you.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "mixed05",
+    "category": "mixed",
+    "split": "development",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "npc_knowledge": "NPC knows but withholds; value excluded",
+    "player_question": "Tell me the gate password.",
+    "candidate": "I enjoy dusk. Say ember at the gate to pass.",
+    "expected_classification": [
+      "C",
+      "G"
+    ],
+    "expected": "REJECT",
+    "risk": "high",
+    "rationale": "Incidental opening does not sanitize password disclosure.",
+    "origin": "investigator-authored synthetic; not human-independent",
+    "claims": [
+      {
+        "text": "I enjoy dusk. Say ember at the gate to pass.",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ]
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "category": "historical_A1_compact_1",
+    "split": "development",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "npc_knowledge": "known",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "Sergeant Mara says, \"The street right past the gate is called the north road.\"",
+    "expected_classification": [
+      "B"
+    ],
+    "expected": "ACCEPT",
+    "risk": "low",
+    "rationale": "Historical paraphrase: compare meaning with the authorized road name.",
+    "origin": "recorded provider output PR-EG-R2 A1_compact_1",
+    "claims": [
+      {
+        "text": "Sergeant Mara says, \"The street right past the gate is called the north road.\"",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ],
+    "source_trial": {
+      "trial_id": "A1_compact_1",
+      "case": {
+        "id": "A1",
+        "group": "A",
+        "question": "Say that again in plainer words.",
+        "posture": "known",
+        "facts": [
+          "The street beyond the gate is called the north road."
+        ],
+        "history": [
+          {
+            "npc": "Word is, the street beyond the gate is the north road."
+          }
+        ],
+        "commitments": []
+      },
+      "level": "compact",
+      "repeat": 1,
+      "context": {
+        "npc": {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "role": "guard",
+          "voice": "plainspoken, reserved"
+        },
+        "speaker": "sergeant_mara",
+        "addressee": "player",
+        "player_question": "Say that again in plainer words.",
+        "knowledge": {
+          "status": "known",
+          "authorized_facts": [
+            "The street beyond the gate is called the north road."
+          ],
+          "uncertainty": null
+        },
+        "delivered_exchange": [
+          {
+            "npc": "Word is, the street beyond the gate is the north road."
+          }
+        ],
+        "noncanonical_commitments": [],
+        "resolver": "No mechanical outcome or state mutation authorized.",
+        "provenance": {
+          "facts": "disposable authored fixture; NPC authorized to disclose",
+          "history": "previous delivered experimental reply",
+          "commitments": "fixture or accepted experimental speech; noncanonical"
+        }
+      },
+      "model_requested": "gpt-4.1-mini",
+      "configuration": {
+        "transport": "responses",
+        "temperature": "provider default; omitted like production",
+        "max_output_tokens": 500,
+        "sdk_max_retries": 0
+      },
+      "prompt_sha256": "c4fb548d5f78019871af8b8a36bcb8544f777b9978599c3af4a4dc16d535c3ef",
+      "model_returned": "gpt-4.1-mini-2025-04-14",
+      "request_id": "resp_0dc631d7188ff4a2006ad2cf56024887d2adc04e5fedb2218b",
+      "raw_output": "{\"narration\":\"Sergeant Mara says, \\\"The street right past the gate is called the north road.\\\"\"}",
+      "usage": {
+        "input_tokens": 473,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 25,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 498
+      },
+      "response_status": "completed",
+      "format_valid": true,
+      "narration": "Sergeant Mara says, \"The street right past the gate is called the north road.\"",
+      "validation": {
+        "authority": {
+          "requested_information": "general",
+          "subject": "say again plainer",
+          "knowledge_posture": "established",
+          "answer_relation": "sufficient",
+          "improvisation_permitted": false,
+          "improvisation_scope": "none",
+          "narration_determined": false,
+          "player_line": "",
+          "canonical": false,
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "npc_role": "guard",
+          "npc_disposition": "",
+          "prohibited_claims": [
+            "consequential_world_fact",
+            "hidden_disclosure",
+            "mechanical_change",
+            "new_obligation",
+            "invented_answer"
+          ],
+          "prior_commitments": [],
+          "reconciled_plan": "",
+          "reuse_prior_speech": false
+        },
+        "dialogue_reasons": [],
+        "hard_validator": {
+          "hard_valid": false,
+          "reasons": [
+            "ungrounded_authoritative_rule"
+          ],
+          "soft_flags": [],
+          "speaker": "Sergeant Mara",
+          "addressee": "Sergeant Mara",
+          "operation": "ask",
+          "interaction_complete": true,
+          "contract_satisfying": false,
+          "authority": [
+            {
+              "text": "Sergeant Mara says, \"The street right past the gate is called the north road.",
+              "kind": "consequential_proposal",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": true,
+              "family": "geography"
+            }
+          ],
+          "gm_resolution_decision_audit": null
+        },
+        "scope": "Production functions with synthetic fixture social result; no full emission lifecycle; decision omitted"
+      },
+      "latency_ms": 1648.48
+    }
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "category": "historical_F2_compact_1",
+    "split": "development",
+    "context_id": "unknown",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you know about this place?",
+      "knowledge": "World facts not established"
+    },
+    "npc_knowledge": "World facts not established",
+    "player_question": "What do you know about this place?",
+    "candidate": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded.\"",
+    "expected_classification": [
+      "H"
+    ],
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "rationale": "Historical provider wording independently requires authority review; conservatively abstain.",
+    "origin": "recorded provider output PR-EG-R2 F2_compact_1",
+    "claims": [
+      {
+        "text": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded.\"",
+        "analysis": "Response-level ground truth; additional atomic analysis retained separately."
+      }
+    ],
+    "source_trial": {
+      "trial_id": "F2_compact_1",
+      "case": {
+        "id": "F2",
+        "group": "F",
+        "question": "What have you heard about when the north gate is unguarded?",
+        "posture": "unknown",
+        "facts": [],
+        "history": [],
+        "commitments": [],
+        "risk": "guard weaknesses",
+        "resolver": "No consequential claims, new facts, obligations or mechanical changes authorized."
+      },
+      "level": "compact",
+      "repeat": 1,
+      "context": {
+        "npc": {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "role": "guard",
+          "voice": "plainspoken, reserved"
+        },
+        "speaker": "sergeant_mara",
+        "addressee": "player",
+        "player_question": "What have you heard about when the north gate is unguarded?",
+        "knowledge": {
+          "status": "unknown",
+          "authorized_facts": [],
+          "uncertainty": null
+        },
+        "delivered_exchange": [],
+        "noncanonical_commitments": [],
+        "resolver": "No consequential claims, new facts, obligations or mechanical changes authorized.",
+        "provenance": {
+          "facts": "disposable authored fixture; NPC authorized to disclose",
+          "history": "previous delivered experimental reply",
+          "commitments": "fixture or accepted experimental speech; noncanonical"
+        }
+      },
+      "model_requested": "gpt-4.1-mini",
+      "configuration": {
+        "transport": "responses",
+        "temperature": "provider default; omitted like production",
+        "max_output_tokens": 500,
+        "sdk_max_retries": 0
+      },
+      "prompt_sha256": "177d762ae876d2d5385ac3d97172d11c98ea1f9f2a235e23bc221155208353cc",
+      "model_returned": "gpt-4.1-mini-2025-04-14",
+      "request_id": "resp_0170edd2abac560c006ad2cf812a0487d28d000e6b0cf11708",
+      "raw_output": "{\"narration\":\"Sergeant Mara says, \\\"I haven't heard anything reliable about the north gate being left unguarded.\\\"\"}",
+      "usage": {
+        "input_tokens": 455,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 28,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 483
+      },
+      "response_status": "completed",
+      "format_valid": true,
+      "narration": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded.\"",
+      "validation": {
+        "authority": {
+          "requested_information": "general",
+          "subject": "heard north gate",
+          "knowledge_posture": "unknown",
+          "answer_relation": "none",
+          "improvisation_permitted": false,
+          "improvisation_scope": "none",
+          "narration_determined": false,
+          "player_line": "",
+          "canonical": false,
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "npc_role": "guard",
+          "npc_disposition": "",
+          "prohibited_claims": [
+            "consequential_world_fact",
+            "hidden_disclosure",
+            "mechanical_change",
+            "new_obligation",
+            "invented_answer"
+          ],
+          "prior_commitments": [],
+          "reconciled_plan": "",
+          "reuse_prior_speech": false
+        },
+        "dialogue_reasons": [],
+        "hard_validator": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "speaker": "Sergeant Mara",
+          "addressee": "Sergeant Mara",
+          "operation": "ask",
+          "interaction_complete": true,
+          "contract_satisfying": true,
+          "authority": [
+            {
+              "text": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded.",
+              "kind": "npc_claim",
+              "epistemic_status": "hearsay",
+              "grounded": false,
+              "consequential": false,
+              "family": "none"
+            }
+          ],
+          "gm_resolution_decision_audit": null
+        },
+        "scope": "Production functions with synthetic fixture social result; no full emission lifecycle; decision omitted"
+      },
+      "latency_ms": 729.76
+    }
+  }
+]

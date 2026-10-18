@@ -68,6 +68,9 @@ def _seed_shared_world(tmp_path, monkeypatch):
     ]
     scene["scene"]["interactables"] = [
         {"id": "desk", "type": "investigate", "reveals_clue": "desk_clue"},
+        {"id": "iron_latch", "label": "iron latch", "aliases": ["latch"]},
+        {"id": "cooking_pot", "label": "cooking pot", "aliases": ["pot"]},
+        {"id": "posted_sheet", "label": "posted sheet", "aliases": ["sheet"]},
     ]
     scene["scene"]["discoverable_clues"] = [
         {"id": "desk_clue", "text": "A map indicates patrol locations."},

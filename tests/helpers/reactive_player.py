@@ -52,6 +52,13 @@ _BOUNDARY_RE = re.compile(
     re.IGNORECASE,
 )
 
+_VISIBLE_NONANSWER_RE = re.compile(
+    r"\b(?:i\s+(?:do not|don't)\s+know|cannot\s+answer|can't\s+answer|"
+    r"nothing\s+new|look\s+again|closer\s+looking\s+yields\s+nothing|"
+    r"not\s+enough\s+to\s+answer|what\s+do\s+you\s+mean|clarify)\b",
+    re.IGNORECASE,
+)
+
 
 def _gate_status(evaluation: Mapping[str, Any], name: str) -> str:
     gates = evaluation.get("mandatory_gates")
@@ -86,6 +93,14 @@ def _has_scenario_evidence(scenario: ReactiveScenario, gm_text: str) -> bool:
     return any(marker.lower() in lowered for marker in scenario.acceptance_markers)
 
 
+def _visible_response_seems_satisfactory(scenario: ReactiveScenario, gm_text: str) -> bool:
+    if not gm_text.strip():
+        return False
+    if _VISIBLE_NONANSWER_RE.search(gm_text):
+        return False
+    return _has_scenario_evidence(scenario, gm_text)
+
+
 def initial_decision(scenario: ReactiveScenario) -> SyntheticDecision:
     return SyntheticDecision(
         player_text=scenario.initial_action,
@@ -102,21 +117,21 @@ def decide_reactive_action(
     prior_gm_text: str,
     prior_evaluation: Mapping[str, Any],
 ) -> SyntheticDecision:
-    """Choose the next bounded action from the preceding GM output and evaluator evidence."""
-    semantic = str(prior_evaluation.get("semantic_result") or "UNCHECKED")
-    malformed = _gate_status(prior_evaluation, "malformed_output")
-    intent = _gate_status(prior_evaluation, "player_intent_addressed")
+    """Choose the next bounded action from player-visible transcript evidence.
 
-    if semantic == "INVALID_RUN":
-        return SyntheticDecision("", "runtime_invalid", True, "invalid_run")
-    if semantic == "UNCHECKED" or malformed == "UNCHECKED" or intent == "UNCHECKED":
-        return SyntheticDecision("", "semantic_evaluation_unchecked", True, "evaluation_unchecked")
+    ``prior_evaluation`` is accepted for artifact compatibility, but normal player
+    cognition does not branch on evaluator labels or gate names.
+    """
+    _ = prior_evaluation
 
-    legitimate_boundary = bool(_BOUNDARY_RE.search(prior_gm_text)) and malformed != "FAIL"
+    if not str(prior_gm_text or "").strip():
+        return SyntheticDecision(scenario.degradation_probe or scenario.rephrased_follow_up, "visible_missing_response:persist")
+
+    legitimate_boundary = bool(_BOUNDARY_RE.search(prior_gm_text))
     if legitimate_boundary:
         return SyntheticDecision("", "legitimate_uncertainty_refusal_or_redirection", True, "legitimate_boundary")
 
-    if semantic == "PASS" and _has_scenario_evidence(scenario, prior_gm_text):
+    if _visible_response_seems_satisfactory(scenario, prior_gm_text):
         if config.strategy == "adversarial":
             options = _probe_options(scenario, set(state.selected_probe_keys))
             key, text = _stable_choice(options, seed=config.seed, turn_index=turn_index)
@@ -127,19 +142,12 @@ def decide_reactive_action(
                 return SyntheticDecision(text, f"adversarial_probe:{key}:prior_semantic_pass")
         return SyntheticDecision("", "objective_satisfactorily_resolved", True, "objective_resolved")
 
-    if semantic == "PASS":
-        semantic = "FAIL"
-
     if state.attempts_on_intent >= config.max_attempts_per_intent:
         return SyntheticDecision("", "bounded_persistence_exhausted", True, "max_intent_attempts")
 
     state.attempts_on_intent += 1
     if state.current_intent not in state.unresolved_intents:
         state.unresolved_intents.append(state.current_intent)
-
-    if malformed == "FAIL":
-        text = scenario.degradation_probe or scenario.rephrased_follow_up
-        return SyntheticDecision(text, "repeat_after_malformed_output")
 
     if scenario.observation_follow_up and re.search(r"\b(?:look|inspect|read|examine|notice|see)\b", scenario.initial_action, re.I):
         return SyntheticDecision(scenario.observation_follow_up, "observation_not_fulfilled:persist")

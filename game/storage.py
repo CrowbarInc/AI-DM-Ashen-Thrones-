@@ -48,7 +48,16 @@ from game.persistence_contract import (
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / 'data'
+
+
+def _configured_data_dir() -> Path:
+    override = os.getenv("ASHEN_DATA_DIR")
+    if override and override.strip():
+        return Path(override).expanduser().resolve()
+    return BASE_DIR / 'data'
+
+
+DATA_DIR = _configured_data_dir()
 SCENES_DIR = DATA_DIR / 'scenes'
 
 CHARACTER_PATH = DATA_DIR / 'character.json'
@@ -703,7 +712,15 @@ def apply_repeated_description_guard(
 ) -> None:
     """If narration matches the last description for this scene, replace with short summary.
     Mutates gm in place. Updates last_description_hash when narration changes."""
+    from game.immutable_valid_response import response_is_immutable, note_mutator_skipped
+
     text = gm.get('player_facing_text')
+    if isinstance(gm, dict) and response_is_immutable(gm):
+        note_mutator_skipped(gm, "apply_repeated_description_guard")
+        if isinstance(text, str) and text.strip():
+            rt = get_scene_runtime(session, scene_id)
+            rt['last_description_hash'] = hash_text(text)
+        return
     if not isinstance(text, str) or not text.strip():
         return
     new_hash = hash_text(text)

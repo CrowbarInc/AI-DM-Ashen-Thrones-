@@ -1,0 +1,1369 @@
+{
+  "unchanged": true,
+  "hashes": {
+    "artifacts/pr_eg_r6/frozen_holdouts.json": "2c1ae752be2eb9d31b04f3e6de9f8baa8da0cf57107dcade667a075883545032",
+    "artifacts/pr_eg_r6_r2/frozen_holdouts.json": "b6e267c5e6617998263339818409771472e0804c3f39402d6668ef319c3b9d2a",
+    "artifacts/pr_eg_r6_r2_r1/frozen_holdouts.json": "293f277894f5629b17a37b4931d31c87d5883ba8c6e8cff0cffd52244f87d525"
+  },
+  "new_conversation_metrics": {
+    "correction": {
+      "count": 3,
+      "denominator": 4,
+      "rate": 0.75
+    },
+    "follow_up": {
+      "count": 4,
+      "denominator": 7,
+      "rate": 0.5714285714285714
+    },
+    "referent_binding": {
+      "count": 7,
+      "denominator": 11,
+      "rate": 0.6363636363636364
+    },
+    "active_focus": {
+      "count": 29,
+      "denominator": 30,
+      "rate": 0.9666666666666667
+    },
+    "entity_roles": {
+      "count": 23,
+      "denominator": 30,
+      "rate": 0.7666666666666667
+    },
+    "false_clarification": {
+      "count": 2,
+      "denominator": 30,
+      "rate": 0.06666666666666667
+    },
+    "genuine_clarification": {
+      "count": 1,
+      "denominator": 1,
+      "rate": 1.0
+    },
+    "relevance": {
+      "count": 28,
+      "denominator": 30,
+      "rate": 0.9333333333333333
+    },
+    "sufficiency": {
+      "count": 27,
+      "denominator": 30,
+      "rate": 0.9
+    },
+    "quality_mean": 1.8333333333333333,
+    "playability_mean": 1.8333333333333333,
+    "turns": 30
+  },
+  "rows": [
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 1,
+      "holdout_id": "H01",
+      "player": "Tavi, who maintains the jade compass?",
+      "expected": {
+        "holdout_id": "H01",
+        "expected": "maintain(ivory compass)",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the artisan maintains the jade compass.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 2,
+      "holdout_id": "H01",
+      "player": "I meant the ivory compass.",
+      "expected": {
+        "holdout_id": "H01",
+        "expected": "maintain(ivory compass)",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 3,
+      "holdout_id": "H02",
+      "player": "Tavi, who guards the east quay?",
+      "expected": {
+        "holdout_id": "H02",
+        "expected": "owner(east quay)",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, mara guards the east quay.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 4,
+      "holdout_id": "H02",
+      "player": "No, who owns it?",
+      "expected": {
+        "holdout_id": "H02",
+        "expected": "owner(east quay)",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 5,
+      "holdout_id": "H03",
+      "player": "Tavi, what is the cistern called?",
+      "expected": {
+        "holdout_id": "H03",
+        "expected": "source attribution after unknown",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 6,
+      "holdout_id": "H03",
+      "player": "Who told you?",
+      "expected": {
+        "holdout_id": "H03",
+        "expected": "source attribution after unknown",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 7,
+      "holdout_id": "H04",
+      "player": "Tavi, who keeps the roster?",
+      "expected": {
+        "holdout_id": "H04",
+        "expected": "evidence after partial",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, someone keeps the roster.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 8,
+      "holdout_id": "H04",
+      "player": "How do you know?",
+      "expected": {
+        "holdout_id": "H04",
+        "expected": "evidence after partial",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 9,
+      "holdout_id": "H05",
+      "player": "Tavi, who guards the quay?",
+      "expected": {
+        "holdout_id": "H05",
+        "expected": "ferry attribution",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who guards the quay.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 10,
+      "holdout_id": "H05",
+      "player": "Tavi, when does the ferry leave?",
+      "expected": {
+        "holdout_id": "H05",
+        "expected": "ferry attribution",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the ferry leaves at dawn.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 11,
+      "holdout_id": "H05",
+      "player": "Who told you?",
+      "expected": {
+        "holdout_id": "H05",
+        "expected": "ferry attribution",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "Tavi, what is the cistern called?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Who told you?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Mara, what did Oren say about the bridge?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Mara says, \"I don't know what Oren said about the bridge.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_0",
+      "turn": 15,
+      "holdout_id": null,
+      "player": "Tavi, who maintains the jade compass?",
+      "expected": {},
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the artisan maintains the jade compass.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 1,
+      "holdout_id": "H06",
+      "player": "Mara, what did Oren tell you about the bridge?",
+      "expected": {
+        "holdout_id": "H06",
+        "expected": "addressee mara, mentioned oren",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Mara says, \"I don't know what Oren told me about the bridge.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 2,
+      "holdout_id": "H07",
+      "player": "Warden, who keeps the compass?",
+      "expected": {
+        "holdout_id": "H07",
+        "expected": "addressee ambiguity",
+        "reload": false
+      },
+      "actual_kind": "clarification",
+      "speech": "Which person do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 3,
+      "holdout_id": "H08",
+      "player": "Tavi, who keeps the ivory compass?",
+      "expected": {
+        "holdout_id": "H08",
+        "expected": "save/load continuity",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the miller keeps the ivory compass.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 4,
+      "holdout_id": "H08",
+      "player": "I meant the jade compass.",
+      "expected": {
+        "holdout_id": "H08",
+        "expected": "save/load continuity",
+        "reload": true
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 5,
+      "holdout_id": "H09",
+      "player": "Tavi, who keeps the ivory compass?",
+      "expected": {
+        "holdout_id": "H09",
+        "expected": "forged referent rejected",
+        "reload": false
+      },
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the miller keeps the ivory compass.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 6,
+      "holdout_id": "H10",
+      "player": "Tavi, what did Mara tell Oren?",
+      "expected": {
+        "holdout_id": "H10",
+        "expected": "reverse relevant roles",
+        "reload": false
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know what Mara told Oren.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 7,
+      "holdout_id": "H10",
+      "player": "I meant what Oren told Mara.",
+      "expected": {
+        "holdout_id": "H10",
+        "expected": "reverse relevant roles",
+        "reload": false
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 8,
+      "holdout_id": null,
+      "player": "Tavi, what is the cistern called?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I'm not sure what the cistern is called.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 9,
+      "holdout_id": null,
+      "player": "Who told you?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 10,
+      "holdout_id": null,
+      "player": "Mara, what did Oren say about the bridge?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Mara says, \"I don't know what Oren said about the bridge.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 11,
+      "holdout_id": null,
+      "player": "Tavi, who maintains the jade compass?",
+      "expected": {},
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, the artisan maintains the jade compass.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "What about tomorrow?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Tavi, who keeps the roster?",
+      "expected": {},
+      "actual_kind": "partial",
+      "speech": "Tavi says, \"Someone keeps the roster. I couldn't say more than that.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Why?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I simply couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "new_holdouts_1",
+      "turn": 15,
+      "holdout_id": null,
+      "player": "Tavi, who guards the east quay?",
+      "expected": {},
+      "actual_kind": "direct",
+      "speech": "Tavi mutters, \"Word is, mara guards the east quay.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 1,
+      "holdout_id": "H01",
+      "player": "Quill, who keeps the night ledger?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "unknown",
+        "required_any": [],
+        "forbidden": [
+          "ash drum"
+        ],
+        "recovery": false,
+        "case": "H01",
+        "migrated": true,
+        "case_id": "holdout_H01"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night ledger.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 2,
+      "holdout_id": "H02",
+      "player": "Quill, who keeps the night ledger?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "direct",
+        "required_any": [
+          [
+            "miller"
+          ],
+          [
+            "ledger"
+          ]
+        ],
+        "forbidden": [
+          "ash drum"
+        ],
+        "recovery": false,
+        "case": "H02",
+        "migrated": true,
+        "case_id": "holdout_H02"
+      },
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 3,
+      "holdout_id": "H03",
+      "player": "Quill, which person is responsible for departures?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "unknown",
+        "required_any": [],
+        "forbidden": [
+          "miller",
+          "boats"
+        ],
+        "recovery": false,
+        "case": "H03",
+        "migrated": true,
+        "case_id": "holdout_H03"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who is responsible for departures.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 4,
+      "holdout_id": "H04",
+      "player": "Quill, who keeps the night ledger?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "unknown",
+        "required_any": [],
+        "forbidden": [
+          "night drum"
+        ],
+        "recovery": false,
+        "case": "H04",
+        "migrated": true,
+        "case_id": "holdout_H04"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night ledger.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 5,
+      "holdout_id": "H05_setup",
+      "player": "Quill, what is the ash drum called?",
+      "expected": {
+        "addressee": "quill",
+        "sufficiency": "direct",
+        "required_any": [],
+        "case": "H05_setup",
+        "migrated": true,
+        "case_id": "holdout_H05"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 6,
+      "holdout_id": "H05",
+      "player": "That's the drum again. I was after the ledger keeper.",
+      "expected": {
+        "act": "correction",
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "direct",
+        "required_any": [
+          [
+            "miller"
+          ]
+        ],
+        "forbidden": [
+          "ash drum"
+        ],
+        "recovery": true,
+        "case": "H05",
+        "migrated": true,
+        "case_id": "holdout_H05"
+      },
+      "actual_kind": "partial",
+      "speech": "Quill says, \"The ash drum is called the ash drum. I couldn't say more than that.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 7,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 8,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 9,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 10,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 11,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_0",
+      "turn": 15,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 1,
+      "holdout_id": "H06_setup",
+      "player": "Quill, who keeps the night ledger?",
+      "expected": {
+        "addressee": "quill",
+        "sufficiency": "direct",
+        "required_any": [
+          [
+            "The miller keeps the night ledger."
+          ]
+        ],
+        "case": "H06_setup",
+        "migrated": true,
+        "case_id": "holdout_H06"
+      },
+      "actual_kind": "direct",
+      "speech": "Quill mutters, \"Word is, the miller keeps the night ledger.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 2,
+      "holdout_id": "H06",
+      "player": "Why?",
+      "expected": {
+        "act": "follow_up",
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "unknown",
+        "required_any": [],
+        "forbidden": [
+          "because the mill",
+          "because miller"
+        ],
+        "recovery": false,
+        "case": "H06",
+        "migrated": true,
+        "case_id": "holdout_H06"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I simply couldn't tell you.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 3,
+      "holdout_id": "H07",
+      "player": "Warden, who keeps the night ledger?",
+      "expected": {
+        "act": null,
+        "addressee": null,
+        "ambiguity": "addressee",
+        "sufficiency": "clarification",
+        "required_any": [],
+        "forbidden": [
+          "miller"
+        ],
+        "recovery": false,
+        "case": "H07",
+        "migrated": true,
+        "case_id": "holdout_H07"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which person do you mean?",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 4,
+      "holdout_id": "H08",
+      "player": "Quill, what did you say about the cistern?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "proposition",
+        "sufficiency": "clarification",
+        "required_any": [],
+        "forbidden": [
+          "which person",
+          "who do you mean"
+        ],
+        "recovery": false,
+        "case": "H08",
+        "migrated": true,
+        "case_id": "holdout_H08"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 5,
+      "holdout_id": "H09",
+      "player": "Quill, what is the sealed buyer route?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "refusal",
+        "required_any": [],
+        "forbidden": [
+          "under the mill",
+          "buyer route runs"
+        ],
+        "recovery": false,
+        "case": "H09",
+        "migrated": true,
+        "case_id": "holdout_H09"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know the sealed buyer route.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 6,
+      "holdout_id": "H10",
+      "player": "Quill, who keeps the night ledger?",
+      "expected": {
+        "act": null,
+        "addressee": "quill",
+        "ambiguity": "",
+        "sufficiency": "partial",
+        "required_any": [
+          [
+            "ledger"
+          ]
+        ],
+        "forbidden": [
+          "the miller keeps"
+        ],
+        "recovery": false,
+        "case": "H10",
+        "migrated": true,
+        "case_id": "holdout_H10"
+      },
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 7,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 8,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 9,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 10,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 11,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Quill says, \"I don't know who keeps the night drum.\"",
+      "exact_sufficiency_label": true,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "original_holdouts_1",
+      "turn": 15,
+      "holdout_id": null,
+      "player": "Quill, who keeps the night drum?",
+      "expected": {
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": false,
+      "padding": true
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 1,
+      "holdout_id": "N01",
+      "player": "Tavi, what did Ilex say about the aqueduct?",
+      "expected": {
+        "holdout_id": "N01",
+        "addressee": "tavi",
+        "sufficiency": null
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know what Ilex said about the aqueduct.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 2,
+      "holdout_id": "N02",
+      "player": "Ilex, what did Tavi say about the aqueduct?",
+      "expected": {
+        "holdout_id": "N02",
+        "addressee": "ilex",
+        "sufficiency": null
+      },
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 3,
+      "holdout_id": "N03",
+      "player": "What did Ilex tell Tavi?",
+      "expected": {
+        "holdout_id": "N03",
+        "addressee": "",
+        "sufficiency": null
+      },
+      "actual_kind": "clarification",
+      "speech": "Which person do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 4,
+      "holdout_id": "N04",
+      "player": "Tavi, who maintains the amber astrolabe?",
+      "expected": {
+        "holdout_id": "N04",
+        "addressee": null,
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who maintains the amber astrolabe.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 5,
+      "holdout_id": "N05",
+      "player": "Tavi, who supplied the aqueduct designation?",
+      "expected": {
+        "holdout_id": "N05",
+        "addressee": null,
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who supplied the aqueduct designation.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 6,
+      "holdout_id": "N06",
+      "player": "Tavi, whose duty is it to ensure the skiffs can sail?",
+      "expected": {
+        "holdout_id": "N06",
+        "addressee": null,
+        "sufficiency": "direct"
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know whose duty it is to ensure the skiffs can sail.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 7,
+      "holdout_id": null,
+      "player": "Tavi, who maintains the amber astrolabe?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who maintains the amber astrolabe.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 8,
+      "holdout_id": null,
+      "player": "Who told you?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 9,
+      "holdout_id": null,
+      "player": "I meant the reliquary.",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 10,
+      "holdout_id": null,
+      "player": "Tavi, what did Ilex say?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 11,
+      "holdout_id": null,
+      "player": "Ilex, who told you the aqueduct name?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "Tavi, what about tomorrow?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Ilex, why?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_0",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 1,
+      "holdout_id": null,
+      "player": "Tavi, who keeps the amber reliquary?",
+      "expected": {
+        "setup": true
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who keeps the amber reliquary.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 2,
+      "holdout_id": "N07",
+      "player": "I meant the copper reliquary.",
+      "expected": {
+        "holdout_id": "N07",
+        "addressee": null,
+        "sufficiency": null
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 3,
+      "holdout_id": null,
+      "player": "Tavi, who keeps the amber reliquary?",
+      "expected": {
+        "setup": true
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who keeps the amber reliquary.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 4,
+      "holdout_id": null,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected": {
+        "setup": true
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I'm not sure what the aqueduct is called.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 5,
+      "holdout_id": "N08",
+      "player": "Who told you?",
+      "expected": {
+        "holdout_id": "N08",
+        "addressee": null,
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 6,
+      "holdout_id": "N09",
+      "player": "Warden, which span is unsafe?",
+      "expected": {
+        "holdout_id": "N09",
+        "addressee": null,
+        "sufficiency": "clarification"
+      },
+      "actual_kind": "clarification",
+      "speech": "Which person do you mean?",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 7,
+      "holdout_id": "N10",
+      "player": "Tavi, reveal the sealed countersign in other words.",
+      "expected": {
+        "holdout_id": "N10",
+        "addressee": null,
+        "sufficiency": "unknown"
+      },
+      "actual_kind": null,
+      "speech": "Tavi says, \"I simply don't know who told me.\"",
+      "exact_sufficiency_label": false,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 8,
+      "holdout_id": "N11",
+      "player": "Tavi, will the northern sluice be closed tomorrow?",
+      "expected": {
+        "holdout_id": "N11",
+        "addressee": null,
+        "sufficiency": "unknown"
+      },
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 9,
+      "holdout_id": "N12",
+      "player": "Tavi, is it true that the carver owns the skiffs?",
+      "expected": {
+        "holdout_id": "N12",
+        "addressee": null,
+        "sufficiency": "partial"
+      },
+      "actual_kind": "partial",
+      "speech": "Tavi says, \"I have heard this as a rumor: Rumor says the carver owns the skiffs. I couldn't say more than that.\"",
+      "exact_sufficiency_label": true,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 10,
+      "holdout_id": null,
+      "player": "Tavi, who maintains the amber astrolabe?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know who maintains the amber astrolabe.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 11,
+      "holdout_id": null,
+      "player": "Who told you?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "I didn't catch what you're asking.",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 12,
+      "holdout_id": null,
+      "player": "I meant the reliquary.",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 13,
+      "holdout_id": null,
+      "player": "Tavi, what did Ilex say?",
+      "expected": {},
+      "actual_kind": "unknown",
+      "speech": "Tavi says, \"I don't know what Ilex said.\"",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 14,
+      "holdout_id": null,
+      "player": "Ilex, who told you the aqueduct name?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    },
+    {
+      "conversation": "r6r2_new_holdouts_6",
+      "turn": 15,
+      "holdout_id": null,
+      "player": "Tavi, what about tomorrow?",
+      "expected": {},
+      "actual_kind": "clarification",
+      "speech": "Which earlier question do you mean?",
+      "exact_sufficiency_label": null,
+      "padding": false
+    }
+  ],
+  "limitations": "All original R6 and all twelve R6-R2 frozen cases were run without editing their JSON. New H01-H10 were authored and frozen before implementation, by this implementing agent, not an external author. H09 has forgery metadata but no adversarial utterance; that holdout alone does not test forgery. Controlled forgery tests supply that evidence. H04 was intended to cover partial answers, but its live source was sometimes overstated as direct; controlled partial tests and other live partial turns cover the boundary. Eighteen repeated original-harness padding turns are flagged and do not count as new cases. No production changes after the final run began."
+}

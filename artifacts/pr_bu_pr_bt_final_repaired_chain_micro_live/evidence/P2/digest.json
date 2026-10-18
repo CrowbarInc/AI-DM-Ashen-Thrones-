@@ -1,0 +1,111 @@
+{
+  "probe": "P2",
+  "player": "Baker, which loaf do you usually keep for yourself?",
+  "scene": "baker",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+  "sealed": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+  "accepted": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "regeneration",
+  "attempt": 2,
+  "acceptance": {
+    "why": "regeneration_hard_valid",
+    "text": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves."
+  },
+  "initial_player_facing_text": "The baker glances around cautiously, then shakes their head with a guarded expression. \"I’m sorry, but I don’t have a favorite loaf to share. Every piece here is for the customers,\" they say firmly, avoiding eye contact.",
+  "initial_declared_claims": null,
+  "retry_player_facing_text": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "validation_attempt_2_reasons": [],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "The baker declines to reveal which loaf they keep for themselves.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "established",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_declared_claim"
+        ]
+      }
+    ],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d4c97cad4722"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "bread_stall"
+  },
+  "calls": [
+    {
+      "index": 4,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_008e0a4b02f53cdd006ac41d6c1f2087d281e08d321206e5b6",
+      "input_chars": 105329,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "input_tokens": 24534,
+      "output_tokens": 448,
+      "total_tokens": 24982,
+      "latency_seconds": 4.873,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    },
+    {
+      "index": 5,
+      "kind": "generation",
+      "retry_attempt": 1,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_04e1159eb25c09ad006ac41d71541c87d2bb2ee754db75f0dc",
+      "input_chars": 111640,
+      "recipe_present": true,
+      "retry_context_present": true,
+      "input_tokens": 26005,
+      "output_tokens": 86,
+      "total_tokens": 26091,
+      "latency_seconds": 4.391,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_d4c97cad4722",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+  "provider_recipe_present_on_generation": true
+}

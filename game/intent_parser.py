@@ -122,9 +122,15 @@ _MIXED_INVESTIGATION_TARGET_RE = re.compile(
     re.IGNORECASE,
 )
 _RE_EXPLICIT_WORLD_OBJECT_ACTION = re.compile(
-    r"\b(?:inspect|examine|study|search|investigate|check|read|"
+    r"\b(?:inspect|examine|study|search|investigate|check|read|open|close|knock\s+on|"
+    r"push|pull|try|use|touch|sit\s+(?:at|on)|"
     r"look\s+(?:at|behind|under|in|for|toward|towards)|"
     r"glance(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards))\b",
+    re.IGNORECASE,
+)
+_RE_PHYSICAL_WORLD_OBJECT_ACTION = re.compile(
+    r"\b(?P<verb>open|close|knock\s+on|push|pull|try|use|touch|sit\s+(?:at|on))\s+"
+    r"(?:the\s+|a\s+|an\s+|this\s+|that\s+)?(?P<target>[^.;?!]{1,100})",
     re.IGNORECASE,
 )
 _INTERACTABLE_CONTENT_QUESTION_RES = (
@@ -371,6 +377,11 @@ def _extract_observation_intent(text: str) -> tuple[str, Optional[str]]:
 
 def segment_mixed_player_turn(text: str) -> Dict[str, Optional[str]]:
     """Extract a narrow, inspectable mixed-turn shape before intent classification.
+
+    This is structural preprocessing only: sentence and clause boundaries, punctuation,
+    and obvious coordination. It is not the authoritative semantic owner. It must not
+    choose the player's operation, commitment, addressee, or resolver. The Resolution
+    Contract is built from the full utterance.
 
     This is intentionally conservative and deterministic. It does not attempt full
     natural-language decomposition, and only fills fields when cues are clear.
@@ -772,6 +783,14 @@ def recover_actionable_stay_leave_or_pursuit(
         if kind in {"scene_transition", "travel"} or str(meta.get("parser_lane") or "") == "explicit_stay":
             return act
     if looks_like_explicit_leave_or_pursuit_intent(raw):
+        from game.player_commitment import committed_world_text
+
+        if not re.search(
+            r"\b(?:follow|leave|pursue|go|head|walk|travel)\b",
+            committed_world_text(raw),
+            re.IGNORECASE,
+        ):
+            return None
         return _build_action(
             "travel",
             raw,
@@ -822,6 +841,23 @@ _RE_COMPATIBLE_PERCEPTION_OR_INSPECT = re.compile(
     r"inspect|examine|study|search|investigate|read|"
     r"look\s+(?:at|behind|under|in|for|toward|towards)|"
     r"glance(?:s|d|ing)?(?:\s+back)?\s+(?:at|over|toward|towards))\b",
+    re.IGNORECASE,
+)
+_RE_SCENE_PERCEPTION_REQUEST = re.compile(
+    r"\b(?:"
+    r"what\s+(?:ordinary\s+)?(?:sounds?|smells?|sights?)\b|"
+    r"what\s+changes?\s+around\s+(?:me|us)\b|"
+    r"what\s+can\s+i\s+(?:directly\s+)?see\b|"
+    r"(?:give|show)\s+me\s+(?:one|a)\s+concrete\s+visible\s+detail\b|"
+    r"what\s+can\s+i\s+learn\s+from\s+(?:its|their|the)\s+(?:wear|marks?|use)\b|"
+    r"compare\b[^.!?]{0,80}\bwhat\s+i\s+can\s+see\b"
+    r")",
+    re.IGNORECASE,
+)
+_RE_REFERENTIAL_WORLD_ACTION = re.compile(
+    r"\b(?:follow|act\s+on|take|use)\s+(?:the\s+)?"
+    r"(?:best|most\s+concrete|next(?:\s+safe)?|suggested|safest|clearest)\s+"
+    r"(?:lead|step|route|action|option)\b",
     re.IGNORECASE,
 )
 
@@ -892,6 +928,27 @@ def recover_actionable_explicit_world_action(
     raw = str(text or "").strip()
     if not raw:
         return None
+    if _RE_SCENE_PERCEPTION_REQUEST.search(raw):
+        return _build_action(
+            "observe",
+            raw,
+            raw,
+            metadata={
+                "parser_lane": "scene_perception_request",
+                "intent": "scene_perception",
+            },
+        )
+    if _RE_REFERENTIAL_WORLD_ACTION.search(raw):
+        return _build_action(
+            "custom",
+            raw,
+            raw,
+            target_id="referenced_next_step",
+            metadata={
+                "parser_lane": "referential_world_action",
+                "intent": "act_on_referenced_option",
+            },
+        )
     physical_or_perception = looks_like_explicit_physical_or_perception_action(raw)
     if not looks_like_explicit_world_object_action(raw) and not physical_or_perception:
         return None
@@ -903,7 +960,28 @@ def recover_actionable_explicit_world_action(
         segmented_turn=segmented_turn if isinstance(segmented_turn, dict) else None,
     )
     if not isinstance(act, dict):
-        return None
+        from game.player_commitment import committed_world_text
+
+        physical = _RE_PHYSICAL_WORLD_OBJECT_ACTION.search(committed_world_text(raw))
+        if not physical:
+            return None
+        target = str(physical.group("target") or "").strip()
+        inner = scene_envelope.get("scene") if isinstance(scene_envelope, dict) else None
+        if not isinstance(inner, dict):
+            inner = scene_envelope if isinstance(scene_envelope, dict) else {}
+        matched = _match_target_to_interactable(slugify(target), inner.get("interactables") or [])
+        return _build_action(
+            "custom",
+            raw,
+            raw,
+            target_id=target,
+            metadata={
+                "parser_lane": "physical_object_interaction",
+                "intent": "physical_interaction",
+                "physical_verb": str(physical.group("verb") or "").lower(),
+                "authored_interactable_id": matched,
+            },
+        )
     kind = str(act.get("type") or "").strip().lower()
     meta = act.get("metadata") if isinstance(act.get("metadata"), dict) else {}
     lane = str(meta.get("parser_lane") or "")
@@ -1759,7 +1837,9 @@ def parse_freeform_to_action(
     )
 
     if not block_travel:
-        emb = try_embedded_named_place_scene_action(t, scene)
+        from game.player_commitment import committed_world_text
+
+        emb = try_embedded_named_place_scene_action(committed_world_text(t), scene)
         if emb is not None:
             return emb
 
@@ -1804,7 +1884,10 @@ def parse_freeform_to_action(
                 target_scene_id=authored_exit_target,
                 metadata=travel_meta,
             )
-        if travel_dest_intent or looks_like_scene_travel_destination_intent(t):
+        from game.player_commitment import committed_world_text
+
+        committed_travel = committed_world_text(t)
+        if committed_travel and (travel_dest_intent or looks_like_scene_travel_destination_intent(committed_travel)):
             return _build_action(
                 "scene_transition" if authored_exit_target else "travel",
                 t,
@@ -1957,6 +2040,10 @@ def parse_freeform_to_action(
     # Use word-boundary "follow" so "follows" (third person) does not arm this path; never
     # `_match_exit("follow", …)` on unrelated prose — that can latch onto "Follow the … rumor" exits.
     if not block_travel:
+        from game.player_commitment import committed_world_text
+
+        if not re.search(r"\b(?:follow|leave|exit)\b", committed_world_text(t), re.IGNORECASE):
+            return None
         follow_target = _match_follow_pursuit_exit(t, exits, scene=scene, session=session)
         if follow_target:
             return _build_action(
@@ -2398,6 +2485,8 @@ def maybe_build_declared_travel_action(
     """
     if not isinstance(scene, dict):
         return None
+    if isinstance(segmented_turn, dict) and str(segmented_turn.get("contingency_text") or "").strip():
+        return None
     declared = None
     if isinstance(segmented_turn, dict):
         dt = segmented_turn.get("declared_action_text")
@@ -2406,9 +2495,14 @@ def maybe_build_declared_travel_action(
     if not declared:
         return None
 
+    from game.player_commitment import committed_world_text
     from game.scene_destination_binding import extract_last_explicit_named_place
 
-    low_decl = declared.lower()
+    scan = committed_world_text(declared)
+    if not scan:
+        return None
+
+    low_decl = scan.lower()
     if re.match(r"^\s*(?:what|where|why|how|who|which|when)\b", low_decl):
         return None
     if low_decl.endswith("?") and any(
@@ -2423,14 +2517,14 @@ def maybe_build_declared_travel_action(
     cursor = 0
     max_passes = 8
     for _ in range(max_passes):
-        m, matched_tag = _first_declared_travel_pattern_match(declared, cursor)
+        m, matched_tag = _first_declared_travel_pattern_match(scan, cursor)
         if not m or not matched_tag:
             return None
         dest_raw = m.group(1)
         if not dest_raw:
             return None
 
-        if _declared_travel_negation_blocks_match(declared, m):
+        if _declared_travel_negation_blocks_match(scan, m):
             nxt = m.end()
             if nxt <= cursor:
                 cursor = cursor + 1
@@ -2448,7 +2542,7 @@ def maybe_build_declared_travel_action(
             "declared_travel_dest_hint": dest,
         }
 
-        infer_scope = declared[m.start() :]
+        infer_scope = scan[m.start() :]
         tid = _resolve_declared_travel_target_scene_id(dest, infer_scope, exits, known_scene_ids)
 
         actionable: List[Dict[str, Any]] = []
@@ -2460,7 +2554,7 @@ def maybe_build_declared_travel_action(
             row = _resolve_qualified_pursuit_target_to_row(dest, scene, session, world, actionable)
         row_scene = _pending_row_resolved_scene_id(row, world) if row else None
 
-        if tid is None and extract_last_explicit_named_place(declared) is not None:
+        if tid is None and extract_last_explicit_named_place(scan) is not None:
             row = None
             row_scene = None
 

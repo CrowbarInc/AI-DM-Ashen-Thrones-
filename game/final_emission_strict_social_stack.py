@@ -58,6 +58,10 @@ from game.social_exchange_projection import (
     strict_social_deterministic_fallback_family_token,
 )
 from game.social_exchange_emission import build_final_strict_social_response
+from game.live_resolution import (
+    UNSUPPORTED_CONSEQUENTIAL_REQUEST,
+    interaction_obligation_from_resolution,
+)
 from game.final_emission_visibility_fallback import (
     _should_use_neutral_nonprogress_fallback_instead_of_global_stock,
     npc_pursuit_neutral_nonprogress_visibility_fallback,
@@ -124,6 +128,22 @@ def run_strict_social_composition_trunk(
         dialogue_plan_trace.get("dialogue_plan_required")
         and (dialogue_plan_trace.get("dialogue_plan_valid") is False)
     )
+    obligation = interaction_obligation_from_resolution(
+        resolution if isinstance(resolution, dict) else eff_resolution
+    )
+    if obligation and str(obligation.get("resolution_mode") or "") != UNSUPPORTED_CONSEQUENTIAL_REQUEST:
+        pre_gate_text, _pre_speaker_contract_payload = enforce_emitted_speaker_with_contract(
+            pre_gate_text,
+            gm_output=out,
+            resolution=resolution if isinstance(resolution, dict) else None,
+            eff_resolution=eff_resolution if isinstance(eff_resolution, dict) else None,
+            world=world if isinstance(world, dict) else None,
+            scene_id=sid,
+        )
+        _sync_eff_social_to_resolution(
+            eff_resolution if isinstance(eff_resolution, dict) else None,
+            resolution if isinstance(resolution, dict) else None,
+        )
     text, details = build_final_strict_social_response(
         pre_gate_text,
         resolution=eff_resolution if isinstance(eff_resolution, dict) else None,

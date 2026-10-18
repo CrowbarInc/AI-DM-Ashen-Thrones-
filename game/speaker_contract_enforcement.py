@@ -461,6 +461,24 @@ def _apply_speaker_contract_repairs(
             soc.pop("reply_speaker_grounding_neutral_bridge", None)
             eff_resolution["social"] = soc
             line = strict_social_ownership_terminal_fallback(eff_resolution)
+            from game.resolution_contract import prefer_stronger_resolution
+
+            kept, precedence = prefer_stronger_resolution(text, line, eff_resolution)
+            dbg["outcome_precedence"] = precedence
+            if precedence.get("downgrade_rejected"):
+                dbg["canonical_rewrite_downgrade_rejected"] = True
+                target_name = cname or str(cid or "").replace("_", " ").strip().title()
+                spoken = re.match(r"^(?P<who>.{1,80}?)\s+says\b", kept, flags=re.IGNORECASE)
+                if spoken and target_name and spoken.group("who").strip().lower() != target_name.lower():
+                    renamed = _try_local_rebind_opening_speaker(
+                        kept,
+                        wrong_label=spoken.group("who").strip(),
+                        canonical_name=target_name,
+                    )
+                    if renamed:
+                        kept = renamed
+                        dbg["canonical_speaker_retargeted"] = True
+                return kept, _SPEAKER_REASON_CANONICAL_SPEAKER_REWRITE, dbg
             dbg["canonical_rewrite_applied"] = True
             return line, _SPEAKER_REASON_CANONICAL_SPEAKER_REWRITE, dbg
         line = _normalize_text(text)
@@ -470,6 +488,13 @@ def _apply_speaker_contract_repairs(
     if mode == "narrator_neutral":
         seed = f"{scene_id}|{cid or ''}|{_stable_seed_fingerprint(_normalize_text(text))}"
         line = neutral_reply_speaker_grounding_bridge_line(seed=seed)
+        from game.resolution_contract import prefer_stronger_resolution
+
+        kept, precedence = prefer_stronger_resolution(text, line, eff_resolution)
+        dbg["outcome_precedence"] = precedence
+        if precedence.get("downgrade_rejected"):
+            dbg["narrator_neutral_downgrade_rejected"] = True
+            return kept, _SPEAKER_REASON_NARRATOR_NEUTRAL_NO_ALLOWED_SPEAKER, dbg
         dbg["narrator_neutral_applied"] = True
         if eff_resolution is not None and isinstance(eff_resolution.get("social"), dict):
             soc = eff_resolution["social"]

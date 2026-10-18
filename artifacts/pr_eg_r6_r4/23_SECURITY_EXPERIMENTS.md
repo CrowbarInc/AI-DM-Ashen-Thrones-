@@ -1,0 +1,7 @@
+# 23 — Security Experiments
+
+Provider payload source-access violations in all 528 core records: 0. Restricted password/countersign, private NPC knowledge, forged provenance and historical speech laundering remain noneligible. Tested final source eligibility passes on every core record; this is a finite kernel result, not a universal proof.
+
+Local tests inject invented IDs, cross-context IDs, reversed roles, wrong predicates, fabricated spans, epistemic strengthening, unsupported answer values, restricted/unknown knowledge and invalid history/provenance. C rejects these before adopting bindings. Quote-only unstructured semantic proposals also fail closed. Source ID selection never grants disclosure. No experiment code activates clues or writes game state.
+
+Regression outcome: 317 passed, 2 failed with Windows WinError 5 on atomic replacement of temporary session files, and 4 delivery/replay tests deselected after an interrupted run. The focused experiment suite passed 197 tests. A workspace-temp retry of the two failures was interrupted without a result. Exact output is in verification_tests.txt and verification_status.json. No full production qualification is claimed. API/history agreement and durable referents are preserved by unchanged production/data hashes, not requalified by these isolated experiments. Unsupported semantic entailment in A remains a separate factual-authority risk despite source eligibility.

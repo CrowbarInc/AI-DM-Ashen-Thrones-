@@ -1,0 +1,360 @@
+[
+  {
+    "probe": "P1",
+    "player": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+    "scene": "chapel",
+    "infrastructure_rerun": false,
+    "http_status": 200,
+    "error": null,
+    "upstream_api_error": null,
+    "meaningful_model_generation": true,
+    "emitted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+    "sealed": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+    "accepted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+    "c18_exact_equal": true,
+    "c18_mutation_blocked": false,
+    "provenance": "safe_nonresolution",
+    "attempt": 2,
+    "acceptance": {
+      "why": "authorized_observation",
+      "text": "The bell's wooden yoke is split. The bell's leather hanger is torn."
+    },
+    "initial_player_facing_text": "The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell's support system has suffered considerable wear or strain, possibly from years of use or a recent forceful event.",
+    "initial_declared_claims": null,
+    "retry_player_facing_text": "The bell's wooden yoke is split, its surface showing clear evidence of damage. The leather hanger appears torn, frayed at the edges. These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.",
+    "retry_declared_claims": null,
+    "validation_attempt_1_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "validation_attempt_2_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "authority_problems": [],
+    "temporal_after": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [],
+      "rejected_consequential": [
+        {
+          "semantic_identity": {},
+          "text": "This damage could suggest that the bell's support system has suffered considerable wear or strain, possibly from years of use or a recent forceful event.",
+          "authority": "unauthorized",
+          "provenance": "generated_proposal",
+          "epistemic_status": "unresolved",
+          "relation_kind": "gameplay_lead",
+          "scene_id": "chapel_belfry",
+          "source_turn": 2,
+          "reason_codes": [
+            "unsupported_narrator_lead"
+          ]
+        },
+        {
+          "semantic_identity": {},
+          "text": "The bell's wooden yoke is split, its surface showing clear evidence of damage.",
+          "authority": "unauthorized",
+          "provenance": "generated_proposal",
+          "epistemic_status": "unresolved",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "chapel_belfry",
+          "source_turn": 2,
+          "reason_codes": [
+            "patrol_route_or_geography"
+          ]
+        },
+        {
+          "semantic_identity": {},
+          "text": "These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.",
+          "authority": "unauthorized",
+          "provenance": "generated_proposal",
+          "epistemic_status": "unresolved",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "chapel_belfry",
+          "source_turn": 2,
+          "reason_codes": [
+            "unauthorized_cause_attribution"
+          ]
+        }
+      ],
+      "active_claim": null,
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "chapel_belfry",
+        "active_interlocutor": null,
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": {
+          "id": "chapel_bell",
+          "label": "chapel bell",
+          "kind": "object",
+          "scene_id": "chapel_belfry",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_3f400a77512d"
+      },
+      "turn_counter": 2,
+      "active_scene_id": "chapel_belfry"
+    },
+    "calls": [
+      {
+        "index": 2,
+        "kind": "generation",
+        "retry_attempt": 0,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "response_id": "resp_080c8160d7511195006ac41d61bfd087d2b91e2a6b45795ff7",
+        "input_chars": 94411,
+        "recipe_present": true,
+        "retry_context_present": false,
+        "input_tokens": 21952,
+        "output_tokens": 467,
+        "total_tokens": 22419,
+        "latency_seconds": 6.403,
+        "status": "completed",
+        "error": null,
+        "meaningful_generation": true
+      },
+      {
+        "index": 3,
+        "kind": "generation",
+        "retry_attempt": 1,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "response_id": "resp_0926127abab144d7006ac41d68881487d28db895396ca8107c",
+        "input_chars": 100297,
+        "recipe_present": true,
+        "retry_context_present": true,
+        "input_tokens": 23308,
+        "output_tokens": 322,
+        "total_tokens": 23630,
+        "latency_seconds": 3.07,
+        "status": "completed",
+        "error": null,
+        "meaningful_generation": true
+      }
+    ],
+    "contract_id": "rc_3f400a77512d",
+    "recipe_schema": "decision_facing_answer_recipe_v1",
+    "recipe_requested_answer": "Answer the interpretation request about chapel bell. Player asked: I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+    "provider_recipe_present_on_generation": true
+  },
+  {
+    "probe": "P2",
+    "player": "Baker, which loaf do you usually keep for yourself?",
+    "scene": "baker",
+    "infrastructure_rerun": false,
+    "http_status": 200,
+    "error": null,
+    "upstream_api_error": null,
+    "meaningful_model_generation": true,
+    "emitted": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+    "sealed": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+    "accepted": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+    "c18_exact_equal": true,
+    "c18_mutation_blocked": false,
+    "provenance": "regeneration",
+    "attempt": 2,
+    "acceptance": {
+      "why": "regeneration_hard_valid",
+      "text": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves."
+    },
+    "initial_player_facing_text": "The baker glances around cautiously, then shakes their head with a guarded expression. \"I’m sorry, but I don’t have a favorite loaf to share. Every piece here is for the customers,\" they say firmly, avoiding eye contact.",
+    "initial_declared_claims": null,
+    "retry_player_facing_text": "The baker meets your gaze but offers no answer, remaining silent about which loaf they keep for themselves.",
+    "retry_declared_claims": null,
+    "validation_attempt_1_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "validation_attempt_2_reasons": [],
+    "authority_problems": [],
+    "temporal_after": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [],
+      "rejected_consequential": [
+        {
+          "semantic_identity": {},
+          "text": "The baker declines to reveal which loaf they keep for themselves.",
+          "authority": "unauthorized",
+          "provenance": "",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 2,
+          "reason_codes": [
+            "unauthorized_declared_claim"
+          ]
+        }
+      ],
+      "active_claim": null,
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "bread_stall",
+        "active_interlocutor": {
+          "id": "baker",
+          "label": "Baker",
+          "kind": "interlocutor",
+          "scene_id": "bread_stall",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_d4c97cad4722"
+      },
+      "turn_counter": 2,
+      "active_scene_id": "bread_stall"
+    },
+    "calls": [
+      {
+        "index": 4,
+        "kind": "generation",
+        "retry_attempt": 0,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "response_id": "resp_008e0a4b02f53cdd006ac41d6c1f2087d281e08d321206e5b6",
+        "input_chars": 105329,
+        "recipe_present": true,
+        "retry_context_present": false,
+        "input_tokens": 24534,
+        "output_tokens": 448,
+        "total_tokens": 24982,
+        "latency_seconds": 4.873,
+        "status": "completed",
+        "error": null,
+        "meaningful_generation": true
+      },
+      {
+        "index": 5,
+        "kind": "generation",
+        "retry_attempt": 1,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "response_id": "resp_04e1159eb25c09ad006ac41d71541c87d2bb2ee754db75f0dc",
+        "input_chars": 111640,
+        "recipe_present": true,
+        "retry_context_present": true,
+        "input_tokens": 26005,
+        "output_tokens": 86,
+        "total_tokens": 26091,
+        "latency_seconds": 4.391,
+        "status": "completed",
+        "error": null,
+        "meaningful_generation": true
+      }
+    ],
+    "contract_id": "rc_d4c97cad4722",
+    "recipe_schema": "decision_facing_answer_recipe_v1",
+    "recipe_requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+    "provider_recipe_present_on_generation": true
+  },
+  {
+    "probe": "P3",
+    "player": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+    "scene": "chapel",
+    "infrastructure_rerun": false,
+    "http_status": 200,
+    "error": null,
+    "upstream_api_error": null,
+    "meaningful_model_generation": true,
+    "emitted": "The bronze bell's wooden yoke is visibly split, and its leather hanger is torn. While these damages are clear, whether they were caused deliberately by someone cannot be confirmed just from the current evidence.",
+    "sealed": "The bronze bell's wooden yoke is visibly split, and its leather hanger is torn. While these damages are clear, whether they were caused deliberately by someone cannot be confirmed just from the current evidence.",
+    "accepted": "The bronze bell's wooden yoke is visibly split, and its leather hanger is torn. While these damages are clear, whether they were caused deliberately by someone cannot be confirmed just from the current evidence.",
+    "c18_exact_equal": true,
+    "c18_mutation_blocked": false,
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "acceptance": {
+      "why": "initial_hard_valid",
+      "text": "The bronze bell's wooden yoke is visibly split, and its leather hanger is torn. While these damages are clear, whether they were caused deliberately by someone cannot be confirmed just from the current evidence."
+    },
+    "initial_player_facing_text": "The bronze bell's wooden yoke is visibly split, and its leather hanger is torn. While these damages are clear, whether they were caused deliberately by someone cannot be confirmed just from the current evidence.",
+    "initial_declared_claims": null,
+    "retry_player_facing_text": null,
+    "retry_declared_claims": null,
+    "validation_attempt_1_reasons": [],
+    "validation_attempt_2_reasons": null,
+    "authority_problems": [],
+    "temporal_after": {
+      "gm_inferences": [],
+      "player_hypotheses": [
+        {
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "hypothesis"
+          },
+          "text": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+          "authority": "observation",
+          "provenance": "player_hypothesis",
+          "epistemic_status": "hypothesis",
+          "relation_kind": "epistemic_status",
+          "scene_id": "chapel_belfry",
+          "source_turn": 2
+        }
+      ],
+      "accepted_incidentals": [],
+      "rejected_consequential": [],
+      "active_claim": {
+        "id": "claim_e3e5a9a7bb",
+        "label": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+        "kind": "claim",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "player_hypothesis",
+        "epistemic_status": "hypothesis"
+      },
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "chapel_belfry",
+        "active_interlocutor": null,
+        "active_claim": {
+          "id": "claim_e3e5a9a7bb",
+          "label": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+          "kind": "claim",
+          "scene_id": "chapel_belfry",
+          "turn_index": 2,
+          "source": "player_hypothesis",
+          "epistemic_status": "hypothesis"
+        },
+        "active_actionable_lead": null,
+        "active_inspected": {
+          "id": "chapel_bell",
+          "label": "chapel bell",
+          "kind": "object",
+          "scene_id": "chapel_belfry",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_a6f3b923e680"
+      },
+      "turn_counter": 2,
+      "active_scene_id": "chapel_belfry"
+    },
+    "calls": [
+      {
+        "index": 6,
+        "kind": "generation",
+        "retry_attempt": 0,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "response_id": "resp_0e5bc3c80317fde6006ac41d762a5087d2ad0b3ebb7176009d",
+        "input_chars": 94626,
+        "recipe_present": true,
+        "retry_context_present": false,
+        "input_tokens": 21977,
+        "output_tokens": 416,
+        "total_tokens": 22393,
+        "latency_seconds": 3.495,
+        "status": "completed",
+        "error": null,
+        "meaningful_generation": true
+      }
+    ],
+    "contract_id": "rc_a6f3b923e680",
+    "recipe_schema": "decision_facing_answer_recipe_v1",
+    "recipe_requested_answer": "Answer the perceive about chapel bell. Player asked: Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+    "provider_recipe_present_on_generation": true
+  }
+]

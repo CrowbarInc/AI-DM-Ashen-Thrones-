@@ -1,0 +1,5 @@
+# 42 — Final Verdict
+
+C — SEMANTIC OPERATIONS BELOW ACCEPTANCE. Added named propositions, witnessed bounded role transformations, explicit malformed-plan handling and preserved host authority. 68/68 new controlled cases pass. Regression 485 passed / 19 failed: five inherited, fourteen explained status/target-contract expectation changes. Fresh primary 150 turns / 10 conversations; matched baseline 45 turns; predecessor supplements 89 turns. Explicit local classification 130/150, dependent binding 25/74, false clarification 16/150; optimistic correction/followup success bounds 5/23 and 20/51. Automated grading overcredits failures and is not reliable acceptance evidence; matched relevance and sufficiency improvement remain unverified. Observed integrity checks and separate-process save/load pass within their documented scope. Keep the existing feature gate default off.
+
+A/B qualification is not justified by controlled tests. The machine-readable gates and preserved negative evidence determine the verdict.

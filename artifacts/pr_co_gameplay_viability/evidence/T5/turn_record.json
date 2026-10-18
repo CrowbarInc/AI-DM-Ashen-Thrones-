@@ -1,0 +1,103 @@
+{
+  "turn": "T5",
+  "player_input": "Describe what I can see around me here at the gate.",
+  "http_status": 200,
+  "error": null,
+  "halt_after": "provider request budget reached (12)",
+  "severe_mutations": [],
+  "trace": {
+    "operation": null,
+    "request_kind": null,
+    "resolution_subject": null,
+    "selected_resolver": null,
+    "resolver_stages": [],
+    "stage_permissions": {
+      "social": false,
+      "dialogue_first": false,
+      "pursuit": false,
+      "world_action": false,
+      "exploration": false,
+      "passive_wait": false,
+      "generic_intent": false,
+      "travel": false
+    },
+    "interlocutor_id": null,
+    "outcome_classification": null,
+    "persistence_policy": null,
+    "permitted_state_mutations": null,
+    "authoritative_resolution_keys": [],
+    "player_facing_text": "On a slower pass, a well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor reads clearer while one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue keeps pulling the eye.",
+    "validation": {
+      "acceptance": null,
+      "regeneration_invoked": null,
+      "provider_response_contract": null,
+      "upstream_api_error": {
+        "failure_class": "unknown_api_error",
+        "retryable": false,
+        "status_code": null,
+        "error_code": null,
+        "message_excerpt": "provider request budget reached (12)"
+      },
+      "provenance": null,
+      "hard_validation_attempt_1": null,
+      "hard_validation_attempt_2": null
+    },
+    "compact_classification": null,
+    "compact_resolution_path": null,
+    "interaction_after": null,
+    "clues": null,
+    "leads": null,
+    "latency_ms": null,
+    "provider_request_count": 1,
+    "retry_count": 0,
+    "warnings": [
+      {
+        "failure_class": "unknown_api_error",
+        "retryable": false,
+        "status_code": null,
+        "error_code": null,
+        "message_excerpt": "provider request budget reached (12)"
+      }
+    ],
+    "state_before_scene": "frontier_gate",
+    "state_after_scene": "frontier_gate"
+  },
+  "provider_calls": [
+    {
+      "index": 12,
+      "turn": "T5",
+      "kind": "interpretation",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "started": "2026-10-10T01:49:26.626982+00:00",
+      "create_kwarg_keys": [
+        "max_output_tokens",
+        "model",
+        "temperature",
+        "text"
+      ],
+      "response_id": "resp_06a4a09388a4caff006ac999a79ec487d1aed3123b77264ef9",
+      "response_model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 927,
+        "output_tokens": 115,
+        "total_tokens": 1042,
+        "cached_input_tokens": 0,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "status": "completed",
+      "error": null,
+      "usable_output": true,
+      "finished": "2026-10-10T01:49:28.141442+00:00",
+      "latency_seconds": 1.514,
+      "raw_output": "{\"primary_operation\":\"perceive\",\"supporting_operations\":[],\"raw_target_text\":\"Describe what I can see around me here at the gate.\",\"proposed_target_id\":\"frontier_gate\",\"interlocutor_id\":null,\"conversational_subject\":\"environment\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"A description of the surroundings at the Cinderwatch Gate District.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+    }
+  ]
+}

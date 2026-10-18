@@ -1,0 +1,5 @@
+# 29 — Statistical Limitations
+
+Core Wilson 95% supported-answer intervals: {'A': [0.8939, 0.9674], 'B': [0.9089, 0.9757], 'C': [0.25, 0.3892]}. These treat cases as independent and therefore overstate precision: 22 templates have eight lexical variants, and each partition has the same families. Paired exact win/loss counts are more useful than an unpaired point estimate; no significance claim or population-level superiority is made.
+
+One model, one logical run per question/architecture, limited source sizes, authored gold semantics and synthetic worlds. No independent human label adjudication panel. Eight ambiguity cases were excluded post hoc due to unequal gold-bit access. False-acceptance accounting was corrected after seeing outcomes, with original scores preserved. Supplemental probes were created after the core experiment and cannot repair its frozen holdout coverage; eight additional paraphrases bring total coverage to sixteen but remain follow-on diagnostics. These limitations preclude A/B verdicts.

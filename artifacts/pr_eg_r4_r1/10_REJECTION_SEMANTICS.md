@@ -1,0 +1,3 @@
+# 10 — Rejection Semantics
+
+Candidate acceptance, correction and safety fallback are distinct. Rejection reasons remain in hard_validation_attempt_1, decision_review and rejected_candidate. A failed NPC fallback is replaced only by the fixed host_terminal_safety GM constant: immutable, no NPC ID/proposition, no effects. Candidate disposition remains rejected; fallback provenance=safe_nonresolution and adoption_status=safe_fallback_selected. Two existing EF-R2 assertions intentionally change from immutable=false to immutable=true for this fixed fallback, while retaining effects_allowed=false and checking rejection reasons. Frozen holdout inputs are untouched.

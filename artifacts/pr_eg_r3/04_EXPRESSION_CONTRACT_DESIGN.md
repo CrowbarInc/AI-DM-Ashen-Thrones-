@@ -1,0 +1,7 @@
+# 04 — Expression Contract Design
+
+The contract is built only from host structures: the selected speaker, the player question, the resolver topic or the prior delivered inner sentence, and the knowledge posture already chosen by dialogue authority. Provider output is never copied into authorized propositions. A prior delivered sentence is a wording source for paraphrase, not a new canonical fact. `canonical` is false.
+
+The contract fields are speaker, addressee, player question, operation, authorized source, authorized propositions, knowledge posture, disclosure posture, permitted scope, prohibited speech acts, prior delivered statement, source revision, and fallback response. The revision is a hash of the authorized material. Hidden or withheld knowledge does not generate; the host line is sealed instead, so uncertainty cannot become a false claim of ignorance about a secret.
+
+Eligible operations are small. An explicit simpler-words, other-words, rephrase, or paraphrase request on a factual proposition is `faithful_paraphrase`. An explain or “what do you mean” request on a non-personal proposition is `simple_explanation`. A why or enjoyment question about a preference proposition is `incidental_characterization`. An unknown, non-hidden, non-personal question with no selected topic is `uncertainty`. A promise request, including the existing continuity refusal, is `nonbinding_refusal`. Exact repeat, GM recall, mechanical checks, authority conflicts, and the first disclosure of an authorized topic stay provider-free.

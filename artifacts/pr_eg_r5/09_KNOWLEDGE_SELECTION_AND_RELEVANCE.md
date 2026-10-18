@@ -1,0 +1,9 @@
+# 09 — Knowledge Selection and Relevance
+
+PR-EG-R5 · 2026-10-17 · investigation only
+
+[game/social.py:1611](../../game/social.py#L1611) filters authored NPC topics by reveal state, hint, subject-token relevance and dimension sufficiency. It scores remaining records by token overlap, clarifies tied positive scores, and otherwise selects the first winner. Revealed topics may be used for recall; a separate provider-evidence branch can recover previously revealed owned facts after checking evidence identity and sufficiency. Provider evidence references therefore influence some paths, but did not cause the initial harbor failure: its recorded call is expression only.
+
+[game/social.py:1564](../../game/social.py#L1564) accepts any subject-token substring in topic ID/text/clue/aliases. [game/social.py:1587](../../game/social.py#L1587) accepts general and clarification dimensions after requested-information support; [game/dialogue_authority.py:215](../../game/dialogue_authority.py#L215) returns true for kind=general. Harbor/ferry overlap thus admits the bell without identifying who manages docking. Historical overlap and pressure then make the same available answer easy to reuse.
+
+**Authorization** asks whether this NPC may reveal the exact source proposition, at this time, with its epistemic status. **Relevance** asks whether it supplies the requested person/relation/reason or a defensible part of it. Neither implies the other. Proposed source retrieval should first expose only host-permitted candidate passages; the AI may rank candidates and label coverage, citing source IDs and spans. The host revalidates ownership/disclosure against the current state and rejects unsupported expansions. Empty relevant set produces explicit uncertainty about the actual question, not a neighboring available fact. Hidden candidate IDs and text must not enter an unauthorized prompt.

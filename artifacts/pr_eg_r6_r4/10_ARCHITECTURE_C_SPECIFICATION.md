@@ -1,0 +1,5 @@
+# 10 — Architecture C Specification
+
+C receives eligible source IDs/text, epistemic status and gold question propositions. It proposes source propositions, a quoted span, requested answer role/value and advisory sufficiency. Host checks ID/context, NPC knowledge, disclosure, schema, source span, epistemic value, authored semantic agreement and supported answer value; final authorization runs again. Advisory sufficiency never grants permission.
+
+Semantic agreement uses an exact fact signature rather than a model judgment. This avoids treating a quote as proof, but requires the same authoring burden as B and rejects semantically equivalent article/role variants. The prompt/schema did not reliably teach that requested_role must be empty once supplied: many proposals included the role both as known and requested. `clean_proposition` correctly rejected that contradiction. No holdout-informed prompt repair was attempted. These results concern this prototype contract, not all possible AI-assisted architectures.

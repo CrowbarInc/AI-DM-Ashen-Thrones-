@@ -1,0 +1,12 @@
+# PR-CS Optimization Candidates
+
+| Rank | Candidate | Affected modules | Current cost evidence | Estimated savings | Complexity | Authority risk | Gameplay risk | Required tests | Reversible |
+|---:|---|---|---|---|---|---|---|---|---|
+| 1 | Deduplicate policy prose between system prompt and payload instructions | `game/gm.py`, `game/prompt_context.py` | 60+ payload instructions; many exact/semantic repeats of system rules | 2k-5k input tokens | low | low if canonical rule ids stay | low | prompt/guard, PR-CP, PR-CR, C18/C19 | yes |
+| 2 | Collapse duplicate authored scene fact projections | `game/prompt_context.py`, decision recipe projection | facts repeated in visible/opening/journal/claims/recipe | 3k-8k | medium | medium; must preserve source refs app-side | low-medium | authored-answer preservation, immutable validation, NPC boundaries | yes |
+| 3 | Resolver-specific provider projection | `game/gm.py`, `game/prompt_context.py` | harmless dialogue carries exploration/combat/world action scaffolding | 8k-18k for simple turns | medium | medium | medium | PR-CC/CE/CK/CN plus continuity | yes |
+| 4 | Keep validator-only metadata out of provider prompt | CTIR/projection/finalizer modules | semantic identity, persistence, premise/source metadata not always needed for narration-only | 2k-7k | medium | medium-high | low if validator retains full state | immutable finalizer, consequential rejection | yes |
+| 5 | Selective NPC/scene/lead projection | prompt_context, leads, interaction_context | unrelated NPCs and broad lead/world pressure appear in local questions | 2k-6k | medium | medium | medium | NPC knowledge boundaries, exploration authority | yes |
+| 6 | Conversation history compression/versioned memory rows | conversational_memory_window | not dominant in early turns; grows later | 1k-5k later | medium | low | medium | history continuity, callback tests | yes |
+| 7 | Retry feedback minimization | gm_retry | retry adds ~8.4k in PR-CQ authored patrol before PR-CR | now lower after PR-CR; still useful for other retries | low | low | low | retry recovery/failure-locality tests | yes |
+| 8 | Deterministic authored-answer delivery | API/finalization | PR-CR already removes eligible authored retry; further direct delivery could remove some generation | up to whole call for narrow authored answers | high | high if overused | medium | broad authored/fallback/social tests | yes with flag |

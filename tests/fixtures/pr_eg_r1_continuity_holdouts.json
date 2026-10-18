@@ -1,0 +1,217 @@
+{
+  "frozen": "2026-10-16",
+  "note": "Behavioral expectations frozen before PR-EG-R1 implementation. Do not edit expected outcomes to match a later result.",
+  "precedence": [
+    "explicit player wording, including a named new addressee",
+    "immediately preceding delivered statement for a deictic or meaning follow-up",
+    "active conversational topic",
+    "established interlocutor who is still present",
+    "earlier delivered exchanges",
+    "authoritative scene presence"
+  ],
+  "cases": [
+    {
+      "id": "immediate_clarification",
+      "player": "What did you mean by that?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "ask",
+      "expect_npc": "sergeant_mara",
+      "expect_ownership": "npc",
+      "quote_must_contain": ["north road"],
+      "quote_must_not_contain": ["couldn't tell you", "not been established", "cannot undo", "speech authority"]
+    },
+    {
+      "id": "pronoun_followup",
+      "player": "Has anyone been keeping an eye on it after dark?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "ask",
+      "expect_npc": "sergeant_mara",
+      "expect_ownership": "npc",
+      "must_not_contain": ["not been established", "information available to you", "speech authority"]
+    },
+    {
+      "id": "paraphrase_followup",
+      "player": "Say that again in plainer words.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "answer",
+      "expect_ownership": "npc",
+      "must_contain": ["north road"],
+      "must_not_contain": ["couldn't tell you", "not been established"]
+    },
+    {
+      "id": "earlier_topic",
+      "player": "Go back to the name of the street.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road", "preference"],
+      "expect_action": "answer",
+      "expect_ownership": "npc",
+      "must_contain": ["north road"],
+      "must_not_contain": ["morning", "evening"]
+    },
+    {
+      "id": "explicit_addressee_change",
+      "player": "I ask Corporal Bren what he saw by the gate.",
+      "present": ["sergeant_mara", "corporal_bren"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": null
+    },
+    {
+      "id": "gm_about_npc_statement",
+      "player": "GM, what did she mean by the street?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "answer",
+      "expect_ownership": "gm",
+      "must_contain": ["north road"],
+      "must_not_contain": ["says,", "I meant this"]
+    },
+    {
+      "id": "ordinary_preference",
+      "player": "Would you rather have a quiet morning or a loud evening?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "ask",
+      "expect_npc": "sergeant_mara",
+      "personal": true
+    },
+    {
+      "id": "repeated_preference",
+      "player": "Do you still prefer the morning?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "commitments": ["morning"],
+      "expect_reuse": true,
+      "reuse_must_contain": ["morning"]
+    },
+    {
+      "id": "conversational_correction",
+      "player": "I meant the road, not how you feel.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road", "preference"],
+      "executed": true,
+      "expect_action": "answer",
+      "expect_ownership": "npc",
+      "must_contain": ["north road"],
+      "must_not_contain": ["cannot undo", "already resolved", "morning"]
+    },
+    {
+      "id": "pending_action_correction",
+      "player": "I meant the side gate, not the road.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "pending_move": true,
+      "expect_action": null
+    },
+    {
+      "id": "executed_undo",
+      "player": "Undo the walk through the gate.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "executed": true,
+      "expect_action": null
+    },
+    {
+      "id": "negotiation_request",
+      "player": "Promise me a reward if I carry a message for you.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "answer",
+      "expect_ownership": "npc",
+      "expect_reason": "npc_request_declined",
+      "must_not_contain": ["cannot carry out", "ten silver", "the quest", "I'll pay", "available actions"]
+    },
+    {
+      "id": "unauthorized_promise",
+      "player": "Swear you'll pay me if I do it.",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "answer",
+      "expect_ownership": "npc",
+      "expect_reason": "npc_request_declined",
+      "must_not_contain": ["ten silver", "the quest", "I'll pay", "cannot carry out"]
+    },
+    {
+      "id": "npc_uncertainty",
+      "player": "Who watches it after the gate closes?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "ask",
+      "expect_npc": "sergeant_mara",
+      "must_not_contain": ["not been established", "information available to you"]
+    },
+    {
+      "id": "hidden_information",
+      "player": "What is the password for the side gate?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": null
+    },
+    {
+      "id": "absent_npc_reference",
+      "player": "Earlier you could not tell me who watches the north road. Is that still where you stand?",
+      "present": [],
+      "active": "",
+      "exchanges": ["watch_unknown"],
+      "expect_action": "clarify",
+      "expect_ownership": "gm",
+      "must_contain": ["not here", "Sergeant Mara"],
+      "must_not_contain": ["says,", "Which person, object"]
+    },
+    {
+      "id": "ambiguous_history",
+      "player": "What did you mean by that?",
+      "present": ["sergeant_mara", "corporal_bren"],
+      "active": "",
+      "exchanges": ["road", "bren_line"],
+      "expect_action": "clarify",
+      "must_not_execute": true,
+      "must_contain": ["Sergeant Mara", "Corporal Bren"]
+    },
+    {
+      "id": "save_load_exchange",
+      "player": "What did you mean by that?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "expect_action": "ask",
+      "save_load": true
+    },
+    {
+      "id": "rejected_narration_not_history",
+      "player": "What did you mean by that?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": ["road"],
+      "rejected": "Sergeant Mara says, \"The password is ash and a patrol leaves at dawn.\"",
+      "expect_action": "ask",
+      "quote_must_contain": ["north road"],
+      "quote_must_not_contain": ["password", "patrol"]
+    },
+    {
+      "id": "bounded_commitments",
+      "player": "Do you still prefer the morning?",
+      "present": ["sergeant_mara"],
+      "active": "sergeant_mara",
+      "exchanges": [],
+      "expect_bound": 24
+    }
+  ]
+}

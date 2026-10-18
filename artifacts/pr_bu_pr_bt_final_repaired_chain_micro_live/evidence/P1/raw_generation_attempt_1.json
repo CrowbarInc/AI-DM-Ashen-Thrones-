@@ -1,0 +1,33 @@
+{
+  "response_id": "resp_080c8160d7511195006ac41d61bfd087d2b91e2a6b45795ff7",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 21952,
+    "output_tokens": 467,
+    "total_tokens": 22419,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 6.403,
+  "input_chars": 94411,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell's support system has suffered considerable wear or strain, possibly from years of use or a recent forceful event.",
+    "declared_claims": null,
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"inferred_damage_possibility_001\",\n      \"declaration_mode\": \"propose\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_db5ec0aa65c3\", \"rc_b31ecb1fd1c7\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"gm_inference\",\n      \"epistemic_status\": \"inferred\",\n      \"modality\": \"possible\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"epistemic_status\",\n      \"text\": \"The split wooden yoke and torn leather hanger could suggest wear, strain, or recent damage to the bell's support system.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell's support system has suffered considerable wear or strain, possibly from years of use or a recent forceful event.\",\n  \"player_facing_text\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell's support system has suffered considerable wear or strain, possibly from years of use or a recent forceful event.\",\n  \"tags\": [\"scene_momentum:consequence_or_opportunity\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The wood splinters at the edges of the split yoke, and faintly musty leather fibers hang loose where the hanger tore.\",\n      \"scope\": \"scene\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Presented established facts about the bell's damage and inferred a possible interpretation without asserting definitive cause or timing.\"\n}"
+  }
+}

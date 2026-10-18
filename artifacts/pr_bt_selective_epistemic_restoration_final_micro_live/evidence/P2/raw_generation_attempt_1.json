@@ -1,0 +1,36 @@
+{
+  "response_id": "resp_0e5bebab97eed230006ac3de44a9e887d2b4987460b34bdb7a",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 24534,
+    "output_tokens": 454,
+    "total_tokens": 24988,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 4.77,
+  "input_chars": 105329,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The baker glances at the loaves with a tight smile and shakes their head. \"I’m not inclined to say which loaf I keep for myself,\" they say quietly, their tone guarded.",
+    "declared_claims": null,
+    "tags": [
+      "refusal",
+      "social_interaction",
+      "bread_stall",
+      "baker"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_d4c97cad4722_claim_1\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_2bb408577206\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {\n        \"kind\": \"npc_claim\",\n        \"subject\": \"baker\",\n        \"relation\": \"refusal_to_answer_loaf_preference\"\n      },\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The baker politely refuses to say which loaf they usually keep for themselves.\"\n    }\n  ],\n  \"narration\": \"The baker glances at the loaves with a tight smile and shakes their head. \\\"I’m not inclined to say which loaf I keep for myself,\\\" they say quietly, their tone guarded.\",\n  \"player_facing_text\": \"The baker glances at the loaves with a tight smile and shakes their head. \\\"I’m not inclined to say which loaf I keep for myself,\\\" they say quietly, their tone guarded.\",\n  \"tags\": [\"refusal\", \"social_interaction\", \"bread_stall\", \"baker\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker's tight smile and guarded tone hint at caution or secrecy.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"low\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Answer refusal per NPC knowledge scope and social constraints; no revealed loaf preference.\"\n}"
+  }
+}

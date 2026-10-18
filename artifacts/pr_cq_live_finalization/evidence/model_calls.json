@@ -1,0 +1,141 @@
+[
+  {
+    "index": 1,
+    "turn": "startup",
+    "kind": "preflight",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T02:47:04.885434+00:00",
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "model",
+      "temperature",
+      "timeout"
+    ],
+    "parsed_narration": "OK",
+    "response_id": "resp_0fced4f4a990b448006ac9a72a837c87d1927061a8277f2fbe",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 2,
+      "total_tokens": 26,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T02:47:06.660403+00:00",
+    "latency_seconds": 1.775,
+    "raw_output": "OK"
+  },
+  {
+    "index": 2,
+    "turn": "T1",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T02:47:07.167151+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "parsed_narration": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+    "response_id": "resp_095305613c58ca13006ac9a72c523487d185d184268343ee27",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 30877,
+      "output_tokens": 66,
+      "total_tokens": 30943,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T02:47:09.160662+00:00",
+    "latency_seconds": 1.994,
+    "raw_output": "{\"narration\": \"The guard captain shrugs, rain pattering off their soaked cloak. \\\"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\\\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.\"}"
+  },
+  {
+    "index": 3,
+    "turn": "T2",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T02:47:09.738860+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "parsed_narration": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty.",
+    "response_id": "resp_0a2fdeb08e181e8c006ac9a72ed45087d18fe14b3f6fa4ffae",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 34561,
+      "output_tokens": 117,
+      "total_tokens": 34678,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T02:47:11.745616+00:00",
+    "latency_seconds": 2.007,
+    "raw_output": "{\"narration\": \"The guard captain's eyes harden beneath the sodden hood as they reply, \\\"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\\\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty.\"}"
+  },
+  {
+    "index": 4,
+    "turn": "T2",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T02:47:12.224760+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "parsed_narration": "The guard captain's eyes flick to the notice board, their expression guarded. \"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain.",
+    "response_id": "resp_08e9d1049a94c719006ac9a731566487d1bbe29bc29c763bd8",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 42960,
+      "output_tokens": 83,
+      "total_tokens": 43043,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T02:47:14.536843+00:00",
+    "latency_seconds": 2.312,
+    "raw_output": "{\"narration\": \"The guard captain's eyes flick to the notice board, their expression guarded. \\\"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\\\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain.\"}"
+  }
+]

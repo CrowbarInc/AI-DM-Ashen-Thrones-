@@ -1,0 +1,188 @@
+{
+  "cycle": "PR-BV",
+  "mode": "FIRST-PASS REALIZATION COMPETENCE DISCOVERY",
+  "model_api_calls": 0,
+  "corpus": "artifacts/pr_bu_pr_bt_final_repaired_chain_micro_live/evidence",
+  "comparison_corpus": "artifacts/pr_bs_cooperative_gm_micro_live/evidence",
+  "payload_identity": {
+    "current_user_payload_equals_selective_restoration": true,
+    "recipe_equals_pr_bs": true,
+    "provider_decision_equals_pr_bs": true,
+    "provider_contract_equals_pr_bs": true,
+    "response_policy_equals_pr_bs": true,
+    "schema_and_declaration_rule_equal_pr_bs": true,
+    "system_prompt_chars": {"pr_bs": 12975, "current": 9564},
+    "p1_instruction_chars": {"pr_bs": 25342, "current": 13124, "removed": 15114, "added": 2896}
+  },
+  "decision": "A",
+  "shared_cause": "strongly_supported_with_distinct_channels",
+  "probes": [
+    {
+      "probe_id": "P1",
+      "player_input": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+      "player_input_seen_by_model_outside_recipe": "I examine the split wooden yoke and the torn leather hanger closely",
+      "expected_operation_repository_native": "inspect / dimension interpretation / epistemic act infer / scope qualified_possibilities_only / declaration_mode propose / provenance gm_inference / modality possible. Narration states the two authored observations, one observation-tied possibility, and leaves cause, actor, time, and history unresolved.",
+      "expected_operation_conceptual": "O3 — BOUNDED INTERPRETATION",
+      "model_chosen_operation": "Correct declaration envelope (propose / gm_inference / inferred / possible) plus an unauthorized causal narration: years of use and a recent forceful event, with no unresolved closer.",
+      "declarations_attempted": [
+        {
+          "declaration_id": "inferred_damage_possibility_001",
+          "declaration_mode": "propose",
+          "source_claim_id": null,
+          "provenance_requested": "gm_inference",
+          "epistemic_status": "inferred",
+          "modality": "possible",
+          "relation_kind": "epistemic_status",
+          "text": "The split wooden yoke and torn leather hanger could suggest wear, strain, or recent damage to the bell's support system."
+        }
+      ],
+      "persistence_attempted": "do_not_persist on the accepted inference declaration. Narration complement rejected as consequential generated_proposal.",
+      "inference_level": "qualified possibility requested; narration supplied a causal history",
+      "authority_information_present": true,
+      "authority_information_salience": "medium in the recipe and the EPISTEMIC REALIZATION paragraph; low inside the shipped gm_resolution_decision, which omits epistemic_acts and narration_constraints",
+      "operation_selection_signal": "ambiguous. Recipe answer_strategy says one qualified possibility with could/may/might. System protocol says add one possibility and state that cause, actor, time, and history stay unresolved, and forbids a mechanism or causal chain. Action-outcome mode, scene-momentum consequence, and rule 1 compete with that ceiling.",
+      "declaration_necessity_signal": "implicit. Recipe says propose only for the inference and not authored_world_fact. It does not say the declaration is optional. The model declared, and that declaration was accepted.",
+      "relevant_recipe_fields": [
+        "answer_strategy",
+        "permitted_inference.allowed=true",
+        "inference_modality=possible",
+        "unresolved_content=[cause, actor, time, history]",
+        "declaration_guidance.bounded_inference",
+        "forbidden_upgrades"
+      ],
+      "relevant_policy_fields": [
+        "answer_completeness.enabled=false",
+        "answer_completeness.player_direct_question=false",
+        "fallback_behavior.uncertainty_active=false",
+        "fallback_behavior.allowed_behaviors.hedge_appropriately=false",
+        "fallback_behavior.require_partial_to_state_unknown_edge=false",
+        "response_type_contract.required_response_type=action_outcome",
+        "uncertainty.answer_shape=[known_edge, unknown_edge, next_lead]"
+      ],
+      "relevant_system_prompt_fields": [
+        "EPISTEMIC REALIZATION protocol",
+        "rule 1 ANSWER THE PLAYER",
+        "rule 6 bounded partial answer",
+        "rule 12 specificity",
+        "scene momentum consequence_or_opportunity",
+        "structured envelope with relation_kind including causal"
+      ],
+      "PR_BS_differential": "Same recipe, decision projection, policy, and schema. PR-BS narration was also a causal completion ('frequent use or recent stress') plus the closer 'remains unclear', which the then-current validator accepted as Q3. Removed guidance that taught known_edge plus unknown_edge. Current protocol already asks for the unresolved sentence. Both the selective sample and this sample still wrote a duration-or-force story and skipped that sentence.",
+      "retry_feedback_differential": "Generic unauthorized_resolution_decision_fact feedback. Allowed channels named: established facts, bounded incidental detail, qualified NPC belief. It does not say 'one qualified reading, no cause'. The retry dropped the inference declaration and wrote deterioration plus 'remains uncertain what exactly caused this wear or when'. Closer to a legal ceiling, and it abandoned the interpretation.",
+      "primary_failure_class": "F",
+      "secondary_failure_classes": ["C", "G", "B"],
+      "confidence": 0.84,
+      "notes": "Declaration mode was the authorized one and passed as accepted_bounded_declared_inference. The narration failed on unauthorized_causal_relation and unsupported_narrator_lead. 'years of use' and 'recent forceful event' are not in the payload. The same duration-or-recent-force template appears in PR-BS, raw PR-BT, and the selective gate."
+    },
+    {
+      "probe_id": "P2",
+      "player_input": "Baker, which loaf do you usually keep for yourself?",
+      "player_input_seen_by_model_outside_recipe": "Baker, which loaf do you usually keep for yourself?",
+      "expected_operation_repository_native": "ask / ordinary dialogue. Incidental refusal, hesitation, or admission in narration. Speech is not authored world truth. No new authored_world_fact. persistence_policy on the full decision is claim_only. declared_claims may be empty.",
+      "expected_operation_conceptual": "O2 — ORDINARY NARRATION / INCIDENTAL IMPROVISATION",
+      "model_chosen_operation": "Voiced refusal in narration, encoded as realize / authored_world_fact / established / MUST_STATE with source_claim_id null.",
+      "declarations_attempted": [
+        {
+          "declaration_id": "rc_reply_refusal_1",
+          "declaration_mode": "realize",
+          "source_claim_id": null,
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "modality": "established",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "ordinary_predicate",
+          "premise_claim_ids": ["rc_9ab69105465f", "rc_2bb408577206"],
+          "text": "The baker declines to reveal which loaf they keep for themselves."
+        }
+      ],
+      "persistence_attempted": "established authored world fact for the refusal. Validator rejected it before narration validation. Rejected row authority unauthorized.",
+      "inference_level": "none authorized; none declared",
+      "authority_information_present": true,
+      "authority_information_salience": "the incidental exception is present and lower-salience than the realize line and the envelope example",
+      "operation_selection_signal": "contradicted. answer_strategy says ordinary dialogue including a refusal. declaration_guidance.consequential_authorized_claim says realize with source_claim_id because required claims exist. Schema lists realize, authored_world_fact, established, and MUST_STATE first.",
+      "declaration_necessity_signal": "absent as an explicit required versus not-required flag. The incidental sentence says the speech is not authored world truth. The first declaration-guidance line tells the model to realize.",
+      "relevant_recipe_fields": [
+        "answer_strategy",
+        "permitted_inference.allowed=false",
+        "declaration_guidance.consequential_authorized_claim",
+        "declaration_guidance.ordinary_incidental_expression",
+        "forbidden_upgrades including generated_dialogue_as_authored_world_fact"
+      ],
+      "relevant_policy_fields": [
+        "response_type_contract.required_response_type=dialogue",
+        "answer_completeness.enabled=true",
+        "answer_completeness.player_direct_question=true",
+        "social_response_structure",
+        "narrative_plan.narrative_mode=dialogue",
+        "role_allocation.dialogue=58"
+      ],
+      "relevant_system_prompt_fields": [
+        "STRUCTURED CLAIM DECLARATION RULE",
+        "ordinary NPC dialogue, refusal, hesitation stay plain narration",
+        "Mundane NPC dialogue may be bounded incidental realization; unsupported durable facts require the structured lanes",
+        "envelope example with a populated declared_claims object"
+      ],
+      "PR_BS_differential": "Recipe and schema byte-identical. PR-BS returned declared_claims []. Raw PR-BT and selective restoration both returned realize / authored_world_fact / established, and both set source_claim_id to rc_2bb408577206, so the validator accepted them and stored the speech as hearsay. This sample left source_claim_id null. The behavioral shift after compaction is 'declare the reply', not 'sometimes roleplay and sometimes declare'.",
+      "retry_feedback_differential": "Same generic consequential-fact rejection as P1. Retry returned an empty declaration array and a silent refusal. The retry taught 'drop the declaration' by rejection. It did not teach a voiced refusal.",
+      "primary_failure_class": "D",
+      "secondary_failure_classes": ["C", "E", "G"],
+      "confidence": 0.86,
+      "notes": "The spoken line was already a natural refusal. The failure is the envelope. Three of three compact-provider P2 samples used realize / authored_world_fact / established. Acceptance among them tracked whether source_claim_id pointed at Baker exists."
+    },
+    {
+      "probe_id": "P3",
+      "player_input": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+      "player_input_seen_by_model_outside_recipe": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+      "expected_operation_repository_native": "perceive. Realize the two MUST_STATE observation claims. Inference not permitted. No player hypothesis is an authorized claim. Narration may leave the player's proposition unresolved. Full decision persistence_policy is do_not_persist.",
+      "expected_operation_conceptual": "O4 — PLAYER-HYPOTHESIS DISCUSSION, with O1 observations",
+      "model_chosen_operation": "Realized the two observation claims as authored_world_fact / established, and narrated that deliberate cutting cannot be confirmed. Did not declare an actor, motive, tool, or time.",
+      "declarations_attempted": [
+        {
+          "declaration_id": "rc_db5ec0aa65c3",
+          "declaration_mode": "realize",
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "text": "The bell's wooden yoke is split."
+        },
+        {
+          "declaration_id": "rc_b31ecb1fd1c7",
+          "declaration_mode": "realize",
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "text": "The bell's leather hanger is torn."
+        }
+      ],
+      "persistence_attempted": "only the two pre-authorized observations. Hypothesis stored later as hypothesis / player_hypothesis, not established.",
+      "inference_level": "none declared. Narration withholds confirmation.",
+      "authority_information_present": true,
+      "authority_information_salience": "high for the hypothesis ceiling in the system protocol and in the intact player text; the recipe strategy itself only says realize the required claims",
+      "operation_selection_signal": "explicit in the system protocol ('visible facts may be compatible' / 'observation alone does not settle it'); weak in the recipe ('Answer directly by realizing the required claims' and 'no player hypothesis is authorized')",
+      "declaration_necessity_signal": "implicit. The model realized only the listed observation claims. That matched consequential_authorized_claim.",
+      "relevant_recipe_fields": [
+        "answer_strategy=Answer directly by realizing the required claims.",
+        "permitted_inference.allowed=false",
+        "declaration_guidance.epistemic_premise",
+        "required_content two MUST_STATE observations"
+      ],
+      "relevant_policy_fields": [
+        "answer_completeness.enabled=true",
+        "player_direct_question=true",
+        "fallback_behavior.uncertainty_active=true",
+        "hedge_appropriately=true",
+        "require_partial_to_state_unknown_edge=true",
+        "narrative_mode=exposition_answer",
+        "role_allocation.exposition=66"
+      ],
+      "relevant_system_prompt_fields": [
+        "EPISTEMIC REALIZATION hypothesis sentences",
+        "Player hypotheses remain hypothetical"
+      ],
+      "PR_BS_differential": "Same recipe. PR-BS also discussed the hypothesis conditionally ('is uncertain from the visible evidence alone') and realized the two observations. The useful mapping was already available once the player supplied the proposition. Policy hedge flags are on for this probe in both gates because the full question remains in player_input.",
+      "retry_feedback_differential": "No retry on this gate.",
+      "primary_failure_class": null,
+      "secondary_failure_classes": [],
+      "confidence": 0.88,
+      "notes": "Success is overcautious Q2: it withholds confirmation and does not say whether the damage fits. The positive design property is a supplied proposition plus an explicit discuss-but-do-not-establish ceiling, with hedge policy actually enabled."
+    }
+  ]
+}

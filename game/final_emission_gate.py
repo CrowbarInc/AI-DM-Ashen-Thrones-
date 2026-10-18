@@ -95,6 +95,10 @@ def apply_final_emission_gate(
     """
     if not isinstance(gm_output, dict):
         return gm_output
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm_output, "apply_final_emission_gate"):
+        return gm_output
     _ctx = initialize_gate_execution_context(
         gm_output,
         resolution=resolution,

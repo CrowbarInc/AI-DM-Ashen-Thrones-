@@ -1,0 +1,570 @@
+{
+  "kind": "investigate",
+  "action_id": "text_the_bathhouse_pumps_long_iron_handl",
+  "label": "I examine the bowed pump handle and the sheared pivot pin closely",
+  "prompt": "I examine the bowed pump handle and the sheared pivot pin closely",
+  "success": true,
+  "resolved_transition": false,
+  "target_scene_id": null,
+  "clue_id": null,
+  "discovered_clues": [],
+  "world_updates": null,
+  "state_changes": {},
+  "hint": "Player inspected an authored visible feature that is not a separate interactable. Narrate only the authorized visible information; do not invent contents.",
+  "metadata": {
+    "referenced_surface_authority": "authored_visible_feature",
+    "referenced_surface_target": "bowed",
+    "referenced_surface_existence": true,
+    "referenced_surface_visibility": true,
+    "referenced_surface_inspectability": false,
+    "referenced_surface_interactable_id": "",
+    "referenced_surface_visible_fact": "{'text': \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", 'semantic_identity': {'kind': 'world_fact', 'subject': 'bathhouse_pump_handle', 'subject_aliases': ['bathhouse pump', 'pump', 'pump handle', 'iron handle', 'pivot pin'], 'relation': 'observation', 'value': 'bowed handle and sheared pivot pin', 'value_aliases': ['bowed', 'bent handle', 'sheared', 'sheared pin', 'broken pivot pin'], 'polarity': 'positive'}}",
+    "referenced_surface_inspectable_text": "",
+    "skip_unrelated_clue_discovery": true,
+    "resolution_contract": {
+      "contract_id": "rc_9c97a3580116",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "inspect",
+      "target_ref": {
+        "type": "resolution_subject",
+        "id_or_text": "bowed pump handle and the sheared pivot pin",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": null,
+      "conversational_subject": "bowed pump handle and the sheared pivot pin",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": {
+        "type": "resolution_subject",
+        "id": "bowed pump handle and the sheared pivot pin",
+        "label": "bowed pump handle and the sheared pivot pin",
+        "source_turn": null
+      },
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "explicit_target",
+        "referent_reason": "explicit_current_turn_target",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "bathhouse_pump_alcove",
+            "type": "place",
+            "label": "Dunmere public bathhouse pump alcove"
+          },
+          {
+            "id": "nessa",
+            "type": "interlocutor",
+            "label": "Nessa"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "inspect",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": "bowed pump handle and the sheared pivot pin",
+        "canonicalization_attempted": true,
+        "canonical_target_found": true,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "bowed pump handle and the sheared pivot pin",
+          "canonical_target_label": "bowed pump handle and the sheared pivot pin",
+          "canonical_target_type": "resolution_subject",
+          "canonical_basis": "explicit_resolution_subject",
+          "authoritative_operation": "inspect",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+          "source": "deterministic_fast_path",
+          "primary_operation": "inspect",
+          "supporting_operations": [],
+          "raw_target_text": "bowed pump handle and the sheared pivot pin",
+          "proposed_target_id": null,
+          "target_capture": "verb_object",
+          "has_determiner": true,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "executed_now",
+        "primary_operation": "inspect",
+        "resolution_subject": "perception",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 97,
+        "provenance_excerpt": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+        "secondary_operations": [],
+        "executable_obligations": {
+          "primary": null,
+          "mutation_owner": null,
+          "sequence": [],
+          "supporting": []
+        },
+        "requested_addressee": null,
+        "addressee_binding_status": "unresolved"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "inspection",
+      "target": null,
+      "interlocutor_id": null,
+      "subject": "bowed pump handle and the sheared pivot pin closely",
+      "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+      "claim_id": null,
+      "resolution_mode": "authoritative_mechanical_action",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_9c97a3580116",
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      }
+    },
+    "gm_resolution_decision": {
+      "contract_id": "rc_9c97a3580116",
+      "resolution_method": "inspect",
+      "outcome_classification": "established_or_retrieved",
+      "established_fact_refs": [
+        "scene_world_authored_corpus",
+        "contract_discourse_ref"
+      ],
+      "proposed_facts": [
+        {
+          "text": "The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "bathhouse_pump_handle",
+            "subject_aliases": [
+              "bathhouse pump",
+              "pump",
+              "pump handle",
+              "iron handle",
+              "pivot pin"
+            ],
+            "relation": "observation",
+            "value": "bowed handle and sheared pivot pin",
+            "value_aliases": [
+              "bowed",
+              "bent handle",
+              "sheared",
+              "sheared pin",
+              "broken pivot pin"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "Two folded towels rest on a cedar bench.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.1",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "A blue-glazed soap dish sits beside the washbasin.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.2",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "Nessa folds clean towels beside the cedar bench.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.3",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "Nessa exists as bath attendant",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_world_npc"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "world.npcs.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "nessa",
+            "subject_aliases": [
+              "Nessa"
+            ],
+            "relation": "exists",
+            "value": "bath attendant",
+            "authority": "world_truth"
+          }
+        }
+      ],
+      "permitted_state_mutations": [],
+      "persistence_policy": "do_not_persist",
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "unresolved_consequential_questions": [],
+      "unresolved_qualifiers": [],
+      "answer_relations": [],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "bathhouse_pump_handle",
+            "subject_aliases": [
+              "bathhouse pump",
+              "pump",
+              "pump handle",
+              "iron handle",
+              "pivot pin"
+            ],
+            "relation": "observation",
+            "value": "bowed handle and sheared pivot pin",
+            "value_aliases": [
+              "bowed",
+              "bent handle",
+              "sheared",
+              "sheared pin",
+              "broken pivot pin"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.2",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.3",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "world.npcs.0",
+          "authority": "world_truth",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "nessa",
+            "subject_aliases": [
+              "Nessa"
+            ],
+            "relation": "exists",
+            "value": "bath attendant",
+            "authority": "world_truth"
+          }
+        }
+      ],
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      },
+      "authority_algorithm": "proposition_claim_control_v1"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "exploration",
+    "turn_segmentation": {
+      "declared_action_text": "I examine the bowed pump handle and the sheared pivot pin closely.",
+      "adjudication_question_text": "What does this damage suggest?"
+    },
+    "unknown_legacy_keys": {
+      "noncombat_resolution": {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "investigation",
+        "subkind": "investigate",
+        "authority_domain": "scene_state",
+        "deterministic_resolved": true,
+        "requires_check": false,
+        "check_request": null,
+        "outcome_type": "closed",
+        "success_state": "success",
+        "discovered_entities": [],
+        "surfaced_facts": [],
+        "state_changes": {},
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+        "authoritative_outputs": [
+          {
+            "output_kind": "resolution_trace",
+            "source_engine": "game.exploration",
+            "route": "exploration",
+            "engine_action_id": "text_the_bathhouse_pumps_long_iron_handl"
+          }
+        ]
+      }
+    },
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "mixed",
+      "allow_escalation": false,
+      "escalation_block_reason": "non_hostile_world_action_guard",
+      "strict_target_id": null,
+      "strict_answer_expected": true,
+      "strict_dialogue_expected": false,
+      "action_must_preserve_agency": true,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    },
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": false,
+        "speaker_id": null,
+        "speaker_name": null,
+        "speaker_source": "unresolved",
+        "dialogue_intent": null,
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:unresolved"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": null,
+          "active_interaction_target_name": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "bathhouse_pump_alcove",
+        "counts": {
+          "location": 7,
+          "actor": 2,
+          "player_action": 11
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "investigate",
+        "pressure_focus_allowed": true,
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=20 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [
+          "nessa"
+        ],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [],
+      "conversational_memory": {
+        "selected_count": 0
+      }
+    }
+  },
+  "world_tick_events": []
+}

@@ -1,0 +1,3 @@
+# 27 FINAL VERDICT
+
+**B — QUALIFIED WITH LIMITATIONS.** The 44 PR-EG-R6-R1 disclosure regressions were reproduced and recovered. The matched selection is now 337 passed / 2 failed. Both remaining failures are inherited and were not introduced here. Fresh production /api/chat qualification recorded 80 turns across 5 conversations, with 0 restricted-value leaks and 0 restricted clue discoveries. Legacy recall of non-protected delivered speech is intentionally narrower than a blanket grandfather, and wider than a current-source recheck of every public sentence. Unified-planning live turns still often fail to ground an utterance; that routing behavior was not redesigned.

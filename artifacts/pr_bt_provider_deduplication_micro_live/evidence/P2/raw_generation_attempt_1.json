@@ -1,0 +1,35 @@
+{
+  "response_id": "resp_0d090b0344f1c6be006ac37c92037487d285461301893a1531",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 24431,
+    "output_tokens": 458,
+    "total_tokens": 24889,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 5.367,
+  "input_chars": 104777,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+    "declared_claims": null,
+    "tags": [
+      "social.reply_kind:refusal",
+      "npc:baker",
+      "scene:bread_stall"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"dc_001\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_2bb408577206\",\n      \"premise_claim_ids\": [\"rc_9ab69105465f\"],\n      \"semantic_identity\": {\n        \"kind\": \"entity\",\n        \"subject\": \"baker\",\n        \"relation\": \"speaks\"\n      },\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"refusal\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The baker shakes their head slightly, unwilling to say which loaf they keep for themselves.\"\n    }\n  ],\n  \"narration\": \"The baker glances around the busy stall, then replies with a guarded tone, \\\"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\\\"\",\n  \"player_facing_text\": \"The baker glances around the busy stall, then replies with a guarded tone, \\\"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\\\"\",\n  \"tags\": [\"social.reply_kind:refusal\", \"npc:baker\", \"scene:bread_stall\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker shifts uneasily, not eager to disclose personal preferences.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Baker refuses to answer which loaf they keep for themselves, preserving player agency and not revealing facts beyond established scene information.\"\n}"
+  }
+}

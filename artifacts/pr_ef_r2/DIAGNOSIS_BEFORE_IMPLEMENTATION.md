@@ -1,0 +1,12 @@
+# Preimplementation diagnosis
+Revision d31beb7d73dd4fda0f22184a6a69b947b5f470ff; dirty state preserved in status_before.txt and source_before. Current established baseline: 293 pass / 26 fail (baseline_junit.xml), matching R1 final exact identities.
+
+A: Captured interpretation binds ASK to sergeant_mara. Production bridge supplies canonical target; social result target_resolved=true, actor_addressable=true, reply_kind=unknown, authority none. Pre-resolver contract independently reparses raw text, leaves interlocutor_id null and entity_binding unresolved proposed=mara. Invalid fabricated narration is legitimately rejected. safe_nonresolution then mistakes the stale contract binding for resolver failure and emits unidentified-person prose. Repair must retain rejection of fabricated answer while preserving known speaker.
+
+B: Same canonical ASK bridge/social success but lexical pre-resolver contract operation=unresolved, interlocutor_id=null. The invalid stub narration is legitimately rejected; generic_ask_completion receives no interlocutor and produces no-one prose. Operation and target must be carried from validated bridge into existing contract before resolver, and confirmed social result into emission. Knowledge remains unknown.
+
+C: SOCIAL_SIGNAL turn toward same addressee and ASK are treated as two consequential components. unresolved_references contains dialogue topic north road. Eligibility returns NEEDS_CLARIFICATION; orchestration treats SOCIAL_SIGNAL as unsupported and compound proposal becomes ineligible. Need conservative incidental classification and separate subject unknown from target unknown, preserving any actual weapon, prerequisite, conditional or ordered consequential operation.
+
+No production modifications preceded this document. Additional holdouts frozen in additional_holdouts.json; unchanged prior 24 are EF holdouts plus R1 independent_holdouts. First replay harness accidentally paired new additional cases with old captured outputs after index 12; holdouts_0.json is invalid evidence for those rows. Corrected holdouts_1.json and original_failure_traces.json are baseline evidence.
+
+Notice board: examine PR-DU four-action assertion with authored clue response before choosing test/implementation change. PR-ED accounting uses begin/finish_request, request ceiling, tokens, usage JSONL and retry stamps; no mandatory new model calls permitted. Active saves hash-snapshotted. Windows sandbox loopback hangs; successful baseline/replay run outside sandbox, not code failure.

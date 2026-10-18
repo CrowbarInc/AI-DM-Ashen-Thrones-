@@ -1,0 +1,84 @@
+{
+  "cases": [
+    {
+      "id": "H01",
+      "turns": [
+        "Tavi, who maintains the jade compass?",
+        "I meant the ivory compass."
+      ],
+      "expected": "maintain(ivory compass)"
+    },
+    {
+      "id": "H02",
+      "turns": [
+        "Tavi, who guards the east quay?",
+        "No, who owns it?"
+      ],
+      "expected": "owner(east quay)"
+    },
+    {
+      "id": "H03",
+      "turns": [
+        "Tavi, what is the cistern called?",
+        "Who told you?"
+      ],
+      "expected": "source attribution after unknown"
+    },
+    {
+      "id": "H04",
+      "turns": [
+        "Tavi, who keeps the roster?",
+        "How do you know?"
+      ],
+      "expected": "evidence after partial"
+    },
+    {
+      "id": "H05",
+      "turns": [
+        "Tavi, who guards the quay?",
+        "Tavi, when does the ferry leave?",
+        "Who told you?"
+      ],
+      "expected": "ferry attribution"
+    },
+    {
+      "id": "H06",
+      "turns": [
+        "Mara, what did Oren tell you about the bridge?"
+      ],
+      "expected": "addressee mara, mentioned oren"
+    },
+    {
+      "id": "H07",
+      "turns": [
+        "Warden, who keeps the compass?"
+      ],
+      "expected": "addressee ambiguity"
+    },
+    {
+      "id": "H08",
+      "turns": [
+        "Tavi, who keeps the ivory compass?",
+        "I meant the jade compass."
+      ],
+      "expected": "save/load continuity",
+      "reload_before": 1
+    },
+    {
+      "id": "H09",
+      "turns": [
+        "Tavi, who keeps the ivory compass?"
+      ],
+      "expected": "forged referent rejected",
+      "adversarial_target": "foreign:999"
+    },
+    {
+      "id": "H10",
+      "turns": [
+        "Tavi, what did Mara tell Oren?",
+        "I meant what Oren told Mara."
+      ],
+      "expected": "reverse relevant roles"
+    }
+  ]
+}

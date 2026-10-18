@@ -2,7 +2,10 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 import copy
 import json
+import os
 import re
+import time
+from contextvars import ContextVar
 from game.config import get_openai_api_key
 from game.model_routing import resolve_model_route
 from game.utils import slugify
@@ -180,72 +183,50 @@ def _split_reply_sentences(text: str) -> List[str]:
 
 
 
-SYSTEM_PROMPT = _SYSTEM_PROMPT_HEADER + """The application owns authoritative mechanics and persistence. You narrate, propose updates, and draft scenes.
-You must not invent dice results or override mechanical resolutions supplied by the app.
-You may propose structured updates that the app may auto-apply.
-When introducing new names or factions, include a source (rumor, NPC claim, notice, or observation).
-Treat player input as an action declaration. Default action style is third person (for example: "Galinor examines the gate records.").
-Quoted in-character speech is valid inside the declaration (for example: "Galinor asks, \\"Who signed this order?\\""), and you should preserve the player's expression format rather than rewriting it.
-Do not restate or lightly paraphrase the player's action declaration as your opening sentence unless exact wording is needed for disambiguation. Prefer continuing from authoritative resolved state, consequences, and NPC intent.
-Do not restate or paraphrase the player's input. Always continue forward with new information.
-Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation.
-Forbidden generic phrases (rewrite if they appear): "In this city...", "Times are tough...", "Trust is hard to come by...", "You'll need to prove yourself..."
-SCENE MOMENTUM RULE (HARD RULE):
-Every 2–3 exchanges, the GM MUST introduce one of:
-- new information
-- a new actor entering
-- environmental change
-- time pressure
-- consequence or opportunity
-The scene MUST NOT remain static conversation.
-FAILURE CONDITION:
-If the scene remains unchanged after 3 exchanges, it is invalid.
-Tagging contract for enforcement:
-When you introduce the momentum beat, include exactly one tag in tags:
-scene_momentum:<kind>
-Where <kind> is one of: new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity.
-QUESTION RESOLUTION RULE (HARD RULE):
-Every direct player question MUST be answered explicitly before any additional dialogue.
-Structure:
-1. Direct answer (first sentence)
-2. Optional elaboration
-3. Optional hook
-The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.
-If the player asks a direct question, you must answer it concretely. If full certainty is unavailable, provide the best grounded partial answer and state uncertainty in-character through rumor, witness limits, distance, darkness, missing access, or incomplete observation. Do not repeat prior information.
-Never speak as a validator, analyst, referee of canon, or system in standard narration. Do not mention what is or is not established, answerable, visible to tools, or available to the model.
-When answering a player question, give a direct answer first. Do not replace the answer with narrative description.
-If an interaction is underway with an active NPC in the payload, prioritize the immediate exchange and that interlocutor over re-stating base scene summary. Use environmental details only when newly relevant, requested, or needed for a transition beat.
+# Linguistic protocol only. It does not grant authority. Canonical acts stay in
+# gm_resolution_decision, the decision-facing answer recipe, and response_policy.
+EPISTEMIC_REALIZATION_PROTOCOL = (
+    "EPISTEMIC REALIZATION: On an interpretation, or when the player offers a hypothesis, "
+    "state the authorized observations first. If the decision permits inference, add one "
+    "possibility tied to those observations and say explicitly that cause, actor, time, and "
+    "history stay unresolved. Do not add a mechanism, setting, maintenance history, or causal "
+    "chain the observations do not contain. Do not use certainty wording for inferred or "
+    "hypothetical material, and do not attach that wording to the observations in the same "
+    "sentence. A player hypothesis stays hypothetical: the visible facts may be compatible "
+    "with it, and observation alone does not settle it."
+)
+_PR_BT_ABSTRACT_EPISTEMIC_SENTENCE = (
+    "If certainty is incomplete, give the strongest grounded partial answer and keep the limit diegetic."
+)
 
-NPC RESPONSE CONTRACT (HARD RULE):
-When an NPC is asked a question, the NPC reply MUST include at least one of:
-- a specific person, place, or faction
-- a concrete next step the player can take
-- a directly usable piece of information (time, location, condition, requirement)
-The NPC MUST NOT respond with only general advice, philosophy, vague warnings, or social commentary.
-If the NPC lacks full information, they must provide partial specifics OR direct the player to a concrete source (named person/place/document).
+SYSTEM_PROMPT = _SYSTEM_PROMPT_HEADER + """The application owns authoritative mechanics, state, and persistence. You realize the supplied turn: narrate within the payload, propose only through the structured lanes, and never invent dice results or override app-supplied resolutions.
+Use the shipped response_policy, visibility data, resolution_contract, gm_resolution_decision, and decision_facing_answer_recipe as the operational guide for this turn. The recipe is guidance only; it grants no new authority.
+Answer direct questions first. If certainty is incomplete, give the strongest grounded partial answer and keep the limit diegetic. Player hypotheses remain hypothetical unless the supplied decision/claims authorize more.
+Treat player input as an action declaration. resolved_exploration_action; scene_transition_already_occurred; do not restate; third person; quoted in-character speech; do not restate or paraphrase the player's input.
+Never speak as a validator, analyst, system, or referee of canon in standard narration. Spoiler safeguard: no hidden_facts, clues, planner labels, JSON, or engine scaffolding.
+Specific NPC replies should provide a concrete answer, partial specific, source, or usable next step when the NPC can plausibly know one. Mundane NPC dialogue and low-stakes texture may be bounded incidental realization; unsupported durable facts require the structured lanes.
+When app-resolved mechanics, scene transitions, speaker selection, visibility, or narration obligations are present, follow them exactly. Do not choose the player's next action or turn a lead into a mandatory path unless authoritative state already imposes that constraint.
+Question resolution rule: direct answer (first sentence). Scene momentum rule: every 2-3 exchanges tag scene_momentum:<kind>, including consequence_or_opportunity.
 
-PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE):
-When the player asks for behavioral insight about an NPC (e.g., nervous, lying, controlled):
-- Choose a single dominant state (not mixed; do not say "mix of" or "seems like both")
-- Provide 1–2 concrete tells (physical or behavioral)
-- Optionally map to a skill interpretation (Sense Motive, etc.)
-Failure conditions:
-- Vague blends ("mix of", "seems like both")
-- Pure emotional summaries without observable cues
-Example: "He’s controlled, but strained—his jaw tightens when you press him, and he avoids eye contact when mentioning the patrol."
-
-Scene information has three layers. Respect them strictly:
-- visible_facts: you may narrate these directly; the player already sees or knows them.
-- discoverable_clues: reveal ONLY when the player investigates, searches, observes closely, or meaningfully interacts (e.g. searching a body, questioning someone, examining an object). Do not mention them in narration until the player has done such an action.
-- hidden_facts: never state these in player_facing_text. Use them only to influence NPC behavior, atmosphere, tension, and indirect clues. Let the player infer; do not explain secrets outright.
-When secrets exist in a scene, reveal them gradually through behavior, rumor, suspicious activity, or environmental detail. Do not explain secrets outright. Let the player infer them.
-Spoiler safeguard: never put hidden_facts or undiscovered discoverable_clues into player_facing_text.
-
-Resolved exploration actions: When mechanical_resolution contains resolved_exploration_action, the app has already determined the action and any scene transition. The current scene in the payload is authoritative. Narrate the outcome of that resolved action—do not restate the previous scene. If scene_transition_already_occurred is true, narrate the destination scene and arrival; do not override app-side transitions with activate_scene_id or new_scene_draft. For observe/investigate/interact, reveal new information, consequence, tension, or a narrowed decision; avoid filler unless paired with a concrete lead or obstacle. Never repeat the same observation twice in a row for the same scene and action.
-
-Return valid JSON only with this shape:
+Return valid JSON only with this one-call realization envelope. The final player response is `narration`; `declared_claims` is internal:
 {
-  "player_facing_text": "string",
+  "declared_claims": [
+    {
+      "declaration_id": "string",
+      "declaration_mode": "realize|propose",
+      "source_claim_id": null | "claim_id_from_gm_resolution_decision",
+      "premise_claim_ids": ["claim_id_of_each_proposition_this_epistemic_claim_depends_on"],
+      "semantic_identity": {},
+      "provenance_requested": "authored_world_fact|gm_inference|player_hypothesis|generated_proposal|bounded_incidental|npc_claim",
+      "epistemic_status": "established|inferred|hypothesis|unresolved|possible",
+      "modality": "established|possible|hypothetical|unresolved",
+      "realization_role": "MUST_STATE|MAY_STATE|MAY_INFER|MUST_PRESERVE_UNCERTAINTY|INCIDENTAL_TEXTURE",
+      "relation_kind": "observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead",
+      "text": "short internal claim text"
+    }
+  ],
+  "narration": "string",
+  "player_facing_text": "same string as narration for temporary legacy compatibility",
   "tags": ["string"],
   "improvisation_proposals": null | [
     {
@@ -295,6 +276,9 @@ Return valid JSON only with this shape:
   "debug_notes": "string"
 }
 
+STRUCTURED CLAIM DECLARATION RULE:
+Every consequential proposition intended for player-facing narration must appear in declared_claims before it appears in narration: causes, actors, event times, historical events, consequential relationships, negative evidence, specific gameplay leads, state mutation, NPC knowledge, generated inferences, and generated hypotheses. Mundane sensory texture, gestures, cadence, ordinary NPC dialogue, refusal, hesitation, and mannerism stay plain narration or incidental improvisation; they are not authored world facts. Declarations do not authorize themselves: realize existing gm_resolution_decision.realization_claims when possible; use declaration_mode "propose" only for bounded possible inference/hypothesis when the supplied decision permits inference. Do not request or imply world_truth authority for a proposal. An epistemic-status claim about a cause, actor, time, reason, or certainty must set premise_claim_ids to the propositions it depends on. Uncertainty about a premise does not establish that premise, and a hypothetical premise may be realized only conditionally. Narration must correspond to declared and accepted consequential claims, and structured metadata must never be spoken to the player.
+
 BOUNDED IMPROVISATION AUTHORITY:
 You may invent ordinary low-consequence details only by expressing them in player_facing_text AND adding a matching improvisation_proposals entry.
 Use kind "incidental_fact" for mundane sensory/service/background details such as food composition, mannerisms, local color, ordinary refusals, and low-stakes connective social detail.
@@ -302,6 +286,25 @@ Use kind "npc_claim" for something a speaker reports, believes, or speculates; s
 Do not use bounded improvisation for mechanics, inventory changes, clues, hidden facts, secret passages, factions, major geography/history, quest-critical facts, or player decisions. Mark such attempted material as consequential_proposal rather than presenting it as truth.
 Accepted bounded improvisation is runtime continuity only; it is not authored world truth.
 """
+if SYSTEM_PROMPT.count(_PR_BT_ABSTRACT_EPISTEMIC_SENTENCE) != 1:
+    raise RuntimeError("PR-BT abstract epistemic sentence was not found exactly once")
+SYSTEM_PROMPT = SYSTEM_PROMPT.replace(_PR_BT_ABSTRACT_EPISTEMIC_SENTENCE, EPISTEMIC_REALIZATION_PROTOCOL, 1)
+
+NARRATION_ONLY_RESPONSE_CONTRACT = (
+    "NARRATION-ONLY RESPONSE CONTRACT: Return valid JSON only in this exact shape: "
+    '{"narration": "player-facing response"}. '
+    "Do not include other fields. The application will normalize this internally."
+)
+NARRATION_ONLY_SYSTEM_PROMPT = _SYSTEM_PROMPT_HEADER + """The application owns authoritative mechanics, state, and persistence. You realize the supplied turn as player-facing narration only and never invent dice results or override app-supplied resolutions.
+Use the shipped response_policy, visibility data, resolution_contract, gm_resolution_decision, and decision_facing_answer_recipe as the operational guide for this turn. The recipe is guidance only; it grants no new authority.
+Answer direct questions first. Player hypotheses remain hypothetical unless the supplied decision/claims authorize more.
+Treat player input as an action declaration. resolved_exploration_action; scene_transition_already_occurred; do not restate; third person; quoted in-character speech; do not restate or paraphrase the player's input.
+Never speak as a validator, analyst, system, or referee of canon in standard narration. Spoiler safeguard: no hidden_facts, clues, planner labels, JSON, or engine scaffolding.
+Specific NPC replies should provide a concrete answer, partial specific, source, or usable next step when the NPC can plausibly know one. Mundane NPC dialogue and low-stakes texture may be bounded incidental realization; unsupported durable facts are not authorized by this provider contract.
+When app-resolved mechanics, scene transitions, speaker selection, visibility, or narration obligations are present, follow them exactly. Do not choose the player's next action or turn a lead into a mandatory path unless authoritative state already imposes that constraint.
+Question resolution rule: direct answer (first sentence). Scene momentum rule: every 2-3 exchanges tag scene_momentum:<kind>, including consequence_or_opportunity.
+
+""" + NARRATION_ONLY_RESPONSE_CONTRACT
 
 
 def classify_player_intent(user_text: str) -> Dict[str, Any]:
@@ -1622,8 +1625,17 @@ def _social_exchange_first_sentence_contract(
     helper_substantive = is_valid_social_answer_first_sentence(substance_sentence)
     token_overlap = bool(q_tokens) and any(tok in substance_low for tok in q_tokens)
     starter_hit = any(substance_low.startswith(p) for p in _QUESTION_RESOLUTION_ANSWER_STARTERS)
+    bounded_refusal = bool(
+        "do not know enough to answer" not in substance_low
+        and "don't know enough to answer" not in substance_low
+        and re.search(
+            r"\b(?:i|we)\s+(?:cannot|can't|could not|couldn't|do not|don't)\s+"
+            r"(?:tell|confirm|name|identify|verify|answer)\b",
+            substance_low,
+        )
+    )
     substantive_opening = bool(
-        (not rejected_filler) and (helper_substantive or token_overlap or starter_hit)
+        (not rejected_filler) and (helper_substantive or token_overlap or starter_hit or bounded_refusal)
     )
 
     reasons: List[str] = []
@@ -1887,6 +1899,8 @@ _VISIBLE_FIGURE_TOKENS: tuple[str, ...] = (
     "guards",
     "refugee",
     "merchant",
+    "traveler",
+    "rider",
     "woman",
     "man",
     "noble",
@@ -1903,6 +1917,13 @@ _SUSPICIOUS_FIGURE_TOKENS: tuple[str, ...] = (
 )
 _LEAD_SUBJECT_CLEAN_PREFIX = re.compile(r"^(?:a|an|the)\s+", re.IGNORECASE)
 _LEAD_SUBJECT_VERB_MARKERS: tuple[str, ...] = (
+    " approaches ",
+    " approach ",
+    " leans ",
+    " lean ",
+    " packs ",
+    " pack ",
+    " packing ",
     " keeps ",
     " keep ",
     " stands ",
@@ -1921,6 +1942,38 @@ _LEAD_SUBJECT_VERB_MARKERS: tuple[str, ...] = (
     " argue ",
     " is ",
     " are ",
+)
+_LEAD_OBSERVER_FRAME_PREFIXES: tuple[str, ...] = (
+    "as you ",
+    "while you ",
+    "when you ",
+    "looking ",
+    "from where you stand",
+)
+_LEAD_PLAYER_OBSERVATION_PREFIX = re.compile(
+    r"^(?:you\s+)?(?:notice|see|spot|watch)\s+",
+    re.IGNORECASE,
+)
+_LEAD_LEADING_POSITION_PATTERN = re.compile(
+    r"^(near|by|at|outside|inside|beside|under)\s+([^,.;!?]+),\s+(.+)$",
+    re.IGNORECASE,
+)
+_LEAD_INVALID_SUBJECT_PREFIXES: tuple[str, ...] = (
+    "as you",
+    "while you",
+    "when you",
+    "you",
+    "looking around",
+    "looking across",
+    "watching the scene",
+    "from where you stand",
+    "no ",
+    "nothing",
+    "nobody",
+    "no one",
+    "absent ",
+    "rumor ",
+    "rumour ",
 )
 _KNOWN_SCENE_LOCATION_PROMPTS: tuple[str, ...] = (
     "where am i",
@@ -1973,10 +2026,33 @@ def _clean_lead_subject(subject: str) -> str:
     return clean
 
 
+def _lead_subject_is_invalid(subject: str) -> bool:
+    low = str(subject or "").strip().lower()
+    if not low:
+        return True
+    return any(low == prefix or low.startswith(prefix) for prefix in _LEAD_INVALID_SUBJECT_PREFIXES)
+
+
+def _strip_visible_figure_observer_frame(text: str) -> tuple[str, str]:
+    clean = " ".join(str(text or "").strip().split()).strip(" ,.;:")
+    if not clean:
+        return "", ""
+    position = ""
+    leading_position = _LEAD_LEADING_POSITION_PATTERN.match(clean)
+    if leading_position:
+        position = _clean_lead_position(f"{leading_position.group(1).lower()} {leading_position.group(2).strip()}")
+        clean = leading_position.group(3).strip(" ,.;:")
+    low = clean.lower()
+    if "," in clean and any(low.startswith(prefix) for prefix in _LEAD_OBSERVER_FRAME_PREFIXES):
+        clean = clean.split(",", 1)[1].strip(" ,.;:")
+    clean = _LEAD_PLAYER_OBSERVATION_PREFIX.sub("", clean).strip(" ,.;:")
+    return clean, position
+
+
 def _clean_lead_position(position: str) -> str:
     clean = " ".join(str(position or "").strip().split()).rstrip(" .,:;")
     low = clean.lower()
-    for marker in (" while ", " and ", " who ", " which ", " as ", " but "):
+    for marker in (",", " while ", " and ", " who ", " which ", " as ", " but "):
         idx = low.find(marker)
         if idx > 0:
             clean = clean[:idx].strip(" ,.;:")
@@ -2102,9 +2178,9 @@ def _score_recent_repetition(candidate: Dict[str, Any], recent_leads: List[Dict[
 
 def _extract_visible_figure_candidate(fact: str) -> Dict[str, Any] | None:
     text = " ".join(str(fact or "").strip().split()).rstrip(".")
-    low = text.lower()
     if not text:
         return None
+    low = text.lower()
     named = _LEAD_NAME_PATTERN.search(text)
     position = ""
     for match in _LEAD_GENERIC_POSITION_PHRASES:
@@ -2126,6 +2202,12 @@ def _extract_visible_figure_candidate(fact: str) -> Dict[str, Any] | None:
             "named": True,
             "positioned": bool(position),
         }
+    text, framed_position = _strip_visible_figure_observer_frame(text)
+    if framed_position:
+        position = framed_position
+    low = text.lower()
+    if not text:
+        return None
     if not any(token in low for token in _VISIBLE_FIGURE_TOKENS):
         return None
     subject = text
@@ -2143,7 +2225,7 @@ def _extract_visible_figure_candidate(fact: str) -> Dict[str, Any] | None:
     if position and position.lower() in subject.lower():
         subject = subject[:subject.lower().find(position.lower())].strip(" ,.;:")
     subject = _clean_lead_subject(subject)
-    if not subject:
+    if _lead_subject_is_invalid(subject):
         return None
     return {
         "key": _lead_key(subject, kind="visible_figure", position=position),
@@ -3711,52 +3793,196 @@ def _in_scene_npc_names(world: Dict[str, Any], scene_id: str) -> List[str]:
     return out
 
 
-def _safe_json(text: str) -> Dict[str, Any]:
+def _structured_contract_failure(
+    form: str,
+    reason: str,
+    *,
+    provider_response_contract: str = "structured_realization",
+) -> Dict[str, Any]:
+    """Model text that is not a claim envelope. It is not narration."""
+    normalized = form if form in {"plain", "malformed", "structured"} else "malformed"
+    return {
+        'player_facing_text': '',
+        'tags': ['structured_output_rejected', 'structured_contract_failure'],
+        'scene_update': None,
+        'activate_scene_id': None,
+        'new_scene_draft': None,
+        'world_updates': None,
+        'suggested_action': None,
+        'debug_notes': 'Structured realization envelope required.',
+        'metadata': {
+            'output_form': normalized,
+            'structured_output_rejected': True,
+            'structured_contract_failure': True,
+            'structured_contract_reason': reason,
+            'provider_response_contract': provider_response_contract,
+            'legacy_fallback': False,
+        },
+    }
+
+
+def _safe_json(
+    text: str,
+    *,
+    require_structured_claims: bool = False,
+    provider_response_contract: str = "structured_realization",
+) -> Dict[str, Any]:
     """Parse model text into a safe, normalized GM response dict.
 
-    Ensures the returned value always has the expected keys with safe defaults
-    so callers can rely on a stable schema even when the model output is
-    malformed or missing fields.
+    A structured response contributes only its player-facing text. The raw
+    envelope is never narration. An unparseable or incomplete envelope is
+    rejected so a later seal cannot publish it.
+
+    ``require_structured_claims`` is the live generation path. Plain prose and
+    legacy player-facing JSON are structured-contract failures there. Direct
+    unit tests may still parse the older shapes.
     """
-    try:
-        parsed = json.loads(text)
-    except Exception:
+    if provider_response_contract == "narration_only":
+        raw = str(text or "").strip()
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError:
+            return _structured_contract_failure(
+                "malformed",
+                "malformed_narration_only_envelope",
+                provider_response_contract=provider_response_contract,
+            )
+        if not isinstance(parsed, dict):
+            return _structured_contract_failure(
+                "malformed",
+                "malformed_narration_only_envelope",
+                provider_response_contract=provider_response_contract,
+            )
+        keys = {str(key) for key in parsed}
+        if keys != {"narration"}:
+            if "declared_claims" in keys:
+                reason = "unexpected_declared_claims"
+            elif "narration" not in keys:
+                reason = "missing_narration"
+            else:
+                reason = "unexpected_narration_only_field"
+            return _structured_contract_failure(
+                "structured",
+                reason,
+                provider_response_contract=provider_response_contract,
+            )
+        prose = parsed.get("narration")
+        if not isinstance(prose, str) or not prose.strip():
+            return _structured_contract_failure(
+                "structured",
+                "missing_narration" if prose is None else "invalid_narration",
+                provider_response_contract=provider_response_contract,
+            )
+        from game.structured_player_output import text_contains_response_envelope
+
+        if text_contains_response_envelope(prose):
+            return _structured_contract_failure(
+                "structured",
+                "nested_response_envelope",
+                provider_response_contract=provider_response_contract,
+            )
+        narration = prose.strip()
         return {
-            'player_facing_text': text or 'No narration provided.',
+            'player_facing_text': narration,
+            'tags': [],
+            'scene_update': None,
+            'activate_scene_id': None,
+            'new_scene_draft': None,
+            'world_updates': None,
+            'suggested_action': None,
+            'debug_notes': 'Parsed narration-only model output.',
+            'metadata': {
+                'output_form': 'structured',
+                'provider_response_contract': provider_response_contract,
+                'realization_envelope': {
+                    'schema_version': 1,
+                    'provider_response_contract': provider_response_contract,
+                    'declared_claims': [],
+                    'narration': narration,
+                    'structured_contract_present': True,
+                    'legacy_fallback': False,
+                    'normalized_empty_declarations': True,
+                    'declaration_authorship': False,
+                },
+            },
+        }
+
+    from game.structured_player_output import classify_model_output
+
+    classified = classify_model_output(text)
+    form = str(classified.get("form") or "")
+    if form == "malformed":
+        if require_structured_claims:
+            return _structured_contract_failure(
+                "malformed",
+                "malformed_envelope",
+                provider_response_contract=provider_response_contract,
+            )
+        return {
+            'player_facing_text': '',
+            'tags': ['structured_output_rejected'],
+            'scene_update': None,
+            'activate_scene_id': None,
+            'new_scene_draft': None,
+            'world_updates': None,
+            'suggested_action': None,
+            'debug_notes': 'Rejected structured model envelope.',
+            'metadata': {'output_form': 'malformed', 'structured_output_rejected': True},
+        }
+    if form == "plain":
+        if require_structured_claims:
+            return _structured_contract_failure(
+                "plain",
+                "missing_structured_envelope",
+                provider_response_contract=provider_response_contract,
+            )
+        prose = str(classified.get("player_facing_text") or "")
+        return {
+            'player_facing_text': prose or 'No narration provided.',
             'tags': ['fallback'],
             'scene_update': None,
             'activate_scene_id': None,
             'new_scene_draft': None,
             'world_updates': None,
             'suggested_action': None,
-            'debug_notes': 'Non-JSON response fallback.'
+            'debug_notes': 'Non-JSON response fallback.',
+            'metadata': {'output_form': 'plain', 'legacy_fallback': True},
         }
 
-    # If the model returned a non-dict, treat entire text as narration.
-    if not isinstance(parsed, dict):
-        return {
-            'player_facing_text': str(parsed),
-            'tags': ['fallback'],
-            'scene_update': None,
-            'activate_scene_id': None,
-            'new_scene_draft': None,
-            'world_updates': None,
-            'suggested_action': None,
-            'debug_notes': 'Parsed JSON was not an object.'
-        }
-
-    # Build normalized response, validating types and providing defaults.
+    parsed = classified.get("fields") if isinstance(classified.get("fields"), dict) else {}
+    prose = str(classified.get("player_facing_text") or "")
+    declared_claims = parsed.get("declared_claims") if isinstance(parsed.get("declared_claims"), list) else None
+    if require_structured_claims and declared_claims is None:
+        return _structured_contract_failure(
+            "structured",
+            "missing_declared_claims",
+            provider_response_contract=provider_response_contract,
+        )
+    proposals = parsed.get("improvisation_proposals") if isinstance(parsed.get("improvisation_proposals"), list) else None
     out: Dict[str, Any] = {
-        'player_facing_text': parsed.get('player_facing_text') if isinstance(parsed.get('player_facing_text'), str) else (str(parsed)[:1000] if parsed else ''),
+        'player_facing_text': prose,
         'tags': parsed.get('tags') if isinstance(parsed.get('tags'), list) else [],
         'scene_update': parsed.get('scene_update') if isinstance(parsed.get('scene_update'), dict) else None,
         'activate_scene_id': parsed.get('activate_scene_id') if isinstance(parsed.get('activate_scene_id'), str) else None,
         'new_scene_draft': parsed.get('new_scene_draft') if isinstance(parsed.get('new_scene_draft'), dict) else None,
         'world_updates': parsed.get('world_updates') if isinstance(parsed.get('world_updates'), dict) else None,
         'suggested_action': parsed.get('suggested_action') if isinstance(parsed.get('suggested_action'), dict) else None,
-        'debug_notes': parsed.get('debug_notes') if isinstance(parsed.get('debug_notes'), str) else 'Parsed model output.'
+        'debug_notes': parsed.get('debug_notes') if isinstance(parsed.get('debug_notes'), str) else 'Parsed model output.',
+        'metadata': {
+            'output_form': 'structured',
+            'provider_response_contract': provider_response_contract,
+            'realization_envelope': {
+                'schema_version': 1,
+                'provider_response_contract': provider_response_contract,
+                'declared_claims': declared_claims,
+                'narration': prose,
+                'structured_contract_present': declared_claims is not None,
+                'legacy_fallback': False if require_structured_claims else declared_claims is None,
+            },
+        },
     }
-
+    if proposals is not None:
+        out["improvisation_proposals"] = proposals
     return out
 
 
@@ -3923,6 +4149,419 @@ def collect_narration_context_call_kwargs(
         "prompt_profile": prompt_profile,
         "known_answer_hint": known_answer_hint,
     }
+
+
+def _provider_response_contract_from_payload(payload: Dict[str, Any]) -> str:
+    """Select model-facing envelope from existing decision projection only."""
+    try:
+        from game.gm_resolution_decision import (
+            PROVIDER_ENVELOPE_NARRATION_ONLY,
+            select_provider_response_envelope,
+        )
+    except Exception:
+        return "structured_realization"
+    decision = payload.get("gm_resolution_decision") if isinstance(payload.get("gm_resolution_decision"), dict) else None
+    contract = payload.get("resolution_contract") if isinstance(payload.get("resolution_contract"), dict) else None
+    selected = select_provider_response_envelope(decision, contract)
+    envelope = str(selected.get("selected_envelope") or "")
+    return PROVIDER_ENVELOPE_NARRATION_ONLY if envelope == PROVIDER_ENVELOPE_NARRATION_ONLY else "structured_realization"
+
+
+def _provider_response_contract_from_messages(messages: List[Dict[str, str]] | None) -> str:
+    if not isinstance(messages, list) or not messages:
+        return "structured_realization"
+    system = str((messages[0] or {}).get("content") or "")
+    return "narration_only" if NARRATION_ONLY_RESPONSE_CONTRACT in system else "structured_realization"
+
+
+# Top-level provider fields that mirror a response_policy child. The smaller
+# interaction_continuity snapshot is intentionally absent: it is not equal to
+# response_policy.interaction_continuity.
+EXACT_PROVIDER_CONTRACT_MIRRORS: Tuple[Tuple[str, str], ...] = (
+    ("anti_railroading_contract", "anti_railroading"),
+    ("context_separation_contract", "context_separation"),
+    ("player_facing_narration_purity_contract", "player_facing_narration_purity"),
+    ("social_response_structure_contract", "social_response_structure"),
+    ("interaction_continuity_contract", "interaction_continuity"),
+    ("fallback_behavior", "fallback_behavior"),
+    ("conversational_memory_window", "conversational_memory_window"),
+)
+
+
+def _json_value_equal(left: Any, right: Any) -> bool:
+    try:
+        return json.dumps(left, ensure_ascii=False, sort_keys=True) == json.dumps(
+            right, ensure_ascii=False, sort_keys=True
+        )
+    except (TypeError, ValueError):
+        return False
+
+
+_PROVIDER_CALL_STAMP: ContextVar[dict | None] = ContextVar("ashen_provider_call_stamp", default=None)
+
+
+def provider_timeout_seconds() -> float:
+    """Bound a single provider wait. The SDK default is several minutes."""
+    raw = os.environ.get("ASHEN_PROVIDER_TIMEOUT_SECONDS", "45")
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        value = 45.0
+    return min(120.0, max(5.0, value))
+
+
+def omit_duplicate_turn_packet_policy(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Drop provider-payload packet fields already present on the root policy.
+
+    Gate and retry code keep their own packet. This projection is serialized
+    to the model only. Unequal policy is retained. The input mapping is not mutated.
+    """
+    if not isinstance(payload, dict):
+        return payload
+    policy = payload.get("response_policy")
+    packet = payload.get("turn_packet")
+    if not isinstance(policy, dict) or not isinstance(packet, dict):
+        return payload
+    nested = packet.get("response_policy")
+    contracts = packet.get("contracts")
+    drop_policy = isinstance(nested, dict) and bool(nested) and all(
+        key in policy and _json_value_equal(nested.get(key), policy.get(key)) for key in nested
+    )
+    kept_contracts = contracts
+    if isinstance(contracts, dict):
+        kept_contracts = {
+            key: value
+            for key, value in contracts.items()
+            if not (key in policy and _json_value_equal(value, policy.get(key)))
+        }
+    contracts_changed = isinstance(contracts, dict) and kept_contracts != contracts
+    if not drop_policy and not contracts_changed:
+        return payload
+    projected = dict(payload)
+    packet_copy = dict(packet)
+    if drop_policy:
+        packet_copy.pop("response_policy", None)
+    if contracts_changed:
+        packet_copy["contracts"] = kept_contracts
+    projected["turn_packet"] = packet_copy
+    return projected
+
+
+def omit_exact_duplicate_provider_contracts(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Omit top-level provider copies that are JSON-equal to a response_policy child.
+
+    The policy child stays in the serialized payload. Unequal values are retained.
+    The input mapping is not mutated, and no diagnostic field is added.
+    """
+    if not isinstance(payload, dict):
+        return payload
+    policy = payload.get("response_policy")
+    if not isinstance(policy, dict):
+        return payload
+    removable: List[str] = []
+    for top_key, policy_key in EXACT_PROVIDER_CONTRACT_MIRRORS:
+        if top_key not in payload or policy_key not in policy:
+            continue
+        if _json_value_equal(payload.get(top_key), policy.get(policy_key)):
+            removable.append(top_key)
+    if not removable:
+        return payload
+    projected = dict(payload)
+    for top_key in removable:
+        projected.pop(top_key, None)
+    return projected
+
+
+def _dedupe_provider_payload_instructions(payload: Dict[str, Any], system_prompt: str) -> Dict[str, Any]:
+    """Remove provider-payload instruction lines already carried verbatim by system prompt."""
+    instructions = payload.get("instructions")
+    if not isinstance(instructions, list) or not isinstance(system_prompt, str) or not system_prompt:
+        return payload
+    deduped: List[Any] = []
+    removed: List[str] = []
+    for item in instructions:
+        if isinstance(item, str) and item.strip() and item in system_prompt:
+            removed.append(item)
+            continue
+        deduped.append(item)
+    if not removed:
+        return payload
+    payload = dict(payload)
+    payload["instructions"] = deduped
+    prompt_debug = payload.get("prompt_debug")
+    if isinstance(prompt_debug, dict):
+        payload["prompt_debug"] = {
+            **prompt_debug,
+            "provider_instruction_deduplication": {
+                "mode": "exact_system_substring",
+                "removed_count": len(removed),
+                "removed_sha256": [_sha256_text(text) for text in removed],
+            },
+        }
+    return payload
+
+
+def _social_projection_nonempty(value: Any) -> bool:
+    if value in (None, "", [], {}):
+        return False
+    if isinstance(value, dict):
+        return any(_social_projection_nonempty(v) for v in value.values())
+    if isinstance(value, list):
+        return any(_social_projection_nonempty(v) for v in value)
+    return True
+
+
+def _social_projection_empty_combat(value: Any) -> bool:
+    if value in (None, {}, []):
+        return True
+    if not isinstance(value, dict):
+        return False
+    return not any(_social_projection_nonempty(v) for v in value.values())
+
+
+def _compact_social_turn_packet(packet: Any) -> Dict[str, Any] | None:
+    if not isinstance(packet, dict):
+        return None
+    out: Dict[str, Any] = {}
+    for key in (
+        "version",
+        "turn_id",
+        "scene_id",
+        "player_text",
+        "resolution_kind",
+        "route",
+        "continuity",
+        "contracts",
+        "fallback",
+        "referent_tracking_compact",
+    ):
+        if key in packet:
+            out[key] = copy.deepcopy(packet.get(key))
+    return out or None
+
+
+def _compact_social_mechanical_resolution(resolution: Any) -> Dict[str, Any] | None:
+    if not isinstance(resolution, dict):
+        return None
+    out: Dict[str, Any] = {}
+    for key in (
+        "kind",
+        "action_id",
+        "label",
+        "prompt",
+        "success",
+        "resolved_transition",
+        "target_scene_id",
+        "clue_id",
+        "discovered_clues",
+        "world_updates",
+        "state_changes",
+        "social",
+    ):
+        if key in resolution:
+            out[key] = copy.deepcopy(resolution.get(key))
+    metadata = resolution.get("metadata")
+    if isinstance(metadata, dict):
+        compact_meta: Dict[str, Any] = {}
+        for key in (
+            "selected_resolver",
+            "active_interaction_target_id",
+            "ordinary_contract_established",
+            "semantic_owner",
+            "response_type_contract",
+            "interaction_obligation",
+            "social_turn_contract",
+        ):
+            if key in metadata:
+                compact_meta[key] = copy.deepcopy(metadata.get(key))
+        if compact_meta:
+            out["metadata"] = compact_meta
+    return out or None
+
+
+def _compact_social_narrative_plan(plan: Any) -> Dict[str, Any] | None:
+    if not isinstance(plan, dict):
+        return None
+    out: Dict[str, Any] = {}
+    for key in (
+        "version",
+        "narrative_mode",
+        "role_allocation",
+        "scene_anchors",
+        "active_pressures",
+        "allowable_entity_references",
+        "narrative_mode_contract",
+    ):
+        if key in plan:
+            out[key] = copy.deepcopy(plan.get(key))
+    answer_plan = plan.get("answer_exposition_plan")
+    if isinstance(answer_plan, dict):
+        out["answer_exposition_plan"] = copy.deepcopy(answer_plan)
+    return out or None
+
+
+def _project_harmless_social_provider_context(
+    payload: Dict[str, Any],
+    *,
+    provider_response_contract: str,
+) -> Dict[str, Any]:
+    """Narrow provider-context projection for harmless incidental NPC dialogue.
+
+    The resolver, authoritative decision, validators, and state are unchanged. This only
+    trims model-facing scaffolding after the ordinary social/narration-only envelope is
+    already selected.
+    """
+    if not isinstance(payload, dict):
+        return payload
+    if provider_response_contract != "narration_only":
+        return payload
+
+    recipe = payload.get("decision_facing_answer_recipe")
+    turn_operation = recipe.get("turn_operation") if isinstance(recipe, dict) else None
+    decision = payload.get("gm_resolution_decision")
+    contract = payload.get("resolution_contract")
+    response_policy = payload.get("response_policy")
+    speaker_selection = payload.get("speaker_selection")
+    active_interlocutor = payload.get("active_interlocutor")
+    dialogue_plan = payload.get("dialogue_social_plan")
+    scene = payload.get("scene")
+    permitted_inference = recipe.get("permitted_inference") if isinstance(recipe, dict) else None
+    combat = payload.get("combat")
+    mechanical = payload.get("mechanical_resolution")
+    metadata = mechanical.get("metadata") if isinstance(mechanical, dict) else None
+    social = mechanical.get("social") if isinstance(mechanical, dict) else None
+
+    if not (
+        isinstance(recipe, dict)
+        and isinstance(turn_operation, dict)
+        and turn_operation.get("response_operation") == "incidental_dialogue"
+        and turn_operation.get("declaration_expectation") == "reply_not_required"
+        and isinstance(decision, dict)
+        and decision.get("permitted_state_mutations") == []
+        and decision.get("unresolved_qualifiers") == []
+        and not recipe.get("unresolved_content")
+        and isinstance(permitted_inference, dict)
+        and permitted_inference.get("allowed") is False
+        and isinstance(contract, dict)
+        and str(contract.get("operation") or "").strip().lower() == "ask"
+        and str(contract.get("target") or "").strip()
+        and isinstance(response_policy, dict)
+        and isinstance(scene, dict)
+        and isinstance(dialogue_plan, dict)
+        and isinstance(speaker_selection, dict)
+        and isinstance(speaker_selection.get("allowed_speaker_ids"), list)
+        and len(speaker_selection["allowed_speaker_ids"]) == 1
+        and isinstance(active_interlocutor, dict)
+        and str(active_interlocutor.get("npc_id") or "").strip()
+        and speaker_selection["allowed_speaker_ids"] == [active_interlocutor["npc_id"]]
+        and speaker_selection.get("primary_speaker_id") == active_interlocutor["npc_id"]
+        and contract.get("interlocutor") == active_interlocutor["npc_id"]
+        and isinstance(metadata, dict)
+        and metadata.get("selected_resolver") == "social"
+        and metadata.get("ordinary_contract_established") is True
+        and isinstance(social, dict)
+        and social.get("npc_id") == active_interlocutor["npc_id"]
+        and social.get("target_resolved") is True
+        and social.get("reply_plan_kind") == "harmless_subjective_response_permitted"
+        and social.get("incidental_subjective_allowed") is True
+        and social.get("objective_world_fact_authority") == "none"
+        and social.get("npc_speech_authority") == "claim_only"
+        and social.get("durable_state_mutation_allowed") is False
+        and not social.get("topic_revealed")
+        and not social.get("skill_check")
+        and mechanical.get("requires_check") is False
+        and not mechanical.get("state_changes")
+        and not mechanical.get("world_updates")
+        and not mechanical.get("discovered_clues")
+        and not mechanical.get("resolved_transition")
+        and isinstance(combat, dict)
+        and combat.get("in_combat") is False
+    ):
+        return payload
+
+    # Missing or contradictory authority metadata always keeps the full context.
+    opening = payload.get("opening_narration_obligations")
+    advancement = payload.get("scene_advancement")
+    if (
+        not isinstance(opening, dict)
+        or opening.get("opening_mode") is not False
+        or not isinstance(advancement, dict)
+        or any(advancement.values())
+    ):
+        return payload
+
+    omitted: List[str] = []
+    compacted: List[str] = []
+    projected = dict(payload)
+
+    for key in (
+        "opening_narration_obligations",
+        "opening_scene_realization",
+        "opening_inputs_are_curated",
+        "opening_selector_source_used",
+        "opening_selector_selected_facts",
+        "opening_curated_facts",
+        "opening_fact_telemetry",
+        "transition",
+        "scene_advancement",
+        "world_progression_summary",
+    ):
+        if key in projected:
+            projected.pop(key, None)
+            omitted.append(key)
+
+    if _social_projection_empty_combat(projected.get("combat")):
+        projected.pop("combat", None)
+        omitted.append("combat")
+
+    for key in ("lead_context", "interlocutor_lead_context", "interlocutor_lead_behavior_hints"):
+        if key in projected and not _social_projection_nonempty(projected.get(key)):
+            projected.pop(key, None)
+            omitted.append(key)
+
+    compact_turn_packet = _compact_social_turn_packet(projected.get("turn_packet"))
+    if compact_turn_packet is not None:
+        projected["turn_packet"] = compact_turn_packet
+        compacted.append("turn_packet")
+
+    compact_mechanical = _compact_social_mechanical_resolution(projected.get("mechanical_resolution"))
+    if compact_mechanical is not None:
+        projected["mechanical_resolution"] = compact_mechanical
+        compacted.append("mechanical_resolution")
+
+    compact_plan = _compact_social_narrative_plan(projected.get("narrative_plan"))
+    if compact_plan is not None:
+        projected["narrative_plan"] = compact_plan
+        compacted.append("narrative_plan")
+
+    projected["provider_context_projection"] = {
+        "mode": "harmless_social_incidental_dialogue_v1",
+        "selected": True,
+        "reason": "ordinary social ask uses narration-only incidental_dialogue with one grounded addressee and no authorized state mutation",
+        "retained_authority_surfaces": [
+            "player_input",
+            "scene",
+            "active_interlocutor",
+            "dialogue_social_plan",
+            "speaker_selection",
+            "selected_conversational_memory",
+            "recent_log",
+            "response_policy",
+            "resolution_contract",
+            "gm_resolution_decision",
+            "decision_facing_answer_recipe",
+            "narration_visibility",
+        ],
+        "omitted_sections": sorted(dict.fromkeys(omitted)),
+        "compacted_sections": sorted(dict.fromkeys(compacted)),
+    }
+    return projected
+
+
+def _sha256_text(text: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def build_messages(
@@ -4161,8 +4800,17 @@ def build_messages(
 
     if not action_outcome_mode and resolution and isinstance(resolution, dict) and resolution.get('hint'):
         payload['instructions'] = list(payload['instructions']) + [resolution['hint']]
+    provider_response_contract = _provider_response_contract_from_payload(payload)
+    system_prompt = NARRATION_ONLY_SYSTEM_PROMPT if provider_response_contract == "narration_only" else SYSTEM_PROMPT
+    payload = _dedupe_provider_payload_instructions(payload, system_prompt)
+    payload = _project_harmless_social_provider_context(
+        payload,
+        provider_response_contract=provider_response_contract,
+    )
+    payload = omit_exact_duplicate_provider_contracts(payload)
+    payload = omit_duplicate_turn_packet_policy(payload)
     return [
-        {'role': 'system', 'content': SYSTEM_PROMPT},
+        {'role': 'system', 'content': system_prompt},
         {'role': 'user', 'content': json.dumps(payload, ensure_ascii=False)}
     ]
 
@@ -4318,6 +4966,16 @@ def _attach_model_route_metadata(
     )
     escalated = escalation_trigger is not None
     md = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    stamp = _PROVIDER_CALL_STAMP.get()
+    provider_call = None
+    if isinstance(stamp, dict):
+        provider_call = {
+            "purpose": stamp.get("purpose"),
+            "sent": bool(stamp.get("sent")),
+            "latency_ms": stamp.get("latency_ms"),
+            "input_tokens": stamp.get("input_tokens"),
+            "output_tokens": stamp.get("output_tokens"),
+        }
     gm["metadata"] = {
         **md,
         "selected_model": selected_model,
@@ -4327,6 +4985,7 @@ def _attach_model_route_metadata(
         "model_retry_attempt": int(retry_attempt or 0),
         "model_escalated": escalated,
         "model_escalation_trigger": escalation_trigger,
+        **({"provider_call": provider_call} if provider_call is not None else {}),
     }
     dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
     token = f"model_route:{route_family}:{route_reason}:{selected_model}"
@@ -4413,11 +5072,30 @@ def call_gpt(
         strict_social=strict_social,
         force_high_precision=force_high_precision,
     )
-    try:
-        from openai import OpenAI
-        client = OpenAI(api_key=get_openai_api_key())
-        _log_model_route(
+    from game.provider_budget import (
+        accounting_active,
+        begin_request,
+        finish_request,
+        provider_retries_disabled,
+    )
+
+    if provider_retries_disabled() and int(retry_attempt or 0) > 0:
+        return _attach_model_route_metadata(
+            {
+                "player_facing_text": (
+                    "The action stands, and no further narration request was sent."
+                ),
+                "tags": ["provider_retry_disabled", "deterministic_fallback"],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "provider_retry_disabled",
+                "metadata": {"provider_retry_disabled": True},
+            },
             selected_model=route.selected_model,
+            route_reason=route.route_reason,
             route_family=route.route_family,
             purpose=purpose,
             retry_attempt=retry_attempt,
@@ -4425,13 +5103,151 @@ def call_gpt(
             strict_social=strict_social,
             force_high_precision=force_high_precision,
         )
-        resp = client.responses.create(model=route.selected_model, input=messages)
+    if os.environ.get("ASHEN_DISABLE_PROVIDER_CALLS", "").strip().lower() in {"1", "true", "yes", "on"}:
+        metadata = {
+            "provider_calls_disabled": True,
+            "provider_accounting": {
+                "model": route.selected_model,
+                "request_count": 0,
+                "input_tokens": None,
+                "output_tokens": None,
+                "total_tokens": None,
+                "latency_ms": None,
+                "usage_unavailable": True,
+            },
+        }
+        return _attach_model_route_metadata({
+            "player_facing_text": (
+                "Provider calls are disabled for this run, so no live narration was generated."
+            ),
+            "tags": ["provider_calls_disabled", "deterministic_fallback"],
+            "scene_update": None,
+            "activate_scene_id": None,
+            "new_scene_draft": None,
+            "world_updates": None,
+            "suggested_action": None,
+            "debug_notes": f"provider_calls_disabled:purpose={purpose}",
+            "metadata": metadata,
+        },
+            selected_model=route.selected_model,
+            route_reason=route.route_reason,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
+    _PROVIDER_CALL_STAMP.set(
+        {
+            "purpose": str(purpose or "primary_turn"),
+            "sent": False,
+            "latency_ms": None,
+            "input_tokens": None,
+            "output_tokens": None,
+            "started": time.perf_counter(),
+        }
+    )
+    pinned_model = os.environ.get("ASHEN_PIN_PROVIDER_MODEL", "").strip()
+    selected_model = pinned_model or route.selected_model
+    narration_cap = int(os.environ.get("ASHEN_NARRATION_MAX_OUTPUT_TOKENS", "600") or "600")
+    if accounting_active():
+        blob = json.dumps(messages, ensure_ascii=False).encode("utf-8")
+        estimated_input = max(1, (len(blob) // 3) + 64)
+        refusal = begin_request(purpose=purpose or "narration", estimated_input=estimated_input, max_output=narration_cap)
+        if refusal:
+            finish_request(
+                {
+                    "purpose": purpose or "narration",
+                    "sent": False,
+                    "model": selected_model,
+                    "input_tokens": None,
+                    "output_tokens": None,
+                    "total_tokens": None,
+                    "refusal": refusal,
+                }
+            )
+            return _attach_model_route_metadata(
+                {
+                    "player_facing_text": (
+                        "The action was resolved, but live narration was not requested because it would exceed the provider budget."
+                    ),
+                    "tags": ["provider_budget_refused", "deterministic_fallback"],
+                    "scene_update": None,
+                    "activate_scene_id": None,
+                    "new_scene_draft": None,
+                    "world_updates": None,
+                    "suggested_action": None,
+                    "debug_notes": f"provider_budget_refused:{refusal}",
+                    "metadata": {"provider_budget_refusal": refusal},
+                },
+                selected_model=selected_model,
+                route_reason=route.route_reason,
+                route_family=route.route_family,
+                purpose=purpose,
+                retry_attempt=retry_attempt,
+                retry_reason=retry_reason,
+                strict_social=strict_social,
+                force_high_precision=force_high_precision,
+            )
+    request_sent = False
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
+        _log_model_route(
+            selected_model=selected_model,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
+        create_kwargs = {"model": selected_model, "input": messages}
+        if accounting_active():
+            create_kwargs["max_output_tokens"] = narration_cap
+        request_sent = True
+        stamp = _PROVIDER_CALL_STAMP.get()
+        if isinstance(stamp, dict):
+            stamp["sent"] = True
+            stamp["started"] = time.perf_counter()
+        resp = client.responses.create(**create_kwargs)
+        if isinstance(stamp, dict):
+            stamp["latency_ms"] = max(0, int(round((time.perf_counter() - float(stamp.get("started") or time.perf_counter())) * 1000)))
         text = getattr(resp, 'output_text', None)
         if text is None:
             # Fallback to stringifying the response if expected attribute missing.
             text = str(resp)
+        usage = getattr(resp, "usage", None)
+        incoming = getattr(usage, "input_tokens", None) if usage is not None else None
+        outgoing = getattr(usage, "output_tokens", None) if usage is not None else None
+        total = getattr(usage, "total_tokens", None) if usage is not None else None
+        if isinstance(stamp, dict):
+            stamp["input_tokens"] = None if incoming is None else int(incoming)
+            stamp["output_tokens"] = None if outgoing is None else int(outgoing)
+        if accounting_active():
+            returned_model = str(getattr(resp, "model", "") or "")
+            finish_request(
+                {
+                    "purpose": purpose or "narration",
+                    "sent": True,
+                    "configured_model": selected_model,
+                    "model": returned_model,
+                    "request_id": getattr(resp, "id", None),
+                    "input_tokens": None if incoming is None else int(incoming),
+                    "output_tokens": None if outgoing is None else int(outgoing),
+                    "total_tokens": None if total is None else int(total),
+                    "max_output_tokens": narration_cap,
+                    "model_mismatch": bool(pinned_model and returned_model and not returned_model.startswith(pinned_model)),
+                }
+            )
+        provider_response_contract = _provider_response_contract_from_messages(messages)
         return _attach_model_route_metadata(
-            _safe_json(text.strip()),
+            _safe_json(
+                text.strip(),
+                require_structured_claims=True,
+                provider_response_contract=provider_response_contract,
+            ),
             selected_model=route.selected_model,
             route_reason=route.route_reason,
             route_family=route.route_family,
@@ -4442,6 +5258,24 @@ def call_gpt(
             force_high_precision=force_high_precision,
         )
     except Exception as e:
+        stamp = _PROVIDER_CALL_STAMP.get()
+        if isinstance(stamp, dict):
+            stamp["sent"] = bool(request_sent)
+            started = stamp.get("started")
+            if isinstance(started, float):
+                stamp["latency_ms"] = max(0, int(round((time.perf_counter() - started) * 1000)))
+        if accounting_active() and request_sent:
+            finish_request(
+                {
+                    "purpose": purpose or "narration",
+                    "sent": True,
+                    "model": selected_model,
+                    "input_tokens": None,
+                    "output_tokens": None,
+                    "total_tokens": None,
+                    "error": type(e).__name__,
+                }
+            )
         err = _classify_upstream_gpt_error(e)
         # Return a safe fallback response that preserves the expected schema so
         # callers can continue without special-casing exceptions.
@@ -4461,9 +5295,14 @@ def call_gpt(
             'new_scene_draft': None,
             'world_updates': None,
             'suggested_action': None,
-            'debug_notes': (
-                f"call_gpt error: {repr(e)} | "
-                f"api_error_class={err['failure_class']}:retryable={err['retryable']}"
+            'debug_notes': re.sub(
+                r"sk-[A-Za-z0-9_\-]{8,}|Bearer\s+\S+",
+                "[REDACTED]",
+                (
+                    f"call_gpt error: {repr(e)} | "
+                    f"api_error_class={err['failure_class']}:retryable={err['retryable']}"
+                ),
+                flags=re.IGNORECASE,
             ),
             'metadata': fallback_metadata,
         },

@@ -1,0 +1,140 @@
+{
+  "attempt_1": {
+    "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+    "reasons": [],
+    "gm_resolution_decision_audit": {
+      "decision_id": "rc_d4c97cad4722",
+      "hard_valid": true,
+      "declaration_validation": {
+        "schema_version": 1,
+        "structured_contract_present": true,
+        "hard_valid": true,
+        "accepted_claims": [
+          {
+            "text": "The baker shakes their head slightly, unwilling to say which loaf they keep for themselves.",
+            "semantic_identity": {
+              "kind": "entity",
+              "subject": "baker",
+              "subject_aliases": [
+                "Baker"
+              ],
+              "relation": "exists",
+              "value": "present",
+              "authority": "world_truth",
+              "premise_claim_ids": [
+                "rc_9ab69105465f"
+              ]
+            },
+            "provenance": "authored_world_fact",
+            "authority": "world_truth",
+            "epistemic_status": "established",
+            "relation_kind": "observation",
+            "persistence": "world_truth",
+            "authorized": true,
+            "source_ref": "world.npcs.0",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "accepted_declared_realization"
+            ],
+            "premise_claim_ids": [
+              "rc_9ab69105465f"
+            ]
+          }
+        ],
+        "rejected_claims": [],
+        "violations": []
+      },
+      "narration_validation": {
+        "decision_id": "rc_d4c97cad4722",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [],
+        "claim_results": []
+      },
+      "violations": [],
+      "proposed_facts": [],
+      "claim_results": [
+        {
+          "text": "The baker shakes their head slightly, unwilling to say which loaf they keep for themselves.",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth",
+            "premise_claim_ids": [
+              "rc_9ab69105465f"
+            ]
+          },
+          "provenance": "authored_world_fact",
+          "authority": "world_truth",
+          "epistemic_status": "established",
+          "relation_kind": "observation",
+          "persistence": "world_truth",
+          "authorized": true,
+          "source_ref": "world.npcs.0",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "accepted_declared_realization"
+          ],
+          "premise_claim_ids": [
+            "rc_9ab69105465f"
+          ]
+        }
+      ],
+      "accepted_realized_claims": [
+        {
+          "text": "The baker shakes their head slightly, unwilling to say which loaf they keep for themselves.",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "baker",
+            "subject_aliases": [
+              "Baker"
+            ],
+            "relation": "exists",
+            "value": "present",
+            "authority": "world_truth",
+            "premise_claim_ids": [
+              "rc_9ab69105465f"
+            ]
+          },
+          "provenance": "authored_world_fact",
+          "authority": "world_truth",
+          "epistemic_status": "established",
+          "relation_kind": "observation",
+          "persistence": "world_truth",
+          "authorized": true,
+          "source_ref": "world.npcs.0",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "accepted_declared_realization"
+          ],
+          "premise_claim_ids": [
+            "rc_9ab69105465f"
+          ]
+        }
+      ]
+    }
+  },
+  "attempt_2": null,
+  "retry_context": "",
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\""
+  },
+  "hard_validation_attempt_1": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [],
+    "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\""
+  },
+  "hard_validation_attempt_2": null,
+  "regeneration_feedback": null,
+  "regeneration_invoked": null
+}

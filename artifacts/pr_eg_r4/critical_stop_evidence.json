@@ -1,0 +1,130 @@
+{
+  "conversation": "B_skeptical",
+  "turn": 9,
+  "player": "I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?",
+  "classification": "Critical speech-adoption boundary bypass; not an observed new secret disclosure or canonical-world mutation",
+  "exact_rejected_candidate": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+  "rejection_reasons": [
+    "conflicting_target_authorities",
+    "wrong_interlocutor"
+  ],
+  "accepted_response": {
+    "provenance": "rejected",
+    "immutable": false,
+    "text": "I cannot provide a validated response to that request.",
+    "hard_invalid_reasons": [
+      "conflicting_target_authorities"
+    ],
+    "hard_validation": {
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_dbe7e0c70ca4",
+        "source": "decision_review",
+        "attempt_1": {
+          "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+          "reasons": [
+            "conflicting_target_authorities",
+            "wrong_interlocutor"
+          ],
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_dbe7e0c70ca4",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              }
+            ]
+          }
+        },
+        "attempt_2": null,
+        "retry_context_present": true,
+        "acceptance_why": "controlled_validation_failure"
+      },
+      "decision_acceptance_why": "controlled_validation_failure"
+    }
+  },
+  "final_delivered": "Clerk Oren answers: The bell beside the ferry is called the harbor bell.",
+  "delivered_history": {
+    "speaker_id": "clerk_oren",
+    "speaker_name": "Clerk Oren",
+    "addressee": "player",
+    "ownership": "npc",
+    "player_text": "I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?",
+    "delivered_text": "Clerk Oren answers: The bell beside the ferry is called the harbor bell.",
+    "subject": "mean both repeated",
+    "topic_id": "bell",
+    "requested_information": "general",
+    "supplied_text": "",
+    "uncertain": false,
+    "commitment": false,
+    "scene_id": "waystation_courtyard",
+    "turn": 5,
+    "active": true,
+    "authorized_proposition": "The bell beside the ferry is called the harbor bell.",
+    "answer_sufficiency": "directly_answers",
+    "proposition_id": "topic:clerk_oren:bell"
+  },
+  "post_gate_replacement": {
+    "applied": true,
+    "source": {
+      "kind": "question",
+      "source": "social_topic"
+    },
+    "replaced_preview": "I cannot provide a validated response to that request.",
+    "candidate_preview": "Clerk Oren answers: The bell beside the ferry is called the harbor bell."
+  },
+  "accepted_emitted_report": {
+    "immutable": false,
+    "exact_match": false,
+    "semantic_match": false,
+    "presentation_only": false,
+    "mutation_blocked": false
+  },
+  "final_selected_candidate": "I cannot provide a validated response to that request.",
+  "canonical_changes": {
+    "world": [],
+    "character": [],
+    "combat": []
+  },
+  "verification": "Assertions above verify the raw HTTP response and persisted history. Rejected speech was re-rendered, not delivered verbatim. No further provider run was made after this stop.",
+  "source_locations": [
+    "game/api_turn_support.py:330",
+    "game/api_turn_support.py:858",
+    "game/api.py:5873"
+  ]
+}

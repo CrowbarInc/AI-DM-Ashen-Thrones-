@@ -64,30 +64,104 @@ from fastapi.testclient import TestClient
 
 from game import storage
 from game.api import app
+from game.gm import _scene_momentum_due
+from game.immutable_valid_response import accepted_record, response_is_immutable, validate_generated_response
 from tests.debug_trace_utils import latest_compact_debug_trace_entry
 
 pytestmark = pytest.mark.integration
 
+# Deleted pre-PR-AR interruption templates. Tension must not require these.
+_OBSOLETE_INTERRUPTION_PHRASES = (
+    "cuts through the crowd",
+    "stops at your shoulder",
+    "comes straight to you",
+    "squares up to you",
+    "breaks the silence first",
+    "if you're moving on this, move now",
+    "question the runner",
+    "work the notice",
+    "east-road trail",
+    "east road",
+    "ask me now",
+)
+_SOCIAL_RESOLUTION_KINDS = {"question", "social", "social_probe", "dialogue"}
 
-def _assert_concrete_pressure(text: str) -> None:
+
+def _player_facing_text(data: dict) -> str:
+    return str((data.get("gm_output") or {}).get("player_facing_text") or "")
+
+
+def _event_texts(events) -> list[str]:
+    texts: list[str] = []
+    for event in events or []:
+        if isinstance(event, str) and event.strip():
+            texts.append(event.strip())
+        elif isinstance(event, dict):
+            text = str(event.get("text") or "").strip()
+            if text:
+                texts.append(text)
+    return texts
+
+
+def _set_investigate_visible_facts(facts: list[str]) -> None:
+    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
+    scene.pop("_is_canon", None)
+    scene["scene"]["visible_facts"] = list(facts)
+    storage.save_scene(scene)
+
+
+def _assert_no_invented_interruption(text: str) -> None:
     low = str(text or "").lower()
-    assert any(
-        phrase in low
-        for phrase in (
-            "\"",
-            "cuts through the crowd",
-            "stops at your shoulder",
-            "comes straight to you",
-            "squares up to you",
-            "breaks the silence first",
-            "if you're moving on this, move now",
-            "question the runner",
-            "work the notice",
-            "east-road trail",
-            "east road",
-            "ask me now",
-        )
-    )
+    for phrase in _OBSOLETE_INTERRUPTION_PHRASES:
+        assert phrase not in low
+    assert '"' not in text
+    assert "“" not in text
+    assert "”" not in text
+
+
+def _assert_not_social_dialogue(data: dict) -> None:
+    resolution = data.get("resolution") if isinstance(data.get("resolution"), dict) else {}
+    assert resolution.get("kind") not in _SOCIAL_RESOLUTION_KINDS
+    assert not resolution.get("social")
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    contract = meta.get("resolution_contract") if isinstance(meta.get("resolution_contract"), dict) else {}
+    assert not contract.get("interlocutor_id")
+
+
+def _assert_session_time_pressure(expected: int) -> dict:
+    session = storage.load_session()
+    clocks = session.get("clocks") if isinstance(session.get("clocks"), dict) else {}
+    assert clocks.get("time_pressure") == expected
+    assert session.get("current_date") == "Day 1"
+    world = storage.load_world()
+    world_clocks = (world.get("world_state") or {}).get("clocks")
+    assert world_clocks in ({}, None)
+    return session
+
+
+def _assert_default_npcs_stay_put() -> None:
+    world = storage.load_world()
+    npcs = [npc for npc in (world.get("npcs") or []) if isinstance(npc, dict)]
+    assert {npc.get("id") for npc in npcs} == {"guard_captain", "tavern_runner"}
+    for npc in npcs:
+        assert npc.get("location") == "frontier_gate"
+        assert str(npc.get("availability") or "available") == "available"
+        assert not npc.get("agenda_move_to_scene_id")
+
+
+def _assert_no_invented_clues(session: dict) -> None:
+    runtime = (session.get("scene_runtime") or {}).get("scene_investigate") or {}
+    assert not runtime.get("discovered_clues")
+    assert not runtime.get("discovered_clue_ids")
+
+
+def _faction_pressure() -> dict[str, int]:
+    world = storage.load_world()
+    return {
+        str(row.get("id")): int(row.get("pressure") or 0)
+        for row in (world.get("factions") or [])
+        if isinstance(row, dict)
+    }
 
 
 # feature: social, routing
@@ -295,18 +369,16 @@ def test_chat_social_route_ships_dialogue_contract_through_request_debug_and_tra
 
     assert resp.status_code == 200
     data = resp.json()
-    assert captured_inputs
-    payload = json.loads(captured_inputs[0][1]["content"])
-    payload_contract = payload.get("response_type_contract") or {}
-    policy_contract = (payload.get("response_policy") or {}).get("response_type_contract") or {}
+    assert not captured_inputs  # R2C: host-owned uncertainty needs no restatement.
+    accepted = data["gm_output"]["metadata"]["accepted_response"]
+    assert accepted["speech_adoption"] == "AUTHORIZED_HOST_SPEECH"
+    assert accepted["text"] == data["gm_output"]["player_facing_text"]
     debug_contract = (data.get("debug") or {}).get("response_type_contract") or {}
     trace_contract = (
         (latest_compact_debug_trace_entry(data.get("debug_traces") or []).get("turn_trace") or {}).get("response_type_contract")
         or {}
     )
 
-    assert payload_contract.get("required_response_type") == "dialogue"
-    assert policy_contract.get("required_response_type") == "dialogue"
     assert debug_contract.get("required_response_type") == "dialogue"
     assert trace_contract.get("required_response_type") == "dialogue"
 
@@ -693,19 +765,25 @@ def test_chat_targeted_retry_scene_stall_only(tmp_path, monkeypatch):
     assert "retry_strategy:selected=scene_stall" in read_turn_debug_notes(data)
 
 
-# feature: social, continuity
-def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, monkeypatch):
+# feature: continuity, emission
+def test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration(tmp_path, monkeypatch):
+    """A tense wait advances authorized world state and keeps a hard-valid line.
+
+    Replaces test_chat_single_wait_in_tense_scene_forces_interaction_pressure.
+    Visible tension does not authorize an invented approach, and the pressure
+    rewriter is not required when no retry or fallback is owed.
+    """
+    provider_line = "Rain beads on the checkpoint while nobody moves first."
     _seed_shared_world(tmp_path, monkeypatch)
-    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
-    scene.pop("_is_canon", None)
-    scene["scene"]["visible_facts"] = [
-        "Guards keep glancing at a missing patrol notice beside the checkpoint.",
-        "A tavern runner lingers under an awning, selling rumors for coin.",
-    ]
-    storage.save_scene(scene)
+    _set_investigate_visible_facts(
+        [
+            "Guards keep glancing at a missing patrol notice beside the checkpoint.",
+            "A tavern runner lingers under an awning, selling rumors for coin.",
+        ]
+    )
 
     with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("Rain beads on the checkpoint while nobody moves first."))
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(provider_line))
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
@@ -714,39 +792,116 @@ def test_chat_single_wait_in_tense_scene_forces_interaction_pressure(tmp_path, m
 
     assert resp.status_code == 200
     data = resp.json()
-    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
-    _assert_concrete_pressure(text)
-    assert "passive_scene_pressure" in ((data.get("gm_output") or {}).get("tags") or [])
+    text = _player_facing_text(data)
+    gm_output = data.get("gm_output") or {}
+    _assert_not_social_dialogue(data)
+    session = _assert_session_time_pressure(1)
+    tick_texts = _event_texts((data.get("resolution") or {}).get("world_tick_events"))
+    assert "House Verevin's pressure mounts." in tick_texts
+    assert "The Ash Cowl's pressure mounts." in tick_texts
+    log_texts = _event_texts(storage.load_world().get("event_log"))
+    assert "House Verevin's pressure mounts." in log_texts
+    assert "The Ash Cowl's pressure mounts." in log_texts
+    assert _faction_pressure() == {"house_verevin": 3, "ash_cowl": 3, "ordo_pyric": 2}
+    assert response_is_immutable(gm_output)
+    record = accepted_record(gm_output) or {}
+    assert record.get("text") == provider_line
+    assert (record.get("hard_validation") or {}).get("hard_valid") is True
+    assert text == provider_line
+    _assert_no_invented_interruption(text)
+    for event_text in tick_texts:
+        assert event_text.lower() not in text.lower()
+    assert "passive_scene_pressure" not in (gm_output.get("tags") or [])
+    assert "passive_scene_pressure:" not in read_turn_debug_notes(data)
+    _assert_default_npcs_stay_put()
+    _assert_no_invented_clues(session)
+    runtime = (session.get("scene_runtime") or {}).get("scene_investigate") or {}
+    assert runtime.get("passive_action_streak") == 1
+    assert runtime.get("momentum_exchanges_since") == 1
+    assert int(runtime.get("momentum_next_due_in") or 0) == 2
+    assert "scene_stall" not in read_turn_debug_notes(data)
+    assert "retry_strategy:selected=scene_stall" not in read_turn_debug_notes(data)
 
 
-# feature: social
-def test_chat_repeated_passive_actions_do_not_stall_into_atmosphere(tmp_path, monkeypatch):
-    _seed_shared_world(tmp_path, monkeypatch)
-    scene = copy.deepcopy(storage.load_scene("scene_investigate"))
-    scene.pop("_is_canon", None)
-    scene["scene"]["visible_facts"] = [
+# feature: continuity, fallback
+def test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall(tmp_path, monkeypatch):
+    """Repeated passive waits keep the world moving and ground a stall in visible facts.
+
+    Replaces test_chat_repeated_passive_actions_do_not_stall_into_atmosphere.
+    The second turn may use the existing scene-stall fallback. It does not need
+    an invented confrontation.
+    """
+    provider_line = "The damp air hangs over the gate as everyone watches everyone else."
+    visible_facts = [
         "A guard leans near the checkpoint, watching the road.",
         "A missing patrol notice curls in the damp beside him.",
     ]
-    storage.save_scene(scene)
+    _seed_shared_world(tmp_path, monkeypatch)
+    _set_investigate_visible_facts(visible_facts)
 
     with monkeypatch.context() as m:
-        m.setattr("game.api.call_gpt", lambda _messages: _gm_response("The damp air hangs over the gate as everyone watches everyone else."))
+        m.setattr("game.api.call_gpt", lambda _messages: _gm_response(provider_line))
         m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
         m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
         client = TestClient(app)
         first = client.post("/api/chat", json={"text": "I wait."})
+        after_first = storage.load_session()
+        first_runtime = (after_first.get("scene_runtime") or {}).get("scene_investigate") or {}
+        assert first_runtime.get("momentum_exchanges_since") == 1
+        assert int(first_runtime.get("momentum_next_due_in") or 0) == 2
+        assert _scene_momentum_due(after_first, "scene_investigate") is True
         second = client.post("/api/chat", json={"text": "I hold position and watch."})
 
     assert first.status_code == 200
     assert second.status_code == 200
-    data = second.json()
-    text = (data.get("gm_output") or {}).get("player_facing_text") or ""
-    _assert_concrete_pressure(text)
-    debug_notes = read_turn_debug_notes(data)
+    first_data = first.json()
+    second_data = second.json()
+    assert _player_facing_text(first_data) == provider_line
+    assert "passive_scene_pressure" not in ((first_data.get("gm_output") or {}).get("tags") or [])
+    _assert_not_social_dialogue(first_data)
+    _assert_not_social_dialogue(second_data)
+    assert _event_texts((first_data.get("resolution") or {}).get("world_tick_events"))
+    assert _event_texts((second_data.get("resolution") or {}).get("world_tick_events"))
+    session = _assert_session_time_pressure(2)
+    log_texts = _event_texts(storage.load_world().get("event_log"))
+    assert "House Verevin's pressure mounts." in log_texts
+    assert "The Ash Cowl's pressure mounts." in log_texts
+    assert "Ordo Pyric's pressure mounts." in log_texts
+    assert _faction_pressure() == {"house_verevin": 4, "ash_cowl": 4, "ordo_pyric": 3}
+    text = _player_facing_text(second_data)
+    assert provider_line.lower() not in text.lower()
+    assert "a guard leans near the checkpoint" in text.lower()
+    _assert_no_invented_interruption(text)
+    for event_text in log_texts:
+        assert event_text.lower() not in text.lower()
+    gm_output = second_data.get("gm_output") or {}
+    assert "passive_scene_pressure" in (gm_output.get("tags") or [])
+    debug_notes = read_turn_debug_notes(second_data)
     assert "passive_scene_pressure:" in debug_notes
     assert "streak=2" in debug_notes
+    runtime = (session.get("scene_runtime") or {}).get("scene_investigate") or {}
+    assert runtime.get("passive_action_streak") == 2
+    assert runtime.get("momentum_exchanges_since") == 0
+    assert runtime.get("momentum_last_kind") == "consequence_or_opportunity"
+    assert runtime.get("momentum_next_due_in") == 3
+    _assert_default_npcs_stay_put()
+    _assert_no_invented_clues(session)
+    resolution = second_data.get("resolution") if isinstance(second_data.get("resolution"), dict) else {}
+    meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+    verdict = validate_generated_response(
+        text,
+        contract=meta.get("resolution_contract") if isinstance(meta.get("resolution_contract"), dict) else None,
+        player_text="I hold position and watch.",
+        resolution=resolution,
+        authored_corpus=" ".join(visible_facts),
+    )
+    assert verdict.get("hard_valid") is True
+    record = accepted_record(gm_output)
+    if record:
+        assert str(record.get("provenance") or "") != "rejected"
+        if record.get("immutable") is True:
+            assert record.get("text") == text
 
 
 # feature: social
@@ -779,9 +934,9 @@ def test_chat_passive_scene_prefers_already_introduced_suspicious_figure(tmp_pat
     assert resp.status_code == 200
     data = resp.json()
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
-    assert "the tattered man" in text.lower()
-    _assert_concrete_pressure(text)
-    assert "passive_scene_pressure:lead_figure" in read_turn_debug_notes(data)
+    # A hard-valid atmosphere line is accepted and is not rewritten into the lead.
+    assert text == "The square stays hushed except for the scrape of boots on wet stone."
+    assert "the tattered man" not in text.lower()
 
 
 def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere(tmp_path, monkeypatch):
@@ -813,10 +968,9 @@ def test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmospher
     assert resp.status_code == 200
     data = resp.json()
     text = (data.get("gm_output") or {}).get("player_facing_text") or ""
-    low = text.lower()
-    assert "the tattered man" in low
+    assert text == "The square stays hushed except for the scrape of boots on wet stone."
+    assert "the tattered man" not in text.lower()
     assert_global_visibility_stock_absent(text)
-    _assert_concrete_pressure(text)
 
 
 # feature: emission
@@ -868,25 +1022,12 @@ def test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped
     low = text.lower()
     meta = _extract_final_emission_meta(data) or {}
 
-    assert resolution.get("kind") == "adjudication_query"
-    assert (
-        "lead" in low
-        or "concrete move" in low
-        or "answer has not formed yet" in low
-        or "that's all" in low
-        or "i do not know enough" in low
-    )
-    assert_response_type_meta(
-        meta,
-        required="answer",
-        candidate_ok=True,
-        repair_used=True,
-        repair_kinds=(
-            "dialogue_minimal_repair",
-            "answer_upstream_prepared_repair",
-            "strict_social_dialogue_repair",
-        ),
-    )
+    assert resolution.get("kind") == "ooc_message"
+    assert (resolution.get("metadata") or {}).get("communication_mode") == "OOC"
+    assert "out-of-character" in low
+    assert "the guard says" not in low
+    assert (resolution.get("metadata") or {}).get("resolver_invoked") is False
+    assert (resolution.get("metadata") or {}).get("narration_invoked") is False
 
 
 # feature: routing, social
@@ -1159,7 +1300,7 @@ def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, m
 def test_chat_explicit_ooc_stays_adjudication_without_gpt(
     tmp_path, monkeypatch, user_text, expected_category
 ):
-    """Explicit OOC/mechanical questions bypass dialogue lock and resolve as adjudication (no GPT)."""
+    """Explicit OOC bypasses gameplay; malformed OOC comma preserves automatic adjudication behavior."""
     _seed_shared_world(tmp_path, monkeypatch)
 
     with monkeypatch.context() as m:
@@ -1172,10 +1313,131 @@ def test_chat_explicit_ooc_stays_adjudication_without_gpt(
 
     assert resp.status_code == 200
     data = resp.json()
-    assert (data.get("resolution") or {}).get("kind") == "adjudication_query"
+    expected_kind = "adjudication_query" if expected_category is None else "ooc_message"
+    assert (data.get("resolution") or {}).get("kind") == expected_kind
     if expected_category is not None:
-        adjudication = (data.get("resolution") or {}).get("adjudication") or {}
-        assert adjudication.get("category") == expected_category
+        meta = (data.get("resolution") or {}).get("metadata") or {}
+        assert meta.get("communication_mode") == "OOC"
+        assert meta.get("resolver_invoked") is False
+
+
+# feature: routing, authority
+@pytest.mark.parametrize(
+    "user_text",
+    [
+        pytest.param(
+            "OOC: I am checking whether the interface is alive; do not change game state.",
+            id="pr_dw_original_failure",
+        ),
+        pytest.param("OOC: I attack the guard.", id="attack_like"),
+        pytest.param("OOC: Move me to the street.", id="move_like"),
+        pytest.param("OOC: Set my HP to full.", id="state_mutation_like"),
+        pytest.param("OOC: I inspect the lantern.", id="inspect_like"),
+        pytest.param("OOC: Roll initiative.", id="roll_like"),
+        pytest.param("OOC: Undo my last action.", id="rollback_like"),
+        pytest.param("  Out of character: Can I ask about the mechanics?", id="spelled_with_space"),
+    ],
+)
+def test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline(
+    tmp_path, monkeypatch, user_text
+):
+    _seed_shared_world(tmp_path, monkeypatch)
+    before_session = copy.deepcopy(storage.load_session())
+    before_world = copy.deepcopy(storage.load_world())
+    before_combat = copy.deepcopy(storage.load_combat())
+
+    def _forbidden(*_args, **_kwargs):
+        raise AssertionError("explicit OOC must not reach gameplay parser, resolver, or provider")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _forbidden)
+        m.setattr("game.api.parse_social_intent", _forbidden)
+        m.setattr("game.api.parse_exploration_intent", _forbidden)
+        m.setattr("game.api.parse_intent", _forbidden)
+        m.setattr("game.api.resolve_social_action", _forbidden)
+        m.setattr("game.api.resolve_exploration_action", _forbidden)
+        client = TestClient(app)
+        resp = client.post("/api/chat?ui_mode=player", json={"text": user_text})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["ok"] is True
+    resolution = data.get("resolution") or {}
+    meta = resolution.get("metadata") or {}
+    assert resolution.get("kind") == "ooc_message"
+    assert meta.get("communication_mode") == "OOC"
+    assert meta.get("authoritative_mutation") is False
+    assert meta.get("resolver_invoked") is False
+    assert meta.get("gameplay_parser_invoked") is False
+    assert meta.get("narration_invoked") is False
+    assert meta.get("provider_calls") == {
+        "interpretation_requests": 0,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0,
+    }
+    after_session = storage.load_session()
+    after_world = storage.load_world()
+    after_combat = storage.load_combat()
+    assert after_session.get("turn_counter") == before_session.get("turn_counter")
+    assert (after_session.get("clocks") or {}).get("time_pressure") == (
+        before_session.get("clocks") or {}
+    ).get("time_pressure")
+    assert after_session.get("active_scene_id") == before_session.get("active_scene_id")
+    assert after_world == before_world
+    assert after_combat == before_combat
+    log = storage.load_log()
+    assert log[-1]["player_input"] == user_text
+    assert (log[-1].get("log_meta") or {}).get("processing_outcome") == "non_mutating_ooc_acknowledgement"
+
+
+# feature: routing, authority
+def test_chat_communication_mode_override_conflict_is_nonmutating(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    before_session = copy.deepcopy(storage.load_session())
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("GPT")))
+        client = TestClient(app)
+        resp = client.post(
+            "/api/chat?ui_mode=player",
+            json={"text": "OOC: I inspect the lantern.", "communication_mode": "IC"},
+        )
+
+    assert resp.status_code == 200
+    data = resp.json()
+    resolution = data.get("resolution") or {}
+    assert resolution.get("kind") == "communication_mode_conflict"
+    assert (resolution.get("metadata") or {}).get("authoritative_mutation") is False
+    after_session = storage.load_session()
+    assert after_session.get("turn_counter") == before_session.get("turn_counter")
+    assert (after_session.get("clocks") or {}).get("time_pressure") == (
+        before_session.get("clocks") or {}
+    ).get("time_pressure")
+
+
+# feature: routing
+def test_chat_explicit_ic_strips_declaration_before_narration_context(tmp_path, monkeypatch):
+    _seed_shared_world(tmp_path, monkeypatch)
+    captured_payloads: list[str] = []
+
+    def _capture_call_gpt(messages):
+        captured_payloads.append(json.dumps(messages))
+        return _gm_response("You hold position and watch the gate.")
+
+    with monkeypatch.context() as m:
+        m.setattr("game.api.call_gpt", _capture_call_gpt)
+        client = TestClient(app)
+        resp = client.post("/api/chat?ui_mode=player", json={"text": "IC: I wait."})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["ok"] is True
+    assert storage.load_session().get("turn_counter") == 1
+    assert captured_payloads
+    assert "IC:" not in captured_payloads[-1]
+    assert "I wait." in captured_payloads[-1]
+    assert storage.load_log()[-1]["request"]["chat"] == "IC: I wait."
 
 
 # feature: emission
@@ -1814,6 +2076,7 @@ def test_chat_social_exchange_interruption_output_stays_coherent(tmp_path, monke
             "shake",
             "do not know enough",
             "do not know a name",
+            "couldn't tell you",
         )
     ) or ("tavern runner" in low and "mutters" in low)
 
@@ -1928,8 +2191,13 @@ def test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical(tmp_
     assert "merchant" not in low
     assert "tavern runner" in low
     meta = _extract_final_emission_meta(data) or {}
-    # HTTP smoke: speaker enforcement ran; exact reason codes owned by speaker/gate suites.
-    assert meta.get("speaker_contract_enforcement_reason")
+    # Immutable-response validation owns this check now; the retired speaker
+    # mutator must not run after sealing. Keep the canonical-speaker assertion
+    # above and require a validated seal with recorded rejection evidence.
+    acceptance = (gm_out.get("metadata") or {}).get("accepted_response") or {}
+    assert acceptance.get("immutable") is True
+    assert acceptance["speech_adoption"] == "AUTHORIZED_HOST_SPEECH"
+    assert acceptance["speaker_id"] == (data["resolution"]["social"]["npc_id"])
 
 
 # feature: emission, speaker_contract
@@ -1954,7 +2222,12 @@ def test_pipeline_strict_social_ragged_stranger_fallback_repaired(tmp_path, monk
     assert "ragged stranger" not in low
     assert "tavern runner" in low
     meta = _extract_final_emission_meta(data) or {}
-    assert meta.get("speaker_contract_enforcement_reason")
+    acceptance = (gm_out.get("metadata") or {}).get("accepted_response") or {}
+    assert acceptance.get("immutable") is True
+    # This input is rejected by the existing preseal social projection, before
+    # the hard validator sees its safe replacement.
+    assert acceptance["speech_adoption"] == "AUTHORIZED_HOST_SPEECH"
+    assert acceptance["text"] == text
 
 
 # feature: emission, interruption

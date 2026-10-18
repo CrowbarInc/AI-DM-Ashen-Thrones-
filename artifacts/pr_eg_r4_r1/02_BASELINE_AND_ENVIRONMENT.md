@@ -1,0 +1,3 @@
+# 02 — Baseline and Environment
+
+Revision `d31beb7d73dd4fda0f22184a6a69b947b5f470ff`; extensively dirty working tree preserved in baseline.json. Captured pre-edit game hashes; predecessor ZIP supplies matching source snapshots. Provider configuration: {'MODEL_NAME': 'gpt-4.1-mini'}. Python .venv 3.12; Windows TestClient needs local socket access outside sandbox. Test budget=0 external requests; fresh test scenes use gpt-4.1-mini with actual returned IDs in usage logs. No credentials are included. First baseline accidentally inherited replay provider-disable; corrected baseline uses zero request budget and reproduces R4's 692/25 identities. Historical state and transcripts were not overwritten.

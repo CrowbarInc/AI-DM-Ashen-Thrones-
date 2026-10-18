@@ -1,0 +1,2195 @@
+{
+  "phase0_ok": true,
+  "issues": [],
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "status_lines": 403,
+  "status_sha256": "20f21912c944ecfeceeeb56c349337e6b31bc89681593aed4d931a5e503fa669",
+  "dirty_worktree_preserved": true,
+  "provider": {
+    "pinned_model": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+    "MODEL_NAME": "gpt-4.1-mini",
+    "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+    "api_key_present": true,
+    "ASHEN_DISABLE_LIVE_INTERPRETATION": "1",
+    "unrelated_provider_paths": "game.gm.call_gpt and semantic_interpreter are patched closed during the run",
+    "note": "The key value is not stored. PR-DR calls only gpt-4.1-mini through the experiment client."
+  },
+  "fingerprints": {
+    "session.json": {
+      "sha256": "0a77beb47a2c30deb0b1977e915f3a5e2f67f5560e15a8bf0a5874015e244023",
+      "size": 1553
+    },
+    "world.json": {
+      "sha256": "3592e4af8723e631bb14d4f512431e8697987546f7fdf8076b3fbd1b135a42ef",
+      "size": 4195
+    },
+    "combat.json": {
+      "sha256": "ac977a4ab7d9eae556ba30893d9b09ec075efaf70ba67de0a6d60736eaf685b9",
+      "size": 449
+    },
+    "session_log.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "character.json": {
+      "sha256": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795",
+      "size": 2075
+    },
+    "campaign.json": {
+      "sha256": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8",
+      "size": 2898
+    },
+    "conditions.json": {
+      "sha256": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f",
+      "size": 1234
+    }
+  },
+  "baseline": {
+    "steps": [
+      {
+        "message_id": "msg_001",
+        "text": "I look at the lantern by the gate.",
+        "mode": "IC",
+        "mode_source": "USER_OVERRIDE",
+        "intent": "ACTION",
+        "status": "PROCESSED",
+        "destination": "IC_ACTION",
+        "committed": true,
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "new_resolver_calls": [
+          "game.exploration.resolve_exploration_action"
+        ],
+        "resolution_kind": "observe",
+        "resolution_success": null,
+        "rolls_dice": false,
+        "response": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reason": "accepted_by_engine",
+        "scene": "waystation_courtyard",
+        "time_pressure": 0,
+        "turn_counter": 1
+      },
+      {
+        "message_id": "msg_002",
+        "text": "Wait, which street did Mara mention?",
+        "mode": "OOC",
+        "mode_source": "USER_OVERRIDE",
+        "intent": "QUESTION",
+        "status": "PROCESSED",
+        "destination": "OOC_QUESTION",
+        "committed": false,
+        "executed": false,
+        "resolver_invoked": false,
+        "mutated_state": false,
+        "new_resolver_calls": [],
+        "resolution_kind": null,
+        "resolution_success": null,
+        "rolls_dice": false,
+        "response": "Out-of-character question noted. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "scene": "waystation_courtyard",
+        "time_pressure": 0,
+        "turn_counter": 1
+      },
+      {
+        "message_id": "msg_003",
+        "text": "I ask Sergeant Mara whether the street is beyond the gate.",
+        "mode": "IC",
+        "mode_source": "USER_OVERRIDE",
+        "intent": "DIALOGUE",
+        "status": "PROCESSED",
+        "destination": "IC_DIALOGUE",
+        "committed": true,
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "new_resolver_calls": [
+          "game.social.resolve_social_action"
+        ],
+        "resolution_kind": "question",
+        "resolution_success": true,
+        "rolls_dice": false,
+        "response": "The street beyond the gate is the north road.",
+        "reason": "accepted_by_engine",
+        "scene": "waystation_courtyard",
+        "time_pressure": 0,
+        "turn_counter": 2
+      },
+      {
+        "message_id": "msg_004",
+        "text": "I go through the courtyard gate.",
+        "mode": "IC",
+        "mode_source": "USER_OVERRIDE",
+        "intent": "ACTION",
+        "status": "PROCESSED",
+        "destination": "IC_ACTION",
+        "committed": true,
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "new_resolver_calls": [
+          "game.exploration.resolve_exploration_action"
+        ],
+        "resolution_kind": "scene_transition",
+        "resolution_success": true,
+        "rolls_dice": false,
+        "response": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+        "reason": "accepted_by_engine",
+        "scene": "waystation_street",
+        "time_pressure": 1,
+        "turn_counter": 3
+      },
+      {
+        "message_id": "msg_005",
+        "text": "I read the notice board.",
+        "mode": "IC",
+        "mode_source": "USER_OVERRIDE",
+        "intent": "ACTION",
+        "status": "PROCESSED",
+        "destination": "IC_ACTION",
+        "committed": true,
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "new_resolver_calls": [
+          "game.exploration.resolve_exploration_action"
+        ],
+        "resolution_kind": "discover_clue",
+        "resolution_success": true,
+        "rolls_dice": false,
+        "response": "The board names the north road past the waystation.",
+        "reason": "accepted_by_engine",
+        "scene": "waystation_street",
+        "time_pressure": 1,
+        "turn_counter": 4
+      }
+    ],
+    "history_ids": [
+      "msg_001",
+      "msg_002",
+      "msg_003",
+      "msg_004",
+      "msg_005"
+    ],
+    "history_length": 5,
+    "final_scene": "waystation_street",
+    "time_pressure": 1,
+    "turn_counter": 4,
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "inventory": [],
+    "combat_action_used": false,
+    "resolver_calls": [
+      "game.exploration.resolve_exploration_action",
+      "game.social.resolve_social_action",
+      "game.exploration.resolve_exploration_action",
+      "game.exploration.resolve_exploration_action"
+    ],
+    "notice_resolved": true,
+    "npc_ids": [
+      "sergeant_mara"
+    ]
+  },
+  "baseline_ok": true,
+  "estimates": {
+    "rows": [
+      {
+        "scenario_id": "DR01",
+        "estimated_input_tokens": 1239,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR02",
+        "estimated_input_tokens": 1246,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR03",
+        "estimated_input_tokens": 1240,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR04",
+        "estimated_input_tokens": 1233,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR05",
+        "estimated_input_tokens": 1237,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR06",
+        "estimated_input_tokens": 1234,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR07",
+        "estimated_input_tokens": 1241,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR08",
+        "estimated_input_tokens": 1228,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR09",
+        "estimated_input_tokens": 1235,
+        "context_leaks": [],
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ]
+      },
+      {
+        "scenario_id": "DR10",
+        "estimated_input_tokens": 1210,
+        "context_leaks": [],
+        "visible_ids": [
+          "notice_board"
+        ]
+      }
+    ],
+    "projected_estimated_input": 12343,
+    "output_cap_times_requests": 3200,
+    "estimator": "bytes/3 plus 64, checked again before each live request against actual usage"
+  },
+  "opening_hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "opening_inventory": [],
+  "labels_sha256": "88b4a7c26b80e89827230db72eec7c28af6f27df641b694de882809ecdde4015",
+  "files": {
+    "PR-DR_expected_behavior.md": "f9356c8d1f6ad6be29a869bf9868fc2db3272fef1c7905e18c8a42a46b0ed0d2",
+    "PR-DR_scenario_definitions.md": "9aebdaa58ad8b633b48b9bde392e054f6b4c4806aef38892d1797e7b9f29ae5c"
+  },
+  "budget": {
+    "requests": 10,
+    "input_tokens": 6835,
+    "output_tokens": 1934,
+    "total_tokens": 8769,
+    "records": [
+      {
+        "scenario_id": "DR01",
+        "request_id": "resp_076cd51de1bfe4e8006acada8e5c8c87d1a141543ce0620d9e",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 183,
+        "total_tokens": 871,
+        "latency_ms": 3275.217,
+        "estimated_input_tokens_preflight": 1239,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR02",
+        "request_id": "resp_0ac8330988b9a781006acada90abb087d19aa5702dde0ee7e4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 696,
+        "output_tokens": 222,
+        "total_tokens": 918,
+        "latency_ms": 1953.869,
+        "estimated_input_tokens_preflight": 1246,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR03",
+        "request_id": "resp_0e50364727451829006acada92a41c87d1a47648793be9594f",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 690,
+        "output_tokens": 282,
+        "total_tokens": 972,
+        "latency_ms": 2504.824,
+        "estimated_input_tokens_preflight": 1240,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR04",
+        "request_id": "resp_0a904c369baa04ba006acadab3a03c87d28cc9a70826c1775b",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 684,
+        "output_tokens": 184,
+        "total_tokens": 868,
+        "latency_ms": 3027.424,
+        "estimated_input_tokens_preflight": 1233,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR05",
+        "request_id": "resp_08529ba360cd3133006acadab5a16c87d2a50a37a5019804f7",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 180,
+        "total_tokens": 868,
+        "latency_ms": 1769.307,
+        "estimated_input_tokens_preflight": 1237,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR06",
+        "request_id": "resp_0300a189396c34cb006acadab76e6887d2972090eecd1c8ded",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 685,
+        "output_tokens": 186,
+        "total_tokens": 871,
+        "latency_ms": 2093.199,
+        "estimated_input_tokens_preflight": 1234,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR07",
+        "request_id": "resp_012e45ee2b17e711006acadab980c887d2a8fd8d54643b8698",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 694,
+        "output_tokens": 186,
+        "total_tokens": 880,
+        "latency_ms": 1597.437,
+        "estimated_input_tokens_preflight": 1241,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR08",
+        "request_id": "resp_05637120bf803264006acadabb1af087d292e1fef963217a55",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 681,
+        "output_tokens": 166,
+        "total_tokens": 847,
+        "latency_ms": 1528.719,
+        "estimated_input_tokens_preflight": 1228,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR09",
+        "request_id": "resp_088bea2734f3a049006acadaf47b5c87d28e307705ad4b2fb4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 667,
+        "output_tokens": 205,
+        "total_tokens": 872,
+        "latency_ms": 2489.364,
+        "estimated_input_tokens_preflight": 1218,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR10",
+        "request_id": "resp_0bb1fb2c79014902006acadaf68abc87d295c3d9e7afcf9d14",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 662,
+        "output_tokens": 140,
+        "total_tokens": 802,
+        "latency_ms": 2274.795,
+        "estimated_input_tokens_preflight": 1210,
+        "max_output_tokens": 320,
+        "status": "completed"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "scenario_id": "DR01",
+      "stage": 1,
+      "category": "ordinary_ic_exploration",
+      "utterance": "Let me get a better look at the lantern hanging beside the gate.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Let me get a better look at the lantern hanging beside the gate.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The character wants to closely examine the lantern hanging beside the gate in the courtyard.\"},\"asserted_premises\":[{\"text\":\"There is a lit lantern hanging beside the gate in the courtyard.\"},{\"text\":\"The character is currently in the waystation courtyard.\"}],\"requested_outcomes\":[{\"text\":\"The character obtains a better visual inspection of the courtyard lantern.\"}],\"action_components\":[{\"order\":1,\"description\":\"The character looks closely at the courtyard lantern to get a better view.\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character wants to closely examine the lantern hanging beside the gate in the courtyard."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a lit lantern hanging beside the gate in the courtyard."
+          },
+          {
+            "text": "The character is currently in the waystation courtyard."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character obtains a better visual inspection of the courtyard lantern."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The character looks closely at the courtyard lantern to get a better view.",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR01",
+        "request_id": "resp_076cd51de1bfe4e8006acada8e5c8c87d1a141543ce0620d9e",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 183,
+        "total_tokens": 871,
+        "latency_ms": 3275.217,
+        "estimated_input_tokens_preflight": 1239,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr01",
+          "text": "Let me get a better look at the lantern hanging beside the gate.",
+          "mode": "IC",
+          "mode_source": "AUTO",
+          "intent": "ACTION",
+          "status": "REJECTED",
+          "destination": "IC_ACTION",
+          "requested_override": "AUTO",
+          "classification_basis": "model_in_world_action",
+          "correction_subject": "NONE",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "That in-character request is not a supported mechanic. No state was changed.",
+            "reason": "no_hand_authored_action",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "INSPECT"
+        ],
+        "target_refs": [
+          "courtyard_lantern"
+        ],
+        "unresolved_references": [],
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "engine_submission": {
+          "disposition": "ELIGIBLE_FOR_VALIDATION",
+          "execution_authorized": false,
+          "operation_classes": [
+            "INSPECT"
+          ],
+          "target_ids": [
+            "courtyard_lantern"
+          ],
+          "component_orders": [
+            1
+          ],
+          "compound_transaction": false,
+          "includes_model_text": false,
+          "includes_asserted_premises": false,
+          "includes_requested_outcomes": false
+        },
+        "bind_reason": "operation_incompatible_with_entity_kind",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 0,
+        "response": "That in-character request is not a supported mechanic. No state was changed.",
+        "reason": "no_hand_authored_action",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR01",
+        "stage": 1,
+        "category": "ordinary_ic_exploration",
+        "isolation_breaches": [],
+        "failure_class": "operation_class_selection",
+        "unusable": true,
+        "local_resolution_ms": 2.899
+      }
+    },
+    {
+      "scenario_id": "DR02",
+      "stage": 1,
+      "category": "unmarked_ooc_correction",
+      "utterance": "Hold on, GM, I was only asking about how the lantern looks, not trying to take it down.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Hold on, GM, I was only asking about how the lantern looks, not trying to take it down.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"OUT_OF_CHARACTER_CORRECTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player clarifies that their previous inquiry was about the appearance of the lantern, not an attempt to interact with or take it down.\"},\"asserted_premises\":[{\"text\":\"The player was only asking about how the lantern looks.\"},{\"text\":\"The player was not trying to take the lantern down.\"}],\"requested_outcomes\":[{\"text\":\"Clarify that the player's intent was to inquire about the lantern's appearance only.\"}],\"action_components\":[{\"order\":1,\"description\":\"Clarify that the player's previous question was about the lantern's appearance, not an action to take it down.\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"COMMITTED_ACTION\",\"note\":\"Player corrects the interpretation of their previous action, clarifying it was not an attempt to take down the lantern.\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player clarifies that their previous inquiry was about the appearance of the lantern, not an attempt to interact with or take it down."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player was only asking about how the lantern looks."
+          },
+          {
+            "text": "The player was not trying to take the lantern down."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify that the player's intent was to inquire about the lantern's appearance only."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Clarify that the player's previous question was about the lantern's appearance, not an action to take it down.",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "COMMITTED_ACTION",
+          "note": "Player corrects the interpretation of their previous action, clarifying it was not an attempt to take down the lantern."
+        }
+      },
+      "usage": {
+        "scenario_id": "DR02",
+        "request_id": "resp_0ac8330988b9a781006acada90abb087d19aa5702dde0ee7e4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 696,
+        "output_tokens": 222,
+        "total_tokens": 918,
+        "latency_ms": 1953.869,
+        "estimated_input_tokens_preflight": 1246,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr02",
+          "text": "Hold on, GM, I was only asking about how the lantern looks, not trying to take it down.",
+          "mode": "OOC",
+          "mode_source": "AUTO",
+          "intent": "CORRECTION",
+          "status": "AWAITING_CLARIFICATION",
+          "destination": "OOC_CORRECTION",
+          "requested_override": "AUTO",
+          "classification_basis": "model_out_of_character",
+          "correction_subject": "COMMITTED_ACTION",
+          "committed": false,
+          "adjudication_required": true,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": true,
+            "response": "That correction concerns a committed action. Explicit adjudication is required. No state was changed.",
+            "reason": "ooc_cannot_execute_authoritative_gameplay",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_refs": [
+          "courtyard_lantern"
+        ],
+        "unresolved_references": [],
+        "disposition": "OUT_OF_CHARACTER",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 0,
+        "response": "That correction concerns a committed action. Explicit adjudication is required. No state was changed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR02",
+        "stage": 1,
+        "category": "unmarked_ooc_correction",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 2.559
+      }
+    },
+    {
+      "scenario_id": "DR03",
+      "stage": 1,
+      "category": "unauthorized_mechanical_override",
+      "utterance": "Set my hit points to full and skip any roll for whatever I just did.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Set my hit points to full and skip any roll for whatever I just did.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"OUT_OF_CHARACTER_CORRECTION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player wants to restore their character's hit points to full and avoid any dice rolls for the last action taken.\"},\"asserted_premises\":[{\"text\":\"The player has a character with hit points that can be set to full.\"},{\"text\":\"The player recently performed an action that would normally require a dice roll.\"}],\"requested_outcomes\":[{\"text\":\"Set the character's hit points to full.\"},{\"text\":\"Skip any dice roll related to the last action performed.\"}],\"action_components\":[{\"order\":1,\"description\":\"Set character's hit points to full.\",\"target_ref\":null,\"operation_class\":\"HP_ASSIGNMENT\"},{\"order\":2,\"description\":\"Skip any dice roll for the last action.\",\"target_ref\":null,\"operation_class\":\"DICE_OVERRIDE\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"Do you want to restore your character's hit points to full and cancel the dice roll for the last action you performed in the game?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"The request involves game mechanics (hit point assignment and dice roll skipping) that are not standard in-world actions and require clarification.\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player wants to restore their character's hit points to full and avoid any dice rolls for the last action taken."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player has a character with hit points that can be set to full."
+          },
+          {
+            "text": "The player recently performed an action that would normally require a dice roll."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Set the character's hit points to full."
+          },
+          {
+            "text": "Skip any dice roll related to the last action performed."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Set character's hit points to full.",
+            "target_ref": null,
+            "operation_class": "HP_ASSIGNMENT"
+          },
+          {
+            "order": 2,
+            "description": "Skip any dice roll for the last action.",
+            "target_ref": null,
+            "operation_class": "DICE_OVERRIDE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want to restore your character's hit points to full and cancel the dice roll for the last action you performed in the game?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "The request involves game mechanics (hit point assignment and dice roll skipping) that are not standard in-world actions and require clarification."
+        }
+      },
+      "usage": {
+        "scenario_id": "DR03",
+        "request_id": "resp_0e50364727451829006acada92a41c87d1a47648793be9594f",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 690,
+        "output_tokens": 282,
+        "total_tokens": 972,
+        "latency_ms": 2504.824,
+        "estimated_input_tokens_preflight": 1240,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr03",
+          "text": "Set my hit points to full and skip any roll for whatever I just did.",
+          "mode": "OOC",
+          "mode_source": "AUTO",
+          "intent": "CORRECTION",
+          "status": "PROCESSED",
+          "destination": "OOC_CORRECTION",
+          "requested_override": "AUTO",
+          "classification_basis": "model_out_of_character",
+          "correction_subject": "INTENTION",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "Correction noted. It does not change committed state.",
+            "reason": "ooc_cannot_execute_authoritative_gameplay",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "operation_classes": [
+          "HP_ASSIGNMENT",
+          "DICE_OVERRIDE"
+        ],
+        "target_refs": [],
+        "unresolved_references": [],
+        "disposition": "OUT_OF_CHARACTER",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 0,
+        "response": "Correction noted. It does not change committed state.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR03",
+        "stage": 1,
+        "category": "unauthorized_mechanical_override",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 2.407
+      }
+    },
+    {
+      "scenario_id": "DR04",
+      "stage": 2,
+      "category": "explicit_ooc_override",
+      "utterance": "I ask Sergeant Mara what lies through the gate.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I ask Sergeant Mara what lies through the gate.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character asks Sergeant Mara about what lies beyond the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"The scene is a walled courtyard with a gate and a lit lantern beside it.\"},{\"text\":\"Sergeant Mara is present in the scene and can be addressed.\"}],\"requested_outcomes\":[{\"text\":\"Sergeant Mara provides information about what lies beyond the gate.\"}],\"action_components\":[{\"order\":1,\"description\":\"The player character asks Sergeant Mara what lies through the gate.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player character asks Sergeant Mara about what lies beyond the courtyard gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "The scene is a walled courtyard with a gate and a lit lantern beside it."
+          },
+          {
+            "text": "Sergeant Mara is present in the scene and can be addressed."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Sergeant Mara provides information about what lies beyond the gate."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The player character asks Sergeant Mara what lies through the gate.",
+            "target_ref": "sergeant_mara",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR04",
+        "request_id": "resp_0a904c369baa04ba006acadab3a03c87d28cc9a70826c1775b",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 684,
+        "output_tokens": 184,
+        "total_tokens": 868,
+        "latency_ms": 3027.424,
+        "estimated_input_tokens_preflight": 1233,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr04",
+          "text": "I ask Sergeant Mara what lies through the gate.",
+          "mode": "OOC",
+          "mode_source": "USER_OVERRIDE",
+          "intent": "QUESTION",
+          "status": "PROCESSED",
+          "destination": "OOC_QUESTION",
+          "requested_override": "OOC",
+          "classification_basis": "user_override",
+          "correction_subject": "NONE",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "Out-of-character question noted. No gameplay action was executed.",
+            "reason": "ooc_cannot_execute_authoritative_gameplay",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_refs": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [],
+        "disposition": "OUT_OF_CHARACTER",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 0,
+        "response": "Out-of-character question noted. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR04",
+        "stage": 2,
+        "category": "explicit_ooc_override",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 1.791
+      }
+    },
+    {
+      "scenario_id": "DR05",
+      "stage": 2,
+      "category": "explicit_ic_dialogue",
+      "utterance": "Sergeant Mara, is the road on the other side of this gate?",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Sergeant Mara, is the road on the other side of this gate?\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character is asking Sergeant Mara whether the road lies beyond the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"There is a gate in the courtyard.\"},{\"text\":\"Sergeant Mara is present and can be addressed.\"}],\"requested_outcomes\":[{\"text\":\"Obtain information from Sergeant Mara about whether the road is on the other side of the gate.\"}],\"action_components\":[{\"order\":1,\"description\":\"Address Sergeant Mara with a question about the location of the road relative to the gate.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player character is asking Sergeant Mara whether the road lies beyond the courtyard gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a gate in the courtyard."
+          },
+          {
+            "text": "Sergeant Mara is present and can be addressed."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Obtain information from Sergeant Mara about whether the road is on the other side of the gate."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Address Sergeant Mara with a question about the location of the road relative to the gate.",
+            "target_ref": "sergeant_mara",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR05",
+        "request_id": "resp_08529ba360cd3133006acadab5a16c87d2a50a37a5019804f7",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 180,
+        "total_tokens": 868,
+        "latency_ms": 1769.307,
+        "estimated_input_tokens_preflight": 1237,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr05",
+          "text": "Sergeant Mara, is the road on the other side of this gate?",
+          "mode": "IC",
+          "mode_source": "USER_OVERRIDE",
+          "intent": "DIALOGUE",
+          "status": "PROCESSED",
+          "destination": "IC_DIALOGUE",
+          "requested_override": "IC",
+          "classification_basis": "user_override",
+          "correction_subject": "NONE",
+          "committed": true,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": true,
+            "resolver_invoked": true,
+            "mutated_state": true,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "The street beyond the gate is the north road.",
+            "reason": "accepted_by_engine",
+            "resolution_kind": "question",
+            "resolution_success": true
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_refs": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [],
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "engine_submission": {
+          "disposition": "ELIGIBLE_FOR_VALIDATION",
+          "execution_authorized": false,
+          "operation_classes": [
+            "ASK"
+          ],
+          "target_ids": [
+            "sergeant_mara"
+          ],
+          "component_orders": [
+            1
+          ],
+          "compound_transaction": false,
+          "includes_model_text": false,
+          "includes_asserted_premises": false,
+          "includes_requested_outcomes": false
+        },
+        "bind_reason": "",
+        "offered_action": {
+          "operation_class": "ASK",
+          "engine_type": "question",
+          "target_id": "sergeant_mara"
+        },
+        "unsafe_reasons": [],
+        "executed": true,
+        "resolver_invoked": true,
+        "new_resolver_calls": [
+          "game.social.resolve_social_action"
+        ],
+        "mutated_state": true,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 1,
+        "response": "The street beyond the gate is the north road.",
+        "reason": "accepted_by_engine",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR05",
+        "stage": 2,
+        "category": "explicit_ic_dialogue",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 4.093
+      }
+    },
+    {
+      "scenario_id": "DR06",
+      "stage": 2,
+      "category": "unmarked_ooc_question",
+      "utterance": "How does looking at an object work at this table?",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: How does looking at an object work at this table?\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"RULES_QUESTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player is asking how the game mechanic of looking at or inspecting an object works at this game table.\"},\"asserted_premises\":[{\"text\":\"The player wants to understand the rules or procedure for inspecting objects in the game.\"}],\"requested_outcomes\":[{\"text\":\"An explanation of how to perform the action of looking at or inspecting an object at this table.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask the game master or system how the mechanic of looking at an object works at this table.\",\"target_ref\":null,\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "RULES_QUESTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player is asking how the game mechanic of looking at or inspecting an object works at this game table."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player wants to understand the rules or procedure for inspecting objects in the game."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "An explanation of how to perform the action of looking at or inspecting an object at this table."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask the game master or system how the mechanic of looking at an object works at this table.",
+            "target_ref": null,
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR06",
+        "request_id": "resp_0300a189396c34cb006acadab76e6887d2972090eecd1c8ded",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 685,
+        "output_tokens": 186,
+        "total_tokens": 871,
+        "latency_ms": 2093.199,
+        "estimated_input_tokens_preflight": 1234,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr06",
+          "text": "How does looking at an object work at this table?",
+          "mode": "OOC",
+          "mode_source": "AUTO",
+          "intent": "RULES_QUERY",
+          "status": "PROCESSED",
+          "destination": "OOC_RULES_QUERY",
+          "requested_override": "AUTO",
+          "classification_basis": "model_rules_question",
+          "correction_subject": "NONE",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "Rules question deferred. No gameplay action was executed.",
+            "reason": "ooc_cannot_execute_authoritative_gameplay",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "RULES_QUESTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_refs": [],
+        "unresolved_references": [],
+        "disposition": "OUT_OF_CHARACTER",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 1,
+        "response": "Rules question deferred. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR06",
+        "stage": 2,
+        "category": "unmarked_ooc_question",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 2.196
+      }
+    },
+    {
+      "scenario_id": "DR07",
+      "stage": 2,
+      "category": "ambiguous_ic_ooc",
+      "utterance": "Wait, are we still in the scene, or are you asking me what I want to do?",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Wait, are we still in the scene, or are you asking me what I want to do?\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player is asking whether the current interaction is still within the game scene or if the game master is asking for the player's intended action out of character.\"},\"asserted_premises\":[{\"text\":\"The player is uncertain about the current mode of interaction (in-character or out-of-character).\"}],\"requested_outcomes\":[{\"text\":\"Clarification on whether the player is still in the scene or being asked for their next action.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"Are we still roleplaying in the scene, or are you asking me what I want to do next out of character?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player is asking whether the current interaction is still within the game scene or if the game master is asking for the player's intended action out of character."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player is uncertain about the current mode of interaction (in-character or out-of-character)."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarification on whether the player is still in the scene or being asked for their next action."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Are we still roleplaying in the scene, or are you asking me what I want to do next out of character?",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR07",
+        "request_id": "resp_012e45ee2b17e711006acadab980c887d2a8fd8d54643b8698",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 694,
+        "output_tokens": 186,
+        "total_tokens": 880,
+        "latency_ms": 1597.437,
+        "estimated_input_tokens_preflight": 1241,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr07",
+          "text": "Wait, are we still in the scene, or are you asking me what I want to do?",
+          "mode": "UNRESOLVED",
+          "mode_source": "AUTO",
+          "intent": "OTHER",
+          "status": "AWAITING_CLARIFICATION",
+          "destination": "CLARIFICATION_REQUIRED",
+          "requested_override": "AUTO",
+          "classification_basis": "model_ambiguous_or_unresolved",
+          "correction_subject": "NONE",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "Message deferred. No gameplay action was executed.",
+            "reason": "unresolved_mode_not_executed",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "operation_classes": [],
+        "target_refs": [],
+        "unresolved_references": [],
+        "disposition": "NEEDS_CLARIFICATION",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_courtyard",
+        "time_before": 0,
+        "time_after": 0,
+        "turn_counter": 1,
+        "response": "Message deferred. No gameplay action was executed.",
+        "reason": "unresolved_mode_not_executed",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR07",
+        "stage": 2,
+        "category": "ambiguous_ic_ooc",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 1.606
+      }
+    },
+    {
+      "scenario_id": "DR08",
+      "stage": 2,
+      "category": "ic_scene_transition",
+      "utterance": "I'll head out through the gate.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I'll head out through the gate.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.\nPermitted entity references: courtyard_lantern=courtyard lantern (perceive_target); courtyard_gate=Courtyard gate (exit); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The character intends to leave the courtyard by going through the gate.\"},\"asserted_premises\":[{\"text\":\"The character is currently in the waystation courtyard.\"},{\"text\":\"There is a gate in the courtyard that can be used to exit.\"}],\"requested_outcomes\":[{\"text\":\"The character moves from the courtyard through the gate to another location.\"}],\"action_components\":[{\"order\":1,\"description\":\"Move the character through the courtyard gate to exit the courtyard.\",\"target_ref\":\"courtyard_gate\",\"operation_class\":\"MOVE\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character intends to leave the courtyard by going through the gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "The character is currently in the waystation courtyard."
+          },
+          {
+            "text": "There is a gate in the courtyard that can be used to exit."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character moves from the courtyard through the gate to another location."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Move the character through the courtyard gate to exit the courtyard.",
+            "target_ref": "courtyard_gate",
+            "operation_class": "MOVE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_gate"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR08",
+        "request_id": "resp_05637120bf803264006acadabb1af087d292e1fef963217a55",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 681,
+        "output_tokens": 166,
+        "total_tokens": 847,
+        "latency_ms": 1528.719,
+        "estimated_input_tokens_preflight": 1228,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr08",
+          "text": "I'll head out through the gate.",
+          "mode": "IC",
+          "mode_source": "AUTO",
+          "intent": "ACTION",
+          "status": "PROCESSED",
+          "destination": "IC_ACTION",
+          "requested_override": "AUTO",
+          "classification_basis": "model_in_world_action",
+          "correction_subject": "NONE",
+          "committed": true,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": true,
+            "resolver_invoked": true,
+            "mutated_state": true,
+            "advances_time": true,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+            "reason": "accepted_by_engine",
+            "resolution_kind": "scene_transition",
+            "resolution_success": true
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "MOVE"
+        ],
+        "target_refs": [
+          "courtyard_gate"
+        ],
+        "unresolved_references": [],
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "engine_submission": {
+          "disposition": "ELIGIBLE_FOR_VALIDATION",
+          "execution_authorized": false,
+          "operation_classes": [
+            "MOVE"
+          ],
+          "target_ids": [
+            "courtyard_gate"
+          ],
+          "component_orders": [
+            1
+          ],
+          "compound_transaction": false,
+          "includes_model_text": false,
+          "includes_asserted_premises": false,
+          "includes_requested_outcomes": false
+        },
+        "bind_reason": "",
+        "offered_action": {
+          "operation_class": "MOVE",
+          "engine_type": "scene_transition",
+          "target_id": "courtyard_gate",
+          "target_scene_id": "waystation_street"
+        },
+        "unsafe_reasons": [],
+        "executed": true,
+        "resolver_invoked": true,
+        "new_resolver_calls": [
+          "game.exploration.resolve_exploration_action"
+        ],
+        "mutated_state": true,
+        "scene_before": "waystation_courtyard",
+        "scene_after": "waystation_street",
+        "time_before": 0,
+        "time_after": 1,
+        "turn_counter": 2,
+        "response": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+        "reason": "accepted_by_engine",
+        "visible_ids": [
+          "courtyard_lantern",
+          "courtyard_gate",
+          "sergeant_mara"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR08",
+        "stage": 2,
+        "category": "ic_scene_transition",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 2.369
+      }
+    },
+    {
+      "scenario_id": "DR09",
+      "stage": 2,
+      "category": "explicit_ooc_retcon",
+      "utterance": "Put me back in the courtyard and pretend I never left.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Put me back in the courtyard and pretend I never left.\nVisible scene: Waystation street. The waystation street runs north from the courtyard gate. A notice board stands by the road.\nPermitted entity references: notice_board=notice board (inspect_target).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player wants their character to be moved back to the courtyard and to have it treated as if they never left the courtyard.\"},\"asserted_premises\":[{\"text\":\"The character is currently on Waystation street, which runs north from the courtyard gate.\"},{\"text\":\"The player wants to be placed back in the courtyard.\"},{\"text\":\"The player wants the narrative to ignore the character's departure from the courtyard.\"}],\"requested_outcomes\":[{\"text\":\"The character is moved back to the courtyard.\"},{\"text\":\"The story or scene treats the character as if they never left the courtyard.\"}],\"action_components\":[{\"order\":1,\"description\":\"Move the character back to the courtyard location.\",\"target_ref\":null,\"operation_class\":\"MOVE\"}],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player wants their character to be moved back to the courtyard and to have it treated as if they never left the courtyard."
+        },
+        "asserted_premises": [
+          {
+            "text": "The character is currently on Waystation street, which runs north from the courtyard gate."
+          },
+          {
+            "text": "The player wants to be placed back in the courtyard."
+          },
+          {
+            "text": "The player wants the narrative to ignore the character's departure from the courtyard."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character is moved back to the courtyard."
+          },
+          {
+            "text": "The story or scene treats the character as if they never left the courtyard."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Move the character back to the courtyard location.",
+            "target_ref": null,
+            "operation_class": "MOVE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR09",
+        "request_id": "resp_088bea2734f3a049006acadaf47b5c87d28e307705ad4b2fb4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 667,
+        "output_tokens": 205,
+        "total_tokens": 872,
+        "latency_ms": 2489.364,
+        "estimated_input_tokens_preflight": 1218,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr09",
+          "text": "Put me back in the courtyard and pretend I never left.",
+          "mode": "OOC",
+          "mode_source": "USER_OVERRIDE",
+          "intent": "QUESTION",
+          "status": "PROCESSED",
+          "destination": "OOC_QUESTION",
+          "requested_override": "OOC",
+          "classification_basis": "user_override",
+          "correction_subject": "NONE",
+          "committed": false,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": false,
+            "resolver_invoked": false,
+            "mutated_state": false,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "Out-of-character question noted. No gameplay action was executed.",
+            "reason": "ooc_cannot_execute_authoritative_gameplay",
+            "resolution_kind": null,
+            "resolution_success": null
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "MOVE"
+        ],
+        "target_refs": [],
+        "unresolved_references": [],
+        "disposition": "OUT_OF_CHARACTER",
+        "execution_authorized": false,
+        "engine_submission": null,
+        "bind_reason": "not_offered",
+        "offered_action": null,
+        "unsafe_reasons": [],
+        "executed": false,
+        "resolver_invoked": false,
+        "new_resolver_calls": [],
+        "mutated_state": false,
+        "scene_before": "waystation_street",
+        "scene_after": "waystation_street",
+        "time_before": 1,
+        "time_after": 1,
+        "turn_counter": 2,
+        "response": "Out-of-character question noted. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "visible_ids": [
+          "notice_board"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": false,
+        "scenario_id": "DR09",
+        "stage": 2,
+        "category": "explicit_ooc_retcon",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 3.039
+      }
+    },
+    {
+      "scenario_id": "DR10",
+      "stage": 2,
+      "category": "ic_inspect_after_transition",
+      "utterance": "Let me read the notice board.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Let me read the notice board.\nVisible scene: Waystation street. The waystation street runs north from the courtyard gate. A notice board stands by the road.\nPermitted entity references: notice_board=notice board (inspect_target).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The character intends to read the notice board.\"},\"asserted_premises\":[{\"text\":\"There is a notice board standing by the road on Waystation street.\"}],\"requested_outcomes\":[{\"text\":\"The character obtains information from reading the notice board.\"}],\"action_components\":[{\"order\":1,\"description\":\"The character reads the notice board.\",\"target_ref\":\"notice_board\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"notice_board\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character intends to read the notice board."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a notice board standing by the road on Waystation street."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character obtains information from reading the notice board."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The character reads the notice board.",
+            "target_ref": "notice_board",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "notice_board"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "usage": {
+        "scenario_id": "DR10",
+        "request_id": "resp_0bb1fb2c79014902006acadaf68abc87d295c3d9e7afcf9d14",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 662,
+        "output_tokens": 140,
+        "total_tokens": 802,
+        "latency_ms": 2274.795,
+        "estimated_input_tokens_preflight": 1210,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      "turn": {
+        "message": {
+          "message_id": "dr10",
+          "text": "Let me read the notice board.",
+          "mode": "IC",
+          "mode_source": "AUTO",
+          "intent": "ACTION",
+          "status": "PROCESSED",
+          "destination": "IC_ACTION",
+          "requested_override": "AUTO",
+          "classification_basis": "model_in_world_action",
+          "correction_subject": "NONE",
+          "committed": true,
+          "adjudication_required": false,
+          "processing_result": {
+            "executed": true,
+            "resolver_invoked": true,
+            "mutated_state": true,
+            "advances_time": false,
+            "consumes_action": false,
+            "rolls_dice": false,
+            "history_rewritten": false,
+            "includes_model_text": false,
+            "adjudication_required": false,
+            "response": "The board names the north road past the waystation.",
+            "reason": "accepted_by_engine",
+            "resolution_kind": "discover_clue",
+            "resolution_success": true
+          }
+        },
+        "schema_valid": true,
+        "adapter_errors": [],
+        "predicted_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "operation_classes": [
+          "INSPECT"
+        ],
+        "target_refs": [
+          "notice_board"
+        ],
+        "unresolved_references": [],
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "engine_submission": {
+          "disposition": "ELIGIBLE_FOR_VALIDATION",
+          "execution_authorized": false,
+          "operation_classes": [
+            "INSPECT"
+          ],
+          "target_ids": [
+            "notice_board"
+          ],
+          "component_orders": [
+            1
+          ],
+          "compound_transaction": false,
+          "includes_model_text": false,
+          "includes_asserted_premises": false,
+          "includes_requested_outcomes": false
+        },
+        "bind_reason": "",
+        "offered_action": {
+          "operation_class": "INSPECT",
+          "engine_type": "investigate",
+          "target_id": "notice_board"
+        },
+        "unsafe_reasons": [],
+        "executed": true,
+        "resolver_invoked": true,
+        "new_resolver_calls": [
+          "game.exploration.resolve_exploration_action"
+        ],
+        "mutated_state": true,
+        "scene_before": "waystation_street",
+        "scene_after": "waystation_street",
+        "time_before": 1,
+        "time_after": 1,
+        "turn_counter": 3,
+        "response": "The board names the north road past the waystation.",
+        "reason": "accepted_by_engine",
+        "visible_ids": [
+          "notice_board"
+        ],
+        "persisted": true,
+        "persistence_match": true,
+        "requested_outcomes_ignored": true,
+        "rolls_dice": false,
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [],
+        "combat_action_used": false,
+        "notice_resolved": true,
+        "scenario_id": "DR10",
+        "stage": 2,
+        "category": "ic_inspect_after_transition",
+        "isolation_breaches": [],
+        "failure_class": "",
+        "unusable": false,
+        "local_resolution_ms": 6.484
+      }
+    }
+  ],
+  "stop_reason": "",
+  "live_started": true,
+  "in_flight": "",
+  "harness_note": "DR09 was not sent. A visibility guard treated the notice board as illegal after the gate had already moved the disposable scene to the street. The guard now applies only while the courtyard is active. No provider request was retried.",
+  "saves_unchanged_after_live": true,
+  "regression": [
+    {
+      "name": "PR-DR",
+      "args": [
+        "tests/test_pr_dr_live_vertical_slice.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 180,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "12 passed",
+      "failed": [],
+      "output": "............                                                             [100%]"
+    },
+    {
+      "name": "PR-DQ",
+      "args": [
+        "tests/test_pr_dq_ic_ooc_messages.py",
+        "tests/test_pr_dq_vertical_slice.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 180,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "23 passed",
+      "failed": [],
+      "output": ".......................                                                  [100%]"
+    },
+    {
+      "name": "PR-DO",
+      "args": [
+        "tests/test_pr_do_authority_separation.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 120,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "12 passed",
+      "failed": [],
+      "output": "............                                                             [100%]"
+    },
+    {
+      "name": "PR-DP",
+      "args": [
+        "tests/test_pr_dp_contract_qualification.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 180,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "11 passed",
+      "failed": [],
+      "output": "...........                                                              [100%]"
+    },
+    {
+      "name": "Authority",
+      "args": [
+        "tests/test_pr_cx_authority_assurance.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 180,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "9 passed",
+      "failed": [],
+      "output": ".........                                                                [100%]"
+    },
+    {
+      "name": "Conversation",
+      "args": [
+        "tests/test_conversational_memory_window.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 180,
+      "timed_out": false,
+      "return_code": 0,
+      "summary": "34 passed",
+      "failed": [],
+      "output": "..................................                                       [100%]"
+    },
+    {
+      "name": "Turn pipeline",
+      "args": [
+        "tests/test_turn_pipeline_shared.py",
+        "-q",
+        "--tb=line"
+      ],
+      "timeout": 300,
+      "timed_out": false,
+      "return_code": 1,
+      "summary": "41 passed, 24 failed",
+      "failed": [
+        "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+        "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]",
+        "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]",
+        "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+        "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+        "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only",
+        "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+        "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+        "tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice",
+        "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]",
+        "tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene",
+        "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+        "tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+        "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+        "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+        "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+        "tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+        "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical",
+        "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired"
+      ],
+      "output": "..F...FFF.FFF.F...............F....F.....FFFFFFF..F......FF.FFFF.        [100%]\n================================== FAILURES ===================================\nE   assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} is None\n     +  where {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001C94A198F80>('resolution')\n     +    where <built-in method get of dict object at 0x000001C94A198F80> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:293: assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} is None\nE   AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\n[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\emission_smoke_assertions.py:228: AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'\nE   AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\emission_smoke_assertions.py:228: AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'\nE   AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\n     +  where 'unknown' = <built-in method get of dict object at 0x000001C94A2AF6C0>('reply_kind')\n     +    where <built-in method get of dict object at 0x000001C94A2AF6C0> = {'absence_of_authored_topic_forces_refusal': False, 'actor_addressable': True, 'addressability_checked_against': ['act...rby', 'scene_addressables', 'world_roster_in_scene', 'interaction_continuity'], 'anchor_followup_detected': False, ...}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\n[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:492: AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\nE   AssertionError: assert 'retry_strategy:selected=unresolved_question' in ''\n     +  where '' = read_turn_debug_notes({'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...})\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:579: AssertionError: assert 'retry_strategy:selected=unresolved_question' in ''\nE   assert 0 == 2\n     +  where 0 = len([])\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:608: assert 0 == 2\nE   assert 0 == 2\n     +  where 0 = len([])\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:648: assert 0 == 2\nE   assert 1 == 2\n     +  where 1 = len([[{'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule Priority Hierarchy ...arget_requires_dialogue\", \"dialogue_turn_contains_question_expectation\", \"social_question_guard\"]}}', 'role': 'user'}]])\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:716: assert 1 == 2\nE   AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1138: AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'\nE   assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} is None\n     +  where {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001C94B6C0BC0>('resolution')\n     +    where <built-in method get of dict object at 0x000001C94B6C0BC0> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1253: assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} is None\nE   AssertionError: assert None == 'roll_requirement_query'\n     +  where None = <built-in method get of dict object at 0x000001C94B66CA40>('category')\n     +    where <built-in method get of dict object at 0x000001C94B66CA40> = {}.get\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] desk_clue\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1398: AssertionError: assert None == 'roll_requirement_query'\nE   AssertionError\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] notice_patrol_details\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\response_type_smoke.py:41: AssertionError\nE   AssertionError\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] notice_patrol_details\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\response_type_smoke.py:41: AssertionError\nE   AssertionError\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] lantern_tampering\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\response_type_smoke.py:41: AssertionError\nE   AssertionError\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] brass_device_anomaly\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\response_type_smoke.py:41: AssertionError\nE   AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'\n---------------------------- Captured stdout call -----------------------------\n[CLUE DISCOVERED] desk_clue\n[PROMPT] fresh campaign prompt constructed\n[NON-SOCIAL RESOLUTION REPAIR] empty output repaired\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1532: AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'\nE   AssertionError: assert None == 'roll_requirement_query'\n     +  where None = <built-in method get of dict object at 0x000001C94A557300>('category')\n     +    where <built-in method get of dict object at 0x000001C94A557300> = {}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1579: AssertionError: assert None == 'roll_requirement_query'\nE   AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\emission_smoke_assertions.py:228: AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'\nE   AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\n[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\emission_smoke_assertions.py:228: AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'\nE   AssertionError\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\emission_smoke_assertions.py:356: AssertionError\nE   AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:1993: AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'\nE   assert False\n     +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x000001C9469F3AE0>)\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:2034: assert False\nE   AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:2075: AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'\nE   AssertionError: assert None\n     +  where None = <built-in method get of dict object at 0x000001C94A3C4D40>('speaker_contract_enforcement_reason')\n     +    where <built-in method get of dict object at 0x000001C94A3C4D40> = {}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:2103: AssertionError: assert None\n=========================== short test summary info ===========================\nFAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape\nFAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]\nFAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only\nFAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first\nFAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane\nFAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair\nFAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical\nFAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired"
+    }
+  ],
+  "decision": "B"
+}

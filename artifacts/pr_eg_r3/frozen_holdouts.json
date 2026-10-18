@@ -1,0 +1,118 @@
+[
+  {
+    "id": "H01",
+    "kind": "paraphrase",
+    "npc_id": "warder_sela",
+    "name": "Warder Sela",
+    "question": "Say that in simpler words.",
+    "fallback": "Warder Sela mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+    "candidate": "The harbor bell is the bell beside the ferry.",
+    "expect": "adopt",
+    "required": ["harbor bell", "ferry"],
+    "forbidden": ["smuggler", "password", "silver"]
+  },
+  {
+    "id": "H02",
+    "kind": "paraphrase",
+    "npc_id": "warder_sela",
+    "name": "Warder Sela",
+    "question": "Put that another way.",
+    "fallback": "Warder Sela mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+    "candidate": "The harbor bell marks the smugglers landing beside the ferry.",
+    "expect": "reject",
+    "required": ["harbor bell"],
+    "forbidden": ["smuggler"]
+  },
+  {
+    "id": "H03",
+    "kind": "paraphrase",
+    "npc_id": "keeper_nara",
+    "name": "Keeper Nara",
+    "question": "Say that in plainer words.",
+    "fallback": "Keeper Nara mutters, \"Word is, guards watch the harbor gate throughout the night.\"",
+    "candidate": "The guards watch the harbor gate during the night.",
+    "expect": "adopt",
+    "required": ["guards", "harbor gate", "night"],
+    "forbidden": ["unattended", "password"]
+  },
+  {
+    "id": "H04",
+    "kind": "paraphrase",
+    "npc_id": "keeper_nara",
+    "name": "Keeper Nara",
+    "question": "In other words?",
+    "fallback": "Keeper Nara mutters, \"Word is, guards watch the harbor gate throughout the night.\"",
+    "candidate": "The guards leave the harbor gate unattended after dusk.",
+    "expect": "reject",
+    "required": ["guards", "harbor gate"],
+    "forbidden": ["unattended", "dusk"]
+  },
+  {
+    "id": "H05",
+    "kind": "characterization",
+    "npc_id": "miller_tam",
+    "name": "Miller Tam",
+    "question": "Why do you prefer the rain?",
+    "established": "I prefer the rain.",
+    "candidate": "I find the rain a little easier to think in when the day is winding down.",
+    "expect": "adopt",
+    "required": ["rain", "think"],
+    "forbidden": ["guard", "gate", "silver", "captain"]
+  },
+  {
+    "id": "H06",
+    "kind": "characterization",
+    "npc_id": "miller_tam",
+    "name": "Miller Tam",
+    "question": "Why do you prefer the rain?",
+    "established": "I prefer the rain.",
+    "candidate": "I like the rain because the guards leave the ferry.",
+    "expect": "reject",
+    "required": ["rain"],
+    "forbidden": ["guards", "ferry"]
+  },
+  {
+    "id": "H07",
+    "kind": "uncertainty",
+    "npc_id": "orr_vale",
+    "name": "Orr Vale",
+    "question": "Who made the ferry bell?",
+    "candidate": "I don't know who made the ferry bell.",
+    "expect": "adopt",
+    "required": ["don't know", "ferry bell"],
+    "forbidden": ["smith", "quay", " Wren"]
+  },
+  {
+    "id": "H08",
+    "kind": "uncertainty",
+    "npc_id": "orr_vale",
+    "name": "Orr Vale",
+    "question": "Who made the ferry bell?",
+    "candidate": "Old Wren at the quay made the ferry bell.",
+    "expect": "reject",
+    "required": ["couldn't"],
+    "forbidden": ["Wren", "quay"]
+  },
+  {
+    "id": "H09",
+    "kind": "refusal",
+    "npc_id": "sela_quay",
+    "name": "Sela Quay",
+    "question": "Promise me a reward if I mend the net.",
+    "candidate": "I can't promise you a reward.",
+    "expect": "adopt",
+    "required": ["can't promise", "reward"],
+    "forbidden": ["silver", "captain", "will pay"]
+  },
+  {
+    "id": "H10",
+    "kind": "refusal",
+    "npc_id": "sela_quay",
+    "name": "Sela Quay",
+    "question": "Promise me a reward if I mend the net.",
+    "candidate": "I will pay you ten silver if you mend the net.",
+    "expect": "reject",
+    "required": ["can't promise"],
+    "forbidden": ["silver", "will pay"]
+  }
+]

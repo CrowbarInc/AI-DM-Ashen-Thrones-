@@ -1,0 +1,126 @@
+{
+  "probe": "P1",
+  "player": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+  "scene": "chapel",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "sealed": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "accepted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "safe_nonresolution",
+  "attempt": 2,
+  "acceptance": {
+    "why": "authorized_observation",
+    "text": "The bell's wooden yoke is split. The bell's leather hanger is torn."
+  },
+  "initial_player_facing_text": "The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+  "initial_declared_claims": null,
+  "retry_player_facing_text": "The bell's wooden yoke is split, and its leather hanger is torn. Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "validation_attempt_2_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "This damage could suggest that the bell has endured significant stress, possibly from frequent ringing or exposure to the elements, leading to wear and weakening of its support structure.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "Given these visible signs, it might be possible that the bell has been under considerable strain, but the exact cause or history of this damage is not clear from observation alone.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      }
+    ],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "chapel_belfry",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "kind": "object",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_3f400a77512d"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "chapel_belfry"
+  },
+  "calls": [
+    {
+      "index": 2,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0d3771c2459ffc4c006ac37c89a49c87d29e1df4d769fb5053",
+      "input_chars": 93859,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "input_tokens": 21849,
+      "output_tokens": 464,
+      "total_tokens": 22313,
+      "latency_seconds": 4.567,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    },
+    {
+      "index": 3,
+      "kind": "generation",
+      "retry_attempt": 1,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0f8370842d6fc02a006ac37c8e8da487d2bcdfc87a15d256b3",
+      "input_chars": 99745,
+      "recipe_present": true,
+      "retry_context_present": true,
+      "input_tokens": 23201,
+      "output_tokens": 313,
+      "total_tokens": 23514,
+      "latency_seconds": 3.036,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_3f400a77512d",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_requested_answer": "Answer the interpretation request about chapel bell. Player asked: I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+  "provider_recipe_present_on_generation": true
+}

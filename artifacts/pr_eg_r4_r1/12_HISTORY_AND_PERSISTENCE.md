@@ -1,0 +1,5 @@
+# 12 — History and Persistence
+
+Existing conversational_context.delivered_exchanges remains the sole delivered-history store. Every resolved chat adoption is passed to it, including fallback; structured /api/action now records the same authorized delivery. Exact whitespace/markup is preserved. Digests bind the delivered response identity; rejected candidates remain diagnostics only. GM safety fallback does not create an NPC commitment or inherit topic/proposition data. Commitments retain the complete exact line. Controlled real snapshot creation/load restores delivered records; both fresh conversations save/reload at turn 6 and continue from a new client.
+
+The live runner’s original full-session equality flag is false because save_session updates last_saved_at. persistence_audit.json preserves that flag and independently compares turn 6 after-state with turn 7 loaded before-state: the entire conversational context matches, and the sole session difference is the save timestamp. The real snapshot regression also passes.

@@ -9,6 +9,10 @@ import pytest
 
 # Default on in CI / local pytest so importing ``game.api`` + TestClient does not hit the network.
 os.environ.setdefault("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", "1")
+# Interpretation model calls are live-only. Pytest keeps the deterministic boundary.
+os.environ["ASHEN_DISABLE_LIVE_INTERPRETATION"] = "1"
+# Bounded expression generation is live-only. Deterministic tests keep host wording.
+os.environ["ASHEN_DISABLE_EXPRESSION_GENERATION"] = "1"
 
 
 def pytest_addoption(parser):
@@ -73,6 +77,18 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if item.get_closest_marker("failure_dashboard_probe"):
             item.add_marker(skip_probe)
+
+
+@pytest.fixture(autouse=True)
+def _forbid_live_model_calls(monkeypatch):
+    """Turn an accidental live model call into an immediate test error.
+
+    Generation stubs installed by a test replace the wrapper. The OpenAI
+    constructor remains blocked for the whole test.
+    """
+    from tests.helpers.live_model_guard import install_live_model_guard
+
+    install_live_model_guard(monkeypatch)
 
 
 def pytest_sessionfinish(session, exitstatus):

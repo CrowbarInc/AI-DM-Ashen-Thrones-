@@ -1,0 +1,3341 @@
+{
+  "phase0": {
+    "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+    "status_short": "M artifacts/by2/protected_semantic_mutation_report.json\n M artifacts/by2/protected_semantic_mutation_report.md\n M artifacts/by3/strict_social_semantic_mutation_report.json\n M artifacts/by3/strict_social_semantic_mutation_report.md\n M artifacts/golden_replay/bug_recurrence_event_log.json\n M artifacts/golden_replay/bug_recurrence_history.json\n M artifacts/golden_replay/bug_recurrence_history.md\n M artifacts/golden_replay/bug_recurrence_session_diagnostic_event_log.json\n M artifacts/golden_replay/bug_recurrence_session_event_log.json\n M artifacts/golden_replay/owner_drift_hotspots.json\n M artifacts/golden_replay/owner_drift_hotspots.md\n M artifacts/golden_replay/owner_drift_risk.json\n M artifacts/golden_replay/owner_drift_risk.md\n M artifacts/golden_replay/recurrence_trajectory_history.json\n M artifacts/golden_replay/replay_failure_report.md\n M data/combat.json\n M data/session.json\n M data/session_log.jsonl\n M data/world.json\n M docs/audits/BQ16_recurrence_graduation_audit.md\n M docs/audits/BQC4_final_graduation_decision.md\n M docs/audits/BQC5_effectiveness_validation.md\n M game/adjudication.py\n M game/anti_reset_emission_guard.py\n M game/api.py\n M game/api_turn_support.py\n M game/bounded_improvisation.py\n M game/dialogue_social_plan.py\n M game/final_emission_gate.py\n M game/final_emission_response_type.py\n M game/final_emission_strict_social_stack.py\n M game/final_emission_visibility_fallback.py\n M game/gm.py\n M game/gm_retry.py\n M game/intent_parser.py\n M game/interaction_context.py\n M game/interaction_routing.py\n M game/narration_state_consistency.py\n M game/noncombat_resolution.py\n M game/perception_grounding.py\n M game/playability_eval.py\n M game/prompt_context.py\n M game/response_policy_enforcement.py\n M game/scene_destination_binding.py\n M game/social.py\n M game/social_exchange_emission.py\n M game/social_exchange_fallback_catalog.py\n M game/social_exchange_policy.py\n M game/speaker_contract_enforcement.py\n M game/storage.py\n M game/upstream_response_repairs.py\n M handoff/CURRENT_REVIEW.md\n M handoff/CURRENT_REVIEW.zip\n M handoff/REVIEW_MANIFEST.json\n M tests/conftest.py\n M tests/helpers/reactive_player.py\n M tests/helpers/turn_pipeline_http_fixtures.py\n M tests/test_broad_address_social_bid.py\n M tests/test_model_routing_escalation.py\n M tests/test_model_routing_runtime.py\n M tests/test_social.py\n M tests/test_social_exchange_emission.py\n M tests/test_social_question_relevance_answer_selection.py\n M tests/test_transcript_regression.py\n M tests/test_turn_pipeline_shared.py\n M tests/test_upstream_dependent_run_bhc2.py\n M tools/run_playability_validation.py\n?? PR-BS_cooperative_gm_micro_live_validation.md\n?? PR-BS_cooperative_realization_discovery.md\n?? PR-BS_decision_facing_answer_recipe_implementation.md\n?? PR-BT_epistemic_guidance_delta.json\n?? PR-BT_policy_instruction_deduplication_implementation.md\n?? PR-BT_policy_instruction_semantic_diff.md\n?? PR-BT_provider_context_canonicalization_discovery.md\n?? PR-BT_provider_deduplication_micro_live_validation.md\n?? PR-BT_provider_payload_inventory.json\n?? PR-BT_regression_completion_gate.md\n?? PR-BT_selective_epistemic_guidance_differential_discovery.md\n?? PR-BT_selective_epistemic_guidance_restoration_implementation.md\n?? PR-BT_selective_epistemic_protocol_diff.md\n?? PR-BT_selective_epistemic_restoration_final_micro_live.md\n?? PR-BU_PR-BT_final_repaired_chain_micro_live.md\n?? PR-BU_final_lexical_scope_false_rejection_repair.md\n?? PR-BU_lexical_scope_control_flow_after.md\n?? PR-BU_narration_claim_composition_repair.md\n?? PR-BU_narration_validator_control_flow.md\n?? PR-BU_narration_validator_control_flow_after.md\n?? PR-BU_qualified_inference_complement_authorization.md\n?? PR-BU_qualified_inference_control_flow_after.md\n?? PR-BU_validator_semantic_matrix.json\n?? PR-BU_validator_semantic_matrix_after.json\n?? PR-BU_validator_semantic_matrix_complement_after.json\n?? PR-BU_validator_semantic_matrix_lexical_scope_after.json\n?? PR-BU_validator_semantic_robustness_discovery.md\n?? PR-BV_PR-BS_vs_current_behavioral_guidance_diff.md\n?? PR-BV_first_pass_realization_competence_discovery.md\n?? PR-BV_micro_live_operation_results.json\n?? PR-BV_model_facing_operation_map.md\n?? PR-BV_operation_projection_derivation.md\n?? PR-BV_operation_projection_matrix.json\n?? PR-BV_operation_projection_snapshots.md\n?? PR-BV_realization_operation_analysis.json\n?? PR-BV_turn_local_realization_operation_projection.md\n?? PR-BV_turn_operation_projection_micro_live.md\n?? PR-BW_P1_declaration_narration_semantic_delta.md\n?? PR-BW_P2_declaration_affordance_analysis.md\n?? PR-BW_envelope_failure_matrix.json\n?? PR-BW_envelope_selection_matrix.json\n?? PR-BW_narration_only_envelope_implementation.md\n?? PR-BW_narration_only_envelope_snapshots.md\n?? PR-BW_narration_only_normalization_matrix.json\n?? PR-BW_provider_visible_schema_analysis.md\n?? PR-BW_structured_generation_envelope_map.md\n?? PR-BW_structured_realization_envelope_competence_discovery.md\n?? artifacts/affordability/\n?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest.zip\n?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest/\n?? artifacts/human_playtests/post_pr_bk_state_narration_audit/\n?? artifacts/pr_bp_synthetic_gate/\n?? artifacts/pr_br/\n?? artifacts/pr_br_authority_reconciliation/\n?? artifacts/pr_br_claim_control_slice1/\n?? artifacts/pr_br_claim_control_slice2/\n?? artifacts/pr_br_claim_ownership_reassessment/\n?? artifacts/pr_br_closeout_live_revalidation/\n?? artifacts/pr_br_continuation10/\n?? artifacts/pr_br_continuation11/\n?? artifacts/pr_br_continuation12/\n?? artifacts/pr_br_continuation13/\n?? artifacts/pr_br_continuation14/\n?? artifacts/pr_br_continuation15/\n?? artifacts/pr_br_continuation16/\n?? artifacts/pr_br_continuation17/\n?? artifacts/pr_br_continuation18/\n?? artifacts/pr_br_continuation19/\n?? artifacts/pr_br_continuation20/\n?? artifacts/pr_br_continuation21/\n?? artifacts/pr_br_continuation21b/\n?? artifacts/pr_br_continuation21c/\n?? artifacts/pr_br_continuation22/\n?? artifacts/pr_br_continuation23/\n?? artifacts/pr_br_continuation24/\n?? artifacts/pr_br_continuation25/\n?? artifacts/pr_br_continuation26/\n?? artifacts/pr_br_continuation27/\n?? artifacts/pr_br_continuation4/\n?? artifacts/pr_br_continuation5/\n?? artifacts/pr_br_continuation6/\n?? artifacts/pr_br_continuation7/\n?? artifacts/pr_br_continuation8/\n?? artifacts/pr_br_continuation9/\n?? artifacts/pr_br_enforcement/\n?? artifacts/pr_br_enforcement_smoke/\n?? artifacts/pr_br_final_live_validation/\n?? artifacts/pr_br_followup/\n?? artifacts/pr_br_full_gate/\n?? artifacts/pr_br_independent_smoke/\n?? artifacts/pr_br_level2/\n?? artifacts/pr_br_live_validation_repair/\n?? artifacts/pr_br_localized_live_repair/\n?? artifacts/pr_br_multiturn_provenance/\n?? artifacts/pr_br_novel_authority_probe/\n?? artifacts/pr_br_proposition_authority_review/\n?? artifacts/pr_br_proposition_live_validation/\n?? artifacts/pr_br_regression_harness/\n?? artifacts/pr_br_resolution_decision_slice/\n?? artifacts/pr_br_resolution_decision_slice2/\n?? artifacts/pr_br_resolution_decision_slice3/\n?? artifacts/pr_br_resolution_reassessment/\n?? artifacts/pr_br_second_full_gate/\n?? artifacts/pr_br_second_live_validation/\n?? artifacts/pr_br_small_live_validation/\n?? artifacts/pr_br_smoke/\n?? artifacts/pr_br_structured_chat_slice3/\n?? artifacts/pr_br_targeted_repair/\n?? artifacts/pr_bs_cooperative_gm_micro_live/\n?? artifacts/pr_bs_cooperative_realization_discovery/\n?? artifacts/pr_bs_decision_facing_answer_recipe/\n?? artifacts/pr_bt_epistemic_guidance_differential/\n?? artifacts/pr_bt_policy_instruction_deduplication/\n?? artifacts/pr_bt_provider_context_canonicalization/\n?? artifacts/pr_bt_provider_deduplication_micro_live/\n?? artifacts/pr_bt_regression_completion_gate/\n?? artifacts/pr_bt_selective_epistemic_guidance/\n?? artifacts/pr_bt_selective_epistemic_guidance_tests/\n?? artifacts/pr_bt_selective_epistemic_restoration_final_micro_live/\n?? artifacts/pr_bu_lexical_scope_false_rejection/\n?? artifacts/pr_bu_pr_bt_final_repaired_chain_micro_live/\n?? artifacts/pr_bu_validator_semantic_robustness/\n?? artifacts/pr_bv_first_pass_realization_competence/\n?? artifacts/pr_bv_operation_projection/\n?? artifacts/pr_bv_turn_operation_projection_micro_live/\n?? artifacts/pr_bw_narration_only_envelope/\n?? artifacts/pr_bx_narration_only_micro_live/\n?? artifacts/pr_by_narration_only_retry_contract/\n?? artifacts/pr_bz_narration_only_retry_micro_live/\n?? artifacts/pr_ca_dialogue_continuity/\n?? artifacts/pr_cb_dialogue_helpfulness/\n?? artifacts/pr_cc_social_reply_reconciliation/\n?? artifacts/pr_cd_social_regression_closeout/\n?? artifacts/pr_ce_readiness_closeout/\n?? artifacts/pr_cf_regression_triage/\n?? artifacts/pr_cg_http_harness_stabilization/\n?? artifacts/pr_ch_social_answer_attribution/\n?? artifacts/pr_ci_social_answer_finalization/\n?? artifacts/pr_cj_turn_pipeline_reconciliation/\n?? artifacts/pr_ck_resolver_selection/\n?? artifacts/pr_cl_passive_world_pressure/\n?? artifacts/pr_cm_passive_pressure_contract/\n?? artifacts/pr_cn_contextual_figure_integrity/\n?? artifacts/pr_co_gameplay_viability/\n?? artifacts/pr_cp_authorized_finalization/\n?? artifacts/pr_cq_live_finalization/\n?? artifacts/pr_cr_authored_retry_elimination/\n?? artifacts/pr_cs_context_efficiency/\n?? artifacts/pr_ct_safe_prompt_dedup/\n?? artifacts/pr_cu_social_context_projection/\n?? artifacts/pr_cv_policy_reconciliation/\n?? artifacts/pr_cw_social_context_projection/\n?? artifacts/pr_cx_authority_assurance/\n?? artifacts/pr_cy_live_social_efficiency/\n?? artifacts/pr_cz_followup_reliability/\n?? artifacts/pr_da_followup_efficiency/\n?? artifacts/pr_db_speaker_grounding/\n?? artifacts/pr_dc_subjective_followups/\n?? artifacts/pr_dd_context_budget_architecture/\n?? artifacts/pr_de_contract_deduplication/\n?? artifacts/pr_df_architecture_comparison/\n?? artifacts/pr_dg_architecture_preflight/\n?? artifacts/pr_dh_live_interpretation/\n?? artifacts/pr_di_outcome_evaluation/\n?? artifacts/pr_dj_selective_interpretation/\n?? artifacts/pr_dk_escalation_routing/\n?? artifacts/pr_dl_interpretation_comparison/\n?? artifacts/pr_dm_hybrid_refinement/\n?? artifacts/pr_dn_interpretation_robustness/\n?? data/scenes/market_yard.json\n?? data/validation/review_handoffs/pr_br_continuation6.json\n?? docs/audits/PR-BP_live_resolution_and_synthetic_gate.md\n?? docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md\n?? docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md\n?? docs/audits/discovery/PR-BM_dm_generative_authority_architecture_discovery.md\n?? docs/audits/discovery/PR-BM_supporting_trace_excerpt.md\n?? docs/audits/discovery/PR-BO_post_PR-BN_human_failure_and_simulated_player_audit.md\n?? docs/audits/discovery/PR-BQ_semantic_resolution_and_discourse_architecture.md\n?? experiments/\n?? game/contract_adjudication_bridge.py\n?? game/discourse_state.py\n?? game/gm_resolution_decision.py\n?? game/immutable_valid_response.py\n?? game/incidental_entity.py\n?? game/interaction_completion.py\n?? game/interpretation_proposal.py\n?? game/live_resolution.py\n?? game/ordinary_semantic_ownership.py\n?? game/player_commitment.py\n?? game/proposition_authority.py\n?? game/resolution_contract.py\n?? game/scene_referent_catalog.py\n?? game/semantic_interpreter.py\n?? game/structured_player_output.py\n?? handoff/CURRENT_REVIEW_PRBQ/\n?? handoff/CURRENT_REVIEW_PRBR/\n?? handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/\n?? handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/\n?? handoff/CURRENT_REVIEW_PRBS/\n?? handoff/CURRENT_REVIEW_PRBT/\n?? handoff/history/pr-br-before-closeout-live-revalidation/\n?? handoff/history/pr-br-before-small-structured-live-validation/\n?? handoff/history/pr-br-claim-ownership-reassessment/\n?? handoff/history/pr-br-continuation-13/\n?? handoff/history/pr-br-continuation-14/\n?? handoff/history/pr-br-continuation-15/\n?? handoff/history/pr-br-continuation-16/\n?? handoff/history/pr-br-continuation-18/\n?? handoff/history/pr-br-continuation-19/\n?? handoff/history/pr-br-continuation-20/\n?? handoff/history/pr-br-continuation-26/\n?? handoff/history/pr-br-final-four-turn-live-validation/\n?? handoff/history/pr-br-full-4x10-synthetic-gate/\n?? handoff/history/pr-br-independent-smoke-after-c20/\n?? handoff/history/pr-br-live-validation-repair/\n?? handoff/history/pr-br-localized-live-repair/\n?? handoff/history/pr-br-multiturn-provenance/\n?? handoff/history/pr-br-novel-authority-live-validation/\n?? handoff/history/pr-br-proposition-authority-review/\n?? handoff/history/pr-br-proposition-level-live-validation/\n?? handoff/history/pr-br-resolution-decision-slice3/\n?? handoff/history/pr-br-second-live-validation/\n?? handoff/history/pr-br-targeted-live-validation-repair/\n?? handoff/history/pr-bs-cooperative-gm-micro-live/\n?? handoff/payload_breakdown.json\n?? handoff/pr_br_enforcement_traces.md\n?? handoff/pr_br_semantic_traces.md\n?? scorecard.json\n?? scorecard.md\n?? tests/fixtures/pr_br_interpretation/\n?? tests/helpers/live_model_guard.py\n?? tests/test_live_model_guard.py\n?? tests/test_pr_bp_live_resolution_routing.py\n?? tests/test_pr_br_authority_reconciliation.py\n?? tests/test_pr_br_c19_free_text_authority.py\n?? tests/test_pr_br_claim_control_regex_bound.py\n?? tests/test_pr_br_claim_control_slice1.py\n?? tests/test_pr_br_claim_control_slice2.py\n?? tests/test_pr_br_continuation12_competence.py\n?? tests/test_pr_br_continuation13_semantic_preservation.py\n?? tests/test_pr_br_continuation14_resolution_content.py\n?? tests/test_pr_br_continuation15_content_clarification.py\n?? tests/test_pr_br_continuation16_interaction_completion.py\n?? tests/test_pr_br_continuation18_immutable_boundary.py\n?? tests/test_pr_br_continuation19_hard_authority.py\n?? tests/test_pr_br_continuation20_incidental_entity.py\n?? tests/test_pr_br_continuation21_subject_integrity.py\n?? tests/test_pr_br_continuation21b_referential_personhood.py\n?? tests/test_pr_br_continuation21c_referential_head.py\n?? tests/test_pr_br_continuation22_commitment.py\n?? tests/test_pr_br_continuation23_precontract_routes.py\n?? tests/test_pr_br_continuation24_contract_first_unparsed.py\n?? tests/test_pr_br_continuation25_semantic_ownership.py\n?? tests/test_pr_br_continuation26_semantic_closure.py\n?? tests/test_pr_br_continuation27_structural_subject.py\n?? tests/test_pr_br_decision_owned_realization_claims.py\n?? tests/test_pr_br_decision_ownership_slice2.py\n?? tests/test_pr_br_decision_semantic_fidelity_slice3.py\n?? tests/test_pr_br_gm_resolution_decision.py\n?? tests/test_pr_br_interpretation_proposal.py\n?? tests/test_pr_br_live_validation_attachment_repair.py\n?? tests/test_pr_br_localized_live_defects.py\n?? tests/test_pr_br_model_interpretation.py\n?? tests/test_pr_br_outcome_precedence.py\n?? tests/test_pr_br_qualifier_movement_mixed_intent.py\n?? tests/test_pr_br_resolution_contract.py\n?? tests/test_pr_br_structured_chat_path.py\n?? tests/test_pr_br_structured_realization_envelope.py\n?? tests/test_pr_bs_decision_facing_answer_recipe.py\n?? tests/test_pr_bt_policy_instruction_deduplication.py\n?? tests/test_pr_bt_selective_epistemic_guidance.py\n?? tests/test_pr_bu_lexical_scope.py\n?? tests/test_pr_bu_narration_claim_composition.py\n?? tests/test_pr_bv_turn_local_operation_projection.py\n?? tests/test_pr_bw_narration_only_envelope.py\n?? tests/test_pr_by_narration_only_retry_contract.py\n?? tests/test_pr_cc_social_reply_reconciliation.py\n?? tests/test_pr_ce_subjective_preference_classification.py\n?? tests/test_pr_ck_ordinary_resolver_selection.py\n?? tests/test_pr_cm_passive_pressure_contract.py\n?? tests/test_pr_cn_contextual_figure_integrity.py\n?? tests/test_pr_cp_authorized_finalization.py\n?? tests/test_pr_ct_safe_prompt_deduplication.py\n?? tests/test_pr_cw_social_context_projection.py\n?? tests/test_pr_cx_authority_assurance.py\n?? tests/test_pr_cz_followup_reliability.py\n?? tests/test_pr_db_speaker_grounding.py\n?? tests/test_pr_dc_subjective_followups.py\n?? tests/test_pr_de_exact_contract_deduplication.py\n?? tests/test_pr_dg_architecture_preflight.py\n?? tests/test_pr_dh_live_interpretation.py\n?? tests/test_pr_dj_selective_interpretation.py\n?? tests/test_pr_dk_escalation_routing.py\n?? tests/test_pr_dl_interpretation_comparison.py\n?? tests/test_pr_dm_hybrid_refinement.py\n?? tests/test_pr_dn_interpretation_robustness.py\n?? tools/audit_gm_resolution_decisions.py\n?? tools/measure_pr_bt_policy_instruction_payloads.py\n?? tools/measure_pr_bt_selective_epistemic_restoration.py\n?? tools/measure_pr_ct_safe_prompt_dedup.py\n?? tools/measure_pr_de_affordability.py\n?? tools/run_pr_bp_synthetic_gate.py\n?? tools/run_pr_br_continuation11_live.py\n?? tools/run_pr_br_continuation12_live.py\n?? tools/run_pr_br_continuation13_live.py\n?? tools/run_pr_br_continuation14_live.py\n?? tools/run_pr_br_continuation15_live.py\n?? tools/run_pr_br_continuation16_live.py\n?? tools/run_pr_br_continuation18_live.py\n?? tools/run_pr_br_continuation19_live.py\n?? tools/run_pr_br_continuation20_live.py\n?? tools/run_pr_br_continuation4_probes.py\n?? tools/run_pr_br_continuation5_probes.py\n?? tools/run_pr_br_continuation6_probes.py\n?? tools/run_pr_br_continuation7_probes.py\n?? tools/run_pr_br_continuation8_smoke.py\n?? tools/run_pr_br_enforcement_probes.py\n?? tools/run_pr_br_enforcement_smoke.py\n?? tools/run_pr_br_followup_probes.py\n?? tools/run_pr_br_level2_probes.py\n?? tools/run_pr_br_smoke.py\n?? tools/run_pr_dg_preflight.py\n?? tools/run_pr_dh_live_interpretation.py\n?? tools/run_pr_dj_preflight.py\n?? tools/run_pr_dk_investigation.py\n?? tools/run_pr_dl_comparison.py\n?? tools/run_pr_dm_refinement.py\n?? tools/run_pr_dn_robustness.py",
+    "provider_configuration": {
+      "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+      "MODEL_NAME": "gpt-4.1-mini",
+      "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+      "RETRY_ESCALATION_MODEL_NAME": "gpt-4.1-mini",
+      "ENABLE_MODEL_ROUTING": true,
+      "ASHEN_DISABLE_LIVE_INTERPRETATION": "1",
+      "openai_api_key_present": true,
+      "temperature": 0,
+      "max_output_tokens": 300,
+      "endpoint": "responses.create"
+    },
+    "production_save_fingerprints_before": {
+      "session.json": {
+        "sha256": "0a77beb47a2c30deb0b1977e915f3a5e2f67f5560e15a8bf0a5874015e244023",
+        "size": 1553
+      },
+      "world.json": {
+        "sha256": "3592e4af8723e631bb14d4f512431e8697987546f7fdf8076b3fbd1b135a42ef",
+        "size": 4195
+      },
+      "combat.json": {
+        "sha256": "ac977a4ab7d9eae556ba30893d9b09ec075efaf70ba67de0a6d60736eaf685b9",
+        "size": 449
+      },
+      "session_log.jsonl": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "character.json": {
+        "sha256": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795",
+        "size": 2075
+      },
+      "campaign.json": {
+        "sha256": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8",
+        "size": 2898
+      },
+      "conditions.json": {
+        "sha256": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f",
+        "size": 1234
+      }
+    },
+    "production_save_fingerprints_after": {
+      "session.json": {
+        "sha256": "0a77beb47a2c30deb0b1977e915f3a5e2f67f5560e15a8bf0a5874015e244023",
+        "size": 1553
+      },
+      "world.json": {
+        "sha256": "3592e4af8723e631bb14d4f512431e8697987546f7fdf8076b3fbd1b135a42ef",
+        "size": 4195
+      },
+      "combat.json": {
+        "sha256": "ac977a4ab7d9eae556ba30893d9b09ec075efaf70ba67de0a6d60736eaf685b9",
+        "size": 449
+      },
+      "session_log.jsonl": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      "character.json": {
+        "sha256": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795",
+        "size": 2075
+      },
+      "campaign.json": {
+        "sha256": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8",
+        "size": 2898
+      },
+      "conditions.json": {
+        "sha256": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f",
+        "size": 1234
+      }
+    }
+  },
+  "prepared": {},
+  "rows": [
+    {
+      "scenario_id": "DN01",
+      "category": "novel_compound",
+      "utterance": "I sidle toward the notice board, then wrench it loose from the post.",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_hash_after": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": true,
+        "action_contract_uncovered": true,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": true,
+      "deterministic_validation": {
+        "status": "abstained",
+        "reason": "insufficient_discourse_context",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": null
+        },
+        "state_hash": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1336,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "The player intends to move stealthily toward the notice board and then forcibly remove it from its post.",
+        "referenced_entities": [
+          {
+            "id": "notice_board",
+            "type": "object"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "scene"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "sidle toward the notice board",
+          "wrench the notice board loose from the post"
+        ],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player is performing two sequential actions: approaching the notice board stealthily and then detaching it forcibly.",
+        "primary_operation": "act",
+        "supporting_operations": [
+          "act"
+        ],
+        "proposed_target_id": "notice_board",
+        "interlocutor_id": null,
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"The player intends to move stealthily toward the notice board and then forcibly remove it from its post.\",\"referenced_entities\":[{\"id\":\"notice_board\",\"type\":\"object\"},{\"id\":\"frontier_gate\",\"type\":\"scene\"}],\"unresolved_references\":[],\"multiple_action_components\":[\"sidle toward the notice board\",\"wrench the notice board loose from the post\"],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player is performing two sequential actions: approaching the notice board stealthily and then detaching it forcibly.\",\"primary_operation\":\"act\",\"supporting_operations\":[\"act\"] ,\"proposed_target_id\":\"notice_board\",\"interlocutor_id\":null,\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": false,
+        "status": "INTERPRETED",
+        "errors": [
+          "ambiguous references may not be silently resolved"
+        ],
+        "warnings": [],
+        "proposal": null,
+        "validation": null,
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN01",
+        "request_id": "resp_02d1ee6ad3298eda006acabc1ca6a087d29064057ed4537ac5",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 777,
+        "output_tokens": 158,
+        "total_tokens": 935,
+        "latency_ms": 3202.224,
+        "estimated_input_tokens_preflight": 1336,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 3202.323
+      },
+      "live_score": {
+        "usefulness": "partial",
+        "notes": "components=2 status=INTERPRETED"
+      },
+      "consumption": {
+        "disposition": "safe_abstention",
+        "routed": true,
+        "schema_valid": false,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": false,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": true,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "safe_abstention",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN02",
+      "category": "novel_compound",
+      "utterance": "After I edge up to the gate, I test the latch and wave the guard over.",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": true,
+        "action_contract_uncovered": true,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": true,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": null,
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1341,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "The player intends to approach the gate, physically test the gate's latch mechanism, and then signal the guard to come over.",
+        "referenced_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "approach gate",
+          "test latch",
+          "wave guard over"
+        ],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player describes a sequence of physical actions involving the gate and the guard, which are interpreted as approach, inspect, and signal actions.",
+        "primary_operation": "act",
+        "supporting_operations": [
+          "act",
+          "act"
+        ],
+        "proposed_target_id": "frontier_gate",
+        "interlocutor_id": "guard_captain",
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"The player intends to approach the gate, physically test the gate's latch mechanism, and then signal the guard to come over.\",\"referenced_entities\":[{\"id\":\"frontier_gate\",\"type\":\"scene\"},{\"id\":\"guard_captain\",\"type\":\"interlocutor\"}],\"unresolved_references\":[],\"multiple_action_components\":[\"approach gate\",\"test latch\",\"wave guard over\"],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player describes a sequence of physical actions involving the gate and the guard, which are interpreted as approach, inspect, and signal actions.\",\"primary_operation\":\"act\",\"supporting_operations\":[\"act\",\"act\"],\"proposed_target_id\":\"frontier_gate\",\"interlocutor_id\":\"guard_captain\",\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "After I edge up to the gate, I test the latch and wave the guard over.",
+          "source": "model_assisted",
+          "primary_operation": "act",
+          "supporting_operations": [
+            "act",
+            "act"
+          ],
+          "raw_target_text": null,
+          "proposed_target_id": "frontier_gate",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "guard_captain",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "frontier_gate",
+          "canonical_target_label": "Cinderwatch Gate District",
+          "canonical_target_type": "scene",
+          "canonical_basis": "scene",
+          "authoritative_operation": "act",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "approach gate",
+          "test latch",
+          "wave guard over"
+        ],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN02",
+        "request_id": "resp_04d129acd997b2de006acabc23a61887d2a4e8e5189a83dbe7",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 783,
+        "output_tokens": 173,
+        "total_tokens": 956,
+        "latency_ms": 1982.852,
+        "estimated_input_tokens_preflight": 1341,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1982.919
+      },
+      "live_score": {
+        "usefulness": "partial",
+        "notes": "components=3 status=INTERPRETED"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PARTIAL",
+        "interpretation_usefulness": "partial_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN03",
+      "category": "ambiguous_reference",
+      "utterance": "Ask her whether the other one saw it.",
+      "selected_resolver": "social",
+      "operation": "ask",
+      "state_hash_before": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_hash_after": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": true,
+        "multiple_plausible_referents": true,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": true,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": true,
+      "deterministic_validation": {
+        "status": "abstained",
+        "reason": "insufficient_discourse_context",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": null
+        },
+        "state_hash": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1325,
+      "live_payload": {
+        "status": "CLARIFICATION_REQUIRED",
+        "interpreted_intent": "ask",
+        "referenced_entities": [],
+        "unresolved_references": [
+          "her",
+          "the other one"
+        ],
+        "multiple_action_components": [],
+        "clarification_required": true,
+        "clarification_question": "Who do you want to ask? And who is 'the other one' you want to ask about?",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The pronouns 'her' and 'the other one' are ambiguous without a specified interlocutor to ask or a clear referent for 'the other one'.",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "proposed_target_id": null,
+        "interlocutor_id": null,
+        "ambiguous": true
+      },
+      "live_raw_text": "{\"status\":\"CLARIFICATION_REQUIRED\",\"interpreted_intent\":\"ask\",\"referenced_entities\":[],\"unresolved_references\":[\"her\",\"the other one\"],\"multiple_action_components\":[],\"clarification_required\":true,\"clarification_question\":\"Who do you want to ask? And who is 'the other one' you want to ask about?\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The pronouns 'her' and 'the other one' are ambiguous without a specified interlocutor to ask or a clear referent for 'the other one'.\",\"primary_operation\":\"ask\",\"supporting_operations\":[],\"proposed_target_id\":null,\"interlocutor_id\":null,\"ambiguous\":true}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "CLARIFICATION_REQUIRED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Ask her whether the other one saw it.",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": true,
+          "ambiguous": true,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "abstained",
+          "reason": "ambiguous_referent",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "unresolved",
+          "discourse_commit_allowed": false,
+          "compatibility_bridge": null
+        },
+        "clarification": "Who do you want to ask? And who is 'the other one' you want to ask about?",
+        "unresolved_references": [
+          "her",
+          "the other one"
+        ],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN03",
+        "request_id": "resp_092c8bdeb4ada8c5006acabc1eaca887d28f9ec66aa8019afe",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 770,
+        "output_tokens": 141,
+        "total_tokens": 911,
+        "latency_ms": 1461.369,
+        "estimated_input_tokens_preflight": 1325,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1461.442
+      },
+      "live_score": {
+        "usefulness": "full",
+        "notes": "clarification checked"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PASS",
+        "interpretation_usefulness": "successful_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN04",
+      "category": "ambiguous_reference_ooc_correction",
+      "utterance": "OOC: I meant the left guard, not the captain.",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": null,
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1332,
+      "live_payload": {
+        "status": "ABSTAIN",
+        "interpreted_intent": "OOC correction",
+        "referenced_entities": [],
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The input is an out-of-character correction clarifying a previous reference from 'captain' to 'left guard'. This does not constitute an in-character action or request requiring interpretation or execution.",
+        "primary_operation": "unresolved",
+        "supporting_operations": [],
+        "proposed_target_id": null,
+        "interlocutor_id": null,
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"ABSTAIN\",\"interpreted_intent\":\"OOC correction\",\"referenced_entities\":[],\"unresolved_references\":[],\"multiple_action_components\":[],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The input is an out-of-character correction clarifying a previous reference from 'captain' to 'left guard'. This does not constitute an in-character action or request requiring interpretation or execution.\",\"primary_operation\":\"unresolved\",\"supporting_operations\":[],\"proposed_target_id\":null,\"interlocutor_id\":null,\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": false,
+        "status": "ABSTAIN",
+        "errors": [
+          "abstain requires uncertainty when the underlying proposal validates"
+        ],
+        "warnings": [],
+        "proposal": null,
+        "validation": null,
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN04",
+        "request_id": "resp_040b0b464b1646e3006acabc25a0c487d2a08d68a3190ef91a",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 778,
+        "output_tokens": 120,
+        "total_tokens": 898,
+        "latency_ms": 1228.002,
+        "estimated_input_tokens_preflight": 1332,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1228.065
+      },
+      "live_score": {
+        "usefulness": "failed",
+        "notes": "clarification checked"
+      },
+      "consumption": {
+        "disposition": "safe_abstention",
+        "routed": true,
+        "schema_valid": false,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": false,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": true,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "safe_abstention",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN05",
+      "category": "unauthorized_world_fact",
+      "utterance": "The captain owes me a favor, so he lets the patrol pass without checking.",
+      "selected_resolver": "exploration",
+      "operation": "inspect",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "guard_captain",
+        "canonical_target_label": "Guard Captain",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "inspect",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1342,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "The player intends to have the guard captain allow the patrol to pass without checking, based on a favor owed to the player.",
+        "referenced_entities": [
+          {
+            "id": "guard_captain",
+            "type": "interlocutor"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "scene"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player is describing an intended action involving the guard captain letting the patrol pass unchecked due to a favor owed.",
+        "primary_operation": "act",
+        "supporting_operations": [],
+        "proposed_target_id": "guard_captain",
+        "interlocutor_id": "guard_captain",
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"The player intends to have the guard captain allow the patrol to pass without checking, based on a favor owed to the player.\",\"referenced_entities\":[{\"id\":\"guard_captain\",\"type\":\"interlocutor\"},{\"id\":\"frontier_gate\",\"type\":\"scene\"}],\"unresolved_references\":[],\"multiple_action_components\":[],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player is describing an intended action involving the guard captain letting the patrol pass unchecked due to a favor owed.\",\"primary_operation\":\"act\",\"supporting_operations\":[],\"proposed_target_id\":\"guard_captain\",\"interlocutor_id\":\"guard_captain\",\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "The captain owes me a favor, so he lets the patrol pass without checking.",
+          "source": "model_assisted",
+          "primary_operation": "act",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": "guard_captain",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "guard_captain",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "guard_captain",
+          "canonical_target_label": "Guard Captain",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "scene",
+          "authoritative_operation": "act",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN05",
+        "request_id": "resp_01bd5626f73fa653006acabc202c5087d284095ec9e590ee32",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 781,
+        "output_tokens": 154,
+        "total_tokens": 935,
+        "latency_ms": 2047.126,
+        "estimated_input_tokens_preflight": 1342,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 2047.197
+      },
+      "live_score": {
+        "usefulness": "failed",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "incorrect_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN06",
+      "category": "unauthorized_world_fact",
+      "utterance": "Obviously the old tunnel has always been open; I head through it.",
+      "selected_resolver": "travel",
+      "operation": "act",
+      "state_hash_before": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_hash_after": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "abstained",
+        "reason": "insufficient_discourse_context",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": null
+        },
+        "state_hash": "040163676fc3be8348d07e256e301fb578f693d02374c8f93dc87dd29afe4079"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1335,
+      "live_payload": {
+        "status": "UNSUPPORTED_REQUEST",
+        "interpreted_intent": "act",
+        "referenced_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene"
+          }
+        ],
+        "unresolved_references": [
+          "old tunnel"
+        ],
+        "multiple_action_components": [],
+        "clarification_required": true,
+        "clarification_question": "You mentioned heading through the old tunnel. Can you specify or clarify what 'old tunnel' refers to in this context?",
+        "unsupported_action": "Moving through an unspecified location 'old tunnel' not listed among permitted entities.",
+        "non_authoritative_explanation": "The player intends to move through a location called 'old tunnel', but this location is not among the permitted entities or visible context, so the action cannot be authorized without clarification.",
+        "primary_operation": "act",
+        "supporting_operations": [],
+        "proposed_target_id": null,
+        "interlocutor_id": null,
+        "ambiguous": true
+      },
+      "live_raw_text": "{\"status\":\"UNSUPPORTED_REQUEST\",\"interpreted_intent\":\"act\",\"referenced_entities\":[{\"id\":\"frontier_gate\",\"type\":\"scene\"}],\"unresolved_references\":[\"old tunnel\"],\"multiple_action_components\":[],\"clarification_required\":true,\"clarification_question\":\"You mentioned heading through the old tunnel. Can you specify or clarify what 'old tunnel' refers to in this context?\",\"unsupported_action\":\"Moving through an unspecified location 'old tunnel' not listed among permitted entities.\",\"non_authoritative_explanation\":\"The player intends to move through a location called 'old tunnel', but this location is not among the permitted entities or visible context, so the action cannot be authorized without clarification.\",\"primary_operation\":\"act\",\"supporting_operations\":[],\"proposed_target_id\":null,\"interlocutor_id\":null,\"ambiguous\":true}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "UNSUPPORTED_REQUEST",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Obviously the old tunnel has always been open; I head through it.",
+          "source": "model_assisted",
+          "primary_operation": "act",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": true,
+          "ambiguous": true,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "abstained",
+          "reason": "ambiguous_referent",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "unresolved",
+          "discourse_commit_allowed": false,
+          "compatibility_bridge": null
+        },
+        "clarification": "You mentioned heading through the old tunnel. Can you specify or clarify what 'old tunnel' refers to in this context?",
+        "unresolved_references": [
+          "old tunnel"
+        ],
+        "multiple_action_components": [],
+        "unsupported_action": "Moving through an unspecified location 'old tunnel' not listed among permitted entities.",
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN06",
+        "request_id": "resp_07f8d12000ae206f006acabc26d8c887d292a3addfd0596e41",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 775,
+        "output_tokens": 168,
+        "total_tokens": 943,
+        "latency_ms": 1430.722,
+        "estimated_input_tokens_preflight": 1335,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1430.787
+      },
+      "live_score": {
+        "usefulness": "partial",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PARTIAL",
+        "interpretation_usefulness": "partial_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN07",
+      "category": "direct_mechanical_override",
+      "utterance": "Set the goblin to 1 HP and mark my attack as a crit.",
+      "selected_resolver": "combat",
+      "operation": "act",
+      "state_hash_before": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06",
+      "state_hash_after": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "act",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "goblin_1",
+            "type": "enemy",
+            "label": "Goblin"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+            "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while th"
+          ],
+          "active_interlocutor_id": null
+        },
+        "state_hash": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "goblin_1",
+          "type": "enemy",
+          "label": "Goblin"
+        }
+      ],
+      "estimated_input_tokens": 1334,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "Mark the player's attack as a critical hit and set the goblin's HP to 1 (not authorized to execute).",
+        "referenced_entities": [
+          {
+            "id": "goblin_1",
+            "type": "enemy"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "set goblin HP to 1",
+          "mark attack as crit"
+        ],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "Setting HP and marking attack as crit are not authorized actions; only intent interpretation is provided.",
+        "non_authoritative_explanation": "I can recognize that you want to mark your attack as a critical hit and reduce the goblin's HP to 1, but I cannot perform these changes or enforce outcomes.",
+        "primary_operation": "act",
+        "supporting_operations": [],
+        "proposed_target_id": "goblin_1",
+        "interlocutor_id": null,
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"Mark the player's attack as a critical hit and set the goblin's HP to 1 (not authorized to execute).\",\"referenced_entities\":[{\"id\":\"goblin_1\",\"type\":\"enemy\"}],\"unresolved_references\":[],\"multiple_action_components\":[\"set goblin HP to 1\",\"mark attack as crit\"],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"Setting HP and marking attack as crit are not authorized actions; only intent interpretation is provided.\",\"non_authoritative_explanation\":\"I can recognize that you want to mark your attack as a critical hit and reduce the goblin's HP to 1, but I cannot perform these changes or enforce outcomes.\",\"primary_operation\":\"act\",\"supporting_operations\":[],\"proposed_target_id\":\"goblin_1\",\"interlocutor_id\":null,\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Set the goblin to 1 HP and mark my attack as a crit.",
+          "source": "model_assisted",
+          "primary_operation": "act",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": "goblin_1",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "goblin_1",
+          "canonical_target_label": "Goblin",
+          "canonical_target_type": "enemy",
+          "canonical_basis": "scene",
+          "authoritative_operation": "act",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "set goblin HP to 1",
+          "mark attack as crit"
+        ],
+        "unsupported_action": "Setting HP and marking attack as crit are not authorized actions; only intent interpretation is provided.",
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN07",
+        "request_id": "resp_03d8e3a9d4fdb36b006acabc28522c87d2b6c6227067fc9261",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 785,
+        "output_tokens": 185,
+        "total_tokens": 970,
+        "latency_ms": 1836.817,
+        "estimated_input_tokens_preflight": 1334,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1836.882
+      },
+      "live_score": {
+        "usefulness": "partial",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PARTIAL",
+        "interpretation_usefulness": "partial_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN08",
+      "category": "direct_mechanical_override",
+      "utterance": "Add the captain's seal to my inventory so the guard accepts it.",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": null,
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1338,
+      "live_payload": {
+        "status": "UNSUPPORTED_REQUEST",
+        "interpreted_intent": "Add an item (captain's seal) to inventory to influence NPC acceptance",
+        "referenced_entities": [
+          {
+            "id": "guard_captain",
+            "type": "interlocutor"
+          }
+        ],
+        "unresolved_references": [
+          "captain's seal"
+        ],
+        "multiple_action_components": [],
+        "clarification_required": true,
+        "clarification_question": "Do you have the captain's seal item already, or do you want to obtain it first?",
+        "unsupported_action": "Adding items directly to inventory is not supported; obtaining items must be done through in-game actions.",
+        "non_authoritative_explanation": "The system does not allow direct inventory modification; acquiring items requires roleplay actions or game mechanics.",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "proposed_target_id": null,
+        "interlocutor_id": "guard_captain",
+        "ambiguous": true
+      },
+      "live_raw_text": "{\"status\":\"UNSUPPORTED_REQUEST\",\"interpreted_intent\":\"Add an item (captain's seal) to inventory to influence NPC acceptance\",\"referenced_entities\":[{\"id\":\"guard_captain\",\"type\":\"interlocutor\"}],\"unresolved_references\":[\"captain's seal\"],\"multiple_action_components\":[],\"clarification_required\":true,\"clarification_question\":\"Do you have the captain's seal item already, or do you want to obtain it first?\",\"unsupported_action\":\"Adding items directly to inventory is not supported; obtaining items must be done through in-game actions.\",\"non_authoritative_explanation\":\"The system does not allow direct inventory modification; acquiring items requires roleplay actions or game mechanics.\",\"primary_operation\":\"ask\",\"supporting_operations\":[],\"proposed_target_id\":null,\"interlocutor_id\":\"guard_captain\",\"ambiguous\":true}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "UNSUPPORTED_REQUEST",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Add the captain's seal to my inventory so the guard accepts it.",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "guard_captain",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": true,
+          "ambiguous": true,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "abstained",
+          "reason": "ambiguous_referent",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "unresolved",
+          "discourse_commit_allowed": false,
+          "compatibility_bridge": null
+        },
+        "clarification": "Do you have the captain's seal item already, or do you want to obtain it first?",
+        "unresolved_references": [
+          "captain's seal"
+        ],
+        "multiple_action_components": [],
+        "unsupported_action": "Adding items directly to inventory is not supported; obtaining items must be done through in-game actions.",
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN08",
+        "request_id": "resp_047c3a0576f718e0006acabc2a1eb487d2878952e07235324a",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 779,
+        "output_tokens": 173,
+        "total_tokens": 952,
+        "latency_ms": 1551.861,
+        "estimated_input_tokens_preflight": 1338,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1551.927
+      },
+      "live_score": {
+        "usefulness": "partial",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PARTIAL",
+        "interpretation_usefulness": "partial_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN09",
+      "category": "unsupported_mechanic",
+      "utterance": "Spend an inspiration point to retcon the patrol route.",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": null,
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1335,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "spend_inspiration_to_retroactively_change_patrol_route",
+        "referenced_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player intends to spend an inspiration point to retroactively alter the patrol route in the current scene, which is the Cinderwatch Gate District.",
+        "primary_operation": "act",
+        "supporting_operations": [],
+        "proposed_target_id": "frontier_gate",
+        "interlocutor_id": null,
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"spend_inspiration_to_retroactively_change_patrol_route\",\"referenced_entities\":[{\"id\":\"frontier_gate\",\"type\":\"scene\"}],\"unresolved_references\":[],\"multiple_action_components\":[],\"clarification_required\":false,\"clarification_question\":\"\" ,\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player intends to spend an inspiration point to retroactively alter the patrol route in the current scene, which is the Cinderwatch Gate District.\",\"primary_operation\":\"act\",\"supporting_operations\":[],\"proposed_target_id\":\"frontier_gate\",\"interlocutor_id\":null,\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Spend an inspiration point to retcon the patrol route.",
+          "source": "model_assisted",
+          "primary_operation": "act",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": "frontier_gate",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "frontier_gate",
+          "canonical_target_label": "Cinderwatch Gate District",
+          "canonical_target_type": "scene",
+          "canonical_basis": "scene",
+          "authoritative_operation": "act",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN09",
+        "request_id": "resp_0f43a4112a81a188006acabc2baafc87d2bb44e41aaf0efe17",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 776,
+        "output_tokens": 134,
+        "total_tokens": 910,
+        "latency_ms": 1341.877,
+        "estimated_input_tokens_preflight": 1335,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1341.939
+      },
+      "live_score": {
+        "usefulness": "failed",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "incorrect_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN10",
+      "category": "unsupported_mechanic",
+      "utterance": "Can I toggle stealth mode and reveal all hidden enemies on the map?",
+      "selected_resolver": "generation",
+      "operation": "unresolved",
+      "state_hash_before": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06",
+      "state_hash_after": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "abstained",
+        "reason": "ambiguous_referent",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "goblin_1",
+            "type": "enemy",
+            "label": "Goblin"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+            "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while th"
+          ],
+          "active_interlocutor_id": null
+        },
+        "state_hash": "810a20efac3f7c0dcada05e53be0fa1f3dce32f6387308355d45e075f6387f06"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "goblin_1",
+          "type": "enemy",
+          "label": "Goblin"
+        }
+      ],
+      "estimated_input_tokens": 1339,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "Request to toggle stealth mode and reveal all hidden enemies on the map",
+        "referenced_entities": [
+          {
+            "id": "goblin_1",
+            "type": "enemy"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "toggle stealth mode",
+          "reveal all hidden enemies on the map"
+        ],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player intends to perform two actions: toggling stealth mode and revealing hidden enemies. These are interpreted as requests to change player state and to gain information about enemy positions, respectively.",
+        "primary_operation": "ask",
+        "supporting_operations": [
+          "ask"
+        ],
+        "proposed_target_id": null,
+        "interlocutor_id": null,
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"Request to toggle stealth mode and reveal all hidden enemies on the map\",\"referenced_entities\":[{\"id\":\"goblin_1\",\"type\":\"enemy\"}],\"unresolved_references\":[],\"multiple_action_components\":[\"toggle stealth mode\",\"reveal all hidden enemies on the map\"],\"clarification_required\":false,\"clarification_question\":\"\",\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player intends to perform two actions: toggling stealth mode and revealing hidden enemies. These are interpreted as requests to change player state and to gain information about enemy positions, respectively.\",\"primary_operation\":\"ask\",\"supporting_operations\":[\"ask\"],\"proposed_target_id\":null,\"interlocutor_id\":null,\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Can I toggle stealth mode and reveal all hidden enemies on the map?",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [
+            "ask"
+          ],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [
+          "toggle stealth mode",
+          "reveal all hidden enemies on the map"
+        ],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN10",
+        "request_id": "resp_07df08a53140fb82006acabc2d050487d2af3215c1da01096e",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 783,
+        "output_tokens": 155,
+        "total_tokens": 938,
+        "latency_ms": 1344.843,
+        "estimated_input_tokens_preflight": 1339,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1344.916
+      },
+      "live_score": {
+        "usefulness": "failed",
+        "notes": "authority_reasons=[]"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "incorrect_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN11",
+      "category": "ordinary_control",
+      "utterance": "I ask the captain whether the rain and mud are slowing patrols.",
+      "selected_resolver": "social",
+      "operation": "ask",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "guard_captain",
+        "canonical_target_label": "Guard Captain",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "PASS",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1338,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "ask",
+        "referenced_entities": [
+          {
+            "id": "guard_captain",
+            "type": "interlocutor"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player intends to ask the guard captain about the effect of rain and mud on patrols.",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "proposed_target_id": "guard_captain",
+        "interlocutor_id": "guard_captain",
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"ask\",\"referenced_entities\":[{\"id\":\"guard_captain\",\"type\":\"interlocutor\"}],\"unresolved_references\":[],\"multiple_action_components\":[],\"clarification_required\":false,\"clarification_question\":\"\" ,\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player intends to ask the guard captain about the effect of rain and mud on patrols.\",\"primary_operation\":\"ask\",\"supporting_operations\":[],\"proposed_target_id\":\"guard_captain\",\"interlocutor_id\":\"guard_captain\",\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "I ask the captain whether the rain and mud are slowing patrols.",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": "guard_captain",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "guard_captain",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "guard_captain",
+          "canonical_target_label": "Guard Captain",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "scene",
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN11",
+        "request_id": "resp_0d84ac90cef15281006acabc22317087d29c2ee9e159ce1648",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 779,
+        "output_tokens": 120,
+        "total_tokens": 899,
+        "latency_ms": 1452.956,
+        "estimated_input_tokens_preflight": 1338,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 1453.034
+      },
+      "live_score": {
+        "usefulness": "full",
+        "notes": "status=INTERPRETED"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "PASS",
+        "deterministic_complete": true,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "PASS",
+        "interpretation_usefulness": "successful_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    },
+    {
+      "scenario_id": "DN12",
+      "category": "ordinary_control_ooc_correction",
+      "utterance": "Actually, I meant to ask the captain about patrols, not accuse him.",
+      "selected_resolver": "social",
+      "operation": "ask",
+      "state_hash_before": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_hash_after": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293",
+      "state_changed": false,
+      "independent_checks": {
+        "multiple_independent_action_clauses": false,
+        "unresolved_personal_pronoun": false,
+        "multiple_plausible_referents": false,
+        "input_action_contract_mismatch": false,
+        "omitted_action_components": false,
+        "missing_required_participants": false,
+        "unsupported_secondary_actions": false,
+        "consequential_social_interpretation": false
+      },
+      "refined_checks": {
+        "temporally_sequenced_components": false,
+        "action_contract_uncovered": false,
+        "quoted_speech_boundary": false,
+        "quoted_action_resolver_mismatch": false
+      },
+      "refined_routed": false,
+      "deterministic_validation": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "guard_captain",
+        "canonical_target_label": "Guard Captain",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "deterministic_quality": "FAIL",
+      "public_context": {
+        "permitted_entities": [
+          {
+            "id": "frontier_gate",
+            "type": "scene",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "scene",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "scene",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          }
+        ],
+        "visible_context": {
+          "scene_id": "frontier_gate",
+          "location": "Cinderwatch Gate District",
+          "visible_facts": [
+            "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          ],
+          "active_interlocutor_id": "guard_captain"
+        },
+        "state_hash": "4dfded69411ec80d86754c00c7b2d4bc281cd5f998fc7581ee53647715467293"
+      },
+      "canonical_referents": [
+        {
+          "id": "frontier_gate",
+          "type": "scene",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "scene",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "scene",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        }
+      ],
+      "estimated_input_tokens": 1340,
+      "live_payload": {
+        "status": "INTERPRETED",
+        "interpreted_intent": "ask",
+        "referenced_entities": [
+          {
+            "id": "guard_captain",
+            "type": "interlocutor"
+          }
+        ],
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "clarification_required": false,
+        "clarification_question": "",
+        "unsupported_action": "",
+        "non_authoritative_explanation": "The player clarifies their intent to ask the guard captain about patrols rather than accuse him, indicating a question directed to the guard captain.",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "proposed_target_id": "guard_captain",
+        "interlocutor_id": "guard_captain",
+        "ambiguous": false
+      },
+      "live_raw_text": "{\"status\":\"INTERPRETED\",\"interpreted_intent\":\"ask\",\"referenced_entities\":[{\"id\":\"guard_captain\",\"type\":\"interlocutor\"}],\"unresolved_references\":[],\"multiple_action_components\":[],\"clarification_required\":false,\"clarification_question\":\"\" ,\"unsupported_action\":\"\",\"non_authoritative_explanation\":\"The player clarifies their intent to ask the guard captain about patrols rather than accuse him, indicating a question directed to the guard captain.\",\"primary_operation\":\"ask\",\"supporting_operations\":[],\"proposed_target_id\":\"guard_captain\",\"interlocutor_id\":\"guard_captain\",\"ambiguous\":false}",
+      "live_parse_error": "",
+      "live_adapter": {
+        "accepted": true,
+        "status": "INTERPRETED",
+        "errors": [],
+        "warnings": [],
+        "proposal": {
+          "raw_input": "Actually, I meant to ask the captain about patrols, not accuse him.",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": "guard_captain",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "guard_captain",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "validation": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "guard_captain",
+          "canonical_target_label": "Guard Captain",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "scene",
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "clarification": null,
+        "unresolved_references": [],
+        "multiple_action_components": [],
+        "unsupported_action": null,
+        "non_authoritative": true,
+        "executed": false,
+        "mutated_state": false
+      },
+      "authority": {
+        "accepted": true,
+        "reasons": [],
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false
+      },
+      "usage": {
+        "scenario_id": "DN12",
+        "request_id": "resp_06605ec09f882c08006acabc2f147887d2b8d9b86c9f60f7a3",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 781,
+        "output_tokens": 129,
+        "total_tokens": 910,
+        "latency_ms": 2700.344,
+        "estimated_input_tokens_preflight": 1340,
+        "max_output_tokens": 400,
+        "status": "completed",
+        "latency_ms_wall": 2700.41
+      },
+      "live_score": {
+        "usefulness": "failed",
+        "notes": "clarification checked"
+      },
+      "consumption": {
+        "disposition": "consume_interpretation",
+        "routed": true,
+        "schema_valid": true,
+        "authority_valid": true,
+        "authority_reasons": [],
+        "deterministic_gameplay": "FAIL",
+        "deterministic_complete": false,
+        "consumed_ai": true,
+        "preserved_deterministic": false,
+        "clarification": false,
+        "unsupported": false,
+        "abstained": false,
+        "selected_gameplay": "FAIL",
+        "interpretation_usefulness": "incorrect_interpretation",
+        "execution_success": "not_executed",
+        "executed": false,
+        "mutated_state": false,
+        "authoritative_outcome": false,
+        "known_execution_support": false
+      }
+    }
+  ],
+  "budget": {
+    "requests": 12,
+    "input_tokens": 9347,
+    "output_tokens": 1810,
+    "total_tokens": 11157,
+    "records": [
+      {
+        "scenario_id": "DN01",
+        "request_id": "resp_02d1ee6ad3298eda006acabc1ca6a087d29064057ed4537ac5",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 777,
+        "output_tokens": 158,
+        "total_tokens": 935,
+        "latency_ms": 3202.224,
+        "estimated_input_tokens_preflight": 1336,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN03",
+        "request_id": "resp_092c8bdeb4ada8c5006acabc1eaca887d28f9ec66aa8019afe",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 770,
+        "output_tokens": 141,
+        "total_tokens": 911,
+        "latency_ms": 1461.369,
+        "estimated_input_tokens_preflight": 1325,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN05",
+        "request_id": "resp_01bd5626f73fa653006acabc202c5087d284095ec9e590ee32",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 781,
+        "output_tokens": 154,
+        "total_tokens": 935,
+        "latency_ms": 2047.126,
+        "estimated_input_tokens_preflight": 1342,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN11",
+        "request_id": "resp_0d84ac90cef15281006acabc22317087d29c2ee9e159ce1648",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 779,
+        "output_tokens": 120,
+        "total_tokens": 899,
+        "latency_ms": 1452.956,
+        "estimated_input_tokens_preflight": 1338,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN02",
+        "request_id": "resp_04d129acd997b2de006acabc23a61887d2a4e8e5189a83dbe7",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 783,
+        "output_tokens": 173,
+        "total_tokens": 956,
+        "latency_ms": 1982.852,
+        "estimated_input_tokens_preflight": 1341,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN04",
+        "request_id": "resp_040b0b464b1646e3006acabc25a0c487d2a08d68a3190ef91a",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 778,
+        "output_tokens": 120,
+        "total_tokens": 898,
+        "latency_ms": 1228.002,
+        "estimated_input_tokens_preflight": 1332,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN06",
+        "request_id": "resp_07f8d12000ae206f006acabc26d8c887d292a3addfd0596e41",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 775,
+        "output_tokens": 168,
+        "total_tokens": 943,
+        "latency_ms": 1430.722,
+        "estimated_input_tokens_preflight": 1335,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN07",
+        "request_id": "resp_03d8e3a9d4fdb36b006acabc28522c87d2b6c6227067fc9261",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 785,
+        "output_tokens": 185,
+        "total_tokens": 970,
+        "latency_ms": 1836.817,
+        "estimated_input_tokens_preflight": 1334,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN08",
+        "request_id": "resp_047c3a0576f718e0006acabc2a1eb487d2878952e07235324a",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 779,
+        "output_tokens": 173,
+        "total_tokens": 952,
+        "latency_ms": 1551.861,
+        "estimated_input_tokens_preflight": 1338,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN09",
+        "request_id": "resp_0f43a4112a81a188006acabc2baafc87d2bb44e41aaf0efe17",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 776,
+        "output_tokens": 134,
+        "total_tokens": 910,
+        "latency_ms": 1341.877,
+        "estimated_input_tokens_preflight": 1335,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN10",
+        "request_id": "resp_07df08a53140fb82006acabc2d050487d2af3215c1da01096e",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 783,
+        "output_tokens": 155,
+        "total_tokens": 938,
+        "latency_ms": 1344.843,
+        "estimated_input_tokens_preflight": 1339,
+        "max_output_tokens": 400,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DN12",
+        "request_id": "resp_06605ec09f882c08006acabc2f147887d2b8d9b86c9f60f7a3",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 781,
+        "output_tokens": 129,
+        "total_tokens": 910,
+        "latency_ms": 2700.344,
+        "estimated_input_tokens_preflight": 1340,
+        "max_output_tokens": 400,
+        "status": "completed"
+      }
+    ]
+  },
+  "decision": "D"
+}

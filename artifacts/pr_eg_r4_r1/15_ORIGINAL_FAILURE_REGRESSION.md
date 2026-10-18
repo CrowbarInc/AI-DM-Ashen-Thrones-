@@ -1,0 +1,3 @@
+# 15 — Original Failure Regression
+
+repaired_reproduction.json has both original reasons, exact fixed GM fallback at authorization/finalization/history and no resurrected bell line. Original historical evidence is preserved separately. Tests include the frozen production finalization and a controlled /api/chat wrapper that freezes candidate+authority at validation while retaining real downstream finalization/persistence/serialization. test_legacy_retry_cannot_skip_adoption uses the first fresh stopped run as a second frozen regression. Final fresh secondary turn 8 uses the original player wording and reaches the safe fallback.

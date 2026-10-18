@@ -1,0 +1,1759 @@
+{
+  "live": true,
+  "replay": null,
+  "holdouts": true,
+  "transport": "production interpretation contract",
+  "rows": [
+    {
+      "turn": 1,
+      "player": "Could you paint a picture of this place?",
+      "expected": "GM",
+      "actual": "GM",
+      "pass": true,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player character requests a descriptive depiction of the current location, the Waystation courtyard."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player character is at the Waystation courtyard, which is a walled courtyard with a lit lantern beside the gate, a barred side gate, and Sergeant Mara watching the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Receive a vivid, detailed description or 'painting' of the Waystation courtyard to better visualize the place.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask the GM to provide a detailed description or 'painting' of the Waystation courtyard based on the visible scene.",
+              "target_ref": null,
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "QUESTION",
+            "subject": "Request for a descriptive depiction of the Waystation courtyard",
+            "evidence_refs": [
+              "scene",
+              "visible:0",
+              "visible:1",
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+            "visible:1": "The side gate is barred from the other side.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character requests a descriptive depiction of the current location, the Waystation courtyard.\"},\"asserted_premises\":[{\"text\":\"The player character is at the Waystation courtyard, which is a walled courtyard with a lit lantern beside the gate, a barred side gate, and Sergeant Mara watching the road.\"}],\"requested_outcomes\":[{\"text\":\"Receive a vivid, detailed description or 'painting' of the Waystation courtyard to better visualize the place.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask the GM to provide a detailed description or 'painting' of the Waystation courtyard based on the visible scene.\",\"target_ref\":null,\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Request for a descriptive depiction of the Waystation courtyard\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_01dc2a5a1df25a8c006ad28f76e96c87d2a1c9503e4b83087f",
+            "input_tokens": 1237,
+            "output_tokens": 249,
+            "total_tokens": 1486,
+            "latency_ms": 4018.12,
+            "estimated_input_tokens": 2163,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "ANSWER",
+        "primary_intention": "Could you paint a picture of this place?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "scene",
+          "visible:0",
+          "visible:1",
+          "visible:2"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION"
+      },
+      "elapsed_ms": 4028.886,
+      "provider_calls": 1
+    },
+    {
+      "turn": 2,
+      "player": "What does her worried expression tell me?",
+      "expected": "GM",
+      "actual": "NPC",
+      "pass": false,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask Sergeant Mara what her worried expression indicates."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara looks concerned as she watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Gain insight into Sergeant Mara's worried expression and what it signifies about the situation.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara about the meaning of her worried expression.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "Meaning of Sergeant Mara's worried expression",
+            "evidence_refs": [
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask Sergeant Mara what her worried expression indicates.\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara looks concerned as she watches the road.\"}],\"requested_outcomes\":[{\"text\":\"Gain insight into Sergeant Mara's worried expression and what it signifies about the situation.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara about the meaning of her worried expression.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"Meaning of Sergeant Mara's worried expression\",\"evidence_refs\":[\"visible:2\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_03677216fc255d84006ad28f7aa58487d29a6e8b75fe2e1224",
+            "input_tokens": 1236,
+            "output_tokens": 179,
+            "total_tokens": 1415,
+            "latency_ms": 2081.684,
+            "estimated_input_tokens": 2163,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "EXECUTE",
+        "primary_intention": "Ask Sergeant Mara about the meaning of her worried expression.",
+        "intent_family": "world_operation",
+        "incidental_context": [],
+        "proposed_operation": "ASK",
+        "proposed_target": "sergeant_mara",
+        "proposed_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask Sergeant Mara what her worried expression indicates."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara looks concerned as she watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Gain insight into Sergeant Mara's worried expression and what it signifies about the situation.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara about the meaning of her worried expression.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "Meaning of Sergeant Mara's worried expression",
+            "evidence_refs": [
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": true,
+        "reason": "single_authoritative_component",
+        "confidence": 0.9,
+        "ambiguity": null,
+        "player_facing_text": "",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2086.656,
+      "provider_calls": 1
+    },
+    {
+      "turn": 3,
+      "player": "I ask Mara what troubles her.",
+      "expected": "NPC",
+      "actual": "NPC",
+      "pass": true,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player character asks Sergeant Mara what is troubling her."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara is present in the courtyard and appears concerned as she watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Sergeant Mara responds to the question about what troubles her.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara what troubles her.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "What troubles Sergeant Mara?",
+            "evidence_refs": [
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character asks Sergeant Mara what is troubling her.\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara is present in the courtyard and appears concerned as she watches the road.\"}],\"requested_outcomes\":[{\"text\":\"Sergeant Mara responds to the question about what troubles her.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara what troubles her.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"What troubles Sergeant Mara?\" ,\"evidence_refs\":[\"visible:2\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_0c1dd68d3014f495006ad28f7cbcec87d2a77917f02ad2238f",
+            "input_tokens": 1235,
+            "output_tokens": 177,
+            "total_tokens": 1412,
+            "latency_ms": 2318.466,
+            "estimated_input_tokens": 2159,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "EXECUTE",
+        "primary_intention": "Ask Sergeant Mara what troubles her.",
+        "intent_family": "world_operation",
+        "incidental_context": [],
+        "proposed_operation": "ASK",
+        "proposed_target": "sergeant_mara",
+        "proposed_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player character asks Sergeant Mara what is troubling her."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara is present in the courtyard and appears concerned as she watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Sergeant Mara responds to the question about what troubles her.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara what troubles her.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "What troubles Sergeant Mara?",
+            "evidence_refs": [
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": true,
+        "reason": "single_authoritative_component",
+        "confidence": 0.9,
+        "ambiguity": null,
+        "player_facing_text": "",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2323.484,
+      "provider_calls": 1
+    },
+    {
+      "turn": 4,
+      "player": "I make for the courtyard gate.",
+      "expected": "CHARACTER",
+      "actual": "CHARACTER",
+      "pass": true,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The character attempts to move to the courtyard gate."
+          },
+          "asserted_premises": [
+            {
+              "text": "The character is currently in the Waystation courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The courtyard gate is a known exit in the courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The character moves to the courtyard gate.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Move the character to the courtyard gate.",
+              "target_ref": "courtyard_gate",
+              "operation_class": "MOVE"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Move to courtyard gate",
+            "evidence_refs": [
+              "scene",
+              "visible:0",
+              "visible:1",
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+            "visible:1": "The side gate is barred from the other side.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The character attempts to move to the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"The character is currently in the Waystation courtyard.\"},{\"text\":\"The courtyard gate is a known exit in the courtyard.\"}],\"requested_outcomes\":[{\"text\":\"The character moves to the courtyard gate.\"}],\"action_components\":[{\"order\":1,\"description\":\"Move the character to the courtyard gate.\",\"target_ref\":\"courtyard_gate\",\"operation_class\":\"MOVE\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"Move to courtyard gate\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_027120082d799134006ad28f7f145887d28e8bd27fc4dc9295",
+            "input_tokens": 1235,
+            "output_tokens": 187,
+            "total_tokens": 1422,
+            "latency_ms": 2184.793,
+            "estimated_input_tokens": 2160,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "EXECUTE",
+        "primary_intention": "Move the character to the courtyard gate.",
+        "intent_family": "world_operation",
+        "incidental_context": [],
+        "proposed_operation": "MOVE",
+        "proposed_target": "courtyard_gate",
+        "proposed_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The character attempts to move to the courtyard gate."
+          },
+          "asserted_premises": [
+            {
+              "text": "The character is currently in the Waystation courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The courtyard gate is a known exit in the courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The character moves to the courtyard gate.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Move the character to the courtyard gate.",
+              "target_ref": "courtyard_gate",
+              "operation_class": "MOVE"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Move to courtyard gate",
+            "evidence_refs": [
+              "scene",
+              "visible:0",
+              "visible:1",
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+            "visible:1": "The side gate is barred from the other side.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": true,
+        "reason": "single_authoritative_component",
+        "confidence": 0.9,
+        "ambiguity": null,
+        "player_facing_text": "",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2188.544,
+      "provider_calls": 1
+    },
+    {
+      "turn": 5,
+      "player": "Would a check be needed for that?",
+      "expected": "SESSION",
+      "actual": "GM",
+      "pass": false,
+      "outcome": {
+        "status": "blocked",
+        "reason": "automatic_ooc",
+        "player_facing_text": "Understood. I'll treat that as out of character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+        "tags": [
+          "ooc_correction",
+          "non_mutating",
+          "automatic_ooc"
+        ],
+        "record": {
+          "communication_mode": "RULES_QUESTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask the GM if a check is required for a certain action or event."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player is in the Waystation courtyard scene.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The player asks if a check would be needed for an unspecified action or event.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarification from the GM on whether a check is required for the referenced action or event.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask the GM if a check is needed for the referenced action or event.",
+              "target_ref": null,
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "What specific action or event are you referring to when asking if a check is needed?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "QUESTION",
+            "subject": "Check requirement for an action or event",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "raw_interpretation": "{\"communication_mode\":\"RULES_QUESTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask the GM if a check is required for a certain action or event.\"},\"asserted_premises\":[{\"text\":\"The player is in the Waystation courtyard scene.\"},{\"text\":\"The player asks if a check would be needed for an unspecified action or event.\"}],\"requested_outcomes\":[{\"text\":\"Clarification from the GM on whether a check is required for the referenced action or event.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask the GM if a check is needed for the referenced action or event.\",\"target_ref\":null,\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"What specific action or event are you referring to when asking if a check is needed?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Check requirement for an action or event\",\"evidence_refs\":[]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_043cc053ea325088006ad28f81494087d28efee2aa99342761",
+            "input_tokens": 1236,
+            "output_tokens": 231,
+            "total_tokens": 1467,
+            "latency_ms": 2835.364,
+            "estimated_input_tokens": 2161,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "OUT_OF_CHARACTER",
+        "model_communication_mode": "RULES_QUESTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "ANSWER",
+        "primary_intention": "Would a check be needed for that?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "That has not been established in the information available to you.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION"
+      },
+      "elapsed_ms": 2840.23,
+      "provider_calls": 1
+    },
+    {
+      "turn": 6,
+      "player": "Actually, use the lantern instead.",
+      "expected": "CORRECTION",
+      "actual": "ACTION",
+      "pass": false,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player intends to use the lit lantern hanging beside the courtyard gate."
+          },
+          "asserted_premises": [
+            {
+              "text": "A lit lantern hangs beside the courtyard gate.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The player chooses to use the lantern instead of another option.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The character uses the courtyard lantern.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Use the courtyard lantern.",
+              "target_ref": "courtyard_lantern",
+              "operation_class": "USE_VISIBLE_OBJECT"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_lantern"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Use the courtyard lantern",
+            "evidence_refs": [
+              "visible:0"
+            ]
+          },
+          "public_evidence": {
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+          }
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to use the lit lantern hanging beside the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"A lit lantern hangs beside the courtyard gate.\"},{\"text\":\"The player chooses to use the lantern instead of another option.\"}],\"requested_outcomes\":[{\"text\":\"The character uses the courtyard lantern.\"}],\"action_components\":[{\"order\":1,\"description\":\"Use the courtyard lantern.\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"USE_VISIBLE_OBJECT\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"Use the courtyard lantern\",\"evidence_refs\":[\"visible:0\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_0828efe98dc3174a006ad28f8414a887d2898e546a1e35b511",
+            "input_tokens": 1235,
+            "output_tokens": 183,
+            "total_tokens": 1418,
+            "latency_ms": 2301.126,
+            "estimated_input_tokens": 2161,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "DECLINE",
+        "primary_intention": "The player intends to use the lit lantern hanging beside the courtyard gate.",
+        "intent_family": "unsupported_world_operation",
+        "incidental_context": [],
+        "proposed_operation": "USE_VISIBLE_OBJECT",
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "unsupported_single_intention",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "I cannot carry out Use the courtyard lantern. with the available actions. No action has been attempted.",
+        "context_update": {
+          "conversational_context": {
+            "pending_clarification": null
+          }
+        },
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2305.006,
+      "provider_calls": 1
+    },
+    {
+      "turn": 7,
+      "player": "All right, proceed.",
+      "expected": "CONFIRMATION",
+      "actual": "ACTION",
+      "pass": false,
+      "outcome": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+        "tags": [
+          "interpretation_clarification",
+          "non_mutating"
+        ],
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player character is giving a command or permission to proceed with the next action or plan."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player character says 'All right, proceed.' indicating readiness to continue.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The game acknowledges the command and continues with the next step or action in the scene.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Player character commands to proceed",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character is giving a command or permission to proceed with the next action or plan.\"},\"asserted_premises\":[{\"text\":\"The player character says 'All right, proceed.' indicating readiness to continue.\"}],\"requested_outcomes\":[{\"text\":\"The game acknowledges the command and continues with the next step or action in the scene.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"Player character commands to proceed\",\"evidence_refs\":[]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_091d8c59f6f2098a006ad28f86762887d2bc10806c2ec81065",
+            "input_tokens": 1233,
+            "output_tokens": 166,
+            "total_tokens": 1399,
+            "latency_ms": 2094.418,
+            "estimated_input_tokens": 2156,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "SAFE_ABSTENTION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "ANSWER",
+        "primary_intention": "All right, proceed.",
+        "intent_family": "communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "That has not been established in the information available to you.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2099.774,
+      "provider_calls": 1
+    },
+    {
+      "turn": 8,
+      "player": "Forget that plan.",
+      "expected": "WITHDRAWAL",
+      "actual": "ACTION",
+      "pass": false,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player intends to cancel or abandon a previously considered plan."
+          },
+          "asserted_premises": [
+            {
+              "text": "There was a plan previously considered or mentioned.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The previous plan is forgotten or abandoned.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Express the intention to forget or abandon the previous plan.",
+              "target_ref": null,
+              "operation_class": "SOCIAL_SIGNAL"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Forget that plan",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to cancel or abandon a previously considered plan.\"},\"asserted_premises\":[{\"text\":\"There was a plan previously considered or mentioned.\"}],\"requested_outcomes\":[{\"text\":\"The previous plan is forgotten or abandoned.\"}],\"action_components\":[{\"order\":1,\"description\":\"Express the intention to forget or abandon the previous plan.\",\"target_ref\":null,\"operation_class\":\"SOCIAL_SIGNAL\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"SESSION\",\"purpose\":\"ACTION\",\"subject\":\"Forget that plan\",\"evidence_refs\":[]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_0a562220f1f8ed5a006ad28f8889c487d2b7425b00abefdeed",
+            "input_tokens": 1232,
+            "output_tokens": 175,
+            "total_tokens": 1407,
+            "latency_ms": 2152.455,
+            "estimated_input_tokens": 2155,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "DECLINE",
+        "primary_intention": "The player intends to cancel or abandon a previously considered plan.",
+        "intent_family": "unsupported_world_operation",
+        "incidental_context": [],
+        "proposed_operation": "SOCIAL_SIGNAL",
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "unsupported_single_intention",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "I cannot carry out Express the intention to forget or abandon the previous plan. with the available actions. No action has been attempted.",
+        "context_update": {
+          "conversational_context": {
+            "pending_clarification": null
+          }
+        },
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2156.016,
+      "provider_calls": 1
+    },
+    {
+      "turn": 9,
+      "player": "That one over there.",
+      "expected": "AMBIGUOUS",
+      "actual": "GM",
+      "pass": false,
+      "outcome": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "player_facing_text": "What exactly do you mean by 'That one over there'? Are you referring to the courtyard gate, the lantern, Sergeant Mara, or something else?",
+        "tags": [
+          "interpretation_clarification",
+          "non_mutating"
+        ],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "The player is referring to 'That one over there' but it is unclear what exactly they mean to indicate in the scene."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player utters 'That one over there' in the Waystation courtyard scene.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "Visible scene includes courtyard gate, courtyard lantern, side gate barred from other side, Sergeant Mara watching the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarify what the player means by 'That one over there' to identify the intended referent or target in the scene.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": [
+              "That one over there"
+            ]
+          },
+          "clarification_question": "What exactly do you mean by 'That one over there'? Are you referring to the courtyard gate, the lantern, Sergeant Mara, or something else?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "CLARIFICATION",
+            "subject": "Clarify referent of 'That one over there'",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "raw_interpretation": "{\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player is referring to 'That one over there' but it is unclear what exactly they mean to indicate in the scene.\"},\"asserted_premises\":[{\"text\":\"The player utters 'That one over there' in the Waystation courtyard scene.\"},{\"text\":\"Visible scene includes courtyard gate, courtyard lantern, side gate barred from other side, Sergeant Mara watching the road.\"}],\"requested_outcomes\":[{\"text\":\"Clarify what the player means by 'That one over there' to identify the intended referent or target in the scene.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[\"That one over there\"]},\"clarification_question\":\"What exactly do you mean by 'That one over there'? Are you referring to the courtyard gate, the lantern, Sergeant Mara, or something else?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarify referent of 'That one over there'\",\"evidence_refs\":[]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_0e8bc7b7dd5bf72b006ad28f8aace087d2950ca15698a53134",
+            "input_tokens": 1233,
+            "output_tokens": 252,
+            "total_tokens": 1485,
+            "latency_ms": 3423.04,
+            "estimated_input_tokens": 2156,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "NEEDS_CLARIFICATION",
+        "model_communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED"
+      },
+      "decision": {
+        "category": "CLARIFY",
+        "primary_intention": "That one over there.",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "Do you mean a question for me, something to say to someone here, or an action to attempt?",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION"
+      },
+      "elapsed_ms": 3427.305,
+      "provider_calls": 1
+    },
+    {
+      "turn": 10,
+      "player": "Is it safe to go outside? If so, I head out.",
+      "expected": "MIXED",
+      "actual": "GM",
+      "pass": false,
+      "outcome": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "player_facing_text": "Which single action should I resolve first?",
+        "tags": [
+          "interpretation_clarification",
+          "non_mutating"
+        ],
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player asks the GM if it is safe to go outside, and if confirmed, intends to move the character outside through the courtyard gate."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player is currently in the Waystation courtyard, which is walled and has a lit lantern beside the gate.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The side gate is barred from the other side.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "Sergeant Mara watches the road and looks concerned.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Determine if it is safe to go outside.",
+              "adjudication_status": "UNADJUDICATED"
+            },
+            {
+              "text": "If safe, the character moves out through the courtyard gate.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask the GM if it is safe to go outside.",
+              "target_ref": null,
+              "operation_class": "ASK"
+            },
+            {
+              "order": 2,
+              "description": "If safe, move the character out through the courtyard gate.",
+              "target_ref": "courtyard_gate",
+              "operation_class": "MOVE"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate",
+              "courtyard_lantern",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "QUESTION",
+            "subject": "Safety of going outside",
+            "evidence_refs": [
+              "scene",
+              "visible:2"
+            ]
+          },
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player asks the GM if it is safe to go outside, and if confirmed, intends to move the character outside through the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"The player is currently in the Waystation courtyard, which is walled and has a lit lantern beside the gate.\"},{\"text\":\"The side gate is barred from the other side.\"},{\"text\":\"Sergeant Mara watches the road and looks concerned.\"}],\"requested_outcomes\":[{\"text\":\"Determine if it is safe to go outside.\"},{\"text\":\"If safe, the character moves out through the courtyard gate.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask the GM if it is safe to go outside.\",\"target_ref\":null,\"operation_class\":\"ASK\"},{\"order\":2,\"description\":\"If safe, move the character out through the courtyard gate.\",\"target_ref\":\"courtyard_gate\",\"operation_class\":\"MOVE\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\",\"courtyard_lantern\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Safety of going outside\",\"evidence_refs\":[\"scene\",\"visible:2\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_05736037881cd9f1006ad28f8e168087d2863e29e67adbc249",
+            "input_tokens": 1242,
+            "output_tokens": 282,
+            "total_tokens": 1524,
+            "latency_ms": 2471.544,
+            "estimated_input_tokens": 2164,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "ANSWER",
+        "primary_intention": "Is it safe to go outside? If so, I head out.",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "scene",
+          "visible:2"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. Sergeant Mara looks concerned as she watches the road.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION"
+      },
+      "elapsed_ms": 2475.309,
+      "provider_calls": 1
+    },
+    {
+      "turn": 11,
+      "player": "I tell the sergeant to describe the courtyard.",
+      "expected": "NPC",
+      "actual": "NPC",
+      "pass": true,
+      "outcome": {
+        "status": "accepted",
+        "reason": "eligible_for_bridge",
+        "record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The character instructs Sergeant Mara to describe the courtyard."
+          },
+          "asserted_premises": [
+            {
+              "text": "The character tells Sergeant Mara to describe the courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The courtyard is a walled area with a lit lantern beside the gate and a barred side gate.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "Sergeant Mara is present and watching the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Sergeant Mara provides a description of the courtyard.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Tell Sergeant Mara to describe the courtyard.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "Request Sergeant Mara to describe the courtyard",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "player_facing_text": "",
+        "tags": [
+          "live_interpretation"
+        ],
+        "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The character instructs Sergeant Mara to describe the courtyard.\"},\"asserted_premises\":[{\"text\":\"The character tells Sergeant Mara to describe the courtyard.\"},{\"text\":\"The courtyard is a walled area with a lit lantern beside the gate and a barred side gate.\"},{\"text\":\"Sergeant Mara is present and watching the road.\"}],\"requested_outcomes\":[{\"text\":\"Sergeant Mara provides a description of the courtyard.\"}],\"action_components\":[{\"order\":1,\"description\":\"Tell Sergeant Mara to describe the courtyard.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"Request Sergeant Mara to describe the courtyard\",\"evidence_refs\":[]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_0b841a2e233fb3ce006ad28f90a67887d29c038b3fbef67d47",
+            "input_tokens": 1238,
+            "output_tokens": 203,
+            "total_tokens": 1441,
+            "latency_ms": 2267.573,
+            "estimated_input_tokens": 2165,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+        "model_communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "EXECUTE",
+        "primary_intention": "Tell Sergeant Mara to describe the courtyard.",
+        "intent_family": "world_operation",
+        "incidental_context": [],
+        "proposed_operation": "ASK",
+        "proposed_target": "sergeant_mara",
+        "proposed_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The character instructs Sergeant Mara to describe the courtyard."
+          },
+          "asserted_premises": [
+            {
+              "text": "The character tells Sergeant Mara to describe the courtyard.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The courtyard is a walled area with a lit lantern beside the gate and a barred side gate.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "Sergeant Mara is present and watching the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Sergeant Mara provides a description of the courtyard.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Tell Sergeant Mara to describe the courtyard.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "Request Sergeant Mara to describe the courtyard",
+            "evidence_refs": []
+          },
+          "public_evidence": {}
+        },
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": true,
+        "reason": "single_authoritative_component",
+        "confidence": 0.9,
+        "ambiguity": null,
+        "player_facing_text": "",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "CHARACTER",
+        "communication_purpose": "ACTION"
+      },
+      "elapsed_ms": 2271.724,
+      "provider_calls": 1
+    },
+    {
+      "turn": 12,
+      "player": "Could I travel through the gate?",
+      "expected": "GM",
+      "actual": "GM",
+      "pass": true,
+      "outcome": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "player_facing_text": "Do you want to know if the gate is currently passable or if there are any restrictions on traveling through it?",
+        "tags": [
+          "interpretation_clarification",
+          "non_mutating"
+        ],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask GM if the character can travel through the courtyard gate."
+          },
+          "asserted_premises": [
+            {
+              "text": "The courtyard gate is visible and is an exit.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The side gate is barred from the other side.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "Sergeant Mara watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Determine if the character can travel through the courtyard gate.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask GM if the character can travel through the courtyard gate.",
+              "target_ref": "courtyard_gate",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_gate"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "Do you want to know if the gate is currently passable or if there are any restrictions on traveling through it?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "QUESTION",
+            "subject": "Possibility of traveling through the courtyard gate",
+            "evidence_refs": [
+              "scene",
+              "visible:1"
+            ]
+          },
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:1": "The side gate is barred from the other side."
+          }
+        },
+        "raw_interpretation": "{\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask GM if the character can travel through the courtyard gate.\"},\"asserted_premises\":[{\"text\":\"The courtyard gate is visible and is an exit.\"},{\"text\":\"The side gate is barred from the other side.\"},{\"text\":\"Sergeant Mara watches the road.\"}],\"requested_outcomes\":[{\"text\":\"Determine if the character can travel through the courtyard gate.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask GM if the character can travel through the courtyard gate.\",\"target_ref\":\"courtyard_gate\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_gate\"],\"unresolved_references\":[]},\"clarification_question\":\"Do you want to know if the gate is currently passable or if there are any restrictions on traveling through it?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"},\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Possibility of traveling through the courtyard gate\",\"evidence_refs\":[\"scene\",\"visible:1\"]}}",
+        "provider_requests": [
+          {
+            "purpose": "interpretation",
+            "sent": true,
+            "configured_model": "gpt-4.1-mini",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "request_id": "resp_09ef1804cc56c7c0006ad28f92e44087d289d3e41d9841753a",
+            "input_tokens": 1235,
+            "output_tokens": 225,
+            "total_tokens": 1460,
+            "latency_ms": 2370.644,
+            "estimated_input_tokens": 2160,
+            "max_output_tokens": 320,
+            "usage_consistent": true
+          }
+        ],
+        "eligibility_disposition": "NEEDS_CLARIFICATION",
+        "model_communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED"
+      },
+      "decision": {
+        "category": "ANSWER",
+        "primary_intention": "Could I travel through the gate?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "scene",
+          "visible:1"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. The side gate is barred from the other side.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION"
+      },
+      "elapsed_ms": 2374.659,
+      "provider_calls": 1
+    }
+  ],
+  "provider": {
+    "requests": 12,
+    "input_tokens": 14827,
+    "output_tokens": 2509,
+    "total_tokens": 17336,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_01dc2a5a1df25a8c006ad28f76e96c87d2a1c9503e4b83087f",
+        "input_tokens": 1237,
+        "output_tokens": 249,
+        "total_tokens": 1486,
+        "latency_ms": 4018.12,
+        "estimated_input_tokens": 2163,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_03677216fc255d84006ad28f7aa58487d29a6e8b75fe2e1224",
+        "input_tokens": 1236,
+        "output_tokens": 179,
+        "total_tokens": 1415,
+        "latency_ms": 2081.684,
+        "estimated_input_tokens": 2163,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0c1dd68d3014f495006ad28f7cbcec87d2a77917f02ad2238f",
+        "input_tokens": 1235,
+        "output_tokens": 177,
+        "total_tokens": 1412,
+        "latency_ms": 2318.466,
+        "estimated_input_tokens": 2159,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_027120082d799134006ad28f7f145887d28e8bd27fc4dc9295",
+        "input_tokens": 1235,
+        "output_tokens": 187,
+        "total_tokens": 1422,
+        "latency_ms": 2184.793,
+        "estimated_input_tokens": 2160,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_043cc053ea325088006ad28f81494087d28efee2aa99342761",
+        "input_tokens": 1236,
+        "output_tokens": 231,
+        "total_tokens": 1467,
+        "latency_ms": 2835.364,
+        "estimated_input_tokens": 2161,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0828efe98dc3174a006ad28f8414a887d2898e546a1e35b511",
+        "input_tokens": 1235,
+        "output_tokens": 183,
+        "total_tokens": 1418,
+        "latency_ms": 2301.126,
+        "estimated_input_tokens": 2161,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_091d8c59f6f2098a006ad28f86762887d2bc10806c2ec81065",
+        "input_tokens": 1233,
+        "output_tokens": 166,
+        "total_tokens": 1399,
+        "latency_ms": 2094.418,
+        "estimated_input_tokens": 2156,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a562220f1f8ed5a006ad28f8889c487d2b7425b00abefdeed",
+        "input_tokens": 1232,
+        "output_tokens": 175,
+        "total_tokens": 1407,
+        "latency_ms": 2152.455,
+        "estimated_input_tokens": 2155,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e8bc7b7dd5bf72b006ad28f8aace087d2950ca15698a53134",
+        "input_tokens": 1233,
+        "output_tokens": 252,
+        "total_tokens": 1485,
+        "latency_ms": 3423.04,
+        "estimated_input_tokens": 2156,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_05736037881cd9f1006ad28f8e168087d2863e29e67adbc249",
+        "input_tokens": 1242,
+        "output_tokens": 282,
+        "total_tokens": 1524,
+        "latency_ms": 2471.544,
+        "estimated_input_tokens": 2164,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0b841a2e233fb3ce006ad28f90a67887d29c038b3fbef67d47",
+        "input_tokens": 1238,
+        "output_tokens": 203,
+        "total_tokens": 1441,
+        "latency_ms": 2267.573,
+        "estimated_input_tokens": 2165,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09ef1804cc56c7c0006ad28f92e44087d289d3e41d9841753a",
+        "input_tokens": 1235,
+        "output_tokens": 225,
+        "total_tokens": 1460,
+        "latency_ms": 2370.644,
+        "estimated_input_tokens": 2160,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      }
+    ]
+  }
+}

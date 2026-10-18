@@ -36,6 +36,17 @@ _REJECT_FIELD_NAMES = frozenset(
 
 # Bounded contract vocabularies (no freeform tone/emotion prose).
 REPLY_KINDS: frozenset[str] = frozenset({"answer", "explanation", "reaction", "refusal", "unknown"})
+REPLY_PLAN_KINDS: frozenset[str] = frozenset(
+    {
+        "authoritative_answer_available",
+        "harmless_subjective_response_permitted",
+        "genuine_uncertainty",
+        "genuine_refusal",
+        "consequential_information_request",
+    }
+)
+NPC_SPEECH_AUTHORITY_CODES: frozenset[str] = frozenset({"none", "claim_only"})
+OBJECTIVE_WORLD_FACT_AUTHORITY_CODES: frozenset[str] = frozenset({"none", "authored_context_required"})
 PRESSURE_STATES: frozenset[str] = frozenset({"none", "low", "moderate", "high"})
 RELATIONSHIP_CODES: frozenset[str] = frozenset(
     {
@@ -303,6 +314,17 @@ def build_dialogue_social_plan(
     reply_kind = _as_str(narr_constraints.get("reply_kind") or res.get("reply_kind") or "").lower() or "unknown"
     if reply_kind not in REPLY_KINDS:
         reply_kind = "unknown"
+    reply_plan_kind = _as_str(narr_constraints.get("reply_plan_kind") or "").lower() or None
+    if reply_plan_kind not in REPLY_PLAN_KINDS:
+        reply_plan_kind = None
+    npc_speech_authority = _as_str(narr_constraints.get("npc_speech_authority") or "").lower() or None
+    if npc_speech_authority not in NPC_SPEECH_AUTHORITY_CODES:
+        npc_speech_authority = None
+    objective_world_fact_authority = _as_str(
+        narr_constraints.get("objective_world_fact_authority") or ""
+    ).lower() or None
+    if objective_world_fact_authority not in OBJECTIVE_WORLD_FACT_AUTHORITY_CODES:
+        objective_world_fact_authority = None
 
     cont = inter.get("continuity_snapshot") if isinstance(inter.get("continuity_snapshot"), Mapping) else {}
     engagement_level = _as_str(cont.get("engagement_level") or "")
@@ -348,6 +370,15 @@ def build_dialogue_social_plan(
         "speaker_source": speaker_source,
         "dialogue_intent": dialogue_intent,
         "reply_kind": reply_kind,
+        "reply_plan_kind": reply_plan_kind,
+        "incidental_subjective_allowed": bool(narr_constraints.get("incidental_subjective_allowed")),
+        "absence_of_authored_topic_forces_refusal": bool(
+            narr_constraints.get("absence_of_authored_topic_forces_refusal")
+        ),
+        "npc_speech_authority": npc_speech_authority,
+        "objective_world_fact_authority": objective_world_fact_authority,
+        "declared_claims_expected": bool(narr_constraints.get("declared_claims_expected")),
+        "durable_state_mutation_allowed": bool(narr_constraints.get("durable_state_mutation_allowed")),
         "pressure_state": pressure_state,
         "relationship_codes": relationship_codes,
         "tone_bounds": tone_bounds,
@@ -358,6 +389,9 @@ def build_dialogue_social_plan(
             "errors": [],
             "reject_field_names": sorted(_REJECT_FIELD_NAMES),
             "allowed_reply_kinds": sorted(REPLY_KINDS),
+            "allowed_reply_plan_kinds": sorted(REPLY_PLAN_KINDS),
+            "allowed_npc_speech_authority_codes": sorted(NPC_SPEECH_AUTHORITY_CODES),
+            "allowed_objective_world_fact_authority_codes": sorted(OBJECTIVE_WORLD_FACT_AUTHORITY_CODES),
             "allowed_pressure_states": sorted(PRESSURE_STATES),
             "allowed_tone_codes": sorted(TONE_CODES),
             "allowed_relationship_codes": sorted(RELATIONSHIP_CODES),
@@ -380,6 +414,13 @@ def build_dialogue_social_plan(
             if _as_str(k) and not isinstance(v, (dict, list, tuple))
         }
 
+    authority = narr_constraints.get("dialogue_authority")
+    if isinstance(authority, Mapping):
+        plan["dialogue_authority"] = {
+            key: _json_safe_atom(value) if not isinstance(value, list) else [_as_str(item) for item in value[:8]]
+            for key, value in authority.items()
+            if _as_str(key) and key not in _REJECT_FIELD_NAMES
+        }
     validate_dialogue_social_plan(plan, strict=True)
     return plan
 
@@ -427,6 +468,30 @@ def validate_dialogue_social_plan(plan: Mapping[str, Any] | None, *, strict: boo
     rk = _as_str(plan.get("reply_kind")).lower() or "unknown"
     if rk not in REPLY_KINDS:
         errors.append("bad_reply_kind")
+
+    rpk_raw = plan.get("reply_plan_kind")
+    rpk = _as_str(rpk_raw).lower()
+    if rpk_raw is not None and rpk and rpk not in REPLY_PLAN_KINDS:
+        errors.append("bad_reply_plan_kind")
+
+    nsa_raw = plan.get("npc_speech_authority")
+    nsa = _as_str(nsa_raw).lower()
+    if nsa_raw is not None and nsa and nsa not in NPC_SPEECH_AUTHORITY_CODES:
+        errors.append("bad_npc_speech_authority")
+
+    owfa_raw = plan.get("objective_world_fact_authority")
+    owfa = _as_str(owfa_raw).lower()
+    if owfa_raw is not None and owfa and owfa not in OBJECTIVE_WORLD_FACT_AUTHORITY_CODES:
+        errors.append("bad_objective_world_fact_authority")
+
+    for bool_key in (
+        "incidental_subjective_allowed",
+        "absence_of_authored_topic_forces_refusal",
+        "declared_claims_expected",
+        "durable_state_mutation_allowed",
+    ):
+        if bool_key in plan and not isinstance(plan.get(bool_key), bool):
+            errors.append(f"bad_bool:{bool_key}")
 
     ps = _as_str(plan.get("pressure_state")).lower()
     if ps and ps not in PRESSURE_STATES:
@@ -673,7 +738,11 @@ def is_bare_speech_attribution_shell_line(text: str) -> bool:
         return True
     if '"' in t or "'" in t or "\u201c" in t or "\u201d" in t:
         return False
-    return bool(_BARE_SPEECH_ATTRIBUTION_SHELL_RE.match(t))
+    if _BARE_SPEECH_ATTRIBUTION_SHELL_RE.match(t):
+        return True
+    from game.interaction_completion import attribution_shell
+
+    return attribution_shell(t)
 
 
 def enforce_dialogue_plan_invariant_on_strict_social(

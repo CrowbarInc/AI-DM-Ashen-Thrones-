@@ -1,0 +1,72 @@
+{
+  "stamp": "20261004T035044Z",
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "head_subject": "PR-BN bounded DM improvisational authority",
+  "status_short": "M artifacts/by2/protected_semantic_mutation_report.json\n M artifacts/golden_replay/bug_recurrence_event_log.json\n M artifacts/golden_replay/bug_recurrence_history.json\n M artifacts/golden_replay/bug_recurrence_history.md\n M artifacts/golden_replay/bug_recurrence_session_diagnostic_event_log.json\n M artifacts/golden_replay/bug_recurrence_session_event_log.json\n M artifacts/golden_replay/recurrence_trajectory_history.json\n M data/combat.json\n M data/session.json\n M data/session_log.jsonl\n M data/world.json\n M docs/audits/BQ16_recurrence_graduation_audit.md\n M docs/audits/BQC4_final_graduation_decision.md\n M game/adjudication.py\n M game/anti_reset_emission_guard.py\n M game/api.py\n M game/api_turn_support.py\n M game/bounded_improvisation.py\n M game/dialogue_social_plan.py\n M game/final_emission_gate.py\n M game/final_emission_response_type.py\n M game/final_emission_strict_social_stack.py\n M game/final_emission_visibility_fallback.py\n M game/gm.py\n M game/gm_retry.py\n M game/intent_parser.py\n M game/interaction_context.py\n M game/interaction_routing.py\n M game/narration_state_consistency.py\n M game/perception_grounding.py\n M game/playability_eval.py\n M game/prompt_context.py\n M game/response_policy_enforcement.py\n M game/scene_destination_binding.py\n M game/social.py\n M game/social_exchange_emission.py\n M game/social_exchange_fallback_catalog.py\n M game/social_exchange_policy.py\n M game/speaker_contract_enforcement.py\n M game/storage.py\n M game/upstream_response_repairs.py\n M handoff/CURRENT_REVIEW.md\n M handoff/CURRENT_REVIEW.zip\n M handoff/REVIEW_MANIFEST.json\n M tests/conftest.py\n M tests/helpers/reactive_player.py\n M tests/helpers/turn_pipeline_http_fixtures.py\n M tests/test_broad_address_social_bid.py\n M tests/test_social_exchange_emission.py\n M tests/test_transcript_regression.py\n M tests/test_turn_pipeline_shared.py\n M tests/test_upstream_dependent_run_bhc2.py\n M tools/run_playability_validation.py\n?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest.zip\n?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest/\n?? artifacts/human_playtests/post_pr_bk_state_narration_audit/\n?? artifacts/pr_bp_synthetic_gate/\n?? artifacts/pr_br/\n?? artifacts/pr_br_authority_reconciliation/\n?? artifacts/pr_br_claim_control_slice1/\n?? artifacts/pr_br_claim_control_slice2/\n?? artifacts/pr_br_continuation10/\n?? artifacts/pr_br_continuation11/\n?? artifacts/pr_br_continuation12/\n?? artifacts/pr_br_continuation13/\n?? artifacts/pr_br_continuation14/\n?? artifacts/pr_br_continuation15/\n?? artifacts/pr_br_continuation16/\n?? artifacts/pr_br_continuation17/\n?? artifacts/pr_br_continuation18/\n?? artifacts/pr_br_continuation19/\n?? artifacts/pr_br_continuation20/\n?? artifacts/pr_br_continuation21/\n?? artifacts/pr_br_continuation21b/\n?? artifacts/pr_br_continuation21c/\n?? artifacts/pr_br_continuation22/\n?? artifacts/pr_br_continuation23/\n?? artifacts/pr_br_continuation24/\n?? artifacts/pr_br_continuation25/\n?? artifacts/pr_br_continuation26/\n?? artifacts/pr_br_continuation27/\n?? artifacts/pr_br_continuation4/\n?? artifacts/pr_br_continuation5/\n?? artifacts/pr_br_continuation6/\n?? artifacts/pr_br_continuation7/\n?? artifacts/pr_br_continuation8/\n?? artifacts/pr_br_continuation9/\n?? artifacts/pr_br_enforcement/\n?? artifacts/pr_br_enforcement_smoke/\n?? artifacts/pr_br_final_live_validation/\n?? artifacts/pr_br_followup/\n?? artifacts/pr_br_full_gate/\n?? artifacts/pr_br_independent_smoke/\n?? artifacts/pr_br_level2/\n?? artifacts/pr_br_live_validation_repair/\n?? artifacts/pr_br_localized_live_repair/\n?? artifacts/pr_br_multiturn_provenance/\n?? artifacts/pr_br_novel_authority_probe/\n?? artifacts/pr_br_proposition_authority_review/\n?? artifacts/pr_br_proposition_live_validation/\n?? artifacts/pr_br_regression_harness/\n?? artifacts/pr_br_resolution_decision_slice/\n?? artifacts/pr_br_resolution_decision_slice2/\n?? artifacts/pr_br_resolution_decision_slice3/\n?? artifacts/pr_br_resolution_reassessment/\n?? artifacts/pr_br_second_full_gate/\n?? artifacts/pr_br_second_live_validation/\n?? artifacts/pr_br_smoke/\n?? artifacts/pr_br_targeted_repair/\n?? data/scenes/market_yard.json\n?? data/validation/review_handoffs/pr_br_continuation6.json\n?? docs/audits/PR-BP_live_resolution_and_synthetic_gate.md\n?? docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md\n?? docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md\n?? docs/audits/discovery/PR-BM_dm_generative_authority_architecture_discovery.md\n?? docs/audits/discovery/PR-BM_supporting_trace_excerpt.md\n?? docs/audits/discovery/PR-BO_post_PR-BN_human_failure_and_simulated_player_audit.md\n?? docs/audits/discovery/PR-BQ_semantic_resolution_and_discourse_architecture.md\n?? game/contract_adjudication_bridge.py\n?? game/discourse_state.py\n?? game/gm_resolution_decision.py\n?? game/immutable_valid_response.py\n?? game/incidental_entity.py\n?? game/interaction_completion.py\n?? game/interpretation_proposal.py\n?? game/live_resolution.py\n?? game/ordinary_semantic_ownership.py\n?? game/player_commitment.py\n?? game/proposition_authority.py\n?? game/resolution_contract.py\n?? game/scene_referent_catalog.py\n?? game/semantic_interpreter.py\n?? game/structured_player_output.py\n?? handoff/CURRENT_REVIEW_PRBQ/\n?? handoff/CURRENT_REVIEW_PRBR/\n?? handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/\n?? handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/\n?? handoff/history/pr-br-continuation-13/\n?? handoff/history/pr-br-continuation-14/\n?? handoff/history/pr-br-continuation-15/\n?? handoff/history/pr-br-continuation-16/\n?? handoff/history/pr-br-continuation-18/\n?? handoff/history/pr-br-continuation-19/\n?? handoff/history/pr-br-continuation-20/\n?? handoff/history/pr-br-continuation-26/\n?? handoff/history/pr-br-full-4x10-synthetic-gate/\n?? handoff/history/pr-br-independent-smoke-after-c20/\n?? handoff/history/pr-br-live-validation-repair/\n?? handoff/history/pr-br-localized-live-repair/\n?? handoff/history/pr-br-multiturn-provenance/\n?? handoff/history/pr-br-novel-authority-live-validation/\n?? handoff/history/pr-br-proposition-authority-review/\n?? handoff/history/pr-br-proposition-level-live-validation/\n?? handoff/history/pr-br-resolution-decision-slice3/\n?? handoff/history/pr-br-second-live-validation/\n?? handoff/history/pr-br-targeted-live-validation-repair/\n?? handoff/pr_br_enforcement_traces.md\n?? handoff/pr_br_semantic_traces.md\n?? scorecard.json\n?? scorecard.md\n?? tests/fixtures/pr_br_interpretation/\n?? tests/helpers/live_model_guard.py\n?? tests/test_live_model_guard.py\n?? tests/test_pr_bp_live_resolution_routing.py\n?? tests/test_pr_br_c19_free_text_authority.py\n?? tests/test_pr_br_claim_control_regex_bound.py\n?? tests/test_pr_br_claim_control_slice1.py\n?? tests/test_pr_br_claim_control_slice2.py\n?? tests/test_pr_br_continuation12_competence.py\n?? tests/test_pr_br_continuation13_semantic_preservation.py\n?? tests/test_pr_br_continuation14_resolution_content.py\n?? tests/test_pr_br_continuation15_content_clarification.py\n?? tests/test_pr_br_continuation16_interaction_completion.py\n?? tests/test_pr_br_continuation18_immutable_boundary.py\n?? tests/test_pr_br_continuation19_hard_authority.py\n?? tests/test_pr_br_continuation20_incidental_entity.py\n?? tests/test_pr_br_continuation21_subject_integrity.py\n?? tests/test_pr_br_continuation21b_referential_personhood.py\n?? tests/test_pr_br_continuation21c_referential_head.py\n?? tests/test_pr_br_continuation22_commitment.py\n?? tests/test_pr_br_continuation23_precontract_routes.py\n?? tests/test_pr_br_continuation24_contract_first_unparsed.py\n?? tests/test_pr_br_continuation25_semantic_ownership.py\n?? tests/test_pr_br_continuation26_semantic_closure.py\n?? tests/test_pr_br_continuation27_structural_subject.py\n?? tests/test_pr_br_decision_ownership_slice2.py\n?? tests/test_pr_br_decision_semantic_fidelity_slice3.py\n?? tests/test_pr_br_gm_resolution_decision.py\n?? tests/test_pr_br_interpretation_proposal.py\n?? tests/test_pr_br_live_validation_attachment_repair.py\n?? tests/test_pr_br_localized_live_defects.py\n?? tests/test_pr_br_model_interpretation.py\n?? tests/test_pr_br_outcome_precedence.py\n?? tests/test_pr_br_qualifier_movement_mixed_intent.py\n?? tests/test_pr_br_resolution_contract.py\n?? tools/audit_gm_resolution_decisions.py\n?? tools/run_pr_bp_synthetic_gate.py\n?? tools/run_pr_br_continuation11_live.py\n?? tools/run_pr_br_continuation12_live.py\n?? tools/run_pr_br_continuation13_live.py\n?? tools/run_pr_br_continuation14_live.py\n?? tools/run_pr_br_continuation15_live.py\n?? tools/run_pr_br_continuation16_live.py\n?? tools/run_pr_br_continuation18_live.py\n?? tools/run_pr_br_continuation19_live.py\n?? tools/run_pr_br_continuation20_live.py\n?? tools/run_pr_br_continuation4_probes.py\n?? tools/run_pr_br_continuation5_probes.py\n?? tools/run_pr_br_continuation6_probes.py\n?? tools/run_pr_br_continuation7_probes.py\n?? tools/run_pr_br_continuation8_smoke.py\n?? tools/run_pr_br_enforcement_probes.py\n?? tools/run_pr_br_enforcement_smoke.py\n?? tools/run_pr_br_followup_probes.py\n?? tools/run_pr_br_level2_probes.py\n?? tools/run_pr_br_smoke.py",
+  "isolated_storage": "C:\\Users\\MASTER~1\\AppData\\Local\\Temp\\prbr_final_live_ydhqm346",
+  "max_gameplay_turns": 4,
+  "authored_scene": {
+    "scene": {
+      "id": "bathhouse_pump_alcove",
+      "location": "Dunmere public bathhouse pump alcove",
+      "summary": "A tiled pump alcove serves an ordinary public bathhouse. The long iron pump handle is visibly bowed, and its pivot pin is sheared through. Two folded towels rest on a cedar bench. A blue-glazed soap dish sits beside the washbasin. Nessa, an ordinary bath attendant, folds towels nearby. Nothing states a cause, responsible actor, event time, history, explanation, or corroborating evidence for the damage.",
+      "mode": "social",
+      "visible_facts": [
+        {
+          "text": "The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "bathhouse_pump_handle",
+            "subject_aliases": [
+              "bathhouse pump",
+              "pump",
+              "pump handle",
+              "iron handle",
+              "pivot pin"
+            ],
+            "relation": "observation",
+            "value": "bowed handle and sheared pivot pin",
+            "value_aliases": [
+              "bowed",
+              "bent handle",
+              "sheared",
+              "sheared pin",
+              "broken pivot pin"
+            ],
+            "polarity": "positive"
+          }
+        },
+        "Two folded towels rest on a cedar bench.",
+        "A blue-glazed soap dish sits beside the washbasin.",
+        "Nessa folds clean towels beside the cedar bench."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "nessa",
+          "name": "Nessa",
+          "scene_id": "bathhouse_pump_alcove",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "bath attendant",
+            "attendant"
+          ],
+          "aliases": [
+            "attendant",
+            "bath attendant"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "no_reruns": true
+}

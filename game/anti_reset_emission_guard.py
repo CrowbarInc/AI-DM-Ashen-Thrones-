@@ -238,6 +238,15 @@ def local_exchange_continuation_fallback_line(
         from game.diegetic_fallback_narration import observe_nothing_new_fallback_line
 
         return observe_nothing_new_fallback_line()
+    # Adjudication has no social speaker of its own. The emergency catalog's
+    # default label is "The guard", which substituted a speaker the player had
+    # not addressed. Keep the continuation local without inventing that speaker.
+    # A contract addressee, when one exists, is left to C22 on the sealed path.
+    if res_kind == "adjudication_query":
+        ctx = inspect_interaction_context(session if isinstance(session, dict) else {})
+        if str(ctx.get("active_interaction_target_id") or "").strip():
+            return "The exchange doesn't resolve cleanly—you hold your ground while the moment stays sharp between you."
+        return "Nothing new locks in yet; you keep the scene's weight without stepping backward."
     if isinstance(resolution, dict) and isinstance(world, Mapping):
         eff, _, _ = effective_strict_social_resolution_for_emission(
             resolution,

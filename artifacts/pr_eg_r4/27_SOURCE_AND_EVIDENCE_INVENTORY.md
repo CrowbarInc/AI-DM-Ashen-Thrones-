@@ -1,0 +1,7 @@
+# 27 — Source and Evidence Inventory
+
+Canonical evidence: supplied `request.txt`; frozen `protocol.json` and SHA-256 `freeze.json`; environment and initial Git status; exact raw provider auxiliary calls; raw production `turns.jsonl`; independent `scores.jsonl`; complete delivered transcripts; initial and per-turn saved world/session/character/combat; reload checks; engine usage; regression JUnit and comparison; root-agent disagreements/recovery audit; metrics/gates; source copies; tooling.
+
+`interrupted_monitor_run/` preserves the false-positive monitor stop; it is not silently counted as a sustained conversation. `evaluation_events.json` records sandbox failure, automatic approval rejection, subsequent explicit user approval and the monitor correction. Temporary inherited-artifact preservation copies were verified and removed; they were never included in the ZIP. No credentials, .env, caches, old review ZIPs or unrelated campaign saves are packaged. Identical state/player-input bytes may be deduplicated by the established bundler; omitted_artifacts records the identical canonical source for every such path. The duplicated A_playful turn-6 state is itself evidence of the missing product-history entry, while the distinct HTTP transcript is retained.
+
+Final bundle verification checks every included byte hash and the 27 report files; see the local `bundle_verification.json`. Complete source provenance is in REVIEW_MANIFEST.json. Large raw files are included with an explicit per-file limit, not silently omitted.

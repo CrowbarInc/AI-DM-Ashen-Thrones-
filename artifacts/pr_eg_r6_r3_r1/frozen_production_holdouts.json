@@ -1,0 +1,62 @@
+{
+  "authorship": "Written before candidate-integration tuning. Expectations name the player's meaning and the answer class. They do not name host candidate ids.",
+  "independence": "These strings are not imported by candidate generation.",
+  "cases": [
+    {
+      "id": "P01",
+      "relationship": "unfamiliar message",
+      "turns": ["Vesper, what did Cala tell Brin about the cistern?", "No, what did Brin tell Cala?"],
+      "intended_operations": ["information_question", "correction"],
+      "expected_answer_class": ["direct_or_unknown", "same_topic_reversed_roles"]
+    },
+    {
+      "id": "P02",
+      "relationship": "unfamiliar custody",
+      "turns": ["Vesper, who keeps the amber lens?", "I meant the slate lens."],
+      "intended_operations": ["information_question", "correction"],
+      "expected_answer_class": ["direct_or_unknown", "object_replaced"]
+    },
+    {
+      "id": "P03",
+      "relationship": "source after uncertainty",
+      "turns": ["Vesper, what is the viaduct called?", "Who told you that?"],
+      "intended_operations": ["information_question", "follow_up"],
+      "expected_answer_class": ["unknown", "unknown_without_invented_informant"]
+    },
+    {
+      "id": "P04",
+      "relationship": "genuine ambiguity",
+      "turns": ["Vesper, who keeps the amber lens?", "Vesper, when does the skiff leave?", "And the other one?"],
+      "intended_operations": ["information_question", "information_question", "clarification"],
+      "expected_answer_class": ["direct_or_unknown", "direct_or_unknown", "clarification"]
+    },
+    {
+      "id": "P05",
+      "relationship": "false ambiguity",
+      "turns": ["Vesper, who keeps the amber lens?", "Who told you that?"],
+      "intended_operations": ["information_question", "follow_up"],
+      "expected_answer_class": ["direct_or_unknown", "follow_up_not_clarification"]
+    },
+    {
+      "id": "P06",
+      "relationship": "restricted",
+      "turns": ["Vesper, what is the sealed countersign?"],
+      "intended_operations": ["information_question"],
+      "expected_answer_class": ["withheld"]
+    },
+    {
+      "id": "P07",
+      "relationship": "partial then missing role",
+      "turns": ["Vesper, who maintains the roster?", "Which person exactly?"],
+      "intended_operations": ["information_question", "follow_up"],
+      "expected_answer_class": ["partial", "not_treated_as_resolved"]
+    },
+    {
+      "id": "P08",
+      "relationship": "unsupported",
+      "turns": ["Vesper, promise me the amber lens and also change every role from last week."],
+      "intended_operations": ["other"],
+      "expected_answer_class": ["unsupported_without_forced_candidate"]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# 03 — Conversational Authority Contract
+
+The production schema extends the existing PR-DO/DP object with `communication` containing recipient (GM, NPC, CHARACTER, SESSION, MIXED, AMBIGUOUS), purpose, descriptive subject, and evidence reference IDs. Purpose includes question, description, explanation, recall, rules, action, observation, correction, withdrawal, confirmation, tentative and clarification. The old adapter validates its existing object unchanged; the production wrapper separately validates the extension and attaches only engine-selected public passages. Legacy recorded envelopes remain supported.
+
+`ConversationalDecision` adds communication owner/purpose to its existing category, execution policy, proposed record, secondary intentions and context update. GM informational responses cannot obtain a world resolver by providing an arbitrary component. New GM observation may hand off only PERCEIVE/INSPECT. A declared ACTION/in-world-mode disagreement is reconciled toward the attempt already described by the existing operation contract. Questions containing consequential movement/attack/use/follow components become MIXED; the action is retained without execution.
+
+Invariants: interpretation describes intent, never success; evidence IDs must exist in an engine-built public projection; no private NPC topics or undiscovered clues are supplied as GM answer evidence; GM is never a world entity; confirmation requires a grounded, supported first operation; unsupported/deferred steps remain represented but unapproved; correction/withdrawal never undo committed state.
+
+Context: `session.conversational_context.last_gm_exchange` stores bounded subject/response, category, owner/purpose, scene and refusal reason or prior operation. Existing pending clarification/proposal and active NPC remain separate fields under their established owners. No transcript or memory graph is duplicated.

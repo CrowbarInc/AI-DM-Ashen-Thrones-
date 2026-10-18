@@ -668,47 +668,16 @@ def _build_narrative_mode_instructions(
 
 
 _NARRATIVE_PLAN_STRUCT_GUIDANCE: tuple[str, ...] = (
-    "NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural "
-    "shaping alongside existing contracts. It does not replace CTIR, response_policy, or narration_visibility; "
-    "on any conflict, follow CTIR and the shipped contracts, not the plan.",
-    "Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus "
-    "the same-turn shipped slices already used at this seam (`response_policy`, `narration_obligations`, optional `turn_packet`). "
-    "It is downstream shaping guidance only—not adjudication and not a second authority over CTIR or policy.",
-    "Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with "
-    "`scene_state_anchor_contract` and narration visibility—do not contradict authoritative visibility.",
-    "Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, "
-    "scene_tension_codes, world/clock summaries) together with `narration_obligations.scene_momentum_due` and registry slices.",
-    "Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this "
-    "turn—without inventing facts beyond visibility and narrative authority.",
-    "Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) "
-    "for published entity_id handles when non-empty—not whom to focus on. Use `scene_anchors.active_interlocutor`, "
-    "`scene_anchors` generally, `narrative_plan.narrative_mode`, `narrative_plan.narrative_mode_contract`, `active_pressures`, "
-    "`required_new_information`, and `role_allocation` for narrower focality. narration_visibility remains the hard visibility scope—never reference entities outside both contracts.",
-    "Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract "
-    "(anchors, closed-set opening_reason, visible_fact anchor ids/categories, prohibited_content_codes)—prose-free; pair with "
-    "narration_visibility.visible_facts for observable lines. It does not replace CTIR or visibility.",
-    "Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints—each carries "
-    "`emphasis_band` plus closed-set `signals` (and small bounded counters/tags)—not prose beats. "
-    "`location_anchor` biases physical/scene grounding; `actor_anchor` biases materially relevant actor presence; "
-    "`pressure` biases current tension or unresolved obligation salience; `hook` biases clue/lead/opening or actionable salience "
-    "aligned with `required_new_information` kind tags; `consequence` biases closing salience toward outcomes, state-forward edges, "
-    "or transition-relevant information. These facets are optional salience dials: weave them where natural; no prescribed ordering, "
-    "no beat checklist, no requirement to dedicate a paragraph or sentence slot to each family.",
-    "N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), "
-    "the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narrative_mode_contract`, answer_completeness, response_delta, "
-    "social_response_structure / response_type_contract, interaction continuity, and every other shipped policy object—never override them.",
-    "Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from "
-    "`narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). "
-    "Use `narrative_plan.role_allocation` integer weights only as bounded emphasis alongside that block—never as a substitute for shipped policy.",
+    "NARRATIVE PLAN: Use narrative_plan only as bounded structural shaping. Its anchors, pressures, opening, roles, "
+    "required_new_information, allowable_entity_references, and mode contract never override CTIR, response_policy, "
+    "narration_visibility, or the compact NARRATIVE MODE deltas.",
 )
 
 
 def _narrative_plan_roles_trusted_lane() -> tuple[str, ...]:
     """Extra instruction only when the bundled plan validates (strict=False)—no synthetic repair of partial dicts."""
     return (
-        "NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as "
-        "planning-only bounded data. Treat each family's `emphasis_band` and `signals` as optional shaping pressure together "
-        "with `role_allocation`—not as mandatory beats, ordering rules, or replacements for CTIR or machine contracts.",
+        "NARRATIVE ROLES: Use validated emphasis_band/signals/role_allocation as optional salience only; no new facts, ordering rules, or policy.",
     )
 
 
@@ -1539,6 +1508,22 @@ def _project_clause_referent_prompt_hints(
     return out or None
 
 
+def _provider_mechanical_resolution(resolution: Dict[str, Any]) -> Dict[str, Any]:
+    """Provider copy of mechanical resolution without duplicated authority blobs.
+
+    The canonical resolution object is not mutated. Validators and traces keep
+    ``metadata.gm_resolution_decision`` and ``metadata.resolution_contract``.
+    The model already receives the compact contract, the decision projection,
+    and the answer recipe at the top level.
+    """
+    shipped = copy.deepcopy(resolution)
+    metadata = shipped.get("metadata")
+    if isinstance(metadata, dict):
+        metadata.pop("gm_resolution_decision", None)
+        metadata.pop("resolution_contract", None)
+    return shipped
+
+
 def build_narration_context(
     campaign: Dict[str, Any],
     world: Dict[str, Any],
@@ -1904,23 +1889,25 @@ def build_narration_context(
         'Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.',
         'Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.',
         (
-            "ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. "
-            "When answer_required is true, answer_must_come_first requires the first sentence to deliver the substantive reply "
-            "aligned with expected_answer_shape (direct, bounded_partial using an in-world limit from allowed_partial_reasons, "
-            "or refusal_with_reason). Bounded partials must name the limiting reason in-character (uncertainty, lack_of_knowledge, or gated_information). "
-            "When forbid_deflection or forbid_generic_nonanswer are true, evasive replies, scene filler before the core reply, and answering-with-a-question are invalid. "
-            "When require_concrete_payload is true, include at least one handle from concrete_payload_any_of. "
-            "Incomplete or hedged replies must still provide a usable specific or next_lead the player can pursue now."
+            "ANSWER POLICY: response_policy.answer_completeness; response_policy.response_delta.enabled; answer first."
         ),
         (
-            "When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply "
-            "per active interlocutor; when narrator, still lead with the answer in the first sentence when answer_required is true."
+            "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; "
+            "response_policy.uncertainty.answer_shape; uncertainty_hint.turn_context; uncertainty_hint.speaker; "
+            "uncertainty_hint.scene_snapshot; frame uncertainty as world-facing limits only; vary sentence count and cadence naturally."
         ),
         (
-            "When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate "
-            "the prior answer. Add net-new value via allowed_delta_kinds (new_information, refinement that narrows the prior claim, "
-            "consequence, or clarified uncertainty—not paraphrase)."
+            "ANTI-RAILROADING (POLICY): HARD WORLD CONSTRAINT; SALIENT LEAD; FORCED PLAYER DIRECTION; "
+            "not globally banned; unjustified forced direction; allow_commitment_language_when_player_explicitly_committed; explicit commitment."
         ),
+        (
+            "CONTEXT SEPARATION (POLICY): local exchange first; briefly color; must not replace the substantive reply; not from generic scene mood alone."
+        ),
+        (
+            "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; "
+            "speak only in player-facing diegetic prose; engine/UI guidance; menu labels; consequence/opportunity; bulleted/numbered choice lists."
+        ),
+        "SCENE ANCHORING (POLICY).",
         *NARRATION_VISIBILITY_MANDATORY_INSTRUCTIONS,
         *FIRST_MENTION_MANDATORY_INSTRUCTIONS,
         *SCENE_STATE_ANCHOR_MANDATORY_INSTRUCTIONS,
@@ -1946,6 +1933,17 @@ def build_narration_context(
                 "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this turn. "
                 "You MUST NOT choose the speaker, decide NPC intent, infer pressure/tone, or add generic conversational glue. "
                 "Express only the planned reply_kind and dialogue_intent for the shipped speaker, staying within pressure_state and tone_bounds; obey prohibited_content_codes and derivation_codes.",
+                "INCIDENTAL SOCIAL REPLY AUTHORITY: If dialogue_social_plan.reply_plan_kind is harmless_subjective_response_permitted, lack of an authored preference is not a refusal requirement. "
+                "The NPC may give a bounded personal opinion, preference, recommendation, reaction, or say they have not tried/seen it; treat it as NPC speech only. "
+                "It does not establish objective world truth, inventory, a durable trait, relationship state, quest evidence, or declared_claims. "
+                "If reply_plan_kind is consequential_information_request, genuine_refusal, or genuine_uncertainty, preserve that limit and do not convert it into helpful invention. "
+                "When dialogue_authority is present, answer its requested_information. Do not substitute a different established fact. "
+                "If requested_information is opinion or personal_state and improvisation_permitted is true, state the preference or feeling itself. "
+                "Do not claim the speaker lacks knowledge of that preference, and do not add a patrol, a schedule, a payment, or a hidden fact. "
+                "Incidental speech is allowed only when improvisation_permitted is true, and that speech is not canonical world truth. "
+                "Do not invent patrols, allegiances, rewards, quests, keys, or hidden facts. "
+                "If knowledge_posture is unknown, unestablished, or withheld, say so in the speaker's voice without mentioning settled facts, speech authority, or engine limits. "
+                "Prior evasive dialogue in recent_log does not by itself force a new refusal when the current plan permits a subjective reply.",
             ]
             if (_dsp_required and _dsp_present)
             else []
@@ -1967,16 +1965,8 @@ def build_narration_context(
         'Use campaign and world state to keep political and strategic continuity.',
         'Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation.',
         'Forbidden generic phrases are disallowed: "In this city...", "Times are tough...", "Trust is hard to come by...", "You\'ll need to prove yourself..." — rewrite into specific names/locations/events.',
-        'QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Optional elaboration, (3) Optional hook. The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.',
-        'If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and response_policy.uncertainty.sources, then compose it from response_policy.uncertainty.answer_shape: known_edge, unknown_edge, next_lead.',
-        'Ground uncertainty with response_policy.uncertainty.context_inputs: uncertainty_hint.turn_context, uncertainty_hint.speaker, and uncertainty_hint.scene_snapshot.',
-        'If uncertainty_hint.speaker.role is npc, keep the reply attributable to that NPC and limited to what they could plausibly know, hear, point to, or direct the player toward.',
-        'If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording.',
-        'If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity.',
-        'Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now.',
-        'Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer.',
-        'If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice.',
-        'PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1–2 concrete observable tells, and optionally map to a skill interpretation (Sense Motive, etc.). Failure: "mix of"/"seems like both" or pure emotional summary with no cues.',
+        'QUESTION / UNCERTAINTY: Answer direct questions before elaboration. Keep uncertainty grounded in response_policy.uncertainty, uncertainty_hint, visible scene limits, or the active NPC knowledge scope.',
+        'PERCEPTION / INTENT: For behavioral insight, give one dominant state with concrete observable tells; do not present unsupported motives as fact.',
         'If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id.',
         'If the player meaningfully changes the world, you may provide world_updates.',
         'If the player text implies a clear mechanical action, suggested_action may be filled for UI assistance, but narration remains primary.',
@@ -1987,19 +1977,13 @@ def build_narration_context(
         'Treat player input as an action declaration: default to third-person phrasing and preserve the user\'s expression format instead of rewriting it.',
         'Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, "Keep your voice down."); do not treat the quote alone as the entire action when surrounding action context exists.',
         'Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics.',
-        'If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, narrative_plan.scene_opening when present, and opening_scene_realization.contract narration_basis_visible_facts for diegetic first-shot shape).',
-        'If narration_obligations.active_npc_reply_expected is true, complete the active NPC\'s substantive in-turn reply now unless a pending engine check prompt already takes precedence, or authoritative state indicates refusal/evasion/interruption/inability.',
-        'If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor\'s reply and the immediate exchange over general scene recap.',
-        'Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal).',
-        'If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling.',
-        'If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertainty in-character through witnesses, conditions, rumor, access, or incomplete observation; do not repeat prior information.',
-        'NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usable info (time/location/condition/requirement). If the NPC lacks full information, give partial specifics or direct the player to a concrete source.',
-        'When answering a player question, give a direct answer first. Do not replace the answer with narrative description.',
+        'NARRATION OBLIGATIONS: Use opening and active_npc_reply fields as output requirements only; they shape focus, reply kind, and refusal shape without granting authority.',
+        'If narration_obligations.should_answer_active_npc, answer/refuse in active NPC voice rather than empty stalling.',
+        'NPC ANSWERS: Provide a concrete answer, partial specific, source, or usable next step when available; otherwise keep the limit in-character.',
         'Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror.',
         "Do not restate or paraphrase the player's input. Always continue forward with new information.",
         "Do not repeat the player's spoken line. React to it instead.",
-        'If narration_obligations.avoid_input_echo or narration_obligations.avoid_player_action_restatement is true, do not restate or lightly paraphrase player_input (for example, "Galinor asks...") unless wording is required to disambiguate the target, quote, or procedural request.',
-        'If narration_obligations.prefer_structured_turn_summary is true, continue from resolved world state, scene advancement, and NPC intent/reply obligations rather than narrating that "the player asks/says X."',
+        'If narration_obligations.avoid_input_echo, avoid_player_action_restatement, or prefer_structured_turn_summary is true, continue from resolved state rather than restating player_input.',
         'Keep the narration to 1-4 concise paragraphs.',
         mode_instruction,
     ]
@@ -2612,86 +2596,22 @@ def build_narration_context(
         "Omitted older material is background only—not an active unresolved obligation.",
     ]
 
-    _narrative_authority_instr = [
-        "NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. "
-        "Do not assert unresolved outcomes as settled fact. "
-        "Do not assert hidden causes or hidden truths as confirmed without basis in published visible/engine state. "
-        "Do not assert NPC motives or intentions as fact without explicit basis. "
-        "When certainty is unavailable, defer via a roll/check request, bounded uncertainty, or conditional/branch framing. "
-        "Observable visible cues are allowed; omniscient conclusions are not.",
+    _policy_tail: List[str] = [
+        (
+            "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface "
+            "(narrative_authority, fallback_behavior, tone_escalation, anti_railroading, context_separation, "
+            "player_facing_narration_purity, narrative_authenticity, and scene anchoring). Keep local intent primary, "
+            "keep uncertainty qualified, preserve player agency and hypotheses, avoid internal/planner language in narration, "
+            "and do not treat policy prose or the answer recipe as authority to create facts."
+        ),
     ]
-    _fallback_behavior_instr = [
-        "FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. "
-        "Either give a bounded partial answer or, only when `fallback_behavior.allowed_behaviors.ask_clarifying_question` is true and a partial would mislead, ask one brief clarifying question. "
-        "Keep uncertainty diegetic, state the strongest grounded known edge plus the unknown edge, and offer a natural next lead when possible.",
-    ]
-    _tone_escalation_instr = [
-        "TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority—do not override it from general scene mood. "
-        "Do not introduce hostility, explicit threats, physical violence, or combat initiation unless the contract's allowances and published state support it. "
-        "When a higher escalation tier is not allowed, prefer guarded refusal, scrutiny, urgency, consequence framing, or concrete social or procedural pressure. "
-        "Topic pressure or conversational friction alone does not justify threats or violence.",
-    ]
-    _anti_railroading_instr = [
-        "ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. "
-        "Do not decide the player character's action for them. "
-        "Do not turn a surfaced lead into a required path: leads may create options, pressure, urgency, or opportunities; "
-        "they do not create main-plot gravity, destiny, or a single mandatory thread. "
-        "Avoid mandatory-path phrasing such as 'only way,' 'must go,' or 'the story pulls you' unless authoritative state "
-        "truly supports it (see allow_exclusivity_from_authoritative_resolution and allow_directional_language_from_resolved_transition on the contract). "
-        "Differentiate: HARD WORLD CONSTRAINT — state a fixed situation or barrier plainly without selecting the player's next move; "
-        "SALIENT LEAD — highlight as option, rumor, pressure, or opportunity, not fate; "
-        "FORCED PLAYER DIRECTION — never narrate the PC's decision, compulsion to one destination, or one true path without basis. "
-        "A hard world constraint may narrow what is possible; it must not auto-pick the player's response. "
-        "Preserve momentum through consequences, openings, reactions, and constraints—not by seizing player action. "
-        "Precedence (compact): player agency outranks momentum polish; authoritative constraints may narrow possibilities but must not choose the player's next move; "
-        "surfaced leads may be highlighted without being made mandatory. "
-        "Directional language is not globally banned—only unjustified forced direction. "
-        "When anti_railroading_contract.allow_commitment_language_when_player_explicitly_committed is true, narration that follows "
-        "the player's explicit commitment in player_input (movement or intent they stated) is allowed and expected where appropriate.",
-    ]
-    _context_separation_instr = [
-        "CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. "
-        "Keep the current interaction intent primary: answer or react to the local exchange first. "
-        "Ambient background pressure may briefly color wording or add an optional hook; it must not replace the substantive reply, hijack topic, or substitute vague instability for a direct answer. "
-        "Background tension alone must not harden interpersonal tone beyond what tone_escalation already allows. "
-        "Letting broader ambient pressure lead the reply is allowed only when the player text, scene framing, a resolved consequence, or published pressure inputs make that focus immediately relevant—not from generic scene mood alone.",
-    ]
-    _player_facing_narration_purity_instr = [
-        "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. "
-        "Speak only in player-facing diegetic prose. "
-        "Do not expose internal consequence/opportunity labels, planner headings, or engine-facing scaffolding as narration. "
-        "Do not present action coaching, prompts, or engine/UI guidance as if it were in-world text. "
-        "Do not mention exits or choices as menu labels (for example 'the exit labeled …', 'your options are …', or bulleted/numbered choice lists). "
-        "When branching paths exist, render them as what the character can see, hear, or infer in the moment—not as explicit instructions to the player.",
-    ]
-    _anchoring_polish_instr = [
-        "SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not use anchoring to smuggle extra ambient pressure.",
-    ]
-    _social_response_structure_instr = [
-        "SOCIAL RESPONSE STRUCTURE (POLICY): When response_policy.social_response_structure.enabled is true, obey that object; deterministic enforcement will use it later. "
-        "NPC/social lines should sound spoken, not essay-like: answer first, then at most one short supporting detail if needed; avoid stacked explanatory clauses. "
-        "Brief action beats are allowed; keep quoted speech primary. Uncertainty or refusal stays conversational and in-world. "
-        "No bullet-like or numbered-list dialogue.",
-    ]
-    _narrative_authenticity_instr = [
-        "NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. "
-        "Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if needed. "
-        "On follow-up pressure turns, change stance, detail, uncertainty boundary, reaction, or next step—without inventing facts. "
-        "Avoid generic non-answers when a substantive or bounded-partial reply is available; when fallback_behavior.uncertainty_active is true, brevity and honest limits override polish. "
-        "When rumor_realism applies (see trace.rumor_turn_active), do not recycle recent narration or scene setup as quoted rumor without a hearsay realism signal (source limit, uncertainty, bias, or net-new detail).",
-    ]
-    _policy_tail: List[str] = (
-        list(_tone_escalation_instr)
-        + _narrative_authority_instr
-        + _fallback_behavior_instr
-        + _anti_railroading_instr
-        + _context_separation_instr
-        + _player_facing_narration_purity_instr
-        + _anchoring_polish_instr
-        + _narrative_authenticity_instr
-    )
     if social_response_structure_contract.get("enabled"):
-        _policy_tail = list(_policy_tail) + _social_response_structure_instr
+        _policy_tail = list(_policy_tail) + [
+            (
+                "SOCIAL RESPONSE STRUCTURE: Obey response_policy.social_response_structure; keep quoted NPC speech primary, "
+                "answer/refuse/qualify conversationally, and avoid bullet-like dialogue."
+            ),
+        ]
 
     _np_for_mode = narrative_plan if isinstance(narrative_plan, dict) else None
     _pnm = str(_np_for_mode.get("narrative_mode") or "").strip() if isinstance(_np_for_mode, dict) else ""
@@ -3043,6 +2963,36 @@ def build_narration_context(
             'first_mention_contract',
         ):
             payload.pop(key, None)
+    from game.gm_resolution_decision import narration_authority_fields, prompt_projection_for_temporal_provenance
+
+    authority_fields = narration_authority_fields(resolution)
+    if authority_fields.get("resolution_contract"):
+        payload["resolution_contract"] = authority_fields["resolution_contract"]
+    if authority_fields.get("gm_resolution_decision"):
+        payload["gm_resolution_decision"] = authority_fields["gm_resolution_decision"]
+    if authority_fields.get("decision_facing_answer_recipe"):
+        payload["decision_facing_answer_recipe"] = authority_fields["decision_facing_answer_recipe"]
+        payload["instructions"] = list(payload.get("instructions") or []) + [
+            "ANSWER RECIPE: Follow decision_facing_answer_recipe for this turn. "
+            "It projects gm_resolution_decision and does not add authority. "
+            "The decision wins if they disagree."
+        ]
+    elif authority_fields.get("resolution_contract"):
+        payload["instructions"] = list(payload.get("instructions") or []) + [
+            "RESOLUTION CONTRACT: Obey resolution_contract.constraint. It names the requested target and semantic point."
+        ]
+    if (
+        authority_fields.get("gm_resolution_decision")
+        and isinstance(resolution, dict)
+        and payload.get("mechanical_resolution") is resolution
+    ):
+        payload["mechanical_resolution"] = _provider_mechanical_resolution(resolution)
+    temporal_provenance = prompt_projection_for_temporal_provenance(
+        session,
+        scene_id=str((session or {}).get("active_scene_id") or "") if isinstance(session, Mapping) else None,
+    )
+    if any(temporal_provenance.get("buckets", {}).values()):
+        payload["narration_temporal_provenance"] = temporal_provenance
     if include_non_public_prompt_keys:
         return payload
     shipped = project_public_payload(payload)

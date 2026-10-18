@@ -1,0 +1,145 @@
+{
+  "temporal": {
+    "gm_inferences": [],
+    "player_hypotheses": [
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "text": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+        "authority": "observation",
+        "provenance": "player_hypothesis",
+        "epistemic_status": "hypothesis",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2
+      }
+    ],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains uncertain.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      }
+    ],
+    "active_claim": {
+      "id": "claim_e3e5a9a7bb",
+      "label": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+      "kind": "claim",
+      "scene_id": "chapel_belfry",
+      "turn_index": 2,
+      "source": "player_hypothesis",
+      "epistemic_status": "hypothesis"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "chapel_belfry",
+      "active_interlocutor": null,
+      "active_claim": {
+        "id": "claim_e3e5a9a7bb",
+        "label": "Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+        "kind": "claim",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "player_hypothesis",
+        "epistemic_status": "hypothesis"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "kind": "object",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_a6f3b923e680"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "chapel_belfry"
+  },
+  "scene": {
+    "id": "chapel_belfry",
+    "location": "Chapel belfry",
+    "summary": "A bronze bell hangs from a timber frame.",
+    "visible_facts": [
+      "The bell's wooden yoke is split.",
+      "The bell's leather hanger is torn."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [
+      {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "aliases": [
+          "bell",
+          "wooden yoke",
+          "yoke",
+          "leather hanger",
+          "hanger"
+        ]
+      }
+    ],
+    "addressables": []
+  },
+  "world": {
+    "npcs": [],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 3,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 1,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 3,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 1,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 2,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 1,
+        "assets": []
+      }
+    ],
+    "clues": {},
+    "world_flags": [],
+    "assets": []
+  }
+}

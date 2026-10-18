@@ -1,0 +1,5396 @@
+[
+  {
+    "id": "direct_exact-02",
+    "partition": "validation",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-02:s0",
+        "context": "direct_exact-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-02",
+    "partition": "validation",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-02:s0",
+        "context": "direct_paraphrase-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-02",
+    "partition": "validation",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-02:s0",
+        "context": "direct_unstructured-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-02",
+    "partition": "validation",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-02:s0",
+        "context": "direct_multiple_facts-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-02",
+    "partition": "validation",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-02:s0",
+        "context": "direct_roles-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the ivory spindle: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-02",
+    "partition": "validation",
+    "family": "direct_open",
+    "question": "Vesper, who attunes the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "attune",
+        "predicate_evidence": "attunes",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-02:s0",
+        "context": "direct_open-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver attunes the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "attune",
+            "predicate_evidence": "attunes",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "agent",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-02",
+    "partition": "validation",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the ivory spindle today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-02:s0",
+        "context": "direct_qualified-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-02",
+    "partition": "validation",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the ivory spindle, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-02:s0",
+        "context": "partial_multipart-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-02",
+    "partition": "validation",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-02:s0",
+        "context": "partial_indefinite-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-02",
+    "partition": "validation",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-02:s0",
+        "context": "partial_rumor-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "weaver"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-02",
+    "partition": "validation",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-02:s0",
+        "context": "partial_conflict-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-02:s1",
+        "context": "partial_conflict-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "weaver",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-02",
+    "partition": "validation",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-02:s0",
+        "context": "related_reversal-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the ivory spindle: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-02",
+    "partition": "validation",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-02:s0",
+        "context": "related_relationship-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "related_time-02",
+    "partition": "validation",
+    "family": "related_time",
+    "question": "Vesper, who keeps the ivory spindle today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-02:s0",
+        "context": "related_time-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-02",
+    "partition": "validation",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-02:s0",
+        "context": "related_negation-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-02",
+    "partition": "validation",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-02",
+    "partition": "validation",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-02:s0",
+        "context": "unknown_private-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-02",
+    "partition": "validation",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-02:s0",
+        "context": "unknown_history-02",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-02",
+    "partition": "validation",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-02:s0",
+        "context": "unknown_forged-02",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "weaver"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-02",
+    "partition": "validation",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-02:s0",
+        "context": "restricted_password-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the ivory spindle is violet-2-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "value",
+                "value": "violet-2-cinder",
+                "entity_id": "",
+                "evidence": "violet-2-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-2-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-02",
+    "partition": "validation",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the ivory spindle?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-02:s0",
+        "context": "restricted_countersign-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the ivory spindle is violet-2-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "value",
+                "value": "violet-2-cinder",
+                "entity_id": "",
+                "evidence": "violet-2-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-2-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-02",
+    "partition": "validation",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the ivory spindle or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ivory spindle",
+            "entity_id": "",
+            "evidence": "ivory spindle"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-02:s0",
+        "context": "clarification-02",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The weaver keeps the ivory spindle.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ivory spindle",
+                "entity_id": "",
+                "evidence": "ivory spindle"
+              },
+              {
+                "name": "keeper",
+                "value": "weaver",
+                "entity_id": "",
+                "evidence": "weaver"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_exact-03",
+    "partition": "validation",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-03:s0",
+        "context": "direct_exact-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-03",
+    "partition": "validation",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-03:s0",
+        "context": "direct_paraphrase-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-03",
+    "partition": "validation",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-03:s0",
+        "context": "direct_unstructured-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-03",
+    "partition": "validation",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-03:s0",
+        "context": "direct_multiple_facts-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-03",
+    "partition": "validation",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the jade comb?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-03:s0",
+        "context": "direct_roles-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the jade comb: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-03",
+    "partition": "validation",
+    "family": "direct_open",
+    "question": "Vesper, who insulates the jade comb?",
+    "queries": [
+      {
+        "predicate": "insulate",
+        "predicate_evidence": "insulates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-03:s0",
+        "context": "direct_open-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist insulates the jade comb.",
+        "facts": [
+          {
+            "predicate": "insulate",
+            "predicate_evidence": "insulates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "agent",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-03",
+    "partition": "validation",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the jade comb today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-03:s0",
+        "context": "direct_qualified-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-03",
+    "partition": "validation",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the jade comb, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-03:s0",
+        "context": "partial_multipart-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-03",
+    "partition": "validation",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-03:s0",
+        "context": "partial_indefinite-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-03",
+    "partition": "validation",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-03:s0",
+        "context": "partial_rumor-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "horticulturist"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-03",
+    "partition": "validation",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-03:s0",
+        "context": "partial_conflict-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-03:s1",
+        "context": "partial_conflict-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "horticulturist",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-03",
+    "partition": "validation",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the jade comb?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-03:s0",
+        "context": "related_reversal-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the jade comb: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-03",
+    "partition": "validation",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the jade comb?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-03:s0",
+        "context": "related_relationship-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "related_time-03",
+    "partition": "validation",
+    "family": "related_time",
+    "question": "Vesper, who keeps the jade comb today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-03:s0",
+        "context": "related_time-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-03",
+    "partition": "validation",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-03:s0",
+        "context": "related_negation-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-03",
+    "partition": "validation",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-03",
+    "partition": "validation",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-03:s0",
+        "context": "unknown_private-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-03",
+    "partition": "validation",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-03:s0",
+        "context": "unknown_history-03",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-03",
+    "partition": "validation",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the jade comb?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-03:s0",
+        "context": "unknown_forged-03",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "horticulturist"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-03",
+    "partition": "validation",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the jade comb?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-03:s0",
+        "context": "restricted_password-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the jade comb is violet-3-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "value",
+                "value": "violet-3-cinder",
+                "entity_id": "",
+                "evidence": "violet-3-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-3-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-03",
+    "partition": "validation",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the jade comb?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-03:s0",
+        "context": "restricted_countersign-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the jade comb is violet-3-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "value",
+                "value": "violet-3-cinder",
+                "entity_id": "",
+                "evidence": "violet-3-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-3-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-03",
+    "partition": "validation",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the jade comb or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "jade comb",
+            "entity_id": "",
+            "evidence": "jade comb"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-03:s0",
+        "context": "clarification-03",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The horticulturist keeps the jade comb.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "jade comb",
+                "entity_id": "",
+                "evidence": "jade comb"
+              },
+              {
+                "name": "keeper",
+                "value": "horticulturist",
+                "entity_id": "",
+                "evidence": "horticulturist"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_exact-04",
+    "partition": "validation",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-04:s0",
+        "context": "direct_exact-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-04",
+    "partition": "validation",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-04:s0",
+        "context": "direct_paraphrase-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-04",
+    "partition": "validation",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-04:s0",
+        "context": "direct_unstructured-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-04",
+    "partition": "validation",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-04:s0",
+        "context": "direct_multiple_facts-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-04",
+    "partition": "validation",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-04:s0",
+        "context": "direct_roles-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the cobalt dial: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-04",
+    "partition": "validation",
+    "family": "direct_open",
+    "question": "Vesper, who reconciles the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "reconcile",
+        "predicate_evidence": "reconciles",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-04:s0",
+        "context": "direct_open-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer reconciles the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "reconcile",
+            "predicate_evidence": "reconciles",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "agent",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-04",
+    "partition": "validation",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the cobalt dial today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-04:s0",
+        "context": "direct_qualified-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-04",
+    "partition": "validation",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the cobalt dial, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-04:s0",
+        "context": "partial_multipart-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-04",
+    "partition": "validation",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-04:s0",
+        "context": "partial_indefinite-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-04",
+    "partition": "validation",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-04:s0",
+        "context": "partial_rumor-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "cartographer"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-04",
+    "partition": "validation",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-04:s0",
+        "context": "partial_conflict-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-04:s1",
+        "context": "partial_conflict-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "cartographer",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-04",
+    "partition": "validation",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-04:s0",
+        "context": "related_reversal-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the cobalt dial: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-04",
+    "partition": "validation",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-04:s0",
+        "context": "related_relationship-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "related_time-04",
+    "partition": "validation",
+    "family": "related_time",
+    "question": "Vesper, who keeps the cobalt dial today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-04:s0",
+        "context": "related_time-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-04",
+    "partition": "validation",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-04:s0",
+        "context": "related_negation-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-04",
+    "partition": "validation",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-04",
+    "partition": "validation",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-04:s0",
+        "context": "unknown_private-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-04",
+    "partition": "validation",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-04:s0",
+        "context": "unknown_history-04",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-04",
+    "partition": "validation",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-04:s0",
+        "context": "unknown_forged-04",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "cartographer"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-04",
+    "partition": "validation",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-04:s0",
+        "context": "restricted_password-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the cobalt dial is violet-4-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "value",
+                "value": "violet-4-cinder",
+                "entity_id": "",
+                "evidence": "violet-4-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-4-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-04",
+    "partition": "validation",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the cobalt dial?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-04:s0",
+        "context": "restricted_countersign-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the cobalt dial is violet-4-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "value",
+                "value": "violet-4-cinder",
+                "entity_id": "",
+                "evidence": "violet-4-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-4-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-04",
+    "partition": "validation",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the cobalt dial or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "cobalt dial",
+            "entity_id": "",
+            "evidence": "cobalt dial"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-04:s0",
+        "context": "clarification-04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The cartographer keeps the cobalt dial.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "cobalt dial",
+                "entity_id": "",
+                "evidence": "cobalt dial"
+              },
+              {
+                "name": "keeper",
+                "value": "cartographer",
+                "entity_id": "",
+                "evidence": "cartographer"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  }
+]

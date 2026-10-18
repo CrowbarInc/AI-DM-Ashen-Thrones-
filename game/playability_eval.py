@@ -12,6 +12,12 @@ import re
 from typing import Any, Mapping, Sequence
 
 from game.observability_attribution_read import normalized_observational_telemetry_bundle, summarize_gameplay_validation_for_turn
+from game.resolution_contract import (
+    assess_contract_satisfaction,
+    canonical_existence_denied,
+    explicit_nonanswer_response,
+    generic_use_nonanswer,
+)
 
 SCHEMA_VERSION = 3
 
@@ -170,14 +176,58 @@ _ANSWER_MARKERS_RES = (
     re.compile(r"\b[a-z]{2,}\s+(commands|leads|runs|owns|guards)\b", re.I),
 )
 
+_COLOR_WORD_RE = re.compile(
+    r"\b(red|blue|green|gold|golden|silver|black|white|gray|grey|brown|purple|violet|"
+    r"crimson|scarlet|maroon|ochre|yellow|orange|amber|bronze|copper|ivory|"
+    r"azure|indigo|teal|verdigris|tarnished|bright|dark|pale|faded|frayed|rain-darkened)\b",
+    re.I,
+)
+
+_SENSORY_DETAIL_WORD_RE = re.compile(
+    r"\b(smells?|tastes?|sounds?|feels?|rough|smooth|dented|cracked|stitched|painted|"
+    r"carved|weathered|weather-beaten|wooden|nails?|parchment|pinned|smeared|flickers?|"
+    r"water-darkened|stained|warm|cold|sour|sweet|smoky|spiced|threadbare|polished)\b",
+    re.I,
+)
+
 _COHERENT_NONANSWER_RES = (
-    re.compile(r"\b(i|we|they)\s+(do not|don't|cannot|can't|couldn't|could not)\s+(know|tell|say|confirm)\b", re.I),
+    re.compile(r"\b(i|we|they)\s+(do not|don't|cannot|can't|couldn't|could not)\s+(know|tell|say|confirm|verify)\b", re.I),
     re.compile(r"\b(couldn't|could not|can't|cannot)\s+tell\s+you\b", re.I),
     re.compile(r"\b(no one|nothing|not enough|no evidence|no witness)\b", re.I),
     re.compile(r"\b(unknown|unclear|not clear|not certain|not established)\b", re.I),
     re.compile(r"\b(i'?m|i am|we are|we're|they are|they're)\s+not\s+(telling|saying)\b", re.I),
     re.compile(r"\b(refuses|won't answer|will not answer|not telling you)\b", re.I),
     re.compile(r"\bwhich (one|notice|door|person)|what do you mean|clarify|be more specific\b", re.I),
+)
+
+_GENERIC_NONANSWER_RES = (
+    re.compile(r"\bdo not know enough to answer\b", re.I),
+    re.compile(r"\bdon't know enough to answer\b", re.I),
+    re.compile(r"\bthe murmur around you never tightens\b", re.I),
+    re.compile(r"\bthe moment passes without anyone stepping forward\b", re.I),
+    re.compile(r"\bnothing new resolves\b", re.I),
+    re.compile(r"\bno one steps forward\b", re.I),
+    re.compile(r"\bcloser looking yields nothing further\b", re.I),
+)
+
+_ACTIONABLE_REDIRECT_RE = re.compile(
+    r"\b(try|ask|check|look|open|find|go to|head to|speak to|talk to|visit|you'll need|you need|"
+    r"would need|come back|bring|show|wait|follow|arrange|schedule)\b",
+    re.I,
+)
+
+_SOURCE_ANSWER_RE = re.compile(
+    r"\b(drover|traveler|runner|guard|serjeant|sergeant|merchant|refugee|watcher|clerk|"
+    r"local|someone|a man|a woman|north road|south road|east road|west road|crowd|rumou?r|hearsay|"
+    r"never caught (?:his|her|their) name|didn't catch (?:his|her|their) name)\b",
+    re.I,
+)
+
+_ACTION_REQUEST_RE = re.compile(
+    r"\b(can|could|would|will)\s+you\b|"
+    r"\b(?:introduce me|take me|lead me|point me|help me)\b|"
+    r"\bask\s+\w{2,20}\s+to\s+(?:introduce|open|unlock|show|take|lead|point|help)\b",
+    re.I,
 )
 
 _OBSERVATION_VERBS_RE = re.compile(
@@ -530,6 +580,36 @@ def _is_coherent_nonanswer(gm: str) -> bool:
     return _any_re_match(_COHERENT_NONANSWER_RES, gm)
 
 
+def _is_generic_nonanswer(gm: str) -> bool:
+    return _any_re_match(_GENERIC_NONANSWER_RES, gm)
+
+
+def _is_action_request(player: str) -> bool:
+    return bool(_ACTION_REQUEST_RE.search(player))
+
+
+def _nonanswer_resolves_request(player: str, gm: str) -> bool:
+    if not _is_coherent_nonanswer(gm):
+        return False
+    p = player.lower()
+    g = gm.lower()
+    if _is_generic_nonanswer(gm) and not _ACTIONABLE_REDIRECT_RE.search(g):
+        return False
+    if re.search(r"\b(look like|looks like|describe|colou?rs?|smell|sound|taste)\b", p):
+        return bool(
+            re.search(r"\b(can't|cannot|couldn't|could not)\s+(tell|see|make out)\s+from here\b", g)
+            and _ACTIONABLE_REDIRECT_RE.search(g)
+        )
+    if re.search(r"\bwho told|where did you hear|who said|source\b", p):
+        return bool(_SOURCE_ANSWER_RE.search(g) or re.search(r"\b(refuses|won't say|will not say)\b", g))
+    if _is_action_request(player):
+        return bool(
+            re.search(r"\b(yes|no|can't|cannot|won't|will not|refuses|not able)\b", g)
+            and (_ACTIONABLE_REDIRECT_RE.search(g) or re.search(r"\b(no|can't|cannot|won't|will not|refuses)\b", g))
+        )
+    return not _is_generic_nonanswer(gm) or bool(_ACTIONABLE_REDIRECT_RE.search(g))
+
+
 def _has_yes_no_answer(player: str, gm: str) -> bool:
     if not re.match(r"^\s*(did|do|does|is|are|was|were|can|could|will|would|has|have|had)\b", player, re.I):
         return False
@@ -538,13 +618,27 @@ def _has_yes_no_answer(player: str, gm: str) -> bool:
 
 def _question_intent_addressed(player: str, gm: str, direct: tuple[int, bool, list[str], dict[str, Any]]) -> bool:
     signals = direct[3]
+    if re.search(r"\bcolou?rs?\b", player, re.I):
+        return bool(_COLOR_WORD_RE.search(gm) or _nonanswer_resolves_request(player, gm))
+    if re.search(r"\b(?:look like|looks like|what does .{0,50}look like|describe)\b", player, re.I):
+        return bool(
+            _SENSORY_DETAIL_WORD_RE.search(gm)
+            or _COLOR_WORD_RE.search(gm)
+            or _nonanswer_resolves_request(player, gm)
+        )
+    if re.search(r"\bwho told|where did you hear|who said|source\b", player, re.I):
+        return bool(_SOURCE_ANSWER_RE.search(gm) or _nonanswer_resolves_request(player, gm))
+    if _is_action_request(player):
+        if _is_generic_nonanswer(gm):
+            return False
+        return bool(_has_yes_no_answer(player, gm) or _ACTIONABLE_REDIRECT_RE.search(gm) or int(signals.get("answer_markers") or 0) >= 2)
     if _has_yes_no_answer(player, gm):
         return True
     if int(signals.get("answer_markers") or 0) >= 1 and len(_tokens(gm)) <= 4:
         return True
     if int(signals.get("answer_markers") or 0) >= 2:
         return True
-    if _is_coherent_nonanswer(gm):
+    if _nonanswer_resolves_request(player, gm):
         return True
     if re.search(r"\b(hear|listen|sound)\b", player, re.I) and re.search(
         r"\b(footsteps?|silence|voices?|whispers?|shout|cry|music|scrape|thud)\b", gm, re.I
@@ -576,6 +670,135 @@ def _observation_intent_addressed(player: str, gm: str) -> bool:
     player_terms = _player_topic_terms(player)
     gm_terms = _word_set(gm)
     return bool(player_terms and (player_terms & gm_terms))
+
+
+def _resolution_contract_from_payload(data: Mapping[str, Any]) -> dict[str, Any] | None:
+    direct = data.get("resolution_contract")
+    if isinstance(direct, Mapping) and direct.get("contract_id"):
+        return dict(direct)
+    resolution = data.get("resolution")
+    if isinstance(resolution, Mapping):
+        metadata = resolution.get("metadata")
+        nested = metadata.get("resolution_contract") if isinstance(metadata, Mapping) else None
+        if isinstance(nested, Mapping) and nested.get("contract_id"):
+            return dict(nested)
+    gm_output = data.get("gm_output")
+    if isinstance(gm_output, Mapping):
+        metadata = gm_output.get("metadata")
+        debug = metadata.get("emission_debug") if isinstance(metadata, Mapping) else None
+        nested = debug.get("resolution_contract") if isinstance(debug, Mapping) else None
+        if isinstance(nested, Mapping) and nested.get("contract_id"):
+            return dict(nested)
+    return None
+
+
+def _referential_action_literalized(player: str, gm: str) -> bool:
+    from game.interpretation_proposal import referential_action_shape
+    from game.resolution_contract import _LITERAL_STEP_RE
+
+    return bool(referential_action_shape(player) and _LITERAL_STEP_RE.search(gm or ""))
+
+
+def _apply_resolution_contract_evidence(
+    result: dict[str, Any],
+    *,
+    gm: str,
+    contract: Mapping[str, Any] | None,
+    gm_output: Mapping[str, Any] | None = None,
+    player: str = "",
+) -> dict[str, Any]:
+    """Use the shared contract as evidence. A runtime success flag is not a verdict."""
+    if _referential_action_literalized(player, gm):
+        evidence = dict(result.get("evidence") or {})
+        evidence["literal_referent_reinterpretation"] = True
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:literal_referent_reinterpretation"], evidence)
+    if not isinstance(contract, Mapping) or not contract.get("contract_id"):
+        return result
+    if canonical_existence_denied(gm, contract):
+        evidence = dict(result.get("evidence") or {})
+        evidence["canonical_premise_contradicted"] = True
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:canonical_premise_contradicted"], evidence)
+    if generic_use_nonanswer(gm):
+        evidence = dict(result.get("evidence") or {})
+        evidence["generic_use_nonanswer"] = True
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:generic_use_nonanswer"], evidence)
+    assessment = assess_contract_satisfaction(gm, contract)
+    status = str(assessment.get("status") or "")
+    from game.resolution_contract import resolution_coverage
+
+    coverage = resolution_coverage(gm, {"metadata": {"resolution_contract": dict(contract)}})
+    evidence = dict(result.get("evidence") or {})
+    evidence["resolution_contract"] = {
+        "contract_id": contract.get("contract_id"),
+        "dimension": contract.get("dimension"),
+        "dimensions": list(contract.get("dimensions") or []),
+        "operation": contract.get("operation"),
+        "referent_provenance": contract.get("referent_provenance"),
+        "assessment_status": assessment.get("status"),
+        "assessment_reasons": list(assessment.get("reasons") or []),
+        "target": assessment.get("target"),
+        "candidate_answer_target": assessment.get("candidate_answer_target"),
+        "target_compatible": assessment.get("target_compatible"),
+        "operation_compatible": assessment.get("operation_compatible"),
+        "dimension_compatible": assessment.get("dimension_compatible"),
+        "resolution_kind": assessment.get("resolution_kind"),
+        "resolution_coverage": coverage.get("covered_dimensions"),
+        "echo_detected": "echo_not_answer" in {str(item) for item in (assessment.get("reasons") or [])},
+        "construction": contract.get("construction") if isinstance(contract.get("construction"), dict) else None,
+        "failure_locus": (
+            "response_missed_contract"
+            if status == "unsatisfied"
+            else "contract_unchecked"
+            if status == "unchecked"
+            else "response_met_contract"
+            if status in {"satisfied", "legitimate_nonresolution", "partial"}
+            else None
+        ),
+    }
+    if result.get("status") == SEMANTIC_FAIL and "malformed" in " ".join(result.get("reason_codes") or []):
+        return _gate(result["status"], list(result.get("reason_codes") or []), evidence)
+    reason_set = {str(item) for item in (assessment.get("reasons") or [])}
+    if reason_set & {"dimension_substituted", "atmospheric_avoidance", "social_not_resolved"}:
+        code = next(
+            item
+            for item in ("dimension_substituted", "atmospheric_avoidance", "social_not_resolved")
+            if item in reason_set
+        )
+        return _gate(SEMANTIC_FAIL, [f"intent_addressed:{code}"], evidence)
+    if "explicit_nonanswer" in reason_set or (
+        assessment.get("resolution_kind") == "answer" and explicit_nonanswer_response(gm)
+    ):
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:explicit_nonanswer"],
+            evidence,
+        )
+    if "repeat_contaminated" in reason_set:
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:repeat_contaminated"],
+            evidence,
+        )
+    output_meta = gm_output.get("metadata") if isinstance(gm_output, Mapping) else None
+    output_debug = output_meta.get("emission_debug") if isinstance(output_meta, Mapping) else None
+    precedence = output_debug.get("outcome_precedence") if isinstance(output_debug, Mapping) else None
+    if isinstance(precedence, Mapping) and precedence.get("destroyed") and status != "satisfied":
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:satisfied_answer_destroyed"],
+            evidence,
+        )
+    if status == "satisfied" and coverage.get("required_dimensions") and not coverage.get("complete"):
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:resolution_content_not_preserved"], evidence)
+    if status == "unsatisfied":
+        return _gate(
+            SEMANTIC_FAIL,
+            ["intent_addressed:resolution_contract_unsatisfied"],
+            evidence,
+        )
+    if status in {"satisfied", "legitimate_nonresolution", "partial"} and result.get("status") == SEMANTIC_FAIL:
+        return _gate(SEMANTIC_PASS, [], evidence)
+    return _gate(result.get("status") or SEMANTIC_UNCHECKED, list(result.get("reason_codes") or []), evidence)
 
 
 def _evaluate_intent_addressed_gate(
@@ -623,7 +846,9 @@ def _evaluate_intent_addressed_gate(
             evidence,
         )
 
-    if intent[1] or _is_coherent_nonanswer(gm):
+    if _is_generic_nonanswer(gm) and not _nonanswer_resolves_request(player, gm):
+        return _gate(SEMANTIC_FAIL, ["intent_addressed:generic_nonanswer_did_not_resolve_action"], evidence)
+    if intent[1] or _nonanswer_resolves_request(player, gm):
         return _gate(SEMANTIC_PASS, [], evidence)
     return _gate(SEMANTIC_FAIL, ["intent_addressed:player_action_or_request_lost"], evidence)
 
@@ -724,12 +949,18 @@ def evaluate_playability(payload: Any) -> dict[str, Any]:
     )
     immersion = _score_immersion(gm=gm, debug_traces=data.get("debug_traces"))
     malformed_gate = _evaluate_malformed_output_gate(gm=gm, gm_output=gm_output)
-    intent_gate = _evaluate_intent_addressed_gate(
-        player=player,
+    intent_gate = _apply_resolution_contract_evidence(
+        _evaluate_intent_addressed_gate(
+            player=player,
+            gm=gm,
+            direct=direct,
+            intent=intent,
+            malformed_gate=malformed_gate,
+        ),
         gm=gm,
-        direct=direct,
-        intent=intent,
-        malformed_gate=malformed_gate,
+        contract=_resolution_contract_from_payload(data),
+        gm_output=gm_output if isinstance(gm_output, Mapping) else None,
+        player=player,
     )
     mandatory_gates = {
         "malformed_output": malformed_gate,

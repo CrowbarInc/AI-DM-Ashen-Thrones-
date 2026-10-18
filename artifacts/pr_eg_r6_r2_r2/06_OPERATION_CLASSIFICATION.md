@@ -1,0 +1,3 @@
+# 06 — Operation Classification
+
+The provider proposes act independently of source availability; host checks schema, quoted operation evidence, target ownership and transformation coherence. Confidence does not grant validity. Classification remains fallible in live transcripts and is graded separately from schema validity. [game/unified_semantic_planning.py:778](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:778>); [artifacts/pr_eg_r6_r2_r2/quality_metrics.json:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r2/quality_metrics.json:1>)

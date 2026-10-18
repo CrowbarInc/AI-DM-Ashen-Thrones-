@@ -180,13 +180,15 @@ def test_resolve_social_action_open_solicitation_payload():
     )
     soc = res.get("social") or {}
     assert soc.get("open_social_solicitation") is True
-    assert soc.get("social_intent_class") == "open_call"
+    assert soc.get("social_intent_class") == "open_call_acquired_interlocutor"
     assert soc.get("broad_address_bid") is True
-    assert soc.get("target_resolved") is False
-    assert soc.get("target_source") == "scene_open_bid"
-    assert soc.get("target_reason") == "broad_address_to_available_scene_npcs"
-    assert soc.get("npc_reply_expected") is False
-    assert soc.get("reply_kind") == "reaction"
+    assert soc.get("broad_address_acquired_interlocutor") is True
+    assert soc.get("target_resolved") is True
+    assert soc.get("npc_id") == "guard_captain"
+    assert soc.get("target_source") == "scene_open_bid_acquired"
+    assert soc.get("target_reason") == "broad_address_acquired_first_addressable_scene_actor"
+    assert soc.get("npc_reply_expected") is True
+    assert soc.get("reply_kind") == "answer"
     assert isinstance(soc.get("candidate_addressable_ids"), list)
     assert soc.get("candidate_addressable_count") == 2
 

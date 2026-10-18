@@ -296,9 +296,12 @@ def _abstract_surfaces(
 ) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for npc in _present_npc_rows(scene_inner, world):
+        from game.dialogue_authority import npc_source_permitted
         topics = npc.get("topics")
         if isinstance(topics, list):
             for topic in topics:
+                if not npc_source_permitted(npc, topic):
+                    continue
                 if isinstance(topic, Mapping):
                     text = _clean(topic.get("text"))
                     if text:
@@ -306,6 +309,8 @@ def _abstract_surfaces(
         knowledge = npc.get("knowledge")
         if isinstance(knowledge, list):
             for item in knowledge:
+                if not npc_source_permitted(npc, item):
+                    continue
                 if isinstance(item, Mapping):
                     text = _clean(item.get("text"))
                     if text:

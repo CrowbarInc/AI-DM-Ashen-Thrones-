@@ -1,0 +1,3 @@
+# 13 — API Serialization Audit
+
+_build_turn_response_payload restores the pinned response before stripping internal keys and bypasses semantic sanitization for sealed text. Finalized response logs and history agree. Conversational decisions return a stripped copy after exact restoration. JSON escaping preserves decoded text identity. No serialization-stage speaker correction or error-stage NPC substitution is allowed. Corrupt public digest and divergent-history tests fail closed. Error messages do not substitute new NPC speech. HTTP controlled reproduction injects frozen authority/candidate at the validation boundary; it does not claim to recreate stochastic upstream interpretation byte-for-byte.

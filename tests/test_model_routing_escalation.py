@@ -9,6 +9,7 @@ import pytest
 import game.api as api_mod
 import game.gm as gm_mod
 import game.model_routing as routing_mod
+from tests.helpers.live_model_guard import production_call_gpt
 from game.api import _build_gpt_narration_from_authoritative_state
 from game.defaults import default_campaign, default_character, default_session, default_world
 from game.storage import get_scene_runtime
@@ -33,6 +34,7 @@ def _install_openai_recorder(
             return SimpleNamespace(output_text=response_text)
 
     monkeypatch.setattr(openai, "OpenAI", _Client)
+    monkeypatch.setattr(gm_mod, "call_gpt", production_call_gpt())
     return calls
 
 

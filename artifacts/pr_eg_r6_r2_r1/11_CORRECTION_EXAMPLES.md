@@ -1,0 +1,3 @@
+# 11 — Correction Examples
+
+Success and failure must both be reviewed: [artifacts/pr_eg_r6_r2_r1/raw_examples.json:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r1/raw_examples.json:1>). Copper object replacement succeeds. A relationship-only correction fails when the provider proposes pronoun 'it' as an unlisted object change. A role reversal fails when the provider requests replace_subject while also changing object. Original H05 accepts an incoherent interpretation that fills a missing subject while retaining the old drum-name predicate, then supplies the wrong public drum statement. This is a serious semantic-validation failure, not a legacy-selector override or protected disclosure.

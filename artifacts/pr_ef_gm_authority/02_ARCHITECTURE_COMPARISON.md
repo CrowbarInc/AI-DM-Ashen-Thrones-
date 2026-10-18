@@ -1,0 +1,9 @@
+# 02 — Architecture Comparison
+
+Before: `/api/chat` -> narrow deterministic conversation checks -> operation-shaped live interpretation -> connected/incidental/unsupported partition -> executable bridge or compound clarification -> resolvers -> narration/final emission. Unsupported singleton cardinality was ignored. An active NPC could capture arbitrary questions before communication ownership was considered.
+
+After: `/api/chat` -> structured pending/GM continuation checks -> **same live call, with communication ownership and public evidence selection** -> communication decision before executable routing -> non-mutating answer/clarification, or existing bridge -> existing authoritative resolver -> existing final emission. No second provider call is mandated. Obvious confirmations, withdrawal, known context and grounded movement remain provider-free.
+
+GM answers: orchestration owns selection/emission of already public text. New observation: only PERCEIVE/INSPECT may pass to the existing exploration bridge. NPC dialogue: bridge binds visible NPC; social owner resolves content and rechecks recalled topic membership/disclosure. Actions: existing bridge/resolvers own all success, movement, clue disclosure and time. Session/rules: non-mutating response, with explicit uncertainty where no ruling is established. Clarification/refusal: orchestration owns text and bounded continuation state.
+
+Final-emission validators were not removed or weakened. Early GM answers continue the PR-EA non-mutating response path; the provider supplies evidence IDs, not free-form answer prose. Resolver-backed responses, including the new NPC recall fast path, still traverse the existing narration/final-emission pipeline. The remaining interpreter ownership error is a classifier boundary defect, not permission to mutate world state from response prose.

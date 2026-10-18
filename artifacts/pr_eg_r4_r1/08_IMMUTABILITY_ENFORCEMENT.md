@@ -1,0 +1,3 @@
+# 08 — Immutability Enforcement
+
+Sealing pins response content plus authority metadata. accepted_record reads the pinned value; restore_accepted_text restores metadata and exact text before effects/history and API packaging. Five formerly unguarded preservation helpers now honor the existing immutable guard. Missing-adoption retries re-enter run_preserve_if_valid without extra provider calls. Public digest verification rejects divergent/corrupt serialized records. A failed integrity check raises rather than delivering a differing NPC line. Controlled tests cover text, speaker, ID, addressee, subject, provenance, source and immutable flag tampering.

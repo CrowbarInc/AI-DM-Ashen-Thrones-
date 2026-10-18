@@ -722,6 +722,7 @@ def _effective_social_clue_context(
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
 
+
     top_clue_id = str(resolution.get("clue_id") or "").strip() or None
     top_texts: List[str] = []
     for raw in resolution.get("discovered_clues") or []:
@@ -1921,6 +1922,20 @@ def apply_socially_revealed_leads(
 
     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
+
+    # A resolver result is a proposal for persistence, never a disclosure grant.
+    # Re-resolve against the host world before the first clue/lead write.
+    from game.dialogue_authority import authorize_npc_disclosure
+    speaker = next((n for n in world.get("npcs") or [] if isinstance(n, dict)
+                    and n.get("id") == social.get("npc_id")), None)
+    grant = authorize_npc_disclosure(speaker, topic)
+    texts = resolution.get("discovered_clues") or []
+    supported_texts = {grant.get("authorized_proposition"), grant.get("authorized_clue_text")}
+    if ((topic or resolution.get("clue_id") or texts) and
+            (not grant["permission"] or any(t not in supported_texts for t in texts)
+             or (resolution.get("clue_id") and resolution.get("clue_id") != grant.get("authorized_clue_id")))):
+        resolution.setdefault("metadata", {})["disclosure_rejected"] = "source_or_policy_denied"
+        return []
 
     top_clue_id = str(resolution.get("clue_id") or "").strip() or None
     top_texts: List[str] = []

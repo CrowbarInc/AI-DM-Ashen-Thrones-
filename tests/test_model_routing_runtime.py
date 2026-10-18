@@ -9,6 +9,7 @@ import pytest
 import game.api as api_mod
 import game.gm as gm_mod
 import game.model_routing as routing_mod
+from tests.helpers.live_model_guard import production_call_gpt
 
 pytestmark = pytest.mark.unit
 
@@ -30,6 +31,7 @@ def _install_openai_recorder(
             return SimpleNamespace(output_text=response_text)
 
     monkeypatch.setattr(openai, "OpenAI", _Client)
+    monkeypatch.setattr(gm_mod, "call_gpt", production_call_gpt())
     return calls
 
 
@@ -86,7 +88,7 @@ def test_call_gpt_attaches_route_metadata_and_merges_existing_metadata(
     monkeypatch.setattr(
         gm_mod,
         "_safe_json",
-        lambda _text: {
+        lambda _text, **_kwargs: {
             "player_facing_text": "ok",
             "tags": [],
             "scene_update": None,
@@ -129,6 +131,25 @@ def test_call_gpt_attaches_route_metadata_and_merges_existing_metadata(
         "existing-debug | "
         "model_route:metadata_family:metadata_reason:metadata-route-model"
     )
+
+
+def test_provider_disable_short_circuits_before_openai_client(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(gm_mod, "call_gpt", production_call_gpt())
+    monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_CALLS", "1")
+
+    def _blocked_client(*_args: Any, **_kwargs: Any) -> None:
+        raise AssertionError("OpenAI client must not be constructed when providers are disabled")
+
+    monkeypatch.setattr(openai, "OpenAI", _blocked_client)
+    out = gm_mod.call_gpt([{"role": "user", "content": "Hello"}], purpose="primary_turn")
+
+    assert out["player_facing_text"]
+    assert "provider_calls_disabled" in (out.get("tags") or [])
+    accounting = (out.get("metadata") or {}).get("provider_accounting") or {}
+    assert accounting.get("request_count") == 0
+    assert accounting.get("total_tokens") is None
 
 
 def test_routing_disabled_forces_default_model_name_in_call_gpt(

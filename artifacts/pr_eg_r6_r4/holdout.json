@@ -1,0 +1,5396 @@
+[
+  {
+    "id": "direct_exact-05",
+    "partition": "holdout",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-05:s0",
+        "context": "direct_exact-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-05",
+    "partition": "holdout",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-05:s0",
+        "context": "direct_paraphrase-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-05",
+    "partition": "holdout",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-05:s0",
+        "context": "direct_unstructured-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-05",
+    "partition": "holdout",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-05:s0",
+        "context": "direct_multiple_facts-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-05",
+    "partition": "holdout",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the silver reed?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-05:s0",
+        "context": "direct_roles-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the silver reed: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-05",
+    "partition": "holdout",
+    "family": "direct_open",
+    "question": "Vesper, who counterbalances the silver reed?",
+    "queries": [
+      {
+        "predicate": "counterbalance",
+        "predicate_evidence": "counterbalances",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-05:s0",
+        "context": "direct_open-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder counterbalances the silver reed.",
+        "facts": [
+          {
+            "predicate": "counterbalance",
+            "predicate_evidence": "counterbalances",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "agent",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-05",
+    "partition": "holdout",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the silver reed today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-05:s0",
+        "context": "direct_qualified-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-05",
+    "partition": "holdout",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the silver reed, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-05:s0",
+        "context": "partial_multipart-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-05",
+    "partition": "holdout",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-05:s0",
+        "context": "partial_indefinite-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-05",
+    "partition": "holdout",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-05:s0",
+        "context": "partial_rumor-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "bellfounder"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-05",
+    "partition": "holdout",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-05:s0",
+        "context": "partial_conflict-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-05:s1",
+        "context": "partial_conflict-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "bellfounder",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-05",
+    "partition": "holdout",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the silver reed?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-05:s0",
+        "context": "related_reversal-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the silver reed: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-05",
+    "partition": "holdout",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the silver reed?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-05:s0",
+        "context": "related_relationship-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "related_time-05",
+    "partition": "holdout",
+    "family": "related_time",
+    "question": "Vesper, who keeps the silver reed today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-05:s0",
+        "context": "related_time-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-05",
+    "partition": "holdout",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-05:s0",
+        "context": "related_negation-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-05",
+    "partition": "holdout",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-05",
+    "partition": "holdout",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-05:s0",
+        "context": "unknown_private-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-05",
+    "partition": "holdout",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-05:s0",
+        "context": "unknown_history-05",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-05",
+    "partition": "holdout",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the silver reed?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-05:s0",
+        "context": "unknown_forged-05",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "bellfounder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-05",
+    "partition": "holdout",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the silver reed?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-05:s0",
+        "context": "restricted_password-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the silver reed is violet-5-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "value",
+                "value": "violet-5-cinder",
+                "entity_id": "",
+                "evidence": "violet-5-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-5-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-05",
+    "partition": "holdout",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the silver reed?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-05:s0",
+        "context": "restricted_countersign-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the silver reed is violet-5-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "value",
+                "value": "violet-5-cinder",
+                "entity_id": "",
+                "evidence": "violet-5-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-5-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-05",
+    "partition": "holdout",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the silver reed or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "silver reed",
+            "entity_id": "",
+            "evidence": "silver reed"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-05:s0",
+        "context": "clarification-05",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The bellfounder keeps the silver reed.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "silver reed",
+                "entity_id": "",
+                "evidence": "silver reed"
+              },
+              {
+                "name": "keeper",
+                "value": "bellfounder",
+                "entity_id": "",
+                "evidence": "bellfounder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_exact-06",
+    "partition": "holdout",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-06:s0",
+        "context": "direct_exact-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-06",
+    "partition": "holdout",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-06:s0",
+        "context": "direct_paraphrase-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-06",
+    "partition": "holdout",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-06:s0",
+        "context": "direct_unstructured-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-06",
+    "partition": "holdout",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-06:s0",
+        "context": "direct_multiple_facts-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-06",
+    "partition": "holdout",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-06:s0",
+        "context": "direct_roles-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the ochre astrolabe: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-06",
+    "partition": "holdout",
+    "family": "direct_open",
+    "question": "Vesper, who triangulates the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "triangulate",
+        "predicate_evidence": "triangulates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-06:s0",
+        "context": "direct_open-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper triangulates the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "triangulate",
+            "predicate_evidence": "triangulates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "agent",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-06",
+    "partition": "holdout",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the ochre astrolabe today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-06:s0",
+        "context": "direct_qualified-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-06",
+    "partition": "holdout",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the ochre astrolabe, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-06:s0",
+        "context": "partial_multipart-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-06",
+    "partition": "holdout",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-06:s0",
+        "context": "partial_indefinite-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-06",
+    "partition": "holdout",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-06:s0",
+        "context": "partial_rumor-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "lichen keeper"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-06",
+    "partition": "holdout",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-06:s0",
+        "context": "partial_conflict-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-06:s1",
+        "context": "partial_conflict-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "lichen keeper",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-06",
+    "partition": "holdout",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-06:s0",
+        "context": "related_reversal-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the ochre astrolabe: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-06",
+    "partition": "holdout",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-06:s0",
+        "context": "related_relationship-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "related_time-06",
+    "partition": "holdout",
+    "family": "related_time",
+    "question": "Vesper, who keeps the ochre astrolabe today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-06:s0",
+        "context": "related_time-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-06",
+    "partition": "holdout",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-06:s0",
+        "context": "related_negation-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-06",
+    "partition": "holdout",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-06",
+    "partition": "holdout",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-06:s0",
+        "context": "unknown_private-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-06",
+    "partition": "holdout",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-06:s0",
+        "context": "unknown_history-06",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-06",
+    "partition": "holdout",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-06:s0",
+        "context": "unknown_forged-06",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "lichen keeper"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-06",
+    "partition": "holdout",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-06:s0",
+        "context": "restricted_password-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the ochre astrolabe is violet-6-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "value",
+                "value": "violet-6-cinder",
+                "entity_id": "",
+                "evidence": "violet-6-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-6-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-06",
+    "partition": "holdout",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the ochre astrolabe?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-06:s0",
+        "context": "restricted_countersign-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the ochre astrolabe is violet-6-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "value",
+                "value": "violet-6-cinder",
+                "entity_id": "",
+                "evidence": "violet-6-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-6-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-06",
+    "partition": "holdout",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the ochre astrolabe or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "ochre astrolabe",
+            "entity_id": "",
+            "evidence": "ochre astrolabe"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-06:s0",
+        "context": "clarification-06",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The lichen keeper keeps the ochre astrolabe.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "ochre astrolabe",
+                "entity_id": "",
+                "evidence": "ochre astrolabe"
+              },
+              {
+                "name": "keeper",
+                "value": "lichen keeper",
+                "entity_id": "",
+                "evidence": "lichen keeper"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_exact-07",
+    "partition": "holdout",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-07:s0",
+        "context": "direct_exact-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-07",
+    "partition": "holdout",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-07:s0",
+        "context": "direct_paraphrase-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-07",
+    "partition": "holdout",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-07:s0",
+        "context": "direct_unstructured-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-07",
+    "partition": "holdout",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-07:s0",
+        "context": "direct_multiple_facts-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-07",
+    "partition": "holdout",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-07:s0",
+        "context": "direct_roles-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the pearl sextant: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-07",
+    "partition": "holdout",
+    "family": "direct_open",
+    "question": "Vesper, who resonates the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "resonate",
+        "predicate_evidence": "resonates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-07:s0",
+        "context": "direct_open-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor resonates the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "resonate",
+            "predicate_evidence": "resonates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "agent",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-07",
+    "partition": "holdout",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the pearl sextant today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-07:s0",
+        "context": "direct_qualified-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-07",
+    "partition": "holdout",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the pearl sextant, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-07:s0",
+        "context": "partial_multipart-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-07",
+    "partition": "holdout",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-07:s0",
+        "context": "partial_indefinite-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-07",
+    "partition": "holdout",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-07:s0",
+        "context": "partial_rumor-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "tide auditor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-07",
+    "partition": "holdout",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-07:s0",
+        "context": "partial_conflict-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-07:s1",
+        "context": "partial_conflict-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "tide auditor",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-07",
+    "partition": "holdout",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-07:s0",
+        "context": "related_reversal-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the pearl sextant: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-07",
+    "partition": "holdout",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-07:s0",
+        "context": "related_relationship-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "related_time-07",
+    "partition": "holdout",
+    "family": "related_time",
+    "question": "Vesper, who keeps the pearl sextant today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-07:s0",
+        "context": "related_time-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-07",
+    "partition": "holdout",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-07:s0",
+        "context": "related_negation-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-07",
+    "partition": "holdout",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-07",
+    "partition": "holdout",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-07:s0",
+        "context": "unknown_private-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-07",
+    "partition": "holdout",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-07:s0",
+        "context": "unknown_history-07",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-07",
+    "partition": "holdout",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-07:s0",
+        "context": "unknown_forged-07",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "tide auditor"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-07",
+    "partition": "holdout",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-07:s0",
+        "context": "restricted_password-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the pearl sextant is violet-7-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "value",
+                "value": "violet-7-cinder",
+                "entity_id": "",
+                "evidence": "violet-7-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-7-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-07",
+    "partition": "holdout",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the pearl sextant?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-07:s0",
+        "context": "restricted_countersign-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the pearl sextant is violet-7-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "value",
+                "value": "violet-7-cinder",
+                "entity_id": "",
+                "evidence": "violet-7-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-7-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-07",
+    "partition": "holdout",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the pearl sextant or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "pearl sextant",
+            "entity_id": "",
+            "evidence": "pearl sextant"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-07:s0",
+        "context": "clarification-07",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The tide auditor keeps the pearl sextant.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "pearl sextant",
+                "entity_id": "",
+                "evidence": "pearl sextant"
+              },
+              {
+                "name": "keeper",
+                "value": "tide auditor",
+                "entity_id": "",
+                "evidence": "tide auditor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  }
+]

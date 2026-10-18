@@ -1,0 +1,1118 @@
+[
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "user_chars": 113494,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_temporal_provenance": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "user_content": "{\"instructions\": [\"When rules conflict, resolve them in this order: answer the player; preserve authoritative state; avoid leaking hidden facts; avoid unjustified certainty about outcomes, hidden truths, and NPC intent (defer per narrative authority policy); preserve player agency\\u2014do not decide the PC's action or treat surfaced leads as mandatory plot gravity (see anti_railroading policy); if certainty is incomplete, give a bounded partial answer; when the player presses the same topic, add net-new value rather than restating; keep narration and quoted speech from recycling the same surface clauses (narrative_authenticity); remain diegetic; keep narration free of internal scaffolds, menu-style choice labels, and engine coaching (see player_facing_narration_purity policy); maintain scene momentum only after agency constraints; then add specificity.\", \"Always answer the player. Prefer partial truth over refusal. Never output meta explanations.\", \"Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.\", \"Follow response_policy.rule_priority_order strictly. Higher-priority rules override later ones.\", \"Treat response_policy.no_validator_voice as a hard narration-lane rule for standard narration.\", \"ANSWER COMPLETENESS CONTRACT (MANDATORY): Obey response_policy.answer_completeness. When answer_required is true, answer_must_come_first requires the first sentence to deliver the substantive reply aligned with expected_answer_shape (direct, bounded_partial using an in-world limit from allowed_partial_reasons, or refusal_with_reason). Bounded partials must name the limiting reason in-character (uncertainty, lack_of_knowledge, or gated_information). When forbid_deflection or forbid_generic_nonanswer are true, evasive replies, scene filler before the core reply, and answering-with-a-question are invalid. When require_concrete_payload is true, include at least one handle from concrete_payload_any_of. Incomplete or hedged replies must still provide a usable specific or next_lead the player can pursue now.\", \"When response_policy.answer_completeness.expected_voice is npc, keep the turn NPC-carried for the substantive reply per active interlocutor; when narrator, still lead with the answer in the first sentence when answer_required is true.\", \"When response_policy.response_delta.enabled is true, the player is pressing the same topic again: do not merely restate the prior answer. Add net-new value via allowed_delta_kinds (new_information, refinement that narrows the prior claim, consequence, or clarified uncertainty\\u2014not paraphrase).\", \"VISIBILITY CONTRACT (MANDATORY): Use narration_visibility as the hard scope for entity references and factual assertions.\", \"You MUST NOT reference entities outside narration_visibility.visible_entities.\", \"You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted.\", \"You MUST NOT reveal hidden or undiscovered facts.\", \"Discoverable facts may be hinted at (discoverable_hinting is true), but not asserted as confirmed truth.\", \"If uncertain whether something is visible or known, omit or reframe it.\", \"Only visible or addressable entities may act or speak.\", \"FIRST-MENTION CONTRACT (MANDATORY): Visibility scope controls who/what may be referenced; first-mention contract controls how first references are phrased.\", \"The first reference to any entity MUST be explicit.\", \"A first reference MUST use a visible name or a visible descriptor.\", \"A first reference MUST include grounding by location, behavior, or relation.\", \"Pronouns MAY be used only after explicit introduction.\", \"You MUST NOT use unearned familiarity phrases (for example, 'you recognize ...', 'you remember ...', 'you know this is ...') unless supported by narration_visibility.visible_facts.\", \"SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a current actor or speaker allowed by authoritative state (see scene_state_anchor_contract), or the player's immediate action (turn_summary + mechanical_resolution).\", \"Avoid floating, abstract, or scene-detached narration.\", \"NARRATIVE PLAN (STRUCTURAL GUIDANCE): When top-level `narrative_plan` is present, prefer it for bounded structural shaping alongside existing contracts. It does not replace CTIR, response_policy, or narration_visibility; on any conflict, follow CTIR and the shipped contracts, not the plan.\", \"Narrative mode contract: `narrative_plan.narrative_mode_contract` is a deterministic, JSON-safe derivative of CTIR plus the same-turn shipped slices already used at this seam (`response_policy`, `narration_obligations`, optional `turn_packet`). It is downstream shaping guidance only\\u2014not adjudication and not a second authority over CTIR or policy.\", \"Anchoring: prefer `narrative_plan.scene_anchors` for scene/interlocutor grounding tokens together with `scene_state_anchor_contract` and narration visibility\\u2014do not contradict authoritative visibility.\", \"Momentum / pressure: prefer `narrative_plan.active_pressures` (pending lead ids, interaction_pressure, scene_tension_codes, world/clock summaries) together with `narration_obligations.scene_momentum_due` and registry slices.\", \"Must-carry novelty: surface categories listed in `narrative_plan.required_new_information` when they apply to this turn\\u2014without inventing facts beyond visibility and narrative authority.\", \"Entity handle boundaries: `narrative_plan.allowable_entity_references` is the visible narration-universe (outer boundary) for published entity_id handles when non-empty\\u2014not whom to focus on. Use `scene_anchors.active_interlocutor`, `scene_anchors` generally, `narrative_plan.narrative_mode`, `narrative_plan.narrative_mode_contract`, `active_pressures`, `required_new_information`, and `role_allocation` for narrower focality. narration_visibility remains the hard visibility scope\\u2014never reference entities outside both contracts.\", \"Scene opening (C1-A): when `narrative_plan.scene_opening` is present, treat it as the sole structural opener contract (anchors, closed-set opening_reason, visible_fact anchor ids/categories, prohibited_content_codes)\\u2014prose-free; pair with narration_visibility.visible_facts for observable lines. It does not replace CTIR or visibility.\", \"Narrative roles composition (N3): read `narrative_plan.narrative_roles` as five parallel composition hints\\u2014each carries `emphasis_band` plus closed-set `signals` (and small bounded counters/tags)\\u2014not prose beats. `location_anchor` biases physical/scene grounding; `actor_anchor` biases materially relevant actor presence; `pressure` biases current tension or unresolved obligation salience; `hook` biases clue/lead/opening or actionable salience aligned with `required_new_information` kind tags; `consequence` biases closing salience toward outcomes, state-forward edges, or transition-relevant information. These facets are optional salience dials: weave them where natural; no prescribed ordering, no beat checklist, no requirement to dedicate a paragraph or sentence slot to each family.\", \"N3 precedence: `narrative_roles` stays strictly subordinate to narration_visibility, narrative_authority (response_policy), the `NARRATIVE MODE (STRUCTURAL DELTA)` lines from `narrative_mode_contract`, answer_completeness, response_delta, social_response_structure / response_type_contract, interaction continuity, and every other shipped policy object\\u2014never override them.\", \"Mode deltas: follow the `NARRATIVE MODE (STRUCTURAL DELTA)` instruction lines derived from `narrative_plan.narrative_mode_contract` (machine prompt_obligations + forbidden_moves). Use `narrative_plan.role_allocation` integer weights only as bounded emphasis alongside that block\\u2014never as a substitute for shipped policy.\", \"NARRATIVE ROLES (N3 supplemental): `narrative_plan.narrative_roles` on this payload passed structural validation as planning-only bounded data. Treat each family's `emphasis_band` and `signals` as optional shaping pressure together with `role_allocation`\\u2014not as mandatory beats, ordering rules, or replacements for CTIR or machine contracts.\", \"N3 bundle upstream: optional `emphasis_band` one-step bump for consequence (validated plan metadata only). CTIR, narration visibility, and shipped contracts still win on conflict; no new facts or policy.\", \"SCENE MOMENTUM RULE (HARD RULE): Every 2\\u20133 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_change, time_pressure, consequence_or_opportunity. When you do, include exactly one tag in tags: scene_momentum:<kind> where kind is one of those five identifiers. If narration_obligations.scene_momentum_due is true, this turn MUST include a momentum beat and MUST include that tag.\", \"Use campaign and world state to keep political and strategic continuity.\", \"Avoid generic dramatic filler and repeated warning phrases. Make NPC replies specific to the speaker and current situation.\", \"Forbidden generic phrases are disallowed: \\\"In this city...\\\", \\\"Times are tough...\\\", \\\"Trust is hard to come by...\\\", \\\"You'll need to prove yourself...\\\" \\u2014 rewrite into specific names/locations/events.\", \"QUESTION RESOLUTION RULE (HARD RULE): Every direct player question MUST be answered explicitly before any additional dialogue. Structure: (1) Direct answer (first sentence), (2) Optional elaboration, (3) Optional hook. The GM/NPC MUST NOT deflect, generalize, or ask a new question before answering.\", \"If certainty is incomplete, classify the uncertainty with response_policy.uncertainty.categories and response_policy.uncertainty.sources, then compose it from response_policy.uncertainty.answer_shape: known_edge, unknown_edge, next_lead.\", \"Ground uncertainty with response_policy.uncertainty.context_inputs: uncertainty_hint.turn_context, uncertainty_hint.speaker, and uncertainty_hint.scene_snapshot.\", \"If uncertainty_hint.speaker.role is npc, keep the reply attributable to that NPC and limited to what they could plausibly know, hear, point to, or direct the player toward.\", \"If there is no active NPC speaker, keep uncertainty in diegetic narrator voice but anchor it to visible scene circumstances rather than generic omniscient wording.\", \"If social_intent_class remains social_exchange on an NPC-directed question, keep uncertainty speaker-grounded (npc_ignorance) instead of drifting into scene ambiguity.\", \"Frame uncertainty as world-facing limits only: who knows, what can be seen, what distance, darkness, rumor, missing witnesses, or incomplete clues prevent right now.\", \"Vary sentence count and cadence naturally; do not stamp the same three-sentence rhythm onto every uncertain answer.\", \"If no strong next lead exists, choose the strongest visible handle already in scene rather than giving generic investigative advice.\", \"PERCEPTION / INTENT ADJUDICATION RULE (HARD RULE): When the player asks for behavioral insight (e.g., nervous, lying, controlled), choose ONE dominant state (not mixed), give 1\\u20132 concrete observable tells, and optionally map to a skill interpretation (Sense Motive, etc.). Failure: \\\"mix of\\\"/\\\"seems like both\\\" or pure emotional summary with no cues.\", \"If the player meaningfully moves to a new location, you may provide a new_scene_draft and/or activate_scene_id.\", \"If the player meaningfully changes the world, you may provide world_updates.\", \"If the player text implies a clear mechanical action, suggested_action may be filled for UI assistance, but narration remains primary.\", \"When interaction_continuity has an active target, treat that NPC as the default conversational counterpart.\", \"Non-addressed NPCs should not casually interject; if they interrupt, present it as a notable event with scene justification.\", \"If conversation_privacy or player_position_context implies private exchange (for example lowered_voice), reduce casual eavesdropping/interjection unless scene facts justify otherwise.\", \"Follow authoritative engine state for who is present, player positioning, scene transitions, and check outcomes; narrate outcomes without inventing structured results.\", \"Treat player input as an action declaration: default to third-person phrasing and preserve the user's expression format instead of rewriting it.\", \"Quoted in-character dialogue is valid inside an action declaration (for example: Galinor says, \\\"Keep your voice down.\\\"); do not treat the quote alone as the entire action when surrounding action context exists.\", \"Follow narration_obligations as output requirements only: they shape wording and focus, but never grant authority to mutate state or decide mechanics.\", \"If narration_obligations.is_opening_scene is true, establish immediate environment plus actionable social/world hooks the player can engage now (see opening_narration_obligations, narrative_plan.scene_opening when present, and opening_scene_realization.contract narration_basis_visible_facts for diegetic first-shot shape).\", \"If narration_obligations.active_npc_reply_expected is true, complete the active NPC's substantive in-turn reply now unless a pending engine check prompt already takes precedence, or authoritative state indicates refusal/evasion/interruption/inability.\", \"If narration_obligations.should_answer_active_npc is true, prioritize the active interlocutor's reply and the immediate exchange over general scene recap.\", \"Use narration_obligations.active_npc_reply_kind as a compact reply-shape hint (answer, explanation, reaction, refusal).\", \"If narration_obligations.active_npc_reply_kind is refusal, make it substantive (clear boundary, brief reason, redirect, or consequence) rather than empty stalling.\", \"If the player asks a direct question, answer concretely (name, place, fact, or direction); if certainty is incomplete, provide the best grounded partial answer and state uncertainty in-character through witnesses, conditions, rumor, access, or incomplete observation; do not repeat prior information.\", \"NPC response contract: when an NPC is asked a question, include at least one of: (a) a specific person/place/faction, (b) a concrete next step the player can take, (c) directly usable info (time/location/condition/requirement). If the NPC lacks full information, give partial specifics or direct the player to a concrete source.\", \"When answering a player question, give a direct answer first. Do not replace the answer with narrative description.\", \"Use turn_summary and mechanical_resolution as primary narration anchors; treat player_input as supporting evidence for disambiguation, not as the sentence structure to mirror.\", \"Do not restate or paraphrase the player's input. Always continue forward with new information.\", \"Do not repeat the player's spoken line. React to it instead.\", \"If narration_obligations.avoid_input_echo or narration_obligations.avoid_player_action_restatement is true, do not restate or lightly paraphrase player_input (for example, \\\"Galinor asks...\\\") unless wording is required to disambiguate the target, quote, or procedural request.\", \"If narration_obligations.prefer_structured_turn_summary is true, continue from resolved world state, scene advancement, and NPC intent/reply obligations rather than narrating that \\\"the player asks/says X.\\\"\", \"Keep the narration to 1-4 concise paragraphs.\", \"Narration mode: standard. Use 1-4 concise paragraphs with a balance of description and pacing.\", \"OPENING SCENE (STRUCTURED COMPOSITION): Start from the player's anchored perspective: where the player is positioned and what immediately surrounds them. Then expand the selected visible facts into sensory detail (sound, motion, texture, smell), introduce light tension (crowd pressure, authority friction, urgency), and only then present affordances the player can act on now.\", \"OPENING SCENE COMPOSITION CONTRACT: Do not list facts. Do not compress facts into clauses. Expand each fact into a natural sentence or phrase, blending every selected fact through one focal player perspective. Include at least one positional anchor, at least two sensory cues (sound, motion, texture, or smell), and at least one pressure/tension element. Preserve source integrity: use only externally observable facts from opening_scene_realization.contract narration_basis_visible_facts and existing visible context; no omniscient briefing, no title-cased role labels as names, no hidden-fact assertions.\", \"OPENING SCENE EXAMPLE: BAD: \\\"Rain spatters... Refugees... Guards...\\\" GOOD: \\\"You stand in the churned mud before Cinderwatch's eastern gate as rain spatters against soot-dark stone. Refugees press shoulder to shoulder around you, wagons grinding forward under shouted orders while guards hold the choke. A tavern runner weaves through the crush, calling out offers of hot stew and paid rumor.\\\"\", \"OPENING SCENE PROHIBITED CONTENT: Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims. | Do not treat engine role labels as proper names (for example title-cased 'Tavern Runner', 'Guard Captain'). | Do not narrate hidden GM notes, scene seeds, or privileged facts as immediate player perception. | Do not assert who controls patrols, who secretly knows what, or what factions are doing unless that is directly visible or audible here and now. | Do not name unseen or off-scene NPCs the player has not been introduced to through direct presence or clear address.\", \"LEAD REGISTRY (authoritative slice): Use top-level lead_context only as supplied\\u2014do not invent leads, facts, or journal summaries. Turn compact rows into light, actionable nudges (what could matter next), not recap.\", \"When the player is clearly continuing an existing investigation thread, prefer lead_context.currently_pursued_lead as the primary thread anchor when it is non-null.\", \"When interaction_continuity names an active NPC, use lead_context.npc_relevant_leads to tie the exchange to registry-linked threads that list that NPC\\u2014without fabricating details beyond those rows.\", \"Use lead_context.urgent_or_stale_leads to surface unattended time pressure or stale threads as diegetic tension or reminders\\u2014only as implied by those rows; do not invent urgency.\", \"Use lead_context.recent_lead_changes for continuity with the latest registry state shifts (status, next_step, touches)\\u2014do not restate full buckets or dump all leads.\", \"follow_up_pressure.from_leads is boolean-only: has_pursued, has_stale, npc_has_relevant, has_escalated_threat, has_newly_unlocked, has_supersession_cleanup. Do not treat it as prose; use the matching lead_context lists/objects for specifics.\", \"If follow_up_pressure.from_leads.has_pursued is true, bias narration toward continuing that pursued thread when it fits the player's action.\", \"If follow_up_pressure.from_leads.has_stale is true, you may surface reminder, pressure, or unattended-thread beats that fit the scene\\u2014without inventing facts beyond lead_context.\", \"If follow_up_pressure.from_leads.npc_has_relevant is true, you may let the active NPC exchange reflect relevance to those threads\\u2014within knowledge_scope and without inventing registry facts.\", \"If follow_up_pressure.from_leads.has_escalated_threat is true, bias tension beats toward unattended threat rows in lead_context (escalation fields)\\u2014without inventing facts beyond those rows.\", \"If follow_up_pressure.from_leads.has_newly_unlocked is true, you may acknowledge a thread becoming available or unblocked when it fits the scene\\u2014grounded in unlocked_by_lead_id / recent_lead_changes only.\", \"If follow_up_pressure.from_leads.has_supersession_cleanup is true, avoid treating superseded obsoleted threads as primary pressure unless the player returns to them; prefer current non-terminal rows.\", \"SPEAKER SELECTION CONTRACT (HARD RULE): Obey the top-level `speaker_selection` object. When `primary_speaker_id` is non-null, treat that NPC as the default voice for substantive quoted dialogue and in-character answers for this turn.\", \"SPEAKER SELECTION CONTRACT (HARD RULE): `allowed_speaker_ids` is empty \\u2014 do not attribute quoted speech to any NPC; remain narrator-neutral. Do not invent incidental speakers or crowd voices to answer for a missing interlocutor.\", \"SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true \\u2014 do not use generic unnamed stand-ins (for example 'ragged stranger', 'stranger', 'someone nearby', 'someone in the crowd', 'a voice nearby', 'a passerby', 'a bystander', 'an onlooker') as the answer source.\", \"CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\\u2014prioritize it over older or omitted chat material. Do not revive stale side threads unless the player explicitly re-grounds them (see `conversational_memory_window.explicit_reintroduced_*`). Omitted older material is background only\\u2014not an active unresolved obligation.\", \"NARRATIVE MODE (STRUCTURAL DELTA): Canonical mode is `narrative_plan.narrative_mode_contract.mode` (opening); obey its prompt_obligations and forbidden_moves as machine codes. Shipped response_policy and CTIR win on any conflict.\", \"struct:opening:first_impression_and_immediate_location_salience\", \"struct:opening:distinct_from_continuation_establish_now_do_not_continue_mid_thread_tableau_as_a_fresh_opening\", \"struct:contract_obligation:require_first_impression_framing\", \"struct:contract_obligation:require_scene_grounding\", \"struct:contract_obligation:suppress_mid_conversation_answer_shape\", \"struct:contract_forbidden_moves:no_generic_fallback|no_opening_tableau_reuse\", \"TONE / ESCALATION (POLICY): Obey response_policy.tone_escalation for interpersonal intensity; that object is the authority\\u2014do not override it from general scene mood. Do not introduce hostility, explicit threats, physical violence, or combat initiation unless the contract's allowances and published state support it. When a higher escalation tier is not allowed, prefer guarded refusal, scrutiny, urgency, consequence framing, or concrete social or procedural pressure. Topic pressure or conversational friction alone does not justify threats or violence.\", \"NARRATIVE AUTHORITY (POLICY): Obey response_policy.narrative_authority for assertion boundaries; deterministic enforcement is authoritative. Do not assert unresolved outcomes as settled fact. Do not assert hidden causes or hidden truths as confirmed without basis in published visible/engine state. Do not assert NPC motives or intentions as fact without explicit basis. When certainty is unavailable, defer via a roll/check request, bounded uncertainty, or conditional/branch framing. Observable visible cues are allowed; omniscient conclusions are not.\", \"FALLBACK BEHAVIOR (MANDATORY): When `fallback_behavior.uncertainty_active` is true, do not invent certainty and do not fabricate authority. Either give a bounded partial answer or, only when `fallback_behavior.allowed_behaviors.ask_clarifying_question` is true and a partial would mislead, ask one brief clarifying question. Keep uncertainty diegetic, state the strongest grounded known edge plus the unknown edge, and offer a natural next lead when possible.\", \"ANTI-RAILROADING (POLICY): Obey top-level anti_railroading_contract and response_policy.anti_railroading. Do not decide the player character's action for them. Do not turn a surfaced lead into a required path: leads may create options, pressure, urgency, or opportunities; they do not create main-plot gravity, destiny, or a single mandatory thread. Avoid mandatory-path phrasing such as 'only way,' 'must go,' or 'the story pulls you' unless authoritative state truly supports it (see allow_exclusivity_from_authoritative_resolution and allow_directional_language_from_resolved_transition on the contract). Differentiate: HARD WORLD CONSTRAINT \\u2014 state a fixed situation or barrier plainly without selecting the player's next move; SALIENT LEAD \\u2014 highlight as option, rumor, pressure, or opportunity, not fate; FORCED PLAYER DIRECTION \\u2014 never narrate the PC's decision, compulsion to one destination, or one true path without basis. A hard world constraint may narrow what is possible; it must not auto-pick the player's response. Preserve momentum through consequences, openings, reactions, and constraints\\u2014not by seizing player action. Precedence (compact): player agency outranks momentum polish; authoritative constraints may narrow possibilities but must not choose the player's next move; surfaced leads may be highlighted without being made mandatory. Directional language is not globally banned\\u2014only unjustified forced direction. When anti_railroading_contract.allow_commitment_language_when_player_explicitly_committed is true, narration that follows the player's explicit commitment in player_input (movement or intent they stated) is allowed and expected where appropriate.\", \"CONTEXT SEPARATION (POLICY): Obey response_policy.context_separation for ambient world pressure versus local interaction focus; deterministic enforcement uses that shipped object. Keep the current interaction intent primary: answer or react to the local exchange first. Ambient background pressure may briefly color wording or add an optional hook; it must not replace the substantive reply, hijack topic, or substitute vague instability for a direct answer. Background tension alone must not harden interpersonal tone beyond what tone_escalation already allows. Letting broader ambient pressure lead the reply is allowed only when the player text, scene framing, a resolved consequence, or published pressure inputs make that focus immediately relevant\\u2014not from generic scene mood alone.\", \"PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; deterministic enforcement uses that shipped object. Speak only in player-facing diegetic prose. Do not expose internal consequence/opportunity labels, planner headings, or engine-facing scaffolding as narration. Do not present action coaching, prompts, or engine/UI guidance as if it were in-world text. Do not mention exits or choices as menu labels (for example 'the exit labeled \\u2026', 'your options are \\u2026', or bulleted/numbered choice lists). When branching paths exist, render them as what the character can see, hear, or infer in the moment\\u2014not as explicit instructions to the player.\", \"SCENE ANCHORING (POLICY): After context separation and narration-purity constraints, keep grounding tight: use scene_state_anchor_contract tokens when tightening wording; do not use anchoring to smuggle extra ambient pressure.\", \"NARRATIVE AUTHENTICITY (POLICY): Obey response_policy.narrative_authenticity. Keep narrator-color beats from being pasted into quoted speech; at most one short continuity anchor if needed. On follow-up pressure turns, change stance, detail, uncertainty boundary, reaction, or next step\\u2014without inventing facts. Avoid generic non-answers when a substantive or bounded-partial reply is available; when fallback_behavior.uncertainty_active is true, brevity and honest limits override polish. When rumor_realism applies (see trace.rumor_turn_active), do not recycle recent narration or scene setup as quoted rumor without a hearsay realism signal (source limit, uncertainty, bias, or net-new detail).\", \"RESOLUTION CONTRACT: Obey resolution_contract.constraint. It names the requested target and semantic point. Do not infer a different request from surrounding prose.\", \"GM RESOLUTION DECISION: Narrate only what gm_resolution_decision authorizes. Negation applies only to the predicate it negates. Unknown cause, actor, or time does not deny an established condition. Do not assert an asked predicate unless answer_relations permits that polarity.\", \"If resolved_exploration_action is present: narrate the outcome of that resolved action; do not restate the previous scene.\", \"If scene_transition_already_occurred: the current scene is the destination; narrate arrival and what the player sees there; do not override with activate_scene_id or new_scene_draft.\", \"For observe/investigate/interact: reveal new information, consequence, tension, or a narrower decision; avoid generic filler unless paired with a concrete lead, obstacle, cost, or pressure.\", \"Never repeat the same observation twice in a row for the same scene and action.\", \"Player inspected an authored visible feature that is not a separate interactable. Narrate only the authorized visible information; do not invent contents.\"], \"bounded_improvisation\": {\"version\": 1, \"entries\": [], \"instructions\": [\"Accepted bounded incidental facts may be reused for consistency but are not authored world truth.\", \"NPC claims remain claims with epistemic status; do not promote rumors/hearsay/speculation into world truth.\", \"Reject contradictions, mechanical outcomes, hidden information, and consequential world changes.\"]}, \"dialogue_social_plan\": {\"version\": 1, \"applies\": false, \"speaker_id\": null, \"speaker_name\": null, \"speaker_source\": \"unresolved\", \"dialogue_intent\": null, \"reply_kind\": \"unknown\", \"pressure_state\": \"none\", \"relationship_codes\": [\"unknown\"], \"tone_bounds\": [\"neutral\"], \"prohibited_content_codes\": [\"no_narrator_override\", \"no_ooc_instructions\", \"no_player_agency_override\", \"no_prompt_text\"], \"derivation_codes\": [\"dialogue_social_plan:v1\", \"intent:ctir_only\", \"referent_tracking:consumed\", \"session_hints:bounded\", \"speaker:unresolved\"], \"validator\": {\"validated\": true, \"errors\": [], \"reject_field_names\": [\"dialogue\", \"dialogue_line\", \"gm_guidance\", \"instructions\", \"message\", \"narration\", \"player_facing_text\", \"prompt\", \"system_prompt\", \"text\"], \"allowed_reply_kinds\": [\"answer\", \"explanation\", \"reaction\", \"refusal\", \"unknown\"], \"allowed_pressure_states\": [\"high\", \"low\", \"moderate\", \"none\"], \"allowed_tone_codes\": [\"cold\", \"deferential\", \"direct\", \"evasive\", \"guarded\", \"hostile\", \"neutral\", \"threatening\", \"warm\"], \"allowed_relationship_codes\": [\"engagement_engaged\", \"engagement_focused\", \"engagement_none\", \"fear_high\", \"fear_low\", \"friendly\", \"hostile\", \"neutral\", \"suspicion_high\", \"suspicion_low\", \"trust_high\", \"trust_low\", \"unfriendly\", \"unknown\"], \"allowed_speaker_alias_resolution_sources\": [\"continuity_snapshot\", \"interaction_continuity_contract\", \"manual_bundle_override\", \"referent_tracking\"]}, \"bounded_session_hints\": {\"active_interaction_target_id\": null, \"active_interaction_target_name\": null, \"active_interaction_kind\": null, \"interaction_mode\": \"none\", \"engagement_level\": \"none\", \"conversation_privacy\": null, \"player_position_context\": null}}, \"transition\": {\"transition_required\": true, \"transition_type\": \"location_change\", \"before_anchor\": {\"scene_id\": \"bathhouse_pump_alcove\", \"location_id\": null, \"location_label\": \"bathhouse_pump_alcove\", \"time_anchor\": null}, \"after_anchor\": {\"scene_id\": \"bathhouse_pump_alcove\", \"location_id\": null, \"location_label\": null, \"time_anchor\": null}, \"continuity_anchor_ids\": [], \"derivation_codes\": [\"signal:state_mutations.scene\", \"transition_node:before_location:public_slice\", \"transition_node:derive\"], \"source_fields\": [\"state_mutations.scene.(scene_id|activate_scene_id)\"]}, \"narrative_plan\": {\"version\": 1, \"narrative_mode\": \"opening\", \"role_allocation\": {\"dialogue\": 12, \"exposition\": 62, \"outcome_forward\": 14, \"transition\": 12}, \"scene_anchors\": {\"scene_id\": \"bathhouse_pump_alcove\", \"scene_name\": null, \"location_anchors\": [\"bathhouse pump\", \"bathhouse pump alcove\", \"bathhouse_pump_alcove\", \"dunmere public\", \"dunmere public bathhouse pump alcove\", \"public bathhouse\", \"pump alcove\"], \"active_interlocutor\": null, \"active_target\": null, \"relevant_actors\": []}, \"active_pressures\": {\"pending_lead_ids\": [], \"context_codes\": [], \"interaction_pressure\": \"none\", \"scene_tension_codes\": [], \"world_pressure\": null, \"clock_summaries\": []}, \"required_new_information\": [{\"kind\": \"authoritative_output_keys\", \"keys\": [\"action_id\", \"resolved_transition\"]}, {\"kind\": \"resolution_kind\", \"value\": \"investigate\"}, {\"kind\": \"success_state\", \"value\": \"success\"}], \"allowable_entity_references\": [{\"entity_id\": \"nessa\", \"descriptor\": \"nessa\"}], \"narrative_roles\": {\"location_anchor\": {\"emphasis_band\": \"high\", \"signals\": [\"exposition_axis_elevated\", \"has_location_tokens\", \"has_scene_id\", \"mode_biases_scene_setting\", \"multi_location_token\"], \"location_token_n\": 7, \"scene_id_present\": true, \"scene_label_present\": false}, \"actor_anchor\": {\"emphasis_band\": \"minimal\", \"signals\": [], \"relevant_actor_n\": 0, \"interlocutor_present\": false, \"visible_entity_handle_n\": 1}, \"pressure\": {\"emphasis_band\": \"minimal\", \"signals\": [], \"interaction_pressure\": \"none\", \"pending_lead_n\": 0, \"context_code_n\": 0, \"tension_code_n\": 0, \"world_pressure_present\": false, \"clock_summary_n\": 0}, \"hook\": {\"emphasis_band\": \"moderate\", \"signals\": [\"multi_information_kinds\", \"prompt_obligations_nonempty\", \"required_information_nonempty\"], \"required_new_information_n\": 3, \"distinct_information_kind_n\": 3, \"information_kind_tags\": [\"authoritative_output_keys\", \"resolution_kind\", \"success_state\"], \"narrative_mode_contract_enabled\": true, \"prompt_obligation_key_n\": 3}, \"consequence\": {\"emphasis_band\": \"moderate\", \"signals\": [\"state_or_mutation_information_present\"], \"outcome_forward_tier\": \"low\", \"has_consequence_information\": false, \"has_state_or_mutation_information\": true, \"has_transition_information\": false}}, \"narrative_mode_contract\": {\"version\": 1, \"enabled\": true, \"mode\": \"opening\", \"mode_family\": \"framing\", \"source_signals\": [\"mode:opening:narration_obligations.is_opening_scene\"], \"prompt_obligations\": {\"require_first_impression_framing\": true, \"require_scene_grounding\": true, \"suppress_mid_conversation_answer_shape\": true}, \"forbidden_moves\": [\"no_generic_fallback\", \"no_opening_tableau_reuse\"], \"debug\": {\"derivation_codes\": [\"mode:opening:narration_obligations.is_opening_scene\"]}}, \"scene_opening\": {\"opening_required\": true, \"opening_reason\": \"scene_entry\", \"scene_id\": \"bathhouse_pump_alcove\", \"location_anchors\": [\"bathhouse pump\", \"bathhouse pump alcove\", \"bathhouse_pump_alcove\", \"dunmere public\", \"dunmere public bathhouse pump alcove\", \"public bathhouse\", \"pump alcove\"], \"actor_anchors\": [], \"active_pressures\": {\"clock_summaries\": [], \"context_codes\": [], \"interaction_pressure\": \"none\", \"pending_lead_ids\": [], \"scene_tension_codes\": [], \"world_pressure\": null}, \"visible_fact_categories\": [\"A\"], \"visible_fact_anchor_ids\": [\"vf_slot:0\", \"vf_slot:1\", \"vf_slot:2\"], \"prohibited_content_codes\": [\"no_backstage_plot_briefings\", \"no_engine_role_label_as_proper_name\", \"no_hidden_gm_facts_as_immediate_perception\", \"no_unfounded_faction_control_claims\", \"no_unintroduced_offscene_npc_names\"], \"derivation_codes\": [\"opening_reason:scene_entry\", \"visible_fact:cat:A\"], \"validator\": {\"ok\": true, \"issues\": []}}, \"action_outcome\": {\"present\": false, \"source_kind\": \"unknown\", \"result\": {\"result_kind\": \"investigate\", \"success_state\": \"success\", \"actor_id\": null, \"target_id\": null, \"action_id\": \"text_the_bathhouse_pumps_long_iron_handl\", \"roll_summary\": {}}, \"effects\": {\"damage_dealt\": 0, \"healing_applied\": 0, \"conditions_applied\": [], \"conditions_removed\": [], \"combat_ended\": false, \"winner\": null, \"state_delta_keys\": []}, \"framing\": {\"emphasis\": \"standard\", \"reveal_policy\": \"respect_visibility\", \"allowed_certainty\": \"engine_only\", \"prohibited_codes\": [\"no_raw_roll_text\", \"no_hint_prompt_prose\", \"no_mechanics_interpretation\"]}, \"derivation_codes\": [\"action_outcome:derive\"]}, \"transition_node\": {\"transition_required\": true, \"transition_type\": \"location_change\", \"before_anchor\": {\"scene_id\": \"bathhouse_pump_alcove\", \"location_id\": null, \"location_label\": \"bathhouse_pump_alcove\", \"time_anchor\": null}, \"after_anchor\": {\"scene_id\": \"bathhouse_pump_alcove\", \"location_id\": null, \"location_label\": null, \"time_anchor\": null}, \"continuity_anchor_ids\": [], \"derivation_codes\": [\"signal:state_mutations.scene\", \"transition_node:before_location:public_slice\", \"transition_node:derive\"], \"source_fields\": [\"state_mutations.scene.(scene_id|activate_scene_id)\"]}, \"answer_exposition_plan\": {\"enabled\": false, \"answer_required\": false, \"answer_intent\": \"none\", \"source\": {\"derived_from_ctir\": true, \"ctir_sections\": [], \"derivation_codes\": [\"answer_exposition_plan:derive\"]}, \"facts\": [], \"constraints\": {\"forbid_invention\": true, \"forbid_hidden_truth_leak\": true, \"forbid_prompt_layer_reasoning\": true, \"allowed_partial_reasons\": []}, \"voice\": {\"expected_voice\": \"either\", \"delivery_mode\": \"plain_answer\"}, \"delivery\": {\"answer_must_come_first\": false, \"max_sentences_hint\": null, \"must_include_fact_ids\": [], \"optional_fact_ids\": [], \"forbidden_moves\": [\"no_generic_fallback\", \"no_opening_tableau_reuse\"]}, \"debug\": {\"derivation_codes\": [\"answer_exposition_plan:derive\"]}}}, \"speaker_selection\": {\"primary_speaker_id\": null, \"primary_speaker_name\": null, \"primary_speaker_source\": null, \"allowed_speaker_ids\": [], \"continuity_locked\": false, \"continuity_lock_reason\": null, \"speaker_switch_allowed\": true, \"speaker_switch_reason\": \"no_authoritative_pin\", \"generic_fallback_forbidden\": true, \"forbidden_fallback_labels\": [\"ragged stranger\", \"stranger\", \"someone nearby\", \"someone in the crowd\", \"a voice nearby\", \"a passerby\", \"a bystander\", \"an onlooker\", \"a figure nearby\", \"someone anonymous\"], \"interruption_allowed\": false, \"interruption_requires_scene_event\": false, \"offscene_speakers_forbidden\": true, \"debug\": {\"merged_player_prompt_preview\": \"I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?\", \"strict_social_active\": false, \"authoritative_source\": \"none\", \"authoritative_reason\": \"no addressable target resolved\", \"grounding_reason_code\": \"empty_actor_id\", \"grounding_fallback_applied\": false, \"neutral_reply_bridge\": true, \"why_speaker_chosen\": \"authoritative_target_unresolved\", \"why_continuity_locked_or_not\": null, \"why_switch_permitted_or_not\": \"no_authoritative_pin\", \"interruption_tracker_active\": false, \"resolution_path\": \"full_authoritative_resolve_plus_grounding\"}}, \"active_topic_anchor\": {\"active\": false, \"focus_fragment\": \"\", \"suppress_lead_thread_bias\": false}, \"interaction_continuity\": {\"active_interaction_target_id\": null, \"active_interaction_target_name\": null, \"active_interaction_kind\": null, \"interaction_mode\": \"none\", \"engagement_level\": \"none\", \"conversation_privacy\": null, \"player_position_context\": null}, \"active_interlocutor\": null, \"social_context\": {\"interlocutor_profile\": {\"npc_is_promoted\": false, \"stance\": null, \"reliability\": null, \"knowledge_scope\": [], \"agenda\": null, \"affiliation\": null}, \"answer_style_hints\": []}, \"turn_summary\": {\"action_descriptor\": \"investigate\", \"resolution_kind\": \"investigate\", \"action_id\": \"text_the_bathhouse_pumps_long_iron_handl\", \"resolved_prompt\": null, \"intent_labels\": [], \"raw_player_input\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"raw_player_input_usage\": \"Retain for exact wording and disambiguation only. Prefer action_descriptor + resolution_kind + mechanical_resolution for narration framing.\"}, \"recent_log\": [], \"conversational_memory_window\": {\"enabled\": true, \"window_version\": \"v1\", \"prioritize_recent_turns\": true, \"prioritize_active_scene_entities\": true, \"deprioritize_stale_inactive_elements\": true, \"allow_explicit_reintroduction\": true, \"recent_turn_window\": 6, \"soft_memory_limit\": 12, \"stale_after_turns\": 18, \"active_scene_entity_ids\": [\"nessa\"], \"anchored_interlocutor_id\": \"\", \"active_interaction_target_id\": \"\", \"explicit_reintroduced_entity_ids\": [], \"explicit_reintroduced_topics\": [], \"selection_debug\": {\"matched_entity_ids\": [], \"matched_topics\": [], \"matched_grounded_ids\": [], \"callback_marker_hit\": null, \"source_of_activity_anchor\": \"none\", \"source_of_recentness\": \"session.turn_counter\", \"source_of_reintroductions\": \"player_text+visibility_aliases\"}}, \"selected_conversational_memory\": [], \"player_input\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"follow_up_pressure\": null, \"lead_context\": {\"top_active_leads\": [], \"currently_pursued_lead\": null, \"urgent_or_stale_leads\": [], \"recent_lead_changes\": [], \"npc_relevant_leads\": [], \"follow_up_pressure_from_leads\": {\"has_pursued\": false, \"has_stale\": false, \"npc_has_relevant\": false, \"has_escalated_threat\": false, \"has_newly_unlocked\": false, \"has_supersession_cleanup\": false}}, \"interlocutor_lead_context\": {\"active_npc_id\": null, \"introduced_by_npc\": [], \"unacknowledged_from_npc\": [], \"recently_discussed_with_npc\": [], \"recent_terminal_reference\": [], \"repeat_suppression\": {\"has_recent_repeat_risk\": false, \"recent_lead_ids\": [], \"prefer_progress_over_restatement\": false}}, \"interlocutor_lead_behavior_hints\": [], \"response_policy\": {\"rule_priority_order\": [\"ANSWER THE PLAYER\", \"DO NOT CONTRADICT AUTHORITATIVE STATE\", \"DO NOT LEAK HIDDEN FACTS / SECRETS\", \"DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT\", \"PRESERVE PLAYER AGENCY \\u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS\", \"IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER\", \"WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING\", \"KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY\", \"MAINTAIN DIEGETIC VOICE (no validator/system voice)\", \"KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING\", \"PRESERVE SCENE MOMENTUM\", \"ADD SPECIFICITY / FLAVOR / POLISH\"], \"must_answer\": true, \"forbid_state_invention\": true, \"forbid_secret_leak\": true, \"allow_partial_answer\": true, \"response_delta\": {\"enabled\": false, \"delta_required\": false, \"delta_must_come_early\": false, \"trigger_source\": \"none\", \"topic_tokens\": [], \"press_depth\": 0, \"previous_player_input\": null, \"previous_answer_snippet\": null, \"overlap_ratio\": null, \"allowed_delta_kinds\": [], \"forbid_semantic_restatement\": false, \"forbid_repackaged_nonanswer\": false, \"allow_short_bridge_before_delta\": false, \"require_delta_when_answer_required\": false, \"expected_delta_shape\": \"none\", \"trace\": {\"question_detected_from_player_text\": false, \"follow_up_pressure_detected\": false, \"follow_up_press_depth\": 0, \"follow_up_overlap_ratio\": null, \"prior_answer_available\": false, \"answer_completeness_required\": false, \"social_lock\": false, \"active_target_id\": null, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"trigger_source\": \"none\", \"resolution_kind\": \"investigate\", \"uncertainty_suggests_partial\": false, \"suppressed_because\": [\"no_follow_up_pressure\", \"not_answer_seeking_turn\", \"opening_scene\"]}}, \"diegetic_only\": true, \"prefer_scene_momentum\": true, \"prefer_specificity\": true, \"no_validator_voice\": {\"enabled\": true, \"applies_to\": \"standard_narration\", \"rule\": \"Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.\", \"prohibited_perspectives\": [\"canon_validation\", \"evidence_review\", \"system_limitation\", \"tool_access\", \"model_identity\", \"rules_explanation_outside_oc_or_adjudication\"], \"rules_explanation_only_in\": [\"oc\", \"adjudication\"]}, \"scene_momentum_due\": false, \"uncertainty\": {\"enabled\": true, \"categories\": [\"unknown_identity\", \"unknown_location\", \"unknown_motive\", \"unknown_method\", \"unknown_quantity\", \"unknown_feasibility\"], \"sources\": [\"npc_ignorance\", \"scene_ambiguity\", \"procedural_insufficiency\"], \"answer_shape\": [\"known_edge\", \"unknown_edge\", \"next_lead\"], \"context_inputs\": [\"turn_context\", \"speaker\", \"scene_snapshot\"]}, \"answer_completeness\": {\"enabled\": false, \"trace\": {\"trigger_source\": \"none\", \"active_target_id\": null, \"active_npc_reply_kind\": null, \"question_detected_from_player_text\": false, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"partial_answer_permitted\": false}, \"player_direct_question\": false, \"answer_required\": false, \"answer_must_come_first\": false, \"expected_voice\": \"either\", \"expected_answer_shape\": \"direct\", \"allowed_partial_reasons\": [], \"forbid_deflection\": false, \"forbid_generic_nonanswer\": false, \"require_concrete_payload\": false, \"concrete_payload_any_of\": [], \"answer_exposition_plan\": {\"enabled\": false, \"answer_required\": false, \"answer_intent\": \"none\", \"source\": {\"derived_from_ctir\": true, \"ctir_sections\": [], \"derivation_codes\": [\"answer_exposition_plan:derive\"]}, \"facts\": [], \"constraints\": {\"forbid_invention\": true, \"forbid_hidden_truth_leak\": true, \"forbid_prompt_layer_reasoning\": true, \"allowed_partial_reasons\": []}, \"voice\": {\"expected_voice\": \"either\", \"delivery_mode\": \"plain_answer\"}, \"delivery\": {\"answer_must_come_first\": false, \"max_sentences_hint\": null, \"must_include_fact_ids\": [], \"optional_fact_ids\": [], \"forbidden_moves\": [\"no_generic_fallback\", \"no_opening_tableau_reuse\"]}, \"debug\": {\"derivation_codes\": [\"answer_exposition_plan:derive\"]}}}, \"planner_seam_trace\": {\"head_state\": {\"legacy_no_ctir_only\": false, \"non_ctir_semantic_path\": false, \"ctir_backed_head_state\": true}}, \"response_type_contract\": {\"required_response_type\": \"action_outcome\", \"source_route\": \"mixed\", \"allow_escalation\": false, \"debug_reasons\": [\"resolved_world_action_requires_action_outcome\", \"non_hostile_world_action_guard\"]}, \"tone_escalation\": {\"enabled\": true, \"scene_id\": \"bathhouse_pump_alcove\", \"active_speaker_id\": null, \"base_tone\": \"neutral\", \"max_allowed_tone\": \"guarded\", \"allow_guarded_refusal\": true, \"allow_verbal_pressure\": false, \"allow_explicit_threat\": false, \"allow_physical_hostility\": false, \"allow_combat_initiation\": false, \"justification_flags\": {\"player_used_aggressive_action\": false, \"player_used_coercive_social_action\": false, \"player_persisted_after_refusal\": false, \"scene_has_active_tension\": false, \"scene_has_authority_pressure\": false, \"scene_has_visible_hostile_actor\": false, \"combat_active\": false, \"resolution_is_risky\": true, \"npc_already_hostile_in_state\": false}, \"justification_reasons\": [\"resolution_kind_or_mechanical_payload_is_risky\"], \"preferred_deescalations\": [\"Default to observational tone; keep interpersonal heat optional.\", \"Prefer curiosity and clarification over suspicion-as-accusation.\"], \"debug_reason\": \"tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False\", \"debug_inputs\": {\"scene_id\": \"bathhouse_pump_alcove\", \"has_session\": true, \"has_world\": true, \"has_resolution\": true, \"has_narration_visibility\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"recent_log_len\": 0}, \"debug_flags\": {\"base_rank\": 0, \"max_rank\": 1, \"recent_player_text_latest_len\": 0, \"resolution_kind\": \"investigate\", \"normalized_action_type\": null, \"prior_refusal_seen_in_log\": false, \"topic_pressure\": 0, \"combat_active_inferred\": false}}, \"narrative_authority\": {\"enabled\": true, \"authoritative_outcome_available\": false, \"resolution_kind\": \"investigate\", \"success_state_available\": false, \"mechanical_result_available\": false, \"active_speaker_id\": null, \"active_target_id\": null, \"visible_fact_strings\": [\"two folded towels rest on a cedar bench\", \"a blue-glazed soap dish sits beside the washbasin\", \"nessa folds clean towels beside the cedar bench\"], \"hidden_fact_strings_present\": false, \"discoverable_hinting_allowed\": false, \"forbid_unresolved_outcome_assertions\": true, \"forbid_hidden_fact_assertions\": true, \"forbid_npc_intent_assertions_without_basis\": true, \"allow_bounded_intent_reading_only_when_player_asked\": false, \"allowed_deferrals\": [\"ask_for_roll\", \"bounded_uncertainty\", \"branch_outcome\"], \"preferred_deferral_order\": [\"ask_for_roll\", \"branch_outcome\", \"bounded_uncertainty\"], \"debug_reason\": \"narrative_authority: authoritative_outcome=False kind='investigate' mechanical_risky=True\", \"debug_inputs\": {\"has_resolution\": true, \"has_narration_visibility\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"has_session_view\": true}, \"debug_flags\": {\"mechanical_risky\": true, \"pending_player_roll\": false, \"anchor_contract_enabled\": true}}, \"forbid_unjustified_narrative_authority\": true, \"anti_railroading\": {\"enabled\": true, \"forbid_player_decision_override\": true, \"forbid_forced_direction\": true, \"forbid_exclusive_path_claims_without_basis\": true, \"forbid_lead_to_plot_gravity_upgrade\": true, \"allow_directional_language_from_resolved_transition\": false, \"allow_exclusivity_from_authoritative_resolution\": false, \"allow_commitment_language_when_player_explicitly_committed\": false, \"surfaced_lead_ids\": [], \"surfaced_lead_labels\": [], \"allowed_lead_roles\": [\"option\", \"hook\", \"rumor\", \"pressure\", \"opportunity\", \"constraint\"], \"forbidden_lead_roles\": [\"destiny\", \"required_path\", \"main_plot\", \"only_real_way_forward\"], \"debug_reason\": \"anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=0\", \"debug_inputs\": {\"has_resolution\": true, \"has_narration_obligations\": true, \"has_session_view\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"has_narrative_authority_contract\": true, \"has_prompt_leads\": true, \"has_active_pending_leads\": true, \"has_follow_surface\": false, \"player_text_nonempty\": true, \"obligation_hints\": {\"must_advance_scene\": true, \"scene_momentum_due\": false, \"is_opening_scene\": true}}, \"debug_flags\": {\"resolved_transition\": false, \"authoritative_resolution_outcome\": false, \"player_commitment_detected\": false, \"surfaced_lead_count\": 0, \"scene_state_anchor_contract_present\": true, \"narrative_authority_contract_present\": true, \"speaker_contract_present\": true}}, \"context_separation\": {\"enabled\": true, \"scene_focus_summary\": \"A tiled pump alcove serves an ordinary public bathhouse. The long iron pump handle is visibly bowed, and its pivot pin is sheared through. Two folded towels rest on a cedar bench. A blue-glazed soap dish sits beside the washbasin. Nessa, an ordinary bath attendant, folds towels nearby. Nothing states a cause, responsible actor, event time, history, explan...\", \"interaction_kind\": \"investigate\", \"player_intent_summary\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"primary_topics\": [\"examine\", \"bowed\", \"pump\", \"handle\", \"sheared\", \"pivot\", \"pin\", \"closely\", \"bathhouse_pump_alcove\", \"bathhouse pump alcove\", \"dunmere public bathhouse pump alcove\", \"dunmere public\", \"public bathhouse\", \"bathhouse pump\", \"pump alcove\", \"nessa\", \"attendant\", \"investigate\", \"text_the_bathhouse_pumps_long_iron_handl\", \"text the bathhouse pumps long iron handl\"], \"allowed_contextual_topics\": [], \"ambient_pressure_topics\": [\"Daily work continues around Dunmere.\"], \"forbid_topic_hijack\": true, \"forbid_pressure_answer_substitution\": true, \"forbid_unearned_tone_shift_from_background_pressure\": true, \"allow_brief_pressure_coloring\": true, \"allow_optional_consequence_signposting\": true, \"max_pressure_sentences_without_player_prompt\": 2, \"tone_escalation_contract\": {\"enabled\": true, \"scene_id\": \"bathhouse_pump_alcove\", \"active_speaker_id\": null, \"base_tone\": \"neutral\", \"max_allowed_tone\": \"guarded\", \"allow_guarded_refusal\": true, \"allow_verbal_pressure\": false, \"allow_explicit_threat\": false, \"allow_physical_hostility\": false, \"allow_combat_initiation\": false, \"justification_flags\": {\"player_used_aggressive_action\": false, \"player_used_coercive_social_action\": false, \"player_persisted_after_refusal\": false, \"scene_has_active_tension\": false, \"scene_has_authority_pressure\": false, \"scene_has_visible_hostile_actor\": false, \"combat_active\": false, \"resolution_is_risky\": true, \"npc_already_hostile_in_state\": false}, \"justification_reasons\": [\"resolution_kind_or_mechanical_payload_is_risky\"], \"preferred_deescalations\": [\"Default to observational tone; keep interpersonal heat optional.\", \"Prefer curiosity and clarification over suspicion-as-accusation.\"], \"debug_reason\": \"tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False\", \"debug_inputs\": {\"scene_id\": \"bathhouse_pump_alcove\", \"has_session\": true, \"has_world\": true, \"has_resolution\": true, \"has_narration_visibility\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"recent_log_len\": 0}, \"debug_flags\": {\"base_rank\": 0, \"max_rank\": 1, \"recent_player_text_latest_len\": 0, \"resolution_kind\": \"investigate\", \"normalized_action_type\": null, \"prior_refusal_seen_in_log\": false, \"topic_pressure\": 0, \"combat_active_inferred\": false}}, \"debug_inputs\": {\"has_resolution\": true, \"has_session_view\": true, \"has_scene_envelope\": true, \"has_scene_summary\": true, \"has_turn_summary\": true, \"has_speaker_selection_contract\": true, \"has_scene_state_anchor_contract\": true, \"has_narration_visibility\": true, \"has_tone_escalation_contract\": true, \"has_compressed_world_pressures\": true, \"has_prompt_leads\": true, \"has_active_pending_leads\": true, \"has_follow_surface\": false, \"player_text_nonempty\": true, \"primary_topic_count\": 20, \"ambient_pressure_topic_count\": 1}, \"debug_flags\": {\"player_seeks_world_danger_info\": false, \"scene_summary_crisis\": false, \"interaction_kind_worldish\": true, \"authoritative_or_consequence_relevant\": false, \"pressure_focus_allowed\": true, \"tone_allow_verbal_pressure\": false, \"tone_allow_explicit_threat\": false}, \"debug_reason\": \"context_separation: pressure_focus_allowed=True primary_topics=20 ambient=1\"}, \"player_facing_narration_purity\": {\"enabled\": true, \"diegetic_only\": true, \"allow_structured_choice_labels\": false, \"allow_explicit_ui_references\": false, \"allow_meta_transition_bridges\": false, \"forbid_scaffold_headers\": true, \"forbid_coaching_language\": true, \"forbid_engine_choice_framing\": true, \"forbid_non_diegetic_action_prompting\": true, \"response_type_required\": null, \"interaction_kind\": null}, \"social_response_structure\": {\"enabled\": false, \"applies_to_response_type\": \"dialogue\", \"require_spoken_dialogue_shape\": false, \"discourage_expository_monologue\": false, \"require_natural_cadence\": false, \"allow_brief_action_beats\": true, \"allow_brief_refusal_or_uncertainty\": true, \"max_contiguous_expository_lines\": null, \"max_dialogue_paragraphs_before_break\": null, \"prefer_single_speaker_turn\": false, \"forbid_bulleted_or_list_like_dialogue\": false, \"required_response_type\": \"action_outcome\", \"debug_reason\": \"response_type_not_dialogue:action_outcome\", \"debug_inputs\": {\"scene_id\": \"bathhouse_pump_alcove\", \"response_type_contract_source\": \"response_policy\"}}, \"interaction_continuity\": {\"enabled\": false, \"continuity_strength\": \"none\", \"preserve_conversational_thread\": false, \"preserve_context_continuity\": false, \"drop_interlocutor_requires_explicit_break\": false, \"speaker_switch_requires_explicit_cue\": false, \"allow_narrator_bridge\": true, \"interaction_mode\": \"none\", \"interaction_kind\": \"\", \"active_interaction_target_id\": \"\", \"current_interlocutor\": \"\", \"anchored_interlocutor_id\": \"\", \"conversation_privacy\": \"\", \"engagement_level\": \"none\", \"speaker_selection_contract\": {\"primary_speaker_id\": null, \"primary_speaker_name\": null, \"primary_speaker_source\": null, \"allowed_speaker_ids\": [], \"continuity_locked\": false, \"continuity_lock_reason\": null, \"speaker_switch_allowed\": true, \"speaker_switch_reason\": \"no_authoritative_pin\", \"generic_fallback_forbidden\": true, \"forbidden_fallback_labels\": [\"ragged stranger\", \"stranger\", \"someone nearby\", \"someone in the crowd\", \"a voice nearby\", \"a passerby\", \"a bystander\", \"an onlooker\", \"a figure nearby\", \"someone anonymous\"], \"interruption_allowed\": false, \"interruption_requires_scene_event\": false, \"offscene_speakers_forbidden\": true, \"debug\": {\"merged_player_prompt_preview\": \"\", \"strict_social_active\": false, \"authoritative_source\": \"none\", \"authoritative_reason\": \"no addressable target resolved\", \"grounding_reason_code\": \"empty_actor_id\", \"grounding_fallback_applied\": false, \"neutral_reply_bridge\": true, \"why_speaker_chosen\": \"authoritative_target_unresolved\", \"why_continuity_locked_or_not\": null, \"why_switch_permitted_or_not\": \"no_authoritative_pin\", \"interruption_tracker_active\": false, \"resolution_path\": \"full_authoritative_resolve_plus_grounding\"}}, \"continuity_reasons\": [], \"break_signals_present\": [], \"debug\": {\"source_of_anchor\": \"none\", \"scene_scope_validated\": true, \"response_type_required\": \"action_outcome\"}}, \"fallback_behavior\": {\"enabled\": true, \"uncertainty_active\": false, \"uncertainty_sources\": [], \"uncertainty_mode\": null, \"allowed_behaviors\": {\"ask_clarifying_question\": false, \"hedge_appropriately\": false, \"provide_partial_information\": false}, \"disallowed_behaviors\": {\"invented_certainty\": true, \"fabricated_authority\": true, \"meta_system_explanations\": true}, \"diegetic_only\": true, \"max_clarifying_questions\": 1, \"prefer_partial_over_question\": false, \"require_partial_to_state_known_edge\": false, \"require_partial_to_state_unknown_edge\": false, \"require_partial_to_offer_next_lead\": false, \"allowed_hedge_forms\": [\"I can't swear to it, but\", \"From what I saw,\", \"As far as rumor goes,\", \"Looks like\", \"Hard to tell, but\"], \"forbidden_hedge_forms\": [\"I lack enough information to answer confidently.\", \"The system cannot confirm that.\", \"Canon proves it.\", \"As an AI, I don't know.\", \"There is insufficient context available.\"], \"allowed_authority_bases\": [\"direct_observation\", \"established_report\", \"rumor_marked_as_rumor\", \"visible_evidence\"], \"forbidden_authority_bases\": [\"unsupported_named_culprit\", \"unsupported_exact_location\", \"unsupported_motive_as_fact\", \"unsupported_procedural_certainty\", \"system_or_canon_claims\"], \"debug\": {\"activation_reasons\": [], \"partial_preferred\": false, \"clarifying_question_allowed\": false}}, \"narrative_authenticity\": {\"enabled\": true, \"version\": 1, \"mode\": \"advisory_prompt_with_gate_enforcement\", \"allow_restate_for_continuity\": true, \"max_anchor_reuse_clauses\": 1, \"forbid_scene_narration_echo_as_dialogue\": true, \"forbid_low_signal_generic_reply\": true, \"forbid_adjacent_phrase_reuse\": true, \"require_meaningful_change_on_followup\": true, \"signal_sources\": [\"new_information\", \"new_perspective\", \"new_reaction\", \"new_boundary_of_uncertainty\", \"new_actionable_next_step\"], \"anti_goals\": {\"do_not_force_verbosity\": true, \"do_not_invent_facts\": true, \"do_not_override_fallback_correctness\": true}, \"fallback_compatibility\": {\"may_be_brief_under_uncertainty\": true, \"may_refuse_or_partially_answer_if_other_contracts_require\": true, \"brevity_alone_is_not_failure\": true}, \"rumor_realism\": {\"enabled\": true, \"apply_on_secondhand_or_rumor_turns\": true, \"forbid_verbatim_scene_to_rumor_reuse\": true, \"forbid_recent_narration_to_dialogue_reuse\": true, \"require_one_of\": [\"source_limitation\", \"uncertainty_or_distortion\", \"perspective_or_bias\", \"net_new_detail\"], \"allow_partial_fact_overlap\": true, \"forbid_identical_phrasing_even_when_overlap_allowed\": true, \"fallback_compatibility\": {\"allow_brief_bounded_partial_under_uncertainty\": true, \"do_not_fail_for_brevity_alone\": true, \"allow_source_limited_refusal\": true}}, \"trace\": {\"response_delta_contract_active\": false, \"topic_follow_up_active\": false, \"answer_completeness_required\": false, \"dialogue_shape_expected\": false, \"prior_turn_gm_snippet_for_overlap\": null, \"player_text_len\": 65, \"rumor_turn_active\": false, \"rumor_turn_reason_codes\": [], \"rumor_trigger_spans\": []}}, \"conversational_memory_window\": {\"enabled\": true, \"window_version\": \"v1\", \"prioritize_recent_turns\": true, \"prioritize_active_scene_entities\": true, \"deprioritize_stale_inactive_elements\": true, \"allow_explicit_reintroduction\": true, \"recent_turn_window\": 6, \"soft_memory_limit\": 12, \"stale_after_turns\": 18, \"active_scene_entity_ids\": [\"nessa\"], \"anchored_interlocutor_id\": \"\", \"active_interaction_target_id\": \"\", \"explicit_reintroduced_entity_ids\": [], \"explicit_reintroduced_topics\": [], \"selection_debug\": {\"matched_entity_ids\": [], \"matched_topics\": [], \"matched_grounded_ids\": [], \"callback_marker_hit\": null, \"source_of_activity_anchor\": \"none\", \"source_of_recentness\": \"session.turn_counter\", \"source_of_reintroductions\": \"player_text+visibility_aliases\"}}}, \"referent_tracking\": {\"version\": 1, \"active_entities\": [{\"entity_id\": \"nessa\", \"display_name\": \"nessa\", \"entity_kind\": \"npc\", \"roles\": [\"attendant\", \"bath attendant\"]}], \"active_entity_order\": [\"nessa\"], \"active_interaction_target\": null, \"active_speaker_candidates\": [], \"continuity_subject\": null, \"continuity_object\": null, \"pronoun_resolution\": {\"strategy\": \"neutral_buckets\", \"buckets_by_entity\": {\"nessa\": [\"they_them\"]}, \"explicit_sources\": [], \"notes\": \"conservative_default_they_them_without_explicit_engine_buckets\"}, \"ambiguity_risk\": 0, \"allowed_named_references\": [{\"entity_id\": \"nessa\", \"display_name\": \"nessa\"}], \"forbidden_or_unresolved_patterns\": [{\"kind\": \"pronoun_anchor_conservative\", \"referential_ambiguity_class\": \"ambiguous_singular\"}], \"safe_explicit_fallback_labels\": [{\"entity_id\": \"nessa\", \"safe_explicit_label\": \"nessa\"}], \"single_unambiguous_entity\": {\"entity_id\": \"nessa\", \"label\": \"nessa\", \"case\": \"single_visible_person_like\"}, \"referential_ambiguity_class\": \"ambiguous_singular\", \"interaction_target_continuity\": {\"prior_target_id\": null, \"current_target_id\": null, \"signal_target_id\": null, \"target_visible\": false, \"drift_detected\": false, \"signal_sources\": []}, \"debug\": {\"derivation_codes\": [\"plan:descriptor_merge\", \"speaker:contract\", \"target:signals_collected\", \"visibility:slice\"], \"sources_used\": [\"interaction_continuity\", \"narration_visibility\", \"narrative_plan\", \"speaker_selection\", \"turn_packet\"], \"target_resolution_trace\": [], \"visible_entity_count\": 1, \"person_like_visible_count\": 1, \"memory_window_entity_ids\": [], \"conflicting_target_signals\": false}}, \"turn_packet\": {\"version\": 1, \"turn_id\": null, \"scene_id\": \"bathhouse_pump_alcove\", \"player_text\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"resolution_kind\": \"investigate\", \"route\": {\"interaction_mode\": \"none\", \"active_target_id\": null, \"active_reply_kind\": null, \"strict_social_expected\": false}, \"response_policy\": {\"rule_priority_order\": [\"ANSWER THE PLAYER\", \"DO NOT CONTRADICT AUTHORITATIVE STATE\", \"DO NOT LEAK HIDDEN FACTS / SECRETS\", \"DO NOT ASSERT UNRESOLVED OUTCOMES, HIDDEN TRUTHS, OR NPC INTENT AS SETTLED FACT\", \"PRESERVE PLAYER AGENCY \\u2014 DO NOT DECIDE ACTIONS OR UPGRADE SURFACED LEADS INTO MANDATORY PATHS\", \"IF FULL CERTAINTY IS UNAVAILABLE, GIVE A BOUNDED PARTIAL ANSWER\", \"WHEN THE PLAYER PRESSES THE SAME TOPIC AGAIN, ADD NET-NEW VALUE RATHER THAN RESTATING\", \"KEEP NARRATION AND SPOKEN LINES DISTINCT; PREFER NEW SIGNAL OVER GENERIC FILLER; RESPECT FALLBACK BREVITY\", \"MAINTAIN DIEGETIC VOICE (no validator/system voice)\", \"KEEP NARRATION FREE OF INTERNAL SCAFFOLDS, MENU LABELS, AND ENGINE COACHING\", \"PRESERVE SCENE MOMENTUM\", \"ADD SPECIFICITY / FLAVOR / POLISH\"], \"must_answer\": true, \"forbid_state_invention\": true, \"forbid_secret_leak\": true, \"allow_partial_answer\": true, \"response_delta\": {\"enabled\": false, \"delta_required\": false, \"delta_must_come_early\": false, \"trigger_source\": \"none\", \"topic_tokens\": [], \"press_depth\": 0, \"previous_player_input\": null, \"previous_answer_snippet\": null, \"overlap_ratio\": null, \"allowed_delta_kinds\": [], \"forbid_semantic_restatement\": false, \"forbid_repackaged_nonanswer\": false, \"allow_short_bridge_before_delta\": false, \"require_delta_when_answer_required\": false, \"expected_delta_shape\": \"none\", \"trace\": {\"question_detected_from_player_text\": false, \"follow_up_pressure_detected\": false, \"follow_up_press_depth\": 0, \"follow_up_overlap_ratio\": null, \"prior_answer_available\": false, \"answer_completeness_required\": false, \"social_lock\": false, \"active_target_id\": null, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"trigger_source\": \"none\", \"resolution_kind\": \"investigate\", \"uncertainty_suggests_partial\": false, \"suppressed_because\": [\"no_follow_up_pressure\", \"not_answer_seeking_turn\", \"opening_scene\"]}}, \"diegetic_only\": true, \"prefer_scene_momentum\": true, \"prefer_specificity\": true, \"no_validator_voice\": {\"enabled\": true, \"applies_to\": \"standard_narration\", \"rule\": \"Never speak as a validator, analyst, referee of canon, or system. Do not mention what is or is not established, available to the model, visible to tools, or answerable by the system. If uncertainty exists, express it as in-world uncertainty from people, circumstances, clues, distance, darkness, rumor, missing access, or incomplete observation.\", \"prohibited_perspectives\": [\"canon_validation\", \"evidence_review\", \"system_limitation\", \"tool_access\", \"model_identity\", \"rules_explanation_outside_oc_or_adjudication\"], \"rules_explanation_only_in\": [\"oc\", \"adjudication\"]}, \"scene_momentum_due\": false, \"uncertainty\": {\"enabled\": true, \"categories\": [\"unknown_identity\", \"unknown_location\", \"unknown_motive\", \"unknown_method\", \"unknown_quantity\", \"unknown_feasibility\"], \"sources\": [\"npc_ignorance\", \"scene_ambiguity\", \"procedural_insufficiency\"], \"answer_shape\": [\"known_edge\", \"unknown_edge\", \"next_lead\"], \"context_inputs\": [\"turn_context\", \"speaker\", \"scene_snapshot\"]}, \"answer_completeness\": {\"enabled\": false, \"trace\": {\"trigger_source\": \"none\", \"active_target_id\": null, \"active_npc_reply_kind\": null, \"question_detected_from_player_text\": false, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"partial_answer_permitted\": false}, \"player_direct_question\": false, \"answer_required\": false, \"answer_must_come_first\": false, \"expected_voice\": \"either\", \"expected_answer_shape\": \"direct\", \"allowed_partial_reasons\": [], \"forbid_deflection\": false, \"forbid_generic_nonanswer\": false, \"require_concrete_payload\": false, \"concrete_payload_any_of\": []}, \"planner_seam_trace\": {\"head_state\": {\"legacy_no_ctir_only\": false, \"non_ctir_semantic_path\": false, \"ctir_backed_head_state\": true}, \"response_type_contract_resolution\": {\"source\": \"resolution_only_derive_ctir_suppressed_phrases\", \"player_text_rtc_fallback\": false, \"phrase_heuristics_legacy_lane\": false, \"phrase_heuristics_suppressed\": true}}, \"response_type_contract\": {\"required_response_type\": \"action_outcome\", \"source_route\": \"exploration\", \"allow_escalation\": false, \"escalation_block_reason\": \"non_hostile_world_action_guard\", \"strict_target_id\": null, \"strict_answer_expected\": false, \"strict_dialogue_expected\": false, \"action_must_preserve_agency\": true, \"debug_reasons\": [\"phrase_heuristics_suppressed_for_ctir_planner_seam\", \"resolved_world_action_requires_action_outcome\", \"non_hostile_world_action_guard\"]}}, \"contracts\": {\"answer_completeness\": {\"enabled\": false, \"trace\": {\"trigger_source\": \"none\", \"active_target_id\": null, \"active_npc_reply_kind\": null, \"question_detected_from_player_text\": false, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"partial_answer_permitted\": false}, \"player_direct_question\": false, \"answer_required\": false, \"answer_must_come_first\": false, \"expected_voice\": \"either\", \"expected_answer_shape\": \"direct\", \"allowed_partial_reasons\": [], \"forbid_deflection\": false, \"forbid_generic_nonanswer\": false, \"require_concrete_payload\": false, \"concrete_payload_any_of\": []}, \"response_delta\": {\"enabled\": false, \"delta_required\": false, \"delta_must_come_early\": false, \"trigger_source\": \"none\", \"topic_tokens\": [], \"press_depth\": 0, \"previous_player_input\": null, \"previous_answer_snippet\": null, \"overlap_ratio\": null, \"allowed_delta_kinds\": [], \"forbid_semantic_restatement\": false, \"forbid_repackaged_nonanswer\": false, \"allow_short_bridge_before_delta\": false, \"require_delta_when_answer_required\": false, \"expected_delta_shape\": \"none\", \"trace\": {\"question_detected_from_player_text\": false, \"follow_up_pressure_detected\": false, \"follow_up_press_depth\": 0, \"follow_up_overlap_ratio\": null, \"prior_answer_available\": false, \"answer_completeness_required\": false, \"social_lock\": false, \"active_target_id\": null, \"answer_pressure_followup_detected\": false, \"strict_social_answer_seek_override\": false, \"same_interlocutor_followup\": false, \"answer_pressure_suppressed_because\": [\"no_active_interlocutor\", \"no_prior_log_exchange\", \"not_question_or_answer_pressure\"], \"answer_pressure_family\": null, \"answer_pressure_anchor_kind\": null, \"contradiction_followup_detected\": false, \"explanation_followup_detected\": false, \"insufficiency_followup_detected\": false, \"short_followup_anchor_detected\": false, \"anchor_tokens_extracted\": [], \"anchor_token_matched\": null, \"anchor_followup_detected\": false, \"explanation_of_recent_anchor_followup\": false, \"recent_reference_clarification_detected\": false, \"recent_reference_kind\": null, \"recent_reference_phrase_matched\": null, \"clarification_prompt_shape\": null, \"correction_reask_followup_detected\": false, \"answer_pressure_reasons\": [], \"trigger_source\": \"none\", \"resolution_kind\": \"investigate\", \"uncertainty_suggests_partial\": false, \"suppressed_because\": [\"no_follow_up_pressure\", \"not_answer_seeking_turn\", \"opening_scene\"]}}, \"fallback_behavior\": null, \"tone_escalation\": null, \"anti_railroading\": null, \"context_separation\": null, \"response_type\": {\"required_response_type\": \"action_outcome\", \"source_route\": \"exploration\", \"allow_escalation\": false, \"escalation_block_reason\": \"non_hostile_world_action_guard\", \"strict_target_id\": null, \"strict_answer_expected\": false, \"strict_dialogue_expected\": false, \"action_must_preserve_agency\": true, \"debug_reasons\": [\"phrase_heuristics_suppressed_for_ctir_planner_seam\", \"resolved_world_action_requires_action_outcome\", \"non_hostile_world_action_guard\"]}}, \"continuity\": {\"last_human_adjacent_continuity\": null}, \"fallback\": {\"fallback_provenance\": null}, \"debug\": {\"sources_used\": [\"game.narration_plan_bundle._assemble_plan_adjacent_renderer_inputs\"], \"missing_contracts\": [\"fallback_behavior\", \"tone_escalation\", \"anti_railroading\", \"context_separation\"], \"world_progression\": {\"changed_nodes_head\": [], \"active_projects_n\": 0, \"world_clocks_n\": 0}}, \"referent_tracking_compact\": {\"referent_artifact_version\": 1, \"active_interaction_target\": null, \"referential_ambiguity_class\": \"ambiguous_singular\", \"ambiguity_risk\": 0}}, \"fallback_behavior\": {\"enabled\": true, \"uncertainty_active\": false, \"uncertainty_sources\": [], \"uncertainty_mode\": null, \"allowed_behaviors\": {\"ask_clarifying_question\": false, \"hedge_appropriately\": false, \"provide_partial_information\": false}, \"disallowed_behaviors\": {\"invented_certainty\": true, \"fabricated_authority\": true, \"meta_system_explanations\": true}, \"diegetic_only\": true, \"max_clarifying_questions\": 1, \"prefer_partial_over_question\": false, \"require_partial_to_state_known_edge\": false, \"require_partial_to_state_unknown_edge\": false, \"require_partial_to_offer_next_lead\": false, \"allowed_hedge_forms\": [\"I can't swear to it, but\", \"From what I saw,\", \"As far as rumor goes,\", \"Looks like\", \"Hard to tell, but\"], \"forbidden_hedge_forms\": [\"I lack enough information to answer confidently.\", \"The system cannot confirm that.\", \"Canon proves it.\", \"As an AI, I don't know.\", \"There is insufficient context available.\"], \"allowed_authority_bases\": [\"direct_observation\", \"established_report\", \"rumor_marked_as_rumor\", \"visible_evidence\"], \"forbidden_authority_bases\": [\"unsupported_named_culprit\", \"unsupported_exact_location\", \"unsupported_motive_as_fact\", \"unsupported_procedural_certainty\", \"system_or_canon_claims\"], \"debug\": {\"activation_reasons\": [], \"partial_preferred\": false, \"clarifying_question_allowed\": false}}, \"uncertainty_hint\": null, \"narration_obligations\": {\"is_opening_scene\": true, \"must_advance_scene\": true, \"should_answer_active_npc\": false, \"avoid_input_echo\": true, \"avoid_player_action_restatement\": true, \"prefer_structured_turn_summary\": true, \"active_npc_reply_expected\": false, \"active_npc_reply_kind\": null, \"scene_momentum_due\": false, \"scene_momentum_exchanges_since\": 0, \"scene_momentum_next_due_in\": 2, \"suppress_non_social_emitters\": false}, \"opening_narration_obligations\": {\"opening_mode\": true, \"opener_style\": \"scene_establishing\", \"required_first_move\": {\"sensory_or_spatial_details\": {\"min\": 2, \"max\": 4}, \"ambient_social_signal_max\": 1, \"named_backstage_explanations\": 0, \"hidden_fact_assertions\": 0}, \"preferred_diction\": {\"unknown_people\": \"refer_by_visible_role_or_appearance_in_natural_language\", \"role_labels\": \"avoid_title_casing_role_labels_unless_actual_names\", \"first_paragraph\": \"externally_observable_only\"}}, \"opening_scene_realization\": {\"opening_mode\": true, \"contract\": {\"scene_id\": \"bathhouse_pump_alcove\", \"location\": \"Dunmere public bathhouse pump alcove\", \"sensory_anchors\": [], \"ambient_motion\": [], \"diegetic_uncertainty_hooks\": [], \"prohibited_opener_content\": [\"Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims.\", \"Do not treat engine role labels as proper names (for example title-cased 'Tavern Runner', 'Guard Captain').\", \"Do not narrate hidden GM notes, scene seeds, or privileged facts as immediate player perception.\", \"Do not assert who controls patrols, who secretly knows what, or what factions are doing unless that is directly visible or audible here and now.\", \"Do not name unseen or off-scene NPCs the player has not been introduced to through direct presence or clear address.\"], \"narration_basis_visible_facts\": [], \"opening_basis_scores\": [], \"opening_basis_has_actor\": false, \"opening_basis_has_activity\": false, \"opening_basis_has_affordance\": false, \"source\": {\"visible_facts\": \"curated_visible_fact_strings\", \"name_grounding\": \"narration_visibility.visible_entity_names + visible_entity_aliases\"}, \"validator\": {\"ok\": false, \"issues\": [\"basis_missing_actor\", \"basis_missing_activity\", \"basis_missing_affordance\"]}, \"opening_fact_source_used\": \"none\", \"opening_fact_eligibility_mode\": \"none\", \"opening_fact_rejected_by_lifecycle_count\": 0, \"opening_fact_rejected_by_form_count\": 0, \"opening_journal_filtered_count\": 0}, \"opening_narration_obligations\": {\"opening_mode\": true, \"opener_style\": \"scene_establishing\", \"required_first_move\": {\"sensory_or_spatial_details\": {\"min\": 2, \"max\": 4}, \"ambient_social_signal_max\": 1, \"named_backstage_explanations\": 0, \"hidden_fact_assertions\": 0}, \"preferred_diction\": {\"unknown_people\": \"refer_by_visible_role_or_appearance_in_natural_language\", \"role_labels\": \"avoid_title_casing_role_labels_unless_actual_names\", \"first_paragraph\": \"externally_observable_only\"}}}, \"opening_inputs_are_curated\": true, \"opening_selector_source_used\": \"none\", \"opening_selector_selected_facts\": [], \"opening_curated_facts\": [], \"narration_visibility\": {\"visible_entities\": [\"nessa\"], \"active_interlocutor_id\": null, \"visible_facts\": [\"two folded towels rest on a cedar bench\", \"a blue-glazed soap dish sits beside the washbasin\", \"nessa folds clean towels beside the cedar bench\"], \"rules\": {\"no_unseen_entities\": true, \"no_hidden_facts\": true, \"no_undiscovered_facts\": true}}, \"scene_state_anchor_contract\": {\"enabled\": true, \"required_any_of\": [\"location\", \"actor\", \"player_action\"], \"minimum_anchor_hits\": 1, \"scene_id\": \"bathhouse_pump_alcove\", \"scene_location_label\": \"Dunmere public bathhouse pump alcove\", \"location_tokens\": [\"bathhouse_pump_alcove\", \"bathhouse pump alcove\", \"dunmere public bathhouse pump alcove\", \"dunmere public\", \"public bathhouse\", \"bathhouse pump\", \"pump alcove\"], \"actor_tokens\": [\"nessa\", \"attendant\"], \"player_action_tokens\": [\"investigate\", \"text_the_bathhouse_pumps_long_iron_handl\", \"text the bathhouse pumps long iron handl\", \"examine\", \"bowed\", \"pump\", \"handle\", \"sheared\", \"pivot\", \"pin\", \"closely\"], \"preferred_repair_order\": [\"actor\", \"player_action\", \"location\"], \"debug_reason\": \"scene_state_anchor: loc=7 actor=2 player_action=11 enabled=True\", \"debug_sources\": {\"location\": [\"scene.id\", \"scene.location\"], \"actor\": [\"narration_visibility.visible_entity_names\", \"visible_entity_aliases\"], \"player_action\": [\"resolution.kind\", \"resolution.action_id\", \"scene_runtime.last_player_action_text\"]}}, \"anti_railroading_contract\": {\"enabled\": true, \"forbid_player_decision_override\": true, \"forbid_forced_direction\": true, \"forbid_exclusive_path_claims_without_basis\": true, \"forbid_lead_to_plot_gravity_upgrade\": true, \"allow_directional_language_from_resolved_transition\": false, \"allow_exclusivity_from_authoritative_resolution\": false, \"allow_commitment_language_when_player_explicitly_committed\": false, \"surfaced_lead_ids\": [], \"surfaced_lead_labels\": [], \"allowed_lead_roles\": [\"option\", \"hook\", \"rumor\", \"pressure\", \"opportunity\", \"constraint\"], \"forbidden_lead_roles\": [\"destiny\", \"required_path\", \"main_plot\", \"only_real_way_forward\"], \"debug_reason\": \"anti_railroading: transition=False authoritative=False commitment=False surfaced_leads=0\", \"debug_inputs\": {\"has_resolution\": true, \"has_narration_obligations\": true, \"has_session_view\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"has_narrative_authority_contract\": true, \"has_prompt_leads\": true, \"has_active_pending_leads\": true, \"has_follow_surface\": false, \"player_text_nonempty\": true, \"obligation_hints\": {\"must_advance_scene\": true, \"scene_momentum_due\": false, \"is_opening_scene\": true}}, \"debug_flags\": {\"resolved_transition\": false, \"authoritative_resolution_outcome\": false, \"player_commitment_detected\": false, \"surfaced_lead_count\": 0, \"scene_state_anchor_contract_present\": true, \"narrative_authority_contract_present\": true, \"speaker_contract_present\": true}}, \"context_separation_contract\": {\"enabled\": true, \"scene_focus_summary\": \"A tiled pump alcove serves an ordinary public bathhouse. The long iron pump handle is visibly bowed, and its pivot pin is sheared through. Two folded towels rest on a cedar bench. A blue-glazed soap dish sits beside the washbasin. Nessa, an ordinary bath attendant, folds towels nearby. Nothing states a cause, responsible actor, event time, history, explan...\", \"interaction_kind\": \"investigate\", \"player_intent_summary\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"primary_topics\": [\"examine\", \"bowed\", \"pump\", \"handle\", \"sheared\", \"pivot\", \"pin\", \"closely\", \"bathhouse_pump_alcove\", \"bathhouse pump alcove\", \"dunmere public bathhouse pump alcove\", \"dunmere public\", \"public bathhouse\", \"bathhouse pump\", \"pump alcove\", \"nessa\", \"attendant\", \"investigate\", \"text_the_bathhouse_pumps_long_iron_handl\", \"text the bathhouse pumps long iron handl\"], \"allowed_contextual_topics\": [], \"ambient_pressure_topics\": [\"Daily work continues around Dunmere.\"], \"forbid_topic_hijack\": true, \"forbid_pressure_answer_substitution\": true, \"forbid_unearned_tone_shift_from_background_pressure\": true, \"allow_brief_pressure_coloring\": true, \"allow_optional_consequence_signposting\": true, \"max_pressure_sentences_without_player_prompt\": 2, \"tone_escalation_contract\": {\"enabled\": true, \"scene_id\": \"bathhouse_pump_alcove\", \"active_speaker_id\": null, \"base_tone\": \"neutral\", \"max_allowed_tone\": \"guarded\", \"allow_guarded_refusal\": true, \"allow_verbal_pressure\": false, \"allow_explicit_threat\": false, \"allow_physical_hostility\": false, \"allow_combat_initiation\": false, \"justification_flags\": {\"player_used_aggressive_action\": false, \"player_used_coercive_social_action\": false, \"player_persisted_after_refusal\": false, \"scene_has_active_tension\": false, \"scene_has_authority_pressure\": false, \"scene_has_visible_hostile_actor\": false, \"combat_active\": false, \"resolution_is_risky\": true, \"npc_already_hostile_in_state\": false}, \"justification_reasons\": [\"resolution_kind_or_mechanical_payload_is_risky\"], \"preferred_deescalations\": [\"Default to observational tone; keep interpersonal heat optional.\", \"Prefer curiosity and clarification over suspicion-as-accusation.\"], \"debug_reason\": \"tone_escalation: base_rank=0 max_rank=1 combat_active=False hostile_npc=False\", \"debug_inputs\": {\"scene_id\": \"bathhouse_pump_alcove\", \"has_session\": true, \"has_world\": true, \"has_resolution\": true, \"has_narration_visibility\": true, \"has_scene_state_anchor_contract\": true, \"has_speaker_selection_contract\": true, \"recent_log_len\": 0}, \"debug_flags\": {\"base_rank\": 0, \"max_rank\": 1, \"recent_player_text_latest_len\": 0, \"resolution_kind\": \"investigate\", \"normalized_action_type\": null, \"prior_refusal_seen_in_log\": false, \"topic_pressure\": 0, \"combat_active_inferred\": false}}, \"debug_inputs\": {\"has_resolution\": true, \"has_session_view\": true, \"has_scene_envelope\": true, \"has_scene_summary\": true, \"has_turn_summary\": true, \"has_speaker_selection_contract\": true, \"has_scene_state_anchor_contract\": true, \"has_narration_visibility\": true, \"has_tone_escalation_contract\": true, \"has_compressed_world_pressures\": true, \"has_prompt_leads\": true, \"has_active_pending_leads\": true, \"has_follow_surface\": false, \"player_text_nonempty\": true, \"primary_topic_count\": 20, \"ambient_pressure_topic_count\": 1}, \"debug_flags\": {\"player_seeks_world_danger_info\": false, \"scene_summary_crisis\": false, \"interaction_kind_worldish\": true, \"authoritative_or_consequence_relevant\": false, \"pressure_focus_allowed\": true, \"tone_allow_verbal_pressure\": false, \"tone_allow_explicit_threat\": false}, \"debug_reason\": \"context_separation: pressure_focus_allowed=True primary_topics=20 ambient=1\"}, \"player_facing_narration_purity_contract\": {\"enabled\": true, \"diegetic_only\": true, \"allow_structured_choice_labels\": false, \"allow_explicit_ui_references\": false, \"allow_meta_transition_bridges\": false, \"forbid_scaffold_headers\": true, \"forbid_coaching_language\": true, \"forbid_engine_choice_framing\": true, \"forbid_non_diegetic_action_prompting\": true, \"response_type_required\": null, \"interaction_kind\": null}, \"social_response_structure_contract\": {\"enabled\": false, \"applies_to_response_type\": \"dialogue\", \"require_spoken_dialogue_shape\": false, \"discourage_expository_monologue\": false, \"require_natural_cadence\": false, \"allow_brief_action_beats\": true, \"allow_brief_refusal_or_uncertainty\": true, \"max_contiguous_expository_lines\": null, \"max_dialogue_paragraphs_before_break\": null, \"prefer_single_speaker_turn\": false, \"forbid_bulleted_or_list_like_dialogue\": false, \"required_response_type\": \"action_outcome\", \"debug_reason\": \"response_type_not_dialogue:action_outcome\", \"debug_inputs\": {\"scene_id\": \"bathhouse_pump_alcove\", \"response_type_contract_source\": \"response_policy\"}}, \"interaction_continuity_contract\": {\"enabled\": false, \"continuity_strength\": \"none\", \"preserve_conversational_thread\": false, \"preserve_context_continuity\": false, \"drop_interlocutor_requires_explicit_break\": false, \"speaker_switch_requires_explicit_cue\": false, \"allow_narrator_bridge\": true, \"interaction_mode\": \"none\", \"interaction_kind\": \"\", \"active_interaction_target_id\": \"\", \"current_interlocutor\": \"\", \"anchored_interlocutor_id\": \"\", \"conversation_privacy\": \"\", \"engagement_level\": \"none\", \"speaker_selection_contract\": {\"primary_speaker_id\": null, \"primary_speaker_name\": null, \"primary_speaker_source\": null, \"allowed_speaker_ids\": [], \"continuity_locked\": false, \"continuity_lock_reason\": null, \"speaker_switch_allowed\": true, \"speaker_switch_reason\": \"no_authoritative_pin\", \"generic_fallback_forbidden\": true, \"forbidden_fallback_labels\": [\"ragged stranger\", \"stranger\", \"someone nearby\", \"someone in the crowd\", \"a voice nearby\", \"a passerby\", \"a bystander\", \"an onlooker\", \"a figure nearby\", \"someone anonymous\"], \"interruption_allowed\": false, \"interruption_requires_scene_event\": false, \"offscene_speakers_forbidden\": true, \"debug\": {\"merged_player_prompt_preview\": \"\", \"strict_social_active\": false, \"authoritative_source\": \"none\", \"authoritative_reason\": \"no addressable target resolved\", \"grounding_reason_code\": \"empty_actor_id\", \"grounding_fallback_applied\": false, \"neutral_reply_bridge\": true, \"why_speaker_chosen\": \"authoritative_target_unresolved\", \"why_continuity_locked_or_not\": null, \"why_switch_permitted_or_not\": \"no_authoritative_pin\", \"interruption_tracker_active\": false, \"resolution_path\": \"full_authoritative_resolve_plus_grounding\"}}, \"continuity_reasons\": [], \"break_signals_present\": [], \"debug\": {\"source_of_anchor\": \"none\", \"scene_scope_validated\": true, \"response_type_required\": \"action_outcome\"}}, \"first_mention_contract\": {\"enabled\": true, \"requires_explicit_intro\": true, \"requires_grounding\": true, \"disallow_pronoun_first_reference\": true, \"disallow_unearned_familiarity\": true}, \"discoverable_hinting\": true, \"mechanical_resolution\": {\"kind\": \"investigate\", \"action_id\": \"text_the_bathhouse_pumps_long_iron_handl\", \"label\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"prompt\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": null, \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {}, \"hint\": \"Player inspected an authored visible feature that is not a separate interactable. Narrate only the authorized visible information; do not invent contents.\", \"metadata\": {\"referenced_surface_authority\": \"authored_visible_feature\", \"referenced_surface_target\": \"bowed\", \"referenced_surface_existence\": true, \"referenced_surface_visibility\": true, \"referenced_surface_inspectability\": false, \"referenced_surface_interactable_id\": \"\", \"referenced_surface_visible_fact\": \"{'text': \\\"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\\\", 'semantic_identity': {'kind': 'world_fact', 'subject': 'bathhouse_pump_handle', 'subject_aliases': ['bathhouse pump', 'pump', 'pump handle', 'iron handle', 'pivot pin'], 'relation': 'observation', 'value': 'bowed handle and sheared pivot pin', 'value_aliases': ['bowed', 'bent handle', 'sheared', 'sheared pin', 'broken pivot pin'], 'polarity': 'positive'}}\", \"referenced_surface_inspectable_text\": \"\", \"skip_unrelated_clue_discovery\": true, \"resolution_contract\": {\"contract_id\": \"rc_9c97a3580116\", \"turn_index\": 1, \"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target_ref\": {\"type\": \"resolution_subject\", \"id_or_text\": \"bowed pump handle and the sheared pivot pin\", \"source\": \"explicit_player\"}, \"interlocutor_id\": null, \"conversational_subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": {\"type\": \"resolution_subject\", \"id\": \"bowed pump handle and the sheared pivot pin\", \"label\": \"bowed pump handle and the sheared pivot pin\", \"source_turn\": null}, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?\", \"construction\": {\"cues\": [\"pronoun\"], \"referent_slot\": \"explicit_target\", \"referent_reason\": \"explicit_current_turn_target\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"bathhouse_pump_alcove\", \"type\": \"place\", \"label\": \"Dunmere public bathhouse pump alcove\"}, {\"id\": \"nessa\", \"type\": \"interlocutor\", \"label\": \"Nessa\"}], \"proposal_source\": \"deterministic_fast_path\", \"proposed_operation\": \"inspect\", \"proposed_supporting_operations\": [], \"proposed_raw_target\": \"bowed pump handle and the sheared pivot pin\", \"canonicalization_attempted\": true, \"canonical_target_found\": true, \"operation_conflict\": false, \"validation_status\": \"validated\", \"validation_result\": {\"status\": \"validated\", \"reason\": null, \"failed_fields\": [], \"clarification_required\": false, \"model_interpretation_appropriate\": false, \"canonical_target_id\": \"bowed pump handle and the sheared pivot pin\", \"canonical_target_label\": \"bowed pump handle and the sheared pivot pin\", \"canonical_target_type\": \"resolution_subject\", \"canonical_basis\": \"explicit_resolution_subject\", \"authoritative_operation\": \"inspect\", \"discourse_commit_allowed\": true, \"compatibility_bridge\": null}, \"abstention_reason\": null, \"failed_fields\": [], \"clarification_required\": false, \"model_interpretation_appropriate\": false, \"discourse_commit_allowed\": true, \"interlocutor_rejected\": false, \"entity_binding\": {\"status\": \"unresolved\", \"entity_class\": \"ambiguous_unresolved\", \"proposed_interlocutor\": null, \"proposed_span\": null, \"bound_interlocutor_id\": null, \"entity_id\": null, \"label\": null, \"explicit_new_interlocutor\": false, \"authority_reasons\": [], \"claim_binding\": \"none\"}, \"authoritative\": true, \"semantic_completeness\": \"sufficient\", \"compatibility_bridge\": null, \"interpretation_proposal\": {\"raw_input\": \"I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?\", \"source\": \"deterministic_fast_path\", \"primary_operation\": \"inspect\", \"supporting_operations\": [], \"raw_target_text\": \"bowed pump handle and the sheared pivot pin\", \"proposed_target_id\": null, \"target_capture\": \"verb_object\", \"has_determiner\": true, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": null, \"referenced_claim_id\": null, \"referenced_action_id\": null, \"referenced_inspected_id\": null, \"confidence\": null, \"clarification_required\": false, \"ambiguous\": false, \"operation_conflict\": false, \"notes\": {}}, \"commitment_status\": \"executed_now\", \"primary_operation\": \"inspect\", \"resolution_subject\": \"perception\", \"resolution_subject_coherence\": \"accepted\", \"semantic_input_length\": 97, \"provenance_excerpt\": \"I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?\", \"secondary_operations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}, \"requested_addressee\": null, \"addressee_binding_status\": \"unresolved\"}, \"retry_preserved\": true}, \"interaction_obligation\": {\"kind\": \"inspection\", \"target\": null, \"interlocutor_id\": null, \"subject\": \"bowed pump handle and the sheared pivot pin closely\", \"requested_outcome\": \"resolve the inspection from authoritative or bounded incidental detail\", \"claim_id\": null, \"resolution_mode\": \"authoritative_mechanical_action\", \"turn_index\": 1, \"resolution_contract_id\": \"rc_9c97a3580116\", \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"resolution_method\": \"inspect\", \"outcome_classification\": \"established_or_retrieved\", \"established_fact_refs\": [\"scene_world_authored_corpus\", \"contract_discourse_ref\"], \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"provenance\": \"authored_world_fact\", \"consequence\": \"consequential\", \"authorized\": true, \"reason_codes\": [\"authored_state_source\"], \"authority\": \"world_truth\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"outcome_classification\": \"established_or_retrieved\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"provenance\": \"authored_world_fact\", \"consequence\": \"consequential\", \"authorized\": true, \"reason_codes\": [\"authored_state_source\"], \"authority\": \"world_truth\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.1\", \"outcome_classification\": \"established_or_retrieved\", \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"provenance\": \"authored_world_fact\", \"consequence\": \"consequential\", \"authorized\": true, \"reason_codes\": [\"authored_state_source\"], \"authority\": \"world_truth\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.2\", \"outcome_classification\": \"established_or_retrieved\", \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"provenance\": \"authored_world_fact\", \"consequence\": \"consequential\", \"authorized\": true, \"reason_codes\": [\"authored_state_source\"], \"authority\": \"world_truth\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.3\", \"outcome_classification\": \"established_or_retrieved\", \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"provenance\": \"authored_world_fact\", \"consequence\": \"consequential\", \"authorized\": true, \"reason_codes\": [\"authored_world_npc\"], \"authority\": \"world_truth\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"outcome_classification\": \"established_or_retrieved\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"persistence_policy\": \"do_not_persist\", \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_consequential_questions\": [], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}, \"authority_algorithm\": \"proposition_claim_control_v1\"}, \"ordinary_contract_established\": true, \"semantic_owner\": \"resolution_contract\", \"contract_before_resolver\": true, \"contract_construction_source\": \"deterministic\", \"selected_resolver\": \"exploration\", \"turn_segmentation\": {\"declared_action_text\": \"I examine the bowed pump handle and the sheared pivot pin closely.\", \"adjudication_question_text\": \"What does this damage suggest?\"}, \"unknown_legacy_keys\": {\"noncombat_resolution\": {\"framework_version\": \"2026.04.noncombat.v1\", \"kind\": \"investigation\", \"subkind\": \"investigate\", \"authority_domain\": \"scene_state\", \"deterministic_resolved\": true, \"requires_check\": false, \"check_request\": null, \"outcome_type\": \"closed\", \"success_state\": \"success\", \"discovered_entities\": [], \"surfaced_facts\": [], \"state_changes\": {}, \"blocked_reason_codes\": [], \"ambiguous_reason_codes\": [], \"unsupported_reason_codes\": [], \"authoritative_outputs\": [{\"output_kind\": \"resolution_trace\", \"source_engine\": \"game.exploration\", \"route\": \"exploration\", \"engine_action_id\": \"text_the_bathhouse_pumps_long_iron_handl\"}]}}, \"response_type_contract\": {\"required_response_type\": \"action_outcome\", \"source_route\": \"mixed\", \"allow_escalation\": false, \"escalation_block_reason\": \"non_hostile_world_action_guard\", \"strict_target_id\": null, \"strict_answer_expected\": true, \"strict_dialogue_expected\": false, \"action_must_preserve_agency\": true, \"debug_reasons\": [\"resolved_world_action_requires_action_outcome\", \"non_hostile_world_action_guard\"]}, \"emission_debug\": {\"dialogue_social_plan\": {\"version\": 1, \"applies\": false, \"speaker_id\": null, \"speaker_name\": null, \"speaker_source\": \"unresolved\", \"dialogue_intent\": null, \"reply_kind\": \"unknown\", \"pressure_state\": \"none\", \"relationship_codes\": [\"unknown\"], \"tone_bounds\": [\"neutral\"], \"prohibited_content_codes\": [\"no_narrator_override\", \"no_ooc_instructions\", \"no_player_agency_override\", \"no_prompt_text\"], \"derivation_codes\": [\"dialogue_social_plan:v1\", \"intent:ctir_only\", \"referent_tracking:consumed\", \"session_hints:bounded\", \"speaker:unresolved\"], \"validator\": {\"validated\": true, \"errors\": [], \"reject_field_names\": [\"dialogue\", \"dialogue_line\", \"gm_guidance\", \"instructions\", \"message\", \"narration\", \"player_facing_text\", \"prompt\", \"system_prompt\", \"text\"], \"allowed_reply_kinds\": [\"answer\", \"explanation\", \"reaction\", \"refusal\", \"unknown\"], \"allowed_pressure_states\": [\"high\", \"low\", \"moderate\", \"none\"], \"allowed_tone_codes\": [\"cold\", \"deferential\", \"direct\", \"evasive\", \"guarded\", \"hostile\", \"neutral\", \"threatening\", \"warm\"], \"allowed_relationship_codes\": [\"engagement_engaged\", \"engagement_focused\", \"engagement_none\", \"fear_high\", \"fear_low\", \"friendly\", \"hostile\", \"neutral\", \"suspicion_high\", \"suspicion_low\", \"trust_high\", \"trust_low\", \"unfriendly\", \"unknown\"], \"allowed_speaker_alias_resolution_sources\": [\"continuity_snapshot\", \"interaction_continuity_contract\", \"manual_bundle_override\", \"referent_tracking\"]}, \"bounded_session_hints\": {\"active_interaction_target_id\": null, \"active_interaction_target_name\": null, \"active_interaction_kind\": null, \"interaction_mode\": \"none\", \"engagement_level\": \"none\", \"conversation_privacy\": null, \"player_position_context\": null}}, \"scene_state_anchor\": {\"enabled\": true, \"scene_id\": \"bathhouse_pump_alcove\", \"counts\": {\"location\": 7, \"actor\": 2, \"player_action\": 11}}, \"context_separation\": {\"enabled\": true, \"interaction_kind\": \"investigate\", \"pressure_focus_allowed\": true, \"debug_reason\": \"context_separation: pressure_focus_allowed=True primary_topics=20 ambient=1\"}, \"conversational_memory_window\": {\"enabled\": true, \"window_version\": \"v1\", \"prioritize_recent_turns\": true, \"prioritize_active_scene_entities\": true, \"deprioritize_stale_inactive_elements\": true, \"allow_explicit_reintroduction\": true, \"recent_turn_window\": 6, \"soft_memory_limit\": 12, \"stale_after_turns\": 18, \"active_scene_entity_ids\": [\"nessa\"], \"anchored_interlocutor_id\": \"\", \"active_interaction_target_id\": \"\", \"explicit_reintroduced_entity_ids\": [], \"explicit_reintroduced_topics\": [], \"selection_debug\": {\"matched_entity_ids\": [], \"matched_topics\": [], \"matched_grounded_ids\": [], \"callback_marker_hit\": null, \"source_of_activity_anchor\": \"none\", \"source_of_recentness\": \"session.turn_counter\", \"source_of_reintroductions\": \"player_text+visibility_aliases\"}}, \"selected_conversational_memory\": [], \"conversational_memory\": {\"selected_count\": 0}}}}, \"scene_advancement\": {\"scene_transition_occurred\": false, \"arrived_at_scene\": false, \"new_scene_context_available\": false}, \"session\": {\"active_scene_id\": \"bathhouse_pump_alcove\", \"response_mode\": \"standard\", \"turn_counter\": 1, \"visited_scene_count\": 1, \"active_interaction_target_id\": null, \"active_interaction_target_name\": null, \"active_interaction_kind\": null, \"interaction_mode\": \"none\", \"engagement_level\": \"none\", \"conversation_privacy\": null, \"player_position_context\": null}, \"character\": {\"name\": \"Galinor\", \"role\": \"A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.\", \"hp\": {\"current\": 8, \"max\": 8, \"nonlethal\": 0}, \"ac\": {\"normal\": 12, \"touch\": 12, \"flat_footed\": 10}, \"conditions\": [], \"attacks\": [{\"id\": \"quarterstaff\", \"name\": \"Quarterstaff\", \"attack_bonus\": 0, \"damage\": {\"dice_count\": 1, \"dice_sides\": 6, \"bonus\": 0, \"type\": \"bludgeoning\"}, \"type\": \"melee\"}, {\"id\": \"crossbow\", \"name\": \"Light Crossbow\", \"attack_bonus\": 2, \"damage\": {\"dice_count\": 1, \"dice_sides\": 8, \"bonus\": 0, \"type\": \"piercing\"}, \"type\": \"ranged\"}], \"spells\": {\"prepared\": [{\"id\": \"daze\", \"name\": \"Daze\", \"cast\": false, \"level\": 0}, {\"id\": \"detect_magic\", \"name\": \"Detect Magic\", \"cast\": false, \"level\": 0}, {\"id\": \"magic_missile\", \"name\": \"Magic Missile\", \"cast\": false, \"level\": 1}, {\"id\": \"shield\", \"name\": \"Shield\", \"cast\": false, \"level\": 1}], \"slots\": {\"0\": 3, \"1\": 1}}, \"skills\": {\"knowledge_arcana\": 8, \"spellcraft\": 8, \"perception\": 4, \"sense_motive\": 4, \"stealth\": 4, \"diplomacy\": 4, \"intimidate\": 2, \"bluff\": 2}}, \"combat\": {\"in_combat\": false}, \"world_state\": {\"flags\": {}, \"counters\": {}, \"clocks_summary\": []}, \"world\": {\"world_state\": {\"flags\": {}, \"counters\": {}, \"clocks_summary\": []}, \"recent_events\": [], \"faction_names\": [], \"progression_counts\": {\"active_projects\": 0, \"faction_pressure\": 0, \"faction_agenda\": 0, \"world_clocks\": 0, \"set_flags\": 0}}, \"world_progression_summary\": [], \"campaign\": {\"title\": \"Ashen Thrones\", \"premise\": \"Galinor is spending an ordinary afternoon in Dunmere.\", \"tone\": \"grimdark political intrigue with survival and horror elements\", \"character_role\": \"A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.\", \"gm_guidance\": [\"Use only the current scene's authored consequential facts as world truth.\", \"Nessa is an ordinary bath attendant unless the scene says otherwise.\"], \"world_pressures\": [\"Daily work continues around Dunmere.\"], \"magic_style\": \"rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.\"}, \"scene\": {\"public\": {\"id\": \"bathhouse_pump_alcove\", \"location\": \"Dunmere public bathhouse pump alcove\", \"summary\": \"A tiled pump alcove serves an ordinary public bathhouse. The long iron pump handle is visibly bowed, and its pivot pin is sheared through. Two folded towels rest on a cedar bench. A blue-glazed soap dish sits beside the washbasin. Nessa, an ordinary bath attendant, folds towels nearby. Nothing states a cause, responsible actor, event time, history, explanation, or corroborating evidence for the damage.\", \"mode\": \"social\", \"visible_facts\": [\"two folded towels rest on a cedar bench\", \"a blue-glazed soap dish sits beside the washbasin\", \"nessa folds clean towels beside the cedar bench\"], \"opening_seed_facts\": [], \"journal_seed_facts\": [], \"campaign_spine_opening_facts\": [], \"spine_opening_facts\": [], \"campaign_spine\": {}, \"scenario_spine\": {}, \"spine\": {}, \"exits\": [], \"enemies\": []}, \"discoverable_clues\": [], \"gm_only\": {\"hidden_facts\": [], \"discoverable_clues_locked\": []}, \"clue_records\": {\"discovered\": [], \"undiscovered\": []}, \"visible_clues\": [], \"discovered_clues\": [], \"clue_visibility\": {\"implicit\": [], \"explicit\": [], \"actionable\": []}, \"pending_leads\": [], \"runtime\": {\"discovered_clues\": [], \"pending_leads\": [], \"recent_contextual_leads\": [], \"repeated_action_count\": 1, \"last_exploration_action_key\": \"text_the_bathhouse_pumps_long_iron_handl\", \"momentum_exchanges_since\": 0, \"momentum_next_due_in\": 2, \"momentum_last_kind\": null}, \"intent\": {\"raw_text\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"normalized_kind\": \"investigate\", \"mode\": \"investigate\", \"classified_action\": \"investigate\", \"requires_check\": false, \"check_request\": null, \"targets\": [\"text_the_bathhouse_pumps_long_iron_handl\"], \"labels\": [], \"allow_discoverable_clues\": true}, \"layering_rules\": {\"visible_facts\": \"Only visible facts may be directly asserted; align with narration_visibility.visible_facts.\", \"discoverable_clues\": \"Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.\", \"hidden_facts\": \"Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues.\"}}, \"player_expression_contract\": {\"default_action_style\": \"third_person\", \"quoted_speech_allowed\": true, \"preserve_user_expression_format\": true, \"example\": \"Galinor asks, \\\"What changed at the north gate?\\\" while examining the notice board.\"}, \"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"bowed pump handle and the sheared pivot pin\", \"interlocutor\": null, \"subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for bowed pump handle and the sheared pivot pin (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\", \"contract_id\": \"rc_9c97a3580116\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"clues\": {\"known\": [], \"implicit\": [], \"explicit\": [], \"actionable\": []}, \"resolved_exploration_action\": {\"id\": \"text_the_bathhouse_pumps_long_iron_handl\", \"label\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"type\": \"investigate\", \"prompt\": \"I examine the bowed pump handle and the sheared pivot pin closely\", \"target_scene_id\": null}, \"resolution_kind\": \"investigate\", \"resolution_summary\": \"Investigate in current scene.\", \"scene_transition_already_occurred\": false, \"response_type_contract\": {\"required_response_type\": \"action_outcome\", \"source_route\": \"mixed\", \"allow_escalation\": false, \"escalation_block_reason\": \"non_hostile_world_action_guard\", \"strict_target_id\": null, \"strict_answer_expected\": true, \"strict_dialogue_expected\": false, \"action_must_preserve_agency\": true, \"debug_reasons\": [\"resolved_world_action_requires_action_outcome\", \"non_hostile_world_action_guard\"]}}"
+    },
+    "result": {
+      "player_facing_text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+      "tags": [
+        "scene_momentum:new_information"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Answer respects visible facts about damage without inferring cause; adds new sensory incidental detail and ongoing bathhouse activity to maintain momentum. | model_route:high_precision:purpose_strict_social:gpt-4.1-mini | model_escalated:strict_social",
+      "metadata": {
+        "output_form": "structured",
+        "selected_model": "gpt-4.1-mini",
+        "model_route_reason": "purpose_strict_social",
+        "model_route_family": "high_precision",
+        "model_route_purpose": "strict_social",
+        "model_retry_attempt": 0,
+        "model_escalated": true,
+        "model_escalation_trigger": "strict_social",
+        "emission_debug": {
+          "live_resolution_mode": {
+            "mode": "authoritative_mechanical_action",
+            "reason_codes": [
+              "physical_affordance_action"
+            ],
+            "target": "text_the_bathhouse_pumps_long_iron_handl",
+            "speaker_id": "",
+            "topic": "bowed pump handle and the sheared pivot pin closely",
+            "improvisation_opportunity_detected": false,
+            "proposal_created": false,
+            "proposal_reason": "not_improvable_mode",
+            "response_complete": true,
+            "response_completeness_reason": "engine_owned",
+            "requested_dimension": null,
+            "contract_id": "rc_9c97a3580116"
+          },
+          "accepted_response_provenance": "initial_generation",
+          "generation_attempts": 1,
+          "legacy_emission_authority": false,
+          "semantic_degradation": false,
+          "semantic_degradation_reasons": [],
+          "resolution_contract_semantic": {
+            "status": "satisfied",
+            "reasons": [
+              "target_observation"
+            ],
+            "contract_id": "rc_9c97a3580116",
+            "operation": "inspect",
+            "target": "bowed pump handle and the sheared pivot pin",
+            "dimension": null,
+            "discourse_referent": "bowed pump handle and the sheared pivot pin",
+            "candidate_answer_target": "bowed pump handle and the sheared pivot pin",
+            "target_compatible": true,
+            "operation_compatible": true,
+            "dimension_compatible": true,
+            "resolution_kind": "answer",
+            "valid_inability": false,
+            "valid_refusal": false,
+            "valid_clarification": false,
+            "necessary_clarification": false
+          },
+          "opening_upstream_prepared_present": false,
+          "opening_upstream_prepared_len": 0,
+          "opening_upstream_prepared_promoted": false,
+          "opening_raw_text_source": "gm_player_facing_text",
+          "pre_gate_text_len": 380,
+          "post_final_emission_gate_text_len": 380,
+          "narration_state_consistency_before_preview": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear...",
+          "resolution_contract": {
+            "contract_id": "rc_9c97a3580116",
+            "turn_index": 1,
+            "request_kind": "inquiry",
+            "operation": "inspect",
+            "target_ref": {
+              "type": "resolution_subject",
+              "id_or_text": "bowed pump handle and the sheared pivot pin",
+              "source": "explicit_player"
+            },
+            "interlocutor_id": null,
+            "conversational_subject": "bowed pump handle and the sheared pivot pin",
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "epistemic_mode": "unknown_allowed",
+            "discourse_ref": {
+              "type": "resolution_subject",
+              "id": "bowed pump handle and the sheared pivot pin",
+              "label": "bowed pump handle and the sheared pivot pin",
+              "source_turn": null
+            },
+            "referent_provenance": "explicit_player",
+            "ambiguous": false,
+            "raw_input": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": "explicit_target",
+              "referent_reason": "explicit_current_turn_target",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "bathhouse_pump_alcove",
+                  "type": "place",
+                  "label": "Dunmere public bathhouse pump alcove"
+                },
+                {
+                  "id": "nessa",
+                  "type": "interlocutor",
+                  "label": "Nessa"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "inspect",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": "bowed pump handle and the sheared pivot pin",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "bowed pump handle and the sheared pivot pin",
+                "canonical_target_label": "bowed pump handle and the sheared pivot pin",
+                "canonical_target_type": "resolution_subject",
+                "canonical_basis": "explicit_resolution_subject",
+                "authoritative_operation": "inspect",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+                "source": "deterministic_fast_path",
+                "primary_operation": "inspect",
+                "supporting_operations": [],
+                "raw_target_text": "bowed pump handle and the sheared pivot pin",
+                "proposed_target_id": null,
+                "target_capture": "verb_object",
+                "has_determiner": true,
+                "interlocutor_id": null,
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": null,
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              },
+              "commitment_status": "executed_now",
+              "primary_operation": "inspect",
+              "resolution_subject": "perception",
+              "resolution_subject_coherence": "accepted",
+              "semantic_input_length": 97,
+              "provenance_excerpt": "I examine the bowed pump handle and the sheared pivot pin closely. What does this damage suggest?",
+              "secondary_operations": [],
+              "executable_obligations": {
+                "primary": null,
+                "mutation_owner": null,
+                "sequence": [],
+                "supporting": []
+              },
+              "requested_addressee": null,
+              "addressee_binding_status": "unresolved"
+            },
+            "retry_preserved": true
+          },
+          "best_safe_candidate": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "best_safe_rank": 4,
+          "best_safe_contract_id": "rc_9c97a3580116",
+          "best_safe_coverage": {
+            "contract_id": "rc_9c97a3580116",
+            "operation": "inspect",
+            "target": "bowed pump handle and the sheared pivot pin",
+            "interlocutor": null,
+            "dimension": null,
+            "expected_resolution": "answer",
+            "required_dimensions": [],
+            "covered_dimensions": [],
+            "complete": true
+          },
+          "replacement_decision": "accepted",
+          "replacement_reason": "no_incumbent",
+          "initial_safe_candidate": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "satisfied_candidate": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "outcome_precedence": {
+            "downgrade_attempted": false,
+            "downgrade_rejected": false,
+            "downgrade_reason": null,
+            "recovery_used": false,
+            "recovery_source": null,
+            "destroyed": false,
+            "scene_momentum_appended": false,
+            "final_outcome_kind": "answer",
+            "final_satisfaction": "satisfied",
+            "replacement_reason": "resolution_content_preserved"
+          },
+          "post_narration_state_consistency_text_len": 380,
+          "narration_state_consistency_changed_text": false,
+          "narration_state_consistency_after_preview": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear...",
+          "accepted_emitted_equality": {
+            "exact_match": true,
+            "semantic_match": true,
+            "presentation_only": false,
+            "mutation_blocked": false,
+            "attempted_text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump."
+          },
+          "accepted_emitted_report": {
+            "immutable": true,
+            "exact_match": true,
+            "semantic_match": true,
+            "presentation_only": false,
+            "mutation_blocked": false,
+            "accepted_response_text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+            "emitted_response_text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump."
+          },
+          "temporal_provenance_commit": {
+            "sealed_text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+            "accepted_claim_count": 2,
+            "rejected_discarded_claim_count": 1,
+            "bucket_counts": {
+              "gm_inferences": 0,
+              "player_hypotheses": 0,
+              "accepted_incidentals": 0,
+              "rejected_consequential": 1
+            }
+          },
+          "legacy_would_emit": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "legacy_comparison": {
+            "downgrade_attempted": false,
+            "downgrade_rejected": false,
+            "downgrade_reason": null,
+            "recovery_used": false,
+            "recovery_source": null,
+            "destroyed": false,
+            "scene_momentum_appended": false,
+            "final_outcome_kind": "answer",
+            "final_satisfaction": "satisfied",
+            "replacement_reason": "resolution_content_preserved"
+          },
+          "gm_output_player_facing_len": 380,
+          "final_emission_text_preview": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear...",
+          "response_payload_text_preview": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear...",
+          "log_payload_text_preview": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear...",
+          "canonical_gm_object_id": 1277730124416
+        },
+        "hard_validation_attempt_1": {
+          "hard_valid": false,
+          "reasons": [
+            "unauthorized_resolution_decision_fact"
+          ],
+          "soft_flags": [],
+          "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_9c97a3580116",
+            "hard_valid": false,
+            "violations": [
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "provenance": "generated_proposal",
+                "consequence": "consequential",
+                "authorized": false,
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ],
+                "authority": "unauthorized",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "consequentially_unresolved",
+                "semantic_identity": {}
+              }
+            ],
+            "proposed_facts": [
+              {
+                "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "reason_codes": [
+                  "authored_state_source"
+                ],
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {
+                  "kind": "world_fact",
+                  "subject": "bathhouse_pump_handle",
+                  "subject_aliases": [
+                    "bathhouse pump",
+                    "pump",
+                    "pump handle",
+                    "iron handle",
+                    "pivot pin"
+                  ],
+                  "relation": "observation",
+                  "value": "bowed handle and sheared pivot pin",
+                  "value_aliases": [
+                    "bowed",
+                    "bent handle",
+                    "sheared",
+                    "sheared pin",
+                    "broken pivot pin"
+                  ],
+                  "polarity": "positive"
+                }
+              },
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "provenance": "generated_proposal",
+                "consequence": "consequential",
+                "authorized": false,
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ],
+                "authority": "unauthorized",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "consequentially_unresolved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                "provenance": "speculation",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "unknown_cause_actor_or_time"
+                ],
+                "authority": "observation",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "unresolved"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                "semantic_identity": {
+                  "kind": "world_fact",
+                  "subject": "bathhouse_pump_handle",
+                  "subject_aliases": [
+                    "bathhouse pump",
+                    "pump",
+                    "pump handle",
+                    "iron handle",
+                    "pivot pin"
+                  ],
+                  "relation": "observation",
+                  "value": "bowed handle and sheared pivot pin",
+                  "value_aliases": [
+                    "bowed",
+                    "bent handle",
+                    "sheared",
+                    "sheared pin",
+                    "broken pivot pin"
+                  ],
+                  "polarity": "positive"
+                },
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "relation_kind": "observation",
+                "persistence": "world_truth",
+                "authorized": true,
+                "source_ref": "scene.visible_facts.0",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "authored_state_source"
+                ]
+              },
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "semantic_identity": {
+                  "relation_kind": "evidential"
+                },
+                "provenance": "generated_proposal",
+                "authority": "unauthorized",
+                "epistemic_status": "unresolved",
+                "relation_kind": "evidential",
+                "persistence": "do_not_persist",
+                "authorized": false,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ]
+              },
+              {
+                "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "unresolved"
+                },
+                "provenance": "speculation",
+                "authority": "observation",
+                "epistemic_status": "unresolved",
+                "relation_kind": "epistemic_status",
+                "persistence": "do_not_persist",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "unknown_cause_actor_or_time"
+                ]
+              }
+            ]
+          }
+        },
+        "accepted_response": {
+          "immutable": true,
+          "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "provenance": "initial_generation",
+          "attempt": 1,
+          "player_input": "I examine the bowed pump handle and the sheared pivot pin closely",
+          "turn_identity": "rc_9c97a3580116",
+          "speaker": "",
+          "addressee": "",
+          "target": "bowed pump handle and the sheared pivot pin",
+          "operation": "inspect",
+          "authority_result": "accepted",
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": [],
+            "authority": [
+              {
+                "text": "Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+                "kind": "npc_claim",
+                "epistemic_status": "uncertain",
+                "grounded": false,
+                "consequential": false,
+                "family": "none"
+              }
+            ],
+            "gm_resolution_decision_audit": {
+              "decision_id": "rc_9c97a3580116",
+              "hard_valid": true,
+              "violations": [],
+              "proposed_facts": [
+                {
+                  "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {
+                    "kind": "world_fact",
+                    "subject": "bathhouse_pump_handle",
+                    "subject_aliases": [
+                      "bathhouse pump",
+                      "pump",
+                      "pump handle",
+                      "iron handle",
+                      "pivot pin"
+                    ],
+                    "relation": "observation",
+                    "value": "bowed handle and sheared pivot pin",
+                    "value_aliases": [
+                      "bowed",
+                      "bent handle",
+                      "sheared",
+                      "sheared pin",
+                      "broken pivot pin"
+                    ],
+                    "polarity": "positive"
+                  }
+                },
+                {
+                  "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                  "provenance": "speculation",
+                  "consequence": "epistemic",
+                  "authorized": true,
+                  "reason_codes": [
+                    "unknown_cause_actor_or_time"
+                  ],
+                  "authority": "observation",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "epistemically_qualified",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "unresolved"
+                  }
+                }
+              ],
+              "claim_results": [
+                {
+                  "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                  "semantic_identity": {
+                    "kind": "world_fact",
+                    "subject": "bathhouse_pump_handle",
+                    "subject_aliases": [
+                      "bathhouse pump",
+                      "pump",
+                      "pump handle",
+                      "iron handle",
+                      "pivot pin"
+                    ],
+                    "relation": "observation",
+                    "value": "bowed handle and sheared pivot pin",
+                    "value_aliases": [
+                      "bowed",
+                      "bent handle",
+                      "sheared",
+                      "sheared pin",
+                      "broken pivot pin"
+                    ],
+                    "polarity": "positive"
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "observation",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "unresolved"
+                  },
+                  "provenance": "speculation",
+                  "authority": "observation",
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "do_not_persist",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "unknown_cause_actor_or_time"
+                  ]
+                }
+              ]
+            },
+            "decision_acceptance_why": "bounded_sentence_preservation"
+          },
+          "interaction_completion": true,
+          "contract_satisfying": true,
+          "contract": {
+            "contract_id": "rc_9c97a3580116",
+            "operation": "inspect",
+            "interlocutor_id": "",
+            "expected_resolution": "answer"
+          },
+          "resolution_kind": "investigate",
+          "generation_attempts": 1,
+          "skipped_mutators": [
+            "apply_response_policy_enforcement",
+            "apply_authored_knowledge_realization_to_gm",
+            "apply_stay_leave_narration_agreement_to_gm",
+            "apply_destination_arrival_realization_to_gm",
+            "apply_perception_non_invention_to_gm",
+            "apply_repeated_description_guard",
+            "apply_final_emission_gate",
+            "enforce_emitted_contract_monotonicity",
+            "apply_spoken_state_refinement_cash_out"
+          ]
+        },
+        "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"bowed pump handle and the sheared pivot pin\", \"interlocutor\": null, \"subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for bowed pump handle and the sheared pivot pin (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_evidential_relation\"], \"text\": \"This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.\"}]}}",
+        "regeneration_invoked": true,
+        "decision_review": {
+          "governing_decision_contract_id": "rc_9c97a3580116",
+          "outcome_classification": "established_or_retrieved",
+          "attempt_1": {
+            "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+            "reasons": [
+              "unauthorized_resolution_decision_fact"
+            ],
+            "gm_resolution_decision_audit": {
+              "decision_id": "rc_9c97a3580116",
+              "hard_valid": false,
+              "violations": [
+                {
+                  "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unauthorized_evidential_relation"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                }
+              ],
+              "proposed_facts": [
+                {
+                  "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {
+                    "kind": "world_fact",
+                    "subject": "bathhouse_pump_handle",
+                    "subject_aliases": [
+                      "bathhouse pump",
+                      "pump",
+                      "pump handle",
+                      "iron handle",
+                      "pivot pin"
+                    ],
+                    "relation": "observation",
+                    "value": "bowed handle and sheared pivot pin",
+                    "value_aliases": [
+                      "bowed",
+                      "bent handle",
+                      "sheared",
+                      "sheared pin",
+                      "broken pivot pin"
+                    ],
+                    "polarity": "positive"
+                  }
+                },
+                {
+                  "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unauthorized_evidential_relation"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                  "provenance": "speculation",
+                  "consequence": "epistemic",
+                  "authorized": true,
+                  "reason_codes": [
+                    "unknown_cause_actor_or_time"
+                  ],
+                  "authority": "observation",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "epistemically_qualified",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "unresolved"
+                  }
+                }
+              ],
+              "claim_results": [
+                {
+                  "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                  "semantic_identity": {
+                    "kind": "world_fact",
+                    "subject": "bathhouse_pump_handle",
+                    "subject_aliases": [
+                      "bathhouse pump",
+                      "pump",
+                      "pump handle",
+                      "iron handle",
+                      "pivot pin"
+                    ],
+                    "relation": "observation",
+                    "value": "bowed handle and sheared pivot pin",
+                    "value_aliases": [
+                      "bowed",
+                      "bent handle",
+                      "sheared",
+                      "sheared pin",
+                      "broken pivot pin"
+                    ],
+                    "polarity": "positive"
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "observation",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                  "semantic_identity": {
+                    "relation_kind": "evidential"
+                  },
+                  "provenance": "generated_proposal",
+                  "authority": "unauthorized",
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "evidential",
+                  "persistence": "do_not_persist",
+                  "authorized": false,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "unauthorized_evidential_relation"
+                  ]
+                },
+                {
+                  "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "unresolved"
+                  },
+                  "provenance": "speculation",
+                  "authority": "observation",
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "do_not_persist",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "unknown_cause_actor_or_time"
+                  ]
+                }
+              ]
+            }
+          },
+          "retry_context": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"bowed pump handle and the sheared pivot pin\", \"interlocutor\": null, \"subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for bowed pump handle and the sheared pivot pin (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_evidential_relation\"], \"text\": \"This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.\"}]}}",
+          "attempt_2": {
+            "text": "",
+            "reasons": [
+              "malformed_or_truncated"
+            ],
+            "gm_resolution_decision_audit": {
+              "decision_id": "rc_9c97a3580116",
+              "hard_valid": true,
+              "violations": [],
+              "proposed_facts": [],
+              "claim_results": []
+            }
+          },
+          "acceptance": {
+            "why": "bounded_sentence_preservation",
+            "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump."
+          }
+        },
+        "skipped_semantic_mutators": [
+          "apply_response_policy_enforcement",
+          "apply_authored_knowledge_realization_to_gm",
+          "apply_stay_leave_narration_agreement_to_gm",
+          "apply_destination_arrival_realization_to_gm",
+          "apply_perception_non_invention_to_gm",
+          "apply_repeated_description_guard",
+          "apply_final_emission_gate",
+          "enforce_emitted_contract_monotonicity",
+          "apply_spoken_state_refinement_cash_out"
+        ],
+        "live_resolution_mode": {
+          "mode": "authoritative_mechanical_action",
+          "reason_codes": [
+            "physical_affordance_action"
+          ],
+          "target": "text_the_bathhouse_pumps_long_iron_handl",
+          "speaker_id": "",
+          "topic": "bowed pump handle and the sheared pivot pin closely",
+          "proposal_kind": null,
+          "proposal_category": null,
+          "epistemic_status": null,
+          "requested_dimension": null,
+          "contract_id": "rc_9c97a3580116"
+        }
+      }
+    }
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "prompt": {
+      "roles": [
+        "system",
+        "user",
+        "user"
+      ],
+      "user_chars": 4891,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_temporal_provenance": false,
+      "contains_authoritative_retry_context": true,
+      "contains_validation_failure": true,
+      "user_content": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"bowed pump handle and the sheared pivot pin\", \"interlocutor\": null, \"subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for bowed pump handle and the sheared pivot pin (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_evidential_relation\"], \"text\": \"This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.\"}]}}"
+    },
+    "result": {
+      "player_facing_text": "",
+      "tags": [
+        "structured_output_rejected"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Rejected structured model envelope. | model_route:retry_escalation:purpose_retry_escalation:gpt-4.1-mini | model_escalated:retry_attempt",
+      "metadata": {
+        "output_form": "malformed",
+        "structured_output_rejected": true,
+        "selected_model": "gpt-4.1-mini",
+        "model_route_reason": "purpose_retry_escalation",
+        "model_route_family": "retry_escalation",
+        "model_route_purpose": "retry_escalation",
+        "model_retry_attempt": 1,
+        "model_escalated": true,
+        "model_escalation_trigger": "retry_attempt",
+        "emission_debug": {
+          "live_resolution_mode": {
+            "mode": "authoritative_mechanical_action",
+            "reason_codes": [
+              "physical_affordance_action"
+            ],
+            "target": "text_the_bathhouse_pumps_long_iron_handl",
+            "speaker_id": "",
+            "topic": "bowed pump handle and the sheared pivot pin closely",
+            "improvisation_opportunity_detected": false,
+            "proposal_created": false,
+            "proposal_reason": "not_improvable_mode",
+            "response_complete": false,
+            "response_completeness_reason": "missing_player_facing_text",
+            "requested_dimension": null,
+            "contract_id": "rc_9c97a3580116"
+          }
+        },
+        "hard_validation_attempt_1": {
+          "hard_valid": false,
+          "reasons": [
+            "unauthorized_resolution_decision_fact"
+          ],
+          "soft_flags": [],
+          "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through. This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place. Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence. Nearby, daily work presses on as Nessa folds towels quietly by a cedar bench, giving no hint of recent disturbance around the pump.",
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_9c97a3580116",
+            "hard_valid": false,
+            "violations": [
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "provenance": "generated_proposal",
+                "consequence": "consequential",
+                "authorized": false,
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ],
+                "authority": "unauthorized",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "consequentially_unresolved",
+                "semantic_identity": {}
+              }
+            ],
+            "proposed_facts": [
+              {
+                "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                "provenance": "authored_world_fact",
+                "consequence": "consequential",
+                "authorized": true,
+                "reason_codes": [
+                  "authored_state_source"
+                ],
+                "authority": "world_truth",
+                "persistence": "world_truth",
+                "source_ref": "scene.visible_facts.0",
+                "outcome_classification": "established_or_retrieved",
+                "semantic_identity": {
+                  "kind": "world_fact",
+                  "subject": "bathhouse_pump_handle",
+                  "subject_aliases": [
+                    "bathhouse pump",
+                    "pump",
+                    "pump handle",
+                    "iron handle",
+                    "pivot pin"
+                  ],
+                  "relation": "observation",
+                  "value": "bowed handle and sheared pivot pin",
+                  "value_aliases": [
+                    "bowed",
+                    "bent handle",
+                    "sheared",
+                    "sheared pin",
+                    "broken pivot pin"
+                  ],
+                  "polarity": "positive"
+                }
+              },
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "provenance": "generated_proposal",
+                "consequence": "consequential",
+                "authorized": false,
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ],
+                "authority": "unauthorized",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "consequentially_unresolved",
+                "semantic_identity": {}
+              },
+              {
+                "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                "provenance": "speculation",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "unknown_cause_actor_or_time"
+                ],
+                "authority": "observation",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "unresolved"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "The long iron handle of the bathhouse pump is noticeably bowed, bending outward from normal shape, and its pivot pin has been cleanly sheared through.",
+                "semantic_identity": {
+                  "kind": "world_fact",
+                  "subject": "bathhouse_pump_handle",
+                  "subject_aliases": [
+                    "bathhouse pump",
+                    "pump",
+                    "pump handle",
+                    "iron handle",
+                    "pivot pin"
+                  ],
+                  "relation": "observation",
+                  "value": "bowed handle and sheared pivot pin",
+                  "value_aliases": [
+                    "bowed",
+                    "bent handle",
+                    "sheared",
+                    "sheared pin",
+                    "broken pivot pin"
+                  ],
+                  "polarity": "positive"
+                },
+                "provenance": "authored_world_fact",
+                "authority": "world_truth",
+                "epistemic_status": "established",
+                "relation_kind": "observation",
+                "persistence": "world_truth",
+                "authorized": true,
+                "source_ref": "scene.visible_facts.0",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "authored_state_source"
+                ]
+              },
+              {
+                "text": "This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.",
+                "semantic_identity": {
+                  "relation_kind": "evidential"
+                },
+                "provenance": "generated_proposal",
+                "authority": "unauthorized",
+                "epistemic_status": "unresolved",
+                "relation_kind": "evidential",
+                "persistence": "do_not_persist",
+                "authorized": false,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "unauthorized_evidential_relation"
+                ]
+              },
+              {
+                "text": "Whether it was excessive wear or a sudden, violent pressure is unclear from the current evidence.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "unresolved"
+                },
+                "provenance": "speculation",
+                "authority": "observation",
+                "epistemic_status": "unresolved",
+                "relation_kind": "epistemic_status",
+                "persistence": "do_not_persist",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "unknown_cause_actor_or_time"
+                ]
+              }
+            ]
+          }
+        },
+        "hard_validation_attempt_2": {
+          "hard_valid": false,
+          "reasons": [
+            "malformed_or_truncated"
+          ],
+          "soft_flags": [],
+          "text": "",
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_9c97a3580116",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [],
+            "claim_results": []
+          }
+        },
+        "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"bowed pump handle and the sheared pivot pin\", \"interlocutor\": null, \"subject\": \"bowed pump handle and the sheared pivot pin\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for bowed pump handle and the sheared pivot pin (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_9c97a3580116\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"text\": \"Two folded towels rest on a cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A blue-glazed soap dish sits beside the washbasin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa folds clean towels beside the cedar bench.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Nessa exists as bath attendant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"world_fact\", \"subject\": \"bathhouse_pump_handle\", \"subject_aliases\": [\"bathhouse pump\", \"pump\", \"pump handle\", \"iron handle\", \"pivot pin\"], \"relation\": \"observation\", \"value\": \"bowed handle and sheared pivot pin\", \"value_aliases\": [\"bowed\", \"bent handle\", \"sheared\", \"sheared pin\", \"broken pivot pin\"], \"polarity\": \"positive\"}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"nessa\", \"subject_aliases\": [\"Nessa\"], \"relation\": \"exists\", \"value\": \"bath attendant\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_evidential_relation\"], \"text\": \"This kind of damage suggests great force applied in a way that twisted the handle beyond its strength, breaking the pin holding it in place.\"}]}}",
+        "regeneration_invoked": true,
+        "generation_attempt_count": 2,
+        "accepted_response": {
+          "provenance": "rejected",
+          "immutable": false,
+          "text": "",
+          "hard_invalid_reasons": [
+            "malformed_or_truncated"
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,7 @@
+# 18 — State-Integrity Audit
+
+STATE: live_semantic_audit.json checks all 27 adopted deliveries, history attribution, authored source identity, exact historical referent and storage continuation. state_audit.json preserves complete world diffs and commitment changes. World changes are only existing faction/event-log ticks and faction agenda flags. No new inventory, reward, secret, security schedule or obligation is authorized by these changes.
+
+session_state_audit.json additionally compares available response-projected session domains and inspects the final persisted canonical sessions, topic reveal/discovery consistency and clue changes on speech-reference turns. Some conversational responses omit session entirely; these omissions are not interpreted as canonical state changes. Complete pre/post persisted session diffs for every turn were not captured. Delivered repetition must not discover a different topic. The first response has the known disposable seed but the runner records only history/commitment before that turn; complete pre-turn session diffs for turn one are therefore not claimed.
+
+active_data_historical_comparison.json confirms active data still matches predecessor hashes; no active-save copies are bundled. This is stronger than working-tree status alone but is a historical hash comparison, not a newly captured byte snapshot at cycle entry. Rejected-provider speech exclusion is separately verified by controlled adoption tests.

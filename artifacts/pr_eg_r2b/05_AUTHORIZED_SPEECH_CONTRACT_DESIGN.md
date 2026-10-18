@@ -1,0 +1,11 @@
+# 05 — Authorized Speech Contract Design
+
+INFERENCE: minimal experimental packet, not an approved production schema. Examples are serialized in contracts.json. Those provider examples are investigator-authored synthetic authority fixtures; they are not described as engine-minted grants. actual_resolver_packet in adoption_probes.json separately demonstrates projection of current resolver outputs.
+
+Essential fields: existing interaction/contract id; canonical speaker id and ownership/addressee; exact player question; evidence[] containing source id/revision, authorized proposition and epistemic mode; knowledge/response posture; permitted incidental scope and speech acts; explicit authorized obligations/outcomes (empty by default); unresolved/restricted response behavior. Attach an immutable host digest and a separate adopted-text/decision record. Source revision/digest is a design requirement absent from the current projection prototype.
+
+Omit separate conversational-intent and response-ownership taxonomies where existing R4/decision fields already answer them. Relevant delivered speech is optional, bounded, tagged “said, not established,” and cannot populate factual evidence automatically. Do not copy full world state, withheld values, unrelated lore or all NPC history. Proposed limits: 4 relevant sources, 3 retained speech rows, 2KB evidence text, 400-character question; overflow resolves to authoritative abstention or existing authored delivery, never silent evidence truncation.
+
+Invariants: grant originated in host authority; source still current and disclosure permitted; every material clause supported; belief scope retained; incidental speech noncanonical; no implicit obligations; rejected/changed text cannot inherit approval; no generated updates applied. Schema integrity and text binding do not prove semantic compliance.
+
+Evidence classes: STATIC = current source inspection; LOCAL = executed current production functions with disposable fixtures and external wire doubles; FRESH = new provider request; HISTORICAL = retained predecessor evidence; REPLAY = recombination of measured results; INFERENCE = proposed design; UNVERIFIED = not exercised. No fresh full-production API test was performed.

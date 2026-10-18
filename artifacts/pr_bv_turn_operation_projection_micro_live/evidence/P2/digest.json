@@ -1,0 +1,111 @@
+{
+  "probe": "P2",
+  "player": "Baker, which loaf do you usually keep for yourself?",
+  "scene": "baker",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail.",
+  "sealed": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail.",
+  "accepted": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "regeneration",
+  "attempt": 2,
+  "acceptance": {
+    "why": "regeneration_hard_valid",
+    "text": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail."
+  },
+  "initial_player_facing_text": "The baker glances around cautiously, then shakes their head. \"I don't have a particular favorite loaf I keep for myself,\" they say. \"Truth be told, everything I bake is meant for my customers.\"",
+  "initial_declared_claims": null,
+  "retry_player_facing_text": "The baker glances at you, a faint smile hinting at secrets kept close. \"I don't rightly say which loaf I keep for myself,\" they say, their voice low and careful, unwilling to share that small detail.",
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "validation_attempt_2_reasons": [],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "The baker does not disclose which loaf they keep for themselves.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "established",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_declared_claim"
+        ]
+      }
+    ],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d4c97cad4722"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "bread_stall"
+  },
+  "calls": [
+    {
+      "index": 4,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0a840da54e2ce2ed006ac57d962bac87d28d8755a512a6d577",
+      "input_chars": 105984,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "input_tokens": 24671,
+      "output_tokens": 421,
+      "total_tokens": 25092,
+      "latency_seconds": 6.808,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    },
+    {
+      "index": 5,
+      "kind": "generation",
+      "retry_attempt": 1,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0ab33b7f83afa216006ac57d9d2d1487d283ab1381223012b4",
+      "input_chars": 112293,
+      "recipe_present": true,
+      "retry_context_present": true,
+      "input_tokens": 26142,
+      "output_tokens": 295,
+      "total_tokens": 26437,
+      "latency_seconds": 4.118,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_d4c97cad4722",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+  "provider_recipe_present_on_generation": true
+}

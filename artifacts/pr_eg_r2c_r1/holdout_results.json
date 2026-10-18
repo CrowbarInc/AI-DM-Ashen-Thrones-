@@ -1,0 +1,873 @@
+[
+  {
+    "id": "R1H1",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "R1H1",
+      "npc": "librarian_ves",
+      "name": "Librarian Ves",
+      "fact": "The southern library opens at noon.",
+      "question": "Could you repeat it in plain words?",
+      "source": "library_hours"
+    },
+    "selected": {
+      "speaker_id": "librarian_ves",
+      "speaker_name": "Librarian Ves",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about library_hours",
+      "delivered_text": "Librarian Ves says, \"The southern library opens at noon.\"",
+      "subject": "",
+      "topic_id": "library_hours",
+      "requested_information": "",
+      "supplied_text": "The southern library opens at noon.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "",
+      "turn": 1,
+      "active": true
+    },
+    "text": "Librarian Ves says, \"The southern library opens at noon.\"",
+    "passed": true
+  },
+  {
+    "id": "R1H2",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "R1H2",
+      "npc": "sailor_ren",
+      "name": "Sailor Ren",
+      "fact": "Sentries patrol the eastern dock after sunset.",
+      "question": "GM, what did Ren say about sentries?",
+      "source": "dock_watch"
+    },
+    "selected": {
+      "speaker_id": "sailor_ren",
+      "speaker_name": "Sailor Ren",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about dock_watch",
+      "delivered_text": "Sailor Ren says, \"Sentries patrol the eastern dock after sunset.\"",
+      "subject": "",
+      "topic_id": "dock_watch",
+      "requested_information": "",
+      "supplied_text": "Sentries patrol the eastern dock after sunset.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "sailor_ren",
+      "npc_name": "Sailor Ren",
+      "line": "Sailor Ren said: \"Sentries patrol the eastern dock after sunset.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "sailor_ren",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "dock_watch",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "R1H3",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "R1H3",
+      "npc": "baker_ada",
+      "name": "Baker Ada",
+      "fact": "The mill belongs to the village council.",
+      "question": "GM, recall what Ada said about the mill.",
+      "source": "mill_owner"
+    },
+    "selected": {
+      "speaker_id": "baker_ada",
+      "speaker_name": "Baker Ada",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about mill_owner",
+      "delivered_text": "Baker Ada says, \"The mill belongs to the village council.\"",
+      "subject": "",
+      "topic_id": "mill_owner",
+      "requested_information": "",
+      "supplied_text": "The mill belongs to the village council.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "baker_ada",
+      "npc_name": "Baker Ada",
+      "line": "Baker Ada said: \"The mill belongs to the village council.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "baker_ada",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "mill_owner",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "Q1",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q1",
+      "npc": "ves",
+      "name": "Keeper Ves",
+      "location": "mountain_library",
+      "facts": [
+        [
+          "hours",
+          "The southern library opens at noon."
+        ],
+        [
+          "security",
+          "Sentries patrol the library at midnight."
+        ]
+      ],
+      "question": "At what time does the southern library open?",
+      "expected_topic": "hours",
+      "history": false,
+      "save_load": false,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selection": {
+      "candidate_sources": [
+        "npc:ves:hours",
+        "npc:ves:security"
+      ],
+      "selected_source": "npc:ves:hours",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Keeper Ves mutters, \"Word is, the southern library opens at noon.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "At what time does the southern library open?",
+      "turn_identity": "r2c",
+      "speaker": "Keeper Ves",
+      "addressee": "player",
+      "target": "ves",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "ves",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "ves",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Keeper Ves mutters, \"Word is, the southern library opens at noon.\"",
+    "passed": true
+  },
+  {
+    "id": "Q2",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q2",
+      "npc": "ren",
+      "name": "Sailor Ren",
+      "location": "eastern_dock",
+      "facts": [
+        [
+          "name",
+          "The lane beyond the pier is called Salt Lane."
+        ],
+        [
+          "patrol",
+          "Sentries patrol the eastern dock after sunset."
+        ]
+      ],
+      "question": "Do sentries patrol the dock after sunset?",
+      "expected_topic": "patrol",
+      "history": false,
+      "save_load": false,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selection": {
+      "candidate_sources": [
+        "npc:ren:patrol"
+      ],
+      "selected_source": "npc:ren:patrol",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Sailor Ren mutters, \"Word is, sentries patrol the eastern dock after sunset.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Do sentries patrol the dock after sunset?",
+      "turn_identity": "r2c",
+      "speaker": "Sailor Ren",
+      "addressee": "player",
+      "target": "ren",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "ren",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "ren",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Sailor Ren mutters, \"Word is, sentries patrol the eastern dock after sunset.\"",
+    "passed": true
+  },
+  {
+    "id": "Q3",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q3",
+      "npc": "ada",
+      "name": "Baker Ada",
+      "location": "village_mill",
+      "facts": [
+        [
+          "owner",
+          "The mill belongs to the village council."
+        ],
+        [
+          "preference",
+          "I prefer the morning."
+        ]
+      ],
+      "question": "GM, recall what Ada said about the mill.",
+      "expected_topic": "owner",
+      "history": true,
+      "save_load": false,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selected": {
+      "speaker_id": "ada",
+      "speaker_name": "Baker Ada",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about owner",
+      "delivered_text": "Baker Ada says, \"The mill belongs to the village council.\"",
+      "subject": "",
+      "topic_id": "owner",
+      "requested_information": "",
+      "supplied_text": "The mill belongs to the village council.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "village_mill",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "ada",
+      "npc_name": "Baker Ada",
+      "line": "Baker Ada said: \"The mill belongs to the village council.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "ada",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "owner",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "Q4",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q4",
+      "npc": "eve",
+      "name": "Librarian Eve",
+      "location": "western_archive",
+      "facts": [
+        [
+          "hours",
+          "The archive opens at noon."
+        ],
+        [
+          "unknown",
+          "I could not identify the bell maker."
+        ]
+      ],
+      "question": "GM, repeat what Eve said about the archive.",
+      "expected_topic": "hours",
+      "history": true,
+      "save_load": true,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selected": {
+      "speaker_id": "eve",
+      "speaker_name": "Librarian Eve",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about hours",
+      "delivered_text": "Librarian Eve says, \"The archive opens at noon.\"",
+      "subject": "",
+      "topic_id": "hours",
+      "requested_information": "",
+      "supplied_text": "The archive opens at noon.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "western_archive",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "eve",
+      "npc_name": "Librarian Eve",
+      "line": "Librarian Eve said: \"The archive opens at noon.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "eve",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "hours",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "Q5",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q5",
+      "npc": "sol",
+      "name": "Warden Sol",
+      "location": "river_fort",
+      "facts": [
+        [
+          "name",
+          "The bridge is called Lantern Bridge."
+        ],
+        [
+          "preference",
+          "I prefer quiet mornings."
+        ]
+      ],
+      "question": "Could you repeat it in plain words?",
+      "expected_topic": "preference",
+      "history": true,
+      "save_load": false,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selected": {
+      "speaker_id": "sol",
+      "speaker_name": "Warden Sol",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about preference",
+      "delivered_text": "Warden Sol says, \"I prefer quiet mornings.\"",
+      "subject": "",
+      "topic_id": "preference",
+      "requested_information": "",
+      "supplied_text": "I prefer quiet mornings.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "river_fort",
+      "turn": 2,
+      "active": true
+    },
+    "text": "Warden Sol says, \"I prefer quiet mornings.\"",
+    "passed": true
+  },
+  {
+    "id": "Q6",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q6",
+      "npc": "tam",
+      "name": "Courier Tam",
+      "location": "hill_market",
+      "facts": [
+        [
+          "safe",
+          "The market opens at dawn."
+        ]
+      ],
+      "question": "What do you personally enjoy about the evening?",
+      "expected_topic": "",
+      "history": false,
+      "save_load": false,
+      "candidate": "I enjoy evening because the treasury is unattended."
+    },
+    "selection": {
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Courier Tam says, \"I prefer the morning.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What do you personally enjoy about the evening?",
+      "turn_identity": "r2c",
+      "speaker": "Courier Tam",
+      "addressee": "player",
+      "target": "tam",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "conversational_continuity.bounded_personal_line"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "tam",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "conversational_continuity.bounded_personal_line",
+      "speaker_id": "tam",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Courier Tam says, \"I prefer the morning.\"",
+    "passed": true
+  },
+  {
+    "id": "Q7",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q7",
+      "npc": "ora",
+      "name": "Sentinel Ora",
+      "location": "harbor_tower",
+      "facts": [
+        [
+          "watch",
+          "Guards watch the harbor tower all night."
+        ]
+      ],
+      "question": "Do guards watch the harbor tower at night?",
+      "expected_topic": "watch",
+      "history": false,
+      "save_load": false,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selection": {
+      "candidate_sources": [
+        "npc:ora:watch"
+      ],
+      "selected_source": "npc:ora:watch",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Sentinel Ora mutters, \"Word is, guards watch the harbor tower all night.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Do guards watch the harbor tower at night?",
+      "turn_identity": "r2c",
+      "speaker": "Sentinel Ora",
+      "addressee": "player",
+      "target": "ora",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "ora",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "ora",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Sentinel Ora mutters, \"Word is, guards watch the harbor tower all night.\"",
+    "passed": true
+  },
+  {
+    "id": "Q8",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "Q8",
+      "npc": "jun",
+      "name": "Potter Jun",
+      "location": "kiln_yard",
+      "facts": [
+        [
+          "maker",
+          "The urn was crafted by Nera."
+        ],
+        [
+          "name",
+          "The lane is called Clay Lane."
+        ]
+      ],
+      "question": "GM, what did Jun say about the urn?",
+      "expected_topic": "maker",
+      "history": true,
+      "save_load": true,
+      "candidate": "The guards abandon the harbor tower at midnight."
+    },
+    "selected": {
+      "speaker_id": "jun",
+      "speaker_name": "Potter Jun",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about maker",
+      "delivered_text": "Potter Jun says, \"The urn was crafted by Nera.\"",
+      "subject": "",
+      "topic_id": "maker",
+      "requested_information": "",
+      "supplied_text": "The urn was crafted by Nera.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "kiln_yard",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "jun",
+      "npc_name": "Potter Jun",
+      "line": "Potter Jun said: \"The urn was crafted by Nera.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "jun",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "maker",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "F1",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "F1",
+      "npc": "mira",
+      "name": "Scholar Mira",
+      "location": "cedar_hall",
+      "facts": [
+        [
+          "map",
+          "The path beside the cedar grove is called Amber Way."
+        ],
+        [
+          "hours",
+          "The hall opens at sunrise."
+        ]
+      ],
+      "question": "GM, recall what Mira said about the path.",
+      "expected_topic": "map",
+      "history": true,
+      "save_load": true
+    },
+    "selected": {
+      "speaker_id": "mira",
+      "speaker_name": "Scholar Mira",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about map",
+      "delivered_text": "Scholar Mira says, \"The path beside the cedar grove is called Amber Way.\"",
+      "subject": "",
+      "topic_id": "map",
+      "requested_information": "",
+      "supplied_text": "The path beside the cedar grove is called Amber Way.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "cedar_hall",
+      "turn": 1,
+      "active": false
+    },
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "mira",
+      "npc_name": "Scholar Mira",
+      "line": "Scholar Mira said: \"The path beside the cedar grove is called Amber Way.\"",
+      "reason": "gm_recall_of_npc_statement",
+      "topic_grounding": {
+        "speaker_id": "mira",
+        "ownership": "gm",
+        "reference": "delivered_speech",
+        "topic_id": "map",
+        "selected_source": null,
+        "delivered_turn": 1,
+        "canonical": false
+      }
+    },
+    "passed": true
+  },
+  {
+    "id": "F2",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "F2",
+      "npc": "orin",
+      "name": "Warden Orin",
+      "location": "granite_keep",
+      "facts": [
+        [
+          "watch",
+          "Sentries patrol the western wall at dusk."
+        ],
+        [
+          "preference",
+          "I prefer quiet afternoons."
+        ]
+      ],
+      "question": "Do sentries patrol the western wall at dusk?",
+      "expected_topic": "watch",
+      "history": false,
+      "candidate": "The western wall has no sentries."
+    },
+    "selection": {
+      "candidate_sources": [
+        "npc:orin:watch"
+      ],
+      "selected_source": "npc:orin:watch",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Warden Orin mutters, \"Word is, sentries patrol the western wall at dusk.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Do sentries patrol the western wall at dusk?",
+      "turn_identity": "r2c",
+      "speaker": "Warden Orin",
+      "addressee": "player",
+      "target": "orin",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "orin",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "orin",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Warden Orin mutters, \"Word is, sentries patrol the western wall at dusk.\"",
+    "passed": true
+  },
+  {
+    "id": "F3",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "F3",
+      "npc": "leni",
+      "name": "Potter Leni",
+      "location": "clay_market",
+      "facts": [
+        [
+          "maker",
+          "The bowl was crafted by Tessa."
+        ],
+        [
+          "preference",
+          "I prefer the afternoon."
+        ]
+      ],
+      "question": "Could you repeat that in plain words?",
+      "expected_topic": "preference",
+      "history": true
+    },
+    "selected": {
+      "speaker_id": "leni",
+      "speaker_name": "Potter Leni",
+      "addressee": "player",
+      "ownership": "npc",
+      "player_text": "Tell me about preference",
+      "delivered_text": "Potter Leni says, \"I prefer the afternoon.\"",
+      "subject": "",
+      "topic_id": "preference",
+      "requested_information": "",
+      "supplied_text": "I prefer the afternoon.",
+      "uncertain": false,
+      "commitment": false,
+      "scene_id": "clay_market",
+      "turn": 2,
+      "active": true
+    },
+    "text": "Potter Leni says, \"I prefer the afternoon.\"",
+    "passed": true
+  },
+  {
+    "id": "F4",
+    "evidence": "DETERMINISTIC_OWNER_SEAM",
+    "case": {
+      "id": "F4",
+      "npc": "eska",
+      "name": "Courier Eska",
+      "location": "maple_bridge",
+      "facts": [
+        [
+          "hours",
+          "The ferry opens at dawn."
+        ]
+      ],
+      "question": "What do you personally enjoy about the evening?",
+      "expected_topic": "",
+      "history": false,
+      "candidate": "The treasury is left unguarded every evening."
+    },
+    "selection": {
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false
+    },
+    "adoption": {
+      "immutable": true,
+      "text": "Courier Eska says, \"I prefer the morning.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What do you personally enjoy about the evening?",
+      "turn_identity": "r2c",
+      "speaker": "Courier Eska",
+      "addressee": "player",
+      "target": "eska",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "conversational_continuity.bounded_personal_line"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "eska",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "conversational_continuity.bounded_personal_line",
+      "speaker_id": "eska",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "text": "Courier Eska says, \"I prefer the morning.\"",
+    "passed": true
+  }
+]

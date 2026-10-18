@@ -1,0 +1,3 @@
+# 34 — Turn-Level Qualification
+
+Each turn retains raw player utterance, prior referents, provider proposal/raw trace, host reason/locked plan, role changes, selected source/relevance/status, sealed API speech, delivered history, persisted referents, clue snapshots, calls/tokens/latency. Provider proposals and committed records are separate. [artifacts/pr_eg_r6_r2_r2/final/live_turns.jsonl:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r2/final/live_turns.jsonl:1>); [artifacts/pr_eg_r6_r2_r2/final/semantic_traces.jsonl:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r2/final/semantic_traces.jsonl:1>)

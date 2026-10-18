@@ -1,0 +1,3 @@
+# 27 — Legacy Routing
+
+Accepted semantic plans remain locked and projected forward; legacy topic routing does not replace their arguments. An unqualified historical ID is rejected rather than substituted. This is a new host-binding choice, not an existing legacy-topic reselection. Live results show substantial recoverable-continuity loss from target rejection. No disclosure/provenance or immutable-response production modules were changed. [game/unified_semantic_planning.py:1341](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:1341>)

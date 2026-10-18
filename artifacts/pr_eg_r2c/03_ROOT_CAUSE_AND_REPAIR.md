@@ -1,0 +1,7 @@
+# 03 — Root Cause and Repair
+
+STATIC + CONTROLLED. Player communication passes conversational authorization, grounding and the social resolver. build_dialogue_authority identifies posture and prior commitments. Previously, an incidental/ordinary question could reach provider narration without any content-level grant. validate_generated_response and its lexical proposition checks could accept an unsupported causal security claim. run_preserve_if_valid then sealed the candidate as initial_generation. Passing hard validation was incorrectly sufficient for speech adoption.
+
+Later social absence projection could replace a legitimate commitment with ignorance/refusal. A separate post-seal personal-ignorance repair could change text immediately before remembering commitments. record_delivered_exchange trusted its string argument without an accepted-response identity; storage preserved whichever string arrived.
+
+Repair: select_host_speech derives host wording from existing resolver topics, explicitly reused delivery, bounded personal lines and knowledge posture. adopt_host_speech seals it with authorization provenance in accepted_response before narration; run_preserve_if_valid also applies the same selection for already-created candidates. Existing conflict, target and mechanical-check restrictions remain. Continuity responses use the same seal. A final restore precedes commitment/history persistence, and host records are checked against delivery. No broad new semantic validator or parallel world store is introduced.

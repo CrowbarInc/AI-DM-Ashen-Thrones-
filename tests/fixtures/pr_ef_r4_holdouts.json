@@ -1,0 +1,168 @@
+{
+  "frozen": "2026-10-16",
+  "cycle": "PR-EF-R4",
+  "note": "Independent semantic holdouts. Do not rewrite these expressions to match an implementation.",
+  "cases": [
+    {
+      "id": "explicit_named_ask",
+      "player": "I ask Sergeant Mara whether the north road is watched.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara"
+    },
+    {
+      "id": "explicit_role_ask",
+      "player": "I ask the sergeant who set the lantern out.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara"
+    },
+    {
+      "id": "unique_pronoun",
+      "player": "I ask him what he saw on the road.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara",
+      "setup": "single_npc"
+    },
+    {
+      "id": "ambiguous_one_of_them_two_npcs",
+      "player": "I ask one of them what happened.",
+      "expect": "clarify_no_mutation",
+      "setup": "two_npcs",
+      "provider_target": "sergeant_mara"
+    },
+    {
+      "id": "ambiguous_one_of_them_one_npc",
+      "player": "I put the question to one of them.",
+      "expect": "clarify_no_mutation",
+      "setup": "single_npc",
+      "provider_target": "sergeant_mara"
+    },
+    {
+      "id": "ambiguous_either_guard",
+      "player": "I ask either guard about the patrol.",
+      "expect": "clarify_no_mutation",
+      "setup": "two_guards"
+    },
+    {
+      "id": "unresolved_someone",
+      "player": "I ask someone nearby what the shouting was.",
+      "expect": "clarify_no_mutation",
+      "setup": "two_npcs",
+      "provider_target": "corporal_bren"
+    },
+    {
+      "id": "distinguishing_fact",
+      "player": "I ask the taller guard about the gate.",
+      "expect": "execute_npc",
+      "target": "corporal_bren",
+      "setup": "taller_bren"
+    },
+    {
+      "id": "no_invented_distinction",
+      "player": "I ask the taller guard about the gate.",
+      "expect": "clarify_no_mutation",
+      "setup": "two_guards_no_height"
+    },
+    {
+      "id": "gm_about_npc",
+      "player": "What does the sergeant know about the lantern?",
+      "expect": "gm_no_social",
+      "provider_target": "sergeant_mara",
+      "provider_owner": "GM"
+    },
+    {
+      "id": "direct_ask_conflicting_owner",
+      "player": "I ask the sergeant who owns the lantern.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara",
+      "provider_owner": "GM",
+      "provider_target": "sergeant_mara"
+    },
+    {
+      "id": "npc_followup",
+      "player": "What did you mean by the north road?",
+      "expect": "execute_npc",
+      "target": "sergeant_mara",
+      "setup": "active_mara"
+    },
+    {
+      "id": "gm_clarification_of_npc",
+      "player": "What did she mean by the road?",
+      "expect": "gm_no_social",
+      "provider_owner": "GM",
+      "provider_purpose": "EXPLANATION"
+    },
+    {
+      "id": "correction_pending",
+      "player": "Instead, make that a question about the lamp.",
+      "expect": "revise_no_execution",
+      "setup": "pending_ambiguous_ask"
+    },
+    {
+      "id": "correction_already_executed",
+      "player": "Instead, make that a question about the lamp.",
+      "expect": "cannot_undo",
+      "setup": "executed_ask"
+    },
+    {
+      "id": "correction_nothing_pending",
+      "player": "Instead, make that a question about the lamp.",
+      "expect": "ask_what_to_change"
+    },
+    {
+      "id": "confirm_single_candidate",
+      "player": "Yes.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara",
+      "setup": "pending_single_candidate"
+    },
+    {
+      "id": "confirm_without_proposal",
+      "player": "Yes.",
+      "expect": "clarify_no_mutation"
+    },
+    {
+      "id": "confirm_among_many",
+      "player": "Yes.",
+      "expect": "clarify_no_mutation",
+      "setup": "pending_two_candidates"
+    },
+    {
+      "id": "withdrawal",
+      "player": "Never mind, forget that question.",
+      "expect": "withdraw_no_execution",
+      "setup": "pending_ambiguous_ask"
+    },
+    {
+      "id": "mixed_ask_then_leave",
+      "player": "I ask Mara about the road, then leave.",
+      "expect": "preserve_both_no_flatten",
+      "provider_components": [["ASK", "sergeant_mara"], ["MOVE", "courtyard_gate"]]
+    },
+    {
+      "id": "conditional_gate",
+      "player": "Does the gate look safe? If so, I go through.",
+      "expect": "clarify_no_mutation"
+    },
+    {
+      "id": "incidental_glance",
+      "player": "I glance toward Mara and ask about the patrol.",
+      "expect": "execute_npc",
+      "target": "sergeant_mara"
+    },
+    {
+      "id": "provider_no_target",
+      "player": "I ask one of them what happened.",
+      "expect": "clarify_no_mutation",
+      "setup": "two_npcs",
+      "provider_target": null,
+      "provider_owner": "GM"
+    },
+    {
+      "id": "save_load_pending",
+      "player": "The sergeant.",
+      "expect": "execute_after_reload",
+      "target": "sergeant_mara",
+      "setup": "save_load_ambiguous"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# 04 — Interpretation Contract Changes
+
+Existing communication fields/enums retained. Property order selects communication before legacy operation fields. Descriptions and same-call instructions distinguish people discussed from people addressed, physical declarations from table procedure, pending control from actions, conditional/mixed intentions, ancillary orientation and dialogue topics from target references. Output cap remains 320.
+
+Pending projection supplies at most four steps/choices, original support status and scene scope, plus existing public context. No private topic/clue evidence or independent transcript reconstruction. NPC/ACTION is no longer overwritten as CHARACTER. Inconsistent GM/SESSION ACTION with one physical component reconciles to CHARACTER; multiple components conservatively become MIXED. GM questions containing independent actions retain them without execution. Outcomes and eligibility remain engine-owned. Raw and normalized strict labels are measured separately.

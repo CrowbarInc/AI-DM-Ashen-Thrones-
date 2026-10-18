@@ -1,0 +1,9 @@
+# 10 — Answer Sufficiency Audit
+
+PR-EG-R5 · 2026-10-17 · investigation only
+
+[game/dialogue_authority.py:162](../../game/dialogue_authority.py#L162) implements four labels: directly_answers, partially_informs, does_not_answer and unknown. Empty text is unknown. “Unattended/unguarded/unwatched” uses a special overlap and watch/guard rule; other requests delegate to topic_supports_requested_information. General requests accept any nonempty fact. Partial answers are therefore specialized around security-absence fixtures rather than a general account of incomplete semantic coverage.
+
+Local probes reproduce: ferry manager + bell → relevant=true, sufficient=true, directly_answers; orchard shift manager + sundial → social sufficient=false but authority directly_answers; orchard cause + dusk closing → the same disagreement. A positive guard-watch claim versus unattended question is partially_informs at authority but false at social sufficiency. These are five input/fact pairs, not a population estimate. No evidence establishes that partial answers are numerically overused; evidence supports limited generalization and inconsistent owners.
+
+AI semantic assessment is plausible because coverage requires relations, negation and discourse understanding. It should propose requested slots, source-supported slots, unanswered slots and direct/partial/no-answer/unknown. It cannot turn a relevant source into permission, infer that night watch means no unguarded interval, or infer coordinator identity from an NPC's job title. Source-level host permission checks remain deterministic. Contradictory or unsourced coverage judgments are rejected or converted to uncertainty. The first implementation must measure false direct answers on withheld questions and adversarial assumptions, not just fluency.

@@ -1,0 +1,31 @@
+{
+  "response_id": "resp_0fb528cd8bbbc01d006ac57d8c663087d2bb983c2b8e66f05f",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 22084,
+    "output_tokens": 328,
+    "total_tokens": 22412,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 5.772,
+  "input_chars": 95041,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has been subjected to strain or wear on its supports over time.",
+    "declared_claims": null,
+    "tags": [],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_infer_damage_nature\",\n      \"declaration_mode\": \"propose\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_db5ec0aa65c3\", \"rc_b31ecb1fd1c7\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"gm_inference\",\n      \"epistemic_status\": \"inferred\",\n      \"modality\": \"possible\",\n      \"realization_role\": \"MAY_STATE\",\n      \"relation_kind\": \"epistemic_status\",\n      \"text\": \"The split wooden yoke and torn leather hanger could indicate strain or wear on the bell's supports.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has been subjected to strain or wear on its supports over time.\",\n  \"player_facing_text\": \"The bell's wooden yoke is split, and its leather hanger is torn. This damage could suggest that the bell has been subjected to strain or wear on its supports over time.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Provided a bounded, possible interpretation tied to observed damage without asserting exact cause or history.\"\n}"
+  }
+}

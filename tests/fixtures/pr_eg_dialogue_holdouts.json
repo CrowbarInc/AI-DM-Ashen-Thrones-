@@ -1,0 +1,171 @@
+{
+  "frozen": "2026-10-16",
+  "cycle": "PR-EG",
+  "note": "Behavioral criteria frozen before the dialogue-authority implementation. Do not rewrite a failed holdout to match a result.",
+  "cases": [
+    {
+      "id": "established_road_name",
+      "player": "I ask Sergeant Mara what the street beyond the gate is called.",
+      "requested_information": "general",
+      "expect_topic": true,
+      "expect_posture": "established",
+      "expect_improvisation": false,
+      "expect_narration_determined": false,
+      "response_must_contain_any": ["north road"],
+      "response_must_not_contain": ["settled here", "speech authority"]
+    },
+    {
+      "id": "watched_not_identity",
+      "player": "I ask Sergeant Mara whether the north road is watched.",
+      "requested_information": "surveillance",
+      "expect_topic": false,
+      "expect_posture": "unestablished",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "reply_plan_not": ["authoritative_answer_available"],
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["street beyond the gate", "settled here", "usually a patrol", "speech authority"]
+    },
+    {
+      "id": "watched_reworded",
+      "player": "Does anyone keep an eye on the north road after dark?",
+      "requested_information": "surveillance",
+      "expect_topic": false,
+      "expect_posture": "unestablished",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["street beyond the gate", "settled here"]
+    },
+    {
+      "id": "partial_patrol_fact",
+      "player": "Is the north road watched tonight?",
+      "topic_text": "A patrol sometimes passes the waystation. I have not seen one on the north road.",
+      "requested_information": "surveillance",
+      "expect_topic": true,
+      "expect_posture": "partial",
+      "expect_improvisation": false,
+      "response_must_contain_any": ["waystation", "north road"],
+      "response_must_not_contain": ["settled here"]
+    },
+    {
+      "id": "forged_lantern_unknown",
+      "player": "I ask Mara who forged the lantern.",
+      "requested_information": "maker",
+      "expect_topic": false,
+      "expect_posture": "unknown",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["settled here", "blacksmith", "I forged"]
+    },
+    {
+      "id": "what_troubles_her",
+      "player": "I ask Mara what troubles her.",
+      "requested_information": "personal_state",
+      "expect_topic": false,
+      "expect_posture": "belief",
+      "expect_improvisation": true,
+      "expect_narration_determined": false,
+      "reply_plan": "harmless_subjective_response_permitted",
+      "response_must_not_contain": ["settled here", "speech authority", "patrol schedule"]
+    },
+    {
+      "id": "ordinary_preference",
+      "player": "Do you prefer the morning watch or the evening one?",
+      "requested_information": "opinion",
+      "expect_topic": false,
+      "expect_improvisation": true,
+      "expect_posture": "belief",
+      "expect_narration_determined": false,
+      "response_must_not_contain": ["settled here"]
+    },
+    {
+      "id": "opinion_not_canon",
+      "player": "Have you ever trusted the watch captain?",
+      "requested_information": "opinion",
+      "expect_improvisation": true,
+      "expect_posture": "belief",
+      "canonical": false,
+      "response_must_not_contain": ["secretly serves", "settled here"]
+    },
+    {
+      "id": "hidden_password",
+      "player": "What's the password for the courtyard gate?",
+      "requested_information": "hidden",
+      "expect_topic": false,
+      "expect_posture": "withheld",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "refusal",
+      "response_must_not_contain": ["the password is", "settled here", "ashcowl"]
+    },
+    {
+      "id": "consequential_promise",
+      "player": "Promise me a reward if I walk the north road for you.",
+      "requested_information": "promise",
+      "expect_improvisation": false,
+      "expect_posture": "unestablished",
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["I'll pay", "ten silver", "the quest", "settled here"]
+    },
+    {
+      "id": "secret_allegiance",
+      "player": "Is the watch captain secretly with the Ash Cowl?",
+      "requested_information": "hidden",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "refusal",
+      "response_must_not_contain": ["secretly serves", "yes, she", "settled here"]
+    },
+    {
+      "id": "unresolved_mystery",
+      "player": "Who killed the missing merchant?",
+      "requested_information": "mystery",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["it was", "settled here"]
+    },
+    {
+      "id": "relationship_not_invented",
+      "player": "Are you and Corporal Bren close?",
+      "requested_information": "relationship",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["we're married", "settled here", "faction"]
+    },
+    {
+      "id": "rumor_not_invented",
+      "player": "What rumors are going around about the lantern?",
+      "requested_information": "rumor",
+      "expect_improvisation": false,
+      "expect_narration_determined": true,
+      "response_class": "uncertainty",
+      "response_must_not_contain": ["I heard that the", "settled here"]
+    },
+    {
+      "id": "background_porter_preference",
+      "player": "I ask the porter whether he likes the rain.",
+      "npc_id": "yard_porter",
+      "npc_name": "Porter Edric",
+      "requested_information": "opinion",
+      "expect_improvisation": true,
+      "expect_posture": "belief",
+      "response_must_not_contain": ["settled here"]
+    },
+    {
+      "id": "contradictory_plan_after_prior_topic",
+      "player": "Who made the lantern, then?",
+      "prior_topic_revealed": true,
+      "requested_information": "maker",
+      "expect_topic": false,
+      "reply_plan_not": ["authoritative_answer_available"],
+      "speech_authority_not": "claim_only",
+      "expect_narration_determined": true,
+      "response_class": "uncertainty"
+    }
+  ]
+}

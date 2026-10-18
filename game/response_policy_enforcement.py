@@ -930,6 +930,19 @@ def guard_gm_output(
     if not res['did_sanitize']:
         return gm
 
+    # C18 seals the candidate it validates. A leak is a hard-invalid reason
+    # and one regeneration, not a catalog line swapped in before the seal.
+    try:
+        from game.immutable_valid_response import lifecycle_applies
+    except Exception:
+        lifecycle_applies = None
+    if lifecycle_applies is not None and lifecycle_applies(resolution):
+        metadata = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+        metadata = dict(metadata)
+        metadata["content_leak_reasons"] = list(res.get("reasons") or [])
+        gm["metadata"] = metadata
+        return gm
+
     tags = gm.get('tags') if isinstance(gm.get('tags'), list) else []
     uncertainty = res.get('uncertainty') if isinstance(res.get('uncertainty'), dict) else {}
     known_fact = uncertainty.get("known_fact") if isinstance(uncertainty.get("known_fact"), dict) else {}
@@ -1408,7 +1421,13 @@ def _apply_escalate_passive_scene_enforcement(
         resolution=resolution,
     )
 
-def enforce_scene_momentum(gm: Dict[str, Any], *, session: Dict[str, Any], scene_envelope: Dict[str, Any]) -> Dict[str, Any]:
+def enforce_scene_momentum(
+    gm: Dict[str, Any],
+    *,
+    session: Dict[str, Any],
+    scene_envelope: Dict[str, Any],
+    resolution: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     """Deterministic enforcement of the Scene Momentum Rule.
 
     If a momentum beat is due but the model did not tag it, append a safe
@@ -1434,11 +1453,26 @@ def enforce_scene_momentum(gm: Dict[str, Any], *, session: Dict[str, Any], scene
     gm = dict(gm)
     tags = gm.get("tags") if isinstance(gm.get("tags"), list) else []
     kind = "consequence_or_opportunity"
-    gm["tags"] = list(tags) + [f"{SCENE_MOMENTUM_TAG_PREFIX}{kind}"]
 
     envelope = scene_envelope if isinstance(scene_envelope, dict) else {"scene": scene}
     opportunity = render_scene_momentum_diegetic_append(envelope, seed_key=scene_id or "momentum")
     txt = gm.get("player_facing_text") if isinstance(gm.get("player_facing_text"), str) else ""
+    from game.resolution_contract import continuation_preserves_resolution
+
+    if not continuation_preserves_resolution(txt, opportunity, resolution):
+        metadata = gm.setdefault("metadata", {})
+        if isinstance(metadata, dict):
+            debug = metadata.setdefault("emission_debug", {})
+            if isinstance(debug, dict):
+                debug["outcome_precedence"] = {
+                    "downgrade_attempted": True,
+                    "downgrade_rejected": True,
+                    "downgrade_reason": "scene_momentum_would_corrupt_answer",
+                    "recovery_used": False,
+                    "scene_momentum_appended": False,
+                }
+        return gm
+    gm["tags"] = list(tags) + [f"{SCENE_MOMENTUM_TAG_PREFIX}{kind}"]
     gm["player_facing_text"] = (txt.strip() + ("\n\n" if txt.strip() else "") + opportunity).strip()
 
     dbg = gm.get("debug_notes") if isinstance(gm.get("debug_notes"), str) else ""
@@ -1450,9 +1484,15 @@ def _apply_scene_momentum_enforcement(
     *,
     session: Dict[str, Any],
     scene_envelope: Dict[str, Any],
+    resolution: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """Third step of ``prefer_scene_momentum`` — momentum beat enforcement."""
-    return enforce_scene_momentum(out, session=session, scene_envelope=scene_envelope)
+    return enforce_scene_momentum(
+        out,
+        session=session,
+        scene_envelope=scene_envelope,
+        resolution=resolution,
+    )
 
 def _reply_is_interruption_breakoff(reply_text: str) -> bool:
     """True when reply text is an interruption cutoff, not a stored answer."""
@@ -1542,6 +1582,10 @@ def apply_response_policy_enforcement(
     in ``sanitize_player_facing_output``; tests split accordingly.
     """
     if not isinstance(gm, dict):
+        return gm
+    from game.immutable_valid_response import leave_text_unchanged
+
+    if leave_text_unchanged(gm, "apply_response_policy_enforcement"):
         return gm
 
     out, policy, strict_social_turn = _init_response_policy_enforcement_state(
@@ -1663,6 +1707,7 @@ def apply_response_policy_enforcement(
                     out,
                     session=session,
                     scene_envelope=scene_envelope,
+                    resolution=resolution if isinstance(resolution, dict) else None,
                 )
                 record_policy_semantic_write_site_if_changed(
                     before_policy,

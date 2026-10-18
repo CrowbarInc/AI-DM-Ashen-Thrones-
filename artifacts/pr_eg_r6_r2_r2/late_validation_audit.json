@@ -1,0 +1,58 @@
+{
+  "proposal": {
+    "conversational_act": "information_question",
+    "addressee_id": "mara",
+    "referent_operation": {
+      "target_referent_id": "",
+      "operation": "",
+      "changed_fields": [],
+      "follow_up_relationship": "",
+      "changed_roles": [],
+      "evidence": "",
+      "target_evidence": ""
+    },
+    "request_proposition": {
+      "predicate": "communicate",
+      "predicate_evidence": "tell",
+      "temporal": "",
+      "spatial": "",
+      "epistemic": "npc_knowledge",
+      "prior_reference": "",
+      "negated": false,
+      "roles": [
+        {
+          "name": "speaker",
+          "value": "Mara",
+          "entity_id": "mara",
+          "evidence": "Mara"
+        },
+        {
+          "name": "recipient",
+          "value": "Oren",
+          "entity_id": "oren",
+          "evidence": "Oren"
+        },
+        {
+          "name": "topic",
+          "value": "road",
+          "entity_id": "",
+          "evidence": "road"
+        }
+      ],
+      "requested_role": "message_content"
+    },
+    "source_propositions": [
+      null
+    ],
+    "ambiguity_type": "",
+    "clarification_needed": false
+  },
+  "failure": "TypeError",
+  "detail": "'NoneType' object is not subscriptable",
+  "effect": "Parser exception before any host state commit or disclosure. Strict provider schema excludes this shape. Host malformed-input defense remains incomplete.",
+  "resolution": {
+    "status": "fixed before repeated final qualification",
+    "change": "Removed eager source-ID dereference from compact normalization; malformed container is rejected by existing bounded schema validation.",
+    "tests": "Four added malformed-container cases in final 68-case controlled suite."
+  }
+}

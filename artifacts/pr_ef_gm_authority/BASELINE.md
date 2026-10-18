@@ -1,0 +1,6 @@
+Baseline before PR-EF production edits: HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff; dirty tree recorded in status_before.txt and source_before/.
+Comparison command: provider disabled; pytest 16 PR-EC/ED family files (see baseline_junit.xml), --tb=line -q --basetemp=development/tmp/pr_ef_baseline_unrestricted --junitxml=artifacts/pr_ef_gm_authority/baseline_junit.xml --override-ini=addopts=.
+Result: 286 tests, 256 passed, 30 failed in 14.86s. Exact failure IDs and signatures retained in XML. Same inherited social/retry/final-emission/exploration failures as PR-ED.
+Environment limitation: sandbox TestClient hangs in socket.socketpair accept before endpoint entry (PR-CG known restriction). Provider-disabled suite succeeds outside sandbox. Initial interrupted attempts are not comparison runs.
+Performance: original PR-ED profiler, disposable data, TEMP/TMP=development/tmp, 10 turns, 7 narration function entries, median 87 ms, provider disabled; tokens unavailable. Models gpt-4.1-mini; existing provider timeout 45 seconds and retry/token controls preserved. Profiler timeout label is stale, source is authoritative.
+Holdout expressions frozen in holdouts.json before implementation. No exact-match implementation permitted.

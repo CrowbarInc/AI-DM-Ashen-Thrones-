@@ -1,0 +1,77 @@
+[
+  {
+    "id": "F1",
+    "npc": "mira",
+    "name": "Scholar Mira",
+    "location": "cedar_hall",
+    "facts": [
+      [
+        "map",
+        "The path beside the cedar grove is called Amber Way."
+      ],
+      [
+        "hours",
+        "The hall opens at sunrise."
+      ]
+    ],
+    "question": "GM, recall what Mira said about the path.",
+    "expected_topic": "map",
+    "history": true,
+    "save_load": true
+  },
+  {
+    "id": "F2",
+    "npc": "orin",
+    "name": "Warden Orin",
+    "location": "granite_keep",
+    "facts": [
+      [
+        "watch",
+        "Sentries patrol the western wall at dusk."
+      ],
+      [
+        "preference",
+        "I prefer quiet afternoons."
+      ]
+    ],
+    "question": "Do sentries patrol the western wall at dusk?",
+    "expected_topic": "watch",
+    "history": false,
+    "candidate": "The western wall has no sentries."
+  },
+  {
+    "id": "F3",
+    "npc": "leni",
+    "name": "Potter Leni",
+    "location": "clay_market",
+    "facts": [
+      [
+        "maker",
+        "The bowl was crafted by Tessa."
+      ],
+      [
+        "preference",
+        "I prefer the afternoon."
+      ]
+    ],
+    "question": "Could you repeat that in plain words?",
+    "expected_topic": "preference",
+    "history": true
+  },
+  {
+    "id": "F4",
+    "npc": "eska",
+    "name": "Courier Eska",
+    "location": "maple_bridge",
+    "facts": [
+      [
+        "hours",
+        "The ferry opens at dawn."
+      ]
+    ],
+    "question": "What do you personally enjoy about the evening?",
+    "expected_topic": "",
+    "history": false,
+    "candidate": "The treasury is left unguarded every evening."
+  }
+]

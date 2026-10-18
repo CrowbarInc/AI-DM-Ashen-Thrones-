@@ -1,0 +1,3 @@
+# 18 — Clarification Discipline
+
+Host checks durable target/focus before clarification and retains prior focus on malformed/rejected proposals. Meaning-known/answer-unknown takes safe uncertainty. Genuine shared Warden aliases clarify. Still, generic clarification remains on 22/120 turns, and two genuine ambiguities are poorly handled. No generic clarification is counted as conversational success merely because it is safe. [artifacts/pr_eg_r6_r2_r1/turn_scores.json:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r1/turn_scores.json:1>).

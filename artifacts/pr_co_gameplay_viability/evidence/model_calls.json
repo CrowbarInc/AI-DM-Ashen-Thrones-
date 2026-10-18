@@ -1,0 +1,410 @@
+[
+  {
+    "index": 1,
+    "turn": "startup",
+    "kind": "preflight",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:31.898294+00:00",
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "model",
+      "temperature",
+      "timeout"
+    ],
+    "response_id": "resp_04f6f577241d3207006ac99971e47487d196f9b0db0e134e55",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 2,
+      "total_tokens": 26,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:34.442980+00:00",
+    "latency_seconds": 2.545,
+    "raw_output_preview": "OK"
+  },
+  {
+    "index": 2,
+    "turn": "T1",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:34.931980+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_08ff63a45c3c12db006ac9997404a887d1bd812276db029653",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 30970,
+      "output_tokens": 128,
+      "total_tokens": 31098,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:38.297069+00:00",
+    "latency_seconds": 3.365,
+    "raw_output_preview": "{\"narration\": \"The guard captain shifts his weight beneath the steady fall of rain, glancing up at the frayed banners flapping dimly above the gate. \\\"Honestly,\\\" they say with a dry chuckle, \\\"a dry watch inside these walls is a blessing I don't often get. Rain and mud make for a miserable post. But the gate's where the action truly is—can't afford to be cozy when the city's first line of defense needs eyes sharp and ready.\\\" Their gaze drifts toward the crowded approach, refugees and wagons pr"
+  },
+  {
+    "index": 3,
+    "turn": "T1",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:38.687293+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_079738d17f054ba2006ac99977cf5487d1b681191687bca9ed",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 38464,
+      "output_tokens": 67,
+      "total_tokens": 38531,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:40.842440+00:00",
+    "latency_seconds": 2.155,
+    "raw_output_preview": "{\"narration\": \"The guard captain shrugs slightly, the steady patter of rain splashing against the soot-dark stone around the gate. \\\"Both have their burdens,\\\" they say, voice low as the crowd presses close. \\\"The rain wears at you, but the emptiness inside can be just as hard.\\\"\"}"
+  },
+  {
+    "index": 4,
+    "turn": "T2",
+    "kind": "interpretation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:41.384577+00:00",
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "model",
+      "temperature",
+      "text"
+    ],
+    "response_id": "resp_0cd2f1f9c2e12a71006ac9997a63e887d1846cf5a79a57e412",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 900,
+      "output_tokens": 130,
+      "total_tokens": 1030,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:43.766663+00:00",
+    "latency_seconds": 2.382,
+    "raw_output_preview": "{\"primary_operation\":\"ask\",\"supporting_operations\":[],\"raw_target_text\":\"\\\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Cold rain needles Cinderwatch's eastern gate under...\\\"\",\"proposed_target_id\":null,\"interlocutor_id\":\"guard_captain\",\"conversational_subject\":\"preference for description\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"explanation of preference\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspe"
+  },
+  {
+    "index": 5,
+    "turn": "T2",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:44.327669+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_035a895ed1f38007006ac9997d61c487d19a6fec51816b9544",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 29914,
+      "output_tokens": 128,
+      "total_tokens": 30042,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:47.269671+00:00",
+    "latency_seconds": 2.942,
+    "raw_output_preview": "{\"narration\": \"The guard captain shrugs slightly, a faint smile breaking through the weathered lines on their face. \\\"There's just something about the rain beating down on the old stones, the feel of those frayed banners overhead,\\\" they say. \\\"It reminds me that this place has stood through worse—storms, sieges, and all. Watching the gate in this rain, despite the cold and wet, feels like standing guard not just for today, but for all the days before and those still to come. It holds a certain "
+  },
+  {
+    "index": 6,
+    "turn": "T2",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:47.653669+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_02b2df32c46b62b0006ac99980b32487d1a088e3aec36b38ec",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 37347,
+      "output_tokens": 132,
+      "total_tokens": 37479,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:50.068411+00:00",
+    "latency_seconds": 2.415,
+    "raw_output_preview": "{\"narration\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. Nearby, a tavern runner shouts offers of hot stew and paid rumor. Across the square, a well-appointed townhouse flies noble colors, standing out quietly against the muddy clamor. One figure in threadbare "
+  },
+  {
+    "index": 7,
+    "turn": "T3",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:50.710848+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_0ceccb61dad8a334006ac99983cffc87d1aa2ef77bf6e29d21",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 35302,
+      "output_tokens": 120,
+      "total_tokens": 35422,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:53.819506+00:00",
+    "latency_seconds": 3.108,
+    "raw_output_preview": "{\"narration\": \"The guard captain shifts their gaze toward the rain-soaked notice board just off the gate, voice low with the weight of unease. \\\"A patrol was sent out near the old milestone, east beyond the trading crossroads,\\\" they say. \\\"They haven't returned, and no word has come back. It's put everyone on edge — especially with the roads so crowded and the tension thick in the air. We've posted warnings and tightened the watches, but beyond that, I don't have much more to offer. Investigati"
+  },
+  {
+    "index": 8,
+    "turn": "T3",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:54.349635+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_03368a11669a4df6006ac99987746887d19393837ca5729f95",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 43230,
+      "output_tokens": 43,
+      "total_tokens": 43273,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:57.189547+00:00",
+    "latency_seconds": 2.841,
+    "raw_output_preview": "{\"narration\": \"The guard captain glances toward the rain-soaked notice board nearby. They say, \\\"A patrol went missing near the old milestone. That's all I can confirm for now.\\\"\"}"
+  },
+  {
+    "index": 9,
+    "turn": "T4",
+    "kind": "interpretation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:48:57.749658+00:00",
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "model",
+      "temperature",
+      "text"
+    ],
+    "response_id": "resp_07ab56804b2c42ea006ac9998acd2487d1b137a653388e707c",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 960,
+      "output_tokens": 97,
+      "total_tokens": 1057,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:48:59.771115+00:00",
+    "latency_seconds": 2.022,
+    "raw_output_preview": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[],\"raw_target_text\":\"notice board\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":null,\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Identify anything unusual on the notice board.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":true,\"ambiguous\":true,\"confidence\":null}"
+  },
+  {
+    "index": 10,
+    "turn": "T4",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:49:00.112137+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_0782f59d8b0e52b1006ac9998d2dd087d1b3aa5a4ea19244af",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 32342,
+      "output_tokens": 1156,
+      "total_tokens": 33498,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:49:08.325933+00:00",
+    "latency_seconds": 8.214,
+    "raw_output_preview": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_ad718c5402fd\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch'"
+  },
+  {
+    "index": 11,
+    "turn": "T4",
+    "kind": "generation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:49:08.725612+00:00",
+    "create_kwarg_keys": [
+      "model"
+    ],
+    "response_id": "resp_0adcd6fe9803b5bd006ac99995d1e487d1a876db02b51292d4",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 40247,
+      "output_tokens": 2292,
+      "total_tokens": 42539,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:49:25.794238+00:00",
+    "latency_seconds": 17.068,
+    "raw_output_preview": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_ad718c5402fd\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch'"
+  },
+  {
+    "index": 12,
+    "turn": "T5",
+    "kind": "interpretation",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-10T01:49:26.626982+00:00",
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "model",
+      "temperature",
+      "text"
+    ],
+    "response_id": "resp_06a4a09388a4caff006ac999a79ec487d1aed3123b77264ef9",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 927,
+      "output_tokens": 115,
+      "total_tokens": 1042,
+      "cached_input_tokens": 0,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "error": null,
+    "usable_output": true,
+    "finished": "2026-10-10T01:49:28.141442+00:00",
+    "latency_seconds": 1.514,
+    "raw_output_preview": "{\"primary_operation\":\"perceive\",\"supporting_operations\":[],\"raw_target_text\":\"Describe what I can see around me here at the gate.\",\"proposed_target_id\":\"frontier_gate\",\"interlocutor_id\":null,\"conversational_subject\":\"environment\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"A description of the surroundings at the Cinderwatch Gate District.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":fa"
+  }
+]

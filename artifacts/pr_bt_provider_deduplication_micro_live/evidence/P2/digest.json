@@ -1,0 +1,78 @@
+{
+  "probe": "P2",
+  "player": "Baker, which loaf do you usually keep for yourself?",
+  "scene": "baker",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+  "sealed": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+  "accepted": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "initial_generation",
+  "attempt": 1,
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\""
+  },
+  "initial_player_facing_text": "The baker glances around the busy stall, then replies with a guarded tone, \"I don't have a particular loaf I keep for myself. Every batch here is for the customers.\"",
+  "initial_declared_claims": null,
+  "retry_player_facing_text": null,
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [],
+  "validation_attempt_2_reasons": null,
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d4c97cad4722"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "bread_stall"
+  },
+  "calls": [
+    {
+      "index": 4,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0d090b0344f1c6be006ac37c92037487d285461301893a1531",
+      "input_chars": 104777,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "input_tokens": 24431,
+      "output_tokens": 458,
+      "total_tokens": 24889,
+      "latency_seconds": 5.367,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_d4c97cad4722",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+  "provider_recipe_present_on_generation": true
+}

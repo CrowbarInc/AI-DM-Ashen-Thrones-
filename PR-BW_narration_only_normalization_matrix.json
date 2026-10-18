@@ -1,0 +1,74 @@
+[
+  {
+    "fixture_id": "N1",
+    "provider_response_contract": "narration_only",
+    "expected": "accept",
+    "accepted": true,
+    "rejected": false,
+    "reason": null,
+    "canonical_declared_claims": [],
+    "narration": "The baker glances at the cooling rack. \"Depends which one came out best.\"",
+    "declaration_authorship": false,
+    "pass": true
+  },
+  {
+    "fixture_id": "N2",
+    "provider_response_contract": "narration_only",
+    "expected": "reject",
+    "accepted": false,
+    "rejected": true,
+    "reason": "missing_narration",
+    "canonical_declared_claims": null,
+    "narration": null,
+    "declaration_authorship": null,
+    "pass": true
+  },
+  {
+    "fixture_id": "N3",
+    "provider_response_contract": "narration_only",
+    "expected": "reject",
+    "accepted": false,
+    "rejected": true,
+    "reason": "invalid_narration",
+    "canonical_declared_claims": null,
+    "narration": null,
+    "declaration_authorship": null,
+    "pass": true
+  },
+  {
+    "fixture_id": "N4",
+    "provider_response_contract": "narration_only",
+    "expected": "reject",
+    "accepted": false,
+    "rejected": true,
+    "reason": "unexpected_declared_claims",
+    "canonical_declared_claims": null,
+    "narration": null,
+    "declaration_authorship": null,
+    "pass": true
+  },
+  {
+    "fixture_id": "N5",
+    "provider_response_contract": "narration_only",
+    "expected": "reject",
+    "accepted": false,
+    "rejected": true,
+    "reason": "malformed_narration_only_envelope",
+    "canonical_declared_claims": null,
+    "narration": null,
+    "declaration_authorship": null,
+    "pass": true
+  },
+  {
+    "fixture_id": "N6",
+    "provider_response_contract": "structured_realization",
+    "expected": "accept",
+    "accepted": true,
+    "rejected": false,
+    "reason": null,
+    "canonical_declared_claims": [],
+    "narration": "The beam is cracked.",
+    "declaration_authorship": null,
+    "pass": true
+  }
+]

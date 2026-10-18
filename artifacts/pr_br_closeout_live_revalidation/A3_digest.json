@@ -1,0 +1,603 @@
+{
+  "turn": "A3",
+  "player": "Do we actually know that, or is it only a possibility?",
+  "http_status": 200,
+  "error": null,
+  "emitted": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull? says, \"I cannot answer that from what is settled here.\"",
+  "sealed": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull? says, \"I cannot answer that from what is settled here.\"",
+  "c18_equal": true,
+  "provenance": "safe_nonresolution",
+  "acceptance_why": "safe_nonresolution",
+  "attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "attempt_2_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "contract": {
+    "contract_id": "rc_7563d073ab0a",
+    "operation": "ask",
+    "dimension": "confidence",
+    "dimensions": [
+      "confidence"
+    ],
+    "conversational_subject": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+    "target": null,
+    "raw_input": "Do we actually know that, or is it only a possibility?",
+    "epistemic_mode": "npc_claim"
+  },
+  "decision": {
+    "contract_id": "rc_7563d073ab0a",
+    "outcome_classification": "established_or_retrieved",
+    "epistemic_acts": [
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.0",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.1",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "infer",
+        "source_ref": "temporal.player_hypotheses.0",
+        "authority": "observation",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        }
+      },
+      {
+        "act": "leave_unresolved",
+        "authority": "observation",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "unresolved",
+          "unresolved_qualifiers": [],
+          "scope": "status_answer"
+        }
+      }
+    ],
+    "realization_claims": [
+      {
+        "claim_id": "rc_db5ec0aa65c3",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "modality": "",
+        "realization_role": "MUST_STATE",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "text": "The bell's wooden yoke is split.",
+        "relation_kind": "ordinary_predicate",
+        "premise_claim_ids": []
+      },
+      {
+        "claim_id": "rc_b31ecb1fd1c7",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "modality": "",
+        "realization_role": "MUST_STATE",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "text": "The bell's leather hanger is torn.",
+        "relation_kind": "ordinary_predicate",
+        "premise_claim_ids": []
+      },
+      {
+        "claim_id": "rc_fec4503616e0",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "provenance": "player_hypothesis",
+        "authority": "observation",
+        "epistemic_status": "hypothesis",
+        "modality": "",
+        "realization_role": "MAY_INFER",
+        "persistence": "do_not_persist",
+        "source_ref": "temporal.player_hypotheses.0",
+        "text": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "relation_kind": "epistemic_status",
+        "premise_claim_ids": []
+      },
+      {
+        "claim_id": "rc_0dac28663693",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "unresolved",
+          "unresolved_qualifiers": [],
+          "scope": "status_answer"
+        },
+        "provenance": "speculation",
+        "authority": "observation",
+        "epistemic_status": "unresolved",
+        "modality": "unresolved",
+        "realization_role": "MUST_PRESERVE_UNCERTAINTY",
+        "persistence": "do_not_persist",
+        "source_ref": "decision.epistemic_acts",
+        "text": "Unresolved consequential slot",
+        "relation_kind": "epistemic_status",
+        "premise_claim_ids": [
+          "rc_fec4503616e0"
+        ]
+      }
+    ],
+    "narration_constraints": [
+      "Narration may not establish consequential world facts absent this decision.",
+      "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+      "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+      "Inference must not be narrated as physical evidence.",
+      "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+      "An unresolved cause, actor, time, reason, or status does not establish its premise. A hypothetical or player-stated premise may be realized only conditionally."
+    ],
+    "unresolved_qualifiers": [],
+    "proposed_facts": [
+      {
+        "text": "The bell's wooden yoke is split.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "The bell's leather hanger is torn.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "provenance": "player_hypothesis",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "temporal_player_hypotheses_ceiling"
+        ],
+        "authority": "observation",
+        "persistence": "do_not_persist",
+        "source_ref": "temporal.player_hypotheses.0",
+        "outcome_classification": "epistemically_qualified",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        }
+      }
+    ]
+  },
+  "temporal_input": {
+    "gm_inferences": [],
+    "player_hypotheses": [
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "text": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "authority": "observation",
+        "provenance": "player_hypothesis",
+        "epistemic_status": "hypothesis",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3
+      }
+    ],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {
+          "relation_kind": "evidential"
+        },
+        "text": "The split wooden yoke and the torn leather hanger of the bronze bell reveal that the bell's support system has suffered significant structural failure.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "evidential",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_evidential_relation"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "This degradation might point to neglect or recent harsh conditions in the chapel belfry.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "A sudden, forceful pull, such as from improper ringing or an accidental tug, could have caused the split wooden yoke and torn leather hanger.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "inferred",
+        "relation_kind": "causal",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3,
+        "reason_codes": [
+          "unauthorized_declared_claim"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "established"
+        },
+        "text": "The bell's wooden yoke is clearly split, and the leather hanger is torn, showing they have both suffered damage.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3,
+        "reason_codes": [
+          "unauthorized_certainty_upgrade"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "text": "The damage to the bell's wooden yoke and leather hanger suggests a significant, sudden force such as a hard pull, but the exact cause remains unknown.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "hypothesis",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 4,
+        "reason_codes": [
+          "embedded_premise_unlinked"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "What caused the hard pull that split the yoke and tore the hanger is not known from the evidence present.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 4,
+        "reason_codes": [
+          "embedded_premise_unlinked"
+        ]
+      }
+    ],
+    "active_claim": {
+      "id": "claim_f19e96c0fc",
+      "label": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+      "kind": "claim",
+      "scene_id": "chapel_belfry",
+      "turn_index": 3,
+      "source": "player_hypothesis",
+      "epistemic_status": "hypothesis"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "chapel_belfry",
+      "active_interlocutor": null,
+      "active_claim": {
+        "id": "claim_f19e96c0fc",
+        "label": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "kind": "claim",
+        "scene_id": "chapel_belfry",
+        "turn_index": 3,
+        "source": "player_hypothesis",
+        "epistemic_status": "hypothesis"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "kind": "object",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_7c5a5d438871"
+    },
+    "turn_counter": 4,
+    "active_scene_id": "chapel_belfry"
+  },
+  "temporal_output": {
+    "gm_inferences": [],
+    "player_hypotheses": [
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "text": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "authority": "observation",
+        "provenance": "player_hypothesis",
+        "epistemic_status": "hypothesis",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3
+      }
+    ],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {
+          "relation_kind": "evidential"
+        },
+        "text": "The split wooden yoke and the torn leather hanger of the bronze bell reveal that the bell's support system has suffered significant structural failure.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "evidential",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_evidential_relation"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "This degradation might point to neglect or recent harsh conditions in the chapel belfry.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "A sudden, forceful pull, such as from improper ringing or an accidental tug, could have caused the split wooden yoke and torn leather hanger.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "inferred",
+        "relation_kind": "causal",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3,
+        "reason_codes": [
+          "unauthorized_declared_claim"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "established"
+        },
+        "text": "The bell's wooden yoke is clearly split, and the leather hanger is torn, showing they have both suffered damage.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 3,
+        "reason_codes": [
+          "unauthorized_certainty_upgrade"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hypothesis"
+        },
+        "text": "The damage to the bell's wooden yoke and leather hanger suggests a significant, sudden force such as a hard pull, but the exact cause remains unknown.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "hypothesis",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 4,
+        "reason_codes": [
+          "embedded_premise_unlinked"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "What caused the hard pull that split the yoke and tore the hanger is not known from the evidence present.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 4,
+        "reason_codes": [
+          "embedded_premise_unlinked"
+        ]
+      }
+    ],
+    "active_claim": {
+      "id": "claim_f19e96c0fc",
+      "label": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+      "kind": "claim",
+      "scene_id": "chapel_belfry",
+      "turn_index": 4,
+      "source": "speculation",
+      "epistemic_status": "unresolved"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "chapel_belfry",
+      "active_interlocutor": null,
+      "active_claim": {
+        "id": "claim_f19e96c0fc",
+        "label": "So if one hard pull split the yoke and tore the hanger together, what would have caused that pull?",
+        "kind": "claim",
+        "scene_id": "chapel_belfry",
+        "turn_index": 4,
+        "source": "speculation",
+        "epistemic_status": "unresolved"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "kind": "object",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_7563d073ab0a"
+    },
+    "turn_counter": 4,
+    "active_scene_id": "chapel_belfry"
+  },
+  "scene_before": {
+    "id": "chapel_belfry",
+    "location": "Chapel belfry",
+    "summary": "A bronze bell hangs from a timber frame.",
+    "visible_facts": [
+      "The bell's wooden yoke is split.",
+      "The bell's leather hanger is torn."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "interactables": [
+      {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "aliases": [
+          "bell",
+          "wooden yoke",
+          "yoke",
+          "leather hanger",
+          "hanger"
+        ]
+      }
+    ]
+  },
+  "scene_after": {
+    "id": "chapel_belfry",
+    "location": "Chapel belfry",
+    "summary": "A bronze bell hangs from a timber frame.",
+    "visible_facts": [
+      "The bell's wooden yoke is split.",
+      "The bell's leather hanger is torn."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "interactables": [
+      {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "aliases": [
+          "bell",
+          "wooden yoke",
+          "yoke",
+          "leather hanger",
+          "hanger"
+        ]
+      }
+    ]
+  },
+  "factions_before": [
+    {
+      "id": "house_verevin",
+      "agenda_progress": 2,
+      "pressure": 4
+    },
+    {
+      "id": "ash_cowl",
+      "agenda_progress": 2,
+      "pressure": 4
+    },
+    {
+      "id": "ordo_pyric",
+      "agenda_progress": 2,
+      "pressure": 3
+    }
+  ],
+  "factions_after": [
+    {
+      "id": "house_verevin",
+      "agenda_progress": 3,
+      "pressure": 5
+    },
+    {
+      "id": "ash_cowl",
+      "agenda_progress": 3,
+      "pressure": 5
+    },
+    {
+      "id": "ordo_pyric",
+      "agenda_progress": 3,
+      "pressure": 4
+    }
+  ],
+  "bounded_keep_invoked": false,
+  "bounded_keep": [],
+  "generation_calls": 2,
+  "interpretation_calls": 0,
+  "other_calls": 0,
+  "call_usage": [
+    {
+      "kind": "generation",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 30733,
+        "output_tokens": 697,
+        "total_tokens": 31430,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "error": null
+    },
+    {
+      "kind": "generation",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 32942,
+        "output_tokens": 377,
+        "total_tokens": 33319,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "error": null
+    }
+  ]
+}

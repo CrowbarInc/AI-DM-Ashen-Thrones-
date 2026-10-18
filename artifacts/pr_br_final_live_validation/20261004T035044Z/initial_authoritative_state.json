@@ -1,0 +1,391 @@
+{
+  "scene": {
+    "scene": {
+      "id": "bathhouse_pump_alcove",
+      "location": "Dunmere public bathhouse pump alcove",
+      "summary": "A tiled pump alcove serves an ordinary public bathhouse. The long iron pump handle is visibly bowed, and its pivot pin is sheared through. Two folded towels rest on a cedar bench. A blue-glazed soap dish sits beside the washbasin. Nessa, an ordinary bath attendant, folds towels nearby. Nothing states a cause, responsible actor, event time, history, explanation, or corroborating evidence for the damage.",
+      "mode": "social",
+      "visible_facts": [
+        {
+          "text": "The bathhouse pump's long iron handle is visibly bowed, and its pivot pin is sheared through.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "bathhouse_pump_handle",
+            "subject_aliases": [
+              "bathhouse pump",
+              "pump",
+              "pump handle",
+              "iron handle",
+              "pivot pin"
+            ],
+            "relation": "observation",
+            "value": "bowed handle and sheared pivot pin",
+            "value_aliases": [
+              "bowed",
+              "bent handle",
+              "sheared",
+              "sheared pin",
+              "broken pivot pin"
+            ],
+            "polarity": "positive"
+          }
+        },
+        "Two folded towels rest on a cedar bench.",
+        "A blue-glazed soap dish sits beside the washbasin.",
+        "Nessa folds clean towels beside the cedar bench."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "nessa",
+          "name": "Nessa",
+          "scene_id": "bathhouse_pump_alcove",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "bath attendant",
+            "attendant"
+          ],
+          "aliases": [
+            "attendant",
+            "bath attendant"
+          ]
+        }
+      ],
+      "interactables": [],
+      "objects": []
+    },
+    "_is_canon": true
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "dunmere",
+        "name": "Dunmere",
+        "type": "river_town",
+        "tags": [
+          "bathhouse"
+        ],
+        "status": "ordinary",
+        "notes": "A small river town with a public bathhouse."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "nessa",
+        "name": "Nessa",
+        "location": "bathhouse_pump_alcove",
+        "role": "bath attendant",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "attendant",
+          "bath attendant"
+        ],
+        "topics": [
+          {
+            "id": "towels",
+            "text": "Nessa is folding clean towels beside the cedar bench."
+          }
+        ],
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "bathhouse_pump_alcove",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign": {
+    "title": "Ashen Thrones",
+    "premise": "Galinor is spending an ordinary afternoon in Dunmere.",
+    "tone": "grimdark political intrigue with survival and horror elements",
+    "player_character": "Galinor",
+    "character_role": "A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.",
+    "starting_context": "Galinor is spending an ordinary afternoon in Dunmere.",
+    "character_secret": {
+      "title": "The Betrayed Loyalist",
+      "description": "Galinor once served faithfully as a trusted court mage. When he uncovered evidence of a conspiracy and brought it to his ruler, he discovered the conspiracy was orchestrated by the throne itself.",
+      "implications": [
+        "The ruler cannot allow Galinor to live if his identity becomes known.",
+        "Agents of the throne may hunt surviving witnesses of the purge.",
+        "Galinor holds knowledge capable of destabilizing an entire realm."
+      ],
+      "hidden_truth": "The conspiracy may have involved forbidden magic or darker powers influencing the throne."
+    },
+    "world_pressures": [
+      "Daily work continues around Dunmere."
+    ],
+    "environmental_threats": [
+      "harsh seasons and famine",
+      "disease and plague",
+      "dangerous wilderness and monsters",
+      "war-torn lands and refugee movements",
+      "cursed ruins and unstable magical sites"
+    ],
+    "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+    "campaign_structure": "A sandbox political world where the player gradually establishes a locus of power through alliances, conquest, intrigue, and exploration.",
+    "long_term_goals": [
+      "Spend an ordinary afternoon in Dunmere."
+    ],
+    "gm_guidance": [
+      "Use only the current scene's authored consequential facts as world truth.",
+      "Nessa is an ordinary bath attendant unless the scene says otherwise."
+    ]
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "round": 0,
+    "initiative_order": [],
+    "turn_index": 0,
+    "active_actor_id": null,
+    "player_turn_used": false
+  },
+  "conditions": {
+    "dazed": {
+      "name": "Dazed",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true
+      }
+    },
+    "shaken": {
+      "name": "Shaken",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "sickened": {
+      "name": "Sickened",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "damage_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "blinded": {
+      "name": "Blinded",
+      "kind": "condition",
+      "default_effects": {
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "stunned": {
+      "name": "Stunned",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true,
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "risky_strike": {
+      "name": "Risky Strike",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "defensive_stance": {
+      "name": "Defensive Stance",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "shield": {
+      "name": "Shield",
+      "kind": "spell_effect",
+      "default_effects": {
+        "ac_bonus": 4
+      }
+    }
+  },
+  "session": {
+    "active_scene_id": "bathhouse_pump_alcove",
+    "visited_scene_ids": [
+      "bathhouse_pump_alcove"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "bathhouse_pump_alcove",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "9ceb1a3f09b0443ca4bd0697",
+    "session_id": "9ceb1a3f09b0443ca4bd0697",
+    "campaign_started": true,
+    "last_saved_at": "2026-10-04T03:50:44.762194Z"
+  },
+  "session_log": ""
+}

@@ -401,6 +401,34 @@ def test_general_http_first_ask(tmp_path, monkeypatch):
     assert "morning bell" in text or "kiln three" in text
 
 
+def test_immutable_preseal_preserves_selected_authored_answer_over_ignorance():
+    from game.immutable_valid_response import accepted_record, run_preserve_if_valid
+
+    world = _brine_world()
+    scene = _brine_scene()
+    session = _session_for(world, "brine_yard", scene)
+    player_text = 'I turn to the Kiln Tender. "When is kiln three banked?"'
+    resolution = _ask(world, session, "kiln_tender", player_text, scene)
+    gm = {"player_facing_text": 'Kiln Tender says, "I do not know."', "metadata": {}, "tags": []}
+
+    sealed = run_preserve_if_valid(
+        gm,
+        regenerate=None,
+        resolution=resolution,
+        player_text=player_text,
+        scene=scene,
+        world=world,
+        session=session,
+    )
+
+    text = _facing({"gm_output": sealed}).lower()
+    record = accepted_record(sealed) or {}
+    assert "morning bell" in text
+    assert record.get("immutable") is True
+    assert record.get("provenance") == "initial_generation"
+    assert "authored_knowledge_preseal_projection" in (sealed.get("tags") or [])
+
+
 def test_generic_ask_without_subject_can_still_reveal_first_topic():
     world = _brine_world()
     session = _session_for(world, "brine_yard", _brine_scene())

@@ -1,0 +1,3 @@
+# 13 — Follow-Up Semantics
+
+Follow-up relations distinguish source_attribution, explanation, evidence, temporal_modification, alternative_argument and speech_clarification. Host projects attribution/evidence/explanation arguments from the targeted proposition; redundant proposed subject/object slots cannot redirect it to another entity. Temporal/alternative deltas require current literal evidence. Speech clarification inherits the proposition. Requested predicate interpretation still depends on the provider; an explanation classified with the old keeper predicate can remain semantically wrong despite a valid ID.

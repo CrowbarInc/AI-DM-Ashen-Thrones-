@@ -1,0 +1,3 @@
+# 24 — Retention and Compaction
+
+At most 24 referent records; provider sees at most six including pinned active focus. Commit pins active record, newly committed record and its immediate parent, then removes older unpinned records. Sequence is not reused. Older lineage IDs survive as links but their records can be evicted; history beyond retention cannot be resolved. Multiple old pending clarification chains are not all pinned, so long historical/pending conversations need additional work. No canonical record is compacted. [game/conversational_referents.py:13](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/conversational_referents.py:13>).

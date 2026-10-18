@@ -1,0 +1,3 @@
+# 06 — Referent Identity
+
+The host mints a UUID conversation scope at first sealed commit and monotonically increments a persisted sequence. IDs survive disk/process restart and are not derived from speech. Provider target IDs must resolve to existing scoped records. Provider cannot create an ID; new question IDs appear only in commit, then are linked into delivered history. Repeated delivery identity is idempotent. [game/conversational_referents.py:206](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/conversational_referents.py:206>); [artifacts/pr_eg_r6_r2_r1/restart/result.json:1](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r6_r2_r1/restart/result.json:1>).

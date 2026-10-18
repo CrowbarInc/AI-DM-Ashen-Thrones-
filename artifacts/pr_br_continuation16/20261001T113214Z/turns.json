@@ -1,0 +1,906 @@
+[
+  {
+    "turn_number": 1,
+    "shape": "direct social question",
+    "intended_meaning": "Ask the tavern runner a price question that needs a substantive reply.",
+    "explicit_discourse_transition": "",
+    "player_text": "I catch the tavern runner's eye and ask what one bowl of stew costs tonight.",
+    "generated_candidate": "\"The tavern runner shakes their head slightly, voice lowered amid the bustle. \"I really can't say for sure—I deal in rumors and hot meals, not exact pricing tonight. Your best bet is to ask the serjeant nearby; they might know how supplies are being handled under these new curfew rules.\"",
+    "gm_text": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+    "best_safe_candidate": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+    "final_selected_candidate": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_f28f1c3fd18a",
+        "operation": "ask",
+        "target": null,
+        "interlocutor": "tavern_runner",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+        "selected_preview": "Tavern Runner says, \"The tavern runner shakes their head slightly, voice lowered amid the bustle.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": true,
+    "initial_structural_reasons": [],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": false,
+    "semantic_degradation_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "referent_reason": "no_anaphor",
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": "tavern_runner",
+    "dimension": null,
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "kind": "interlocutor"
+    },
+    "active_inspected": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0
+  },
+  {
+    "turn_number": 2,
+    "shape": "explicit interlocutor switch",
+    "intended_meaning": "Leave the runner and ask the guard captain who commands the gate.",
+    "explicit_discourse_transition": "runner rejected; guard captain selected",
+    "player_text": "I'm not asking the runner. I turn to the guard captain and ask who commands the watch tonight.",
+    "generated_candidate": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I can disclose to just anyone. If you require an audience with the officer in charge, you might consider petitioning at the barracks.\"\nTheir eyes briefly scan the crowd, before settling back on you with a guarded expression.",
+    "gm_text": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I can disclose to just anyone. If you require an audience with the officer in charge, you might consider petitioning at the barracks.\"\nTheir eyes briefly scan the crowd, before settling back on you with a guarded expression.",
+    "best_safe_candidate": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I can disclose to just anyone. If you require an audience with the officer in charge, you might consider petitioning at the barracks.\"\nTheir eyes briefly scan the crowd, before settling back on you with a guarded expression.",
+    "final_selected_candidate": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I can disclose to just anyone. If you require an audience with the officer in charge, you might consider petitioning at the barracks.\"\nTheir eyes briefly scan the crowd, before settling back on you with a guarded expression.",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I can disclose to just anyone. If you require an audience with the officer in charge, you might consider petitioning at the barracks.\"\nTheir eyes briefly scan the crowd, before settling back on you with a guarded expression.",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "lower_satisfaction_rank",
+        "contract_id": "rc_f5aabeeae007",
+        "operation": "ask",
+        "target": "Guard Captain",
+        "interlocutor": "guard_captain",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [
+          "content"
+        ],
+        "coverage_after": [
+          "content"
+        ],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "selected_preview": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "clue_frame",
+        "reason": "lower_satisfaction_rank",
+        "contract_id": "rc_f5aabeeae007",
+        "operation": "ask",
+        "target": "Guard Captain",
+        "interlocutor": "guard_captain",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [
+          "content"
+        ],
+        "coverage_after": [
+          "content"
+        ],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "selected_preview": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_f5aabeeae007",
+        "operation": "ask",
+        "target": "Guard Captain",
+        "interlocutor": "guard_captain",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [
+          "content"
+        ],
+        "coverage_after": [
+          "content"
+        ],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "selected_preview": "\"That, I'm afraid, isn't information I can share,\" the guard captain says with a tight jaw and a slight shake of their head. \"The command of the watch tonight is not something I ca",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:content"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:content"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "content"
+      ],
+      "covered_dimensions": [
+        "content"
+      ],
+      "complete": true,
+      "dimension": "content",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "content"
+      ],
+      "covered_dimensions": [
+        "content"
+      ],
+      "complete": true,
+      "dimension": "content",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": true,
+    "initial_structural_reasons": [],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": false,
+    "semantic_degradation_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention_reason": "ambiguous_referent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "referent_reason": "explicit_current_turn_interlocutor",
+    "operation": "ask",
+    "canonical_target": "Guard Captain",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "source_turn": null
+    },
+    "interlocutor_id": "guard_captain",
+    "dimension": "content",
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "kind": "interlocutor"
+    },
+    "active_inspected": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1
+  },
+  {
+    "turn_number": 3,
+    "shape": "follow-up with the new interlocutor",
+    "intended_meaning": "Stay with the captain and ask what that command means for passage.",
+    "explicit_discourse_transition": "",
+    "player_text": "What does that mean for someone trying to pass the gate?",
+    "generated_candidate": "\"That, I cannot say,\" the guard captain replies, their gaze narrowing with a trace of resolve. \"The regulations for passing the gate are clear, but the details of enforcement and exceptions are matters beyond what I am permitted to discuss openly. You'll find the specifics in the official decrees posted on the notice board, or by speaking to the serjeant managing the roster.\"",
+    "gm_text": "Guard Captain says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "best_safe_candidate": "Guard Captain says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "final_selected_candidate": "Guard Captain says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "npc_topic:gate_guard:watch_command",
+        "contract_id": "rc_b6bd2cc66ec4",
+        "operation": "ask",
+        "target": "Guard Captain",
+        "interlocutor": "guard_captain",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 0,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "higher_rank",
+        "best_safe_candidate_before": "",
+        "selected_preview": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_b6bd2cc66ec4",
+        "operation": "ask",
+        "target": "Guard Captain",
+        "interlocutor": "guard_captain",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Guard Captain says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "selected_preview": "Guard Captain says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "initial_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "discourse_state_contradiction"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": false,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": false,
+    "initial_structural_reasons": [
+      "discourse_state_contradiction"
+    ],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": false,
+    "semantic_degradation_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "discourse_inheritance",
+    "referent_reason": "unambiguous_discourse_referent",
+    "operation": "ask",
+    "canonical_target": "Guard Captain",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "source_turn": 2
+    },
+    "interlocutor_id": "guard_captain",
+    "dimension": null,
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "kind": "interlocutor"
+    },
+    "active_inspected": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0
+  },
+  {
+    "turn_number": 4,
+    "shape": "compound approach and ask",
+    "intended_meaning": "Walk to the threadbare figure and ask a question; the ask stays the resolution.",
+    "explicit_discourse_transition": "captain left; threadbare figure selected",
+    "player_text": "I leave the captain and walk over to the threadbare figure by the wall. I ask whether they are waiting for the gate to open.",
+    "generated_candidate": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" they repeat, voice thin but clear. \"Not exactly. We're watching for the right moment, something signals to open it. But as you can see, no luck yet. The guards are tight, and the rain only makes things worse.\" Their gaze drifts back to the muddy line of refugees and guards alike, their fingers clutching a worn bundle close to their chest.",
+    "gm_text": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" We're watching for the right moment, something signals to open it. Their gaze drifts back to the muddy line of refugees and guards alike, their fingers clutching a worn bundle close to their chest.",
+    "best_safe_candidate": "",
+    "final_selected_candidate": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" We're watching for the right moment, something signals to open it. Their gaze drifts back to the muddy line of refugees and guards alike, their fingers clutching a worn bundle close to their chest.",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "different_proposition",
+        "contract_id": "rc_c471fd103ccf",
+        "operation": "ask",
+        "target": "Threadbare watcher",
+        "interlocutor": "threadbare_watcher",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "",
+        "selected_preview": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" they repeat, voice thin but clear. \"",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "clue_frame",
+        "reason": "different_proposition",
+        "contract_id": "rc_c471fd103ccf",
+        "operation": "ask",
+        "target": "Threadbare watcher",
+        "interlocutor": "threadbare_watcher",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "",
+        "selected_preview": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" We're watching for the right moment,",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_c471fd103ccf",
+        "operation": "ask",
+        "target": "Threadbare watcher",
+        "interlocutor": "threadbare_watcher",
+        "dimension": "content",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "",
+        "selected_preview": "The threadbare watcher turns to you slowly, their tired eyes flicking toward the gate with a faint trace of impatience. \"Waiting for the gate?\" We're watching for the right moment,",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "unrelated",
+      "final_satisfaction": "unsatisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "initial_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "dimension_not_addressed"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": false,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "dimension_not_addressed"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": false,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "content"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "content",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "content"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "content",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": true,
+    "initial_structural_reasons": [],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": false,
+    "semantic_degradation_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention_reason": "unresolved_compound_intent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "referent_reason": "explicit_current_turn_interlocutor",
+    "operation": "ask",
+    "canonical_target": "Threadbare watcher",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "source_turn": null
+    },
+    "interlocutor_id": "threadbare_watcher",
+    "dimension": "content",
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "threadbare_watcher",
+      "kind": "interlocutor"
+    },
+    "active_inspected": null,
+    "semantic_result": "FAIL",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1
+  },
+  {
+    "turn_number": 5,
+    "shape": "inherited follow-up",
+    "intended_meaning": "Use you to stay with the figure just addressed.",
+    "explicit_discourse_transition": "",
+    "player_text": "What did you mean by that?",
+    "generated_candidate": "The threadbare watcher meets your gaze with weariness etched deep in their features. \"Waiting for the gate,\" they repeat slowly, \"means more than standing in line. We're watching for a sign—a signal that the authorities have shifted their stance, or that the danger beyond has passed. It’s a moment measured in tension, when the usual rules bend.\" They glance toward the clusters of refugees and guards, their voice dropping to a cautious murmur. \"For someone trying to pass the gate, it means timing and knowing who to watch. Those signals aren’t clear to outsiders, and their meaning can change with the weather or whispers in the dark. If you want to move when it’s right, keep your eyes open and your ears sharper.\"",
+    "gm_text": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "best_safe_candidate": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "final_selected_candidate": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "The threadbare watcher meets your gaze with weariness etched deep in their features. \"Waiting for the gate,\" they repeat slowly, \"means more than standing in line. We're watching for a sign—a signal that the authorities have shifted their stance, or that the danger beyond has passed. It’s a moment measured in tension, when the usual rules bend.\" They glance toward the clusters of refugees and guards, their voice dropping to a cautious murmur. \"For someone trying to pass the gate, it means timing and knowing who to watch. Those signals aren’t clear to outsiders, and their meaning can change with the weather or whispers in the dark. If you want to move when it’s right, keep your eyes open and your ears sharper.\"",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_80fc6cb6651c",
+        "operation": "ask",
+        "target": "threadbare_watcher",
+        "interlocutor": "threadbare_watcher",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+        "selected_preview": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": true,
+    "initial_structural_reasons": [],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": false,
+    "semantic_degradation_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "discourse_inheritance",
+    "referent_reason": "active_interlocutor",
+    "operation": "ask",
+    "canonical_target": "threadbare_watcher",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "threadbare_watcher",
+      "label": "threadbare_watcher",
+      "source_turn": null
+    },
+    "interlocutor_id": "threadbare_watcher",
+    "dimension": null,
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "threadbare_watcher",
+      "kind": "interlocutor"
+    },
+    "active_inspected": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0
+  },
+  {
+    "turn_number": 6,
+    "shape": "ordinary control",
+    "intended_meaning": "Read the notice board as an ordinary inspection.",
+    "explicit_discourse_transition": "",
+    "player_text": "I step over to the notice board and read what is posted.",
+    "generated_candidate": "The notice board clearly displays lists of new taxes and curfew rules imposed on the district. Among these official postings, a stark warning stands out, alerting the public to a patrol that has gone missing. The guard serjeant nearby glances frequently between the crowd and the roster, his gaze sharpened by the tension in the air. Rain continues to patter against the mud-slicked ground as the steady presence of threadbare watchers and clustered refugees underscores the unease festering along this checkpoint.",
+    "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "best_safe_candidate": "",
+    "final_selected_candidate": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": {
+      "reason": "grounding_contradiction",
+      "candidate": "Nothing here matches that. The inspection establishes no further reliable detail about Notice board."
+    },
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "lower_satisfaction_rank",
+        "contract_id": "rc_e3053883d1b6",
+        "operation": "inspect",
+        "target": "Notice board",
+        "interlocutor": null,
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "The notice board clearly displays lists of new taxes and curfew rules imposed on the district. Among these official postings, a stark warning stands out, alerting the public to a p",
+        "selected_preview": "The notice board clearly displays lists of new taxes and curfew rules imposed on the district. Among these official postings, a stark warning stands out, alerting the public to a p",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "clue_frame",
+        "reason": "clue_frame_would_reduce_contract",
+        "contract_id": "rc_e3053883d1b6",
+        "operation": "inspect",
+        "target": "Notice board",
+        "interlocutor": null,
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "rejected",
+        "replacement_reason": "hard_invalid",
+        "best_safe_candidate_before": "",
+        "selected_preview": "Nothing here matches that. The inspection establishes no further reliable detail about Notice board.",
+        "invalidation_reason": "grounding_contradiction"
+      },
+      {
+        "stage": "final_emission",
+        "reason": "grounding_correction_authoritative",
+        "contract_id": "rc_e3053883d1b6",
+        "operation": "inspect",
+        "target": "Notice board",
+        "interlocutor": null,
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "rejected",
+        "replacement_reason": "hard_invalid",
+        "best_safe_candidate_before": "",
+        "selected_preview": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "invalidation_reason": "grounding_contradiction"
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": "grounding_correction_authoritative",
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "unrelated",
+      "final_satisfaction": "unsatisfied",
+      "stage": "final_emission"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "target_observation"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "canonical_premise_contradicted"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "inspect",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "inspect",
+      "expected_resolution": "answer"
+    },
+    "initial_structural_valid": true,
+    "initial_structural_reasons": [],
+    "final_structural_valid": true,
+    "final_structural_reasons": [],
+    "attribution_shell": false,
+    "passive_observation": false,
+    "player_text_leakage": false,
+    "semantic_degradation": true,
+    "semantic_degradation_reasons": [
+      "lower_rank",
+      "target_loss"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "referent_reason": "explicit_current_turn_target",
+    "operation": "inspect",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": null,
+    "dimension": null,
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "threadbare_watcher",
+      "kind": "interlocutor"
+    },
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object"
+    },
+    "semantic_result": "FAIL",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0
+  }
+]

@@ -1,0 +1,7 @@
+# 31 — Integration Readiness
+
+Design only; nothing integrated. Potential modules: semantic_correspondence, semantic_operations, unified_semantic_planning, social source-selection adapters and dialogue_authority. Preserve authorize_information_turn plan shape, universal authorize_npc_disclosure, source IDs/NPC/context scope, provenance categories, referent IDs, immutable final adoption and API/history agreement.
+
+Data requirements: versioned host-authored facts with open predicates, named roles, epistemic/polarity/conditional scope, per-fact source spans and source revision hashes. Index by NPC/context/permission first, then relation/argument; retrieval must not reveal restricted text. Proposed interface: eligible candidate handles + question interpretation -> correspondence proposals -> host validation result containing coverage/bindings/missing slots, followed by mandatory final disclosure.
+
+Feature gate should default off and have explicit fallback to existing source resolution. Migration would require offline fact authoring/review, schema versioning, source revision invalidation and provenance preservation. Regression risks: role aliases, stale facts, multi-fact leakage, contradictory sources, historical laundering, qualifier strengthening and cap-related recall loss. Qualification must include independent actual-interpretation holdouts, real /api/chat conversations, legacy paths, immutable response checks, durable reload referents, zero unauthorized disclosures and comparative token/latency gates. No migration or new gate is implemented.

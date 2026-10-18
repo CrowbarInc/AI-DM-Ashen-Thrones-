@@ -1,0 +1,22 @@
+{
+  "model": "gpt-4.1-mini",
+  "kind": "interpretation",
+  "retry_attempt": 0,
+  "retry_reason": null,
+  "create_kwarg_keys": [
+    "max_output_tokens",
+    "model",
+    "temperature",
+    "text"
+  ],
+  "provider_input": [
+    {
+      "role": "system",
+      "content": "You interpret what the player is immediately trying to ask, do, or reference. You do not decide what exists, what is true, what becomes canonical, or what happens next. Use only candidate ids from the supplied list. Put the player's main goal in primary_operation and any setup action in supporting_operations. If more than one candidate remains plausible, set ambiguous and clarification_required to true and leave proposed ids null. Do not invent ids, operations, claims, or previous actions. Set dimension to content when the player asks what was said, reported, written, or heard. source is who said it, confidence is how sure, time is when, and use is what something is for."
+    },
+    {
+      "role": "user",
+      "content": "{\"utterance\": \"I examine the notice board for anything unusual.\", \"abstention_reason\": \"target_not_canonical\", \"candidates\": [{\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\", \"aliases\": []}, {\"id\": \"lead_frontier_gate_old_milestone\", \"type\": \"lead\", \"label\": \"Investigate the old milestone\", \"aliases\": []}, {\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\", \"aliases\": []}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\", \"aliases\": []}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\", \"aliases\": []}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\", \"aliases\": [\"guard\", \"watchman\", \"sentry\", \"guardsman\", \"captain\"]}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\", \"aliases\": [\"runner\", \"informant\"]}, {\"id\": \"refugee\", \"type\": \"interlocutor\", \"label\": \"Ragged stranger\", \"aliases\": [\"ragged stranger\", \"stranger\", \"refugee\"]}, {\"id\": \"threadbare_watcher\", \"type\": \"interlocutor\", \"label\": \"Threadbare watcher\", \"aliases\": [\"watcher\"]}], \"discourse\": {\"scene_id\": \"frontier_gate\", \"active_interlocutor\": {\"id\": \"guard_captain\", \"label\": \"Guard Captain\"}, \"active_claim\": null, \"active_actionable_lead\": {\"id\": \"lead_frontier_gate_old_milestone\", \"label\": \"Investigate the old milestone\"}, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": [{\"player\": \"About what you just told me — \\\"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Cold rain needles Cinderwatch's eastern gate under...\\\" — what makes you prefer that?\", \"gm\": \"\"}, {\"player\": \"Captain, what do you know about the missing patrol?\", \"gm\": \"\"}]}"
+    }
+  ]
+}

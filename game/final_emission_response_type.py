@@ -306,6 +306,25 @@ def enforce_response_type_contract(
     reasons: List[str] = []
     opening_mode = _response_type_opening_mode_active(required, gm_output, resolution)
     _seed_opening_response_type_debug(debug, opening_mode=opening_mode)
+    if not opening_mode:
+        from game.resolution_contract import (
+            canonical_existence_denied,
+            contract_mapping_from_resolution,
+            semantic_line_view,
+        )
+
+        resolution_contract = contract_mapping_from_resolution(resolution)
+        operation = str((resolution_contract or {}).get("operation") or "")
+        if (
+            resolution_contract
+            and operation in {"ask", "inspect", "perceive", "repeat"}
+            and semantic_line_view(current, resolution).get("keeps_answer")
+            and not canonical_existence_denied(current, resolution_contract)
+        ):
+            debug["response_type_candidate_ok"] = True
+            debug["response_type_repair_used"] = False
+            debug["response_type_repair_kind"] = "resolution_contract_answer_preserved"
+            return current, debug
 
     validator_ok = True
     validator_reasons: List[str] = []

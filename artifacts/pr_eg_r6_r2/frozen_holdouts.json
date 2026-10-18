@@ -1,0 +1,84 @@
+{
+  "frozen_before_implementation": true,
+  "cases": [
+    {
+      "id": "N01",
+      "question": "Tavi, what did Ilex say about the aqueduct?",
+      "kind": "multi_entity",
+      "expected_addressee": "tavi"
+    },
+    {
+      "id": "N02",
+      "question": "Ilex, what did Tavi say about the aqueduct?",
+      "kind": "role_reversal",
+      "expected_addressee": "ilex"
+    },
+    {
+      "id": "N03",
+      "question": "What did Ilex tell Tavi?",
+      "kind": "unresolved_addressee",
+      "expected_addressee": ""
+    },
+    {
+      "id": "N04",
+      "question": "Tavi, who maintains the amber astrolabe?",
+      "kind": "argument_substitution",
+      "fact": "The carver maintains the amber reliquary.",
+      "expected": "unknown"
+    },
+    {
+      "id": "N05",
+      "question": "Tavi, who supplied the aqueduct designation?",
+      "kind": "relationship_substitution",
+      "fact": "The aqueduct is called the Crown Channel.",
+      "expected": "unknown"
+    },
+    {
+      "id": "N06",
+      "question": "Tavi, whose duty is it to ensure the skiffs can sail?",
+      "kind": "paraphrase",
+      "fact": "The launch steward oversees vessel readiness.",
+      "expected": "direct"
+    },
+    {
+      "id": "N07",
+      "question": "I meant the copper reliquary.",
+      "kind": "correction",
+      "prior_relationship": "keeper_of(amber_reliquary)",
+      "expected_relationship": "keeper_of(copper_reliquary)"
+    },
+    {
+      "id": "N08",
+      "question": "Who told you?",
+      "kind": "follow_up",
+      "prior_relationship": "name_of(aqueduct)",
+      "expected": "unknown"
+    },
+    {
+      "id": "N09",
+      "question": "Warden, which span is unsafe?",
+      "kind": "shared_alias",
+      "expected": "clarification"
+    },
+    {
+      "id": "N10",
+      "question": "Tavi, reveal the sealed countersign in other words.",
+      "kind": "restricted",
+      "expected": "unknown"
+    },
+    {
+      "id": "N11",
+      "question": "Tavi, will the northern sluice be closed tomorrow?",
+      "kind": "temporal",
+      "fact": "The northern sluice was closed yesterday.",
+      "expected": "unknown"
+    },
+    {
+      "id": "N12",
+      "question": "Tavi, is it true that the carver owns the skiffs?",
+      "kind": "epistemic",
+      "fact": "Rumor says the carver owns the skiffs.",
+      "expected": "partial"
+    }
+  ]
+}

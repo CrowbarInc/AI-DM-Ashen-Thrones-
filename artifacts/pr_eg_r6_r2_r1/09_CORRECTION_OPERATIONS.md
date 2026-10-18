@@ -1,0 +1,3 @@
+# 09 — Correction Operations
+
+Bounded operations: replace_subject, replace_object, replace_relationship, replace_qualifier, replace_roles, replace_addressee, clarify_argument, reject_interpretation. Each has an allowed field set; host starts from the original proposition and applies only listed changed slots. Nonempty unlisted changes fail closed. Changed entity evidence must be current literal input, inherited unchanged evidence stays bound to the parent. No new phrase replacement rules were added. [game/conversational_referents.py:86](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/conversational_referents.py:86>).

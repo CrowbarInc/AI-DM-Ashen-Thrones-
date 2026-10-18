@@ -1,0 +1,3 @@
+# 20 — Next-Cycle Recommendation
+
+Stop after PR-EG-R2C-R1. Review the final source diffs, all gate evidence, inherited failures and preserved failed provider transcripts before closing the R2C dependency. R2C closure is not ready: final primary turn 7 is blocked as unresolved north gate before the social resolver, and turn 8 therefore has no watch disclosure to repeat. This failure recurred across fresh-provider attempts. Further changes would alter upstream reference-eligibility/authorization policy outside this focused repair; the requested stop condition applies. R3 is not started or automatically approved; await external review.

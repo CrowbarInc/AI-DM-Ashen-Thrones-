@@ -1,0 +1,3 @@
+# 02 Baseline and Repository State
+
+Pre-edit revision, complete dirty working-tree status and source hashes: baseline_repository.json. Existing user work was retained in place. The previous CURRENT_REVIEW is preserved under predecessor_review/. Preserved predecessor reports substantiate 337 passed / 2 inherited failures; the broader matched selection adds 13 reference-eligibility cases and reproduces 347 passed / 5 failed. The two earlier and three additional failure identities are explicit in regression_comparison.json. Prior 47/58 relevance, 43/58 sufficiency and 5/9 correction/recovery are predecessor measurements, not rerun rates.

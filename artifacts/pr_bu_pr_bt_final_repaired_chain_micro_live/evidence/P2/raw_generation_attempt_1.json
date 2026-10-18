@@ -1,0 +1,35 @@
+{
+  "response_id": "resp_008e0a4b02f53cdd006ac41d6c1f2087d281e08d321206e5b6",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 24534,
+    "output_tokens": 448,
+    "total_tokens": 24982,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 4.873,
+  "input_chars": 105329,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The baker glances around cautiously, then shakes their head with a guarded expression. \"I’m sorry, but I don’t have a favorite loaf to share. Every piece here is for the customers,\" they say firmly, avoiding eye contact.",
+    "declared_claims": null,
+    "tags": [
+      "social",
+      "refusal",
+      "npc:baker"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "realization_envelope"
+    ],
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_reply_refusal_1\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_9ab69105465f\", \"rc_2bb408577206\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The baker declines to reveal which loaf they keep for themselves.\"\n    }\n  ],\n  \"narration\": \"The baker glances around cautiously, then shakes their head with a guarded expression. \\\"I’m sorry, but I don’t have a favorite loaf to share. Every piece here is for the customers,\\\" they say firmly, avoiding eye contact.\",\n  \"player_facing_text\": \"The baker glances around cautiously, then shakes their head with a guarded expression. \\\"I’m sorry, but I don’t have a favorite loaf to share. Every piece here is for the customers,\\\" they say firmly, avoiding eye contact.\",\n  \"tags\": [\"social\", \"refusal\", \"npc:baker\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker’s gaze flickers briefly towards a shadowed alley nearby, as if wary of being overheard.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Baker refuses to disclose a personal preference regarding loaves, maintaining guarded secrecy.\"\n}"
+  }
+}

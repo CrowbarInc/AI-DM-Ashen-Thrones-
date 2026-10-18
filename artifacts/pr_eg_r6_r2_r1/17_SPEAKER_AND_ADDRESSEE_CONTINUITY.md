@@ -1,0 +1,3 @@
+# 17 — Speaker and Addressee Continuity
+
+Leading vocatives ground addressees; interior names remain mentioned entities. On corrections/follow-ups without a direct vocative, current mentions cannot steal addressee ownership. Speaker/addressee role proposals are ignored in the durable contract and host-projected; consequential request/source roles remain validated. Missing/absent or mismatched NPC targets are rejected. A correction's mentioned_entity_ids list currently reflects the new utterance while proposition slots preserve inherited participants; richer inherited role metadata remains a limitation. [game/unified_semantic_planning.py:848](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:848>).

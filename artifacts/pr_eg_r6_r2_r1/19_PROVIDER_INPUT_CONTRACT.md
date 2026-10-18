@@ -1,0 +1,3 @@
+# 19 — Provider Input Contract
+
+One provider plan call receives current utterance, visible participant roster, bounded scene summary, four delivered speech references, active/recent question IDs and compact semantic fields/statuses, plus up to twelve currently permitted source candidates. No denied topic text is added to resolve referents; referent context holds player intent, not protected world records. Six recent questions plus pinned focus can still contribute substantial context, and a downstream strict_social outlier consumed 29,885 additional input tokens. [game/unified_semantic_planning.py:461](<C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/game/unified_semantic_planning.py:461>).

@@ -449,7 +449,9 @@ def resolve_authored_exit_from_player_travel(
     Consumes only current-scene exit labels and destination ids. Fail closed on
     ambiguity, unavailable destinations, and information-seeking mentions.
     """
-    raw = str(text or "").strip()
+    from game.player_commitment import committed_world_text
+
+    raw = committed_world_text(text)
     if not raw or not exits:
         return None
     if _looks_like_information_question(raw):

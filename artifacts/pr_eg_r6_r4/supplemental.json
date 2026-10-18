@@ -1,0 +1,3731 @@
+[
+  {
+    "id": "loan_direct",
+    "partition": "supplemental",
+    "family": "loan_direct",
+    "question": "Vesper, Who lent the jade cup to Brin?",
+    "queries": [
+      {
+        "predicate": "loan",
+        "predicate_evidence": "lent",
+        "roles": [
+          {
+            "name": "borrower",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "lender",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "loan_direct:s0",
+        "context": "loan_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala lent the jade cup to Brin.",
+        "facts": [
+          {
+            "predicate": "loan",
+            "predicate_evidence": "lent",
+            "roles": [
+              {
+                "name": "lender",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "borrower",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "lender": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "loan_reverse",
+    "partition": "supplemental",
+    "family": "loan_reverse",
+    "question": "Vesper, Who did Brin lend the jade cup to?",
+    "queries": [
+      {
+        "predicate": "loan",
+        "predicate_evidence": "lend",
+        "roles": [
+          {
+            "name": "lender",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "borrower",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "loan_reverse:s0",
+        "context": "loan_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala lent the jade cup to Brin.",
+        "facts": [
+          {
+            "predicate": "loan",
+            "predicate_evidence": "lent",
+            "roles": [
+              {
+                "name": "lender",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "borrower",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "own_direct",
+    "partition": "supplemental",
+    "family": "own_direct",
+    "question": "Vesper, Who owns the cup Brin borrowed?",
+    "queries": [
+      {
+        "predicate": "own",
+        "predicate_evidence": "owns",
+        "roles": [
+          {
+            "name": "borrower",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "owner",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "own_direct:s0",
+        "context": "own_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala owns the cup Brin borrowed.",
+        "facts": [
+          {
+            "predicate": "own",
+            "predicate_evidence": "owns",
+            "roles": [
+              {
+                "name": "owner",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "borrower",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "owner": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "own_reverse",
+    "partition": "supplemental",
+    "family": "own_reverse",
+    "question": "Vesper, Who borrowed the cup Brin owns?",
+    "queries": [
+      {
+        "predicate": "own",
+        "predicate_evidence": "owns",
+        "roles": [
+          {
+            "name": "owner",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "borrower",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "own_reverse:s0",
+        "context": "own_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala owns the cup Brin borrowed.",
+        "facts": [
+          {
+            "predicate": "own",
+            "predicate_evidence": "owns",
+            "roles": [
+              {
+                "name": "owner",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "borrower",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "guard_direct",
+    "partition": "supplemental",
+    "family": "guard_direct",
+    "question": "Vesper, Who guards Brin at the lodge?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "protected_party",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "guard_direct:s0",
+        "context": "guard_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala guards Brin at the lodge.",
+        "facts": [
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "guard",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "protected_party",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "guard": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "guard_reverse",
+    "partition": "supplemental",
+    "family": "guard_reverse",
+    "question": "Vesper, Who does Brin guard at the lodge?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guard",
+        "roles": [
+          {
+            "name": "guard",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "protected_party",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "guard_reverse:s0",
+        "context": "guard_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala guards Brin at the lodge.",
+        "facts": [
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "guard",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "protected_party",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "buy_direct",
+    "partition": "supplemental",
+    "family": "buy_direct",
+    "question": "Vesper, Who bought the lamp from Brin?",
+    "queries": [
+      {
+        "predicate": "buy",
+        "predicate_evidence": "bought",
+        "roles": [
+          {
+            "name": "seller",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "buyer",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "buy_direct:s0",
+        "context": "buy_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala bought the lamp from Brin.",
+        "facts": [
+          {
+            "predicate": "buy",
+            "predicate_evidence": "bought",
+            "roles": [
+              {
+                "name": "buyer",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "seller",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "buyer": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "buy_reverse",
+    "partition": "supplemental",
+    "family": "buy_reverse",
+    "question": "Vesper, Who did Brin buy the lamp from?",
+    "queries": [
+      {
+        "predicate": "buy",
+        "predicate_evidence": "buy",
+        "roles": [
+          {
+            "name": "buyer",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "seller",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "buy_reverse:s0",
+        "context": "buy_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala bought the lamp from Brin.",
+        "facts": [
+          {
+            "predicate": "buy",
+            "predicate_evidence": "bought",
+            "roles": [
+              {
+                "name": "buyer",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "seller",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "owe_direct",
+    "partition": "supplemental",
+    "family": "owe_direct",
+    "question": "Vesper, Who owes Brin six coins?",
+    "queries": [
+      {
+        "predicate": "owe",
+        "predicate_evidence": "owes",
+        "roles": [
+          {
+            "name": "creditor",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "debtor",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "owe_direct:s0",
+        "context": "owe_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala owes Brin six coins.",
+        "facts": [
+          {
+            "predicate": "owe",
+            "predicate_evidence": "owes",
+            "roles": [
+              {
+                "name": "debtor",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "creditor",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "debtor": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "owe_reverse",
+    "partition": "supplemental",
+    "family": "owe_reverse",
+    "question": "Vesper, Who does Brin owe six coins to?",
+    "queries": [
+      {
+        "predicate": "owe",
+        "predicate_evidence": "owe",
+        "roles": [
+          {
+            "name": "debtor",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "creditor",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "owe_reverse:s0",
+        "context": "owe_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala owes Brin six coins.",
+        "facts": [
+          {
+            "predicate": "owe",
+            "predicate_evidence": "owes",
+            "roles": [
+              {
+                "name": "debtor",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "creditor",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "appoint_direct",
+    "partition": "supplemental",
+    "family": "appoint_direct",
+    "question": "Vesper, Who appointed Brin to the guild?",
+    "queries": [
+      {
+        "predicate": "appoint",
+        "predicate_evidence": "appointed",
+        "roles": [
+          {
+            "name": "appointee",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "appointer",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "appoint_direct:s0",
+        "context": "appoint_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala appointed Brin to the guild.",
+        "facts": [
+          {
+            "predicate": "appoint",
+            "predicate_evidence": "appointed",
+            "roles": [
+              {
+                "name": "appointer",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "appointee",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "appointer": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "appoint_reverse",
+    "partition": "supplemental",
+    "family": "appoint_reverse",
+    "question": "Vesper, Who did Brin appoint to the guild?",
+    "queries": [
+      {
+        "predicate": "appoint",
+        "predicate_evidence": "appoint",
+        "roles": [
+          {
+            "name": "appointer",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "appointee",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "appoint_reverse:s0",
+        "context": "appoint_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala appointed Brin to the guild.",
+        "facts": [
+          {
+            "predicate": "appoint",
+            "predicate_evidence": "appointed",
+            "roles": [
+              {
+                "name": "appointer",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "appointee",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "precede_direct",
+    "partition": "supplemental",
+    "family": "precede_direct",
+    "question": "Vesper, Who preceded Brin in the chair?",
+    "queries": [
+      {
+        "predicate": "precede",
+        "predicate_evidence": "preceded",
+        "roles": [
+          {
+            "name": "successor",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "predecessor",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "precede_direct:s0",
+        "context": "precede_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala preceded Brin in the chair.",
+        "facts": [
+          {
+            "predicate": "precede",
+            "predicate_evidence": "preceded",
+            "roles": [
+              {
+                "name": "predecessor",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "successor",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "predecessor": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "precede_reverse",
+    "partition": "supplemental",
+    "family": "precede_reverse",
+    "question": "Vesper, Who did Brin precede in the chair?",
+    "queries": [
+      {
+        "predicate": "precede",
+        "predicate_evidence": "precede",
+        "roles": [
+          {
+            "name": "predecessor",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "successor",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "precede_reverse:s0",
+        "context": "precede_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala preceded Brin in the chair.",
+        "facts": [
+          {
+            "predicate": "precede",
+            "predicate_evidence": "preceded",
+            "roles": [
+              {
+                "name": "predecessor",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "successor",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "vouch_direct",
+    "partition": "supplemental",
+    "family": "vouch_direct",
+    "question": "Vesper, Who vouches for Brin?",
+    "queries": [
+      {
+        "predicate": "vouch",
+        "predicate_evidence": "vouches",
+        "roles": [
+          {
+            "name": "beneficiary",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "voucher",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "vouch_direct:s0",
+        "context": "vouch_direct",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala vouches for Brin.",
+        "facts": [
+          {
+            "predicate": "vouch",
+            "predicate_evidence": "vouches",
+            "roles": [
+              {
+                "name": "voucher",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "beneficiary",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "institutional"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "voucher": "Cala"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "vouch_reverse",
+    "partition": "supplemental",
+    "family": "vouch_reverse",
+    "question": "Vesper, Who does Brin vouch for?",
+    "queries": [
+      {
+        "predicate": "vouch",
+        "predicate_evidence": "vouch",
+        "roles": [
+          {
+            "name": "voucher",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          }
+        ],
+        "requested_role": "beneficiary",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "vouch_reverse:s0",
+        "context": "vouch_reverse",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala vouches for Brin.",
+        "facts": [
+          {
+            "predicate": "vouch",
+            "predicate_evidence": "vouches",
+            "roles": [
+              {
+                "name": "voucher",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "beneficiary",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role",
+      "role_reversal"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "spatial_match",
+    "partition": "supplemental",
+    "family": "spatial_match",
+    "question": "Vesper, what illuminates the vault below the stair?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "below the stair",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "spatial_match:s0",
+        "context": "spatial_match",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault below the stair.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "below the stair",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "spatial",
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "spatial_mismatch",
+    "partition": "supplemental",
+    "family": "spatial_mismatch",
+    "question": "Vesper, what illuminates the vault above the stair?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "above the stair",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "spatial_mismatch:s0",
+        "context": "spatial_mismatch",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault below the stair.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "below the stair",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "spatial"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "qualifier_possibility",
+    "partition": "supplemental",
+    "family": "qualifier_possibility",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "qualifier_possibility:s0",
+        "context": "qualifier_possibility",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "possibility",
+        "text": "Phosphor moss may illuminate the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminate",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "possibility",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "possibility"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "qualifier_conditional",
+    "partition": "supplemental",
+    "family": "qualifier_conditional",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "qualifier_conditional:s0",
+        "context": "qualifier_conditional",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "conditional",
+        "text": "If watered, phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "conditional",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "conditional"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "qualifier_approximation",
+    "partition": "supplemental",
+    "family": "qualifier_approximation",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "qualifier_approximation:s0",
+        "context": "qualifier_approximation",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "approximation",
+        "text": "Approximately ten lanterns illuminate the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminate",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "ten lanterns",
+                "entity_id": "",
+                "evidence": "ten lanterns"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "approximation",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "approximation"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "agent": "ten lanterns"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "qualifier_uncertainty",
+    "partition": "supplemental",
+    "family": "qualifier_uncertainty",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "qualifier_uncertainty:s0",
+        "context": "qualifier_uncertainty",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "uncertainty",
+        "text": "Possibly phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "uncertainty",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "negative_answer",
+    "partition": "supplemental",
+    "family": "negative_answer",
+    "question": "Vesper, what does not illuminate the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminate",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "negative_answer:s0",
+        "context": "negative_answer",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss does not illuminate the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminate",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": true
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "scaling_01",
+    "partition": "supplemental",
+    "family": "scaling_01",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "scaling_01:s0",
+        "context": "scaling_01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "scaling"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "scaling_04",
+    "partition": "supplemental",
+    "family": "scaling_04",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "scaling_04:d2",
+        "context": "scaling_04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 2.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 2",
+                "entity_id": "",
+                "evidence": "token 2"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_04:d1",
+        "context": "scaling_04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 1.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 1",
+                "entity_id": "",
+                "evidence": "token 1"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_04:d0",
+        "context": "scaling_04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 0.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 0",
+                "entity_id": "",
+                "evidence": "token 0"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_04:s0",
+        "context": "scaling_04",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "scaling"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "scaling_12",
+    "partition": "supplemental",
+    "family": "scaling_12",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "scaling_12:d10",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 10.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 10",
+                "entity_id": "",
+                "evidence": "token 10"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d9",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 9.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 9",
+                "entity_id": "",
+                "evidence": "token 9"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d8",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 8.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 8",
+                "entity_id": "",
+                "evidence": "token 8"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d7",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 7.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 7",
+                "entity_id": "",
+                "evidence": "token 7"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d6",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 6.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 6",
+                "entity_id": "",
+                "evidence": "token 6"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d5",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 5.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 5",
+                "entity_id": "",
+                "evidence": "token 5"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d4",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 4.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 4",
+                "entity_id": "",
+                "evidence": "token 4"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d3",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 3.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 3",
+                "entity_id": "",
+                "evidence": "token 3"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d2",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 2.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 2",
+                "entity_id": "",
+                "evidence": "token 2"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d1",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 1.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 1",
+                "entity_id": "",
+                "evidence": "token 1"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:d0",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 0.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 0",
+                "entity_id": "",
+                "evidence": "token 0"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_12:s0",
+        "context": "scaling_12",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "scaling"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "scaling_32",
+    "partition": "supplemental",
+    "family": "scaling_32",
+    "question": "Vesper, what illuminates the vault?",
+    "queries": [
+      {
+        "predicate": "illuminate",
+        "predicate_evidence": "illuminates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "vault",
+            "entity_id": "",
+            "evidence": "vault"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "scaling_32:d30",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 30.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 30",
+                "entity_id": "",
+                "evidence": "token 30"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d29",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 29.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 29",
+                "entity_id": "",
+                "evidence": "token 29"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d28",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 28.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 28",
+                "entity_id": "",
+                "evidence": "token 28"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d27",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 27.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 27",
+                "entity_id": "",
+                "evidence": "token 27"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d26",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 26.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 26",
+                "entity_id": "",
+                "evidence": "token 26"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d25",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 25.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 25",
+                "entity_id": "",
+                "evidence": "token 25"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d24",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 24.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 24",
+                "entity_id": "",
+                "evidence": "token 24"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d23",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 23.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 23",
+                "entity_id": "",
+                "evidence": "token 23"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d22",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 22.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 22",
+                "entity_id": "",
+                "evidence": "token 22"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d21",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 21.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 21",
+                "entity_id": "",
+                "evidence": "token 21"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d20",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 20.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 20",
+                "entity_id": "",
+                "evidence": "token 20"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d19",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 19.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 19",
+                "entity_id": "",
+                "evidence": "token 19"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d18",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 18.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 18",
+                "entity_id": "",
+                "evidence": "token 18"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d17",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 17.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 17",
+                "entity_id": "",
+                "evidence": "token 17"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d16",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 16.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 16",
+                "entity_id": "",
+                "evidence": "token 16"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d15",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 15.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 15",
+                "entity_id": "",
+                "evidence": "token 15"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d14",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 14.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 14",
+                "entity_id": "",
+                "evidence": "token 14"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d13",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 13.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 13",
+                "entity_id": "",
+                "evidence": "token 13"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d12",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 12.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 12",
+                "entity_id": "",
+                "evidence": "token 12"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d11",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 11.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 11",
+                "entity_id": "",
+                "evidence": "token 11"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d10",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 10.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 10",
+                "entity_id": "",
+                "evidence": "token 10"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d9",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 9.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 9",
+                "entity_id": "",
+                "evidence": "token 9"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d8",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 8.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 8",
+                "entity_id": "",
+                "evidence": "token 8"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d7",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 7.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 7",
+                "entity_id": "",
+                "evidence": "token 7"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d6",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 6.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 6",
+                "entity_id": "",
+                "evidence": "token 6"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d5",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 5.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 5",
+                "entity_id": "",
+                "evidence": "token 5"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d4",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 4.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 4",
+                "entity_id": "",
+                "evidence": "token 4"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d3",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 3.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 3",
+                "entity_id": "",
+                "evidence": "token 3"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d2",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 2.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 2",
+                "entity_id": "",
+                "evidence": "token 2"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d1",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 1.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 1",
+                "entity_id": "",
+                "evidence": "token 1"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:d0",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter polishes token 0.",
+        "facts": [
+          {
+            "predicate": "polish",
+            "predicate_evidence": "polishes",
+            "roles": [
+              {
+                "name": "agent",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              },
+              {
+                "name": "object",
+                "value": "token 0",
+                "entity_id": "",
+                "evidence": "token 0"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "scaling_32:s0",
+        "context": "scaling_32",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Phosphor moss illuminates the vault.",
+        "facts": [
+          {
+            "predicate": "illuminate",
+            "predicate_evidence": "illuminates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "vault",
+                "entity_id": "",
+                "evidence": "vault"
+              },
+              {
+                "name": "agent",
+                "value": "phosphor moss",
+                "entity_id": "",
+                "evidence": "phosphor moss"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "scaling"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "phosphor moss"
+      },
+      "forbidden_claims": []
+    }
+  }
+]

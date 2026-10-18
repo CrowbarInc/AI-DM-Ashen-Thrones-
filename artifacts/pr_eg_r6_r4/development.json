@@ -1,0 +1,3598 @@
+[
+  {
+    "id": "direct_exact-00",
+    "partition": "development",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-00:s0",
+        "context": "direct_exact-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-00",
+    "partition": "development",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-00:s0",
+        "context": "direct_paraphrase-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-00",
+    "partition": "development",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-00:s0",
+        "context": "direct_unstructured-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-00",
+    "partition": "development",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-00:s0",
+        "context": "direct_multiple_facts-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-00",
+    "partition": "development",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the amber lens?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-00:s0",
+        "context": "direct_roles-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the amber lens: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-00",
+    "partition": "development",
+    "family": "direct_open",
+    "question": "Vesper, who stabilizes the amber lens?",
+    "queries": [
+      {
+        "predicate": "stabilize",
+        "predicate_evidence": "stabilizes",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-00:s0",
+        "context": "direct_open-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor stabilizes the amber lens.",
+        "facts": [
+          {
+            "predicate": "stabilize",
+            "predicate_evidence": "stabilizes",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "agent",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-00",
+    "partition": "development",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the amber lens today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-00:s0",
+        "context": "direct_qualified-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-00",
+    "partition": "development",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the amber lens, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-00:s0",
+        "context": "partial_multipart-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-00",
+    "partition": "development",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-00:s0",
+        "context": "partial_indefinite-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-00",
+    "partition": "development",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-00:s0",
+        "context": "partial_rumor-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "surveyor"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-00",
+    "partition": "development",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-00:s0",
+        "context": "partial_conflict-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-00:s1",
+        "context": "partial_conflict-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "surveyor",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-00",
+    "partition": "development",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the amber lens?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-00:s0",
+        "context": "related_reversal-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the amber lens: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-00",
+    "partition": "development",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the amber lens?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-00:s0",
+        "context": "related_relationship-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "related_time-00",
+    "partition": "development",
+    "family": "related_time",
+    "question": "Vesper, who keeps the amber lens today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-00:s0",
+        "context": "related_time-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-00",
+    "partition": "development",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-00:s0",
+        "context": "related_negation-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-00",
+    "partition": "development",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-00",
+    "partition": "development",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-00:s0",
+        "context": "unknown_private-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-00",
+    "partition": "development",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-00:s0",
+        "context": "unknown_history-00",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-00",
+    "partition": "development",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the amber lens?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-00:s0",
+        "context": "unknown_forged-00",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "surveyor"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-00",
+    "partition": "development",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the amber lens?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-00:s0",
+        "context": "restricted_password-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the amber lens is violet-0-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "value",
+                "value": "violet-0-cinder",
+                "entity_id": "",
+                "evidence": "violet-0-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-0-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-00",
+    "partition": "development",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the amber lens?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-00:s0",
+        "context": "restricted_countersign-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the amber lens is violet-0-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "value",
+                "value": "violet-0-cinder",
+                "entity_id": "",
+                "evidence": "violet-0-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-0-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-00",
+    "partition": "development",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the amber lens or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "amber lens",
+            "entity_id": "",
+            "evidence": "amber lens"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-00:s0",
+        "context": "clarification-00",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The surveyor keeps the amber lens.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "amber lens",
+                "entity_id": "",
+                "evidence": "amber lens"
+              },
+              {
+                "name": "keeper",
+                "value": "surveyor",
+                "entity_id": "",
+                "evidence": "surveyor"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_exact-01",
+    "partition": "development",
+    "family": "direct_exact",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_exact-01:s0",
+        "context": "direct_exact-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_paraphrase-01",
+    "partition": "development",
+    "family": "direct_paraphrase",
+    "question": "Vesper, who has custody of the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "has custody of",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_paraphrase-01:s0",
+        "context": "direct_paraphrase-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "paraphrase"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_unstructured-01",
+    "partition": "development",
+    "family": "direct_unstructured",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_unstructured-01:s0",
+        "context": "direct_unstructured-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": []
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_multiple_facts-01",
+    "partition": "development",
+    "family": "direct_multiple_facts",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_multiple_facts-01:s0",
+        "context": "direct_multiple_facts-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism. The porter guards the brass token.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          {
+            "predicate": "guard",
+            "predicate_evidence": "guards",
+            "roles": [
+              {
+                "name": "object",
+                "value": "brass token",
+                "entity_id": "",
+                "evidence": "brass token"
+              },
+              {
+                "name": "guard",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multiple_facts"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_roles-01",
+    "partition": "development",
+    "family": "direct_roles",
+    "question": "Vesper, what did Cala tell Brin about the slate prism?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "recipient",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "topic",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_roles-01:s0",
+        "context": "direct_roles-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the slate prism: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "message_content": "it is cracked"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_open-01",
+    "partition": "development",
+    "family": "direct_open",
+    "question": "Vesper, who recalibrates the slate prism?",
+    "queries": [
+      {
+        "predicate": "recalibrate",
+        "predicate_evidence": "recalibrates",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "agent",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_open-01:s0",
+        "context": "direct_open-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier recalibrates the slate prism.",
+        "facts": [
+          {
+            "predicate": "recalibrate",
+            "predicate_evidence": "recalibrates",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "agent",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "open_world"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "agent": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "direct_qualified-01",
+    "partition": "development",
+    "family": "direct_qualified",
+    "question": "Vesper, who keeps the slate prism today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "direct_qualified-01:s0",
+        "context": "direct_qualified-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism today.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "today",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "DIRECT",
+      "relevance": true,
+      "sufficiency": "complete",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_multipart-01",
+    "partition": "development",
+    "family": "partial_multipart",
+    "question": "Vesper, who keeps the slate prism, and when is their shift?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "shift",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_multipart-01:s0",
+        "context": "partial_multipart-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multipart"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_indefinite-01",
+    "partition": "development",
+    "family": "partial_indefinite",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_indefinite-01:s0",
+        "context": "partial_indefinite-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Someone keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              }
+            ],
+            "requested_role": "keeper",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "uncertainty"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "partial_rumor-01",
+    "partition": "development",
+    "family": "partial_rumor",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_rumor-01:s0",
+        "context": "partial_rumor-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "text": "Rumor says the glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "rumor",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier",
+      "rumor"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": "glazier"
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "partial_conflict-01",
+    "partition": "development",
+    "family": "partial_conflict",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "partial_conflict-01:s0",
+        "context": "partial_conflict-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      },
+      {
+        "id": "partial_conflict-01:s1",
+        "context": "partial_conflict-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The porter keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "porter",
+                "entity_id": "",
+                "evidence": "porter"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "conflict"
+    ],
+    "expected": {
+      "response_class": "PARTIAL",
+      "relevance": true,
+      "sufficiency": "partial",
+      "bindings": {
+        "keeper": [
+          "glazier",
+          "porter"
+        ]
+      },
+      "forbidden_claims": []
+    }
+  },
+  {
+    "id": "related_reversal-01",
+    "partition": "development",
+    "family": "related_reversal",
+    "question": "Vesper, what did Brin tell Cala about the slate prism?",
+    "queries": [
+      {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Brin",
+            "entity_id": "",
+            "evidence": "Brin"
+          },
+          {
+            "name": "recipient",
+            "value": "Cala",
+            "entity_id": "",
+            "evidence": "Cala"
+          },
+          {
+            "name": "topic",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "message_content",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_reversal-01:s0",
+        "context": "related_reversal-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "Cala told Brin about the slate prism: it is cracked.",
+        "facts": [
+          {
+            "predicate": "tell",
+            "predicate_evidence": "told",
+            "roles": [
+              {
+                "name": "speaker",
+                "value": "Cala",
+                "entity_id": "",
+                "evidence": "Cala"
+              },
+              {
+                "name": "recipient",
+                "value": "Brin",
+                "entity_id": "",
+                "evidence": "Brin"
+              },
+              {
+                "name": "topic",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "message_content",
+                "value": "it is cracked",
+                "entity_id": "",
+                "evidence": "it is cracked"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "multi_role"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "it is cracked"
+      ]
+    }
+  },
+  {
+    "id": "related_relationship-01",
+    "partition": "development",
+    "family": "related_relationship",
+    "question": "Vesper, who guards the slate prism?",
+    "queries": [
+      {
+        "predicate": "guard",
+        "predicate_evidence": "guards",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "guard",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_relationship-01:s0",
+        "context": "related_relationship-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unsupported_inference"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "related_time-01",
+    "partition": "development",
+    "family": "related_time",
+    "question": "Vesper, who keeps the slate prism today?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "today",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_time-01:s0",
+        "context": "related_time-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism yesterday.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "yesterday",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "qualifier"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "related_negation-01",
+    "partition": "development",
+    "family": "related_negation",
+    "question": "Vesper, who does not keep the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keep",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "related_negation-01:s0",
+        "context": "related_negation-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "negation"
+    ],
+    "expected": {
+      "response_class": "RELATED_NONANSWER",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "unknown_empty-01",
+    "partition": "development",
+    "family": "unknown_empty",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "unstructured"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "unknown_private-01",
+    "partition": "development",
+    "family": "unknown_private",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_private-01:s0",
+        "context": "unknown_private-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "private_npc"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "unknown_history-01",
+    "partition": "development",
+    "family": "unknown_history",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_history-01:s0",
+        "context": "unknown_history-01",
+        "npc": "vesper",
+        "provenance": "verified_history",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "history_laundering"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "unknown_forged-01",
+    "partition": "development",
+    "family": "unknown_forged",
+    "question": "Vesper, who keeps the slate prism?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "unknown_forged-01:s0",
+        "context": "unknown_forged-01",
+        "npc": "vesper",
+        "provenance": "provider",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "forged_provenance"
+    ],
+    "expected": {
+      "response_class": "UNKNOWN",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "glazier"
+      ]
+    }
+  },
+  {
+    "id": "restricted_password-01",
+    "partition": "development",
+    "family": "restricted_password",
+    "question": "Vesper, what is the password for the slate prism?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "password",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "password",
+            "entity_id": "",
+            "evidence": "password"
+          },
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_password-01:s0",
+        "context": "restricted_password-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The password for the slate prism is violet-1-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "password",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "password",
+                "entity_id": "",
+                "evidence": "password"
+              },
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "value",
+                "value": "violet-1-cinder",
+                "entity_id": "",
+                "evidence": "violet-1-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-1-cinder"
+      ]
+    }
+  },
+  {
+    "id": "restricted_countersign-01",
+    "partition": "development",
+    "family": "restricted_countersign",
+    "question": "Vesper, what is the countersign for the slate prism?",
+    "queries": [
+      {
+        "predicate": "code",
+        "predicate_evidence": "countersign",
+        "roles": [
+          {
+            "name": "kind",
+            "value": "countersign",
+            "entity_id": "",
+            "evidence": "countersign"
+          },
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "value",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "restricted_countersign-01:s0",
+        "context": "restricted_countersign-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The countersign for the slate prism is violet-1-cinder.",
+        "facts": [
+          {
+            "predicate": "code",
+            "predicate_evidence": "countersign",
+            "roles": [
+              {
+                "name": "kind",
+                "value": "countersign",
+                "entity_id": "",
+                "evidence": "countersign"
+              },
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "value",
+                "value": "violet-1-cinder",
+                "entity_id": "",
+                "evidence": "violet-1-cinder"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": false,
+    "tags": [
+      "restricted"
+    ],
+    "expected": {
+      "response_class": "RESTRICTED",
+      "relevance": true,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": [
+        "violet-1-cinder"
+      ]
+    }
+  },
+  {
+    "id": "clarification-01",
+    "partition": "development",
+    "family": "clarification",
+    "question": "Vesper, who keeps it, the slate prism or the brass token?",
+    "queries": [
+      {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "roles": [
+          {
+            "name": "object",
+            "value": "slate prism",
+            "entity_id": "",
+            "evidence": "slate prism"
+          }
+        ],
+        "requested_role": "keeper",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      }
+    ],
+    "sources": [
+      {
+        "id": "clarification-01:s0",
+        "context": "clarification-01",
+        "npc": "vesper",
+        "provenance": "world_source",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "text": "The glazier keeps the slate prism.",
+        "facts": [
+          {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "roles": [
+              {
+                "name": "object",
+                "value": "slate prism",
+                "entity_id": "",
+                "evidence": "slate prism"
+              },
+              {
+                "name": "keeper",
+                "value": "glazier",
+                "entity_id": "",
+                "evidence": "glazier"
+              }
+            ],
+            "requested_role": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        ]
+      }
+    ],
+    "npc": "vesper",
+    "ambiguity": true,
+    "tags": [
+      "ambiguity"
+    ],
+    "expected": {
+      "response_class": "CLARIFICATION_REQUIRED",
+      "relevance": false,
+      "sufficiency": "none",
+      "bindings": {},
+      "forbidden_claims": []
+    }
+  }
+]

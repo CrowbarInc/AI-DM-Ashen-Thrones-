@@ -1,0 +1,20 @@
+# Effective Prompt Audit
+
+The four T*_effective_provider_input_redacted.json files reproduce the preserved PR-CA generation inputs and recorded request metadata. Each contains exactly a system message and a user message holding a serialized JSON payload. There is no separate developer message, no raw multi-message chat history, and no API response schema; the JSON shape is instructed in text. Source hashes are in context_reconstruction_evidence.json. These records contain game context and no credential/header transport data; no game-context fields were removed. Transport defaults absent from the original capture cannot be reconstructed.
+
+System instructions favor answers: ANSWER THE PLAYER ranks first; direct questions should be answered first; specific NPC replies should offer a concrete answer, partial specific, source, or usable next step. They expressly permit mundane dialogue and low-stakes texture as bounded incidental realization, while denying authority to create unsupported durable facts. Mechanics, hidden facts, player agency, and app-selected speakers remain protected. These restrictions are appropriate for consequential assertions.
+
+User payload conflicts and scope gaps:
+
+- instructions: 'You MUST NOT assert facts outside narration_visibility.visible_facts; only visible facts may be directly asserted.' No local distinction between objective assertions and subjective quoted opinions is given in that mandatory block. The scene lists only the baker beside loaves.
+- social_context: knowledge_scope is empty, reliability partial, guardedness medium in mechanical_resolution.social.target_profile_hints. The knowledge gate permits grounding in visible role, scene, or prior exchanges, which supports a baker knowing bread, but does not override explicit refusal obligations.
+- mechanical_resolution.hint and the LAST instruction: 'No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.' This turns absence of a retrieved topic into a conversational limit.
+- narration_obligations.active_npc_reply_kind: refusal T1-T3, reaction T4. narrative_plan.narrative_mode_contract and instructions include struct:contract_obligation:reply_kind:refusal for T1-T3.
+- decision_facing_answer_recipe.turn_operation: answer/hesitate/deflect/joke/refuse are allowed, but 'Do not establish a durable preference or history merely to answer.' forbidden_upgrades includes durable_preference_without_authorized_claim. T1 asks what the baker usually keeps, making that warning particularly salient.
+- recipe.declaration_guidance.epistemic_premise says no NPC claim is authorized on this turn, while ordinary dialogue is allowed and validation treats an ordinary preference as claim_only. This lacks an explicit distinction between an existing authorized claim and fresh subjective speech.
+- recipe.incidental_improvisation_guidance gives refusal, hesitation, mannerism, and phrasing as examples. It omits affirmative opinion/recommendation examples.
+- instructions still mention world_updates, new_scene_draft and suggested_action although narration_only permits only narration. These are stale structured-lane affordances, not demonstrated causes of evasion.
+
+Ordering: the system hierarchy explicitly puts answering first, so restrictions do NOT dominate by formal message priority. However, specific engine-selected obligations and the final refusal hint conflict with that general goal. Repetition, specificity, and last placement are observable; their effect on model attention is an inference. The top-level dialogue_social_plan.reply_kind is unknown in ALL four turns, despite the explicit refusal/reaction elsewhere; its ONLY planning-source rule creates another inconsistent guide. Do not report that object itself as specifying refusal.
+
+Locations: game/gm.py:295 (narration-only system), game/prompt_context.py:1900 (visibility block), :1935 (dialogue-plan rule), :1969 (obligations), game/social.py:3420 and :4170 (reply derivation/hint), game/gm_resolution_decision.py:4269 and :4726 (recipe limits/examples). See captured text for exact historical instructions.
