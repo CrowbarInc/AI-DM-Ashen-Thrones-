@@ -50,7 +50,7 @@ jobs:
         env:
           ASHEN_PROTECTED_REPLAY_REPORT_PATH: ${{ runner.temp }}/protected-replay/replay_failure_report.md
         run: |
-          mkdir -p "$RUNNER_TEMP/protected-replay"
+          mkdir -p development/tmp "$RUNNER_TEMP/protected-replay"
           python -m pytest -m golden_replay -q --junitxml="$RUNNER_TEMP/protected-replay/pytest.xml" 2>&1 | tee "$RUNNER_TEMP/protected-replay/pytest-output.txt"
 
       - name: Upload protected replay failure report

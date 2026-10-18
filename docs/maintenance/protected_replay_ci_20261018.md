@@ -116,6 +116,15 @@ The test-inventory regeneration changed no semantic inventory content after the 
 All blocking convergence-workflow test selections and audit commands pass locally after these corrections.
 GitHub Actions and push verification are reported separately after the maintenance commit.
 
+### Clean-checkout CI follow-up
+
+Run https://github.com/CrowbarInc/AI-DM-Ashen-Thrones-/actions/runs/39146562803 at repair commit 588531e
+installed dependencies successfully, then exposed an absent parent for pytest's configured
+`--basetemp=development/tmp/pytest`. Fresh checkouts do not include ignored `development/tmp`.
+The workflow now creates that parent before pytest. No tests or assertions were skipped.
+The failure artifact from this run contains current Ubuntu stdout, JUnit, and a freshly generated
+execution summary, confirming that the stale-artifact defect is repaired.
+
 ### Related owner-suite commands
 
 - `python -m pytest tests/test_api_upstream_preflight.py tests/test_golden_replay_projection.py tests/test_failure_dashboard_orchestration.py tests/test_failure_dashboard_report.py tests/test_golden_replay_fallback_sanitizer_projection.py tests/test_golden_replay_fallback_acceptance_matrix.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_pr_eg_r4_r1_delivery_integrity.py tests/test_pr_eg_r2c_speech_adoption.py tests/test_final_emission_gate.py tests/test_strict_social_emergency_fallback_dialogue.py tests/test_referential_clarity_strict_social_local_repair.py -q --tb=short` — 221 passed, 1 baseline failure.
